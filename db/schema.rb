@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140602051055) do
+ActiveRecord::Schema.define(:version => 20140602171744) do
 
   create_table "contacts", :force => true do |t|
     t.string   "user_inst"
@@ -46,8 +46,9 @@ ActiveRecord::Schema.define(:version => 20140602051055) do
     t.integer  "partner_id"
     t.integer  "familiarity"
     t.integer  "exclusivity"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "communication"
   end
 
   create_table "profiles", :force => true do |t|

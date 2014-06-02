@@ -1,7 +1,8 @@
 class WelcomeController < ApplicationController
+  skip_before_filter :require_login, only: [:index, :create]
   def index
     if session[:user_id]
-      redirect_to profile_path(User.find(session[:user_id]))
+      redirect_to profile_path(Profile.find(session[:user_id]))
     end
   end
   def create

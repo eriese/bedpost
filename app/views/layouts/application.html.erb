@@ -3,7 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='http://fonts.googleapis.com/css?family=Lily+Script+One|Londrina+Outline|Fanwood+Text' rel='stylesheet' type='text/css'>
-  <title>RisqueFactr</title>
+  <title>BedPost</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
@@ -14,14 +14,14 @@
 
           <div id="logo">
             <a href="/">
-                Risque<span>Factr</span>
+                Bed<span>post</span>
             </a>
           </div>
         <ul><% if session[:user_id] %>
             <li>
               <%= link_to "Dash", "/profiles" %><br>
             </li>
-            <li><%= link_to "Partners", "/partners" %></li>
+            <li><%= link_to "Partners", "/partnerships" %></li>
             <li><%= link_to "Tests", sti_tests_path %></li>
             <li>
               <%= link_to "Encounters", "/profiles/#{session[:user_id]}/encounters" %>

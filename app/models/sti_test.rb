@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: sti_tests
+#
+#  id         :integer          not null, primary key
+#  date_taken :date
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class StiTest < ActiveRecord::Base
   attr_accessible :date_taken, :infections_attributes
   has_many :infections

@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: encounters
+#
+#  id         :integer          not null, primary key
+#  fluid      :boolean
+#  notes      :text
+#  self_risk  :integer
+#  took_place :date
+#  user_id    :integer
+#  partner_id :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Encounter < ActiveRecord::Base
   attr_accessible :fluid, :notes, :partner_id, :self_risk, :took_place, :user_id, :contacts_attributes
   belongs_to :user, class_name: "Profile", foreign_key: "user_id"

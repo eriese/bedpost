@@ -1,7 +1,5 @@
 class EncountersController < ApplicationController
-  before :each do
-    @user = Profile.find(session[:user_id])
-  end
+
   def index
     @encounters = Encounter.where({user_id: session[:user_id]})
   end

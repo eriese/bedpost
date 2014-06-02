@@ -1,0 +1,14 @@
+<div class="center">
+  <%= form_tag "/partnerships" %>
+  Partner's uid <%= text_field_tag :uid %><br>
+  <%= fields_for @partnership do |t| %>
+    <%= t.label :familiarity, "How high would you rate your trust for this partner?" %>
+    <%= t.select :familiarity, options_for_select(1..10) %><br>
+    <%= t.label :exclusivity, "How exclusive is this partner with you?" %>
+    <%= t.select :exclusivity, options_for_select(1..10) %><br>
+    (1 meaning not at all and 10 meaning they've never slept with anyone else)<br>
+    <%= t.label :communication, "How much do you and this partner communicate about safer sex practices/sex with other people?" %>
+    <%= t.select :communication, options_for_select(1..10) %><br>
+  <% end %>
+  <%= submit_tag "Create Partnership" %>
+</div>

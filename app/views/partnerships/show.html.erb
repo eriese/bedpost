@@ -1,0 +1,32 @@
+<div class="right">
+  <div id="wrapper">
+    <% @encounters.each do |encounter| %>
+      <%= link_to encounter.took_place, encounter_path(encounter)%><br>
+      Self-assessed risk:
+      <%= encounter.self_risk%><br>
+      App-assessed risk:
+      <% if encounter.risk <= 4 %>
+          <span class="low">low</span>
+        <% elsif encounter.risk <= 8 %>
+          <span class="medium">medium</span>
+        <% else %>
+          <span class="high">high</span>
+        <% end %><br>
+      Notes: <%= encounter.notes %><br>
+      <br>
+    <% end %>
+    <br>
+    <%= link_to "new encounter", new_encounter_path %>
+  </div>
+</div>
+<div class="dashes"></div>
+<div class="center">
+  <h1><%= "#{@partner.name} (#{@partner.pronoun})" %></h1><br>
+  Exclusivity: <%= @partnership.exclusivity %><br>
+  Trust level: <%= @partnership.familiarity %><br>
+  Communication level: <%= @partnership.communication %>
+  <br>
+  <%= link_to "edit", edit_partnership_path(@partnership) %>
+  <br>
+  <%= link_to "new encounter", new_encounter_path %>
+</div>

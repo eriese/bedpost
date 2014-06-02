@@ -1,4 +1,5 @@
 class ProfilesController < ApplicationController
+  skip_before_filter :require_login, only: [:new, :create]
   def index
     if session[:user_id]
       redirect_to "/profiles/#{session[:user_id]}"
@@ -7,6 +8,7 @@ class ProfilesController < ApplicationController
     end
   end
   def new
+    @profile = Profile.new
     @pronouns = PRONOUNS.map { |pronoun| pronoun[:subject] }
   end
   def create
@@ -20,25 +22,22 @@ class ProfilesController < ApplicationController
     end
   end
   def show
-    @user = Profile.find(session[:user_id])
     @partners = @user.partners
     @encounters = @user.encounters.order("took_place DESC")
     @diseases = DISEASES
   end
   def edit
-    @profile = Profile.find(session[:user_id])
+    @profile = @user
     @pronouns = PRONOUNS.map { |pronoun| pronoun[:subject] }
   end
   def update
-    @user = Profile.find(session[:user_id])
     if @user.update_attributes(params[:profile])
       redirect_to profile_path(@user)
     else
-      redirect_to edit_profile_path
+      redirect_to edit_profile_path(@user)
     end
   end
   def destroy
-    @user = Profile.find(session[:user_id])
     @user.destroy
   end
 end

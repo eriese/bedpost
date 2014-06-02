@@ -1,0 +1,27 @@
+<div class="right">
+    <div id="wrapper">
+      <h2>Partners within your risk windows:</h2>
+      <ul>
+      <% @at_risk.each do |partner| %>
+        <li>
+          <%= partner.name %>
+        </li>
+        <br>
+      <% end %>
+      </ul>
+      <br>
+      <br>
+      <br>
+      <h2><%= link_to "Add New Partner", new_partnership_path %></h2>
+    </div>
+  </div>
+  <div class="dashes"></div>
+<div class="center"><% @partnerships.each do |partnership| %>
+    <h2><%= link_to partnership.partner.name, partnership_path(partnership) %></h2>
+    <strong>Most recent encounter:</strong><br>
+    <br>
+  <% end %>
+  <%= link_to "Add New Partner", new_partnership_path %>
+  </div>
+
+
