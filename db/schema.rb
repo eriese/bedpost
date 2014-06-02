@@ -11,6 +11,50 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20140602000128) do
+
+  create_table "contacts", :force => true do |t|
+    t.string   "user_inst"
+    t.string   "partner_inst"
+    t.integer  "encounter_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "encounters", :force => true do |t|
+    t.boolean  "fluid"
+    t.text     "notes"
+    t.integer  "self_risk"
+    t.date     "took_place"
+    t.integer  "user_id"
+    t.integer  "partner_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "infections", :force => true do |t|
+    t.string   "disease"
+    t.boolean  "positive"
+    t.integer  "sti_test_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "profiles", :force => true do |t|
+    t.string   "email"
+    t.string   "name"
+    t.string   "password_digest"
+    t.string   "pronoun"
+    t.string   "anus_name"
+    t.string   "genital_name"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "sti_tests", :force => true do |t|
+    t.date     "date_taken"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
 end
