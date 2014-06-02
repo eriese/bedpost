@@ -1,4 +1,6 @@
 Bedpost::Application.routes.draw do
+  get "profiles/new"
+
   root to: 'welcome#index'
 
   get "welcome/index"
