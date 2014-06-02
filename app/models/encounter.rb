@@ -2,7 +2,7 @@ class Encounter < ActiveRecord::Base
   attr_accessible :fluid, :notes, :partner_id, :self_risk, :took_place, :user_id, :contacts_attributes
   belongs_to :partner
   has_many :contacts
-  validates :partner_id, :presences => true
+  validates :partner_id, :presence => true
   accepts_nested_attributes_for :contacts, reject_if: lambda {|contact| contact[:partner_instrument].blank?}
   def no_barrier
     self.contacts.where(barriers: false)
