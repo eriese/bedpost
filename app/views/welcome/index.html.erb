@@ -1,2 +1,14 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<div class="right">
+  <div id="wrapper">
+    <p>
+      RisqueFactr offers users a simple, customizable, gender, sexuality, and body-neutral interface for cataloguing their sexual practices, sexual partners, and STI test results. The app allows them to take control of their sexual health by analyzing likelihood of infection in individual sexual encounters and keeping track of which partners might be at risk.
+    </p>
+  </div>
+</div>
+<div class="dashes"></div>
+<div class="center"><%= form_tag "/login" %>
+  User Name: <%= text_field_tag :email %><br>
+  Password: <%= password_field_tag :password %><br>
+  <%= submit_tag "Log In"%>
+  </div>
+

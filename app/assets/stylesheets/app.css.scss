@@ -1,0 +1,202 @@
+$script-font: 'Lily Script One', cursive;
+$outline-font: 'Londrina Outline', cursive;
+$text-font: 'Fanwood Text', serif;
+$old-main: #083a34;
+$main: #082D73;
+$crossover: rgba(8,45,115,0.75);
+$dark: darken($main, 9);
+$light: lighten($main, 78);
+$contrast: lighten(saturate($main, 24), 11);
+$dash-width: 4px;
+$nav-width: 15%;
+$nav-offset: 40px;
+$right-depth: 250px;
+$right-width: $right-depth + $nav-offset;
+$center-width: 55%;
+$nav-depth: 50px;
+$nav-height: $nav-depth + $nav-offset;
+$off-white: lighten(desaturate($main, 75), 83);
+$grey: lighten(desaturate($main, 75), 73);
+$color-pop: #a3fffe;
+$pop-light: lighten(saturate($color-pop, 9), 46);
+$offset: 20px;
+$standard: 18px;
+
+#container {
+  width: 100%;
+}
+body {
+  font-family: $text-font;
+  background-color: $grey;
+  font-size: 18px;
+  h2 {
+    font-size: 28px;
+  }
+}
+a {
+  text-decoration: none;
+  color: $color-pop;
+}
+.nav {
+  position: fixed;
+  width: 100%;
+  height: $nav-depth;
+  margin-top: $nav-offset;
+  padding-left: $nav-offset;
+  padding-top: 2px;
+  // min-width: 900px;
+  // overflow: scroll;
+  z-index: 1;
+  background-color: $crossover;
+  color: $contrast;
+  #menu {
+    width: 80%;
+    display: inline-block;
+    text-align: right;
+    margin-right: 5%
+  }
+  h1 {
+    margin-bottom: -22px;
+    font-size: 48px;
+  }
+  #logo {
+    margin-left: 10px;
+    margin-right: 60px;
+    display: inline-block;
+    text-align: right;
+    font-size: 40px;
+    // padding: 5px;
+    width: 160px;
+    font-family: $script-font;
+    color: $color-pop;
+    span {
+      font-family: $outline-font;
+      padding-right: 10px;
+    }
+    a {
+      color: $color-pop;
+    }
+  }
+  ul {
+    display: inline-block;
+    width: 65%;
+    margin-left: 20px;
+  }
+  li {
+    font-size: 25px;
+    color: $off-white;
+    display: inline-block;
+    margin: 0px 20px;
+  }
+  a {
+    color: $grey;
+  }
+}
+
+.center {
+  padding: $offset;
+  margin-top: $nav-height;
+  margin-left: $right-width;
+  width: $center-width;
+  display: inline-block;
+  text-align: left;
+  color: $dark;
+  height: 100%;
+  font-size: 20px;
+  h1 {
+    font-size: 40px;
+    color: $main;
+  }
+  h2 {
+    font-size: 32px;
+    color: $main;
+  }
+  a {
+    color: $main;
+  }
+  ul {
+    margin-left: $offset;
+  }
+  strong {
+    font-size: 24 px;
+    color: $main;
+  }
+  textarea {
+    height: 50px;
+    width: 255px;
+  }
+}
+.right {
+  position: fixed;
+  display: inline-block;
+  width: $right-depth;
+  margin-left: $nav-offset;
+  background-color: $crossover;
+  color: $dark;
+  overflow: scroll;
+  height: 100%;
+  // margin-right: $dash-width;
+  ul {
+    width: 80%;
+    margin: 5px auto;
+  }
+  #wrapper {
+    padding-top: $nav-height;
+    margin: 5%;
+    p {
+      font-size: 20px;
+    }
+  }
+}
+.dashes {
+  width: $dash-width;
+  position: fixed;
+  margin-left: $right-width;
+  display: inline-block;
+  height: 120%;
+  border-left: 1px dashed $grey;
+  border-right: 2px dashed $grey;
+  background-color: $crossover;
+  z-index: 2;
+}
+
+.poz {
+  color: #7A0D0E;
+}
+
+.neg {
+  color: #009400;
+}
+
+.low {
+  color: #009400;
+}
+
+.medium {
+  color: #FF9B0D;
+}
+
+.high {
+  color: #7A0D0E;
+}
+
+.hidden {
+  display: none;
+}
+
+ul.encounters {
+  li:before {
+    content: ".";
+    font-size: 80px;
+  }
+  li {
+    // padding-bottom: 16px;
+    line-height: 18px;
+    // margin-left: 20px;
+  }
+}
+.normal {
+  color: $dark;
+  font-size: 18px;
+  line-height: 18px;
+}

@@ -1,6 +1,7 @@
 class Encounter < ActiveRecord::Base
   attr_accessible :fluid, :notes, :partner_id, :self_risk, :took_place, :user_id, :contacts_attributes
-  belongs_to :partner
+  belongs_to :user, class_name: "Profile", foreign_key: "user_id"
+  belongs_to :partner, class_name: "Profile", foreign_key: "partner_id"
   has_many :contacts
   validates :partner_id, :presence => true
   accepts_nested_attributes_for :contacts, reject_if: lambda {|contact| contact[:partner_instrument].blank?}

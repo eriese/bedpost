@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Bedpost</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='http://fonts.googleapis.com/css?family=Lily+Script+One|Londrina+Outline|Fanwood+Text' rel='stylesheet' type='text/css'>
+  <title>RisqueFactr</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div id="container">
+    <div class="nav">
 
-<%= yield %>
-
+          <div id="logo">
+            <a href="/">
+                Risque<span>Factr</span>
+            </a>
+          </div>
+        <ul><% if session[:user_id] %>
+            <li>
+              <%= link_to "Dash", "/profiles" %><br>
+            </li>
+            <li><%= link_to "Partners", "/partners" %></li>
+            <li><%= link_to "Tests", sti_tests_path %></li>
+            <li>
+              <%= link_to "Encounters", "/profiles/#{session[:user_id]}/encounters" %>
+            </li>
+            <li>
+              <%= link_to "Log Out", "/logout"%><br>
+            </li>
+          <% elsif params[:action] != "new" || params[:controller] != "profiles" %>
+            <li><%= link_to "Sign Up", new_profile_path %></li>
+          <% end %></ul>
+      </div>
+    <%= yield %>
+  </div>
 </body>
+
 </html>

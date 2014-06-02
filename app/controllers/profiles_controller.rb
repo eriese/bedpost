@@ -1,22 +1,22 @@
 class ProfilesController < ApplicationController
   def index
     if session[:user_id]
-      redirect_to "/users/#{session[:user_id]}"
+      redirect_to "/profiles/#{session[:user_id]}"
     else
       redirect_to "/login"
     end
   end
   def new
-    @user = Profile.new({uid: SecureRandom.uuid.slice(0,8)})
-    @pronouns = PRONOUNS
+    @profile = Profile.new({uid: SecureRandom.uuid.slice(0,8)})
+    @pronouns = PRONOUNS.map { |pronoun| pronoun[:subject] }
   end
   def create
     @user = Profile.new(params[:profile])
     if @user.save
       session[:user_id] = @user.id
-      redirect_to user_path(@user)
+      redirect_to profile_path(@user)
     else
-      redirect_to new_user_path
+      redirect_to new_profile_path
     end
   end
   def show

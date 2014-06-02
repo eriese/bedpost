@@ -1,9 +1,16 @@
 Bedpost::Application.routes.draw do
-  get "profiles/new"
 
   root to: 'welcome#index'
 
   get "welcome/index"
+  get "/login" => "welcome#index"
+  post "/login" => "welcome#create"
+  get "/logout" => "welcome#destroy"
+
+  resources :profiles
+  resources :encounters
+  resources :partnerships
+  resources :sti_tests
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
