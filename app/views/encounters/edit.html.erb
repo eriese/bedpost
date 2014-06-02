@@ -1,0 +1,52 @@
+<div class="dashes hidden to-hide"></div>
+<div class="center"><%= form_for @encounter do |t|%>
+  New Encounter with <%= @partner.name %>
+  <br>
+  <br>
+  Took place on: <br>
+  <%= t.date_select :took_place, selected: @encounter.took_place %>
+  <br>
+  <br>
+  Self-assessed risk: <%= t.select :self_risk, options_for_select(1..10, @encounter.self_risk) %><br>
+  <br>
+  <%= t.label :notes %><br>
+  <%= t.text_area :notes, value: @encounter.notes %><br>
+  <%= t.hidden_field :partner_id, value: @partner.id %>
+  <br>
+    <% @instruments.each do |instrument| %>
+      <% if instrument == "genitals" && !@user.genital_name.empty? %>
+        My <strong><%= @user.genital_name%></strong> came in contact with
+      <% elsif instrument == "anus" && !@user.anus_name.empty?%>
+        My <strong><%= @user.anus_name%></strong> came in contact with
+      <% else %>
+        My <strong><%= instrument %></strong> came in contact with
+      <% end %>
+      <%= @pronoun[:possessive] %><br>
+      <% @instruments.each do |inst| %>
+        <%= t.fields_for :contacts, @encounter.contacts.build do |builder| %>
+        <% if instrument == "hand" || instrument == "toys" || instrument == "mouth" %>
+          <% if inst != "hand" && inst != "toys" && inst != "mouth" %>
+            <%= builder.check_box :partner_inst, {checked: @encounter.has_contact?(instrument, inst)}, inst, nil %> <%= inst %>
+            <%= builder.check_box :barriers, checked: @encounter.has_barriers?(instrument, inst) %> with a barrier <br>
+            <%= builder.hidden_field :user_inst, value: instrument %>
+          <% end %>
+        <% else %>
+          <%= builder.check_box :partner_inst, {checked: @encounter.has_contact?(instrument, inst)}, inst, nil %>
+          <% if inst == "genitals" && !@partner.genital_name.empty?%>
+            <%= @partner.genital_name %>
+          <% elsif inst == "anus" && !@partner.anus_name.empty? %>
+            <%= @partner.anus_name  %>
+          <% else %>
+            <%= inst %>
+          <% end %>
+          <%= builder.hidden_field :user_inst, value: instrument %>
+          <%= builder.check_box :barriers, checked: @encounter.has_barriers?(instrument, inst) %> with a barrier <br>
+        <% end %>
+      <% end %>
+    <% end %><br>
+  <% end %>
+  <%= t.check_box :fluid, value: true, checked: @encounter.fluid %>fluid exchange not accounted for (e.g. ejaculate in eyes, nose, or open cuts)<br>
+  <br>
+  <%= t.submit %>
+<% end %>
+</div>
