@@ -34,5 +34,14 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = "random"
+  # config.order = "random"
+
+  # Use color in STDOUT
+  config.color_enabled = true
+  # Use color not only in STDOUT but also in pagers and files
+  config.tty = true
+  # Use the specified formatter
+  config.formatter = :documentation  # :progress, :html, :textmate
+  # immediately stop running upon first failure
+  config.fail_fast = true
 end
