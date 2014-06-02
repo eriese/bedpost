@@ -7,11 +7,11 @@ class ProfilesController < ApplicationController
     end
   end
   def new
-    @profile = Profile.new({uid: SecureRandom.uuid.slice(0,8)})
     @pronouns = PRONOUNS.map { |pronoun| pronoun[:subject] }
   end
   def create
     @user = Profile.new(params[:profile])
+    @user.uid = SecureRandom.uuid.slice(0,8)
     if @user.save
       session[:user_id] = @user.id
       redirect_to profile_path(@user)
@@ -26,11 +26,11 @@ class ProfilesController < ApplicationController
     @diseases = DISEASES
   end
   def edit
-    @user = Profile.find(session[:user_id])
-    @pronouns = PRONOUNS
+    @profile = Profile.find(session[:user_id])
+    @pronouns = PRONOUNS.map { |pronoun| pronoun[:subject] }
   end
   def update
-    @user = User.find(session[:user_id])
+    @user = Profile.find(session[:user_id])
     if @user.update_attributes(params[:profile])
       redirect_to profile_path(@user)
     else

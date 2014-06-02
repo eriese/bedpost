@@ -1,0 +1,11 @@
+<div class="right">
+  <div class="wrapper">
+    <%= link_to "Edit", edit_profile_path(@user) %>
+  </div>
+</div>
+<div class="dashes"></div>
+<div class="center">
+  <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1><br>
+    partnering Id:
+    <%= @user.uid %>
+</div>

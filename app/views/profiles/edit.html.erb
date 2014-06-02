@@ -1,0 +1,26 @@
+<div class="dashes hidden to-hide"></div>
+<div class="center">
+  <%= form_for @profile do |t| %>
+  <%= t.label :name %>
+  <%= t.text_field :name, value: @profile.name %><br>
+  <%= t.label :email, "Username" %>
+  <%= t.text_field :email, value: @profile.email %>
+  <br>
+  <br>
+  <h2>Preferences</h2>
+  <%= t.label :genital_name, "What do you call your genitals?", value: @profile.genital_name %>
+  <%= t.text_field :genital_name %><br>
+  <%= t.label :anus_name, "What do you call your anus?" %>
+  <%= t.text_field :anus_name, value: @profile.anus_name %><br>
+  <%= t.label :pronoun, "What pronouns do you use?" %>
+  <%= t.select :pronoun, options_for_select(@pronouns, @profile.pronoun) %>
+  <br>
+  <br>
+  <%= t.label :uid, "Customize your partnering ID:" %>
+  <%= t.text_field :uid, value: @profile.uid %><br>
+  <%= t.label :password, "Re-enter password" %>
+  <%= t.password_field :password %><br>
+  <%= t.label :password_confirmation %>
+  <%= t.password_field :password_confirmation %><br>
+  <%= t.submit %>
+  <% end %></div>
