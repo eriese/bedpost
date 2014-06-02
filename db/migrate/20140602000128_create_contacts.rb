@@ -4,7 +4,7 @@ class CreateContacts < ActiveRecord::Migration
       t.string :user_inst
       t.string :partner_inst
       t.integer :encounter_id
-
+      t.boolean :barriers
       t.timestamps
     end
   end
