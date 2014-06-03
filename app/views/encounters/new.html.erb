@@ -21,7 +21,7 @@
       <% else %>
         My <strong><%= instrument %></strong> came in contact with
       <% end %>
-      <%= @pronoun[:possessive] %><br>
+      <%= @pronoun %><br>
       <% @instruments.each do |inst| %>
         <%= t.fields_for :contacts do |builder| %>
         <% if instrument == "hand" || instrument == "toys" || instrument == "mouth" %>

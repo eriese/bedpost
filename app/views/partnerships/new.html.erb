@@ -1,6 +1,7 @@
 <div class="center">
   <%= form_tag "/partnerships" %>
-  Partner's uid <%= text_field_tag :uid %><br>
+  Partner's uid <%= text_field_tag :uid, @uid %><br>
+  (no uid? <%= link_to "make a profile for your partner", new_profile_path %>)
   <%= fields_for @partnership do |t| %>
     <%= t.label :familiarity, "How high would you rate your trust for this partner?" %>
     <%= t.select :familiarity, options_for_select(1..10) %><br>

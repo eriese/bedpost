@@ -6,6 +6,7 @@ class PartnershipsController < ApplicationController
   end
   def new
     @partnership = @user.partnerships.new
+    @uid = flash[:uid]
   end
   def create
     @partnership = @user.partnerships.new(params[:partnership])

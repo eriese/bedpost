@@ -15,8 +15,13 @@ class ProfilesController < ApplicationController
     @user = Profile.new(params[:profile])
     @user.uid = SecureRandom.uuid.slice(0,8)
     if @user.save
-      session[:user_id] = @user.id
-      redirect_to profile_path(@user)
+      if session[:user_id]
+        flash[:uid] = @user.uid
+        redirect_to new_partnership_path
+      else
+        session[:user_id] = @user.id
+        redirect_to profile_path(@user)
+      end
     else
       redirect_to new_profile_path
     end
