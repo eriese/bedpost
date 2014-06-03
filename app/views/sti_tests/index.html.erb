@@ -14,13 +14,13 @@
   <ul>
   <% @diseases.each do |disease| %>
   <li>
-    <%# if disease.risk_window(@user) %>
+    <% if disease.risk_window(@user) %>
         <strong><%= disease[:name] %></strong> risk window began:<br>
-        <%# " #{disease.risk_window(@user).strftime('%m/%d/%Y')}" %>
-    <%# else %>
-      <!-- No test data for <strong><%# disease.name %></strong>; consider getting tested. -->
+        <%= " #{disease.risk_window(@user).strftime('%m/%d/%Y')}" %>
+    <% else %>
+      No test data for <strong><%= disease.name %></strong>; consider getting tested. -->
 
-    <%# end %>
+    <% end %>
   </li><br>
   <% end %>
   <%= link_to "Add a test", new_sti_test_path %>

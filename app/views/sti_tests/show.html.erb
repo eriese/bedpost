@@ -7,15 +7,15 @@
       <span class="poz">positive</span><br>
       <div class="risk-partners">
         Partners at risk:<br>
-        <!-- <ul>
-          <%# @user.partners.each do |partner| %>
-            <%# if partner.at_risk(infection.disease) %>
+        <ul>
+          <% @user.partnerships.each do |partnership| %>
+            <% if partnership.at_risk?(infection.disease) %>
              <li>
-                <%# partner.name %><br>
+                <%= partnership.partner.name %><br>
              </li>
-            <%# end %>
-          <%# end %>
-        </ul> -->
+            <% end %>
+          <% end %>
+        </ul>
       </div>
 
     <% else %>

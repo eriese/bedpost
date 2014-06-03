@@ -28,4 +28,21 @@ class Partnership < ActiveRecord::Base
     @risk += 10 - self.communication
     return @risk
   end
+  def encounters
+    Encounter.where({user_id: self.user_id, partner_id: self.partner_id}).order("took_place DESC")
+  end
+  def most_recent
+    self.encounters.first
+  end
+  def at_risk?(disease_name)
+    if self.most_recent
+      if self.user.risk_window(disease_name)
+        return self.user.risk_window(disease_name) <= self.most_recent.took_place
+      else
+        return true
+      end
+    else
+      return false
+    end
+  end
 end
