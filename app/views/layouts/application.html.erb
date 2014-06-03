@@ -19,12 +19,12 @@
           </div>
         <ul><% if session[:user_id] %>
             <li>
-              <%= link_to "Dash", "/profiles" %><br>
+              <%= link_to "Dash", profiles_path %><br>
             </li>
-            <li><%= link_to "Partners", "/partnerships" %></li>
+            <li><%= link_to "Partners", partnerships_path %></li>
             <li><%= link_to "Tests", sti_tests_path %></li>
             <li>
-              <%= link_to "Encounters", "/profiles/#{session[:user_id]}/encounters" %>
+              <%= link_to "Encounters", encounters_path %>
             </li>
             <li>
               <%= link_to "Log Out", "/logout"%><br>

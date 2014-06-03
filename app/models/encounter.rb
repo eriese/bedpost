@@ -19,7 +19,7 @@ class Encounter < ActiveRecord::Base
   belongs_to :partner, class_name: "Profile", foreign_key: "partner_id"
   has_many :contacts
   validates :partner_id, :presence => true
-  accepts_nested_attributes_for :contacts, reject_if: lambda {|contact| contact[:partner_instrument].blank?}
+  accepts_nested_attributes_for :contacts, reject_if: lambda {|contact| contact[:partner_inst].blank?}
   def no_barrier
     self.contacts.where(barriers: false)
   end
@@ -38,9 +38,9 @@ class Encounter < ActiveRecord::Base
     return @risk
   end
   def has_contact?(user_instrument, partner_instrument)
-    self.contacts.include?([user_inst: user_instrument, partner_inst: partner_instrument, barriers: true]) || self.contacts.include?([user_inst: user_instrument, partner_inst: partner_instrument, barriers: false])
+    !self.contacts.find{|contact| contact[:user_inst] == user_instrument && contact[:partner_inst] == partner_instrument}.nil?
   end
   def has_barriers?(user_instrument, partner_instrument)
-    self.contacts.include?([user_inst: user_instrument, partner_inst: partner_instrument, barriers: true])
+    !self.contacts.find{|contact| contact[:user_inst] == user_instrument && contact[:partner_inst] == partner_instrument && contact[:barriers] == true}.nil?
   end
 end

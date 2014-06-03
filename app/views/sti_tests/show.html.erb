@@ -1,0 +1,29 @@
+<div class="dashes hidden to-hide"></div>
+<div class="center">
+  <h1>Tested on: <%= @sti_test.date_taken %></h1><br>
+  <% @infections.each do |infection| %>
+  <h2><%= infection.disease %></h2>
+    <% if infection.positive %>
+      <span class="poz">positive</span><br>
+      <div class="risk-partners">
+        Partners at risk:<br>
+        <!-- <ul>
+          <%# @user.partners.each do |partner| %>
+            <%# if partner.at_risk(infection.disease) %>
+             <li>
+                <%# partner.name %><br>
+             </li>
+            <%# end %>
+          <%# end %>
+        </ul> -->
+      </div>
+
+    <% else %>
+      <span class="neg">negative</span><br>
+      <!-- Risk-window begins: <%# infection.disease.risk_window(@user).strftime('%m/%d/%Y') %><br> -->
+    <% end %>
+    <br>
+  <% end %>
+  <br>
+  <%= link_to "edit", edit_sti_test_path(@sti_test) %>
+</div>

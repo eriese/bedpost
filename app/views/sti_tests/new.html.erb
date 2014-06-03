@@ -1,0 +1,15 @@
+<div class="dashes hidden to-hide"></div>
+<div class="center">
+  <%= form_for @sti_test  do |t| %>
+  <%= t.label :date_taken, "Date"%>
+  <%= t.date_select :date_taken %>
+    <% @diseases.each do |disease| %>
+      <%= t.fields_for :infections do |f| %>
+        <h3><%= disease[:name] %></h3>
+        <%= f.select :positive, "<option value='true'>Positive</option><option value='false'>Negative</option>".html_safe, include_blank: true %>
+        <%= f.hidden_field :disease, value: disease[:name] %><br>
+      <% end %>
+    <% end %>
+    <br>
+    <%= t.submit %>
+  <% end %></div>

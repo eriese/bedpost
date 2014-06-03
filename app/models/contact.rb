@@ -13,6 +13,6 @@
 
 class Contact < ActiveRecord::Base
   attr_accessible :encounter_id, :partner_inst, :user_inst, :barriers
-  belongs_to :encounter_id
+  belongs_to :encounter
   validates :user_inst, :partner_inst, :presence => true
 end

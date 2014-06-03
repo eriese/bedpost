@@ -42,7 +42,7 @@ class PartnershipsController < ApplicationController
   def check_partnership
     @partnership = Partnership.find(params[:id])
     if @partnership.user != @user
-      redirect_to partnership_path
+      redirect_to partnerships_path
     else
       @partner = @partnership.partner
     end
