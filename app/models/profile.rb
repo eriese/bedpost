@@ -24,18 +24,17 @@ class Profile < ActiveRecord::Base
 
   def risk_window(disease_name)
     case_test_ids = self.sti_tests.map { |tst| tst.id }
-    cases = Infection.where({disease: disease_name, id: case_test_ids}).sort_by do |infection|
-      infection.sti_test.date_taken
-    end
+    cases = Infection.where({disease: disease_name, id: case_test_ids}).sort_by {|infection| infection.sti_test.date_taken}
+    cases.reverse!
     if cases.any?
-      if cases.find{|infection| infection.positive == false}.any?
-        last_neg = casesfind{|infection| infection.positive == false}.last
+      if cases.find{|infection| infection.positive == false}
+        last_neg = cases.find{|infection| infection.positive == false}
       else
         last_neg = cases.last
       end
       for_time = last_neg.sti_test.date_taken.to_s.split("-")
       t = Time.mktime(for_time[0], for_time[1], for_time[2])
-      window = t - DISEASES.find{|disease| disease[:name] == disease_name.intern}[:gestation_max] * (60 * 60 * 24 * 7)
+      window = t - DISEASES.find{|disease| disease[:name] == disease_name}[:gestation_max] * (60 * 60 * 24 * 7)
       return window
     end
   end

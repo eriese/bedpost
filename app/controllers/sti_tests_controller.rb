@@ -3,6 +3,7 @@ class StiTestsController < ApplicationController
   before_filter :check_sti_test, :except => [:index, :new, :create]
   def index
     @sti_tests = StiTest.where(user_id: session[:user_id]).order("date_taken DESC")
+    @diseases = DISEASES
   end
   def new
     @sti_test = StiTest.new
@@ -47,7 +48,6 @@ class StiTestsController < ApplicationController
       redirect_to sti_tests_path
     end
   end
-  private
   def get_diseases
     @diseases = DISEASES
   end
