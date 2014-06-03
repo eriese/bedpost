@@ -6,13 +6,13 @@
           <br><%= link_to encounter.took_place, encounter_path(encounter) %>: <br>
           <%= encounter.partner.name %><br>
           Risk level:
-          <%# if encounter.risk <= 4 %>
-            <!-- <span class="low">low</span> -->
-          <%# elsif encounter.risk <= 8 %>
-            <!-- <span class="medium">medium</span> -->
-          <%# else %>
-            <!-- <span class="high">high</span> -->
-          <%# end %><br>
+          <% if encounter.risk <= 4 %>
+            <span class="low">low</span>
+          <% elsif encounter.risk <= 8 %>
+            <span class="medium">medium</span>
+          <% else %>
+            <span class="high">high</span>
+          <% end %><br>
         <% end %>
       </li>
     </ul>

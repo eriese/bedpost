@@ -1,5 +1,30 @@
 <div class="right">
-  <div class="wrapper">
+  <div id="wrapper">
+    <h2>Recent Encounters:</h2>
+    <ul class="encounters">
+      <% @encounters.each do |encounter| %>
+      <% if encounter.risk <= 4 %>
+            <li class="low">
+          <% elsif encounter.risk <= 8 %>
+            <li class="medium">
+          <% else %>
+            <li class="high">
+          <% end %>
+          <span class="normal">
+          <%= link_to encounter.took_place, encounter_path(encounter) %> <br>
+          <%= encounter.partner.name %>
+        <% end %>
+        <br>
+        </span>
+      </li>
+    </ul>
+    <br>
+    <%= form_tag new_encounter_path, method: :get %>
+    New Encounter with:<br>
+    <%= select_tag :partner_id, options_from_collection_for_select(@partners, :id, :name), id: "partner-select" %>
+    <%= submit_tag "create", id: "new-encounter" %>
+    <br>
+    <br>
     <%= link_to "Edit", edit_profile_path(@user) %>
   </div>
 </div>

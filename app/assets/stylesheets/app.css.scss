@@ -1,10 +1,10 @@
 $script-font: 'Lily Script One', cursive;
-$outline-font: 'Londrina Outline', cursive;
-$text-font: 'Fanwood Text', serif;
+$outline-font: 'Londrina Shadow', cursive;
+$text-font: Arial;
 $old-main: #083a34;
-$main: #082D73;
-$crossover: rgba(8,45,115,0.75);
-$dark: darken($main, 9);
+$main: #4c001d;
+$crossover: rgba(33,32,35,0.7);
+$dark: #0f140b;
 $light: lighten($main, 78);
 $contrast: lighten(saturate($main, 24), 11);
 $dash-width: 4px;
@@ -13,11 +13,11 @@ $nav-offset: 40px;
 $right-depth: 250px;
 $right-width: $right-depth + $nav-offset;
 $center-width: 55%;
-$nav-depth: 50px;
+$nav-depth: 60px;
 $nav-height: $nav-depth + $nav-offset;
 $off-white: lighten(desaturate($main, 75), 83);
-$grey: lighten(desaturate($main, 75), 73);
-$color-pop: #a3fffe;
+$grey: desaturate(lighten($main, 80), 95);
+$color-pop: #570021;
 $pop-light: lighten(saturate($color-pop, 9), 46);
 $offset: 20px;
 $standard: 18px;
@@ -43,9 +43,6 @@ a {
   height: $nav-depth;
   margin-top: $nav-offset;
   padding-left: $nav-offset;
-  padding-top: 2px;
-  // min-width: 900px;
-  // overflow: scroll;
   z-index: 1;
   background-color: $crossover;
   color: $contrast;
@@ -60,18 +57,18 @@ a {
     font-size: 48px;
   }
   #logo {
-    margin-left: 10px;
+    margin-left: 30px;
     margin-right: 60px;
     display: inline-block;
     text-align: right;
-    font-size: 40px;
-    // padding: 5px;
+    font-size: 45px;
     width: 160px;
     font-family: $script-font;
     color: $color-pop;
     span {
       font-family: $outline-font;
       padding-right: 10px;
+      font-size: 50px;
     }
     a {
       color: $color-pop;
@@ -80,7 +77,7 @@ a {
   ul {
     display: inline-block;
     width: 65%;
-    margin-left: 20px;
+    margin-left: 10px;
   }
   li {
     font-size: 25px;
@@ -200,3 +197,4 @@ ul.encounters {
   font-size: 18px;
   line-height: 18px;
 }
+

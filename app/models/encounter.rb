@@ -26,13 +26,15 @@ class Encounter < ActiveRecord::Base
   def with_barrier
     self.contacts.where(barriers: true)
   end
+  def partnership
+    Partnership.where({user_id: self.user_id, partner_id: partner_id}).first
+  end
   def risk
     @risk = 0
     @risk += self.no_barrier.length * 2
     @risk += self.with_barrier.length / 2
     @risk += 4 if self.fluid
-    @risk *= partner.risk
-    @risk /= 10
+    @risk *= self.partnership.riskiness / 10
     @risk += self.self_risk
     @risk /= 2
     return @risk
