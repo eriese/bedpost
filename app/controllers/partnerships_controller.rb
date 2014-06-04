@@ -14,6 +14,7 @@ class PartnershipsController < ApplicationController
     if @partnership.save
       redirect_to partnership_path(@partnership)
     else
+      flash[:message] = @partnership.errors.messages
       redirect_to new_partnership_path
     end
   end

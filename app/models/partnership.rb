@@ -16,7 +16,7 @@ class Partnership < ActiveRecord::Base
   attr_accessible :exclusivity, :familiarity, :partner_id, :user_id, :exclusivity, :communication
   belongs_to :user, class_name: "Profile",foreign_key: "user_id"
   belongs_to :partner, class_name: "Profile", foreign_key: "partner_id"
-  validates_uniqueness_of :user_id, :scope => :partner_id
+  validates_uniqueness_of :user_id, :scope => :partner_id, message: "You have already registered this partnership."
 
   def find_partner(uid)
     self.partner = Profile.where(uid: uid).first

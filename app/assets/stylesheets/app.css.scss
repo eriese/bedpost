@@ -25,6 +25,11 @@ $standard: 18px;
 #container {
   width: 100%;
 }
+#flash {
+  margin: 10px auto 0px auto;
+  text-align: center;
+
+}
 body {
   font-family: $text-font;
   background-color: $grey;
@@ -128,6 +133,7 @@ a {
   display: inline-block;
   width: $right-depth;
   margin-left: $nav-offset;
+  margin-top: -10px;
   background-color: $crossover;
   color: $dark;
   overflow: scroll;
@@ -149,6 +155,7 @@ a {
   width: $dash-width;
   position: fixed;
   margin-left: $right-width;
+  margin-top: -10px;
   display: inline-block;
   height: 120%;
   border-left: 1px dashed $grey;

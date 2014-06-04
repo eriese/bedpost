@@ -39,6 +39,7 @@ class ProfilesController < ApplicationController
     if @user.update_attributes(params[:profile])
       redirect_to profile_path(@user)
     else
+      flash[:message] = @user.errors.messages
       redirect_to edit_profile_path(@user)
     end
   end

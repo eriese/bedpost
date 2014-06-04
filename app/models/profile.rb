@@ -20,6 +20,7 @@ class Profile < ActiveRecord::Base
   has_many :partners, :through => :partnerships, :source => :partner
   has_many :sti_tests, foreign_key: "user_id"
   has_many :encounters, foreign_key: "user_id"
+  validates_uniqueness_of :uid, message: "That partnering ID is unavailable. Please try a different one."
   has_secure_password
 
   def risk_window(disease_name)
