@@ -9,7 +9,7 @@ $crossover: rgba(33,32,35,0.7);
 $light: lighten($main, 78);
 $contrast: lighten(saturate($main, 24), 11);
 $off-white: lighten(desaturate($main, 75), 83);
-$grey: desaturate(lighten($main, 80), 95);
+$grey: desaturate(lighten($main, 75), 95);
 $pop-light: lighten(saturate($color-pop, 9), 46);
 $dash-width: 4px;
 $nav-width: 15%;
@@ -207,4 +207,14 @@ ul.encounters {
 
 .scroller, .risk {
   display: none;
+}
+
+.highlight {
+  color: $pop-light;
+}
+
+.bubble {
+  background-color: $off-white;
+  border-radius: 10px;
+  padding: 10px;
 }

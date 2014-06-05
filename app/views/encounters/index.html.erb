@@ -1,9 +1,10 @@
 <div class="dashes hidden to-hide"></div>
 <div class="center">
   <h2>Recent Encounters:</h2>
+  <br>
     <ul>
-      <li><% @encounters.each do |encounter| %>
-          <br><%= link_to encounter.took_place, encounter_path(encounter) %>: <br>
+      <% @encounters.each do |encounter| %>
+       <li class="bubble"> <%= link_to encounter.took_place, encounter_path(encounter) %>: <br>
           <%= encounter.partner.name %><br>
           Risk level:
           <% if encounter.risk <= 4 %>
@@ -12,9 +13,9 @@
             <span class="medium">medium</span>
           <% else %>
             <span class="high">high</span>
-          <% end %><br>
+          <% end %>
+          </li><br>
         <% end %>
-      </li>
     </ul>
     <br>
     <%= form_tag new_encounter_path, method: :get%>

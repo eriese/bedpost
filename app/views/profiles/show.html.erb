@@ -37,12 +37,20 @@
     <br>
     <ul>
       <% @categories.each do |category, info| %>
-        <li> <span class="category"><strong>> &nbsp&nbsp<%= category.upcase %></strong>
-        <br> <%= info[:description] %></span>
+        <li class="bubble">
+          <span class="category"><strong><%= category.upcase %></strong>
+          <br>
+          <%= info[:description] %></span>
           <ul class="scroller">
             <% info[:diseases].each do |disease| %>
-              <li class="disease"><%= @diseases.find{|d| d[:name] == disease}[:readable] %>
-                <span class="risk">at risk from: <%= @user.risk_window(disease) %></span></li>
+              <li class="disease"><%= @diseases.find{|d| d[:name] == disease}[:readable]%>
+                <span class="risk">— at risk from:
+                  <% if @user.risk_window(disease) %>
+                    <%= time_ago_in_words(@user.risk_window(disease)) %> ago, on <%= @user.risk_window(disease).strftime('%m/%d/%Y') %>
+                  <% else %>
+                    unknown. Consider yourself at risk and get tested.
+                  <% end %>
+                  </span></li>
 
             <% end %>
           </ul>

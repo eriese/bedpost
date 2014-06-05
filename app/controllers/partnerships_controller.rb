@@ -2,7 +2,13 @@ class PartnershipsController < ApplicationController
   before_filter :get_partners
   before_filter :check_partnership, :except => [:index, :new, :create]
   def index
+    diseases = DISEASES.sort{|d| d[:gestation_max]}
     @at_risk = []
+    @partnerships.each do |partnership|
+      if partnership.at_risk?(diseases.last[:name])
+        @at_risk << partnership
+      end
+    end
   end
   def new
     @partnership = @user.partnerships.new

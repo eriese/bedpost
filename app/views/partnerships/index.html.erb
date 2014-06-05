@@ -2,9 +2,9 @@
     <div id="wrapper">
       <h2>Partners within your risk windows:</h2>
       <ul>
-      <% @at_risk.each do |partner| %>
+      <% @at_risk.each do |partnership| %>
         <li>
-          <%= partner.name %>
+          <%= partnership.partner.name %>
         </li>
         <br>
       <% end %>
@@ -18,10 +18,29 @@
   <div class="dashes"></div>
 <div class="center">
   <h2>Your PartneringId: <%= @user.uid %></h2>
+  <%= link_to "Share" %>
+  <br>
+  <br>
   <% @partnerships.each do |partnership| %>
+  <div class="bubble">
     <h2><%= link_to partnership.partner.name, partnership_path(partnership) %></h2>
     <strong>Most recent encounter:</strong><br>
-    <br>
+    <% if partnership.most_recent %>
+      Fluid exchange: <%= partnership.most_recent.fluid %><br>
+      date: <%= partnership.most_recent.took_place %><br>
+      Self-assessed risk level: <%= partnership.most_recent.self_risk %><br>
+      App-assessed risk:
+      <% if partnership.most_recent.risk <= 4 %>
+        <span class="low">low</span>
+      <% elsif partnership.most_recent.risk <= 8 %>
+        <span class="medium">medium</span>
+      <% else %>
+        <span class="high">high</span>
+      <% end %><br>
+      Notes: <%= partnership.most_recent.notes %><br>
+    <% end %>
+  </div>
+  <br>
   <% end %>
   <%= link_to "Add New Partner", new_partnership_path %>
   </div>
