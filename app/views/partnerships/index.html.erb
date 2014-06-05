@@ -16,7 +16,9 @@
     </div>
   </div>
   <div class="dashes"></div>
-<div class="center"><% @partnerships.each do |partnership| %>
+<div class="center">
+  <h2>Your PartneringId: <%= @user.uid %></h2>
+  <% @partnerships.each do |partnership| %>
     <h2><%= link_to partnership.partner.name, partnership_path(partnership) %></h2>
     <strong>Most recent encounter:</strong><br>
     <br>

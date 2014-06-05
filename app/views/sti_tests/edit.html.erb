@@ -2,9 +2,9 @@
 <div class="center">
   <%= form_for @sti_test  do |t| %>
   <%= t.label :date_taken, "Date"%>
-  <%= t.date_select :date_taken %>
+  <%= t.date_select :date_taken %><br><br>
     <% @infections.each do |infection| %>
-    <h3><%= infection.disease %></h3>
+    <h3><%= @diseases.find{|d| d[:name] ==infection.disease.intern}[:readable] %></h3>
       <%= t.fields_for :infections, infection do |f| %>
         <%= f.select :positive, options_for_select([["", :_destroy], ["Positive", true], ["Negative", false]], infection.positive)%>
         <%= f.hidden_field :disease, value: infection.disease %><br>

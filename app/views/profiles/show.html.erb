@@ -30,7 +30,24 @@
 </div>
 <div class="dashes"></div>
 <div class="center">
-  <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1><br>
-    partnering Id:
-    <%= @user.uid %>
+  <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1>
+    <br>
+    <strong>Check your risk of infections:</strong>
+    <br>
+    <br>
+    <ul>
+      <% @categories.each do |category, info| %>
+        <li> <span class="category"><strong>> &nbsp&nbsp<%= category.upcase %></strong>
+        <br> <%= info[:description] %></span>
+          <ul class="scroller">
+            <% info[:diseases].each do |disease| %>
+              <li class="disease"><%= @diseases.find{|d| d[:name] == disease}[:readable] %>
+                <span class="risk">at risk from: <%= @user.risk_window(disease) %></span></li>
+
+            <% end %>
+          </ul>
+        </li>
+        <br>
+      <% end %>
+    </ul>
 </div>

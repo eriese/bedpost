@@ -4,8 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='http://fonts.googleapis.com/css?family=Lily+Script+One|Londrina+Shadow|Fanwood+Text' rel='stylesheet' type='text/css'>
   <title>BedPost</title>
+
   <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -43,5 +44,5 @@
     <%= yield %>
   </div>
 </body>
-
+<%= javascript_include_tag "application" %>
 </html>
