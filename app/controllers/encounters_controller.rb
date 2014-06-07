@@ -1,5 +1,5 @@
 class EncountersController < ApplicationController
-  before_filter :check_encounter, :except => [:index, :new, :create]
+  before_filter :check_encounter, :except => [:index]
   def index
     @encounters = Encounter.where({user_id: session[:user_id]})
     @partners = @user.partners
@@ -16,8 +16,10 @@ class EncountersController < ApplicationController
     if @encounter.save
       redirect_to encounter_path(@encounter)
     else
-      redirect_to new_encounter_path
+      raise
       params[:partner_id] = partner_id
+      redirect_to new_encounter_path
+
     end
   end
   def show
@@ -46,8 +48,14 @@ class EncountersController < ApplicationController
   end
   private
   def check_encounter
-    @encounter = Encounter.find(params[:id])
-    if @encounter.user != @user
+    if params[:action] == "new"
+      @encounter = Encounter.new({partner_id: params[:partner_id], user_id: session[:user_id]})
+    elsif params[:action] == "create"
+      @encounter = Encounter.new(params[:encounter])
+    else
+      @encounter = Encounter.find(params[:id])
+    end
+    if !@user.partners.include?(@encounter.partner) || @encounter.user != @user
       redirect_to encounters_path
     else
       @partner = @encounter.partner

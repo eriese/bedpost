@@ -31,6 +31,7 @@ class ProfilesController < ApplicationController
     @encounters = @user.encounters.order("took_place DESC")
     @diseases = DISEASES
     @categories = DISEASE_CATEGORIES
+    @overdue_list = @user.overdue_tests
   end
   def edit
     @profile = @user

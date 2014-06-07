@@ -14,27 +14,29 @@
   <%= t.hidden_field :partner_id, value: @partner.id %>
   <br>
     <% @instruments.each do |instrument| %>
-      <% if instrument == "genitals" && !@user.genital_name.empty? %>
-        My <strong><%= @user.genital_name%></strong> came in contact with
-      <% elsif instrument == "anus" && !@user.anus_name.empty?%>
-        My <strong><%= @user.anus_name%></strong> came in contact with
+      My
+      <% if instrument == :genitals && !@user.genital_name.empty? %>
+        <strong><%= @user.genital_name%></strong>
+      <% elsif instrument == :anus && !@user.anus_name.empty?%>
+        <strong><%= @user.anus_name%></strong>
       <% else %>
-        My <strong><%= instrument %></strong> came in contact with
+        <strong><%= instrument %></strong>
       <% end %>
-      <%= @pronoun %><br>
+      came in contact with
+      <%= @pronoun[:possessive] %><br>
       <% @instruments.each do |inst| %>
         <%= t.fields_for :contacts do |builder| %>
-        <% if instrument == "hand" || instrument == "toys" || instrument == "mouth" %>
-          <% if inst != "hand" && inst != "toys" && inst != "mouth" %>
+        <% if instrument == :hand || instrument == :toys || instrument == :mouth %>
+          <% if inst != :hand && inst != :toys && inst != :mouth %>
             <%= builder.check_box :partner_inst, {}, inst, nil %> <%= inst %>
             <%= builder.check_box :barriers %> with a barrier <br>
             <%= builder.hidden_field :user_inst, value: instrument %>
           <% end %>
         <% else %>
           <%= builder.check_box :partner_inst, {}, inst, nil %>
-          <% if inst == "genitals" && !@partner.genital_name.empty?%>
+          <% if inst == :genitals && !@partner.genital_name.empty?%>
             <%= @partner.genital_name %>
-          <% elsif inst == "anus" && !@partner.anus_name.empty? %>
+          <% elsif inst == :anus && !@partner.anus_name.empty? %>
             <%= @partner.anus_name  %>
           <% else %>
             <%= inst %>

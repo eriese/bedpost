@@ -16,7 +16,7 @@
       <br>
     <% end %>
     <br>
-    <%= link_to "new encounter", new_encounter_path %>
+    <%= link_to "new encounter", new_encounter_path(partner_id: @partnership.partner_id) %>
   </div>
 </div>
 <div class="dashes"></div>
@@ -28,5 +28,5 @@
   <br>
   <%= link_to "edit", edit_partnership_path(@partnership) %>
   <br>
-  <%= link_to "new encounter", new_encounter_path %>
+  <%= link_to "new encounter", new_encounter_path(partner_id: @partnership.partner_id) %>
 </div>

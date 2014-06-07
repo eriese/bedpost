@@ -12,6 +12,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  uid             :string(255)
+#  min_window      :integer          default(6)
 #
 
 class Profile < ActiveRecord::Base
@@ -38,5 +39,19 @@ class Profile < ActiveRecord::Base
       window = t - DISEASES.find{|disease| disease[:name] == disease_name}[:gestation_max] * (60 * 60 * 24 * 7)
       return window
     end
+  end
+  def overdue?(disease_name)
+    if self.risk_window(disease_name)
+      return self.risk_window(disease_name) < Time.now - self.min_window * (60 * 60 * 24 * 7)
+    else
+      return true
+    end
+  end
+  def overdue_tests
+    overdue_list = []
+    DISEASES.each do |disease|
+      overdue_list << disease[:name] if self.overdue?(disease[:name])
+    end
+    return overdue_list
   end
 end

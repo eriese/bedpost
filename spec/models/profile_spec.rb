@@ -12,6 +12,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  uid             :string(255)
+#  min_window      :integer          default(6)
 #
 
 require 'spec_helper'

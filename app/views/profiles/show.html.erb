@@ -32,6 +32,11 @@
 <div class="center">
   <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1>
     <br>
+    <% if @overdue_list.any? %>
+      <span class="alert">Warning: you are overdue for testing for some infections.</span>
+    <% end %>
+    <br>
+    <br>
     <strong>Check your risk of infections:</strong>
     <br>
     <br>
@@ -43,7 +48,12 @@
           <%= info[:description] %></span>
           <ul class="scroller">
             <% info[:diseases].each do |disease| %>
-              <li class="disease"><%= @diseases.find{|d| d[:name] == disease}[:readable]%>
+              <% if @overdue_list.include?(disease) %>
+              <li class="disease alert">
+              <% else %>
+              <li class="disease">
+              <% end %>
+                <%= @diseases.find{|d| d[:name] == disease}[:readable]%>
                 <span class="risk">— at risk from:
                   <% if @user.risk_window(disease) %>
                     <%= time_ago_in_words(@user.risk_window(disease)) %> ago, on <%= @user.risk_window(disease).strftime('%m/%d/%Y') %>

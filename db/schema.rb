@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140603032305) do
+ActiveRecord::Schema.define(:version => 20140607035939) do
 
   create_table "contacts", :force => true do |t|
     t.string   "user_inst"
@@ -58,9 +58,10 @@ ActiveRecord::Schema.define(:version => 20140603032305) do
     t.string   "pronoun"
     t.string   "anus_name"
     t.string   "genital_name"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.string   "uid"
+    t.integer  "min_window",      :default => 6
   end
 
   create_table "sti_tests", :force => true do |t|
