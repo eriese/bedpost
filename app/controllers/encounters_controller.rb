@@ -6,7 +6,7 @@ class EncountersController < ApplicationController
   end
   def new
     @partner = Profile.find(params[:partner_id])
-    @encounter = @user.encounters.new
+    @encounter = @user.encounters.new(partner_id: @partner.id)
     @contact = @encounter.contacts.new
     @instruments = INSTRUMENTS
   end
@@ -16,10 +16,9 @@ class EncountersController < ApplicationController
     if @encounter.save
       redirect_to encounter_path(@encounter)
     else
-      raise
       params[:partner_id] = partner_id
+      flash[:message] = @encounter.errors.messages
       redirect_to new_encounter_path
-
     end
   end
   def show
@@ -51,7 +50,7 @@ class EncountersController < ApplicationController
     if params[:action] == "new"
       @encounter = Encounter.new({partner_id: params[:partner_id], user_id: session[:user_id]})
     elsif params[:action] == "create"
-      @encounter = Encounter.new(params[:encounter])
+      @encounter = @user.encounters.new(params[:encounter])
     else
       @encounter = Encounter.find(params[:id])
     end
