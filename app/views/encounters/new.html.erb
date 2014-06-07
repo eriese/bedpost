@@ -13,36 +13,44 @@
   <%= t.text_area :notes %><br>
   <%= t.hidden_field :partner_id, value: @partner.id %>
   <br>
-    <% @instruments.each do |instrument| %>
+    <% @instruments.each do |u_instrument| %>
       My
-      <% if instrument == :genitals && !@user.genital_name.empty? %>
+      <% if u_instrument == :genitals && !@user.genital_name.empty? %>
         <strong><%= @user.genital_name%></strong>
-      <% elsif instrument == :anus && !@user.anus_name.empty?%>
+      <% elsif u_instrument == :anus && !@user.anus_name.empty?%>
         <strong><%= @user.anus_name%></strong>
+      <% elsif u_instrument == :hand_penetrative %>
+        <strong>hand</strong>
+      <% elsif u_instrument == :genitals_penetrative %>
+        <% if !@user.genital_name.empty? %>
+          <strong><%= @user.genital_name %></strong>
+        <% else %>
+          genitals
+        <% end %>
       <% else %>
-        <strong><%= instrument %></strong>
+        <strong><%= u_instrument %></strong>
       <% end %>
-      came in contact with
-      <%= @pronoun[:possessive] %><br>
-      <% @instruments.each do |inst| %>
+      <br>
+      <% @instruments.each do |p_instrument| %>
         <%= t.fields_for :contacts do |builder| %>
-        <% if instrument == :hand || instrument == :toys || instrument == :mouth %>
-          <% if inst != :hand && inst != :toys && inst != :mouth %>
-            <%= builder.check_box :partner_inst, {}, inst, nil %> <%= inst %>
-            <%= builder.check_box :barriers %> with a barrier <br>
-            <%= builder.hidden_field :user_inst, value: instrument %>
+        <% if u_instrument == :hand %>
+          <% if p_instrument != :hand && p_instrument != :toys && p_instrument != :mouth && p_instrument != :hand_penetrative && p_instrument != :genitals_penetrative %>
+            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
+          <% end %>
+        <% elsif u_instrument == :hand_penetrative %>
+          <% if p_instrument != :hand && p_instrument != :toys && p_instrument != :mouth && p_instrument != :hand_penetrative && p_instrument != :genitals_penetrative %>
+            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
+          <% end %>
+        <% elsif (u_instrument == :toys || u_instrument == :mouth) %>
+          <% if p_instrument != :hand && p_instrument != :toys && p_instrument != :mouth && p_instrument != :hand_penetrative %>
+            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
+          <% end %>
+        <% elsif u_instrument == :genitals_penetrative %>
+          <% if p_instrument != :hand && p_instrument != :hand_penetrative && p_instrument != :genitals_penetrative%>
+            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user})%>
           <% end %>
         <% else %>
-          <%= builder.check_box :partner_inst, {}, inst, nil %>
-          <% if inst == :genitals && !@partner.genital_name.empty?%>
-            <%= @partner.genital_name %>
-          <% elsif inst == :anus && !@partner.anus_name.empty? %>
-            <%= @partner.anus_name  %>
-          <% else %>
-            <%= inst %>
-          <% end %>
-          <%= builder.hidden_field :user_inst, value: instrument %>
-          <%= builder.check_box :barriers %> with a barrier <br>
+          <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
         <% end %>
       <% end %>
     <% end %><br>

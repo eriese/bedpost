@@ -1,0 +1,26 @@
+<%= builder.check_box :partner_inst, {}, p_instrument, nil %>
+<% if p_instrument == :hand_penetrative || p_instrument == :genitals_penetrative %>
+  <% if (u_instrument == :genitals && !user.genital_name.empty? && user.genital_name.last != "s") || u_instrument != :genitals %>
+    was penetrated by
+  <% elsif u_instrument == :genitals %>
+    were penetrated by
+  <% end %>
+<% elsif u_instrument == :hand_penetrative || u_instrument == :genitals_penetrative %>
+  penetrated
+<% else %>
+  came in contact with
+<% end %>
+<%= @pronoun[:possessive] %>
+<% if p_instrument == :genitals && !@partner.genital_name.empty?%>
+  <%= @partner.genital_name %>
+<% elsif p_instrument == :anus && !@partner.anus_name.empty? %>
+  <%= @partner.anus_name  %>
+<% else %>
+  <%= p_instrument %>
+<% end %>
+<%= builder.hidden_field :user_inst, value: u_instrument %>
+<%= builder.check_box :barriers %> with a barrier
+<% if p_instrument == :toys || u_instrument == :toys %>
+  (or sanitized)
+<% end %>
+<br>
