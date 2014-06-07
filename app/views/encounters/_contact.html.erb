@@ -7,14 +7,20 @@
   <% end %>
 <% elsif u_instrument == :hand_penetrative || u_instrument == :genitals_penetrative %>
   penetrated
+<% elsif u_instrument == :toys %>
+  came in contact with or penetrated
+<% elsif p_instrument == :toys %>
+  came in contact with or was penetrated by
 <% else %>
   came in contact with
 <% end %>
 <%= @pronoun[:possessive] %>
-<% if p_instrument == :genitals && !@partner.genital_name.empty?%>
+<% if (p_instrument == :genitals || p_instrument == :genitals_penetrative) && !@partner.genital_name.empty?%>
   <%= @partner.genital_name %>
 <% elsif p_instrument == :anus && !@partner.anus_name.empty? %>
   <%= @partner.anus_name  %>
+<% elsif p_instrument == :hand_penetrative %>
+  hand
 <% else %>
   <%= p_instrument %>
 <% end %>

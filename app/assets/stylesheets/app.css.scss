@@ -208,7 +208,9 @@ ul.encounters {
 .scroller, .risk {
   display: none;
 }
-
+.alert {
+  color: $color-pop;
+}
 .highlight {
   color: $pop-light;
 }
@@ -219,6 +221,4 @@ ul.encounters {
   padding: 10px;
 }
 
-.alert {
-  color: $color-pop;
-}
+
