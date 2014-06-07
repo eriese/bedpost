@@ -9,7 +9,7 @@ class EncountersController < ApplicationController
     @encounter = @user.encounters.new(partner_id: @partner.id)
     @contact = @encounter.contacts.new
     @instruments = INSTRUMENTS
-    @possibilities = RISKY_CONTACTS
+    @possibilities = POSSIBLE_CONTACTS
   end
   def create
     @encounter = @user.encounters.new(params[:encounter])

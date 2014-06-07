@@ -13,47 +13,24 @@
   <%= t.text_area :notes %><br>
   <%= t.hidden_field :partner_id, value: @partner.id %>
   <br>
-    <% @instruments.each do |u_instrument| %>
+    <% @possibilities.each do |possibility| %>
       My
-      <% if u_instrument == :genitals && !@user.genital_name.empty? %>
+      <% if (possibility[:user_instrument] == :genitals || possibility[:user_instrument] == :genitals_penetrative) && !@user.genital_name.empty? %>
         <strong><%= @user.genital_name%></strong>
-      <% elsif u_instrument == :anus && !@user.anus_name.empty?%>
+      <% elsif possibility[:user_instrument] == :anus && !@user.anus_name.empty?%>
         <strong><%= @user.anus_name%></strong>
-      <% elsif u_instrument == :hand_penetrative %>
+      <% elsif possibility[:user_instrument] == :hand_penetrative %>
         <strong>hand</strong>
-      <% elsif u_instrument == :genitals_penetrative %>
-        <% if !@user.genital_name.empty? %>
-          <strong><%= @user.genital_name %></strong>
-        <% else %>
-          genitals
-        <% end %>
       <% else %>
-        <strong><%= u_instrument %></strong>
+        <strong><%= possibility[:user_instrument] %></strong>
       <% end %>
       <br>
-      <% @instruments.each do |p_instrument| %>
-        <%= t.fields_for :contacts do |builder| %>
-        <% if u_instrument == :hand %>
-          <% if p_instrument != :hand && p_instrument != :toys && p_instrument != :mouth && p_instrument != :hand_penetrative && p_instrument != :genitals_penetrative %>
-            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
-          <% end %>
-        <% elsif u_instrument == :hand_penetrative %>
-          <% if p_instrument != :hand && p_instrument != :toys && p_instrument != :mouth && p_instrument != :hand_penetrative && p_instrument != :genitals_penetrative %>
-            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
-          <% end %>
-        <% elsif (u_instrument == :toys || u_instrument == :mouth) %>
-          <% if p_instrument != :hand && p_instrument != :toys && p_instrument != :mouth && p_instrument != :hand_penetrative %>
-            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
-          <% end %>
-        <% elsif u_instrument == :genitals_penetrative %>
-          <% if p_instrument != :hand && p_instrument != :hand_penetrative && p_instrument != :genitals_penetrative%>
-            <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user})%>
-          <% end %>
-        <% else %>
-          <%= render partial: "contact", locals: ({builder: builder, u_instrument: u_instrument, p_instrument: p_instrument, user: @user}) %>
-        <% end %>
+      <%= t.fields_for :contacts do |builder| %>
+      <% possibility[:partner_instruments].each do |partner_instrument| %>
+        <%= render partial: "contact", locals: ({builder: builder, u_instrument: possibility[:user_instrument], p_instrument: partner_instrument, user: @user}) %>
       <% end %>
-    <% end %><br>
+    <% end %>
+    <br>
   <% end %>
   <%= t.check_box :fluid, value: true %>fluid exchange not accounted for (e.g. ejaculate in eyes, nose, or open cuts)<br>
   <br>
