@@ -1,45 +1,26 @@
 <div class="dashes hidden to-hide"></div>
-<div class="center"><%= form_for @encounter do |t|%>
-  New Encounter with <%= @partner.name %>
-  <br>
-  <br>
-  Took place on: <br>
-  <%= t.date_select :took_place %>
-  <br>
-  <br>
-  Self-assessed risk: <%= t.select :self_risk, options_for_select(1..10) %><br>
-  <br>
-  <%= t.label :notes %><br>
-  <%= t.text_area :notes %><br>
-  <%= t.hidden_field :partner_id, value: @partner.id %>
-  <br>
-    <% @possibilities.each do |possibility| %>
-      <div class="bubble"><% if possibility[:user_instrument] != :hand_penetrative && possibility[:user_instrument] != :genitals_penetrative %>
-          My <strong class="category">
-          <% if possibility[:user_instrument] == :genitals && !@user.genital_name.empty? %>
-            <%= @user.genital_name%>
-          <% elsif possibility[:user_instrument] == :anus && !@user.anus_name.empty?%>
-            <%= @user.anus_name%>
-          <% elsif possibility[:user_instrument] == :hand_penetrative %>
-            hand
-          <% else %>
-            <%= possibility[:user_instrument] %>
-          <% end %>
-          <br>
-        <% end %>
-        </strong>
-        <%= t.fields_for :contacts do |builder| %>
-        <% possibility[:partner_instruments].each do |partner_instrument| %>
-        <div class="hidden">
-          <%= render partial: "contact", locals: ({builder: builder, u_instrument: possibility[:user_instrument], p_instrument: partner_instrument, user: @user}) %>
-        </div>
-        <% end %>
-      <% end %>
-    </div>
+<div class="center">
+  <%= form_for @encounter do |t|%>
+    New Encounter with <%= @partner.name %>
     <br>
+    <br>
+    Took place on: <br>
+    <%= t.date_select :took_place %>
+    <br>
+    <br>
+    Self-assessed risk: <%= t.select :self_risk, options_for_select(1..10) %><br>
+    <br>
+    <%= t.label :notes %><br>
+    <%= t.text_area :notes %><br>
+    <%= t.hidden_field :partner_id, value: @partner.id %>
+    <br>
+    <% @possibilities.each do |inst, contact_types| %>
+      <%= render partial: "contact", locals: ({inst: inst, contact_types: contact_types, user: @user, t: t}) %>
+      <br>
+    <% end %>
+    <br>
+    <%= t.check_box :fluid, value: true %>fluid exchange not accounted for (e.g. ejaculate in eyes, nose, or open cuts, fluids transferred through indirect contact)<br>
+    <br>
+    <%= t.submit %>
   <% end %>
-  <%= t.check_box :fluid, value: true %>fluid exchange not accounted for (e.g. ejaculate in eyes, nose, or open cuts, fluids transferred through indirect contact)<br>
-  <br>
-  <%= t.submit %>
-<% end %>
 </div>

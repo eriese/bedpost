@@ -1,32 +1,46 @@
-<%= builder.check_box :partner_inst, {}, p_instrument, nil %>
-<% if p_instrument == :hand_penetrative || p_instrument == :genitals_penetrative %>
-  <% if (u_instrument == :genitals && !user.genital_name.empty? && user.genital_name.last != "s") || (u_instrument != :genitals && u_instrument != :toys) %>
-    was penetrated by
-  <% elsif u_instrument == :genitals || u_instrument == :toys %>
-    were penetrated by
-  <% end %>
-<% elsif u_instrument == :hand_penetrative || u_instrument == :genitals_penetrative %>
-  penetrated
-<% elsif u_instrument == :toys %>
-  came in contact with or penetrated
-<% elsif p_instrument == :toys %>
-  came in contact with or was penetrated by
-<% else %>
-  came in contact with
-<% end %>
-<%= @pronoun[:possessive] %>
-<% if (p_instrument == :genitals || p_instrument == :genitals_penetrative) && !@partner.genital_name.empty?%>
-  <%= @partner.genital_name %>
-<% elsif p_instrument == :anus && !@partner.anus_name.empty? %>
-  <%= @partner.anus_name  %>
-<% elsif p_instrument == :hand_penetrative %>
-  hand
-<% else %>
-  <%= p_instrument %>
-<% end %>
-<%= builder.hidden_field :user_inst, value: u_instrument %>
-<%= builder.check_box :barriers %> with a barrier
-<% if p_instrument == :toys || u_instrument == :toys %>
-  (or sanitized)
-<% end %>
-<br>
+<div class="bubble">
+  My
+  <strong class="category">
+    <% if inst == :genitals && !@user.genital_name.empty? %>
+      <%= @user.genital_name%>
+    <% elsif inst == :anus && !@user.anus_name.empty?%>
+      <%= @user.anus_name%>
+    <% else %>
+      <%= inst %>
+    <% end %>
+    <br>
+  </strong>
+  <div class="hidden">
+    <%= t.fields_for :contacts do |builder| %>
+      <% contact_types.each do|c_type, insts| %>
+        <div class="contact-type">
+          <span class="category">
+            > <%= c_type %>
+            <%= @pronoun[:possessive] %>
+          </span>
+          <br>
+          <div class="hidden">
+            <% insts[:partner_instruments].each do |p_instrument| %>
+              <%= builder.check_box :partner_inst, {}, p_instrument, nil %>
+              <% if (p_instrument == :genitals || p_instrument == :genitals_penetrative) && !@partner.genital_name.empty?%>
+                <%= @partner.genital_name %>
+              <% elsif p_instrument == :anus && !@partner.anus_name.empty? %>
+                <%= @partner.anus_name  %>
+              <% elsif p_instrument == :hand_penetrative %>
+                hand
+              <% else %>
+                <%= p_instrument %>
+              <% end %>
+              <%= builder.hidden_field :user_inst, value: insts[:user_instrument] %>
+              <%= builder.check_box :barriers %> with a barrier
+              <% if p_instrument == :toys || insts[:user_instrument] == :toys %>
+                (or sanitized)
+              <% end %>
+              <br>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

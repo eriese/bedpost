@@ -76,15 +76,55 @@ PRONOUNS = [
   {subject: "she", object: "her", possessive: "her", obj_possessive: "hers", reflexive: "herself"},
   {subject: "he", object: "him", possessive: "his", obj_possessive: "his", reflexive: "himself"},
   {subject: "they", object: "them", possessive: "their", obj_possessive: "theirs", reflexive: "themself"}]
-POSSIBLE_CONTACTS = [
-  {user_instrument: :hand, partner_instruments: [:genitals, :anus]},
-  {user_instrument: :hand_penetrative, partner_instruments: [:genitals, :anus]},
-  {user_instrument: :genitals, partner_instruments: [:hand, :genitals, :anus, :mouth, :toys, :hand_penetrative, :genitals_penetrative]},
-  {user_instrument: :genitals_penetrative, partner_instruments: [:genitals, :anus, :mouth, :toys]},
-  {user_instrument: :anus, partner_instruments: [:hand, :genitals, :mouth, :toys, :hand_penetrative, :genitals_penetrative]},
-  {user_instrument: :mouth, partner_instruments: [:genitals, :anus, :toys, :genitals_penetrative]},
-  {user_instrument: :toys, partner_instruments: [:genitals, :anus, :genitals_penetrative]}
-]
+POSSIBLE_CONTACTS = {
+  hand: {
+    "came in contact with" => {
+      user_instrument: :hand, partner_instruments: [:genitals, :anus]
+    },
+    "penetrated" => {
+      user_instrument: :hand_penetrative, partner_instruments: [:genitals, :anus]
+    },
+  },
+  genitals: {
+    "came in contact with" => {
+      user_instrument: :genitals, partner_instruments: [:hand, :genitals, :anus, :mouth, :toys]
+    },
+    "were penetrated by" => {
+      user_instrument: :genitals, partner_instruments:[:hand_penetrative, :genitals_penetrative, :toys]
+    },
+    "penetrated" => {
+      user_instrument: :genitals_penetrative, partner_instruments: [:genitals, :anus, :mouth, :toys]
+    }
+  },
+  anus: {
+    "came in contact with" => {
+      user_instrument: :anus, partner_instruments: [:hand, :genitals, :mouth, :toys]
+    },
+    "were penetrated by" => {
+      user_instrument: :anus, partner_instruments: [:hand_penetrative, :genitals_penetrative, :toys]
+    }
+  },
+  mouth: {
+    "came in contact with" => {
+      user_instrument: :mouth, partner_instruments: [:genitals, :anus, :toys]
+    },
+    "were penetrated by" => {
+      user_instrument: :mouth, partner_instruments: [:genitals_penetrative, :toys]
+    }
+  },
+  toys: {
+    "came in contact with" => {
+      user_instrument: :toys, partner_instruments: [:genitals, :anus]
+    },
+    "penetrated" => {
+      user_instrument: :toys, partner_instruments: [:genitals, :anus, :mouth]
+    },
+    "were penetrated by" => {
+      user_instrument: :toys, partner_instruments: [:genitals]
+    }
+  }
+}
+
 KINKY_CONTACTS = [
   {urine: [:mouth, :genitals, :ass, :glands]},
   {feces: [:mouth, :genitals, :ass, :glands]},
