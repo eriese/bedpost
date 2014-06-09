@@ -14,25 +14,28 @@
   <%= t.hidden_field :partner_id, value: @partner.id %>
   <br>
     <% @possibilities.each do |possibility| %>
-      <% if possibility[:user_instrument] != :hand_penetrative && possibility[:user_instrument] != :genitals_penetrative %>
-        My
-        <% if possibility[:user_instrument] == :genitals && !@user.genital_name.empty? %>
-          <strong><%= @user.genital_name%></strong>
-        <% elsif possibility[:user_instrument] == :anus && !@user.anus_name.empty?%>
-          <strong><%= @user.anus_name%></strong>
-        <% elsif possibility[:user_instrument] == :hand_penetrative %>
-          <strong>hand</strong>
-        <% else %>
-          <strong><%= possibility[:user_instrument] %></strong>
+      <div class="bubble"><% if possibility[:user_instrument] != :hand_penetrative && possibility[:user_instrument] != :genitals_penetrative %>
+          My <strong class="category">
+          <% if possibility[:user_instrument] == :genitals && !@user.genital_name.empty? %>
+            <%= @user.genital_name%>
+          <% elsif possibility[:user_instrument] == :anus && !@user.anus_name.empty?%>
+            <%= @user.anus_name%>
+          <% elsif possibility[:user_instrument] == :hand_penetrative %>
+            hand
+          <% else %>
+            <%= possibility[:user_instrument] %>
+          <% end %>
+          <br>
         <% end %>
-        <br>
+        </strong>
+        <%= t.fields_for :contacts do |builder| %>
+        <% possibility[:partner_instruments].each do |partner_instrument| %>
+        <div class="hidden">
+          <%= render partial: "contact", locals: ({builder: builder, u_instrument: possibility[:user_instrument], p_instrument: partner_instrument, user: @user}) %>
+        </div>
+        <% end %>
       <% end %>
-
-      <%= t.fields_for :contacts do |builder| %>
-      <% possibility[:partner_instruments].each do |partner_instrument| %>
-        <%= render partial: "contact", locals: ({builder: builder, u_instrument: possibility[:user_instrument], p_instrument: partner_instrument, user: @user}) %>
-      <% end %>
-    <% end %>
+    </div>
     <br>
   <% end %>
   <%= t.check_box :fluid, value: true %>fluid exchange not accounted for (e.g. ejaculate in eyes, nose, or open cuts, fluids transferred through indirect contact)<br>

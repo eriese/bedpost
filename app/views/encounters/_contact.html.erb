@@ -1,8 +1,8 @@
 <%= builder.check_box :partner_inst, {}, p_instrument, nil %>
 <% if p_instrument == :hand_penetrative || p_instrument == :genitals_penetrative %>
-  <% if (u_instrument == :genitals && !user.genital_name.empty? && user.genital_name.last != "s") || u_instrument != :genitals %>
+  <% if (u_instrument == :genitals && !user.genital_name.empty? && user.genital_name.last != "s") || (u_instrument != :genitals && u_instrument != :toys) %>
     was penetrated by
-  <% elsif u_instrument == :genitals %>
+  <% elsif u_instrument == :genitals || u_instrument == :toys %>
     were penetrated by
   <% end %>
 <% elsif u_instrument == :hand_penetrative || u_instrument == :genitals_penetrative %>

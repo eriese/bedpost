@@ -76,4 +76,18 @@ PRONOUNS = [
   {subject: "she", object: "her", possessive: "her", obj_possessive: "hers", reflexive: "herself"},
   {subject: "he", object: "him", possessive: "his", obj_possessive: "his", reflexive: "himself"},
   {subject: "they", object: "them", possessive: "their", obj_possessive: "theirs", reflexive: "themself"}]
-POSSIBLE_CONTACTS = [{user_instrument: :hand, partner_instruments: [:genitals, :anus]}, {user_instrument: :hand_penetrative, partner_instruments: [:genitals, :anus]}, {user_instrument: :genitals, partner_instruments: [:hand, :hand_penetrative, :genitals, :genitals_penetrative, :anus, :mouth, :toys]}, {user_instrument: :genitals_penetrative, partner_instruments: [:genitals, :anus, :mouth, :toys]}, {user_instrument: :anus, partner_instruments: [:hand, :hand_penetrative, :genitals, :genitals_penetrative, :mouth, :toys]}, {user_instrument: :mouth, partner_instruments: [:genitals, :genitals_penetrative, :anus, :toys]}, {user_instrument: :toys, partner_instruments: [:genitals, :genitals_penetrative, :anus]}]
+POSSIBLE_CONTACTS = [
+  {user_instrument: :hand, partner_instruments: [:genitals, :anus]},
+  {user_instrument: :hand_penetrative, partner_instruments: [:genitals, :anus]},
+  {user_instrument: :genitals, partner_instruments: [:hand, :genitals, :anus, :mouth, :toys, :hand_penetrative, :genitals_penetrative]},
+  {user_instrument: :genitals_penetrative, partner_instruments: [:genitals, :anus, :mouth, :toys]},
+  {user_instrument: :anus, partner_instruments: [:hand, :genitals, :mouth, :toys, :hand_penetrative, :genitals_penetrative]},
+  {user_instrument: :mouth, partner_instruments: [:genitals, :anus, :toys, :genitals_penetrative]},
+  {user_instrument: :toys, partner_instruments: [:genitals, :anus, :genitals_penetrative]}
+]
+KINKY_CONTACTS = [
+  {urine: [:mouth, :genitals, :ass, :glands]},
+  {feces: [:mouth, :genitals, :ass, :glands]},
+  {blood: [:mouth, :genitals, :ass, :glands]},
+  {vomit: [:mouth, :genitals, :ass, :glands]}
+]
