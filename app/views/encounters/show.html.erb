@@ -20,27 +20,31 @@
       <% insts[:partner_instruments].each do |p_instrument| %>
         <% if @encounter.has_contact?(insts[:user_instrument], p_instrument) %>
           Your
-          <% if inst == :genitals && !@user.genital_name.empty? %>
-            <%= @user.genital_name%>
-          <% elsif inst == :anus && !@user.anus_name.empty?%>
-            <%= @user.anus_name%>
-          <% else %>
-            <%= inst %>
-          <% end %>
+          <span class="highlight">
+            <% if inst == :genitals && !@user.genital_name.empty? %>
+              <%= @user.genital_name%>
+            <% elsif inst == :anus && !@user.anus_name.empty?%>
+              <%= @user.anus_name%>
+            <% else %>
+              <%= inst %>
+            <% end %>
+          </span>
           <% if c_type == "was penetrated by" && (insts[:user_instrument] == :toys || (insts[:user_instrument] == :genitals && (@user.genital_name.empty? || @user.genital_name.last == "s")))%>
             were penetrated by
           <% else %>
             <%= c_type %>
           <% end %>
-          <% if (p_instrument == :genitals || p_instrument == :genitals_penetrative) && !@partner.genital_name.empty?%>
-            <%= @partner.genital_name %>
-          <% elsif p_instrument == :anus && !@partner.anus_name.empty? %>
-            <%= @partner.anus_name  %>
-          <% elsif p_instrument == :hand_penetrative %>
-            hand
-          <% else %>
-            <%= p_instrument %>
-          <% end %>
+          <span class="highlight">
+            <% if (p_instrument == :genitals || p_instrument == :genitals_penetrative) && !@partner.genital_name.empty?%>
+              <%= @partner.genital_name %>
+            <% elsif p_instrument == :anus && !@partner.anus_name.empty? %>
+              <%= @partner.anus_name  %>
+            <% elsif p_instrument == :hand_penetrative %>
+              hand
+            <% else %>
+              <%= p_instrument %>
+            <% end %>
+          </span>
           <% if @encounter.has_barriers?(insts[:user_instrument], p_instrument) %>
             <%= "with a barrier" %>
           <% else %>
