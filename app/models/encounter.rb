@@ -40,9 +40,9 @@ class Encounter < ActiveRecord::Base
     return @risk
   end
   def has_contact?(user_instrument, partner_instrument)
-    !self.contacts.find{|contact| contact[:user_inst] == user_instrument && contact[:partner_inst] == partner_instrument}.nil?
+    !self.contacts.find{|contact| contact[:user_inst] == user_instrument.to_s && contact[:partner_inst] == partner_instrument.to_s}.nil?
   end
   def has_barriers?(user_instrument, partner_instrument)
-    !self.contacts.find{|contact| contact[:user_inst] == user_instrument && contact[:partner_inst] == partner_instrument && contact[:barriers] == true}.nil?
+    !self.contacts.find{|contact| contact[:user_inst] == user_instrument.to_s && contact[:partner_inst] == partner_instrument.to_s && contact[:barriers] == true}.nil?
   end
 end

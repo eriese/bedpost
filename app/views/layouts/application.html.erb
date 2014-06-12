@@ -3,44 +3,45 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='http://fonts.googleapis.com/css?family=Lily+Script+One|Londrina+Shadow|Fanwood+Text' rel='stylesheet' type='text/css'>
-  <title>BedPost</title>
-
+  <title>BedPosting</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
-
   <%= csrf_meta_tags %>
 </head>
 <body>
   <div id="container">
     <div class="nav">
-
-          <div id="logo">
-            <a href="/">
-                Bed<span>post</span>
-            </a>
-          </div>
-        <ul><% if session[:user_id] %>
-            <li>
-              <%= link_to "Dash", profiles_path %><br>
-            </li>
-            <li><%= link_to "Partners", partnerships_path %></li>
-            <li><%= link_to "Tests", sti_tests_path %></li>
-            <li>
-              <%= link_to "Encounters", encounters_path %>
-            </li>
-            <li>
-              <%= link_to "Log Out", "/logout"%><br>
-            </li>
-          <% elsif params[:action] != "new" || params[:controller] != "profiles" %>
-            <li><%= link_to "Sign Up", new_profile_path %></li>
-          <% end %></ul>
+      <div id="logo">
+        <a href="/">
+          Bed<span>post</span>
+        </a>
       </div>
-      <div id="flash"><% if flash[:message] %>
-          <% flash[:message].each do |key, message| %>
+      <ul>
+        <% if session[:user_id] %>
+          <li>
+            <%= link_to "Dash", profiles_path %><br>
+          </li>
+          <li><%= link_to "Partners", partnerships_path %></li>
+          <li><%= link_to "Tests", sti_tests_path %></li>
+          <li>
+            <%= link_to "Encounters", encounters_path %>
+          </li>
+          <li>
+            <%= link_to "Log Out", "/logout"%><br>
+          </li>
+        <% elsif params[:action] != "new" || params[:controller] != "profiles" %>
+          <li><%= link_to "Sign Up", new_profile_path %></li>
+        <% end %>
+      </ul>
+    </div>
+    <div id="flash">
+      <% if flash[:message] %>
+        <% flash[:message].each do |key, message| %>
           <% message.each do |msg| %>
             <%= msg %>
-            <% end %>
           <% end %>
-        <% end %></div>
+        <% end %>
+      <% end %>
+    </div>
     <%= yield %>
   </div>
 </body>

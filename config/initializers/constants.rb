@@ -62,20 +62,44 @@ DISEASES = [
   {name: :Molluscum_Contagiosum, readable: "Molluscum Contagiosum", gestation_min: 2, gestation_max: 24, barriers_effective: true, risky_contacts: [] },
   {name: :Bacterial_Vaginosis, readable: "Bacterial Vaginosis", gestation_min: 0, gestation_max: 1, barriers_effective: true, risky_contacts: [
     {user_instrument: :genitals, partner_instrument: :hand, risk_level: 1},
-    {user_instrument: :genitals, partner_instrument: :toys, risk_level: 1}] }]
+    {user_instrument: :genitals, partner_instrument: :toys, risk_level: 1}
+    ] }
+  ]
 DISEASE_CATEGORIES = {
-  "Curable" => {description: "These infections are very common and easily treatable, but can be dangerous if left untreated", diseases: [:Gonorrhea, :Chlamydia, :Syphillis]},
-  "Uncommon" => {description: "These infections are less well-known than others, but can still happen.", diseases: [:Cytomegalovirus, :Molluscum_Contagiosum]},
-  "Genital-specific" => {description: "These infections only occur for people with internal genitalia", diseases: [:Bacterial_Vaginosis, :Trichomoniasis]},
-  "Hepatitis" => {description: "Hepatitis attacks the liver and stays in your system forever, even after it is cured", diseases:[:Hepatitis_A, :Hepatitis_B, :Hepatitis_C]},
-  "Skin-to-skin" => {description: "These infections are passed from skin-to-skin contact with affected areas, and are therefore harder to protect against using condoms", diseases: [:Herpes, :HPV]},
-  "HIV" => {description: "HIV is currently uncurable, but can be treated if detected early and well-managed", diseases: [:HIV]}}
-INSTRUMENTS = [:hand, :hand_penetrative, :genitals, :genitals_penetrative, :anus, :mouth, :toys]
+  "Curable" => {
+    description: "These infections are very common and easily treatable, but can be dangerous if left untreated", diseases: [:Gonorrhea, :Chlamydia, :Syphillis]
+    },
+  "Uncommon" => {
+    description: "These infections are less well-known than others, but can still happen.", diseases: [:Cytomegalovirus, :Molluscum_Contagiosum]
+    },
+  "Genital-specific" => {
+    description: "These infections only occur for people with internal genitalia", diseases: [:Bacterial_Vaginosis, :Trichomoniasis]
+    },
+  "Hepatitis" => {
+    description: "Hepatitis attacks the liver and stays in your system forever, even after it is cured", diseases:[:Hepatitis_A, :Hepatitis_B, :Hepatitis_C]
+    },
+  "Skin-to-skin" => {
+    description: "These infections are passed from skin-to-skin contact with affected areas, and are therefore harder to protect against using condoms", diseases: [:Herpes, :HPV]
+    },
+  "HIV" => {
+    description: "HIV is currently uncurable, but can be treated if detected early and well-managed", diseases: [:HIV]
+    }
+}
+INSTRUMENTS = [
+  :hand,
+  :hand_penetrative,
+  :genitals,
+  :genitals_penetrative,
+  :anus,
+  :mouth,
+  :toys
+]
 PRONOUNS = [
   {subject: "ze", object: "hir", possessive: "hir" , obj_possessive: "hirs", reflexive: "hirself"},
   {subject: "she", object: "her", possessive: "her", obj_possessive: "hers", reflexive: "herself"},
   {subject: "he", object: "him", possessive: "his", obj_possessive: "his", reflexive: "himself"},
-  {subject: "they", object: "them", possessive: "their", obj_possessive: "theirs", reflexive: "themself"}]
+  {subject: "they", object: "them", possessive: "their", obj_possessive: "theirs", reflexive: "themself"}
+]
 POSSIBLE_CONTACTS = {
   hand: {
     "came in contact with" => {
@@ -89,7 +113,7 @@ POSSIBLE_CONTACTS = {
     "came in contact with" => {
       user_instrument: :genitals, partner_instruments: [:hand, :genitals, :anus, :mouth, :toys]
     },
-    "were penetrated by" => {
+    "was penetrated by" => {
       user_instrument: :genitals, partner_instruments:[:hand_penetrative, :genitals_penetrative, :toys]
     },
     "penetrated" => {
@@ -100,7 +124,7 @@ POSSIBLE_CONTACTS = {
     "came in contact with" => {
       user_instrument: :anus, partner_instruments: [:hand, :genitals, :mouth, :toys]
     },
-    "were penetrated by" => {
+    "was penetrated by" => {
       user_instrument: :anus, partner_instruments: [:hand_penetrative, :genitals_penetrative, :toys]
     }
   },
@@ -108,7 +132,7 @@ POSSIBLE_CONTACTS = {
     "came in contact with" => {
       user_instrument: :mouth, partner_instruments: [:genitals, :anus, :toys]
     },
-    "were penetrated by" => {
+    "was penetrated by" => {
       user_instrument: :mouth, partner_instruments: [:genitals_penetrative, :toys]
     }
   },
@@ -119,7 +143,7 @@ POSSIBLE_CONTACTS = {
     "penetrated" => {
       user_instrument: :toys, partner_instruments: [:genitals, :anus, :mouth]
     },
-    "were penetrated by" => {
+    "was penetrated by" => {
       user_instrument: :toys, partner_instruments: [:genitals]
     }
   }

@@ -7,9 +7,6 @@ class EncountersController < ApplicationController
   def new
     @partner = Profile.find(params[:partner_id])
     @encounter = @user.encounters.new(partner_id: @partner.id)
-    @contact = @encounter.contacts.new
-    @instruments = INSTRUMENTS
-    @possibilities = POSSIBLE_CONTACTS
   end
   def create
     @encounter = @user.encounters.new(params[:encounter])
@@ -26,8 +23,6 @@ class EncountersController < ApplicationController
     @contacts = @encounter.contacts
   end
   def edit
-    @contacts = @encounter.contacts.new
-    @instruments = INSTRUMENTS
   end
   def update
     @encounter.contacts.destroy_all
@@ -59,6 +54,7 @@ class EncountersController < ApplicationController
       redirect_to encounters_path
     else
       @partner = @encounter.partner
+      @possibilities = POSSIBLE_CONTACTS
       @pronoun = PRONOUNS.find{|p_set| p_set[:subject] == @partner.pronoun}
     end
   end

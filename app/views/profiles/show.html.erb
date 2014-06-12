@@ -33,7 +33,7 @@
   <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1>
     <br>
     <% if @overdue_list.any? %>
-      <span class="alert">Warning: you are overdue for testing for some infections.</span>
+      <span class="alert">Warning: you are overdue for testing for some infections. They are marked in red below. To change your preferred testing frequency, <%= link_to "edit your profile settings", edit_profile_path(@user) %>.</span>
     <% end %>
     <br>
     <br>

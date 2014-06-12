@@ -1,0 +1,44 @@
+@media (max-width: 750px) {
+  .right {
+    display: none;
+  }
+  .center {
+    margin-left: 10px;
+    width: 90%;
+  }
+  .dashes {
+    margin-left: 10px;
+    width: 8px;
+  }
+  .nav {
+    height: 28px;
+    position: absolute;
+    #logo {
+      display: none;
+      width: 0px;
+      a {
+      display: none;
+      }
+    }
+    ul {
+      padding-top: 3px;
+      margin-left: -5px;
+      width: 95%;
+    }
+    li {
+      font-size: 20px;
+      margin-left: 0px;
+    }
+  }
+}
+// @media (max-width: 400px) {
+//   .nav {
+//     li {
+//       font-size: 17px;
+//       margin-left: 10px;
+//     }
+//     ul {
+//       margin-left: -255px;
+//     }
+//   }
+// }

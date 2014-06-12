@@ -15,6 +15,8 @@
   <%= t.label :pronoun, "What pronouns do you use?" %>
   <%= t.select :pronoun, options_for_select(@pronouns, @profile.pronoun) %>
   <br>
+  <%= t.label :min_window, "How frequently do you prefer to get tested?" %>
+  every <%= t.text_field :min_window, value: @profile.min_window %> months
   <br>
   <%= t.label :uid, "Customize your partnering ID:" %>
   <%= t.text_field :uid, value: @profile.uid %><br>

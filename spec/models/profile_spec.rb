@@ -19,6 +19,8 @@ require 'spec_helper'
 
 describe Profile do
   before :each do
+    uid1 = SecureRandom.uuid.slice(0,8)
+    uid2 = SecureRandom.uuid.slice(0,8)
     @u1 = Profile.create({anus_name: "ass", email: "email", genital_name: "genitals", password: "pass", password_confirmation: "pass", pronoun: "he", name: "User 1"})
     @u2 = Profile.create({anus_name: "ass", email: "email", genital_name: "genitals", password: "pass", password_confirmation: "pass", pronoun: "ze", name: "User 2"})
   end
