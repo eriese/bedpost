@@ -1,0 +1,18 @@
+<div class="center">
+  <p>Did this person give you their uid so you could use their updated preferences and contact information through bedpost?</p>
+  <br>
+  <div id="yes" class="bubble response">
+    <span>Yes</span>
+    <div class="continue">
+      <%= form_tag new_partnership_path, method: :get %>
+        <%= text_field_tag :uid %>
+        <%= submit_tag "continue" %>
+    </div>
+  </div>
+  <div id="no" class="bubble response">
+    <span>No</span>
+    <div class="continue">
+      <%= link_to "Make a profile for them", new_profile_path %>
+    </div>
+  </div>
+</div>

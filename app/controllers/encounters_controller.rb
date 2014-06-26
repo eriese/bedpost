@@ -1,7 +1,10 @@
 class EncountersController < ApplicationController
-  before_filter :check_encounter, :except => [:index]
+  before_filter :check_encounter, :except => [:index, :landing]
   def index
     @encounters = Encounter.where({user_id: session[:user_id]}).order("took_place DESC")
+    @partners = @user.partners
+  end
+  def landing
     @partners = @user.partners
   end
   def new

@@ -27,9 +27,10 @@ $icon-size: 100px;
   width: 100%;
 }
 #flash {
-  margin: 10px auto 0px auto;
+  margin: 0px auto;
+  padding-top: 10px;
   text-align: center;
-
+  color: $color-pop;
 }
 body {
   font-family: $text-font;
@@ -240,4 +241,17 @@ ul.encounters {
   height: $icon-size;
   width: $icon-size;
   margin-top: 20px;
+}
+
+.response {
+  display: inline-block;
+  min-width: 75px;
+  min-height: 30px;
+  text-align: center;
+  span {
+    vertical-align: middle;
+  }
+  .continue {
+    display: none;
+  }
 }

@@ -6,6 +6,8 @@ Bedpost::Application.routes.draw do
   get "/login" => "welcome#index"
   post "/login" => "welcome#create"
   get "/logout" => "welcome#destroy"
+  get "/encounters/landing" => "encounters#landing"
+  get "/partnerships/landing" => "partnerships#landing"
 
   resources :profiles
   resources :encounters

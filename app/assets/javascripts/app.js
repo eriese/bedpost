@@ -5,6 +5,11 @@ $(".disease").click(function(e) {
 $(".category").click(function(e) {
   $(this).siblings().toggle();
 });
+$(".response").click(function(e) {
+  $(this).find(".continue").toggle();
+  $(this).find("input[id='uid']").focus();
+  $(".response").not($(this)).toggle();
+});
 var setSize = function() {
     var fontSize;
     if($(window).width() / 40 > 16) {
