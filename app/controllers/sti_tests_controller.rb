@@ -4,6 +4,8 @@ class StiTestsController < ApplicationController
   def index
     @sti_tests = StiTest.where(user_id: session[:user_id]).order("date_taken DESC")
     @diseases = DISEASES
+    @categories = DISEASE_CATEGORIES
+    @overdue_list = @user.overdue_tests
   end
   def new
     @sti_test = StiTest.new

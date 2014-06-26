@@ -10,19 +10,42 @@
 </div>
 <div class="dashes"></div>
 <div class="center">
-
-  <ul>
-  <% @diseases.each do |disease| %>
-  <li>
-    <% if @user.risk_window(disease[:name]) %>
-        <strong><%= disease[:name] %></strong> risk window began:
-        <%= " #{@user.risk_window(disease[:name]).strftime('%m/%d/%Y')}" %>
-    <% else %>
-      No test data for <strong><%= disease[:name] %></strong>; consider getting tested.
-
+  <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1>
+    <br>
+    <% if @overdue_list.any? %>
+      <span class="alert">Warning: you are overdue for testing for some infections. They are marked in red below. To change your preferred testing frequency, <%= link_to "edit your profile settings", edit_profile_path(@user) %>.</span>
     <% end %>
-  </li><br>
-  <% end %>
-  <%= link_to "Add a test", new_sti_test_path %>
-  </ul>
+    <br>
+    <br>
+    <strong>Check your risk of infections:</strong>
+    <br>
+    <br>
+    <ul>
+      <% @categories.each do |category, info| %>
+        <li class="bubble">
+          <span class="category"><strong><%= category.upcase %></strong>
+          <br>
+          <%= info[:description] %></span>
+          <ul class="scroller">
+            <% info[:diseases].each do |disease| %>
+              <% if @overdue_list.include?(disease) %>
+              <li class="disease alert">
+              <% else %>
+              <li class="disease">
+              <% end %>
+                <%= @diseases.find{|d| d[:name] == disease}[:readable]%>
+                <span class="risk">— at risk from:
+                  <% if @user.risk_window(disease) %>
+                    <%= time_ago_in_words(@user.risk_window(disease)) %> ago, on <%= @user.risk_window(disease).strftime('%m/%d/%Y') %>
+                  <% else %>
+                    unknown. Consider yourself at risk and get tested.
+                  <% end %>
+                  </span></li>
+
+            <% end %>
+          </ul>
+        </li>
+        <br>
+      <% end %>
+    </ul>
 </div>

@@ -21,7 +21,8 @@ $right-width: $right-depth + $nav-offset;
 $center-width: 55%;
 $offset: 20px;
 $standard: 18px;
-
+$option-size: 200px;
+$icon-size: 100px;
 #container {
   width: 100%;
 }
@@ -221,4 +222,22 @@ ul.encounters {
   padding: 10px;
 }
 
+.option {
+  height: $option-size;
+  width: $option-size;
+  display: inline-block;
+  text-align: center;
+  margin: 5px;
+  margin-top: 20px;
+  vertical-align: top;
+  p {
+    padding-top: 15px;
+    vertical-align: middle;
+  }
+}
 
+.icon {
+  height: $icon-size;
+  width: $icon-size;
+  margin-top: 20px;
+}

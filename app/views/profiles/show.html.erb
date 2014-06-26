@@ -30,42 +30,26 @@
 </div>
 <div class="dashes"></div>
 <div class="center">
-  <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1>
-    <br>
-    <% if @overdue_list.any? %>
-      <span class="alert">Warning: you are overdue for testing for some infections. They are marked in red below. To change your preferred testing frequency, <%= link_to "edit your profile settings", edit_profile_path(@user) %>.</span>
-    <% end %>
-    <br>
-    <br>
-    <strong>Check your risk of infections:</strong>
-    <br>
-    <br>
-    <ul>
-      <% @categories.each do |category, info| %>
-        <li class="bubble">
-          <span class="category"><strong><%= category.upcase %></strong>
-          <br>
-          <%= info[:description] %></span>
-          <ul class="scroller">
-            <% info[:diseases].each do |disease| %>
-              <% if @overdue_list.include?(disease) %>
-              <li class="disease alert">
-              <% else %>
-              <li class="disease">
-              <% end %>
-                <%= @diseases.find{|d| d[:name] == disease}[:readable]%>
-                <span class="risk">— at risk from:
-                  <% if @user.risk_window(disease) %>
-                    <%= time_ago_in_words(@user.risk_window(disease)) %> ago, on <%= @user.risk_window(disease).strftime('%m/%d/%Y') %>
-                  <% else %>
-                    unknown. Consider yourself at risk and get tested.
-                  <% end %>
-                  </span></li>
-
-            <% end %>
-          </ul>
-        </li>
-        <br>
-      <% end %>
-    </ul>
+  <h1>
+    <%= "Hi there, #{@user.name}. What's new?" %>
+  </h1>
+  <a href=<%= new_encounter_path %>>
+    <div class="bubble option">
+      <img src="" alt="" class="icon">
+      <p>I recently had sex</p>
+    </div>
+  </a>
+  <a href=<%= new_partnership_path %>>
+    <div class="bubble option">
+      <img src="" alt="" class="icon">
+      <p>I recently met someone new</p>
+    </div>
+  </a>
+  <a href=<%= new_sti_test_path %>>
+    <div class="bubble option">
+      <img src="" alt="" class="icon">
+      <p>I recently got tested</p>
+    </div>
+  </a>
+  <br>
 </div>
