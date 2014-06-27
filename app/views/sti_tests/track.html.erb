@@ -1,12 +1,17 @@
 
 <div class="center">
-    <% if @overdue_list.any? %>
-      <span class="alert">Warning: </span>you are overdue for testing for some infections. They are marked in red below. To change your preferred testing frequency, <%= link_to "edit your profile settings", edit_profile_path(@user) %>.
+    <h2>Check your risk of infections: <% if @overdue_list.any? %>
+      <span class="help">
+        <%= image_tag "warning.png" %>
+          <div class="info bubble normal">
+            <span class="alert">Warning: </span>
+            <br>
+            you are overdue for testing for some infections. They are marked in red below.
+            <br>To change your preferred testing frequency, <%= link_to "edit your profile settings", edit_profile_path(@user) %>.
+          </div>
+        </span>
+      </h2>
     <% end %>
-    <br>
-    <br>
-    <strong>Check your risk of infections:</strong>
-    <br>
     <br>
     <ul>
       <% @categories.each do |category, info| %>

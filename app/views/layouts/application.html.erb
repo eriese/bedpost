@@ -15,15 +15,20 @@
           Bed<span>post</span>
         </a>
       </div>
+      <div id="mobile-logo">
+        <a href="/">
+          B<span>p</span>
+        </a>
+      </div>
       <ul>
         <% if session[:user_id] %>
-          <li>
-            <%= link_to "Dash", profiles_path %><br>
-          </li>
           <li><%= link_to "Partners", partnerships_path %></li>
           <li><%= link_to "Tests", sti_tests_path %></li>
           <li>
             <%= link_to "Encounters", encounters_path %>
+          </li>
+          <li>
+            <%= link_to "Track", "/track" %>
           </li>
           <li>
             <%= link_to "Log Out", "/logout"%><br>
@@ -33,6 +38,7 @@
         <% end %>
       </ul>
     </div>
+    <div class="dashes"></div>
     <div id="flash">
       <% if flash[:message] %>
         <% flash[:message].each do |key, message| %>

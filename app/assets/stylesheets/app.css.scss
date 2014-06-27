@@ -90,7 +90,7 @@ a {
     font-size: 25px;
     color: $off-white;
     display: inline-block;
-    margin: 0px 20px;
+    margin: 0px 2%;
   }
   a {
     color: $grey;
@@ -103,7 +103,7 @@ a {
   margin-left: $right-width;
   width: $center-width;
   display: inline-block;
-  text-align: left;
+  text-align: center;
   color: $dark;
   height: 100%;
   font-size: 20px;
@@ -117,9 +117,6 @@ a {
   }
   a {
     color: $main;
-  }
-  ul {
-    margin-left: $offset;
   }
   strong {
     font-size: 24 px;
@@ -154,14 +151,12 @@ a {
   }
 }
 .dashes {
-  width: $dash-width;
+  width: 101%;
   position: fixed;
-  margin-left: $right-width;
-  margin-top: -10px;
-  display: inline-block;
-  height: 120%;
-  border-left: 1px dashed $grey;
-  border-right: 2px dashed $grey;
+  margin-top: $nav-height;
+  height: $dash-width;
+  border-bottom: 1px dashed $grey;
+  border-top: 2px dashed $grey;
   background-color: $crossover;
   z-index: 2;
 }
@@ -221,28 +216,33 @@ ul.encounters {
   background-color: $off-white;
   border-radius: 10px;
   padding: 10px;
+  .category {
+    text-align: left;
+  }
 }
-
+.contact-type {
+  text-align: left;
+}
 .option {
-  height: $option-size;
-  width: $option-size;
+  max-height: $option-size;
+  max-width: $option-size;
+  width: 25%;
+  min-height: 100px;
   display: inline-block;
   text-align: center;
   margin: 5px;
   margin-top: 20px;
   vertical-align: top;
+  padding: 5%;
   p {
-    padding-top: 15px;
     vertical-align: middle;
   }
+  .icon {
+    width: 50%;
+    max-height: $icon-size;
+    max-width: $icon-size;
+  }
 }
-
-.icon {
-  height: $icon-size;
-  width: $icon-size;
-  margin-top: 20px;
-}
-
 .response {
   display: inline-block;
   min-width: 75px;
@@ -254,4 +254,67 @@ ul.encounters {
   .continue {
     display: none;
   }
+}
+
+.label {
+  text-align: right;
+  padding-right: 8px;
+}
+.input {
+  text-align: left;
+  select {
+    height: 18px;
+    vertical-align: top;
+  }
+}
+tr {
+  height: 25px;
+  text-align: center;
+}
+th {
+  text-align: center;
+}
+form {
+  max-width: 500px;
+  margin: 0px auto;
+}
+.partner {
+  max-width: 50%;
+  text-align: left;
+  margin: 0px auto;
+  min-width: 250px;
+}
+.help {
+  img {
+    width: 20px;
+    vertical-align: middle;
+  }
+  .info {
+    font-size: 18px;
+    width: 225px;
+    border: 2px solid $crossover;
+    position: absolute;
+    display: none;
+    box-shadow: 10px 10px 5px #888888;
+  }
+}
+.small-input {
+  width: 20px;
+}
+table {
+  margin: 0px auto;
+}
+#mobile-logo {
+  display: none;
+  font-family: $script-font;
+  color: $color-pop;
+  font-size: 25px;
+    span {
+      font-family: $outline-font;
+      padding-right: 10px;
+      font-size: 25px;
+    }
+    a {
+      color: $color-pop;
+    }
 }

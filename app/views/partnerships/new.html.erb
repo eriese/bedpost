@@ -1,15 +1,47 @@
 <div class="center">
   <%= form_tag "/partnerships" %>
-  Partner's uid <%= text_field_tag :uid, @uid %><br>
-  (no uid? <%= link_to "make a profile for your partner", new_profile_path %>)
+  Partner's uid <%= text_field_tag :uid, @uid %>
+  <span class="help">
+    <%= image_tag "help.png" %>
+    <div class="info bubble normal">
+      <strong>No uid?</strong>
+      <br>
+      <%= link_to "make a profile for your partner", new_profile_path %>
+      <br><br>
+      <strong>What is a uid?</strong>
+      <br>
+        A uid allows you to connect with partners who are also using BedPost to track their risks. Registering a partner using their uid <em>will not</em> give you access to any of the private information that they record with BedPost. You <em>cannot</em> see their partners, their encounters, or their test results. It <em>will</em> allow you to see their profile preferences such as their name, pronouns, and what they call their body parts. It will also allow BedPost to use their contact information—without providing it to you—if you need to inform them of a positive test.
+    </div>
+  </span>
+  <br><br>
   <%= fields_for @partnership do |t| %>
     <%= t.label :familiarity, "How high would you rate your trust for this partner?" %>
-    <%= t.select :familiarity, options_for_select(1..10) %><br>
+    <%= t.select :familiarity, options_for_select(1..10) %><br><br>
     <%= t.label :exclusivity, "How exclusive is this partner with you?" %>
-    <%= t.select :exclusivity, options_for_select(1..10) %><br>
-    (1 meaning not at all and 10 meaning they've never slept with anyone else)<br>
+    <%= t.select :exclusivity, options_for_select(1..10) %><span class="help">
+    <%= image_tag "help.png" %>
+    <div class="info bubble normal">
+      (1 meaning not at all and 10 meaning they've never slept with anyone else)
+      <br><br>
+      <strong>Why is this important?</strong>
+      <br>
+      We're asking how exclusive this partner is with you because the more partners they have, the more careful they have to be to stay aware of the risks they're taking and exposing you to. Don't worry, though, this is not the only factor we use to calculate how risky they are to you!
+    </div>
+  </span>
+    <br><br>
     <%= t.label :communication, "How much do you and this partner communicate about safer sex practices/sex with other people?" %>
-    <%= t.select :communication, options_for_select(1..10) %><br>
+    <%= t.select :communication, options_for_select(1..10) %>
+    <span class="help">
+    <%= image_tag "help.png" %>
+    <div class="info bubble normal">
+      (1 meaning not at all and 10 meaning constantly and carefully)
+      <br><br>
+      <strong>Why is this important?</strong>
+      <br>
+      A partner who communicates about their sex practices and thinks about safer sex is more likely to be careful and communicative with all of their partners, which can make it less likely that they're exposing you to risk. A secretive partner may be perfectly safe, but you have no real way of knowing.
+    </div>
+  </span>
+    <br><br>
   <% end %>
   <%= submit_tag "Create Partnership" %>
 </div>

@@ -14,15 +14,14 @@
   <div class="hidden">
     <% contact_types.each do|c_type, insts| %>
       <div class="contact-type">
-        <span class="category">
+        <div class="category">
           <% if c_type == "was penetrated by" && (insts[:user_instrument] == :toys || (insts[:user_instrument] == :genitals && (@user.genital_name.empty? || @user.genital_name.last == "s")))%>
-            > were penetrated by
+            + were penetrated by
           <% else %>
-            > <%= c_type %>
+            + <%= c_type %>
           <% end %>
           <%= @pronoun[:possessive] %>
-        </span>
-        <br>
+        </div>
         <div class="hidden">
           <% insts[:partner_instruments].each do |p_instrument| %>
             <%= t.fields_for :contacts, @encounter.contacts.build do |builder| %>

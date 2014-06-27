@@ -67,11 +67,17 @@ class PartnershipsController < ApplicationController
       check_uid = params[:uid]
     end
     if check_uid
-      if Profile.where({uid: check_uid}).empty?
+      partner = Profile.where({uid: check_uid})
+      if partner.empty?
         flash[:message] = {message: ["There is no user with that uid"]}
         redirect_to redirect
       elsif @user.uid == check_uid
         flash[:message] = {message: ["That is your own uid"]}
+        redirect_to redirect
+      elsif !Partnership.new({user_id: @user.id, partner_id: partner.first.id}).valid?
+        tester = Partnership.new({user_id: @user.id, partner_id: partner.first.id})
+        tester.valid?
+        flash[:message] = tester.errors.messages
         redirect_to redirect
       end
     end

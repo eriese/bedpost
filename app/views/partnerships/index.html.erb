@@ -1,28 +1,19 @@
-<div class="right">
-    <div id="wrapper">
-      <h2>Partners within your risk windows:</h2>
-      <ul>
-      <% @at_risk.each do |partnership| %>
-        <li>
-          <%= partnership.partner.name %>
-        </li>
-        <br>
-      <% end %>
-      </ul>
-      <br>
-      <br>
-      <br>
-      <h2><%= link_to "Add New Partner", new_partnership_path %></h2>
-    </div>
-  </div>
-  <div class="dashes"></div>
 <div class="center">
-  <h2>Your PartneringId: <%= @user.uid %></h2>
-  <%= link_to "Share" %>
+  <h2>Your UID: <%= @user.uid %>
+    <span class="help">
+      <%= image_tag "help.png" %>
+      <div class="info bubble normal">
+        <strong>What is a uid?</strong>
+        <br>
+        Your uid allows you to connect with partners who are also using BedPost to track their risks. Giving a person your uid <em>will not</em> give them access to any of the private information that you record with BedPost. They <em>cannot</em> see your partners, your encounters, or your test results. It <em>will</em> allow them to see your profile preferences such as your name, pronouns, and what you call your body parts. It will also allow BedPost to use your contact information—without providing it to your partner—if they need to inform you of a positive test.
+      </div>
+    </span>
+  </h2>
+  <%= link_to "Share" %> or <%= link_to "Edit", edit_profile_path(@user) %>
   <br>
   <br>
   <% @partnerships.each do |partnership| %>
-  <div class="bubble">
+  <div class="bubble partner">
     <h2><%= link_to partnership.partner.name, partnership_path(partnership) %></h2>
     <strong>Most recent encounter:</strong><br>
     <% if partnership.most_recent %>

@@ -8,6 +8,7 @@ Bedpost::Application.routes.draw do
   get "/logout" => "welcome#destroy"
   get "/encounters/landing" => "encounters#landing"
   get "/partnerships/landing" => "partnerships#landing"
+  get "track" => "sti_tests#track"
 
   resources :profiles
   resources :encounters
