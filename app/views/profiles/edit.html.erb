@@ -1,28 +1,64 @@
-<div class="dashes hidden to-hide"></div>
 <div class="center">
+  <h2>Update profile settings</h2>
+  <hr>
   <%= form_for @profile do |t| %>
-  <%= t.label :name %>
-  <%= t.text_field :name, value: @profile.name %><br>
-  <%= t.label :email, "Username" %>
-  <%= t.text_field :email, value: @profile.email %>
-  <br>
-  <br>
-  <h2>Preferences</h2>
-  <%= t.label :genital_name, "What do you call your genitals?", value: @profile.genital_name %>
-  <%= t.text_field :genital_name %><br>
-  <%= t.label :anus_name, "What do you call your anus?" %>
-  <%= t.text_field :anus_name, value: @profile.anus_name %><br>
-  <%= t.label :pronoun, "What pronouns do you use?" %>
-  <%= t.select :pronoun, options_for_select(@pronouns, @profile.pronoun) %>
-  <br>
-  <%= t.label :min_window, "How frequently do you prefer to get tested?" %>
-  every <%= t.text_field :min_window, value: @profile.min_window %> months
-  <br>
-  <%= t.label :uid, "Customize your partnering ID:" %>
-  <%= t.text_field :uid, value: @profile.uid %><br>
-  <%= t.label :password, "Re-enter password" %>
-  <%= t.password_field :password %><br>
-  <%= t.label :password_confirmation %>
-  <%= t.password_field :password_confirmation %><br>
+    <table>
+  <tr>
+    <td class="label"><%= t.label :name %></td>
+    <td class="input"><%= t.text_field :name, value: @profile.name %></td>
+  </tr>
+  <tr>
+    <td class="label"><%= t.label :email, "Email" %></td>
+    <td class="input"><%= t.text_field :email, value: @profile.email %></td>
+  </tr>
+  <tr>
+    <td class="label"><%= t.label :uid, "Customize your partnering ID:" %></td>
+    <td class="input">
+      <%= t.text_field :uid, value: @profile.uid %>
+    </td>
+  </tr>
+</table>
+
+<br>
+      <h2>Preferences</h2>
+      <hr>
+    <table>
+    <tr>
+      <td class="label"><%= t.label :genital_name, "What do you call your genitals?", value: @profile.genital_name %></td>
+      <td class="input">
+        <%= t.text_field :genital_name %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label"><%= t.label :anus_name, "What do you call your anus?" %></td>
+      <td class="input">
+        <%= t.text_field :anus_name, value: @profile.anus_name %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label"><%= t.label :pronoun, "What pronouns do you use?" %></td>
+      <td class="input"><%= t.select :pronoun, options_for_select(@pronouns, @profile.pronoun) %></td>
+
+    </tr>
+    <tr></tr>
+    <tr>
+      <td class="label"><%= t.label :min_window, "How often do you prefer to get tested?" %></td>
+      <td class="input">every <%= t.text_field :min_window, value: @profile.min_window, class: "small-input" %> months</td>
+
+    </tr>
+    <tr></tr>
+    <tr>
+      <td class="label"><%= t.label :password, "Re-enter password" %></td>
+      <td class="input">
+        <%= t.password_field :password %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label"><%= t.label :password_confirmation %></td>
+      <td class="input">
+        <%= t.password_field :password_confirmation %>
+      </td>
+    </tr>
+  </table>
   <%= t.submit %>
   <% end %></div>

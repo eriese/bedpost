@@ -1,10 +1,9 @@
-<div class="dashes hidden to-hide"></div>
 <div class="center">
-  <h2>Recent Encounters:</h2>
-  <br>
+  <h2>Recent Encounters: <span class="help plus"><a href="/encounters/landing"><%= image_tag "plus.png" %></a></span></h2>
+  <hr>
     <ul>
       <% @encounters.each do |encounter| %>
-       <li class="bubble"> <%= link_to encounter.took_place, encounter_path(encounter) %>: <br>
+       <li class="bubble partner"> <%= link_to encounter.took_place, encounter_path(encounter) %>: <br>
           <%= encounter.partner.name %><br>
           Risk level:
           <% if encounter.risk <= 4 %>
@@ -14,8 +13,11 @@
           <% else %>
             <span class="high">high</span>
           <% end %>
-          </li><br>
-        <% end %>
+          <br>
+          Notes: <%= encounter.notes %>
+        </li>
+        <br>
+      <% end %>
     </ul>
     <br>
     <%= form_tag new_encounter_path, method: :get%>

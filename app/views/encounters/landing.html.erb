@@ -1,0 +1,7 @@
+<div class="center">
+  <%= form_tag new_encounter_path, method: :get%>
+    <h2>Who did you have sex with?</h2>
+    <%= select_tag :partner_id, options_from_collection_for_select(@partners, :id, :name), id: "partner-select" %>
+    <%= submit_tag "continue", id: "new-encounter" %><br><br>
+    <%= link_to "Someone Else?", new_partnership_path %>
+</div>

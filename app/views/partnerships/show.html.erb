@@ -19,9 +19,9 @@
     <%= link_to "new encounter", new_encounter_path(partner_id: @partnership.partner_id) %>
   </div>
 </div>
-<div class="dashes"></div>
 <div class="center">
-  <h1><%= "#{@partner.name} (#{@partner.pronoun})" %></h1><br>
+  <h2><%= "#{@partner.name} (#{@partner.pronoun})" %></h2>
+  <hr>
   Exclusivity: <%= @partnership.exclusivity %><br>
   Trust level: <%= @partnership.familiarity %><br>
   Communication level: <%= @partnership.communication %>

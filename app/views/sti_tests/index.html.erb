@@ -1,28 +1,26 @@
-<div class="right">
-  <div id="wrapper">
-    <% @sti_tests.each do |sti_test| %>
-      <%= link_to sti_test.date_taken, sti_test_path(sti_test) %><br>
-    <% end %>
-    <br>
-    <br>
-    <%= link_to "Add a test", new_sti_test_path %>
-  </div>
-</div>
-<div class="dashes"></div>
 <div class="center">
-
+  <h2>Recent tests <span class="help plus"><a href=<%= new_sti_test_path %>><%= image_tag "plus.png" %></a></span></h2>
+  <hr>
   <ul>
-  <% @diseases.each do |disease| %>
-  <li>
-    <% if @user.risk_window(disease[:name]) %>
-        <strong><%= disease[:name] %></strong> risk window began:
-        <%= " #{@user.risk_window(disease[:name]).strftime('%m/%d/%Y')}" %>
-    <% else %>
-      No test data for <strong><%= disease[:name] %></strong>; consider getting tested.
-
+    <% @sti_tests.each do |tst| %>
+    <li class="bubble partner">
+      <%= link_to tst.date_taken, sti_test_path(tst) %>
+      <br><br>
+      <strong>Tested for:</strong>
+      <br>
+      <% tst.infections.each do |infection| %>
+      <% if infection.positive %>
+        <span class="poz">
+      <% else %>
+        <span class="neg">
+      <% end %>
+        <%= @diseases.find{|d| d[:name] ==infection.disease.intern}[:readable] %>
+        </span>
+        <br>
+      <% end %>
+    </li>
+    <br>
     <% end %>
-  </li><br>
-  <% end %>
-  <%= link_to "Add a test", new_sti_test_path %>
   </ul>
+
 </div>

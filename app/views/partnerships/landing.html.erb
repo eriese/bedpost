@@ -1,0 +1,25 @@
+<div class="center">
+  <h2>Did this person give you their uid? <span class="help">
+      <%= image_tag "help.png" %>
+      <div class="info bubble normal">
+        <strong>What is a uid?</strong>
+        <br><br>
+        A uid allows you to connect with partners who are also using BedPost to track their risks. Registering a partner using their uid <em>will not</em> give you access to any of the private information that they record with BedPost. You <em>cannot</em> see their partners, their encounters, or their test results. It <em>will</em> allow you to see their profile preferences such as their name, pronouns, and what they call their body parts. It will also allow BedPost to use their contact information—without providing it to you—if you need to inform them of a positive test.
+      </div>
+    </span></h2>
+  <br>
+  <div id="yes" class="bubble response">
+    <span>Yes</span><br>
+    <div class="continue">
+      <%= form_tag new_partnership_path, method: :get %>
+        <%= text_field_tag :uid %>
+        <%= submit_tag "continue" %>
+    </div>
+  </div>
+  <div id="no" class="bubble response">
+    <span>No</span>
+    <div class="continue">
+      <%= link_to "Make a profile for them", new_profile_path %>
+    </div>
+  </div>
+</div>

@@ -1,71 +1,34 @@
-<div class="right">
-  <div id="wrapper">
-    <h2>Recent Encounters:</h2>
-    <ul class="encounters">
-      <% @encounters.each do |encounter| %>
-      <% if encounter.risk <= 4 %>
-            <li class="low">
-          <% elsif encounter.risk <= 8 %>
-            <li class="medium">
-          <% else %>
-            <li class="high">
-          <% end %>
-          <span class="normal">
-          <%= link_to encounter.took_place, encounter_path(encounter) %> <br>
-          <%= encounter.partner.name %>
-        <% end %>
-        <br>
-        </span>
-      </li>
-    </ul>
-    <br>
-    <%= form_tag new_encounter_path, method: :get %>
-    New Encounter with:<br>
-    <%= select_tag :partner_id, options_from_collection_for_select(@partners, :id, :name), id: "partner-select" %>
-    <%= submit_tag "create", id: "new-encounter" %>
-    <br>
-    <br>
-    <%= link_to "Edit", edit_profile_path(@user) %>
-  </div>
-</div>
-<div class="dashes"></div>
-<div class="center">
-  <h1><%= "#{@user.name} (#{@user.pronoun})" %></h1>
-    <br>
-    <% if @overdue_list.any? %>
-      <span class="alert">Warning: you are overdue for testing for some infections. They are marked in red below. To change your preferred testing frequency, <%= link_to "edit your profile settings", edit_profile_path(@user) %>.</span>
-    <% end %>
-    <br>
-    <br>
-    <strong>Check your risk of infections:</strong>
-    <br>
-    <br>
-    <ul>
-      <% @categories.each do |category, info| %>
-        <li class="bubble">
-          <span class="category"><strong><%= category.upcase %></strong>
-          <br>
-          <%= info[:description] %></span>
-          <ul class="scroller">
-            <% info[:diseases].each do |disease| %>
-              <% if @overdue_list.include?(disease) %>
-              <li class="disease alert">
-              <% else %>
-              <li class="disease">
-              <% end %>
-                <%= @diseases.find{|d| d[:name] == disease}[:readable]%>
-                <span class="risk">— at risk from:
-                  <% if @user.risk_window(disease) %>
-                    <%= time_ago_in_words(@user.risk_window(disease)) %> ago, on <%= @user.risk_window(disease).strftime('%m/%d/%Y') %>
-                  <% else %>
-                    unknown. Consider yourself at risk and get tested.
-                  <% end %>
-                  </span></li>
 
-            <% end %>
-          </ul>
-        </li>
-        <br>
-      <% end %>
-    </ul>
+<div class="center">
+  <h1>
+    <%= "Hi there, #{@user.name}. What's new?" %>
+  </h1>
+  <a href="/encounters/landing">
+    <div class="bubble option">
+      <%= image_tag "new.png", class: "icon" %>
+        <p>I had sex</p>
+    </div>
+  </a>
+  <a href="/partnerships/landing">
+    <div class="bubble option">
+      <%= image_tag "user-add.png", class: "icon" %>
+        <p>I met someone</p>
+    </div>
+  </a>
+  <br>
+  <a href=<%= new_sti_test_path %>>
+    <div class="bubble option">
+      <%= image_tag "lab.png", class: "icon" %>
+        <p>I got tested</p>
+    </div>
+  </a>
+  <a href="/track">
+    <div class="bubble option">
+      <%= image_tag "target.png", class: "icon" %>
+        <p>I want to track an infection</p>
+    </div>
+  </a>
+  <br>
+  <br>
+  <p><%= link_to "Edit profile settings", edit_profile_path(@user) %></p>
 </div>

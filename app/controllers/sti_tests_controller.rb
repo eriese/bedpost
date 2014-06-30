@@ -1,9 +1,10 @@
 class StiTestsController < ApplicationController
   before_filter :get_diseases
-  before_filter :check_sti_test, :except => [:index, :new, :create]
+  before_filter :check_sti_test, :except => [:index, :new, :create, :track]
   def index
     @sti_tests = StiTest.where(user_id: session[:user_id]).order("date_taken DESC")
-    @diseases = DISEASES
+    @categories = DISEASE_CATEGORIES
+    @overdue_list = @user.overdue_tests
   end
   def new
     @sti_test = StiTest.new
@@ -41,6 +42,11 @@ class StiTestsController < ApplicationController
     @sti_test = StiTest.find(params[:id])
     @sti_test.destroy
   end
+  def track
+    @sti_tests = StiTest.where(user_id: session[:user_id]).order("date_taken DESC")
+    @categories = DISEASE_CATEGORIES
+    @overdue_list = @user.overdue_tests
+  end
   private
   def check_sti_test
     @sti_test = StiTest.find(params[:id])
@@ -49,6 +55,6 @@ class StiTestsController < ApplicationController
     end
   end
   def get_diseases
-    @diseases = DISEASES
+    @diseases = DISEASES.sort { |a, b| a[:readable] <=> b[:readable] }
   end
 end
