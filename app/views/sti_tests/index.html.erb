@@ -1,39 +1,26 @@
-
 <div class="center">
-    <% if @overdue_list.any? %>
-      <span class="alert">Warning: </span>you are overdue for testing for some infections. They are marked in red below. To change your preferred testing frequency, <%= link_to "edit your profile settings", edit_profile_path(@user) %>.
-    <% end %>
-    <br>
-    <br>
-    <strong>Check your risk of infections:</strong>
-    <br>
-    <br>
-    <ul>
-      <% @categories.each do |category, info| %>
-        <li class="bubble">
-          <span class="category"><strong><%= category.upcase %></strong>
-          <br>
-          <%= info[:description] %></span>
-          <ul class="scroller">
-            <% info[:diseases].each do |disease| %>
-              <% if @overdue_list.include?(disease) %>
-              <li class="disease alert">
-              <% else %>
-              <li class="disease">
-              <% end %>
-                <%= @diseases.find{|d| d[:name] == disease}[:readable]%>
-                <span class="risk">— at risk from:
-                  <% if @user.risk_window(disease) %>
-                    <%= time_ago_in_words(@user.risk_window(disease)) %> ago, on <%= @user.risk_window(disease).strftime('%m/%d/%Y') %>
-                  <% else %>
-                    unknown. Consider yourself at risk and get tested.
-                  <% end %>
-                  </span></li>
-
-            <% end %>
-          </ul>
-        </li>
+  <h2>Recent tests <span class="help plus"><a href=<%= new_sti_test_path %>><%= image_tag "plus.png" %></a></span></h2>
+  <hr>
+  <ul>
+    <% @sti_tests.each do |tst| %>
+    <li class="bubble partner">
+      <%= link_to tst.date_taken, sti_test_path(tst) %>
+      <br><br>
+      <strong>Tested for:</strong>
+      <br>
+      <% tst.infections.each do |infection| %>
+      <% if infection.positive %>
+        <span class="poz">
+      <% else %>
+        <span class="neg">
+      <% end %>
+        <%= @diseases.find{|d| d[:name] ==infection.disease.intern}[:readable] %>
+        </span>
         <br>
       <% end %>
-    </ul>
+    </li>
+    <br>
+    <% end %>
+  </ul>
+
 </div>

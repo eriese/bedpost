@@ -1,27 +1,28 @@
 
 <div class="center">
-  <h1>Tested on: <%= @sti_test.date_taken %></h1><br>
+  <h2>Test results from <%= @sti_test.date_taken %></h2><hr>
   <% @infections.each do |infection| %>
-  <h2><%= infection.disease %></h2>
-    <% if infection.positive %>
-      <span class="poz">positive</span><br>
-      <div class="risk-partners">
-        Partners at risk:<br>
-        <ul>
-          <% @user.partnerships.each do |partnership| %>
-            <% if partnership.at_risk?(infection.disease) %>
-             <li>
-                <%= partnership.partner.name %><br>
-             </li>
+  <div class="bubble partner"><strong><%= @diseases.find{|d| d[:name] ==infection.disease.intern}[:readable] %></strong>
+    <br>
+      <% if infection.positive %>
+        <span class="poz">positive</span><br>
+        <div class="risk-partners">
+          Partners at risk:<br>
+          <ul>
+            <% @user.partnerships.each do |partnership| %>
+              <% if partnership.at_risk?(infection.disease) %>
+               <li>
+                  <%= partnership.partner.name %><br>
+               </li>
+              <% end %>
             <% end %>
-          <% end %>
-        </ul>
-      </div>
+          </ul>
+        </div>
 
-    <% else %>
-      <span class="neg">negative</span><br>
-      <!-- Risk-window begins: <%# infection.disease.risk_window(@user).strftime('%m/%d/%Y') %><br> -->
-    <% end %>
+      <% else %>
+        <span class="neg">negative</span><br>
+        Risk-window began: <%= @user.risk_window(infection.disease).strftime('%m/%d/%Y') %><br>
+      <% end %></div>
     <br>
   <% end %>
   <br>

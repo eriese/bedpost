@@ -3,7 +3,6 @@ class StiTestsController < ApplicationController
   before_filter :check_sti_test, :except => [:index, :new, :create, :track]
   def index
     @sti_tests = StiTest.where(user_id: session[:user_id]).order("date_taken DESC")
-    @diseases = DISEASES
     @categories = DISEASE_CATEGORIES
     @overdue_list = @user.overdue_tests
   end

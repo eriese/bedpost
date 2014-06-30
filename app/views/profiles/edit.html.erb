@@ -1,4 +1,6 @@
 <div class="center">
+  <h2>Update profile settings</h2>
+  <hr>
   <%= form_for @profile do |t| %>
     <table>
   <tr>
@@ -6,13 +8,20 @@
     <td class="input"><%= t.text_field :name, value: @profile.name %></td>
   </tr>
   <tr>
-    <td class="label"><%= t.label :email, "Username" %></td>
+    <td class="label"><%= t.label :email, "Email" %></td>
     <td class="input"><%= t.text_field :email, value: @profile.email %></td>
+  </tr>
+  <tr>
+    <td class="label"><%= t.label :uid, "Customize your partnering ID:" %></td>
+    <td class="input">
+      <%= t.text_field :uid, value: @profile.uid %>
+    </td>
   </tr>
 </table>
 
 <br>
       <h2>Preferences</h2>
+      <hr>
     <table>
     <tr>
       <td class="label"><%= t.label :genital_name, "What do you call your genitals?", value: @profile.genital_name %></td>
@@ -38,12 +47,6 @@
 
     </tr>
     <tr></tr>
-    <tr>
-      <td class="label"><%= t.label :uid, "Customize your partnering ID:" %></td>
-      <td class="input">
-        <%= t.text_field :uid, value: @profile.uid %>
-      </td>
-    </tr>
     <tr>
       <td class="label"><%= t.label :password, "Re-enter password" %></td>
       <td class="input">

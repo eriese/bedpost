@@ -1,9 +1,7 @@
-
 <div class="center">
   <%= form_for @encounter do |t|%>
-    New Encounter with <%= @partner.name %>
-    <br>
-    <br>
+    <h2>New Encounter with <%= @partner.name %></h2>
+    <hr>
     Took place on: <br>
     <%= t.date_select :took_place %>
     <br>

@@ -216,6 +216,7 @@ ul.encounters {
   background-color: $off-white;
   border-radius: 10px;
   padding: 10px;
+  box-shadow: 1px 1px 1px #888888;
   .category {
     text-align: left;
   }
@@ -246,7 +247,6 @@ ul.encounters {
 .response {
   display: inline-block;
   min-width: 75px;
-  min-height: 30px;
   text-align: center;
   span {
     vertical-align: middle;
@@ -295,7 +295,7 @@ form {
     border: 2px solid $crossover;
     position: absolute;
     display: none;
-    box-shadow: 10px 10px 5px #888888;
+    box-shadow: 8px 8px 15px $crossover;
   }
 }
 .small-input {
@@ -317,4 +317,7 @@ table {
     a {
       color: $color-pop;
     }
+}
+.plus {
+  padding-left: 30px;
 }
