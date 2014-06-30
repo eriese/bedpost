@@ -14,6 +14,10 @@ class ProfilesController < ApplicationController
   def create
     @user = Profile.new(params[:profile])
     @user.uid = SecureRandom.uuid.slice(0,8)
+    if @user.password.nil?
+      @user.password = SecureRandom.uuid.slice(0,8)
+      @user.password_confirmation = @user.password
+    end
     if @user.save
       if session[:user_id]
         flash[:uid] = @user.uid
@@ -24,6 +28,7 @@ class ProfilesController < ApplicationController
       end
     else
       redirect_to new_profile_path
+      flash[:message] = @user.errors.messages
     end
   end
   def show
