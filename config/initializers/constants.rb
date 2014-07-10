@@ -67,7 +67,7 @@ DISEASES = [
   ]
 DISEASE_CATEGORIES = {
   "Curable" => {
-    description: "These infections are very common and easily treatable, but can be dangerous if left untreated", diseases: [:Gonorrhea, :Chlamydia, :Syphillis]
+    description: "These infections are very common and easily treatable, but can be dangerous if left untreated", diseases: [:Gonorrhea, :Chlamydia, :Syphillis, :Bacterial_Vaginosis]
     },
   "Uncommon" => {
     description: "These infections are less well-known than others, but can still happen.", diseases: [:Cytomegalovirus, :Molluscum_Contagiosum]
@@ -75,14 +75,11 @@ DISEASE_CATEGORIES = {
   "Genital-specific" => {
     description: "These infections only occur for people with internal genitalia", diseases: [:Bacterial_Vaginosis, :Trichomoniasis]
     },
-  "Hepatitis" => {
-    description: "Hepatitis attacks the liver and stays in your system forever, even after it is cured", diseases:[:Hepatitis_A, :Hepatitis_B, :Hepatitis_C]
+  "Manageable" => {
+    description: "These infections have no cure, but can be managed if detected early and well-treated", diseases:[:Hepatitis_A, :Hepatitis_B, :Hepatitis_C, :HIV, :Herpes, :HPV]
     },
   "Skin-to-skin" => {
     description: "These infections are passed from skin-to-skin contact with affected areas, and are therefore harder to protect against using condoms", diseases: [:Herpes, :HPV]
-    },
-  "HIV" => {
-    description: "HIV is currently uncurable, but can be treated if detected early and well-managed", diseases: [:HIV]
     }
 }
 INSTRUMENTS = [
