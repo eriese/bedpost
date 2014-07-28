@@ -54,3 +54,4 @@ gem "awesome_print", :group => [:test, :development]
 gem "launchy", :group => [:test, :development]
 gem "better_errors", :group => [:development]
 gem "simplecov", :require => false, :group => :test
+gem "ruby-enum"

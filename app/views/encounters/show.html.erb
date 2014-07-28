@@ -56,4 +56,15 @@
     <% end %>
   <% end %>
   Fluid exchange: <%= @encounter.fluid %> <br>
-  <br><%= link_to "edit", edit_encounter_path(@encounter)%></div>
+  <br><%= link_to "edit", edit_encounter_path(@encounter)%>
+  <br><br>
+  <%= form_tag "/best_test", method: :get, id: "time-form" %>
+  When is the
+  <%= select_tag :time_type, options_for_select(["best", "earliest"]) %>
+  possible time for me to get tested for
+  <%= hidden_field_tag :encounter_id, @encounter.id %>
+  <%= select_tag :d_name, options_from_collection_for_select(@diseases, "name", "readable") %>
+  <%= submit_tag "Calculate" %>
+  <br>
+  <div class="results"></div>
+</div>

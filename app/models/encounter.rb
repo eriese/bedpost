@@ -45,4 +45,16 @@ class Encounter < ActiveRecord::Base
   def has_barriers?(user_instrument, partner_instrument)
     !self.contacts.find{|contact| contact[:user_inst] == user_instrument.to_s && contact[:partner_inst] == partner_instrument.to_s && contact[:barriers] == true}.nil?
   end
+  def earliest_to_test(disease)
+    for_time = self.took_place.to_s.split("-")
+    t = Time.mktime(for_time[0], for_time[1], for_time[2])
+    min_time = (t + disease.gestation_min * (60 * 60 * 24 * 7)).strftime('%m/%d/%Y')
+    return min_time
+  end
+  def best_to_test(disease)
+    for_time = self.took_place.to_s.split("-")
+    t = Time.mktime(for_time[0], for_time[1], for_time[2])
+    max_time = (t + disease.gestation_max * (60 * 60 * 24 * 7)).strftime('%m/%d/%Y')
+    return max_time
+  end
 end

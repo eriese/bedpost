@@ -1,5 +1,5 @@
 class EncountersController < ApplicationController
-  before_filter :check_encounter, :except => [:index, :landing]
+  before_filter :check_encounter, :except => [:index, :landing, :best_test, :earliest_test]
   def index
     @encounters = Encounter.where({user_id: session[:user_id]}).order("took_place DESC")
     @partners = @user.partners
@@ -24,6 +24,7 @@ class EncountersController < ApplicationController
   end
   def show
     @contacts = @encounter.contacts
+    @diseases =  Disease.all
   end
   def edit
   end
@@ -43,6 +44,24 @@ class EncountersController < ApplicationController
   def destroy
     @encounter = Encounter.find(params[:id])
     @encounter.destroy
+  end
+  def best_test
+    encounter = Encounter.find(params[:encounter_id])
+    diseases = Disease.all
+    best_time = {}
+    diseases.each do |disease|
+      best_time[disease.name] = encounter.best_to_test(disease)
+    end
+    render json: best_time
+  end
+  def earliest_test
+    encounter = Encounter.find(params[:encounter_id])
+    diseases = Disease.all
+    earliest_time = {}
+    diseases.each do |disease|
+      earliest_time[disease.name] = encounter.earliest_to_test(disease)
+    end
+    render json: earliest_time
   end
   private
   def check_encounter

@@ -152,3 +152,7 @@ KINKY_CONTACTS = [
   {blood: [:mouth, :genitals, :ass, :glands]},
   {vomit: [:mouth, :genitals, :ass, :glands]}
 ]
+
+def get_disease(disease_name)
+  DISEASES.find{|disease| disease[:name] == disease_name.intern}
+end

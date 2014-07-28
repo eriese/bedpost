@@ -9,6 +9,8 @@ Bedpost::Application.routes.draw do
   get "/encounters/landing" => "encounters#landing"
   get "/partnerships/landing" => "partnerships#landing"
   get "track" => "sti_tests#track"
+  get "best_test" => "encounters#best_test"
+  get "earliest_test" => "encounters#earliest_test"
 
   resources :profiles
   resources :encounters
