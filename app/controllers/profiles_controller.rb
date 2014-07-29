@@ -14,6 +14,7 @@ class ProfilesController < ApplicationController
   def create
     @user = Profile.new(params[:profile])
     @user.uid = SecureRandom.uuid.slice(0,8)
+    @user.email = @user.email.downcase
     if @user.password.nil?
       @user.password = SecureRandom.uuid.slice(0,8)
       @user.password_confirmation = @user.password
@@ -44,6 +45,8 @@ class ProfilesController < ApplicationController
   end
   def update
     if @user.update_attributes(params[:profile])
+      @user.email = @user.email.downcase
+      @user.save
       redirect_to profile_path(@user)
     else
       flash[:message] = @user.errors.messages

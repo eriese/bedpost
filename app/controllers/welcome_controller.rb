@@ -6,7 +6,7 @@ class WelcomeController < ApplicationController
     end
   end
   def create
-    @user = Profile.where(email: params[:email]).first.try(:authenticate, params[:password])
+    @user = Profile.where(email: params[:email].downcase).first.try(:authenticate, params[:password])
     if @user
       session[:user_id] = @user.id
       redirect_to "/profiles"
