@@ -8,9 +8,10 @@ Bedpost::Application.routes.draw do
   get "/logout" => "welcome#destroy"
   get "/encounters/landing" => "encounters#landing"
   get "/partnerships/landing" => "partnerships#landing"
-  get "track" => "sti_tests#track"
-  get "best_test" => "encounters#best_test"
-  get "earliest_test" => "encounters#earliest_test"
+  get "/track" => "sti_tests#track"
+  get "/best_test" => "encounters#best_test"
+  get "/earliest_test" => "encounters#earliest_test"
+  get "/encounters/:id/recommendations" => "encounters#recommend"
 
   resources :profiles
   resources :encounters

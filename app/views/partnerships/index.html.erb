@@ -20,8 +20,9 @@
     <h2><%= link_to partnership.partner.name, partnership_path(partnership) %></h2>
     <strong>Most recent encounter:</strong><br>
     <% if partnership.most_recent %>
+
+      <%= link_to "date: #{partnership.most_recent.took_place}", encounter_path(partnership.most_recent) %><br>
       Fluid exchange: <%= partnership.most_recent.fluid %><br>
-      date: <%= partnership.most_recent.took_place %><br>
       Self-assessed risk level: <%= partnership.most_recent.self_risk %><br>
       App-assessed risk:
       <% if partnership.most_recent.risk <= 4 %>

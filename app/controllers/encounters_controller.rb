@@ -25,6 +25,7 @@ class EncountersController < ApplicationController
   def show
     @contacts = @encounter.contacts
     @diseases =  Disease.all
+    @risks = @encounter.get_risks
   end
   def edit
   end
@@ -62,6 +63,9 @@ class EncountersController < ApplicationController
       earliest_time[disease.name] = encounter.earliest_to_test(disease)
     end
     render json: earliest_time
+  end
+  def recommend
+    @diseases = Disease.highest_risk(@encounter)
   end
   private
   def check_encounter

@@ -80,7 +80,43 @@ module Disease
   def self.find_by_category(category)
     all.select{|disease| disease.category.include?(category)}
   end
-  def self.find_by_contact(user_inst, partner_inst)
-    all.select{|disease| disease.risky_contacts.find{|contact| contact[:user_instrument] == user_inst && contact[:partner_instrument] == partner_inst}}
+  def self.find_by_contact(hsh)
+    if hsh[:risk_level]
+      all.select{|disease| disease.risky_contacts.find{|contact| contact[:user_instrument] == hsh[:user_instrument].intern && contact[:partner_instrument] == hsh[:partner_instrument].intern && contact[:risk_level] == hsh[:risk_level].intern}
+    }
+    else
+      all.select{|disease| disease.risky_contacts.find{|contact| contact[:user_instrument] == hsh[:user_instrument].intern && contact[:partner_instrument] == hsh[:partner_instrument].intern
+      }
+    }
+    end
+  end
+  def self.risk_by_contact(hsh)
+    disease_list = find_by_contact(hsh)
+    risk_hsh = {3=>[], 2=>[], 1=>[]}
+    disease_list.each do |disease|
+      if disease.barriers_effective && hsh[:barriers?]
+        risk_mitigated = 1
+      else
+        risk_mitigated = disease.risky_contacts.find{|contact| contact[:user_instrument] = hsh[:user_instrument].intern && contact[:partner_instrument] == hsh[:partner_instrument].intern}[:risk_level]
+      end
+      risk_hsh[risk_mitigated] << disease.readable
+    end
+    risk_hsh
+  end
+  def self.highest_risk(encounter)
+    risk_map = {1 => [], 2 => [], 3 => []}
+    risks = encounter.contacts.map{|contact| contact.get_risks }
+    risks.each do |hsh|
+      hsh[3].each do |dis|
+        risk_map[3] << {readable: dis, earliest: encounter.earliest_to_test(find_by_readable(dis)), best: encounter.best_to_test(find_by_readable(dis))} if !risk_map[3].include?(dis)
+      end
+      hsh[2].each do |dis|
+        risk_map[2] << {readable: dis, earliest: encounter.earliest_to_test(find_by_readable(dis)), best: encounter.best_to_test(find_by_readable(dis))} if !risk_map[3].include?(dis) && !risk_map[2].include?(dis)
+      end
+      hsh[1].each do |dis|
+        risk_map[1] << {readable: dis, earliest: encounter.earliest_to_test(find_by_readable(dis)), best: encounter.best_to_test(find_by_readable(dis))} if !risk_map[3].include?(dis) && !risk_map[2].include?(dis) && !risk_map[1].include?(dis)
+      end
+    end
+    return risk_map
   end
 end

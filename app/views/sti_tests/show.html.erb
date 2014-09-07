@@ -1,6 +1,6 @@
 
 <div class="center">
-  <h2>Test results from <%= @sti_test.date_taken %></h2><hr>
+  <h2>Test results from <%= @sti_test.date_taken %><span class="help plus"><a href=<%= edit_sti_test_path(@sti_test) %>><%= image_tag "pencil.png", alt: "edit test" %></a></span></h2><hr>
   <% @infections.each do |infection| %>
   <div class="bubble partner"><strong><%= @diseases.find{|d| d[:name] ==infection.disease.intern}[:readable] %></strong>
     <br>
@@ -26,5 +26,4 @@
     <br>
   <% end %>
   <br>
-  <%= link_to "edit", edit_sti_test_path(@sti_test) %>
 </div>

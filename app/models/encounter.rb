@@ -57,4 +57,10 @@ class Encounter < ActiveRecord::Base
     max_time = (t + disease.gestation_max * (60 * 60 * 24 * 7)).strftime('%m/%d/%Y')
     return max_time
   end
+  def get_risks()
+    self.contacts.map do |contact|
+      {contact.id => contact.get_risks}
+    end
+  end
+
 end

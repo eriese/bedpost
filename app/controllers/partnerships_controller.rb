@@ -28,7 +28,7 @@ class PartnershipsController < ApplicationController
     end
   end
   def show
-    @encounters = []
+    @encounters = @partnership.encounters
   end
   def edit
   end

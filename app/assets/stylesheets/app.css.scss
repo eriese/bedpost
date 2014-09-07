@@ -217,6 +217,7 @@ ul.encounters {
   border-radius: 10px;
   padding: 10px;
   box-shadow: 1px 1px 1px #888888;
+  margin-bottom: 15px;
   .category {
     text-align: left;
   }
@@ -320,4 +321,13 @@ table {
 }
 .plus {
   padding-left: 30px;
+}
+.therm {
+  img {
+    width: 18px;
+  }
+}
+div.six-hundred {
+  width: 70%;
+  display: inline-block
 }

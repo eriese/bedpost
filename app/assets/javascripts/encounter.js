@@ -9,4 +9,7 @@ $(window).load(function() {
       }
     })
   })
+  $(".therm").click(function(e) {
+    $(this).parent().find(".risk-assoc").toggleClass("hidden");
+  })
 })
