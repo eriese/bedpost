@@ -8,7 +8,9 @@ class Profile
   field :e_n, as: :external_name, type: String
   field :i_n, as: :internal_name, type: String
 
+  validates_presence_of :name, :pronoun, :anus_name, :external_name
+
   def has_internal?
-  	@internal_name != nil
+  	self.internal_name != nil
   end
 end
