@@ -11,26 +11,20 @@ RSpec.describe UserProfile, type: :model do
 
   it "doesn't allow duplicate uids" do
   	user2 = build(:user_profile)
-  	expect(user2.valid?).to be false
-
-  	details = user2.errors.details[:uid]
-  	expect(details).to include({error: :taken, value: user2.uid})
+  	expect(user2).to_not be_valid
+  	expect(user2).to have_validation_error_for(:uid, :taken)
   end
 
   it "requires an email" do
   	user2 = build(:user_profile, email: nil, uid: "2345")
-  	expect(user2.valid?).to be false
-
-  	details = user2.errors.details[:email]
-  	expect(details).to include({error: :blank})
+  	expect(user2).to_not be_valid
+  	expect(user2).to have_validation_error_for(:email, :blank)
   end
 
   it "doesn't allow duplicate emails" do
   	user2 = build(:user_profile, email: @user1.email, uid: "2345")
-  	expect(user2.valid?).to be false
-
-  	details = user2.errors.details[:email]
-  	expect(details).to include({error: :taken, value: @user1.email})
+  	expect(user2).to_not be_valid
+  	expect(user2).to have_validation_error_for(:email, :taken)
   end
 
   it "generates a password hash" do
