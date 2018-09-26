@@ -1,0 +1,20 @@
+<div class="login">
+  <div class="container">
+    <div class="form">
+
+    <h1>Sign up</h1>
+		<%= form_for @user_profile, url: user_profile_path do |f| %>
+        name:
+        <%= f.text_field :name %>
+        email:
+        <%= f.text_field :email %>
+        password:
+        <%= f.password_field :password %>
+        password confirmation:
+        <%= f.password_field :password_confirmation %>
+        <%= f.submit %>
+        <% end %>
+
+    </div>
+  </div>
+</div>
