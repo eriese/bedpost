@@ -16,12 +16,22 @@
       <li><%= current_user.name %></li>
       <li><%= link_to "Log out", logout_path, method: "delete" %></li>
     </ul>
-  <% else %>
+    <% else %>
     <ul>
       <li><%= link_to "Login", 'login' %></a></li>
       <li><%= link_to "Signup", 'signup' %></a></li>
     </ul>
-  <% end %>
+    <% end %>
+    <div id="flash">
+      <%= flash[:error] %>
+      <% if flash[:message] %>
+      <% flash[:message].each do |key, message| %>
+      <% message.each do |msg| %>
+      <%= msg %>
+      <% end %>
+      <% end %>
+      <% end %>
+    </div>
     <%= yield %>
   </body>
 </html>
