@@ -117,7 +117,7 @@ development:
 
     # Preload all models in development, needed when models use
     # inheritance. (default: false)
-    # preload_models: false
+    preload_models: true
 
     # Raise an error when performing a #find and the document is not found.
     # (default: true)
