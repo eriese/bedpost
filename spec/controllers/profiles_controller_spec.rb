@@ -24,12 +24,6 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe ProfilesController, type: :controller do
-  before(:all) do
-    @user1 = create(:user_profile)
-  end
-  after(:all) do
-    @user1.destroy
-  end
 
   # This should return the minimal set of attributes required to create a valid
   # Profile. As you add validations to Profile, be sure to
@@ -45,7 +39,7 @@ RSpec.describe ProfilesController, type: :controller do
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # ProfilesController. Be sure to keep this updated too.
-  let(:valid_session) { {user_id: @user1.id} }
+  let(:valid_session) { {user_id: dummy_user.id} }
 
   describe "GET #index" do
     it "returns a success response" do

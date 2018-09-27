@@ -45,4 +45,12 @@ RSpec.configure do |config|
 
   # include factory bot
   config.include FactoryBot::Syntax::Methods
+
+  # incude UserProfileHelpers
+  include UserProfileHelpers
+
+  #clear the dummy user after all the tests are run
+  config.after :suite do
+    clear_dummy
+  end
 end
