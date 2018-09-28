@@ -39,7 +39,7 @@ RSpec.describe ProfilesController, type: :controller do
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # ProfilesController. Be sure to keep this updated too.
-  let(:valid_session) { {user_id: dummy_user.id} }
+  let(:valid_session) { dummy_user_session }
 
   describe "GET #index" do
     it "returns a success response" do

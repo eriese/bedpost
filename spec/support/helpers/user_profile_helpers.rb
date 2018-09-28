@@ -9,7 +9,12 @@ module UserProfileHelpers
 		return @@dummy
 	end
 
+	def dummy_user_session
+		{user_id: dummy_user.id}
+	end
+
 	def clear_dummy
 		@@dummy.destroy if @@dummy
+		@@dummy = nil
 	end
 end

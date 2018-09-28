@@ -1,5 +1,7 @@
 class UserProfilesController < ApplicationController
 	skip_before_action :require_user, only: [:new, :create]
+	before_action :require_no_user, only: [:new, :create]
+
 	def new
 		@user_profile = UserProfile.new
 	end

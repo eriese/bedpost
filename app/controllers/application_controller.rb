@@ -11,4 +11,8 @@ class ApplicationController < ActionController::Base
 	def require_user
 		redirect_to login_path(r: request.url) unless current_user
 	end
+
+	def require_no_user
+		redirect_to params[:r] || user_profile_path if current_user
+	end
 end
