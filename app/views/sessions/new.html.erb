@@ -1,13 +1,10 @@
 <div class="login">
-	<div class="container">
-		<div class="form">
-
-      <h1>Log in</h1>
-			<%= form_for :session, url: login_path do |f| %>
-			  <%= f.email_field :email, :placeholder => "Email" %>
-			  <%= f.password_field :password, :placeholder => "Password" %>
-			  <%= f.submit "Log in", class: "btn-submit" %>
-			<% end %>
-    </div>
-	</div>
+	<h1>Log in to BedPost</h1>
+	<%= form_for :session, url: login_path, html: {class: "big"} do |f| %>
+	<%= f.label :email %>
+	<%= f.email_field :email, :placeholder => "Email", :value => flash[:email] %>
+	<%= f.label :password %>
+	<%= f.password_field :password, :placeholder => "Password" %>
+	<%= f.submit "Log in", class: "btn-submit" %>
+	<% end %>
 </div>

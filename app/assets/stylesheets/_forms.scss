@@ -1,0 +1,34 @@
+@import "_defaults";
+
+input, select, textarea {
+	background-color: $color-off-white;
+	border-color: $color-purple-dark;
+	border-style: solid;
+	border-radius: 3px;
+	border-width: 1px;
+	box-sizing: border-box;
+
+	form.big &:not([type=hidden]) {
+		padding: 5px 10px;
+		display: block;
+		width: 100%;
+		margin-bottom: 10px;
+	}
+
+	&:focus {
+		border-color: $color-purple-light;
+	}
+
+}
+
+input[type=submit] {
+	background-color: $color-purple-dark;
+	color: $background-color;
+	padding: 5px 10px;
+	transition: 0.1s linear all;
+
+	&:hover {
+		background-color: $color-purple-light;
+		border-color: $color-purple-light;
+	}
+}

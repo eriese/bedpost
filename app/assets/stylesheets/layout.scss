@@ -1,0 +1,36 @@
+@import "_defaults";
+
+body {
+	font-family: $text-font;
+	color: $color-black;
+	padding: 10px;
+}
+
+#logo {
+	font-family: $script-font;
+	color: $color-purple-light;
+	font-size: 55px;
+	text-align: center;
+
+	span {
+		font-family: $outline-font;
+		font-size: 58px;
+		color: $color-purple-dark;
+	}
+}
+
+#nav {
+	text-align: right;
+
+	li {
+		display: inline-block;
+		list-style: none;
+		margin-left: 30px;
+
+
+		a {
+			text-decoration: none;
+			color: $color-purple-light;
+		}
+	}
+}
