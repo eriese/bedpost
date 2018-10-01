@@ -8,6 +8,11 @@ class SessionsController < ApplicationController
 
 	def create
 		email = params[:session][:email]
+    if email.empty?
+      flash[:error] = "please enter an email address"
+      redirect_to login_path
+      return
+    end
     @user = UserProfile.find_by(email: email.downcase)
     password = params[:session][:password]
     if @user && @user.authenticate(password)

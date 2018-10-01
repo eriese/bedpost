@@ -3,7 +3,22 @@
 body {
 	font-family: $text-font;
 	color: $color-black;
-	padding: 10px;
+	// padding: 10px;
+	background-color: $background-color;
+}
+
+h1 {
+	font-weight: unset;
+	font-size: 40px;
+	color: $color-purple-dark;
+}
+
+a {
+	color: $color-green-light;
+
+	&:hover {
+		color: $color-green-dark;
+	}
 }
 
 #logo {
@@ -17,20 +32,77 @@ body {
 		font-size: 58px;
 		color: $color-purple-dark;
 	}
+
+	&.small {
+		text-align: left;
+		font-size: 39px;
+		margin-left: 60px;
+		padding-top: 5px;
+
+		span {
+			font-size: 41px;
+		}
+	}
 }
 
 #nav {
-	text-align: right;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 1;
+
+	.burger {
+		margin: 10px;
+		width: 35px;
+		border: 2px solid $button-color;
+		border-radius: 5px;
+		z-index: 2;
+
+		.burger-line {
+			height: 3px;
+			background-color: $button-color;
+			margin: 6.5px 5px;
+		}
+	}
+
+	&.open .burger, .burger:hover {
+		background-color: $button-hover-color;
+		border-color: $button-hover-color;
+
+		.burger-line {
+			background-color: $background-color;
+		}
+	}
+
+	&.open {
+		ul {
+			display: block
+		}
+	}
+
+	ul {
+		display: none;
+		position: absolute;
+		top: 57px;
+		padding-top: 10px;
+		padding-inline-start: 10px;
+		background-color: $color-purple-dark;
+		margin: 0px;
+		z-index: 1;
+		width: 200px;
+		color: $color-light-gray;
+	}
 
 	li {
-		display: inline-block;
 		list-style: none;
-		margin-left: 30px;
-
+		font-size: 28px;
 
 		a {
 			text-decoration: none;
-			color: $color-purple-light;
+			color: $color-off-white;
+			display: block;
+			height: 100%;
+			padding: 15px 5px;
 		}
 	}
 }

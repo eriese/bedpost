@@ -8,3 +8,16 @@
 // layout file, like app/views/layouts/application.html.erb
 
 console.log('Hello World from Webpacker')
+
+import TurbolinksAdapter from 'vue-turbolinks'
+import Vue from 'vue/dist/vue.esm'
+import navComponent from './nav'
+
+Vue.use(TurbolinksAdapter)
+Vue.component("nav-component", navComponent);
+let app = null;
+document.addEventListener('turbolinks:load', () => {
+  app = new Vue({
+    el: '#vue-container'
+  })
+})

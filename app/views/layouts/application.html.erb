@@ -6,37 +6,28 @@
     <%= csp_meta_tag %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <link href='//fonts.googleapis.com/css?family=Lily+Script+One|Londrina+Shadow|Fanwood+Text' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri|Lily+Script+One|Londrina+Shadow" rel="stylesheet">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= include_gon %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'hello_vue' %>
+    <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>
-    <div id="logo">Bed<span>Post</span></div>
-    <div id="nav">
-      <% if current_user %>
-      <ul>
-        <li><%= current_user.name %></li>
-        <li><%= link_to "Log out", logout_path, method: "delete" %></li>
-      </ul>
-      <% else %>
-      <ul>
-        <li><%= link_to "Login", 'login' %></a></li>
-        <li><%= link_to "Signup", 'signup' %></a></li>
-      </ul>
-      <% end %>
-    </div>
-    <div id="flash">
-      <%= flash[:error] %>
-      <% if flash[:message] %>
-      <% flash[:message].each do |key, message| %>
-      <% message.each do |msg| %>
-      <%= msg %>
-      <% end %>
-      <% end %>
-      <% end %>
-    </div>
-    <%= yield %>
+    <div id="vue-container">
+      <%= render "layouts/nav" %>
+      <div id="logo" class=<%=current_user ? "small" : ""%>>Bed<span>Post</span></div>
+
+      <div id="flash">
+        <%= flash[:error] %>
+        <% if flash[:message] %>
+        <% flash[:message].each do |key, message| %>
+        <% message.each do |msg| %>
+        <div><%= key + ": " + msg %></div>
+        <% end %>
+        <% end %>
+        <% end %>
+      </div>
+      <%= yield %></div>
   </body>
 </html>

@@ -1,10 +1,11 @@
 <div class="login">
-	<h1>Log in to BedPost</h1>
-	<%= form_for :session, url: login_path, html: {class: "big"} do |f| %>
+	<h1>Log In</h1>
+	<%= form_with scope: :session, url: login_path, class: "big centered" do |f| %>
 	<%= f.label :email %>
-	<%= f.email_field :email, :placeholder => "Email", :value => flash[:email] %>
+	<%= f.email_field :email, value: flash[:email], required: true %>
 	<%= f.label :password %>
-	<%= f.password_field :password, :placeholder => "Password" %>
+	<%= f.password_field :password, required: true %>
 	<%= f.submit "Log in", class: "btn-submit" %>
+	<%= link_to "Create an Account", new_user_profile_path %></a>
 	<% end %>
 </div>

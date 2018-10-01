@@ -1,14 +1,20 @@
 // fonts
 $script-font: 'Lily Script One', cursive;
 $outline-font: 'Londrina Shadow', sans-serif;
-$text-font: Helvetica, sans-serif;
+$text-font: 'Hind Siliguri', sans-serif;;
 
 // colors
-$color-purple-light: hsl(312,81.6,34.1);
-$color-purple-dark: hsl(312,100,16.1);
+$color-purple-dark: hsl(316,70,19);
+$color-purple-light: hsl(316,70,39);
+
+$color-green-dark: hsl(180,90,15);
+$color-green-light: hsl(180,95,30);
 
 $color-black: rgb(55,50,50);
-$color-off-white: #F9F9F9;
+$color-off-white: #F3F3F3;
 $color-light-gray: #e0e0e0;
 
-$background-color: #FFFFFF;
+// widget colors
+$background-color: #fcfcfc;
+$button-color: $color-purple-light;
+$button-hover-color: $color-purple-dark;

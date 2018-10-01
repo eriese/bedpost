@@ -54,18 +54,18 @@
 //
 // Then uncomment the code block below:
 //
-import TurbolinksAdapter from 'vue-turbolinks'
-import Vue from 'vue/dist/vue.esm'
-import App from '../app.vue'
+// import TurbolinksAdapter from 'vue-turbolinks'
+// import Vue from 'vue/dist/vue.esm'
+// import App from '../app.vue'
 
-Vue.use(TurbolinksAdapter)
-let app = null;
-document.addEventListener('turbolinks:load', () => {
-  app = new Vue({
-    el: '#hello',
-    data: {
-      message: "Can you say hello?"
-    },
-    components: { App }
-  })
-})
+// Vue.use(TurbolinksAdapter)
+// let app = null;
+// document.addEventListener('turbolinks:load', () => {
+//   app = new Vue({
+//     el: '#hello',
+//     data: {
+//       message: "Can you say hello?"
+//     },
+//     components: { App }
+//   })
+// })

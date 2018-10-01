@@ -1,6 +1,6 @@
 @import "_defaults";
 
-input, select, textarea {
+input:not([type=hidden]), select, textarea {
 	background-color: $color-off-white;
 	border-color: $color-purple-dark;
 	border-style: solid;
@@ -8,11 +8,14 @@ input, select, textarea {
 	border-width: 1px;
 	box-sizing: border-box;
 
-	form.big &:not([type=hidden]) {
+	form.big & {
 		padding: 5px 10px;
+	}
+
+	form.centered & {
 		display: block;
 		width: 100%;
-		margin-bottom: 10px;
+		margin-bottom: 5px;
 	}
 
 	&:focus {
@@ -22,13 +25,23 @@ input, select, textarea {
 }
 
 input[type=submit] {
-	background-color: $color-purple-dark;
+	background-color: $color-purple-light;
+	border-color: $color-purple-light;
 	color: $background-color;
 	padding: 5px 10px;
 	transition: 0.1s linear all;
 
 	&:hover {
-		background-color: $color-purple-light;
-		border-color: $color-purple-light;
+		background-color: $color-purple-dark;
+		border-color: $color-purple-dark;
 	}
+
+	form.centered & {
+		margin-top: 10px;
+	}
+}
+
+form.centered {
+	max-width: 400px;
+	margin: 0px auto;
 }

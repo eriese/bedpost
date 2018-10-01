@@ -1,20 +1,18 @@
 <div class="login">
-  <div class="container">
-    <div class="form">
-
     <h1>Sign up</h1>
-		<%= form_for @user_profile, url: user_profile_path do |f| %>
-        <%= f.label :name %>
-        <%= f.text_field :name %>
-        <%= f.label :email %>
-        <%= f.text_field :email %>
-        <%= f.label :password %>
-        <%= f.password_field :password %>
-        <%= f.label :password_confirmation %>
-        <%= f.password_field :password_confirmation %>
-        <%= f.submit id: "signup-submit" %>
-        <% end %>
+    <%= form_for @user_profile, url: user_profile_path, html: {class: "centered"} do |f| %>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
+    <%= f.submit id: "signup-submit" %>
+    <p>
+        Already have an account? <%= link_to "Log In", login_path %></a>
+    </p>
+    <% end %>
 
-    </div>
-  </div>
 </div>
