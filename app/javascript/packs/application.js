@@ -8,7 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
-import navComponent from './nav'
+import navComponent from '../components/navComponent'
 
 Vue.use(TurbolinksAdapter)
 Vue.component("nav-component", navComponent);

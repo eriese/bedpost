@@ -17,18 +17,19 @@
     <div id="vue-container">
       <%= render "layouts/nav" %>
       <div id="logo" class=<%=current_user ? "small" : ""%>>Bed<span>Post</span></div>
-
-      <div id="flash">
-        <%= flash[:error] %>
-        <% if flash[:message] %>
-        <% flash[:message].each do |key, message| %>
-        <% message.each do |msg| %>
-        <div><%= key + ": " + msg %></div>
-        <% end %>
-        <% end %>
-        <% end %>
+      <div id="page-container">
+        <div id="flash">
+          <%= flash[:error] %>
+          <% if flash[:message] %>
+          <% flash[:message].each do |key, message| %>
+          <% message.each do |msg| %>
+          <div><%= key + ": " + msg %></div>
+          <% end %>
+          <% end %>
+          <% end %>
+        </div>
+        <%= yield %>
       </div>
-      <div id="page-container"><%= yield %></div>
     </div>
   </body>
 </html>
