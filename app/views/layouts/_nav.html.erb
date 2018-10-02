@@ -1,17 +1,26 @@
 <nav-component inline-template>
 <div id="nav" :class="{open: isOpen}">
   <% if current_user %>
-  <div class="burger" @click="openMenu">
+  <div class="burger" @click.stop="toggleMenu">
     <div class="burger-line"></div>
     <div class="burger-line"></div>
     <div class="burger-line"></div>
   </div>
-  <ul>
-    <li><%= current_user.name %></li>
-    <li><%= link_to "Log out", logout_path, method: "delete" %></li>
-    <!-- <li><%= link_to "Login", login_path %></a></li>
-    <li><%= link_to "Signup", new_user_profile_path %></a></li> -->
-  </ul>
+  <div class="menu" ref="menu">
+    <ul>
+      <li class="no-link"><%= current_user.name %></li>
+      <% {"Dashboard" => user_profile_path, "Edit Profile" => edit_user_profile_path}.each do |key, path| %>
+        <li>
+          <%= link_to_unless_current(key, path) do %>
+          <span> <%= key %> </span>
+          <%end%>
+        </li>
+      <% end %>
+      <li><%= link_to "Log out", logout_path, method: "delete" %></li>
+      <!-- <li><%= link_to "Login", login_path %></a></li>
+      <li><%= link_to "Signup", new_user_profile_path %></a></li> -->
+    </ul>
+  </div>
 <% end %>
 </div>
 </nav-component>

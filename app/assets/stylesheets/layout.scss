@@ -1,9 +1,12 @@
 @import "_defaults";
 
+html, body {
+	height: 100%;
+}
+
 body {
 	font-family: $text-font;
 	color: $color-black;
-	// padding: 10px;
 	background-color: $background-color;
 }
 
@@ -36,7 +39,7 @@ a {
 	&.small {
 		text-align: left;
 		font-size: 39px;
-		margin-left: 60px;
+		float: left;
 		padding-top: 5px;
 
 		span {
@@ -45,64 +48,12 @@ a {
 	}
 }
 
-#nav {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	z-index: 1;
-
-	.burger {
-		margin: 10px;
-		width: 35px;
-		border: 2px solid $button-color;
-		border-radius: 5px;
-		z-index: 2;
-
-		.burger-line {
-			height: 3px;
-			background-color: $button-color;
-			margin: 6.5px 5px;
-		}
-	}
-
-	&.open .burger, .burger:hover {
-		background-color: $button-hover-color;
-		border-color: $button-hover-color;
-
-		.burger-line {
-			background-color: $background-color;
-		}
-	}
-
-	&.open {
-		ul {
-			display: block
-		}
-	}
-
-	ul {
-		display: none;
-		position: absolute;
-		top: 57px;
-		padding-top: 10px;
-		padding-inline-start: 10px;
-		background-color: $color-purple-dark;
-		margin: 0px;
-		z-index: 1;
-		width: 200px;
-		color: $color-light-gray;
-	}
-
-	li {
-		list-style: none;
-		font-size: 28px;
-
-		a {
-			text-decoration: none;
-			color: $color-off-white;
-			display: block;
-			height: 100%;
-			padding: 15px 5px;
-		}
-	}
+#flash {
+	clear: both;
 }
+
+#page-container {
+	clear: both;
+	padding: 10px;
+}
+

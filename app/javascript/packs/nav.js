@@ -1,21 +1,33 @@
 let navComponent = {
 	data: function() {
-		console.log("nav connected")
 		return {
 			isOpen: false
 		}
 	},
-	// props: {
-	// 	isOpen: {
-	// 		default: false,
-	// 		required: false
-	// 	}
-	// },
-	template: "<div></div>",
 	methods: {
 		openMenu() {
-			this.isOpen = !this.isOpen;
+			this.isOpen = true;
+			document.body.addEventListener('click', this.documentClick)
+		},
+		closeMenu() {
+			this.isOpen = false;
+			document.body.removeEventListener('click', this.documentClick)
+		},
+		documentClick(e) {
+			let menu = this.$refs.menu;
+			let target = e.target;
+			if (menu !== target & !menu.contains(target)) {
+				this.closeMenu()
+			}
+		},
+		toggleMenu() {
+			if (this.isOpen) {
+				this.closeMenu();
+			} else {
+				this.openMenu();
+			}
 		}
+
 	}
 }
 

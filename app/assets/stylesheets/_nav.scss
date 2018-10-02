@@ -1,0 +1,84 @@
+@import "_defaults";
+
+#nav {
+	position: relative;
+	left: 0px;
+	top: 0px;
+	z-index: 1;
+	float: left;
+
+	.burger {
+		margin: 10px;
+		width: 35px;
+		border: 2px solid $button-color;
+		border-radius: 5px;
+		position: relative;
+		z-index: 2;
+
+		.burger-line {
+			height: 3px;
+			background-color: $button-color;
+			margin: 6.5px 5px;
+		}
+	}
+
+	&.open .burger, .burger:hover {
+		background-color: $button-hover-color;
+		border-color: $button-hover-color;
+
+		.burger-line {
+			background-color: $background-color;
+		}
+	}
+
+	$nav-width: 250px;
+	&.open .menu {
+		width: $nav-width;
+	}
+
+	.menu {
+		width: 0px;
+		overflow: hidden;
+		position: absolute;
+		padding-top: 57px;
+		top: 0px;
+
+		margin: 0px;
+		z-index: 1;
+		height: 100vh;
+		box-sizing: border-box;
+
+		transition: width 0.3s ease-in;
+	}
+
+	ul {
+		padding-inline-start: 0px;
+		margin: 0px;
+		width: $nav-width;
+		background-color: $color-purple-dark;
+		height: 100%;
+	}
+
+	li {
+		list-style: none;
+		font-size: 26px;
+		color: $color-light-gray;
+
+		&.no-link {
+			padding: 15px 10px 10px;
+			color: $color-green-light;
+		}
+
+		span {
+			background-color: $color-purple-light;
+		}
+
+		a, span {
+			text-decoration: none;
+			color: $color-off-white;
+			display: block;
+			height: 100%;
+			padding: 15px 5px 15px 15px;
+		}
+	}
+}

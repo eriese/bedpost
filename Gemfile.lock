@@ -117,6 +117,8 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    guard-webpack (0.1.2)
+      guard (< 3.0)
     http_parser.rb (0.6.0)
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
@@ -299,6 +301,7 @@ DEPENDENCIES
   guard
   guard-livereload (~> 2.5)
   guard-rspec
+  guard-webpack
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   mongoid (~> 7.0)

@@ -69,7 +69,7 @@ guard :rspec, cmd: "spring rspec -f doc" do
   end
 end
 
-guard 'livereload' do
+guard 'livereload', js_apple_webkit_extra_wait_time: 50 do
   extensions = {
     css: :css,
     scss: :css,
@@ -107,3 +107,5 @@ guard 'livereload' do
   watch(%r{app/helpers/.+\.rb})
   watch(%r{config/locales/.+\.yml})
 end
+
+guard :webpack, config: './config/webpack/development.js'
