@@ -8,10 +8,14 @@
 // layout file, like app/views/layouts/application.html.erb
 import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
+import Vuelidate from 'vuelidate';
 import navComponent from '../components/navComponent'
+import validFormComponent from '../components/validFormComponent'
 
-Vue.use(TurbolinksAdapter)
+Vue.use(TurbolinksAdapter);
+Vue.use(Vuelidate);
 Vue.component("nav-component", navComponent);
+Vue.component('valid-form', validFormComponent);
 let app = null;
 document.addEventListener('turbolinks:load', () => {
   app = new Vue({

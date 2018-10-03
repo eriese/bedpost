@@ -4,7 +4,7 @@ class UserProfilesController < ApplicationController
 
 	def new
 		@user_profile = UserProfile.new(flash[:profile_attempt])
-		gon.validators = get_client_validators(@user_profile)
+		gon_client_validators(@user_profile)
 	end
 	def create
 		req_params = user_params

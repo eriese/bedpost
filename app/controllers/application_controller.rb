@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 	  @current_user ||= UserProfile.find(session[:user_id]) if session[:user_id]
 	end
 
-	def get_client_validators(obj)
+	def gon_client_validators(obj)
 		validators = {};
 		is_new = obj.new_record?
 		obj.class.validators.each do |v|
@@ -18,12 +18,13 @@ class ApplicationController < ActionController::Base
 			end
 
 			v.attributes.each do |a|
-				validators[a] ||= {}
-				validators[a][v.kind] = v.options
+				validators[a] ||= []
+				validators[a] << [v.kind, v.options]
 			end
 		end
 
-		return validators
+		gon.validators = validators
+		gon.form_obj = obj
 	end
 
 

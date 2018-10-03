@@ -1,5 +1,7 @@
 class UserProfile < Profile
   include ActiveModel::SecurePassword
+  include DeAliasFields
+
   field :email, type: String
   field :password_digest, type: String
   field :uid, type: String, default: ->{generate_uid}
