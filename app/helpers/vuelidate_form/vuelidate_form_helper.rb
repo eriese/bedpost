@@ -1,30 +1,30 @@
 module VuelidateForm::VuelidateFormHelper
-	def vuelidate_form_for(**options)
-		set_options(options) do
-			if block_given?
-	      form_with(options, &Proc.new)
-	    else
-	      form_with(options)
-	    end
-	  end
-  end
+	def vuelidate_form_with(**options)
+		prc = block_given? ? Proc.new : nil
+		generate_form_using(:form_with, [options], options, prc)
+	end
 
-  def vuelidate_form_for(record, options = {}, &block)
-    set_options(options) do
-    	form_obj = nil
-    	form_text = form_for(record, options) do |f|
-    			form_obj = f
-					block.call(f)
-			end
-			add_valid_form_wrapper(form_obj, form_text)
-    end
-  end
+	def vuelidate_form_for(record, options = {}, &block)
+		generate_form_using(:form_for, [record, options], options, block)
+	end
 
-  private def set_options(options, &block)
-  	options[:builder] ||= VuelidateForm::VuelidateFormBuilder
+	private
+	def generate_form_using(method, args, options, block)
+		set_options(options)
+		form_obj = nil
+		form_text = send(method, *args) do |f|
+			#grab the form builder during building
+			form_obj = f
+			#do normal building business
+			block.call(f) if block
+		end
+		add_valid_form_wrapper(form_obj, form_text)
+	end
+
+	def set_options(options)
+		options[:builder] ||= VuelidateForm::VuelidateFormBuilder
 		options[:html] ||= {}
 		options[:html][:"@submit"] = "validateForm"
-		block.call
 	end
 
 	def add_valid_form_wrapper(form_obj, form_text)
