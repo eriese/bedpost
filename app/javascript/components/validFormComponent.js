@@ -43,6 +43,9 @@ export default {
 		}
 		return dt;
 	},
+	props: {
+		validate: String
+	},
 	components: {
 		'field-errors': fieldErrorsComponent
 	},
