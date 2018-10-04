@@ -16,3 +16,4 @@
 
 #Ignore spec log
 /spec/examples.txt
+.byebug_history

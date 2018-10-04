@@ -1,4 +1,5 @@
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators'
+import fieldErrorsComponent from "./fieldErrorsComponent.vue"
 
 function formatValidators() {
 	let validators = {}
@@ -16,7 +17,7 @@ function formatValidators() {
 					break;
 				case "length":
 					if (opts.maximum) {
-						validators[field].maxLength = maxLength(opts.maxLength)
+						validators[field].maxLength = maxLength(opts.maximum)
 					}
 					if (opts.minimum) {
 						validators[field].minLength = minLength(opts.minimum)
@@ -35,9 +36,16 @@ function formatValidators() {
 
 export default {
 	data: function() {
-		return gon.form_obj
+		let dt = gon.form_obj;
+		if (gon.form_obj.password_digest !== undefined) {
+			dt.password = "";
+			dt.password_confirmation = "";
+		}
+		return dt;
 	},
-	template: "<div><slot></slot></div>",
+	components: {
+		'field-errors': fieldErrorsComponent
+	},
 	validations: function() {
 		return formatValidators();
 	},

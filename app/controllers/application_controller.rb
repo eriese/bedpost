@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
 			end
 
 			v.attributes.each do |a|
+				next if a == :password_digest
 				validators[a] ||= []
 				validators[a] << [v.kind, v.options]
 			end
