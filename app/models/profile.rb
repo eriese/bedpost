@@ -10,7 +10,7 @@ class Profile
 
   validates_presence_of :name
   #only run this validation on the base class
-  #validates_presence_of :pronoun, :anus_name, :external_name, :if => :is_base?
+  validates_presence_of :pronoun, :anus_name, :external_name, :if => :is_base?
 
   def has_internal?
   	self.internal_name != nil

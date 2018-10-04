@@ -13,6 +13,8 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+#ignore webpack's compiled files
+/public/packs/*
 
 #Ignore spec log
 /spec/examples.txt

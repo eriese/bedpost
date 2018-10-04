@@ -12,9 +12,11 @@ class ApplicationController < ActionController::Base
 		validators = {};
 		is_new = obj.new_record?
 		obj.class.validators.each do |v|
-			if !v.options.empty? && v.options.has_key?(:on)
-				on_cond = v.options[:on]
-				next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
+			if !v.options.empty?
+				if v.options.has_key?(:on)
+					on_cond = v.options[:on]
+					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
+				end
 			end
 
 			v.attributes.each do |a|
