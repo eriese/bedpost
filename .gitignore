@@ -15,6 +15,7 @@
 /tmp
 #ignore webpack's compiled files
 /public/packs/*
+/public/packs-test/*
 
 #Ignore spec log
 /spec/examples.txt

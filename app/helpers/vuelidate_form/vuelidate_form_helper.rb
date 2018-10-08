@@ -18,6 +18,8 @@ module VuelidateForm::VuelidateFormHelper
 			#do normal building business
 			block.call(f) if block
 		end
+
+		#wrap in vue component template
 		add_valid_form_wrapper(form_obj, form_text)
 	end
 
@@ -29,9 +31,8 @@ module VuelidateForm::VuelidateFormHelper
 
 	def add_valid_form_wrapper(form_obj, form_text)
 		validations = form_obj.validations.join(",")
-		content_tag("valid-form", {"inline-template" => "", validate: validations}) do
+		content_tag("vuelidate-form", {"inline-template" => "", validate: validations}) do
 			form_text
 		end
 	end
-
 end

@@ -1,5 +1,5 @@
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators'
-import fieldErrorsComponent from "./fieldErrorsComponent.vue"
+import fieldErrors from "./fieldErrorsComponent.vue"
 
 function formatValidators(formFields) {
 	let validators = {}
@@ -55,16 +55,31 @@ export default {
 		validate: String
 	},
 	components: {
-		'field-errors': fieldErrorsComponent
+		fieldErrors
 	},
 	validations: function() {
 		return formatValidators(this.$props.validate);
+	},
+	computed: {
+		validationList: function() {
+			return this.$props.validate.split(",");
+		}
 	},
 	methods: {
 		validateForm(e) {
 			this.$v.$touch();
 			if (this.$v.$invalid) {
 				e.preventDefault();
+				e.stopPropagation();
+
+				// find the first errored field and focus it
+				for (var i = 0; i < this.validationList.length; i++) {
+					let field = this.validationList[i];
+					if (this.$v[field].$invalid) {
+						this.$refs[field].focus()
+						break;
+					}
+				}
 			}
 		}
 	}

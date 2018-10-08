@@ -5,6 +5,7 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	def field_wrapper(attribute, args = {}, &block)
 		args[:"v-model"] = attribute
 		args[:"@blur"] ||= "$v.#{attribute}.$touch()"
+		args[:ref] ||= attribute
 		@validations ||= []
 		@validations << attribute unless args[:validate] == false
 		@template.content_tag(:div, {class: 'field'}) do
