@@ -20,21 +20,22 @@ function formatValidators(formFields) {
 
 			switch(type) {
 				case "presence":
-					validators[field].required = required
+					validators[field].blank = required
 					break;
 				case "length":
 					if (opts.maximum) {
-						validators[field].maxLength = maxLength(opts.maximum)
+						validators[field].too_long = maxLength(opts.maximum)
 					}
 					if (opts.minimum) {
-						validators[field].minLength = minLength(opts.minimum)
+						validators[field].too_short = minLength(opts.minimum)
 					}
 					break;
 				case "confirmation":
 					let conf_field = field + "_confirmation";
 					validators[conf_field] = validators[conf_field] || {};
-					validators[field].required = required;
-					validators[conf_field].sameAs = sameAs(field);
+
+					validators[field].blank = required;
+					validators[conf_field].confirmation = sameAs(field);
 					break
 			}
 		}

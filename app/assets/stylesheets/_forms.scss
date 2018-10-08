@@ -44,4 +44,26 @@ input[type=submit] {
 form.centered {
 	max-width: 400px;
 	margin: 0px auto;
+
+	label {
+		display: block;
+		line-height: 1;
+	}
+
+	.additional {
+		text-align: right;
+
+		p {
+			margin: 0;
+		}
+	}
 }
+
+form div.errors {
+	text-align: right;
+	color: $color-purple-light;
+	font-size: 12px;
+	line-height: 1;
+}
+
+

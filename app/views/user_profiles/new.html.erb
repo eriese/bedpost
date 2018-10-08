@@ -6,8 +6,8 @@
     <%= f.password_field :password %>
     <%= f.password_field :password_confirmation %>
     <%= f.submit id: "signup-submit" %>
-    <p>
-        Already have an account? <%= link_to "Log In", login_path %>
-    </p>
+    <div class="additional">
+        <p>Already have an account? <%= link_to "Log In", login_path %></p>
+    </div>
     <% end %>
 </div>

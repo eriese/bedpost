@@ -16,6 +16,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
 # put javascript variables directly from the controller
 gem 'gon'
+# add internationalization to javascript
+gem "i18n-js"
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 
