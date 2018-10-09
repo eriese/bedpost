@@ -50,7 +50,9 @@ export default {
 			dt.password = dt.password || "";
 			dt.password_confirmation = dt.password_confirmation || "";
 		}
+		dt.showPass = false;
 		return dt;
+
 	},
 	props: {
 		validate: String
@@ -64,6 +66,13 @@ export default {
 	computed: {
 		validationList: function() {
 			return this.$props.validate.split(",");
+		},
+		passType: function() {
+			return this.showPass ? "text" : "password";
+		},
+		passText: function() {
+			let key = this.showPass ? "hide_password" : "show_password"
+			return I18n.t(key);
 		}
 	},
 	methods: {
@@ -82,6 +91,9 @@ export default {
 					}
 				}
 			}
+		},
+		togglePassword() {
+			this.showPass = !this.showPass
 		}
 	}
 }

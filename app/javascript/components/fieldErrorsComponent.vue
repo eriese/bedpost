@@ -7,14 +7,14 @@
 <script>
 	function getDefaults (validator, field, modelName) {
 		let defaults = [
-			{scope: `activerecord.errors.messages.${validator}`},
+			{scope: `activemodel.errors.messages.${validator}`},
 			{scope: `errors.attributes.${validator}`},
 			{scope: `errors.messages.${validator}`}
 		];
 
 		if (modelName) {
-			defaults.unshift({scope: `activerecord.errors.models.${modelName}.${validator}`})
-			defaults.unshift({scope: `activerecord.errors.models.${modelName}.attributes.${field}.${validator}`})
+			defaults.unshift({scope: `activemodel.errors.models.${modelName}.${validator}`})
+			defaults.unshift({scope: `activemodel.errors.models.${modelName}.attributes.${field}.${validator}`})
 		}
 		return defaults;
 	}

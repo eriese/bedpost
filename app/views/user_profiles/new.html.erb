@@ -4,7 +4,7 @@
     <%= f.text_field :name%>
     <%= f.text_field :email %>
     <%= f.password_field :password %>
-    <%= f.password_field :password_confirmation %>
+    <%= f.password_field :password_confirmation, show_toggle: true %>
     <%= f.submit id: "signup-submit" %>
     <div class="additional">
         <p>Already have an account? <%= link_to "Log In", login_path %></p>

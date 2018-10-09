@@ -33,3 +33,5 @@ en:
   errors:
     messages:
       email: must be a valid email address
+  show_password: show password
+  hide_password: hide password

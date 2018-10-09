@@ -4,6 +4,11 @@ class SessionsController < ApplicationController
 
 	def new
 		@url = params[:r]
+    gon.validators = {
+      email: [[:presence]],
+      password: [[:presence]]
+    }
+    gon.form_obj = {email: "", password: ""}
 	end
 
 	def create

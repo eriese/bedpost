@@ -109,8 +109,3 @@ guard 'livereload', js_apple_webkit_extra_wait_time: 50 do
 end
 
 guard :webpack, config: './config/webpack/development.js'
-
-guard :rails, CLI: 'spring rails s' do
-  watch('Gemfile.lock')
-  watch(%r{^(config|lib)/.*})
-end
