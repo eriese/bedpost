@@ -4,11 +4,7 @@ class SessionsController < ApplicationController
 
 	def new
 		@url = params[:r]
-    gon.validators = {
-      email: [[:presence]],
-      password: [[:presence]]
-    }
-    gon.form_obj = {email: "", password: ""}
+    gon_client_validators({email: "", password: ""})
 	end
 
 	def create
@@ -18,7 +14,7 @@ class SessionsController < ApplicationController
       redirect_to login_path
       return
     end
-    @user = UserProfile.find_by(email: email.downcase)
+    @user = UserProfile.find_by_email(email)
     password = params[:session][:password]
     if @user && @user.authenticate(password)
       session[:user_id] = @user.id

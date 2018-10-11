@@ -1,0 +1,9 @@
+<div class="login">
+    <h1>Reset Password</h1>
+    <%= vuelidate_form_with model: @user, method: :put, url: reset_path, html: {class: "centered"} do |f| %>
+    <%= hidden_field_tag(:reset_token, @token.id) %>
+    <%= f.password_field :password %>
+    <%= f.password_field :password_confirmation, show_toggle: true %>
+    <%= f.submit id: "signup-submit" %>
+    <% end %>
+</div>

@@ -68,9 +68,15 @@ export default {
 			return this.$props.validate.split(",");
 		},
 		passType: function() {
+			if (this.$props.validate.indexOf("password") < 0) {
+				return;
+			};
 			return this.showPass ? "text" : "password";
 		},
 		passText: function() {
+			if (this.$props.validate.indexOf("password") < 0) {
+				return;
+			};
 			let key = this.showPass ? "hide_password" : "show_password"
 			return I18n.t(key);
 		}
