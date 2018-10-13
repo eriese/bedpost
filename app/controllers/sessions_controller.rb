@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
     @user = UserProfile.find_by_email(email)
     password = params[:session][:password]
     if @user && @user.authenticate(password)
-      session[:user_id] = @user.id
+      log_in_user(@user)
       redirect_to params[:r] || user_profile_path
     else
     	flash[:error] = "oops, wrong email or password"

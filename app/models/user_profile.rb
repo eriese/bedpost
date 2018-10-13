@@ -24,12 +24,28 @@ class UserProfile < Profile
   	super(value.downcase) unless value == nil
   end
 
+  def update_only_password(new_pass)
+    self.password = new_pass;
+    return password_valid? && save(validate: false)
+  end
+
   def self.find_by_email(email)
-    UserProfile.find_by(email: email.downcase)
+    find_by(email: email.downcase)
   end
 
   private
   def generate_uid
   	SecureRandom.uuid.slice(0,8)
+  end
+
+  def password_valid?
+    self.class.validators_on(:password).each do |validator|
+      validator.validate_each(self, :password, self.password)
+      unless errors[:password].none?
+        return false
+      end
+    end
+
+    true
   end
 end

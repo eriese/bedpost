@@ -18,6 +18,10 @@ class UserToken
 
   def self.with_user(token_id, user_id)
     token = find(token_id)
-    token.user_profile_id == user_id ? token : nil
+    check = token.user_profile_id
+    check = check.to_s if user_id.is_a? String
+    check == user_id ? token : nil
+  rescue Mongoid::Errors::DocumentNotFound
+    return nil
   end
 end

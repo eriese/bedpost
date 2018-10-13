@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
 	  @current_user ||= UserProfile.find(session[:user_id]) if session[:user_id]
 	end
 
+	def log_in_user(user_profile)
+		session[:user_id] = user_profile.id
+	end
+
 	def gon_client_validators(obj, opts = {}, skip = [])
 		# TODO consider deep copying if it seems like opts needs to be unedited
 		validators = opts
