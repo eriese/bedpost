@@ -9,8 +9,7 @@ class ResetsController < ApplicationController
 	def create
 		email = params[:reset][:email]
 		user = UserProfile.find_by_email(email)
-		#TODO perform later
-		SendPasswordResetJob.perform_now(user)
+		SendPasswordResetJob.perform_later(user)
 		redirect_to login_path
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to signup_path

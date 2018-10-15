@@ -5,14 +5,10 @@ RSpec.describe ResetsController, type: :controller do
 		# pending 'user submits an email address that is not in system'
 
 		context 'user submits an email address that is in the system' do
-			after :each do
-				UserToken.all.destroy
-			end
-
-			it 'creates a reset token for the user' do
+			it 'triggers a job to creates a reset token for the user and email it to them' do
+				allow(SendPasswordResetJob).to receive(:perform_later) {nil}
 				post :create, params: {reset: {email: dummy_user.email}}
-				token_query = UserToken.where(user_profile_id: dummy_user.id, token_type: "reset")
-				expect(token_query.count).to eq 1
+				expect(SendPasswordResetJob).to have_received(:perform_later).with(dummy_user)
 			end
 		end
 	end

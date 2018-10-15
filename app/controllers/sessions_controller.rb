@@ -11,19 +11,19 @@ class SessionsController < ApplicationController
 		email = params[:session][:email]
     if email.empty?
       flash[:error] = "please enter an email address"
-      redirect_to login_path
+      redirect_to login_path(r: params[:session][:r])
       return
     end
     @user = UserProfile.find_by_email(email)
     password = params[:session][:password]
     if @user && @user.authenticate(password)
       log_in_user(@user)
-      redirect_to params[:r] || user_profile_path
+      redirect_to params[:session][:r] || user_profile_path
     else
     	flash[:error] = "oops, wrong email or password"
       #keep the entered email address, but clear the password
       flash[:email] = email
-      redirect_to login_path
+      redirect_to login_path(r: params[:session][:r])
     end
   end
   def destroy

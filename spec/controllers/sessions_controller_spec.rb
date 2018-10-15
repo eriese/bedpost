@@ -17,7 +17,7 @@ RSpec.describe SessionsController, type: :controller do
 	describe "POST #create" do
 		def make_post(password="invalid", adl_params={})
 			def_params = {session: {email: dummy_user.email, password: password}}
-			params = def_params.merge(adl_params)
+			params = def_params.deep_merge(adl_params)
 			post :create, params: params
 		end
 
@@ -58,9 +58,11 @@ RSpec.describe SessionsController, type: :controller do
 			context "when the user was redirected from another page" do
 				it "redirects the user back to that page after login" do
 					password = attributes_for(:user_profile)[:password];
-					make_post(password, {r: "/"})
+					routed_from = request.base_url + "/profiles"
 
-					expect(response).to redirect_to "/"
+					make_post(password, {session: {r: "/profiles"}})
+
+					expect(response).to redirect_to "/profiles"
 				end
 			end
 		end
