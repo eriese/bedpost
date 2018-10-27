@@ -5,6 +5,7 @@
     "@rails/webpacker": "3.5",
     "vue": "^2.5.17",
     "vue-loader": "14.2.2",
+    "vue-resource": "^1.5.1",
     "vue-template-compiler": "^2.5.17",
     "vue-turbolinks": "^2.0.3",
     "vuelidate": "^0.7.4"

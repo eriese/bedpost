@@ -12,6 +12,15 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
     RUBY_EVAL
   end
 
+  [:check_box, :radio_button, :hidden_field].each do |selector|
+  	class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
+			def #{selector}(method, options = {})  # def text_field(method, options = {})
+		    add_v_model(method, options)
+		  	super
+		  end                                    # end
+    RUBY_EVAL
+  end
+
   def password_field(attribute, args={})
   	args[":type"] = "passType"
   	after_method = args[:show_toggle] ? :password_toggle : nil
@@ -43,18 +52,23 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	def error_fields(attribute, args={})
 		unless args[:validate] == false
 		error_props = {field: attribute, ":v" => "$v"}
-			error_props["model-name"] = @object_name unless @object.nil?
+			error_props["model-name"] = @object_name unless @object_name.blank?
 			@template.content_tag("field-errors", "",  error_props)
 		end
 	end
 
+	def form_errors
+		@template.content_tag(:div, "{{formError}}", {class: 'errors'})
+	end
+
 	private
 	def add_v_model(attribute, args={})
-		args[:"v-model"] = attribute
+		full_name = "formData.#{@object_name}.#{attribute}"
+		args[:"v-model"] = full_name
 		args[:ref] ||= attribute
 
 		unless args[:validate] == false
-			args[:"@blur"] ||= "$v.#{attribute}.$touch()"
+			args[:"@blur"] ||= "$v.#{full_name}.$touch()"
 			@validations ||= []
 			@validations << attribute
 		end

@@ -10,10 +10,12 @@ import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
 import Vuelidate from 'vuelidate';
 import navComponent from '../components/navComponent'
-import vuelidateFormComponent from '../components/vuelidateFormComponent'
+import vuelidateFormComponent from '../components/vuelidateFormComponent';
+import VueResource from 'vue-resource';
 
 Vue.use(TurbolinksAdapter);
 Vue.use(Vuelidate);
+Vue.use(VueResource);
 Vue.component('nav-component', navComponent);
 Vue.component('vuelidate-form', vuelidateFormComponent);
 let app = null;

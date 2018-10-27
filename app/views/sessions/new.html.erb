@@ -1,13 +1,13 @@
 <div class="login">
 	<h1>Log In</h1>
 	<%= vuelidate_form_with scope: :session, url: login_path, class: "big centered" do |f| %>
-	<%= f.email_field :email, value: flash[:email]%>
-	<%= f.password_field :password, show_toggle: true%>
-	<%= f.hidden_field :r, value: @url %>
-	<%= f.submit "Log in", class: "btn-submit" %>
-	<div class="additional">
-		<p><%= link_to "Create an Account", new_user_profile_path %></p>
-		<p><%= link_to "Forgot your password?", retrieve_path%> </p>
-	</div>
+		<%= f.email_field :email, value: flash[:email]%>
+		<%= f.password_field :password, show_toggle: true%>
+		<%= f.hidden_field :r, value: @url, validate: false %>
+		<%= f.submit "Log in", class: "btn-submit" %>
+		<div class="additional">
+			<p><%= link_to "Create an Account", new_user_profile_path %></p>
+			<p><%= link_to "Forgot your password?", retrieve_path%> </p>
+		</div>
 	<% end %>
 </div>

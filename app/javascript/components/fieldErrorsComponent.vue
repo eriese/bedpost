@@ -1,5 +1,5 @@
 <template>
-	<div class="errors" v-if="v[field].$dirty && v[field].$anyError">
+	<div class="field-errors" v-if="vField.$dirty && vField.$anyError">
 		{{errorMsg}}
 	</div>
 </template>
@@ -29,11 +29,14 @@
 			modelName: String
 		},
 		computed: {
+			vField: function() {
+				return this.v.formData[this.modelName] ? this.v.formData[this.modelName][this.field] : this.v.formData[this.field]
+			},
 			errorMsg: function() {
 				let field = this.field;
-				let vParams = this.v[field].$params
+				let vParams = this.vField.$params
 				for (var validator in vParams) {
-					if (!this.v[field][validator]) {
+					if (!this.vField[validator]) {
 						let params = {};
 						switch(validator) {
 							case "too_long":

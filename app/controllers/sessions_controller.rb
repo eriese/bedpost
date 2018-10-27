@@ -4,7 +4,8 @@ class SessionsController < ApplicationController
 
 	def new
 		@url = params[:r]
-    gon_client_validators({email: "", password: ""})
+    gon_client_validators({session: {email: flash[:email], password: "", r: @url}}, {}, [:r])
+    gon.formError = flash[:form_error]
 	end
 
 	def create
@@ -20,10 +21,13 @@ class SessionsController < ApplicationController
       log_in_user(@user)
       redirect_to params[:session][:r] || user_profile_path
     else
-    	flash[:error] = "oops, wrong email or password"
+    	flash[:form_error] = "oops, wrong email or password"
       #keep the entered email address, but clear the password
       flash[:email] = email
-      redirect_to login_path(r: params[:session][:r])
+      respond_to do |format|
+        format.html { redirect_to login_path(r: params[:session][:r]) }
+        format.json { render json: flash[:form_error], status: :unprocessable_entity}
+      end
     end
   end
   def destroy

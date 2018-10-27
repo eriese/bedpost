@@ -15,6 +15,9 @@ module VuelidateForm::VuelidateFormHelper
 		form_text = send(method, *args) do |f|
 			#grab the form builder during building
 			form_obj = f
+
+			#add the errors at the top
+			concat(f.form_errors) unless options[:errors] == false
 			#do normal building business
 			block.call(f) if block
 		end
@@ -27,6 +30,8 @@ module VuelidateForm::VuelidateFormHelper
 		options[:builder] ||= VuelidateForm::VuelidateFormBuilder
 		options[:html] ||= {}
 		options[:html][:"@submit"] = "validateForm"
+		options[:html][:ref] = "form"
+		options[:html][:novalidate] = ""
 	end
 
 	def add_valid_form_wrapper(form_obj, form_text)

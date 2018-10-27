@@ -30,6 +30,7 @@ input[type=submit] {
 	color: $background-color;
 	padding: 5px 10px;
 	transition: 0.1s linear all;
+	cursor: pointer;
 
 	&:hover {
 		background-color: $color-purple-dark;
@@ -57,13 +58,24 @@ form.centered {
 			margin: 0;
 		}
 	}
+
+	div.errors {
+		text-align: center;
+	}
 }
 
-form div.errors {
-	text-align: right;
-	color: $color-purple-light;
-	font-size: 12px;
-	line-height: 1;
+form {
+	div.field-errors {
+		text-align: right;
+		color: $color-purple-light;
+		font-size: 12px;
+		line-height: 1;
+	}
+
+	div.errors {
+		color: $color-purple-light;
+	}
 }
+
 
 
