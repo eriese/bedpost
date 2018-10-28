@@ -29,9 +29,13 @@ module VuelidateForm::VuelidateFormHelper
 	def set_options(options)
 		options[:builder] ||= VuelidateForm::VuelidateFormBuilder
 		options[:html] ||= {}
-		options[:html][:"@submit"] = "validateForm"
-		options[:html][:ref] = "form"
-		options[:html][:novalidate] = ""
+		options[:html].reverse_merge! ({
+			"@submit" => "validateForm",
+			"@ajax:error" => "handleError",
+			"ref" => "form",
+			"novalidate" => "",
+			"data-type" => "json"
+		})
 	end
 
 	def add_valid_form_wrapper(form_obj, form_text)

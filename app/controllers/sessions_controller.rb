@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
       flash[:email] = email
       respond_to do |format|
         format.html { redirect_to login_path(r: params[:session][:r]) }
-        format.json { render json: flash[:form_error], status: :unprocessable_entity}
+        format.json { render json: {formError: flash[:form_error]}, status: :unprocessable_entity}
       end
     end
   end

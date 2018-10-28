@@ -51,14 +51,14 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
 	def error_fields(attribute, args={})
 		unless args[:validate] == false
-		error_props = {field: attribute, ":v" => "$v"}
+		error_props = {field: attribute, ":v" => "$v", ":submission-error" => "submissionError"}
 			error_props["model-name"] = @object_name unless @object_name.blank?
 			@template.content_tag("field-errors", "",  error_props)
 		end
 	end
 
 	def form_errors
-		@template.content_tag(:div, "{{formError}}", {class: 'errors'})
+		@template.content_tag("form-errors", "", {":submission-error" => "submissionError"})
 	end
 
 	private

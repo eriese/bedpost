@@ -34,7 +34,7 @@ RSpec.describe SessionsController, type: :controller do
 
 			it "gives a message that the email or password is wrong" do
 				make_post
-				expect(flash[:error]).to eq "oops, wrong email or password"
+				expect(flash[:form_error]).to eq "oops, wrong email or password"
 			end
 		end
 

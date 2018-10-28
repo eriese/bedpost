@@ -8,12 +8,13 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri|Lily+Script+One|Londrina+Shadow" rel="stylesheet">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= include_gon %>
+
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>
+    <%= include_gon %>
     <div id="vue-container">
       <%= render "layouts/nav" %>
       <div id="logo" class=<%=current_user ? "small" : ""%>>Bed<span>Post</span></div>

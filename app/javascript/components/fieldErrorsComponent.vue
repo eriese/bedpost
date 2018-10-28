@@ -1,5 +1,5 @@
 <template>
-	<div class="field-errors" v-if="vField.$dirty && vField.$anyError">
+	<div class="field-errors" v-if="errorMsg">
 		{{errorMsg}}
 	</div>
 </template>
@@ -25,6 +25,7 @@
 		},
 		props: {
 			v: Object,
+			submissionError: Object,
 			field: String,
 			modelName: String
 		},
@@ -33,6 +34,16 @@
 				return this.v.formData[this.modelName] ? this.v.formData[this.modelName][this.field] : this.v.formData[this.field]
 			},
 			errorMsg: function() {
+				let msg = this.submissionError[this.modelName];
+				msg = msg ? msg[this.field] : this.submissionError[this.field];
+				if (msg) {
+					return msg;
+				}
+
+				if (!this.vField.$dirty) {
+					return "";
+				}
+
 				let field = this.field;
 				let vParams = this.vField.$params
 				for (var validator in vParams) {

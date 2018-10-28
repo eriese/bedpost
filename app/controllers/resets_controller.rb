@@ -3,7 +3,7 @@ class ResetsController < ApplicationController
 	before_action :require_no_user
 
 	def new
-		gon_client_validators({email: ""})
+		gon_client_validators({reset: {email: ""}})
 	end
 
 	def create
