@@ -14,9 +14,7 @@ class UserProfilesController < ApplicationController
 			redirect_to edit_user_profile_path
 		else
 			flash[:profile_attempt] = req_params
-			flash[:message] ||= {}
-			flash[:message].merge!(@user_profile.errors.messages)
-			redirect_to new_user_profile_path
+			respond_with_submission_error(@user_profile.errors.messages, signup_path)
 		end
 	end
 	def show

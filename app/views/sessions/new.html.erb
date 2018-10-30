@@ -6,7 +6,7 @@
 		<%= f.hidden_field :r, value: @url, validate: false %>
 		<%= f.submit "Log in", class: "btn-submit" %>
 		<div class="additional">
-			<p><%= link_to "Create an Account", new_user_profile_path %></p>
+			<p><%= link_to "Create an Account", signup_path %></p>
 			<p><%= link_to "Forgot your password?", retrieve_path%> </p>
 		</div>
 	<% end %>

@@ -33,5 +33,10 @@ en:
   errors:
     messages:
       email: must be a valid email address
+  reset:
+    errors:
+      email:
+        not_found_html: we couldn't find an account with that email address. Please try a different one or click <a href="%{url}"> here </a> to sign up
   show_password: show password
   hide_password: hide password
+  join_delimeter: ' , '

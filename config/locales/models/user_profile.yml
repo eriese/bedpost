@@ -1,8 +1,10 @@
 en:
-  activemodel:
+  mongoid:
     errors:
       models:
         user_profile:
           attributes:
             name:
               blank: please tell us your name
+            email:
+              taken: an account with that email address already exists

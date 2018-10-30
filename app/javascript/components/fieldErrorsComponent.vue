@@ -1,25 +1,28 @@
 <template>
-	<div class="field-errors" v-if="errorMsg">
-		{{errorMsg}}
-	</div>
+	<div class="field-errors" v-if="errorMsg" v-html="errorMsg"></div>
 </template>
 
 <script>
 	function getDefaults (validator, field, modelName) {
 		let defaults = [
-			{scope: `activemodel.errors.messages.${validator}`},
+			{scope: `mongoid.errors.messages.${validator}`},
 			{scope: `errors.attributes.${validator}`},
 			{scope: `errors.messages.${validator}`}
 		];
 
 		if (modelName) {
-			defaults.unshift({scope: `activemodel.errors.models.${modelName}.${validator}`})
-			defaults.unshift({scope: `activemodel.errors.models.${modelName}.attributes.${field}.${validator}`})
+			defaults.unshift({scope: `mongoid.errors.models.${modelName}.${validator}`})
+			defaults.unshift({scope: `mongoid.errors.models.${modelName}.attributes.${field}.${validator}`})
 		}
 		return defaults;
 	}
 
+	function getFieldFrom(obj, vm) {
+		return obj[vm.modelName] ? obj[vm.modelName][vm.field] : obj[vm.field]
+	}
+
 	export default {
+		name: "field_errors",
 		data: function() {
 			return {}
 		},
@@ -31,17 +34,20 @@
 		},
 		computed: {
 			vField: function() {
-				return this.v.formData[this.modelName] ? this.v.formData[this.modelName][this.field] : this.v.formData[this.field]
+				return getFieldFrom(this.v.formData, this)
 			},
 			errorMsg: function() {
-				let msg = this.submissionError[this.modelName];
-				msg = msg ? msg[this.field] : this.submissionError[this.field];
-				if (msg) {
-					return msg;
+				if (!this.vField.$dirty || !this.vField.$anyError) {
+					return "";
 				}
 
-				if (!this.vField.$dirty) {
-					return "";
+				if (!this.vField.submitted) {
+					let msg = getFieldFrom(this.submissionError, this);
+					if (msg && typeof msg.join == "function") {
+						msg = msg.join(I18n.t("join_delimeter"))
+					}
+
+					return msg;
 				}
 
 				let field = this.field;

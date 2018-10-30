@@ -12,7 +12,8 @@ class ResetsController < ApplicationController
 		SendPasswordResetJob.perform_later(user)
 		redirect_to login_path
 	rescue Mongoid::Errors::DocumentNotFound
-		redirect_to signup_path
+		err_text = I18n.t("reset.errors.email.not_found_html", {url: signup_path})
+		respond_with_submission_error({email: err_text}, retrieve_path, :not_found)
 	end
 
 	def edit

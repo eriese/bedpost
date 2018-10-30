@@ -61,12 +61,12 @@ RSpec.describe UserProfilesController, type: :controller do
 		context "with invalid params" do
 			it "reloads the page" do
 				post :create, params: {user_profile: {name: ""}}
-				expect(response).to redirect_to new_user_profile_path
+				expect(response).to redirect_to signup_path
 			end
 
-			it "puts the error messages in the flash[:message] hash" do
+			it "puts the error messages in the flash[:submission_error] hash" do
 				post :create, params: {user_profile: attributes_for(:user_profile, name: "")}
-				expect(flash[:message]).to have_key(:name)
+				expect(flash[:submission_error]).to have_key(:name)
 			end
 
 			it "puts the user's previous attempt into flash [:profile_attempt]" do

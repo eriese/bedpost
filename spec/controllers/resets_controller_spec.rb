@@ -2,11 +2,26 @@ require 'rails_helper'
 
 RSpec.describe ResetsController, type: :controller do
 	describe 'POST #create' do
-		# pending 'user submits an email address that is not in system'
+		before :each do
+			allow(SendPasswordResetJob).to receive(:perform_later) {nil}
+		end
+
+		context 'user submits an email address that is not in system' do
+			it 'refreshes the page' do
+				post :create, params: {reset: {email: "wrong_email"}}
+				expect(response).to redirect_to retrieve_path
+			end
+
+			it 'send a submission error on the email' do
+				post :create, params: {reset: {email: "wrong_email"}}
+				expect(flash[:submission_error]).to_not be_nil
+				expect(flash[:submission_error][:email]).to eq I18n.t("reset.errors.email.not_found_html", {url: signup_path})
+			end
+		end
 
 		context 'user submits an email address that is in the system' do
 			it 'triggers a job to creates a reset token for the user and email it to them' do
-				allow(SendPasswordResetJob).to receive(:perform_later) {nil}
+
 				post :create, params: {reset: {email: dummy_user.email}}
 				expect(SendPasswordResetJob).to have_received(:perform_later).with(dummy_user)
 			end

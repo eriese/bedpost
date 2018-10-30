@@ -20,6 +20,12 @@ class ApplicationController < ActionController::Base
 		redirect_to params[:r] || user_profile_path if current_user
 	end
 
+	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
+		respond_to do |format|
+			format.html {flash[:submission_error] = error; redirect_to redirect}
+			format.json {render json: error.deep_merge(adl_json), status: status}
+		end
+	end
 
 	def gon_client_validators(obj, opts = {}, skip = [])
 		# TODO consider deep copying if it seems like opts needs to be unedited
@@ -44,6 +50,7 @@ class ApplicationController < ActionController::Base
 			gon.form_obj = obj
 			gon.validators = validators
 		end
+		gon.submissionError = flash[:submission_error]
 	end
 
 	private
