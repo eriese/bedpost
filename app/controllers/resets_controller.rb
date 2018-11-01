@@ -33,10 +33,10 @@ class ResetsController < ApplicationController
 		if user.update_only_password(new_pass)
 			log_in_user(user)
 			token.destroy
+			flash[:message] = {password: "reset.success"}
 			redirect_to user_profile_path
 		else
-			flash[:error] = user.errors
-			redirect_to reset_path(t: token_id, e: user.email)
+			respond_with_submission_error(user.errors.messages, reset_path(t: token_id, e: user.email))
 		end
 	end
 

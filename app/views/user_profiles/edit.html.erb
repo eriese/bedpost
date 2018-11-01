@@ -1,0 +1,9 @@
+<%= vuelidate_form_with model: @user_profile do |f| %>
+	<% unless @user_profile.pronoun.nil? %>
+		<%= f.text_field :name %>
+    	<%= f.text_field :email %>
+	<% end %>
+	<%= f.text_field :uid %>
+	<%= render  "profiles/fields", f: f, profile: @user_profile %>
+	<%= f.submit %>
+<% end %>

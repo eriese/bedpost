@@ -1,0 +1,4 @@
+<%= f.text_field :anus_name %>
+<%= f.text_field :external_name %>
+<%= check_box_tag :show_internal, 1, false, {:"v-model" => "toggles['internal_name']"} %>
+<%= f.text_field :internal_name, :"v-show" => "toggles['internal_name']"%>

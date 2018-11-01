@@ -21,6 +21,8 @@ class UserProfilesController < ApplicationController
 	end
 	def edit
 		@user_profile = current_user
+		gon_client_validators(@user_profile)
+		gon_toggle({internal_name: @user_profile.has_internal?})
 	end
 
 	private def user_params

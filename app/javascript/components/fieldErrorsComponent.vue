@@ -37,7 +37,7 @@
 				return getFieldFrom(this.v.formData, this)
 			},
 			errorMsg: function() {
-				if (!this.vField.$dirty || !this.vField.$anyError) {
+				if (!this.vField || !this.vField.$dirty || !this.vField.$anyError) {
 					return "";
 				}
 

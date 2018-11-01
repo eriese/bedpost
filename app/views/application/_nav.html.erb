@@ -10,7 +10,7 @@
   <div class="menu" ref="menu">
     <ul>
       <li class="no-link"><%= current_user.name %></li>
-      <% {"Dashboard" => user_profile_path, "Edit Profile" => edit_user_profile_path}.each do |key, path| %>
+      <% nav_links.each do |key, path| %>
         <li>
           <%= link_to_unless_current(key, path) do %>
           <span> <%= key %> </span>

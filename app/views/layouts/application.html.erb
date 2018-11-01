@@ -16,8 +16,12 @@
   <body>
     <%= include_gon %>
     <div id="vue-container">
-      <%= render "layouts/nav" %>
-      <div id="logo" class=<%=current_user ? "small" : ""%>>Bed<span>Post</span></div>
+      <%= render "nav", nav_links: ApplicationHelper::NAV_LINKS %>
+      <div id="logo" class=<%=current_user ? "small" : ""%>>
+        <%= link_to(root_path) do %>
+          Bed<span>Post</span>
+        <% end %>
+      </div>
       <div id="page-container">
         <div id="flash">
           <%= flash[:error] %>

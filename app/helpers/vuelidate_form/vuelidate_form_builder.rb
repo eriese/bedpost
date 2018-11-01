@@ -12,13 +12,18 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
     RUBY_EVAL
   end
 
-  [:check_box, :radio_button, :hidden_field].each do |selector|
+  [:radio_button, :hidden_field].each do |selector|
   	class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
 			def #{selector}(method, options = {})  # def text_field(method, options = {})
 		    add_v_model(method, options)
 		  	super
 		  end                                    # end
     RUBY_EVAL
+  end
+
+  def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
+  	add_v_model(attribute, args)
+  	super(attribute, args, checked_value, unchecked_value)
   end
 
   def password_field(attribute, args={})
@@ -32,7 +37,7 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   def password_toggle
   	@template.content_tag(:div, {class: "additional"}) do
   		@template.content_tag(:p) do
-  			@template.content_tag(:a, "{{passText}}", {"@click" => "togglePassword", class: "no-line"})
+  			@template.content_tag(:a, "{{passText}}", {"@click" => "toggle('password')", class: "no-line"})
   		end
   	end
   end
@@ -40,7 +45,14 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	def field_wrapper(attribute, args = {}, after_method, &block)
 		add_v_model(attribute, args)
 
-		@template.content_tag(:div, {class: 'field'}) do
+		field_args = {class: 'field'}
+		if args[:show_if] || args[:"v-show"]
+			field_args[:"v-show"] = args[:"v-show"] || full_v_name(args[:show_if])
+			args.delete(:show_if)
+			args.delete(:"v-show")
+		end
+
+		@template.content_tag(:div, field_args) do
 			temp = block.call
 			temp = label(attribute, args[:label]) + temp unless args[:label] == false
 			temp += error_fields(attribute, args)
@@ -62,13 +74,16 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	private
+	def full_v_name(attribute)
+		"formData.#{@object_name}.#{attribute}"
+	end
 	def add_v_model(attribute, args={})
-		full_name = "formData.#{@object_name}.#{attribute}"
-		args[:"v-model"] = full_name
+		full_name = full_v_name attribute
+		args[:"v-model"] ||= full_name
 		args[:ref] ||= attribute
 
 		unless args[:validate] == false
-			args[:"@blur"] ||= "$v.#{full_name}.$touch()"
+			args[:"@blur"] ||= "touch($v.#{full_name})"
 			@validations ||= []
 			@validations << attribute
 		end

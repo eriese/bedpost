@@ -27,6 +27,11 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	def gon_toggle(toggles)
+		gon.form_toggles ||= {}
+		gon.form_toggles.merge! (toggles)
+	end
+
 	def gon_client_validators(obj, opts = {}, skip = [])
 		# TODO consider deep copying if it seems like opts needs to be unedited
 		validators = opts
@@ -57,6 +62,8 @@ class ApplicationController < ActionController::Base
 	def validator_adder(obj, v_hash, skip = [])
 		Proc.new do |atr, validator|
 			unless atr == :password_digest || skip.include?(atr)
+				gon_toggle({password: false}) if (atr == :password)
+
 				if obj[atr].is_a? Hash
 					v_hash[atr] ||= {}
 					o_adder = validator_adder(obj[atr], v_hash[atr], skip)

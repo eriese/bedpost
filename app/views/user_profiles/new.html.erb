@@ -1,7 +1,7 @@
 <div class="login">
     <h1>Sign up</h1>
     <%= vuelidate_form_with model: @user_profile, url: user_profile_path, html: {class: "centered"} do |f| %>
-    <%= f.text_field :name%>
+    <%= f.text_field :name %>
     <%= f.text_field :email %>
     <%= f.password_field :password %>
     <%= f.password_field :password_confirmation, show_toggle: true %>

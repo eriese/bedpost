@@ -78,7 +78,7 @@ export default {
 	data: function() {
 		let dt = {
 			formData: gon.form_obj,
-			showPass: false,
+			toggles: gon.form_toggles || {},
 			submissionError: gon.submissionError || {}
 		};
 		if (gon.form_obj.password_digest !== undefined) {
@@ -100,16 +100,16 @@ export default {
 	},
 	computed: {
 		passType: function() {
-			if (this.$props.validate.indexOf("password") < 0) {
+			if (this.toggles.password === undefined) {
 				return;
 			};
-			return this.showPass ? "text" : "password";
+			return this.toggles.password ? "text" : "password";
 		},
 		passText: function() {
-			if (this.$props.validate.indexOf("password") < 0) {
+			if (this.toggles.password === undefined) {
 				return;
 			};
-			let key = this.showPass ? "hide_password" : "show_password";
+			let key = this.toggles.password ? "hide_password" : "show_password";
 			return I18n.t(key);
 		}
 	},
@@ -136,8 +136,13 @@ export default {
 			this.submissionError = respJson;
 			this.$v.$touch();
 		},
-		togglePassword() {
-			this.showPass = !this.showPass;
+		toggle(toggleField) {
+			this.toggles[toggleField] = !this.toggles[toggleField];
+		},
+		touch(vField) {
+			if (vField) {
+				vField.$touch()
+			}
 		}
 	}
 }

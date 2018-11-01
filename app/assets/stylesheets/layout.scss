@@ -26,9 +26,13 @@ a {
 
 #logo {
 	font-family: $script-font;
-	color: $color-purple-light;
 	font-size: 55px;
 	text-align: center;
+
+	a {
+		color: $color-purple-light;
+		text-decoration: none;
+	}
 
 	span {
 		font-family: $outline-font;

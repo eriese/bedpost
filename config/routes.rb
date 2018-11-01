@@ -13,6 +13,10 @@ Rails.application.routes.draw do
 
   resource :reset, only: [:update]
 
+  root to: 'user_profiles#show', constraints: lambda {|request|
+    request.session[:user_id] != nil
+  }
+
   #TODO this is temporary
   root to: 'user_profiles#new'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
