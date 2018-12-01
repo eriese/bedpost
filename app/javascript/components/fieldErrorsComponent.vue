@@ -72,7 +72,13 @@
 
 						params.defaults = defaults;
 
-						return I18n.t(transKey, params)
+						let trans = I18n.t(transKey, params)
+						// TODO don't do this. make better translations
+						if (trans.indexOf('is') == 0) {
+							trans = trans.replace('is', '')
+						}
+
+						return trans;
 					}
 				}
 

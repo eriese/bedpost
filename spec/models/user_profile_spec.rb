@@ -68,7 +68,7 @@ RSpec.describe UserProfile, type: :model do
       end
 
       it 'does not update if the password is invalid' do
-        pass = "p" * 73
+        pass = "p" * 6
         expect(@user.update_only_password(pass)).to be false
       end
 

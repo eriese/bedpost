@@ -17,6 +17,7 @@ class UserProfile < Profile
   validates_uniqueness_of :email, case_sensitive: false
   validates_presence_of :email, :password_digest, :uid
   validates_presence_of :pronoun, :anus_name, :external_name, on: :update
+  validates :password, length: {minimum: 7}
 
   after_create {SendWelcomeEmailJob.perform_later(self)}
 
