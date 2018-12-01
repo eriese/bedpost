@@ -3,10 +3,11 @@ class Profile
   include Mongoid::Timestamps::Short
 
   field :name, type: String
-  field :pr, as: :pronoun, type: String
   field :a_n, as: :anus_name, type: String
   field :e_n, as: :external_name, type: String
   field :i_n, as: :internal_name, type: String
+
+  belongs_to :pronoun, optional: true
 
   validates_presence_of :name
   #only run this validation on the base class

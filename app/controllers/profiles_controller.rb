@@ -1,28 +1,28 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
 
-  # GET /profiles
-  # GET /profiles.json
+  # GET /partners
+  # GET /partners.json
   def index
-    @profiles = Profile.all
+    @partners = Profile.all
   end
 
-  # GET /profiles/1
-  # GET /profiles/1.json
+  # GET /partners/1
+  # GET /partners/1.json
   def show
   end
 
-  # GET /profiles/new
+  # GET /partners/new
   def new
     @profile = Profile.new
   end
 
-  # GET /profiles/1/edit
+  # GET /partners/1/edit
   def edit
   end
 
-  # POST /profiles
-  # POST /profiles.json
+  # POST /partners
+  # POST /partners.json
   def create
     @profile = Profile.new(profile_params)
 
@@ -37,26 +37,22 @@ class ProfilesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /profiles/1
-  # PATCH/PUT /profiles/1.json
+  # PATCH/PUT /partners/1
+  # PATCH/PUT /partners/1.json
   def update
-    respond_to do |format|
-      if @profile.update(profile_params)
-        format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
-        format.json { render :show, status: :ok, location: @profile }
-      else
-        format.html { render :edit }
-        format.json { render json: @profile.errors, status: :unprocessable_entity }
-      end
+    if @profile.update(profile_params)
+      redirect_to show_path, notice: 'Profile was successfully updated.'
+    else
+      respond_with_submission_error(@profile.errors.messages, edit_path)
     end
   end
 
-  # DELETE /profiles/1
-  # DELETE /profiles/1.json
+  # DELETE /partners/1
+  # DELETE /partners/1.json
   def destroy
     @profile.destroy
     respond_to do |format|
-      format.html { redirect_to profiles_url, notice: 'Profile was successfully destroyed.' }
+      format.html { redirect_to partners_url, notice: 'Profile was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -71,4 +67,13 @@ class ProfilesController < ApplicationController
     def profile_params
       params.fetch(:profile, {})
     end
+
+    def edit_path
+      edit_partner_path(@profile)
+    end
+
+    def show_path
+      @profile
+    end
+
 end

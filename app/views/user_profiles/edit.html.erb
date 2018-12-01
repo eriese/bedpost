@@ -1,9 +1,9 @@
-<%= vuelidate_form_with model: @user_profile do |f| %>
-	<% unless @user_profile.pronoun.nil? %>
+<%= vuelidate_form_with model: @profile, html: {class: "centered"} do |f| %>
+	<% unless @profile.pronoun.nil? %>
 		<%= f.text_field :name %>
     	<%= f.text_field :email %>
 	<% end %>
 	<%= f.text_field :uid %>
-	<%= render  "profiles/fields", f: f, profile: @user_profile %>
+	<%= render  "profiles/fields", f: f, profile: @profile %>
 	<%= f.submit %>
 <% end %>

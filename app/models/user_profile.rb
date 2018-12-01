@@ -29,6 +29,10 @@ class UserProfile < Profile
     return password_valid? && save(validate: false)
   end
 
+  def as_json(options = nil)
+    super except: [:password_digest]
+  end
+
   def self.find_by_email(email)
     find_by(email: email.downcase)
   end

@@ -8,3 +8,11 @@ en:
               blank: please tell us your name
             email:
               taken: an account with that email address already exists
+  helpers:
+    label:
+      user_profile:
+        show_internal: Do you also have internal genitals?
+        anus_name: What do you call your anus?
+        external_name: What do you call your external genitals?
+        internal_name: What do you call your internal genitals?
+        pronoun: What pronouns do you use?

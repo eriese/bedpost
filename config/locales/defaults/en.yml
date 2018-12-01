@@ -38,6 +38,14 @@ en:
       email:
         not_found_html: we couldn't find an account with that email address. Please try a different one or click <a href="%{url}"> here </a> to sign up
     success: successfully reset password
+  helpers:
+    label:
+      profile:
+        show_internal: Do they also have internal genitals?
+        anus_name: What do they call their anus?
+        external_name: What do they call their external genitals?
+        internal_name: What do they call their internal genitals?
+        pronoun: What pronouns do they use?
   show_password: show password
   hide_password: hide password
   join_delimeter: ' , '

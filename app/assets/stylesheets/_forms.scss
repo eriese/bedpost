@@ -1,6 +1,6 @@
 @import "_defaults";
 
-input:not([type=hidden]), select, textarea {
+input, select, textarea {
 	background-color: $color-off-white;
 	border-color: $color-purple-dark;
 	border-style: solid;
@@ -24,6 +24,15 @@ input:not([type=hidden]), select, textarea {
 
 }
 
+input[type=checkbox], input[type=radio] {
+	display: inline-block;
+
+	form.centered & {
+		display: inline-block;
+		width: auto;
+	}
+}
+
 input[type=submit] {
 	background-color: $color-purple-light;
 	border-color: $color-purple-light;
@@ -42,6 +51,10 @@ input[type=submit] {
 	}
 }
 
+input[type=hidden] {
+	display: none !important;
+}
+
 form.centered {
 	max-width: 400px;
 	margin: 0px auto;
@@ -49,6 +62,10 @@ form.centered {
 	label {
 		display: block;
 		line-height: 1;
+
+		&.inline {
+			display: inline-block;
+		}
 	}
 
 	.additional {

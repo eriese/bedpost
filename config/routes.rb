@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :profiles
-  resource :user_profile
+  resources :profiles, as: "partners"
+  resource :user_profile, except: [:show, :new]
   get 'signup', to: 'user_profiles#new'
 
   get 'login', to: 'sessions#new'

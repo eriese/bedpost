@@ -1,4 +1,8 @@
 <%= f.text_field :anus_name %>
 <%= f.text_field :external_name %>
-<%= check_box_tag :show_internal, 1, false, {:"v-model" => "toggles['internal_name']"} %>
+<%= f.field :show_internal, {label: {class: "inline"}} do %>
+	<%= check_box_tag :show_internal, 1, profile.has_internal?, {:"v-model" => "toggles['internal_name']"} %>
+<% end %>
+
 <%= f.text_field :internal_name, :"v-show" => "toggles['internal_name']"%>
+<%= f.select :pronoun, options_from_collection_for_select(pronouns, :id, :display)%>

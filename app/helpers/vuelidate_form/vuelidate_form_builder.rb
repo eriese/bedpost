@@ -5,7 +5,7 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	(field_helpers - [:fields_for, :fields, :label, :check_box, :radio_button,  :hidden_field, :password_field]).each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})  # def text_field(method, options = {})
-        field_wrapper(method, options, nil) do
+        field_wrapper(method, options) do
         	super
         end
       end                                    # end
@@ -23,14 +23,24 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
   def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
   	add_v_model(attribute, args)
-  	super(attribute, args, checked_value, unchecked_value)
+  	super
   end
+
+  def select(attribute, choices = nil, options = {}, html_options=nil, &block)
+		html_options ||= options[:html] || {}
+		html_options[:label] = options.delete(:label) if html_options[:label].nil?
+		html_options[:class] ||= options.delete(:class)
+  	field_wrapper(attribute, html_options) do
+  		super
+  	end
+  end
+
 
   def password_field(attribute, args={})
   	args[":type"] = "passType"
   	after_method = args[:show_toggle] ? :password_toggle : nil
   	field_wrapper(attribute, args, after_method) do
-  		temp = super(attribute, args)
+  		super
   	end
   end
 
@@ -42,22 +52,30 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   	end
   end
 
-	def field_wrapper(attribute, args = {}, after_method, &block)
+  def field(attribute, options = {}, &block)
+  	options[:class] = options.has_key?(:class) ? options[:class] + ' field' : 'field'
+  	label_opt = options.delete(:label)
+  	@template.content_tag(:div, options) do
+  		@template.concat(label(attribute, label_opt)) unless label_opt == false
+  		@template.concat(block.call)
+		end
+	end
+
+
+	def field_wrapper(attribute, args = {}, after_method = nil, &block)
 		add_v_model(attribute, args)
 
-		field_args = {class: 'field'}
+		field_args = {label: args[:label]}
 		if args[:show_if] || args[:"v-show"]
 			field_args[:"v-show"] = args[:"v-show"] || full_v_name(args[:show_if])
-			args.delete(:show_if)
-			args.delete(:"v-show")
 		end
 
-		@template.content_tag(:div, field_args) do
-			temp = block.call
-			temp = label(attribute, args[:label]) + temp unless args[:label] == false
-			temp += error_fields(attribute, args)
-			temp += send(after_method) unless after_method.nil?
-			temp
+		field(attribute, field_args) do
+			@template.capture do
+				@template.concat block.call
+				@template.concat error_fields(attribute, args)
+				@template.concat send(after_method) unless after_method.nil?
+			end
 		end
 	end
 
@@ -71,6 +89,10 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
 	def form_errors
 		@template.content_tag("form-errors", "", {":submission-error" => "submissionError"})
+	end
+
+	def objectify_options(options)
+	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if)
 	end
 
 	private
