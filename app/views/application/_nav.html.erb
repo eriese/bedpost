@@ -12,8 +12,8 @@
       <li class="no-link"><%= current_user.name %></li>
       <% nav_links.each do |key, path| %>
         <li>
-          <%= link_to_unless_current(key, path) do %>
-          <span> <%= key %> </span>
+          <%= link_to_unless_current(t(key), path) do %>
+          <span> <%= t(key) %> </span>
           <%end%>
         </li>
       <% end %>

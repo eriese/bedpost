@@ -49,3 +49,6 @@ en:
   show_password: show password
   hide_password: hide password
   join_delimeter: ' , '
+  nav:
+    dashboard: "Dashboard"
+    user_profile_edit: "Edit Profile"

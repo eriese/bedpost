@@ -41,7 +41,7 @@
 					return "";
 				}
 
-				if (!this.vField.submitted) {
+				if (this.vField.submitted === false) {
 					let msg = getFieldFrom(this.submissionError, this);
 					if (msg && typeof msg.join == "function") {
 						msg = msg.join(I18n.t("join_delimeter"))
