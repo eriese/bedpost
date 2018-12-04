@@ -62,9 +62,16 @@ form.centered {
 	padding: 0px 15px;
 	margin: 0px auto;
 
-	h2 {
-		color: $color-green-dark;
+	h2, p.description, div.errors {
 		text-align: center;
+	}
+
+	h2.with-desc {
+		margin-bottom: 0.25em;
+	}
+
+	p.description {
+		margin-top: 0;
 	}
 
 	label {
@@ -78,10 +85,6 @@ form.centered {
 		p {
 			margin: 0;
 		}
-	}
-
-	div.errors {
-		text-align: center;
 	}
 }
 
@@ -154,6 +157,8 @@ form .tooltip {
 				color: $color-off-white;
 				border: 2px solid $color-off-white;
 				padding: 10px;
+				min-width: 200px;
+				line-height: 1.2;
 			}
 		}
 	}

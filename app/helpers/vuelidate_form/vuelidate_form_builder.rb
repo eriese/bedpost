@@ -54,10 +54,11 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
   def field(attribute, options = {}, &block)
   	add_to_class(options, "field")
-  	label_opt = options.delete(:label)
+  	label_opt = options.delete :label
+  	tooltip_opt = options.delete :tooltip
   	@template.content_tag(:div, options) do
-  		@template.concat(label(attribute, label_opt)) unless label_opt == false
-  		@template.concat tooltip(attribute, options[:tooltip]) if options[:tooltip]
+  		@template.concat label(attribute, label_opt) unless label_opt == false
+  		@template.concat tooltip(attribute, tooltip_opt) if tooltip_opt
   		@template.concat(block.call)
 		end
 	end
@@ -97,12 +98,14 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	def tooltip(attribute, key=true, html_options={})
-		key = key == true ? "helpers.tooltips.#{@object_name}.#{attribute}" : key
+		content =
+			key == true ? ActionView::Helpers::Tags::Translator.new(@object, @object_name, attribute, scope: "helpers.tooltip").translate :
+				I18n.t(key)
 		add_to_class(html_options, "tooltip")
 		@template.content_tag :div, html_options do
 			@template.content_tag(:div, {class: "tooltip-icon"}) do
 				@template.content_tag(:div, "?", {class: "inner"}) +
-				@template.content_tag(:div, I18n.t(key), {class: "tooltip-content"})
+				@template.content_tag(:div, content, {class: "tooltip-content"})
 			end
 		end
 	end

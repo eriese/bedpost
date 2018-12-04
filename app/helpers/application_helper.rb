@@ -8,4 +8,17 @@ module ApplicationHelper
 	def pronouns
 		Mongoid::QueryCache.cache { Pronoun.all}.to_ary
 	end
+
+	def t_action(key, options={})
+		options = options.dup
+		default = Array(options.delete(:default)).compact
+
+		ac = controller.action_name
+		prefixes = controller.lookup_context.prefixes
+		new_default = prefixes.map { |pr| "#{pr}.#{ac}#{key}".to_sym} + default
+
+		new_key = new_default.shift
+		options[:default] = new_default
+		I18n.t(new_key, options)
+	end
 end

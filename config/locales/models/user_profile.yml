@@ -1,4 +1,10 @@
 en:
+  user_profiles:
+    edit:
+      account_settings: Account Settings
+      personal_prefs:
+        title: Personal Preferences
+        desc: Customize how BedPost talks about you and your body
   mongoid:
     errors:
       models:

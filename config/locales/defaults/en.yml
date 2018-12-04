@@ -46,6 +46,14 @@ en:
         external_name: What do they call their external genitals?
         internal_name: What do they call their internal genitals?
         pronoun: What pronouns do they use?
+    submit:
+      update: Save
+      create: Save
+      submit: Submit
+    tooltip:
+      profile:
+        internal_name: Internal genitals are usually medically referred to using words like "vagina"
+        external_name: External genitals are usually medically referred to using words like "penis", "vulva", and "clitoris"
   show_password: show password
   hide_password: hide password
   join_delimeter: ' , '

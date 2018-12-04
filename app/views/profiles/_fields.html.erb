@@ -1,5 +1,5 @@
-
-<h2><%= t("profile.personal_prefs") %></h3>
+<h2 class="with-desc"><%= t_action(".personal_prefs.title") %></h2>
+<p class="description"><%= t_action(".personal_prefs.desc") %></p>
 <%= f.select :pronoun, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true}%>
 <%= f.text_field :anus_name, tooltip: true %>
 <%= f.text_field :external_name, tooltip: true %>

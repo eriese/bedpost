@@ -1,5 +1,5 @@
 <%= vuelidate_form_with model: @profile, html: {class: "centered"} do |f| %>
-	<h2><%= t("profile.account_settings") %></h2>
+	<h2><%= t(".account_settings") %></h2>
 	<% unless @profile.pronoun.nil? %>
 		<%= f.text_field :name %>
     	<%= f.text_field :email %>
