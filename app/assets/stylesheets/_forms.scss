@@ -1,7 +1,8 @@
 @import "_defaults";
 
+$input-background-color: $color-off-white;
 input, select, textarea {
-	background-color: $color-off-white;
+	background-color: $input-background-color;
 	border-color: $color-purple-dark;
 	border-style: solid;
 	border-radius: 2px;
@@ -26,6 +27,7 @@ input, select, textarea {
 
 input[type=checkbox], input[type=radio] {
 	display: inline-block;
+	vertical-align: middle;
 
 	form.centered & {
 		display: inline-block;
@@ -57,15 +59,17 @@ input[type=hidden] {
 
 form.centered {
 	max-width: 400px;
+	padding: 0px 15px;
 	margin: 0px auto;
+
+	h2 {
+		color: $color-green-dark;
+		text-align: center;
+	}
 
 	label {
 		display: block;
 		line-height: 1;
-
-		&.inline {
-			display: inline-block;
-		}
 	}
 
 	.additional {
@@ -94,5 +98,65 @@ form {
 	}
 }
 
+.field.inline {
+	label {
+		display: inline-block;
+	}
+
+	.tooltip-icon {
+		top: -32px;
+	}
+}
+
+form .tooltip {
+	position: relative;
+
+	.tooltip-icon {
+		position: absolute;
+		top: -2px;
+		right: 0px;
+		height: 34px;
+		width: 34px;
+		text-align: center;
+		padding: 7px;
+		box-sizing: border-box;
+
+		.inner {
+			background-color: $input-background-color;
+			color: $color-green-light;
+			border: 2px solid $color-green-light;
+			border-radius: 50%;
+			width: 100%;
+			height: 100%;
+			box-sizing: border-box;
+			line-height: 1;
+			font-weight: bold;
+			font-size: 18px;
+		}
+
+		.tooltip-content {
+			display: none;
+		}
+
+		&:hover {
+			.inner {
+				background-color: $color-green-light;
+				color: $input-background-color;
+			}
+
+			.tooltip-content {
+				display: block;
+				position: absolute;
+				right: 5px;
+				margin-top: 1px;
+				background-color: $color-green-dark;
+				z-index: 1;
+				color: $color-off-white;
+				border: 2px solid $color-off-white;
+				padding: 10px;
+			}
+		}
+	}
+}
 
 

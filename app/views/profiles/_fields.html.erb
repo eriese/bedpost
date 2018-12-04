@@ -1,8 +1,10 @@
-<%= f.text_field :anus_name %>
-<%= f.text_field :external_name %>
-<%= f.field :show_internal, {label: {class: "inline"}} do %>
-	<%= check_box_tag :show_internal, 1, profile.has_internal?, {:"v-model" => "toggles['internal_name']"} %>
-<% end %>
 
+<h2><%= t("profile.personal_prefs") %></h3>
+<%= f.select :pronoun, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true}%>
+<%= f.text_field :anus_name, tooltip: true %>
+<%= f.text_field :external_name, tooltip: true %>
+<%= f.field :show_internal, {class: "inline"} do %>
+	<%= check_box_tag :show_internal, 1, profile.has_internal?, {:"v-model" => "toggles['internal_name']"} %>
+	<%= f.tooltip :internal_name, true, {class: "inline"} %>
+<% end %>
 <%= f.text_field :internal_name, :"v-show" => "toggles['internal_name']"%>
-<%= f.select :pronoun, options_from_collection_for_select(pronouns, :id, :display)%>

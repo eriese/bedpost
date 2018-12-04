@@ -53,10 +53,11 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def field(attribute, options = {}, &block)
-  	options[:class] = options.has_key?(:class) ? options[:class] + ' field' : 'field'
+  	add_to_class(options, "field")
   	label_opt = options.delete(:label)
   	@template.content_tag(:div, options) do
   		@template.concat(label(attribute, label_opt)) unless label_opt == false
+  		@template.concat tooltip(attribute, options[:tooltip]) if options[:tooltip]
   		@template.concat(block.call)
 		end
 	end
@@ -65,7 +66,7 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	def field_wrapper(attribute, args = {}, after_method = nil, &block)
 		add_v_model(attribute, args)
 
-		field_args = {label: args[:label]}
+		field_args = args.slice :label, :tooltip
 		if args[:show_if] || args[:"v-show"]
 			field_args[:"v-show"] = args[:"v-show"] || full_v_name(args[:show_if])
 		end
@@ -92,7 +93,18 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	def objectify_options(options)
-	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if)
+	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip)
+	end
+
+	def tooltip(attribute, key=true, html_options={})
+		key = key == true ? "helpers.tooltips.#{@object_name}.#{attribute}" : key
+		add_to_class(html_options, "tooltip")
+		@template.content_tag :div, html_options do
+			@template.content_tag(:div, {class: "tooltip-icon"}) do
+				@template.content_tag(:div, "?", {class: "inner"}) +
+				@template.content_tag(:div, I18n.t(key), {class: "tooltip-content"})
+			end
+		end
 	end
 
 	private
@@ -109,5 +121,9 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 			@validations ||= []
 			@validations << attribute
 		end
+	end
+	def add_to_class(args, class_name)
+		args[:class] ||= ""
+		args[:class] << " " << class_name
 	end
 end
