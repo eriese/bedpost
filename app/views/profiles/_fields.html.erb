@@ -3,8 +3,5 @@
 <%= f.select :pronoun, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true}%>
 <%= f.text_field :anus_name, tooltip: true %>
 <%= f.text_field :external_name, tooltip: true %>
-<%= f.field :show_internal, {class: "inline"} do %>
-	<%= check_box_tag :show_internal, 1, profile.has_internal?, {:"v-model" => "toggles['internal_name']"} %>
-	<%= f.tooltip :internal_name, true, {class: "inline"} %>
-<% end %>
+<%= f.toggle :internal_name, {label: :show_internal, tooltip: true}, {:":clear" => true, :":clear-on" => "[false]"}%>
 <%= f.text_field :internal_name, :"v-show" => "toggles['internal_name']"%>

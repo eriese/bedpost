@@ -1,6 +1,7 @@
 class Profile
   include Mongoid::Document
   include Mongoid::Timestamps::Short
+  include NormalizeBlankValues
 
   field :name, type: String
   field :a_n, as: :anus_name, type: String
@@ -14,7 +15,7 @@ class Profile
   validates_presence_of :pronoun, :anus_name, :external_name, :if => :is_base?
 
   def has_internal?
-  	self.internal_name != nil
+  	self.internal_name.present?
   end
 
   private

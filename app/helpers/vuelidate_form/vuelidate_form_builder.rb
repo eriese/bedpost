@@ -37,7 +37,7 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
 
   def password_field(attribute, args={})
-  	args[":type"] = "passType"
+  	args[":type"] = "toggles['password']"
   	after_method = args[:show_toggle] ? :password_toggle : nil
   	field_wrapper(attribute, args, after_method) do
   		super
@@ -47,7 +47,7 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   def password_toggle
   	@template.content_tag(:div, {class: "additional"}) do
   		@template.content_tag(:p) do
-  			@template.content_tag(:a, "{{passText}}", {"@click" => "toggle('password')", class: "no-line"})
+  			toggle_tag(:password, {class: "no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']"})
   		end
   	end
   end
@@ -56,18 +56,19 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   	add_to_class(options, "field")
   	label_opt = options.delete :label
   	tooltip_opt = options.delete :tooltip
+  	before_label = options.delete :before_label
   	@template.content_tag(:div, options) do
-  		@template.concat label(attribute, label_opt) unless label_opt == false
+  		@template.concat(block.call) if before_label
+			@template.concat field_label(attribute, label_opt) unless label_opt == false
   		@template.concat tooltip(attribute, tooltip_opt) if tooltip_opt
-  		@template.concat(block.call)
+  		@template.concat(block.call) unless before_label
 		end
 	end
-
 
 	def field_wrapper(attribute, args = {}, after_method = nil, &block)
 		add_v_model(attribute, args)
 
-		field_args = args.slice :label, :tooltip
+		field_args = args.slice :label, :tooltip, :before_label
 		if args[:show_if] || args[:"v-show"]
 			field_args[:"v-show"] = args[:"v-show"] || full_v_name(args[:show_if])
 		end
@@ -90,11 +91,33 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	def form_errors
-		@template.content_tag("form-errors", "", {":submission-error" => "submissionError"})
+		@template.content_tag("form-errors", "", {:":submission-error" => "submissionError"})
 	end
 
+	def toggle(attribute, options={}, toggle_options={})
+		field(attribute, options.merge({class: "inline", before_label: true})) do
+			toggle_tag(attribute, toggle_options)
+		end
+	end
+
+	def toggle_tag(attribute, toggle_options)
+		clear_opt = toggle_options.delete :":clear"
+		if clear_opt
+			clear_attr = clear_opt == true ? attribute : clear_opt
+			toggle_options[:":clear"] = "'#{full_v_name(clear_attr)}'"
+		end
+
+		toggle_options.merge! ({
+			:"@toggle-event" => "toggle",
+			:":val" => "toggles['#{attribute}']",
+			:field=> attribute
+		})
+		@template.content_tag(:toggle, "", toggle_options)
+	end
+
+
 	def objectify_options(options)
-	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip)
+	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :before_label)
 	end
 
 	def tooltip(attribute, key=true, html_options={})
@@ -129,4 +152,17 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 		args[:class] ||= ""
 		args[:class] << " " << class_name
 	end
+	def field_label(attribute, label_opt)
+		opts_to_pass = label_opt
+		label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
+			opts_to_pass = {}
+			label_opt
+		elsif label_opt.is_a?(Hash) && label_opt.has_key?(:key)
+			label_opt.delete :key
+		else
+			attribute
+		end
+
+  	label(label_key, opts_to_pass)
+  end
 end

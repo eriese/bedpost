@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
 	def validator_adder(obj, v_hash, skip = [])
 		Proc.new do |atr, validator|
 			unless atr == :password_digest || skip.include?(atr)
-				gon_toggle({password: false}) if (atr == :password)
+				gon_toggle({password: "password"}) if (atr == :password)
 
 				if obj[atr].is_a? Hash
 					v_hash[atr] ||= {}

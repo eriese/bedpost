@@ -1,6 +1,7 @@
 import { required, email, minLength, maxLength, sameAs, helpers } from 'vuelidate/lib/validators'
 import fieldErrors from "./fieldErrorsComponent.vue"
 import formErrors from "./formErrorsComponent.vue"
+import toggle from "./toggleComponent.vue"
 
 const submitted = (path) => {
 	let erroredVal = undefined;
@@ -93,25 +94,11 @@ export default {
 	},
 	components: {
 		fieldErrors,
-		formErrors
+		formErrors,
+		toggle
 	},
 	validations: function() {
 		return {formData: formatValidators(this.$props.validate, gon.validators, [])};
-	},
-	computed: {
-		passType: function() {
-			if (this.toggles.password === undefined) {
-				return;
-			};
-			return this.toggles.password ? "text" : "password";
-		},
-		passText: function() {
-			if (this.toggles.password === undefined) {
-				return;
-			};
-			let key = this.toggles.password ? "hide_password" : "show_password";
-			return I18n.t(key);
-		}
 	},
 	methods: {
 		validateForm(e) {
@@ -136,8 +123,11 @@ export default {
 			this.submissionError = respJson;
 			this.$v.$touch();
 		},
-		toggle(toggleField) {
-			this.toggles[toggleField] = !this.toggles[toggleField];
+		toggle(toggleField, new_val, clear) {
+			this.toggles[toggleField] = new_val
+			if (clear) {
+				Object.setAtPath(this, clear, null)
+			}
 		},
 		touch(vField) {
 			if (vField) {
