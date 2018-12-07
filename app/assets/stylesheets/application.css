@@ -11,6 +11,8 @@
  * It is generally better to create a new file per style scope.
  *
  *= require normalize-rails
+ *= require _defaults
+ *= require layout
  *= require_tree .
  *= require_self
  */

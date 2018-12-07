@@ -8,7 +8,7 @@ $color-purple-dark: hsl(316,70,19);
 $color-purple-light: hsl(316,70,39);
 
 $color-green-dark: hsl(180,90,18);
-$color-green-light: hsl(180,95,30);
+$color-green-light: hsl(180,95,25);
 
 $color-black: rgb(55,50,50);
 $color-off-white: #F3F3F3;
@@ -18,3 +18,5 @@ $color-light-gray: #e0e0e0;
 $background-color: #fcfcfc;
 $button-color: $color-purple-light;
 $button-hover-color: $color-purple-dark;
+$link-color: $color-green-light;
+$link-hover-color: $color-green-dark;

@@ -25,17 +25,44 @@ input, select, textarea {
 
 }
 
+$check-box-size: 18px;
+
 input[type=checkbox], input[type=radio] {
 	display: inline-block;
 	vertical-align: middle;
 
 	form.centered & {
 		display: inline-block;
-		width: auto;
+		width: $check-box-size;
 	}
 }
 
-input[type=submit] {
+input[type=checkbox] {
+	-webkit-appearance: none;
+	-moz-appearance:    none;
+	appearance:         none;
+	height: $check-box-size;
+	width: $check-box-size;
+	cursor: pointer;
+	color: $color-purple-dark;
+	position: relative;
+
+	&:checked::after {
+		content: "";
+		display: inline-block;
+		border-left: 2px solid;
+		border-bottom: 2px solid;
+		transform: rotate(-45deg);
+		position: absolute;
+
+		height: 5px;
+	    top: 2px;
+	    width: 11px;
+	    left: 1px;
+	}
+}
+
+button:not(.not-button), input[type=submit] {
 	background-color: $color-purple-light;
 	border-color: $color-purple-light;
 	color: $background-color;

@@ -1,5 +1,5 @@
 <template>
-	<a class="toggle" @click="doToggle">{{toggleState}}</a>
+	<button class="toggle not-button" @click="doToggle" type="button">{{toggleState}}</button>
 </template>
 
 <script>

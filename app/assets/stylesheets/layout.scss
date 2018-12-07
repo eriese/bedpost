@@ -20,12 +20,20 @@ h2 {
 	color: $color-green-dark;
 }
 
-a {
-	color: $color-green-light;
+a, button.not-button {
+	color: $link-color;
 	cursor: pointer;
 	&:hover {
-		color: $color-green-dark;
+		color: $link-hover-color;
 	}
+}
+
+button.not-button {
+	background: none;
+	border: none;
+	-webkit-appearance: none;
+	-moz-appearance:    none;
+	appearance:         none;
 }
 
 #logo {
