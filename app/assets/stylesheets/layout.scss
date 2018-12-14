@@ -20,6 +20,15 @@ h2 {
 	color: $color-green-dark;
 }
 
+header {
+	text-align: center;
+}
+
+main {
+	clear: both;
+	padding: 10px;
+}
+
 a, button.not-button {
 	color: $link-color;
 	cursor: pointer;
@@ -37,6 +46,26 @@ button.not-button {
 	padding: 0px;
 }
 
+.no-js {
+	main {
+		float: right;
+		clear: none;
+		width: calc(100% - #{$nav-width});
+		box-sizing: border-box;
+	}
+
+	header {
+		position: absolute;
+		margin-left: 10px;
+	}
+}
+
+#no-js-warning {
+	text-align: center;
+	font-weight: bold;
+	border: 1px solid $color-green-light;
+}
+
 .aria-only {
 	font-size: 0px;
 }
@@ -44,12 +73,8 @@ button.not-button {
 #logo {
 	font-family: $script-font;
 	font-size: 55px;
-	text-align: center;
-
-	a {
-		color: $color-purple-light;
-		text-decoration: none;
-	}
+	color: $color-purple-light;
+	text-decoration: none;
 
 	span {
 		font-family: $outline-font;
@@ -57,7 +82,7 @@ button.not-button {
 		color: $color-purple-dark;
 	}
 
-	&.small {
+	header.small & {
 		text-align: left;
 		font-size: 39px;
 		float: left;
@@ -71,10 +96,5 @@ button.not-button {
 
 #flash {
 	clear: both;
-}
-
-#page-container {
-	clear: both;
-	padding: 10px;
 }
 

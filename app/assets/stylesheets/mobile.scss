@@ -1,0 +1,56 @@
+@import "_defaults";
+
+@media (max-width: 500px) {
+	.no-js {
+		display: flex;
+		flex-wrap: wrap;
+
+		header.small {
+			order: 1;
+			width: 100%;
+			position: static;
+
+			#logo {
+				float: none;
+			}
+		}
+
+		nav-component {
+			order: 2;
+			width: 100%;
+
+			nav {
+				float: none;
+			}
+
+			.burger {
+				display: none;
+			}
+
+			.menu {
+				width: 100%;
+				height: auto;
+				padding-top: 0px;
+
+				ul {
+					width: 100%;
+					text-align: center;
+
+					li {
+						font-size: 20px;
+						line-height: 1;
+
+						a, &.no-link, span {
+							padding: 5px;
+						}
+					}
+				}
+			}
+		}
+
+		main {
+			order: 3;
+			width: 100%;
+		}
+	}
+}

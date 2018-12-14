@@ -17,19 +17,16 @@ class UserProfilesController < ProfilesController
 			respond_with_submission_error(@user_profile.errors.messages, signup_path)
 		end
 	end
-	def show
-	end
-	def edit
-		gon_client_validators(@profile)
-		gon_toggle({internal_name: @profile.has_internal?})
-	end
 
 	private
 		def user_params
 			params.require(:user_profile).permit(:name, :email, :password)
 		end
 		def profile_params
-			params.require(:user_profile).permit(:name, :email, :password, :internal_name, :external_name, :anus_name, :pronoun, :uid)
+			super + [:name, :email, :password, :uid]
+		end
+		def param_name
+			:user_profile
 		end
 		def set_profile
 			@profile = current_user

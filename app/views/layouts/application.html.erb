@@ -16,15 +16,16 @@
 
   <body>
     <%= include_gon %>
-    <div id="vue-container">
+    <div id="vue-container" class="no-js">
       <%= render "nav", nav_links: ApplicationHelper::NAV_LINKS %>
-      <header id="logo" class=<%=current_user ? "small" : ""%>>
-        <%= link_to(root_path) do %>
+      <header class=<%=current_user ? "small" : ""%>>
+        <%= link_to root_path, id: "logo" do %>
           Bed<span>Post</span>
         <% end %>
       </header>
       <main id="page-container">
         <div id="flash">
+          <noscript><div id="no-js-warning"><%= t(:no_script) %></div></noscript>
           <%= flash[:error] %>
           <% if flash[:message] %>
           <% flash[:message].each do |key, message| %>

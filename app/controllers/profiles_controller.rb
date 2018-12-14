@@ -19,6 +19,8 @@ class ProfilesController < ApplicationController
 
   # GET /partners/1/edit
   def edit
+    gon_client_validators(@profile)
+    gon_toggle({internal_name: @profile.has_internal?})
   end
 
   # POST /partners
@@ -40,7 +42,7 @@ class ProfilesController < ApplicationController
   # PATCH/PUT /partners/1
   # PATCH/PUT /partners/1.json
   def update
-    if @profile.update(profile_params)
+    if @profile.update(req_params)
       redirect_to show_path, notice: 'Profile was successfully updated.'
     else
       respond_with_submission_error(@profile.errors.messages, edit_path)
@@ -58,6 +60,11 @@ class ProfilesController < ApplicationController
   end
 
   private
+    def req_params
+      ps = params.require(param_name).permit(profile_params)
+      ps[:internal_name] = nil if params[param_name][:show_internal] == "0" && @profile.internal_name.present?
+      return ps
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
       @profile = Profile.find(params[:id])
@@ -65,7 +72,11 @@ class ProfilesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      params.fetch(:profile, {})
+      [:internal_name, :external_name, :anus_name, :pronoun]
+    end
+
+    def param_name
+      :profile
     end
 
     def edit_path

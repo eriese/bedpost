@@ -21,6 +21,10 @@ Vue.component('vuelidate-form', vuelidateFormComponent);
 let app = null;
 document.addEventListener('turbolinks:load', () => {
   app = new Vue({
-    el: '#vue-container'
+    el: '#vue-container',
+    mounted: function() {
+    	// remove no-js specific styling
+    	this.$el.classList.remove("no-js");
+    }
   })
 })

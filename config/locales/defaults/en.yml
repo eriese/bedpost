@@ -48,7 +48,8 @@ en:
       invalid: "Invalid: "
   show_password: show password
   hide_password: hide password
-  join_delimeter: ' , '
+  join_delimeter: ', '
+  no_script: "You don't have javascript enabled. We've tried to make the site as usable as possible for you, but some stuff might not work as well."
   nav:
     dashboard: "Dashboard"
     user_profile_edit: "Edit Profile"

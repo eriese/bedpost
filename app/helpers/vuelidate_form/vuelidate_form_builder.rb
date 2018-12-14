@@ -106,7 +106,20 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	def form_errors
-		@template.content_tag("form-errors", "", {:":submission-error" => "submissionError"})
+		@template.content_tag("form-errors", {:":submission-error" => "submissionError"}) do
+			errors = @template.flash[:submission_error]
+			if errors.present?
+				@template.content_tag(:noscript) do
+					@template.content_tag(:div, {class: "errors"}) do
+						delim = I18n.t(:join_delimeter)
+						errors.each do |att, errs|
+							err_text = errs.join(delim)
+							@template.concat(@template.content_tag(:div, err_text, {id: "#{att}-error"}))
+						end
+					end
+				end
+			end
+		end
 	end
 
 	def toggle(attribute, options={}, toggle_options={})

@@ -1,6 +1,6 @@
 @import "_defaults";
 
-#nav {
+nav {
 	position: relative;
 	left: 0px;
 	top: 0px;
@@ -22,6 +22,10 @@
 			background-color: $button-color;
 			margin: 6.5px 5px;
 		}
+
+		.no-js & {
+			display: none;
+		}
 	}
 
 	&.open .burger, .burger:hover, .burger:focus {
@@ -33,7 +37,6 @@
 		}
 	}
 
-	$nav-width: 250px;
 	&.open .menu {
 		width: $nav-width;
 		display: block;
@@ -70,11 +73,11 @@
 
 		animation: slideout 0.3s ease-in;
 		animation-fill-mode: both;
+		display: none;
+		width: 0px;
 	}
 
 	.menu {
-		// display: none;
-		width: 0px;
 		overflow: hidden;
 		position: absolute;
 		padding-top: 57px;
@@ -84,6 +87,10 @@
 		z-index: 1;
 		height: 100vh;
 		box-sizing: border-box;
+
+		.no-js & {
+			position: static;
+		}
 	}
 
 	ul {
