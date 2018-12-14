@@ -22,8 +22,10 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
-  	add_v_model(attribute, args)
-  	super
+  	add_to_class(args, "inline", :field_class)
+  	field_wrapper(attribute, args) do
+  		super
+  	end
   end
 
   def select(attribute, choices = nil, options = {}, html_options=nil, &block)
@@ -52,12 +54,11 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   	end
   end
 
-  def field(attribute, options = {}, &block)
-  	add_to_class(options, "field")
+  def field(attribute, options = {}, selector = :div, &block)
   	label_opt = options.delete :label
   	tooltip_opt = options.delete :tooltip
   	before_label = options.delete :before_label
-  	@template.content_tag(:div, options) do
+  	@template.content_tag(selector, options) do
   		@template.concat(block.call) if before_label
 			@template.concat field_label(attribute, label_opt) unless label_opt == false
   		@template.concat tooltip(attribute, tooltip_opt) if tooltip_opt
@@ -66,27 +67,41 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	def field_wrapper(attribute, args = {}, after_method = nil, &block)
+		add_ARIA(attribute, args)
 		add_v_model(attribute, args)
 
+		field_error_wrapper(attribute, args) do
+			field(attribute, get_field_args(attribute, args)) do
+				@template.capture do
+					@template.concat block.call
+					@template.concat send(after_method) unless after_method.nil?
+				end
+			end
+		end
+	end
+
+	def get_field_args(attribute, args={})
 		field_args = args.slice :label, :tooltip, :before_label
 		if args[:show_if] || args[:"v-show"]
 			field_args[:"v-show"] = args[:"v-show"] || full_v_name(args[:show_if])
 		end
 
-		field(attribute, field_args) do
-			@template.capture do
-				@template.concat block.call
-				@template.concat error_fields(attribute, args)
-				@template.concat send(after_method) unless after_method.nil?
-			end
-		end
+		field_args[:class] = args.delete :field_class
+		field_args[:"slot-scope"] = "slot" unless args[:validate] == false
+		add_to_class(field_args, "field") if args[:validate] == false
+
+		return field_args
 	end
 
-	def error_fields(attribute, args={})
+	def field_error_wrapper(attribute, args, &block)
 		unless args[:validate] == false
-		error_props = {field: attribute, ":v" => "$v", ":submission-error" => "submissionError"}
-			error_props["model-name"] = @object_name unless @object_name.blank?
-			@template.content_tag("field-errors", "",  error_props)
+			err_args = {field: attribute, :":v" => "$v", :":submission-error" => "submissionError"}
+			err_args[:"model-name"] = @object_name unless @object_name.blank?
+			err_args[:class] = args.delete :field_class
+			add_to_class(err_args, "field")
+			@template.content_tag(:"field-errors", err_args, &block)
+		else
+			block.call
 		end
 	end
 
@@ -121,36 +136,47 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	def tooltip(attribute, key=true, html_options={})
-		content =
-			key == true ? ActionView::Helpers::Tags::Translator.new(@object, @object_name, attribute, scope: "helpers.tooltip").translate :
-				I18n.t(key)
+		t_key = key == true ? attribute : key;
+		content = ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
 		add_to_class(html_options, "tooltip")
 		@template.content_tag :div, html_options do
 			@template.content_tag(:div, {class: "tooltip-icon"}) do
-				@template.content_tag(:div, "?", {class: "inner"}) +
-				@template.content_tag(:div, content, {class: "tooltip-content"})
+				@template.content_tag(:button, "?", {class: "inner not-button", type: "button", role: "tooltip"}) +
+				@template.content_tag(:div, content, {class: "tooltip-content", id: "#{attribute}-tooltip-content"})
 			end
 		end
 	end
 
 	private
 	def full_v_name(attribute)
-		"formData.#{@object_name}.#{attribute}"
+		@object_name.blank? ? "formData.#{attribute}" : "formData.#{@object_name}.#{attribute}"
 	end
 	def add_v_model(attribute, args={})
-		full_name = full_v_name attribute
-		args[:"v-model"] ||= full_name
+		args[:"v-model"] ||= full_v_name attribute
 		args[:ref] ||= attribute
 
 		unless args[:validate] == false
-			args[:"@blur"] ||= "touch($v.#{full_name})"
+			args[:"@blur"] ||= "slot.vField.$touch"
 			@validations ||= []
 			@validations << attribute
 		end
 	end
-	def add_to_class(args, class_name)
-		args[:class] ||= ""
-		args[:class] << " " << class_name
+	def add_ARIA(attribute, args)
+		desc = args[:"aria-describedby"]
+		args[:"aria-describedby"] = "#{desc}-tooltip-content" if desc.is_a? Symbol
+
+		unless args[:validate] == false
+			args[:":aria-invalid"] ||= "slot.vField.$invalid && slot.vField.$dirty"
+			args[:":aria-required"] ||= "slot.vField.blank !== undefined"
+			add_to_class(args, "#{attribute}-error", :"aria-describedby")
+		end
+
+		add_to_class(args, "#{attribute}-tooltip-content", :"aria-describedby") if args[:tooltip]
+	end
+	def add_to_class(args, class_name="", key_name=:class)
+		new_name = args[key_name].nil? ? "" : (args[key_name] << " ")
+		new_name << class_name
+		args[key_name] = new_name
 	end
 	def field_label(attribute, label_opt)
 		opts_to_pass = label_opt
@@ -160,8 +186,11 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 		elsif label_opt.is_a?(Hash) && label_opt.has_key?(:key)
 			label_opt.delete :key
 		else
+			opts_to_pass = {}
 			attribute
 		end
+
+		opts_to_pass[:id] = "#{label_key}-label"
 
   	label(label_key, opts_to_pass)
   end

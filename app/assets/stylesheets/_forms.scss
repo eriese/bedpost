@@ -46,6 +46,7 @@ input[type=checkbox] {
 	cursor: pointer;
 	color: $color-purple-dark;
 	position: relative;
+	margin-right: 10px;
 
 	&:checked::after {
 		content: "";
@@ -70,7 +71,7 @@ button:not(.not-button), input[type=submit] {
 	transition: 0.1s linear all;
 	cursor: pointer;
 
-	&:hover {
+	&:hover, &:focus {
 		background-color: $color-purple-dark;
 		border-color: $color-purple-dark;
 	}
@@ -138,21 +139,22 @@ form {
 		line-height: 16px;
 		margin-right: 5px;
 
-		&:hover {
+		&:hover, &:focus {
 			color: $color-purple-light;
 		}
 	}
 
 	&.inline {
-		label {
+		label, input {
 			display: inline-block;
+			margin-right: 10px;
 		}
 
 		.tooltip {
 			float: right;
 
 			.tooltip-icon {
-				top: -4px;
+				top: -5px;
 			}
 		}
 	}
@@ -168,7 +170,7 @@ form .tooltip {
 		height: 34px;
 		width: 34px;
 		text-align: center;
-		padding: 7px;
+		padding: 5px;
 		box-sizing: border-box;
 
 		.inner {
@@ -188,12 +190,12 @@ form .tooltip {
 			display: none;
 		}
 
-		&:hover {
-			.inner {
-				background-color: $color-green-light;
-				color: $input-background-color;
-			}
+		&:hover .inner, .inner:focus {
+			background-color: $color-green-light;
+			color: $input-background-color;
+		}
 
+		&:hover, .inner:focus + {
 			.tooltip-content {
 				display: block;
 				position: absolute;

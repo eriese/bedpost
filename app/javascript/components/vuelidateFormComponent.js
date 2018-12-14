@@ -128,11 +128,6 @@ export default {
 			if (clear) {
 				Object.setAtPath(this, clear, null)
 			}
-		},
-		touch(vField) {
-			if (vField) {
-				vField.$touch()
-			}
 		}
 	}
 }

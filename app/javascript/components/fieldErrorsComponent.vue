@@ -1,5 +1,11 @@
 <template>
-	<div class="field-errors" v-if="errorMsg" v-html="errorMsg"></div>
+	<div>
+		<slot :vField="vField"></slot>
+		<div :id="field + '-error'" class="field-errors" aria-live="polite" aria-atomic="true" v-if="errorMsg">
+			<div class="aria-only" v-html="ariaLabel"></div>
+			<div v-html="errorMsg"></div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -36,6 +42,9 @@
 			vField: function() {
 				return getFieldFrom(this.v.formData, this)
 			},
+			ariaLabel: function() {
+				return I18n.t(this.$attrs["aria-label"] || "helpers.aria.invalid")
+			},
 			errorMsg: function() {
 				if (!this.vField || !this.vField.$dirty || !this.vField.$anyError) {
 					return "";
@@ -54,7 +63,7 @@
 				let vParams = this.vField.$params
 				for (var validator in vParams) {
 					if (!this.vField[validator]) {
-						let params = {};
+						let params = {attribute: this.field};
 						switch(validator) {
 							case "too_long":
 								params.count = vParams[validator].max;
@@ -84,6 +93,6 @@
 
 				return ""
 			}
-		}
+		},
 	}
 </script>

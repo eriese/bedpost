@@ -9,6 +9,7 @@ ActionView::Helpers::Tags::Translator.class_eval do
 				defs << "#{key}.#{method_and_value}".to_sym
 				clazz = clazz.superclass
 			end
+			defs << method_and_value.to_sym
 			defs << ""
 		else
 			""

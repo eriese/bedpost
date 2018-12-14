@@ -34,6 +34,11 @@ button.not-button {
 	-webkit-appearance: none;
 	-moz-appearance:    none;
 	appearance:         none;
+	padding: 0px;
+}
+
+.aria-only {
+	font-size: 0px;
 }
 
 #logo {

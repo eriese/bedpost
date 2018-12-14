@@ -14,6 +14,8 @@ en:
               blank: please tell us your name
             email:
               taken: an account with that email address already exists
+            external_name:
+              blank: Please tell us what you call your external genitals.
   helpers:
     label:
       user_profile:

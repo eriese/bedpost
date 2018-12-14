@@ -1,0 +1,20 @@
+en:
+  helpers:
+    label:
+      profile:
+        show_internal: Do they also have internal genitals?
+        anus_name: What do they call their anus?
+        external_name: What do they call their external genitals?
+        internal_name: What do they call their internal genitals?
+        pronoun: What pronouns do they use?
+    tooltip:
+      profile:
+        internal_name: Internal genitals are usually medically referred to using words like "vagina"
+        external_name: External genitals are usually medically referred to using words like "penis", "vulva", and "clitoris"
+  mongoid:
+    errors:
+      models:
+        profile:
+          attributes:
+            external_name:
+              blank: Please tell us what they call their external genitals.

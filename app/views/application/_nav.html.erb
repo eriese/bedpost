@@ -1,14 +1,14 @@
 <% if current_user %>
 <nav-component inline-template>
-<div id="nav" :class="{open: isOpen}">
+<nav id="nav" :class="{open: isOpen, closed: !isOpen}">
 
-  <div class="burger" @click.stop="toggleMenu">
+  <button class="burger not-button" @click.stop="toggleMenu" type="button":aria-expanded="isOpen ? 'true' : 'false'" aria-controls="nav-list">
     <div class="burger-line"></div>
     <div class="burger-line"></div>
     <div class="burger-line"></div>
-  </div>
+  </button>
   <div class="menu" ref="menu">
-    <ul>
+    <ul id="nav-list">
       <li class="no-link"><%= current_user.name %></li>
       <% nav_links.each do |key, path| %>
         <li>
@@ -20,6 +20,6 @@
       <li><%= link_to "Log out", logout_path, method: "delete" %></li>
     </ul>
   </div>
-</div>
+</nav>
 </nav-component>
 <% end %>
