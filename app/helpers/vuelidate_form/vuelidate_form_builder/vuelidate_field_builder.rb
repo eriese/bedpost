@@ -26,6 +26,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		end
 
 		if @validate
+			output << no_js_error_field
 			output << call_after_method(true)
 			output = @template.content_tag(:"field-errors", output, @err_args)
 			@formBuilder.add_validation(@attribute)
@@ -48,6 +49,14 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		output << call_after_method(false)
 	end
 
+	def no_js_error_field
+		if @sub_error.present?
+			@template.content_tag(:noscript) do
+				@template.content_tag(:div, @sub_error, {id: "#{@attribute}-error", class: "field-errors"})
+			end
+		end
+	end
+
 	def call_after_method(if_validate_is)
 		@after_method.nil? || if_validate_is != @validate ? "" : @formBuilder.send(@after_method)
 	end
@@ -66,6 +75,10 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 		@required = @options.has_key?(:required) ? @options[:required] : (@formBuilder.options[:require_all] || filter_validators(:presence, validators))
 		@validate = @options.has_key?(:validate) ? @options[:validate] : (@required || validators.any?)
+
+		flash_error = @template.flash[:submission_error]
+		@sub_error = flash_error[@attribute.to_s] if flash_error.present?
+		@sub_error = @sub_error.join(I18n.t(:join_delimeter)) if @sub_error.respond_to? :join
 	end
 
 	def process_options
@@ -122,7 +135,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		if @validate
 			set_external(:":aria-invalid", "slot.vField.$invalid && slot.vField.$dirty")
 			sub_error = @template.flash[:submission_error]
-			set_external(:"aria-invalid", sub_error.present? && sub_error[@attribute].any?)
+			set_external(:"aria-invalid", @sub_error.present?)
 
 			set_external(:":aria-required", "slot.vField.blank !== undefined")
 			set_external(:"aria-required", @required)

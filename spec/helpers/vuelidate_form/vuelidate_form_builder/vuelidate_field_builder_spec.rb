@@ -7,6 +7,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 		@obj_class = class_double("FormObjectClass", validators_on: validators)
 		@f_obj = double("FormObject", class: @obj_class, name: "My Name")
 
+		submission_error.stringify_keys! if submission_error.respond_to? :stringify_keys
 		helper.flash[:submission_error] = submission_error
 
 		@f_builder = VuelidateForm::VuelidateFormBuilder.new(@obj_name, @f_obj, helper, form_options)
@@ -122,7 +123,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			it 'adds a fallback invalid attribute based off of the flash submission errors' do
 				atr = :name
 				sub_errors = {}
-				sub_errors[atr] = [""]
+				sub_errors[atr] = ["error"]
 				@builder = stub_builder attribute: atr, options: {validate: true}, submission_error: sub_errors
 
 				@builder.send(:add_ARIA)
@@ -391,6 +392,27 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 			expected = I18n.t("helpers.required", {content: ""})
 			expect(result).to include(expected)
+		end
+	end
+
+	describe '#no_js_error_field' do
+		it 'adds an error field that shows if the attribute has an error and the javascript is turned off' do
+			attribute = :name
+			err = "There is a problem"
+			builder = stub_builder options: {validate: true}, submission_error: {attribute => [err]}
+
+			result = builder.send(:no_js_error_field)
+			expect(result).to eq "<noscript><div id=\"#{@attr}-error\" class=\"field-errors\">#{err}</div></noscript>"
+		end
+
+		it 'gets called properly by the #field method' do
+			attribute = :name
+			err = "There is a problem"
+			stub_form_builder submission_error: {attribute => [err]}
+
+			result = @f_builder.text_field(attribute, {validate: true})
+
+			expect(result).to include("<noscript>")
 		end
 	end
 

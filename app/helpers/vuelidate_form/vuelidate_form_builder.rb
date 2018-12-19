@@ -67,16 +67,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	def form_errors
 		@template.content_tag("form-errors", {:":submission-error" => "submissionError"}) do
-			errors = @template.flash[:submission_error]
+			errors = @template.flash[:submission_error]["form_error"] if @template.flash[:submission_error].present?
 			if errors.present?
+				errors = errors.join(I18n.t(:join_delimeter)) if errors.respond_to? :join
 				@template.content_tag(:noscript) do
-					@template.content_tag(:div, {class: "errors"}) do
-						delim = I18n.t(:join_delimeter)
-						errors.each do |att, errs|
-							err_text = errs.join(delim)
-							@template.concat(@template.content_tag(:div, err_text, {id: "#{att}-error"}))
-						end
-					end
+					@template.content_tag(:div, errors, {class: "errors"})
 				end
 			end
 		end

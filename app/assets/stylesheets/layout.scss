@@ -29,9 +29,10 @@ main {
 	padding: 10px;
 }
 
-a, button.not-button {
+a, button.not-button, input[type=submit].not-button {
 	color: $link-color;
 	cursor: pointer;
+	-webkit-appearance: none;
 	&:hover {
 		color: $link-hover-color;
 	}
@@ -47,16 +48,16 @@ button.not-button {
 }
 
 .no-js {
-	main {
+	header.small {
+		position: absolute;
+		margin-left: 10px;
+	}
+
+	header.small + main {
 		float: right;
 		clear: none;
 		width: calc(100% - #{$nav-width});
 		box-sizing: border-box;
-	}
-
-	header {
-		position: absolute;
-		margin-left: 10px;
 	}
 }
 

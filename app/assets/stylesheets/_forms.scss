@@ -63,7 +63,7 @@ input[type=checkbox] {
 	}
 }
 
-button:not(.not-button), input[type=submit] {
+button:not(.not-button), input[type=submit]:not(.not-button) {
 	background-color: $color-purple-light;
 	border-color: $color-purple-light;
 	color: $background-color;
