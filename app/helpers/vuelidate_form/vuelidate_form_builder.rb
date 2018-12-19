@@ -1,11 +1,14 @@
-class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
+module VuelidateForm
+class VuelidateFormBuilder < ActionView::Helpers::FormBuilder
+
+	include VuelidateFormUtils
 
 	attr_reader :validations
 
 	(field_helpers - [:fields_for, :fields, :label, :check_box, :radio_button,  :hidden_field, :password_field]).each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})  # def text_field(method, options = {})
-        field_wrapper(method, options) do
+        field_builder(method, options).field do
         	super
         end
       end                                    # end
@@ -21,9 +24,13 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
     RUBY_EVAL
   end
 
+  def field_builder(attribute, options)
+  	VuelidateFieldBuilder.new(attribute, options, self, @template)
+  end
+
   def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
   	add_to_class(args, "inline", :field_class)
-  	field_wrapper(attribute, args) do
+  	field_builder(attribute, args).field do
   		super
   	end
   end
@@ -32,7 +39,7 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 		html_options ||= options[:html] || {}
 		html_options[:label] = options.delete(:label) if html_options[:label].nil?
 		html_options[:class] ||= options.delete(:class)
-  	field_wrapper(attribute, html_options) do
+  	field_builder(attribute, html_options).field do
   		super
   	end
   end
@@ -41,13 +48,13 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   def password_field(attribute, args={})
   	args[":type"] = "toggles['password']"
   	after_method = args[:show_toggle] ? :password_toggle : nil
-  	field_wrapper(attribute, args, after_method) do
+  	field_builder(attribute, args).field(after_method) do
   		super
   	end
   end
 
   def password_toggle
-  	@template.content_tag(:div, {class: "additional"}) do
+  	@template.content_tag(:div, {class: "additional", slot: "additional"}) do
   		@template.content_tag(:p) do
   			toggle_tag(:password, {class: "no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']"})
   		end
@@ -59,10 +66,10 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
   	tooltip_opt = options.delete :tooltip
   	before_label = options.delete :before_label
   	@template.content_tag(selector, options) do
-  		@template.concat(block.call) if before_label
+  		@template.concat block.call if before_label
 			@template.concat field_label(attribute, label_opt) unless label_opt == false
   		@template.concat tooltip(attribute, tooltip_opt) if tooltip_opt
-  		@template.concat(block.call) unless before_label
+  		@template.concat block.call unless before_label
 		end
 	end
 
@@ -72,11 +79,9 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
 		field_error_wrapper(attribute, args) do
 			field(attribute, get_field_args(attribute, args)) do
-				@template.capture do
-					@template.concat block.call
-					@template.concat send(after_method) unless after_method.nil?
-				end
-			end
+				block.call
+			end <<
+			(send(after_method) unless after_method.nil?)
 		end
 	end
 
@@ -160,6 +165,11 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 		end
 	end
 
+	def add_validation(attribute)
+		@validations ||= []
+		@validations << attribute unless @validations.include?(attribute)
+	end
+
 	private
 	def full_v_name(attribute)
 		@object_name.blank? ? "formData.#{attribute}" : "formData.#{@object_name}.#{attribute}"
@@ -186,11 +196,6 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
 		add_to_class(args, "#{attribute}-tooltip-content", :"aria-describedby") if args[:tooltip]
 	end
-	def add_to_class(args, class_name="", key_name=:class)
-		new_name = args[key_name].nil? ? "" : (args[key_name] << " ")
-		new_name << class_name
-		args[key_name] = new_name
-	end
 	def field_label(attribute, label_opt)
 		opts_to_pass = label_opt
 		label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
@@ -207,4 +212,5 @@ class VuelidateForm::VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
   	label(label_key, opts_to_pass)
   end
+end
 end

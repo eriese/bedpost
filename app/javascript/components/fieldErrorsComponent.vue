@@ -5,6 +5,7 @@
 			<div class="aria-only" v-html="ariaLabel"></div>
 			<div v-html="errorMsg"></div>
 		</div>
+		<slot name="additional"></slot>
 	</div>
 </template>
 
