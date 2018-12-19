@@ -1,7 +1,6 @@
 module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 	include VuelidateFormUtils
-	include ActionView::Helpers::TagHelper
 
 	FIELD_OPTIONS = [:label, :tooltip, :before_label, :validate, :required, :show_if, :"v-show",
 		:field_class]
@@ -14,21 +13,20 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		#easy access
 		@template = template
 		@object = formBuilder.object
+		@object_name = @formBuilder.object_name
 
 		@options = options.extract! *FIELD_OPTIONS
 		do_setup
 	end
 
 	def field(after_method = nil, selector=:div, &block)
-		output = @template.capture do
-			@template.content_tag(selector, @field_args) do
-				field_inner &block
-			end
+		@after_method = after_method
+		output = @template.content_tag(selector, @field_args) do
+			field_inner &block
 		end
 
-		output << @formBuilder.send(after_method) unless after_method.nil?
-
 		if @validate
+			output << call_after_method(true)
 			output = @template.content_tag(:"field-errors", output, @err_args)
 			@formBuilder.add_validation(@attribute)
 		end
@@ -36,6 +34,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		output
 	end
 
+	private
 	def field_inner
 		output = ActiveSupport::SafeBuffer.new
 		output << field_label
@@ -45,20 +44,31 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 		inner = block_given? ? yield : ""
 		@options[:before_label] ? output.prepend(inner) : output << inner
+
+		output << call_after_method(false)
 	end
 
-	private
-	def process_options
-		validators = @object.present? ? @object.class.validators_on(@attribute) : []
+	def call_after_method(if_validate_is)
+		@after_method.nil? || if_validate_is != @validate ? "" : @formBuilder.send(@after_method)
+	end
 
-		if @object.present? && @attribute.to_s.include?("_confirmation")
-			other_vals = @object.class.validators_on(@attribute.to_s.chomp("_confirmation"))
-			validators = filter_validators(ActiveModel::Validations::ConfirmationValidator,other_vals, :select)
-			@required = filter_validators(Mongoid::Validatable::PresenceValidator, other_vals, :any?)
+	def get_validation
+		validators = []
+
+		if @object.present?
+			validators = @object.class.validators_on(@attribute)
+
+			if validators.empty? && @attribute.to_s.include?("_confirmation")
+				other_vals = @object.class.validators_on(@attribute.to_s.chomp("_confirmation"))
+				validators = other_vals if filter_validators(:confirm, other_vals)
+			end
 		end
 
-		@validate = @options[:validate] == true || @options[:required] == true || (@options[:validate] != false && validators.any?)
-		@required ||= @options[:required].nil? ? filter_validators(Mongoid::Validatable::PresenceValidator, validators) : @options[:required]
+		@required = @options.has_key?(:required) ? @options[:required] : (@formBuilder.options[:require_all] || filter_validators(:presence, validators))
+		@validate = @options.has_key?(:validate) ? @options[:validate] : (@required || validators.any?)
+	end
+
+	def process_options
 		field_class = (@options[:field_class] || "") << " field"
 		field_class.strip!
 
@@ -80,24 +90,18 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		end
 	end
 
-	def filter_validators(val_type, val_list=nil, filt = :any?, field=@attribute)
-		return false if @object.nil?
-		val_list ||= @object.class.validators_on(field)
-		val_list.send(filt) {|v| v.kind_of? val_type}
-	end
-
 	def do_setup
+		get_validation
 		process_options
 		add_ARIA
 		add_v_model
-
 	end
 
 	def field_label
 		label_opt = @options[:label]
 		return "" if label_opt == false
 
-		opts_to_pass = {}
+		opts_to_pass = {required: @required}
 		label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
 			label_opt
 		elsif label_opt.is_a?(Hash)
@@ -134,10 +138,6 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		set_external(:@blur, "slot.vField.$touch") if @validate
 	end
 
-	def full_v_name(attribute=@attribute)
-		@formBuilder.object_name.blank? ? "formData.#{attribute}" : "formData.#{@formBuilder.object_name}.#{attribute}"
-	end
-
 	def add_on(key, addition, add_to_front=false)
 		add_to_class(@options, addition, key, add_to_front)
 	end
@@ -148,5 +148,22 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		else
 			@external_options[key] = value
 		end
+	end
+
+	def filter_validators(val_type, val_list=nil, filt = :any?, field=@attribute)
+		return false if @object.nil?
+		unless val_type.kind_of? Class
+			val_type = case val_type
+			when :presence
+				Mongoid::Validatable::PresenceValidator
+			when :confirm
+				ActiveModel::Validations::ConfirmationValidator
+			else
+				return filt == :any? ? false : []
+			end
+		end
+
+		val_list ||= @object.class.validators_on(field)
+		val_list.send(filt) {|v| v.kind_of? val_type}
 	end
 end; end; end

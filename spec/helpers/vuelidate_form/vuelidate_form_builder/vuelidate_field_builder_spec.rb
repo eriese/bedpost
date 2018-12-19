@@ -2,23 +2,30 @@ require 'rails_helper'
 
 RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type: :helper do
 
-	def stub_form_builder(validators: [], submission_error: {})
+	def stub_form_builder(validators: [], submission_error: {}, form_options: {})
 		@obj_name = "object_name"
-		obj_class = class_double("FormObjectClass", validators_on: validators)
-		f_obj = double("FormObject", class: obj_class, name: "My Name")
+		@obj_class = class_double("FormObjectClass", validators_on: validators)
+		@f_obj = double("FormObject", class: @obj_class, name: "My Name")
 
 		helper.flash[:submission_error] = submission_error
 
-		@f_builder = VuelidateForm::VuelidateFormBuilder.new(@obj_name, f_obj, helper, {})
+		@f_builder = VuelidateForm::VuelidateFormBuilder.new(@obj_name, @f_obj, helper, form_options)
 	end
 
-	def stub_builder(options: {}, validators: [], submission_error: {}, attribute: :name)
+	def stub_builder(options: {}, validators: [], submission_error: {}, attribute: :name, form_options: {})
 		@attr = attribute
-		stub_form_builder(validators: validators, submission_error: submission_error)
+		stub_form_builder(validators: validators, submission_error: submission_error, form_options: form_options)
 		VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder.new(attribute, options, @f_builder, helper)
 	end
 
 	describe '#add_ARIA' do
+		it 'is called during do_setup' do
+			allow_any_instance_of(VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder).to receive(:add_ARIA).and_call_original
+			builder = stub_builder
+			builder.send(:do_setup)
+			expect(builder).to have_received(:add_ARIA).twice
+		end
+
 		context 'aria-describedby' do
 
 			def get_desc
@@ -176,32 +183,41 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 	end
 
 	describe '#add_v_model' do
+		it 'is called during do_setup' do
+			allow_any_instance_of(VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder).to receive(:add_v_model).and_call_original
+			builder = stub_builder
+			builder.send(:do_setup)
+			expect(builder).to have_received(:add_v_model).twice
+		end
+
 		it 'sets the v-model option' do
 			builder = stub_builder
-			builder.send(:add_v_model)
 			expect(builder.instance_variable_get(:@external_options)[:"v-model"]).to eq "formData.#{@obj_name}.#{@attr}"
 		end
 
 		it 'sets the ref option to have the same name as the attribute' do
 			builder = stub_builder
-			builder.send(:add_v_model)
 			expect(builder.instance_variable_get(:@external_options)[:ref]).to eq @attr
 		end
 
 		it 'sets the blur option if the field validates' do
 			builder = stub_builder options: {validate: true}
-			builder.send(:add_v_model)
 			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "slot.vField.$touch"
 		end
 
 		it 'does not set the blur option if the field does not validate' do
 			builder = stub_builder
-			builder.send(:add_v_model)
 			expect(builder.instance_variable_get(:@external_options)[:@blue]).to be nil
 		end
 	end
 
 	describe "#do_setup" do
+		it 'is called during initialization' do
+			allow_any_instance_of(VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder).to receive(:do_setup).and_call_original
+			builder = stub_builder
+			expect(builder).to have_received(:do_setup)
+		end
+
 		it 'adds the aria attributes' do
 			builder = stub_builder
 			allow(builder).to receive(:add_ARIA) {nil}
@@ -223,6 +239,92 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			builder.send(:do_setup)
 
 			expect(@f_builder.validations).to be_nil
+		end
+	end
+
+	describe '#get_validation' do
+		it 'is called during do_setup' do
+			allow_any_instance_of(VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder).to receive(:get_validation).and_call_original
+			builder = stub_builder
+			builder.send(:do_setup)
+			expect(builder).to have_received(:get_validation).twice
+		end
+
+		context '@formBuilder.options[:require_all]' do
+			it 'allows require_all to be set as an option on the form, making all fields required' do
+				builder = stub_builder form_options: {require_all: true}
+				expect(builder.instance_variable_get(:@required)).to be true
+				expect(builder.instance_variable_get(:@validate)).to be true
+			end
+
+			it 'uses the required option on the field to override the require_all option from the form' do
+				builder = stub_builder form_options: {require_all: true}, options: {required: false}
+				expect(builder.instance_variable_get(:@required)).to be false
+				expect(builder.instance_variable_get(:@validate)).to be false
+			end
+		end
+
+		context 'it uses the validate option over all else' do
+			it 'validate set to true causes validation' do
+				builder = stub_builder options: {validate: true}
+				expect(builder.instance_variable_get(:@validate)).to be true
+			end
+			it 'validate set to false causes no validation even if the attribute has validators' do
+				builder = stub_builder options: {validate: false}, validators: ["val"]
+				expect(builder.instance_variable_get(:@validate)).to be false
+			end
+		end
+
+		context 'it uses the presence of validators in the absence of a validate option' do
+			it 'no validators on the attribute means no validation' do
+				builder = stub_builder
+				expect(builder.instance_variable_get(:@validate)).to be false
+			end
+
+			it 'validators on the attribute cause validation' do
+				builder = stub_builder validators: ["val"]
+				expect(builder.instance_variable_get(:@validate)).to be true
+			end
+
+			it 'checks for validators on the confirmed attribute if the attribute is a *_confirmation' do
+				stub_form_builder
+				allow(@obj_class).to receive(:validators_on) do |atr|
+					atr.to_s == "pass" ? [double("ConfirmationValidator", kind_of?: true)] : []
+				end
+				@attr = :pass_confirmation
+				builder = VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder.new(@attr, {}, @f_builder, helper)
+				expect(builder.instance_variable_get(:@validate)).to be true
+			end
+		end
+	end
+
+	describe '#process_options' do
+		it 'is called during do_setup' do
+			allow_any_instance_of(VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder).to receive(:process_options).and_call_original
+			builder = stub_builder
+			builder.send(:do_setup)
+			expect(builder).to have_received(:process_options).twice
+		end
+
+		context 'field_class' do
+			it 'sets the field class on the @field_args if the field does not validate' do
+				builder = stub_builder
+				expect(builder.instance_variable_get(:@field_args)[:class]).to eq "field"
+			end
+
+			it 'sets the field class based on the field_class option' do
+				cls = "fieldy"
+				builder = stub_builder options: {field_class: cls}
+
+				result_class = builder.instance_variable_get(:@field_args)[:class]
+				expect(result_class).to include "field"
+				expect(result_class).to include cls
+			end
+
+			it 'sets the field class on the the @err_args if the field does validate' do
+				builder = stub_builder options: {validate: true}
+				expect(builder.instance_variable_get(:@err_args)[:class]).to eq "field"
+			end
 		end
 	end
 
@@ -282,60 +384,20 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			result = builder.send(:field_label)
 			expect(result).to be_blank
 		end
-	end
 
-	describe '#process_options' do
-		it 'is called during initialization' do
-			allow_any_instance_of(VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder).to receive(:process_options).and_call_original
-			builder = stub_builder
-			expect(builder).to have_received(:process_options)
-		end
+		it 'adds to the label text to indicate that the field is required' do
+			builder = stub_builder options: {required: true}
+			result = builder.send(:field_label)
 
-		# it 'sets the field class' do
-		# 	builder = stub_builder
-		# 	expect(builder.instance_variable_get(:@options)[:class]).to eq "field"
-		# end
-
-		# it 'sets the field class based on the field_class option' do
-		# 	cls = "fieldy"
-		# 	builder = stub_builder options: {field_class: cls}
-
-		# 	result_class = builder.instance_variable_get(:@options)[:class]
-		# 	expect(result_class).to include "field"
-		# 	expect(result_class).to include cls
-		# end
-
-		context "@validate" do
-			context 'it uses the validate option over all else' do
-				it 'validate set to true causes validation' do
-					builder = stub_builder options: {validate: true}
-					expect(builder.instance_variable_get(:@validate)).to be true
-				end
-				it 'validate set to false causes no validation even if the attribute has validators' do
-					builder = stub_builder options: {validate: false}, validators: ["val"]
-					expect(builder.instance_variable_get(:@validate)).to be false
-				end
-			end
-
-			context 'it uses the presence of validators in the absence of a validate option' do
-				it 'no validators on the attribute means no validation' do
-					builder = stub_builder
-					expect(builder.instance_variable_get(:@validate)).to be false
-				end
-
-				it 'validators on the attribute cause validation' do
-					builder = stub_builder validators: ["val"]
-					expect(builder.instance_variable_get(:@validate)).to be true
-				end
-			end
+			expected = I18n.t("helpers.required", {content: ""})
+			expect(result).to include(expected)
 		end
 	end
 
 	describe '#field_inner' do
 		it 'adds the label' do
 			builder = stub_builder
-			builder.send :do_setup
-			result = builder.field_inner
+			result = builder.send(:field_inner)
 
 			expected_label = @f_builder.label(@attr, {id: "#{@attr}-label"})
 			expect(result).to include(expected_label)
@@ -343,8 +405,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 		it 'adds the tooltip if the tooltip is called for' do
 			builder = stub_builder options: {tooltip: true}
-			builder.send :do_setup
-			result = builder.field_inner
+			result = builder.send(:field_inner)
 
 			expected_tooltip = @f_builder.tooltip(@attr)
 			expect(result).to include(expected_tooltip)
@@ -352,20 +413,18 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 		it 'adds the given block at the end' do
 			builder = stub_builder
-			builder.send :do_setup
 
 			additional = "additional"
-			result = builder.field_inner {additional}
+			result = builder.send(:field_inner) {additional}
 
 			expect(result).to end_with(additional)
 		end
 
 		it 'adds the given block at the beginning if the before_label option is true' do
 			builder = stub_builder options: {before_label: true}
-			builder.send :do_setup
 
 			additional = "additional"
-			result = builder.field_inner {additional}
+			result = builder.send(:field_inner) {additional}
 
 			expect(result).to start_with(additional)
 		end
@@ -385,6 +444,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			result = @f_builder.password_field(@attr, {show_toggle: true, validate: true})
 
 			toggle_output = @f_builder.password_toggle
+			expect(result).to include(toggle_output)
 			expect(result).to_not end_with(toggle_output)
 		end
 

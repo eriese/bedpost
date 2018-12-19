@@ -39,7 +39,7 @@ module VuelidateForm::VuelidateFormHelper
 	end
 
 	def add_valid_form_wrapper(form_obj, form_text)
-		validations = form_obj.validations.join(",")
+		validations = form_obj.validations.nil? ? "" : form_obj.validations.join(",")
 		content_tag("vuelidate-form", {"inline-template" => "", validate: validations}) do
 			form_text
 		end

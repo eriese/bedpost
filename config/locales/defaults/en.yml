@@ -44,6 +44,7 @@ en:
       update: Save
       create: Save
       submit: Submit
+    required: "%{content}*"
     aria:
       invalid: "Invalid: "
   show_password: show password
