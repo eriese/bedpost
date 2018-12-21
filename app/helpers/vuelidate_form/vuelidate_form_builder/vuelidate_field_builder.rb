@@ -85,22 +85,17 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		field_class.strip!
 
 		@field_args = @options.slice :"v-show"
+		@field_args[:"slot-scope"] = "slot"
 		@field_args[:"v-show"] = full_v_name(@options[:show_if]) if @options[:show_if]
 
-		# if @validate
-			@field_args[:"slot-scope"] = "slot"
-
-			@err_args = {
-				field: @attribute,
-				:":v" => "$v",
-				:":submission-error" => "submissionError",
-				:class => field_class,
-				:":validate" => @validate
-			}
-			@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
-		# else
-		# 	@field_args[:class] = field_class
-		# end
+		@err_args = {
+			field: @attribute,
+			:":v" => "$v",
+			:":submission-error" => "submissionError",
+			:class => field_class,
+			:":validate" => @validate
+		}
+		@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
 	end
 
 	def do_setup
