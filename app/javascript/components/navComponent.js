@@ -1,16 +1,26 @@
+import {TimelineMax, TweenMax} from "gsap/TweenMax"
+
 let navComponent = {
 	data: function() {
 		return {
-			isOpen: false
+			isOpen: false,
+			timeLine: null
 		}
+	},
+	mounted() {
+		this.timeLine = new TimelineMax()
+		this.timeLine.to(this.$refs.menu, 0.3, {width: 0})
+		this.timeLine.set(this.$refs.menu, {display: "none", immediateRender: false});
 	},
 	methods: {
 		openMenu() {
 			this.isOpen = true;
+			this.timeLine.reverse();
 			document.body.addEventListener('click', this.documentClick)
 		},
 		closeMenu() {
 			this.isOpen = false;
+			this.timeLine.play();
 			document.body.removeEventListener('click', this.documentClick)
 		},
 		documentClick(e) {

@@ -2,7 +2,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 	include VuelidateFormUtils
 
-	FIELD_OPTIONS = [:label, :tooltip, :before_label, :validate, :required, :show_if, :"v-show",
+	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
 		:field_class]
 
 	def initialize(attribute, options, formBuilder, template)
@@ -21,16 +21,15 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 	def field(after_method = nil, selector=:div, &block)
 		@after_method = after_method
-		output = @template.content_tag(selector, @field_args) do
-			field_inner &block
+		output = @template.content_tag(:"field-errors", @err_args) do
+			@template.content_tag(selector, @field_args) do
+				field_inner &block
+			end <<
+			no_js_error_field <<
+			call_after_method
 		end
 
-		if @validate
-			output << no_js_error_field
-			output << call_after_method(true)
-			output = @template.content_tag(:"field-errors", output, @err_args)
-			@formBuilder.add_validation(@attribute)
-		end
+		@formBuilder.add_validation(@attribute) if @validate
 
 		output
 	end
@@ -38,27 +37,27 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	private
 	def field_inner
 		output = ActiveSupport::SafeBuffer.new
-		output << field_label
 
 		tooltip_opt = @options[:tooltip]
 		output << @formBuilder.tooltip(@attribute, tooltip_opt) if tooltip_opt
 
-		inner = block_given? ? yield : ""
-		@options[:before_label] ? output.prepend(inner) : output << inner
+		output << yield if block_given?
 
-		output << call_after_method(false)
+		@options[:label_last] ? output << field_label : output.prepend(field_label)
 	end
 
 	def no_js_error_field
-		if @sub_error.present?
+		if @validate && @sub_error.present?
 			@template.content_tag(:noscript) do
 				@template.content_tag(:div, @sub_error, {id: "#{@attribute}-error", class: "field-errors"})
 			end
+		else
+			""
 		end
 	end
 
-	def call_after_method(if_validate_is)
-		@after_method.nil? || if_validate_is != @validate ? "" : @formBuilder.send(@after_method)
+	def call_after_method
+		@after_method.present? && @formBuilder.respond_to?(@after_method) ? @formBuilder.send(@after_method) : ""
 	end
 
 	def get_validation
@@ -88,19 +87,20 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		@field_args = @options.slice :"v-show"
 		@field_args[:"v-show"] = full_v_name(@options[:show_if]) if @options[:show_if]
 
-		if @validate
+		# if @validate
 			@field_args[:"slot-scope"] = "slot"
 
 			@err_args = {
 				field: @attribute,
 				:":v" => "$v",
 				:":submission-error" => "submissionError",
-				:class => field_class
+				:class => field_class,
+				:":validate" => @validate
 			}
 			@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
-		else
-			@field_args[:class] = field_class
-		end
+		# else
+		# 	@field_args[:class] = field_class
+		# end
 	end
 
 	def do_setup
@@ -133,11 +133,11 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		set_external(:"aria-describedby", "#{desc}-tooltip-content", false) if desc.is_a? Symbol
 
 		if @validate
-			set_external(:":aria-invalid", "slot.vField.$invalid && slot.vField.$dirty")
+			set_external(:":aria-invalid", "slot.scope.ariaInvalid")
 			sub_error = @template.flash[:submission_error]
 			set_external(:"aria-invalid", @sub_error.present?)
 
-			set_external(:":aria-required", "slot.vField.blank !== undefined")
+			set_external(:":aria-required", "slot.scope.ariaRequired")
 			set_external(:"aria-required", @required)
 			add_to_class(@external_options, "#{@attribute}-error", :"aria-describedby", true)
 		end
@@ -148,7 +148,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	def add_v_model
 		set_external(:"v-model", full_v_name)
 		set_external(:ref, @attribute)
-		set_external(:@blur, "slot.vField.$touch") if @validate
+		set_external(:@blur, "slot.scope.onBlur")
+		set_external(:@focus, "slot.scope.onFocus")
 	end
 
 	def add_on(key, addition, add_to_front=false)

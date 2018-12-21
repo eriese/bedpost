@@ -3,6 +3,6 @@ ActionView::Helpers::Tags::Label.class_eval do
 	private def render_component(builder)
 		content = builder.translation
 		content = I18n.t("helpers.required", {content: content}) if (@options[:required])
-		content
+		content.html_safe
 	end
 end

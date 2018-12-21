@@ -161,56 +161,9 @@ form {
 }
 
 form .tooltip {
-	position: relative;
-
-	.tooltip-icon {
-		position: absolute;
-		top: -2px;
-		right: 10px;
-		height: 34px;
-		width: 34px;
-		text-align: center;
-		padding: 5px;
-		box-sizing: border-box;
-
-		.inner {
-			background-color: $input-background-color;
-			color: $color-green-light;
-			border: 2px solid $color-green-light;
-			border-radius: 50%;
-			width: 100%;
-			height: 100%;
-			box-sizing: border-box;
-			line-height: 1;
-			font-weight: bold;
-			font-size: 18px;
-		}
-
-		.tooltip-content {
-			display: none;
-		}
-
-		&:hover .inner, .inner:focus {
-			background-color: $color-green-light;
-			color: $input-background-color;
-		}
-
-		&:hover, .inner:focus + {
-			.tooltip-content {
-				display: block;
-				position: absolute;
-				right: 5px;
-				margin-top: 1px;
-				background-color: $color-green-dark;
-				z-index: 1;
-				color: $color-off-white;
-				border: 2px solid $color-off-white;
-				padding: 10px;
-				min-width: 200px;
-				line-height: 1.2;
-			}
-		}
-	}
+	color: $color-green-dark;
+	font-size: 14px;
+	line-height: 1.25;
+	margin: 3px auto;
 }
-
 

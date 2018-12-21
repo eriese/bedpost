@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<slot :vField="vField"></slot>
+		<slot :scope="{onBlur, onFocus, vField, ariaRequired, ariaInvalid, focused}"></slot>
 		<div :id="field + '-error'" class="field-errors" aria-live="polite" aria-atomic="true" v-if="errorMsg">
 			<div class="aria-only" v-html="ariaLabel"></div>
 			<div v-html="errorMsg"></div>
@@ -31,23 +31,32 @@
 	export default {
 		name: "field_errors",
 		data: function() {
-			return {}
+			return {
+				focused: false
+			}
 		},
 		props: {
 			v: Object,
 			submissionError: Object,
 			field: String,
-			modelName: String
+			modelName: String,
+			validate: Boolean
 		},
 		computed: {
 			vField: function() {
-				return getFieldFrom(this.v.formData, this)
+				return this.validate ? getFieldFrom(this.v.formData, this) : null
 			},
 			ariaLabel: function() {
-				return I18n.t(this.$attrs["aria-label"] || "helpers.aria.invalid")
+				return this.validate ? I18n.t(this.$attrs["aria-label"] || "helpers.aria.invalid") : null
+			},
+			ariaInvalid: function() {
+				return this.vField && this.vField.$invalid && this.vField.$dirty
+			},
+			ariaRequired: function() {
+				return this.vField && this.vField.blank !== undefined;
 			},
 			errorMsg: function() {
-				if (!this.vField || !this.vField.$dirty || !this.vField.$anyError) {
+				if (!this.validate || !this.vField || !this.vField.$dirty || !this.vField.$anyError) {
 					return "";
 				}
 
@@ -95,5 +104,16 @@
 				return ""
 			}
 		},
+		methods: {
+			onBlur() {
+				this.focused = false;
+				if (this.validate) {
+					this.vField.$touch();
+				}
+			},
+			onFocus() {
+				this.focused = true;
+			}
+		}
 	}
 </script>

@@ -117,7 +117,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 				@builder.send(:add_ARIA)
 
-				expect(get_invalid(true)).to eq "slot.vField.$invalid && slot.vField.$dirty"
+				expect(get_invalid(true)).to eq "slot.scope.ariaInvalid"
 			end
 
 			it 'adds a fallback invalid attribute based off of the flash submission errors' do
@@ -161,7 +161,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 				@builder.send(:add_ARIA)
 
-				expect(get_required(true)).to eq "slot.vField.blank !== undefined"
+				expect(get_required(true)).to eq "slot.scope.ariaRequired"
 			end
 
 			it 'adds a fallback required attribute based off of the validators on the attribute' do
@@ -203,12 +203,22 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 		it 'sets the blur option if the field validates' do
 			builder = stub_builder options: {validate: true}
-			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "slot.vField.$touch"
+			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "slot.scope.onBlur"
 		end
 
-		it 'does not set the blur option if the field does not validate' do
+		it 'sets the blur option if the field does not validate' do
 			builder = stub_builder
-			expect(builder.instance_variable_get(:@external_options)[:@blue]).to be nil
+			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "slot.scope.onBlur"
+		end
+
+		it 'sets the focus option if the field validates' do
+			builder = stub_builder options: {validate: true}
+			expect(builder.instance_variable_get(:@external_options)[:@focus]).to eq "slot.scope.onFocus"
+		end
+
+		it 'sets the focus option if the field does not validate' do
+			builder = stub_builder
+			expect(builder.instance_variable_get(:@external_options)[:@focus]).to eq "slot.scope.onFocus"
 		end
 	end
 
@@ -307,22 +317,19 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			expect(builder).to have_received(:process_options).twice
 		end
 
-		context 'field_class' do
-			it 'sets the field class on the @field_args if the field does not validate' do
-				builder = stub_builder
-				expect(builder.instance_variable_get(:@field_args)[:class]).to eq "field"
-			end
 
-			it 'sets the field class based on the field_class option' do
+
+		context 'field_class' do
+			it 'sets the field class on the @err_args based on the field_class option' do
 				cls = "fieldy"
 				builder = stub_builder options: {field_class: cls}
 
-				result_class = builder.instance_variable_get(:@field_args)[:class]
+				result_class = builder.instance_variable_get(:@err_args)[:class]
 				expect(result_class).to include "field"
 				expect(result_class).to include cls
 			end
 
-			it 'sets the field class on the the @err_args if the field does validate' do
+			it 'always adds "field" to the field class on the the @err_args' do
 				builder = stub_builder options: {validate: true}
 				expect(builder.instance_variable_get(:@err_args)[:class]).to eq "field"
 			end
@@ -442,13 +449,28 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			expect(result).to end_with(additional)
 		end
 
-		it 'adds the given block at the beginning if the before_label option is true' do
-			builder = stub_builder options: {before_label: true}
+		it 'adds the label at the end if the label_last option is true' do
+			builder = stub_builder options: {label_last: true}
 
-			additional = "additional"
-			result = builder.send(:field_inner) {additional}
+			result = builder.send(:field_inner) {"additional"}
 
-			expect(result).to start_with(additional)
+			expect(result).to end_with("</label>")
+			expect(result).to_not start_with("<label")
+		end
+
+		it 'uses the order label, tooltip, input by default' do
+			builder = stub_builder options: {tooltip: true}
+
+			result = builder.send(:field_inner) {"additional"}
+			expect(result).to match(/<label.+tooltip.+additional/)
+		end
+
+		it 'uses the order tooltip, input, label if the label_last option is true' do
+			builder = stub_builder options: {label_last: true, tooltip: true}
+
+			result = builder.send(:field_inner) {"additional"}
+
+			expect(result).to match(/.+tooltip.+additional.+label>/)
 		end
 	end
 

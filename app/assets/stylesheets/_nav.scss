@@ -37,46 +37,6 @@ nav {
 		}
 	}
 
-	&.open .menu {
-		width: $nav-width;
-		display: block;
-
-		@keyframes slidein {
-			0% {
-				display: none;
-				width: 0px;
-			}
-			1% {
-				display: block;
-			}
-			100% {
-				width: $nav-width;
-			}
-		}
-		animation: slidein 0.3s ease-in;
-	}
-
-	&.closed .menu {
-		@keyframes slideout {
-			0% {
-				display: block;
-				width: $nav-width;
-			}
-			99% {
-				display: block;
-			}
-			100% {
-				display: none;
-				width: 0px;
-			}
-		}
-
-		animation: slideout 0.3s ease-in;
-		animation-fill-mode: both;
-		display: none;
-		width: 0px;
-	}
-
 	.menu {
 		overflow: hidden;
 		position: absolute;
@@ -130,9 +90,11 @@ nav {
 			padding: 15px 5px 15px 15px;
 		}
 
-		a:hover, a:focus{
-			// font-size: 30px;
-			background-color: rgba($color-purple-light, 0.5);
+		a, form>input[type=submit].not-button {
+			&:hover, &:focus {
+				background-color: rgba($color-purple-light, 0.5);
+				color: $color-off-white;
+			}
 		}
 	}
 }

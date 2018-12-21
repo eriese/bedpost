@@ -78,14 +78,12 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def tooltip(attribute, key=true, html_options={})
-		t_key = key == true ? attribute : key;
-		content = ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
-		add_to_class(html_options, "tooltip")
-		@template.content_tag :div, html_options do
-			@template.content_tag(:div, {class: "tooltip-icon"}) do
-				@template.content_tag(:button, "?", {class: "inner not-button", type: "button", role: "tooltip"}) +
-				@template.content_tag(:div, content, {class: "tooltip-content", id: "#{attribute}-tooltip-content"})
-			end
+		opts = html_options.merge({id: "#{attribute}-tooltip-content", role: "tooltip", :"v-show" => "slot.scope.focused"})
+		add_to_class(opts, "tooltip")
+
+		@template.content_tag(:aside, opts) do
+			t_key = key == true ? attribute : key;
+			ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
 		end
 	end
 
