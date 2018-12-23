@@ -1,12 +1,6 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
 
-  # GET /partners
-  # GET /partners.json
-  def index
-    @partners = Profile.all
-  end
-
   # GET /partners/1
   # GET /partners/1.json
   def show
@@ -19,23 +13,23 @@ class ProfilesController < ApplicationController
 
   # GET /partners/1/edit
   def edit
-    gon_client_validators(@profile)
-    gon_toggle({internal_name: @profile.has_internal?})
+    if @partnership.present? && @profile.is_a?(UserProfile)
+      redirect_to partners_path(@partnership)
+    else
+      gon_client_validators(@profile)
+      gon_toggle({internal_name: @profile.has_internal?})
+    end
   end
 
   # POST /partners
   # POST /partners.json
   def create
-    @profile = Profile.new(profile_params)
-
-    respond_to do |format|
-      if @profile.save
-        format.html { redirect_to @profile, notice: 'Profile was successfully created.' }
-        format.json { render :show, status: :created, location: @profile }
-      else
-        format.html { render :new }
-        format.json { render json: @profile.errors, status: :unprocessable_entity }
-      end
+    @profile = Profile.new(req_params)
+    if @profile.save
+      redirect_to new_partner_path(partner_id: @profile.id)
+    else
+      flash[:profile_attempt] = req_params
+      respond_with_submission_error(@profile.errors, new_profile_path)
     end
   end
 
@@ -67,12 +61,13 @@ class ProfilesController < ApplicationController
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
-      @profile = Profile.find(params[:id])
+      @partnership = current_user.partnerships.find(params[:partner_id])
+      @profile = Profile.find(@partnership.partner_id)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      [:internal_name, :external_name, :anus_name, :pronoun]
+      [:internal_name, :external_name, :anus_name, :pronoun, :name]
     end
 
     def param_name

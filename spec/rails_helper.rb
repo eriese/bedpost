@@ -54,6 +54,6 @@ RSpec.configure do |config|
 
   #clear the dummy user after all the tests are run
   config.after :suite do
-    clear_dummy
+    UserProfileHelpers.clear_all_dummies
   end
 end

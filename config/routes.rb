@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  resources :profiles, as: "partners"
+  scope "/partners" do
+    resource :profile, only: [:new, :create]
+  end
+
+  resources :partners, controller: "partnerships" do
+    resource :profile, except: [:index, :new, :create]
+  end
   resource :user_profile, except: [:show, :new]
   get 'signup', to: 'user_profiles#new'
 

@@ -4,7 +4,7 @@ FactoryBot.define do
     anus_name { "asshole" }
     external_name { "clit" }
     internal_name { "pussy" }
-    association :pronoun, strategy: :build_stubbed
+    pronoun {UserProfileHelpers.dummy_pronoun}
   end
 
   factory :profile2, class: Profile, aliases: [:no_internal] do
@@ -12,6 +12,6 @@ FactoryBot.define do
     anus_name { "butt" }
     external_name { "dick" }
     internal_name { nil }
-    association :pronoun, strategy: :build_stubbed
+    pronoun {UserProfileHelpers.dummy_pronoun}
   end
 end

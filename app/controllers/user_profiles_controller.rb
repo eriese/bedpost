@@ -23,7 +23,7 @@ class UserProfilesController < ProfilesController
 			params.require(:user_profile).permit(:name, :email, :password)
 		end
 		def profile_params
-			super + [:name, :email, :password, :uid]
+			super + [:email, :password, :uid]
 		end
 		def param_name
 			:user_profile

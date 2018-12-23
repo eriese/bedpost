@@ -12,6 +12,7 @@ class UserProfile < Profile
 
   has_secure_password
   has_many :user_tokens
+  embeds_many :partnerships
 
   validates_uniqueness_of :uid, message: "That partnering ID is unavailable. Please try a different one.", case_sensitive: false
   validates_uniqueness_of :email, case_sensitive: false

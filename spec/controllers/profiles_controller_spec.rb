@@ -28,114 +28,137 @@ RSpec.describe ProfilesController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # Profile. As you add validations to Profile, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  # let(:valid_attributes) {
+  #   skip("Add a hash of attributes valid for your model")
+  # }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  # let(:invalid_attributes) {
+  #   skip("Add a hash of attributes invalid for your model")
+  # }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # ProfilesController. Be sure to keep this updated too.
-  let(:valid_session) { dummy_user_session }
-
-  describe "GET #index" do
-    it "returns a success response" do
-      Profile.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(response).to be_successful
-    end
+  after :each do
+    @prof.destroy unless @prof.nil?
+    @partnership.destroy unless @partnership.nil?
   end
 
   describe "GET #show" do
-    it "returns a success response" do
-      profile = Profile.create! valid_attributes
-      get :show, params: {id: profile.to_param}, session: valid_session
+    it "shows the profile of the partner in the partnership" do
+      @prof = create(:profile)
+      @partnership = dummy_user.partnerships.create(partner: @prof)
+
+      get :show, params: {partner_id: @partnership.to_param}, session: dummy_user_session
       expect(response).to be_successful
+      expect(assigns(:profile)).to eq @prof
     end
   end
 
   describe "GET #new" do
     it "returns a success response" do
-      get :new, params: {}, session: valid_session
+      get :new, params: {}, session: dummy_user_session
       expect(response).to be_successful
     end
   end
 
   describe "GET #edit" do
-    it "returns a success response" do
-      profile = Profile.create! valid_attributes
-      get :edit, params: {id: profile.to_param}, session: valid_session
-      expect(response).to be_successful
+    context "the user made a dummy profile for their partner" do
+      it "returns the edit page for that dummy partner" do
+        @prof = create(:profile)
+        @partnership = dummy_user.partnerships.create(partner: @prof)
+        get :edit, params: {partner_id: @partnership.to_param}, session: dummy_user_session
+        expect(response).to be_successful
+        expect(assigns(:profile)).to eq @prof
+      end
+    end
+
+    context "the user is partnered with another user on the platform" do
+      it "redirects the user to the partnership page" do
+        @prof = create(:user_profile)
+        @partnership = dummy_user.partnerships.create(partner: @prof)
+        get :edit, params: {partner_id: @partnership.to_param}, session: dummy_user_session
+
+        expect(response).to redirect_to partners_path(@partnership)
+      end
     end
   end
 
   describe "POST #create" do
     context "with valid params" do
+      before :each do
+        @prof = nil
+      end
+
+      def get_valid_params
+        {profile: attributes_for(:profile)}
+      end
+
+      def get_new_prof(params)
+        Profile.last
+      end
+
       it "creates a new Profile" do
+        session = dummy_user_session
         expect {
-          post :create, params: {profile: valid_attributes}, session: valid_session
+          post :create, params: get_valid_params, session: session
         }.to change(Profile, :count).by(1)
+        @prof = Profile.last
       end
 
-      it "redirects to the created profile" do
-        post :create, params: {profile: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Profile.last)
-      end
-    end
-
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {profile: invalid_attributes}, session: valid_session
-        expect(response).to be_successful
-      end
-    end
-  end
-
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested profile" do
-        profile = Profile.create! valid_attributes
-        put :update, params: {id: profile.to_param, profile: new_attributes}, session: valid_session
-        profile.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the profile" do
-        profile = Profile.create! valid_attributes
-        put :update, params: {id: profile.to_param, profile: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(profile)
+      it "redirects to the new partnership page with the new profile as the partner" do
+        post :create, params: get_valid_params, session: dummy_user_session
+        @prof = Profile.last
+        expect(response).to redirect_to new_partner_path(partner_id: @prof.id)
       end
     end
 
     context "with invalid params" do
-      it "returns a success response (i.e. to display the 'edit' template)" do
-        profile = Profile.create! valid_attributes
-        put :update, params: {id: profile.to_param, profile: invalid_attributes}, session: valid_session
-        expect(response).to be_successful
+      it "redirects to the new partner profile page to try again" do
+        post :create, params: {profile: {name: "name"}}, session: dummy_user_session
+        expect(response).to redirect_to new_profile_path
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested profile" do
-      profile = Profile.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: profile.to_param}, session: valid_session
-      }.to change(Profile, :count).by(-1)
-    end
+  # describe "PUT #update" do
+  #   context "with valid params" do
+  #     let(:new_attributes) {
+  #       skip("Add a hash of attributes valid for your model")
+  #     }
 
-    it "redirects to the profiles list" do
-      profile = Profile.create! valid_attributes
-      delete :destroy, params: {id: profile.to_param}, session: valid_session
-      expect(response).to redirect_to(profiles_url)
-    end
-  end
+  #     it "updates the requested profile" do
+  #       profile = Profile.create! valid_attributes
+  #       put :update, params: {id: profile.to_param, profile: new_attributes}, session: dummy_user_session
+  #       profile.reload
+  #       skip("Add assertions for updated state")
+  #     end
 
+  #     it "redirects to the profile" do
+  #       profile = Profile.create! valid_attributes
+  #       put :update, params: {id: profile.to_param, profile: valid_attributes}, session: dummy_user_session
+  #       expect(response).to redirect_to(profile)
+  #     end
+  #   end
+
+  #   context "with invalid params" do
+  #     it "returns a success response (i.e. to display the 'edit' template)" do
+  #       profile = Profile.create! valid_attributes
+  #       put :update, params: {id: profile.to_param, profile: invalid_attributes}, session: dummy_user_session
+  #       expect(response).to be_successful
+  #     end
+  #   end
+  # end
+
+  # describe "DELETE #destroy" do
+  #   it "destroys the requested profile" do
+  #     profile = Profile.create! valid_attributes
+  #     expect {
+  #       delete :destroy, params: {id: profile.to_param}, session: dummy_user_session
+  #     }.to change(Profile, :count).by(-1)
+  #   end
+
+  #   it "redirects to the profiles list" do
+  #     profile = Profile.create! valid_attributes
+  #     delete :destroy, params: {id: profile.to_param}, session: dummy_user_session
+  #     expect(response).to redirect_to(profiles_url)
+  #   end
+  # end
 end

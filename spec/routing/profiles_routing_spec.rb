@@ -2,37 +2,38 @@ require "rails_helper"
 
 RSpec.describe ProfilesController, type: :routing do
   describe "routing" do
-    it "routes to #index" do
-      expect(:get => "/profiles").to route_to("profiles#index")
-    end
+    context "it is a singular resource nested under 'partners'" do
+      it "does not route to #index" do
+        expect(:get => "partners/1/profile").to_not route_to("profiles#index")
+      end
 
-    it "routes to #new" do
-      expect(:get => "/profiles/new").to route_to("profiles#new")
-    end
+      it "routes to #new" do
+        expect(:get => "partners/profile/new").to route_to("profiles#new")
+      end
 
-    it "routes to #show" do
-      expect(:get => "/profiles/1").to route_to("profiles#show", :id => "1")
-    end
+      it "routes to #create" do
+        expect(:post => "partners/profile").to route_to("profiles#create")
+      end
 
-    it "routes to #edit" do
-      expect(:get => "/profiles/1/edit").to route_to("profiles#edit", :id => "1")
-    end
+      it "routes to #show" do
+        expect(:get => "partners/1/profile").to route_to("profiles#show", :partner_id => "1")
+      end
 
+      it "routes to #edit" do
+        expect(:get => "partners/1/profile/edit").to route_to("profiles#edit", :partner_id => "1")
+      end
 
-    it "routes to #create" do
-      expect(:post => "/profiles").to route_to("profiles#create")
-    end
+      it "routes to #update via PUT" do
+        expect(:put => "partners/1/profile").to route_to("profiles#update", :partner_id => "1")
+      end
 
-    it "routes to #update via PUT" do
-      expect(:put => "/profiles/1").to route_to("profiles#update", :id => "1")
-    end
+      it "routes to #update via PATCH" do
+        expect(:patch => "partners/1/profile").to route_to("profiles#update", :partner_id => "1")
+      end
 
-    it "routes to #update via PATCH" do
-      expect(:patch => "/profiles/1").to route_to("profiles#update", :id => "1")
-    end
-
-    it "routes to #destroy" do
-      expect(:delete => "/profiles/1").to route_to("profiles#destroy", :id => "1")
+      it "routes to #destroy" do
+        expect(:delete => "partners/1/profile").to route_to("profiles#destroy", :partner_id => "1")
+      end
     end
   end
 end
