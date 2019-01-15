@@ -56,7 +56,8 @@
 				return this.vField && this.vField.blank !== undefined;
 			},
 			errorMsg: function() {
-				if (!this.validate || !this.vField || !this.vField.$dirty || !this.vField.$anyError) {
+				if (!this.validate || !this.vField ||
+					((!this.vField.$anyError || !this.vField.$dirty) && this.vField.submitted !== false)) {
 					return "";
 				}
 

@@ -8,14 +8,14 @@ class UserProfile < Profile
   field :password_digest, type: String
   field :uid, type: String, default: ->{generate_uid}
   field :min_window, type: Integer, default: 6
-  index({email: 1})
+  index({email: 1}, {unique: true})
+  index({uid: 1}, {unique: true})
 
   has_secure_password
   has_many :user_tokens
   embeds_many :partnerships
 
-  validates_uniqueness_of :uid, message: "That partnering ID is unavailable. Please try a different one.", case_sensitive: false
-  validates_uniqueness_of :email, case_sensitive: false
+  validates_uniqueness_of :uid, :email, case_sensitive: false
   validates_presence_of :email, :password_digest, :uid
   validates_presence_of :pronoun, :anus_name, :external_name, on: :update
   validates :password, length: {minimum: 7}, confirmation: {case_sensitive: true}, allow_nil: true

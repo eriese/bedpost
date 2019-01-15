@@ -28,13 +28,6 @@ RSpec.describe ProfilesController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # Profile. As you add validations to Profile, be sure to
   # adjust the attributes here as well.
-  # let(:valid_attributes) {
-  #   skip("Add a hash of attributes valid for your model")
-  # }
-
-  # let(:invalid_attributes) {
-  #   skip("Add a hash of attributes invalid for your model")
-  # }
 
   after :each do
     @prof.destroy unless @prof.nil?
@@ -106,7 +99,7 @@ RSpec.describe ProfilesController, type: :controller do
       it "redirects to the new partnership page with the new profile as the partner" do
         post :create, params: get_valid_params, session: dummy_user_session
         @prof = Profile.last
-        expect(response).to redirect_to new_partner_path(partner_id: @prof.id)
+        expect(response).to redirect_to new_partner_path(p_id: @prof.id)
       end
     end
 

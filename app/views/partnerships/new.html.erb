@@ -1,0 +1,13 @@
+<%= vuelidate_form_with model: @partnership, url: partners_path, html: {class: "centered"} do |f| %>
+	<% if @partnership.partner_id.present? %>
+		<%= t(".partner", {name: @partnership.partner.name}) %>
+		<%# f.toggle_tag  %>
+	<% else %>
+		<%= f.text_field :uid, {tooltip: true, validate: true}%>
+	<% end %>
+	<%= f.text_field :nickname, tooltip: true %>
+	<% [:familiarity, :exclusivity, :communication].each do |field| %>
+		<%= f.select field, options_for_select(1..10), {}, {tooltip: true} %>
+	<% end %>
+	<%= f.submit %>
+<% end %>

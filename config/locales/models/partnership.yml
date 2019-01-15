@@ -1,0 +1,10 @@
+en:
+  mongoid:
+    errors:
+      models:
+        partnership:
+          attributes:
+            uid:
+              bad_key: That UID doesn't seem to connect to anyone...
+              self_key: You can't have yourself as a partner
+              taken: You already have a partnership with this person

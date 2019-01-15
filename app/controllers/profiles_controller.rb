@@ -26,10 +26,10 @@ class ProfilesController < ApplicationController
   def create
     @profile = Profile.new(req_params)
     if @profile.save
-      redirect_to new_partner_path(partner_id: @profile.id)
+      redirect_to new_partner_path(p_id: @profile.id)
     else
       flash[:profile_attempt] = req_params
-      respond_with_submission_error(@profile.errors, new_profile_path)
+      respond_with_submission_error(@profile.errors.messages, new_profile_path)
     end
   end
 

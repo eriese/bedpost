@@ -55,6 +55,7 @@ class ApplicationController < ActionController::Base
 			gon.form_obj = obj
 			gon.validators = validators
 		end
+		flash[:submission_error] ||= obj.errors.messages.stringify_keys unless obj.valid?
 		gon.submissionError = flash[:submission_error]
 	end
 

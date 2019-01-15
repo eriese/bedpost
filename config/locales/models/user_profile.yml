@@ -16,6 +16,8 @@ en:
               taken: an account with that email address already exists
             external_name:
               blank: Please tell us what you call your external genitals.
+            uid:
+              taken: That partnering ID is unavailable. Please try a different one.
   helpers:
     label:
       user_profile:
