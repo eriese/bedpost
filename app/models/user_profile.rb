@@ -3,6 +3,7 @@ class UserProfile < Profile
   #to allow for serialization for jobs
   include GlobalID::Identification
   include DeAliasFields
+  include DirtyTrackingEmbedded
 
   field :email, type: String
   field :password_digest, type: String
@@ -13,6 +14,7 @@ class UserProfile < Profile
 
   has_secure_password
   has_many :user_tokens
+
   embeds_many :partnerships
 
   validates_uniqueness_of :uid, :email, case_sensitive: false
@@ -21,6 +23,8 @@ class UserProfile < Profile
   validates :password, length: {minimum: 7}, confirmation: {case_sensitive: true}, allow_nil: true
 
   after_create {SendWelcomeEmailJob.perform_later(self)}
+
+
 
   def email=(value)
   	super(value.downcase) unless value == nil
