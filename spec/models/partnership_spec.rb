@@ -7,13 +7,6 @@ RSpec.describe Partnership, type: :model do
 		@partner.destroy if @partner && @partner.persisted?
 	end
 
-	it 'is not counted until it is saved' do
-		@user = create(:user_profile)
-		ship = @user.partnerships.new
-
-		expect(@user.partnerships.length).to eq 0
-	end
-
 	describe '#partner' do
 		def create_ship(partner_alias)
 			@user = create(:user_profile)

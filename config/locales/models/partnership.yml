@@ -8,3 +8,6 @@ en:
               bad_key: That UID doesn't seem to connect to anyone...
               self_key: You can't have yourself as a partner
               taken: You already have a partnership with this person
+  partnerships:
+    new:
+      partner_html: Create a partnership with <b>%{name}</b>

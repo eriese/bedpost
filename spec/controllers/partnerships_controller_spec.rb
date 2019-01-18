@@ -55,39 +55,110 @@ RSpec.describe PartnershipsController, type: :controller do
 			profile.destroy
 		end
 
-		it 'adds the given partner user profile if there is a UID query parameter' do
-			profile = create(:user_profile)
-
-			get :new, params: {uid: profile.uid}, session: dummy_user_session
-			expect(assigns(:partnership).partner_id).to eq profile.id
-		ensure
-			profile.destroy
-		end
-
-		it 'gives a blank partnership if no uid is given' do
+		it 'redirects to the who page if no partner id is given' do
 			get :new, session: dummy_user_session
-			expect(assigns(:partnership).partner_id).to be_nil
+			expect(response).to redirect_to who_path
 		end
 
-		it 'puts UID errors on the page if the UID connects to nothing' do
-			get :new, params: {uid: "nonsense"}, session: dummy_user_session
-			expect(assigns(:partnership).partner_id).to be_nil
-			expect(assigns(:partnership).uid).to eq "nonsense"
+		it 'puts partner errors on the who page if the partner id connects to nothing' do
+			get :new, params: {p_id: "nonsense"}, session: dummy_user_session
+			expect(assigns(:partnership).partner_id).to eq "nonsense"
+			expect(assigns(:partnership).uid).to be nil
 
-			msg = I18n.t("mongoid.errors.models.partnership.attributes.uid.bad_key")
-			expect(flash[:submission_error]["uid"]).to include msg
-			expect(gon['submissionError']["uid"]).to include msg
+			msg = I18n.t("mongoid.errors.models.partnership.attributes.partner.blank", attribute: "Partner", default: [:"mongoid.errors.messages.blank", :"errors.messages.blank"])
+			expect(flash[:submission_error]["form_error"]).to include msg
 		end
 
 		it 'does not leave an un-saved partnership on the user' do
 			get :new, session: dummy_user_session
 			expect(controller.current_user.partnerships.length).to eq 0
-			get :new, session: dummy_user_session
-			expect(controller.current_user.partnerships.length).to eq 0
+			get :index, session: dummy_user_session
+			expect(assigns(:partnerships).length).to eq 0
+
 		end
 	end
 
 	describe 'POST #create' do
-		# context
+		context 'with a valid partnership' do
+			it 'saves the partnership to the user if the partnership has a partner_id' do
+				user = create(:user_profile)
+				partner = create(:profile)
+				post :create, session: {user_id: user.id}, params: {partnership: attributes_for(:partnership).merge({partner_id: partner.id})}
+
+				expect(user.reload.partnerships.length).to eq 1
+
+			ensure
+				user.destroy
+				partner.destroy
+			end
+
+			it 'saves the partnership to the user if the partnership has a uid' do
+				user = create(:user_profile)
+				partner = create(:user_profile)
+				post :create, session: {user_id: user.id}, params: {partnership: attributes_for(:partnership).merge({uid: partner.uid})}
+
+				expect(controller.current_user).to eq user
+				expect(controller.current_user.partnerships.length).to eq 1
+			ensure
+				user.destroy
+				partner.destroy
+			end
+
+			it 'redirects to the show partnership page for the new partnership' do
+				user = create(:user_profile)
+				partner = create(:user_profile)
+				post :create, session: {user_id: user.id}, params: {partnership: attributes_for(:partnership).merge({uid: partner.uid})}
+
+				expect(response).to redirect_to partner_path(user.reload.partnerships.last)
+
+			ensure
+				user.destroy
+				partner.destroy
+			end
+		end
+
+		context 'with invalid partnership' do
+			it 'reloads the page' do
+				user = create(:user_profile)
+				post :create, session: {user_id: user.id}, params: {partnership: attributes_for(:partnership)}
+
+				expect(response).to redirect_to new_partner_path
+			ensure
+				user.destroy
+			end
+
+			it 'does not leave an unsaved partnership on the user' do
+				user = create(:user_profile)
+				post :create, session: {user_id: user.id}, params: {partnership: attributes_for(:partnership)}
+
+				expect(controller.current_user.partnerships.length).to eq 0
+			ensure
+				user.destroy
+			end
+		end
+	end
+
+	describe 'POST #check_who' do
+		it 'does not leave an unsaved partnership on the user' do
+			user = create(:user_profile)
+			post :check_who, session: {user_id: user.id}, params: {partnership: {uid: "nonsense"}}
+
+			expect(controller.current_user.partnerships.length).to eq 0
+		ensure
+			user.destroy
+		end
+
+		context 'with a valid uid' do
+			it 'forwards to the create partnership page with the partner id of the given user' do
+				user = create(:user_profile)
+				partner = create(:user_profile)
+				post :check_who, session: {user_id: user.id}, params: {partnership: {uid: partner.uid}}
+
+				expect(response).to redirect_to new_partner_path(p_id: partner.id)
+			ensure
+				user.destroy
+				partner.destroy
+			end
+		end
 	end
 end

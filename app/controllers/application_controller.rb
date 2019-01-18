@@ -21,8 +21,9 @@ class ApplicationController < ActionController::Base
 	end
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
+		flash[:submission_error] = error;
 		respond_to do |format|
-			format.html {flash[:submission_error] = error; redirect_to redirect}
+			format.html {redirect_to redirect}
 			format.json {render json: error.deep_merge(adl_json), status: status}
 		end
 	end
@@ -32,7 +33,7 @@ class ApplicationController < ActionController::Base
 		gon.form_toggles.merge! (toggles)
 	end
 
-	def gon_client_validators(obj, opts = {}, skip = [])
+	def gon_client_validators(obj,opts = {}, skip = [], pre_validate: false)
 		# TODO consider deep copying if it seems like opts needs to be unedited
 		validators = opts
 		adder = validator_adder(obj, validators, skip)
@@ -55,7 +56,7 @@ class ApplicationController < ActionController::Base
 			gon.form_obj = obj
 			gon.validators = validators
 		end
-		flash[:submission_error] ||= obj.errors.messages.stringify_keys unless obj.valid?
+		flash[:submission_error] ||= obj.errors.messages.stringify_keys if obj.respond_to?(:valid?) && pre_validate && !obj.valid?
 		gon.submissionError = flash[:submission_error]
 	end
 

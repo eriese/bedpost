@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   scope "/partners" do
     resource :profile, only: [:new, :create]
+    get '/who', to: 'partnerships#who'
+    post '/who', to: 'partnerships#check_who'
   end
 
   resources :partners, controller: "partnerships" do

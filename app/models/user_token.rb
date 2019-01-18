@@ -6,8 +6,6 @@ class UserToken
 
   index({user_profile_id: 1, _id: 1}, {unique: true})
 
-
-
   def self.reset_token(user_id)
   	UserToken.new(user_profile_id: user_id, token_type: "reset")
   end
