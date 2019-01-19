@@ -8,9 +8,11 @@ let navComponent = {
 		}
 	},
 	mounted() {
+		this.$refs.menu.style.display = "block"
 		this.timeLine = new TimelineMax()
 		this.timeLine.to(this.$refs.menu, 0.3, {width: 0})
 		this.timeLine.set(this.$refs.menu, {display: "none", immediateRender: false});
+		this.timeLine.progress(1);
 	},
 	methods: {
 		openMenu() {

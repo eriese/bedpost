@@ -47,9 +47,11 @@ nav {
 		z-index: 1;
 		height: 100vh;
 		box-sizing: border-box;
+		display: none;
 
 		.no-js & {
 			position: static;
+			display: block;
 		}
 	}
 
