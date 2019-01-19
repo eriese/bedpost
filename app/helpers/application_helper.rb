@@ -1,8 +1,14 @@
 module ApplicationHelper
+	private
+	def self.url_helpers
+		Rails.application.routes.url_helpers
+	end
 
+	public
 	NAV_LINKS = {
-		"nav.dashboard" => Rails.application.routes.url_helpers.root_path,
-		"nav.user_profile_edit" => Rails.application.routes.url_helpers.edit_user_profile_path
+		"nav.dashboard" => url_helpers.root_path,
+		"nav.user_profile_edit" => url_helpers.edit_user_profile_path,
+		"nav.partners" => url_helpers.partners_path
 	}
 
 	def pronouns
@@ -21,4 +27,6 @@ module ApplicationHelper
 		options[:default] = new_default
 		I18n.t(new_key, options)
 	end
+
+
 end

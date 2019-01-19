@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 shared_examples_for 'an object that dirty-tracks its embedded relations' do |class_obj|
 
 	class_obj.embedded_relations.each do |name, rel|
@@ -19,5 +20,4 @@ shared_examples_for 'an object that dirty-tracks its embedded relations' do |cla
 			end
 		end
 	end
-
 end

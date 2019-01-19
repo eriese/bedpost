@@ -3,7 +3,6 @@ class UserProfile < Profile
   #to allow for serialization for jobs
   include GlobalID::Identification
   include DeAliasFields
-  include DirtyTrackingEmbedded
 
   field :email, type: String
   field :password_digest, type: String
