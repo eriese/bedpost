@@ -12,7 +12,7 @@ import Vuelidate from 'vuelidate';
 import navComponent from '../components/navComponent'
 import vuelidateFormComponent from '../components/vuelidateFormComponent';
 import VueResource from 'vue-resource';
-import {animIn} from './transitions';
+import {animIn, addTransitionEvents} from './transitions';
 
 Vue.use(TurbolinksAdapter);
 Vue.use(Vuelidate);
@@ -20,7 +20,6 @@ Vue.use(VueResource);
 Vue.component('nav-component', navComponent);
 Vue.component('vuelidate-form', vuelidateFormComponent);
 let app = null;
-let animLength = 0.2;
 document.addEventListener('turbolinks:load', () => {
 	// remove no-js specific styling
 	document.getElementById("vue-container").classList.remove("no-js")
@@ -29,3 +28,4 @@ document.addEventListener('turbolinks:load', () => {
 		mounted: animIn
 	})
 });
+addTransitionEvents();

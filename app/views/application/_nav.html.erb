@@ -1,6 +1,6 @@
 <% if current_user %>
 <nav-component inline-template>
-<nav data-turbolinks-permanent id="nav" :class="{open: isOpen, closed: !isOpen}" role="navigation">
+<nav id="nav" :class="{open: isOpen, closed: !isOpen}" role="navigation">
   <button class="burger not-button" @click.stop="toggleMenu" type="button" :aria-expanded="isOpen ? 'true' : 'false'" aria-controls="nav-list">
     <div class="aria-only"><%= t("helpers.navigation_menu") %></div>
     <div class="burger-line"></div>

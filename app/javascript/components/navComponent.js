@@ -28,7 +28,7 @@ let navComponent = {
 		documentClick(e) {
 			let menu = this.$refs.menu;
 			let target = e.target;
-			if (menu !== target & !menu.contains(target)) {
+			if (target.tagName == "A" || (menu !== target & !menu.contains(target))) {
 				this.closeMenu()
 			}
 		},

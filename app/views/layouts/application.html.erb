@@ -10,7 +10,6 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
     <%= javascript_pack_tag 'utils' %>
-    <%= javascript_pack_tag 'transitions' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application' %>
   </head>
@@ -20,7 +19,7 @@
     <div id="vue-container" class="no-js">
       <%= render "nav", nav_links: ApplicationHelper::NAV_LINKS %>
       <header class=<%=current_user ? "small" : ""%>>
-        <%= link_to root_path, id: "logo", "data-out-animation" => 'new TweenMax(document.getElementById(props.outId), props.animLength, {width: 0})' do %>
+        <%= link_to root_path, id: "logo" do %>
           Bed<span>Post</span>
         <% end %>
       </header>

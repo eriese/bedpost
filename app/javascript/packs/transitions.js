@@ -22,10 +22,11 @@ const animIn = function() {
 const animOut = function(visitUrl) {
 	let outContainer = document.getElementById(props.outId)
 
-	props.outAnimation = props.outAnimation || new TweenMax(outContainer, props.animLength, props.animOutProps)
+	props.outAnimation = props.outAnimation || new TweenMax(outContainer, props.animLength, props.animOutProps);
 	if (typeof props.outAnimation == "function") {
 		props.outAnimation = props.outAnimation();
 	}
+
 	props.outAnimation.eventCallback("onComplete", Turbolinks.visit, [visitUrl])
 
 	props.outAnimation.play();
@@ -44,22 +45,24 @@ const beforeUnload = function(e) {
 	animOut(e.data.url);
 }
 
-document.addEventListener('turbolinks:before-visit', beforeUnload)
+const addTransitionEvents = function() {
+	document.addEventListener('turbolinks:before-visit', beforeUnload)
 
-document.addEventListener('turbolinks:click', (e) => {
-	let dataset = e.target.dataset
-	for(let propName in props) {
-		let given = dataset[propName]
-		let granted = prop_defaults[propName]
-		if (given) {
-			if (propName.indexOf("Animation") > 0) {
-				granted = function() {return eval(given)}
-			} else {
-				granted = JSON.parse(given);
+	document.addEventListener('turbolinks:click', (e) => {
+		let dataset = e.target.dataset
+		for(let propName in props) {
+			let given = dataset[propName]
+			let granted = prop_defaults[propName]
+			if (given) {
+				if (propName.indexOf("Animation") > 0) {
+					granted = function() {return eval(given)}
+				} else {
+					granted = JSON.parse(given);
+				}
 			}
+			props[propName] = granted;
 		}
-		props[propName] = granted;
-	}
-})
+	})
+}
 
-export {animIn};
+export {animIn, addTransitionEvents};
