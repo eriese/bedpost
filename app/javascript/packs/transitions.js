@@ -1,36 +1,95 @@
-import {TimelineMax, TweenMax} from "gsap/TweenMax"
+import {TimelineMax, TweenMax} from "gsap/TweenMax";
+
+const slide = function(animatingOut, toLeft) {
+	let dir = animatingOut ? "out" : "in";
+	let container = document.getElementById(props[`${dir}Id`]);
+	let tl = new TimelineMax();
+	tl.set(container.parentElement, {position: "relative", overflow: "hidden", height: container.parentElement.offsetHeight})
+	tl.set(container, {position: "absolute", width: container.offsetWidth, top: container.offsetTop, opacity: 1});
+	let animProps = {};
+	if (toLeft) {
+		animProps[animatingOut && toLeft || (!animatingOut && !toLeft) ? "right" : "left"] = "100%";
+	} else {
+		animProps[animatingOut ? "left" : "right"] = "100%";
+	}
+	tl[animatingOut ? "to" : "from"](container, props.animLength, animProps);
+	tl.set([container, container.parentElement], {clearProps: 'all'});
+	if (!animatingOut) {
+		tl.set(container, {opacity: 1});
+	}
+	return tl;
+};
+
+const slideLeft = function(animatingOut) {
+	return slide(animatingOut, true);
+}
+
+const slideRight = function(animatingOut) {
+	return slide(animatingOut, false);
+}
+
+const fade = function(animatingOut) {
+	let dir = animatingOut ? "out" : "in";
+	let container = document.getElementById(props[`${dir}Id`]);
+	let animProps = animatingOut ? {opacity: 0} : {opacity: 1};
+	return new TimelineMax().to(container, props.animLength, animProps);
+};
+
+const animationFunctions = {
+	slideLeft,
+	slideRight,
+	fade
+};
 
 const prop_defaults = {
-	animLength: 0.2,
-	animInProps: {opacity: 1},
+	animLength: 0.3,
+	inProps: null,
 	inId: 'page-container',
-	animOutProps: {opacity: 0},
+	outProps: null,
 	outId: 'page-container',
 	inAnimation: null,
 	outAnimation: null,
-}
+	inAnimationType: null,
+	outAnimationType: null,
+	animationType: animationFunctions.fade
+};
 
 let props = Object.assign({}, prop_defaults);
 
+const getTween = function(animatingOut, onComplete, onCompleteParams) {
+	let dir = animatingOut ? "out" : "in";
+	let anim = props[`${dir}Animation`];
+	if (!anim) {
+		if (props[`${dir}Props`]) {
+			let container = document.getElementById(props[`${dir}Id`]);
+			anim = new TimelineMax().to(container, props.animLength, props[`${dir}Props`]);
+		} else if (props[`${dir}AnimationType`]) {
+			anim = props[`${dir}AnimationType`];
+		}
+	}
+
+	if (!anim) {
+		anim = props.animationType;
+	}
+
+	if (typeof anim == "function") {
+		anim = anim(animatingOut);
+	}
+
+	if (onComplete) {
+		anim.eventCallback("onComplete", onComplete, onCompleteParams)
+	}
+
+	anim.play()
+	props[`${dir}Animation`] = null;
+}
+
 const animIn = function() {
-	let inContainer = document.getElementById(props.inId)
-	props.inAnimation = props.inAnimation || new TimelineMax({paused: true}).to(inContainer, props.animLength, props.animInProps);
-	props.inAnimation.play();
-	props.inAnimation = null;
+	getTween(false);
 }
 
 const animOut = function(visitUrl) {
-	let outContainer = document.getElementById(props.outId)
-
-	props.outAnimation = props.outAnimation || new TweenMax(outContainer, props.animLength, props.animOutProps);
-	if (typeof props.outAnimation == "function") {
-		props.outAnimation = props.outAnimation();
-	}
-
-	props.outAnimation.eventCallback("onComplete", Turbolinks.visit, [visitUrl])
-
-	props.outAnimation.play();
-	props.outAnimation = null;
+	getTween(true, Turbolinks.visit, [visitUrl])
 }
 
 let no_visit = true;
@@ -54,7 +113,9 @@ const addTransitionEvents = function() {
 			let given = dataset[propName]
 			let granted = prop_defaults[propName]
 			if (given) {
-				if (propName.indexOf("Animation") > 0) {
+				if (propName.indexOf("Type") > 0) {
+					granted = animationFunctions[given];
+				} else if (propName.indexOf("Animation") > 0) {
 					granted = function() {return eval(given)}
 				} else {
 					granted = JSON.parse(given);
