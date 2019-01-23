@@ -12,7 +12,7 @@ import Vuelidate from 'vuelidate';
 import navComponent from '../components/navComponent'
 import vuelidateFormComponent from '../components/vuelidateFormComponent';
 import VueResource from 'vue-resource';
-import {animIn, addTransitionEvents} from './transitions';
+import {animIn, addTransitionEvents} from '../modules/transitions';
 
 Vue.use(TurbolinksAdapter);
 Vue.use(Vuelidate);

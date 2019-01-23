@@ -104,26 +104,28 @@ const beforeUnload = function(e) {
 	animOut(e.data.url);
 }
 
+const onTransitionTriggered = function(e) {
+	let dataset = e.target.dataset
+	for(let propName in props) {
+		let given = dataset[propName]
+		let granted = prop_defaults[propName]
+		if (given) {
+			if (propName.indexOf("Type") > 0) {
+				granted = animationFunctions[given];
+			} else if (propName.indexOf("Animation") > 0) {
+				granted = function() {return eval(given)}
+			} else {
+				granted = JSON.parse(given);
+			}
+		}
+		props[propName] = granted;
+	}
+}
+
 const addTransitionEvents = function() {
 	document.addEventListener('turbolinks:before-visit', beforeUnload)
 
-	document.addEventListener('turbolinks:click', (e) => {
-		let dataset = e.target.dataset
-		for(let propName in props) {
-			let given = dataset[propName]
-			let granted = prop_defaults[propName]
-			if (given) {
-				if (propName.indexOf("Type") > 0) {
-					granted = animationFunctions[given];
-				} else if (propName.indexOf("Animation") > 0) {
-					granted = function() {return eval(given)}
-				} else {
-					granted = JSON.parse(given);
-				}
-			}
-			props[propName] = granted;
-		}
-	})
+	document.addEventListener('turbolinks:click', onTransitionTriggered)
 }
 
-export {animIn, addTransitionEvents};
+export {animIn, addTransitionEvents, onTransitionTriggered};

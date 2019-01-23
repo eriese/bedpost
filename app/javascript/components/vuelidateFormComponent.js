@@ -2,6 +2,7 @@ import { required, email, minLength, maxLength, sameAs, helpers } from 'vuelidat
 import fieldErrors from "./fieldErrorsComponent.vue"
 import formErrors from "./formErrorsComponent.vue"
 import toggle from "./toggleComponent.vue"
+import {onTransitionTriggered} from "../modules/transitions"
 
 const submitted = (path) => {
 	let erroredVal = undefined;
@@ -115,6 +116,7 @@ export default {
 					}
 				}
 			} else {
+				onTransitionTriggered(e);
 				this.submissionError = {};
 			}
 		},
