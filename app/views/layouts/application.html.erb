@@ -12,6 +12,14 @@
     <%= javascript_pack_tag 'utils' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application' %>
+
+    <% if Rails.env.development? %>
+      <style>
+        .translation_missing {
+          background-color: lightcoral;
+        }
+      </style>
+    <% end %>
   </head>
 
   <body>

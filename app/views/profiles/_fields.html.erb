@@ -1,3 +1,7 @@
+<h2><%= t_action(".account_settings") %></h2>
+<%= f.text_field :name if show_name%>
+<%= yield %>
+
 <h2 class="with-desc"><%= t_action(".personal_prefs.title") %></h2>
 <p class="description"><%= t_action(".personal_prefs.desc") %></p>
 <%= f.select :pronoun, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true}%>

@@ -14,5 +14,8 @@ en:
   partnerships:
     new:
       partner_html: Create a partnership with <b>%{name}</b>
+    show:
+      partner_html: Partnership with <b>%{name} %{nickname}</b>
+      level_field_html: "%{field}: %{level}"
     index:
       new_partnership: Add a partner

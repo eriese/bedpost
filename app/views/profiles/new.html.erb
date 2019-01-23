@@ -1,5 +1,7 @@
-<h1>New Profile</h1>
+<div class="centered-container">
+	<h1><%= t(".title") %></h1>
 
-<%= render 'form', profile: @profile %>
+	<%= render 'form', profile: @profile, url: profile_path %>
 
-<%= link_to 'Back', profiles_path %>
+	<%= link_to t(".back"), who_path, "data-animation-type" => "slideRight"%>
+</div>

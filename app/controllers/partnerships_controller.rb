@@ -36,7 +36,7 @@ class PartnershipsController < ApplicationController
 
 	def who
 		@partnership = current_user.partnerships.new(flash[:who_attempt])
-		gon_client_validators(@partnership, pre_validate: true)
+		gon_client_validators(@partnership, {uid: [[:presence]]}, pre_validate: true)
 	end
 
 	def check_who

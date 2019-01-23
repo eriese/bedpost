@@ -78,7 +78,14 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def tooltip(attribute, key=true, html_options={})
-		opts = html_options.merge({id: "#{attribute}-tooltip-content", role: "tooltip", :"v-show" => "slot.scope.focused"})
+		show_always = html_options.delete :show_always
+		if show_always
+			opts = html_options
+			add_to_class(opts, "show-always")
+		else
+			opts = html_options.merge({role: "tooltip", :"v-show" => "slot.scope.focused"})
+		end
+		opts[:id] = "#{attribute}-tooltip-content"
 		add_to_class(opts, "tooltip")
 
 		@template.content_tag(:aside, opts) do

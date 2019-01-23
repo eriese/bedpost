@@ -1,4 +1,9 @@
-<%= vuelidate_form_with model: @partnership, url: who_path, html: {class: "centered"} do |f| %>
-	<%= f.text_field :uid, {tooltip: true}%>
-	<%= f.submit %>
-<% end %>
+<div class="centered-container">
+	<h2><%= t(".title") %></h2>
+	<%= vuelidate_form_with model: @partnership, url: who_path, html: {class: "centered single", "data-animation-type" => "slideLeft"} do |f| %>
+		<%= f.text_field :uid, {tooltip: {show_always: true}, required: true}%>
+		<%= f.submit %>
+	<% end %>
+	<h3><%= t(".or") %></h3>
+	<%= link_to t(".new_profile"), new_profile_path, "data-animation-type" => "slideLeft"%>
+</div>

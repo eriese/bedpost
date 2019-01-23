@@ -87,7 +87,7 @@ button.not-button {
 		text-align: left;
 		font-size: 39px;
 		float: left;
-		padding-top: 5px;
+		padding-top: 10px;
 
 		span {
 			font-size: 41px;
@@ -101,9 +101,15 @@ button.not-button {
 
 #page-container {
 	opacity: 0;
+	max-width: 1000px;
+	margin: 0px auto;
 
 	.no-js & {
 		opacity: 1;
 	}
+}
+
+.centered-container {
+	text-align: center;
 }
 

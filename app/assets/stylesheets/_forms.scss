@@ -116,6 +116,26 @@ form.centered {
 	}
 }
 
+form.single {
+	@extend form.big;
+
+	&.centered {
+		text-align: center;
+
+		input {
+			text-align: center;
+		}
+	}
+
+	label {
+		font-size: 20px;
+	}
+
+	.tooltip {
+		font-size: 18px;
+	}
+}
+
 form {
 	div.field-errors {
 		text-align: right;

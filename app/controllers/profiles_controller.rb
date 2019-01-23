@@ -9,6 +9,7 @@ class ProfilesController < ApplicationController
   # GET /partners/new
   def new
     @profile = Profile.new
+    gon_client_validators(@profile)
   end
 
   # GET /partners/1/edit
@@ -75,7 +76,7 @@ class ProfilesController < ApplicationController
     end
 
     def edit_path
-      edit_partner_path(@profile)
+      edit_partner_profile_path(@partnership, @profile)
     end
 
     def show_path

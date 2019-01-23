@@ -38,9 +38,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	def field_inner
 		output = ActiveSupport::SafeBuffer.new
 
-		tooltip_opt = @options[:tooltip]
-		output << @formBuilder.tooltip(@attribute, tooltip_opt) if tooltip_opt
-
+		output << field_tooltip
 		output << yield if block_given?
 
 		@options[:label_last] ? output << field_label : output.prepend(field_label)
@@ -121,6 +119,18 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 		opts_to_pass[:id] ||= "#{label_key}-label"
 		@formBuilder.label(label_key, opts_to_pass)
+	end
+
+	def field_tooltip
+		tooltip_opt = @options[:tooltip]
+		if tooltip_opt.is_a? Hash
+			key = tooltip_opt.delete(:key) || true
+			html_opts = tooltip_opt
+		else
+			key = tooltip_opt
+			html_opts = {}
+		end
+		@formBuilder.tooltip(@attribute, key, html_opts) if key
 	end
 
 	def add_ARIA

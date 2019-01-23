@@ -1,1 +1,4 @@
+<% @partnerships.each do |partner| %>
+	<div><%= link_to "#{partner.partner.name} #{partner.nickname}", partner_path(partner) %></div>
+<% end %>
 <%= link_to t(".new_partnership"), who_path %>

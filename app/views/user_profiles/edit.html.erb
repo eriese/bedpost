@@ -1,10 +1,7 @@
 <%= vuelidate_form_with model: @profile, html: {class: "centered"} do |f| %>
-	<h2><%= t(".account_settings") %></h2>
-	<% unless @profile.pronoun.nil? %>
-		<%= f.text_field :name %>
-    	<%= f.text_field :email %>
+	<%= render  "profiles/fields", f: f, profile: @profile, show_name: @profile.pronoun.present? do |p| %>
+		<%= f.text_field :email unless @profile.pronoun.nil? %>
+		<%= f.text_field :uid, {tooltip: true} %>
 	<% end %>
-	<%= f.text_field :uid, {tooltip: true} %>
-	<%= render  "profiles/fields", f: f, profile: @profile %>
 	<%= f.submit %>
 <% end %>

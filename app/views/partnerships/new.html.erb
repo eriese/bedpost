@@ -1,10 +1,12 @@
-
-<%= vuelidate_form_with model: @partnership, url: partners_path, html: {class: "centered"} do |f| %>
+<div class="centered-container">
 	<h2><%= t(".partner_html", {name: @partnership.partner.name}) %></h2>
-	<%= f.hidden_field :partner_id %>
-	<%= f.text_field :nickname, tooltip: true %>
-	<% [:familiarity, :exclusivity, :communication].each do |field| %>
-		<%= f.select field, options_for_select(1..10), {}, {tooltip: true} %>
+	<%= vuelidate_form_with model: @partnership, url: partners_path, html: {class: "centered"} do |f| %>
+		<%= f.hidden_field :partner_id %>
+		<%= f.text_field :nickname, tooltip: true %>
+		<% [:familiarity, :exclusivity, :communication].each do |field| %>
+			<%= f.select field, options_for_select(1..10), {}, {tooltip: true} %>
+		<% end %>
+		<%= f.submit %>
 	<% end %>
-	<%= f.submit %>
-<% end %>
+	<%= link_to t(".back"), who_path, "data-animation-type" => "slideRight" if @partnership.partner.is_a?(UserProfile) %>
+</div>
