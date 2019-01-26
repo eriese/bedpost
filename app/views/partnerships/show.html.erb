@@ -2,5 +2,5 @@
 <% [:familiarity, :exclusivity, :communication].each do |field| %>
 	<div><%= t(".level_field_html", {level: @partnership[field], field: field}) %></div>
 <% end %>
-<p><%= link_to t(".back"), partners_path %></p>
-<p><%# link_to t(".edit"), edit_partner_path(@partnership) %></p>
+<p><%= link_to t(".back"), partnerships_path %></p>
+<p><%= link_to t(".edit"), edit_partnership_path(@partnership) %></p>

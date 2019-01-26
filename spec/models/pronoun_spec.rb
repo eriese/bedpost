@@ -1,5 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Pronoun, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+	it 'has a working factory' do
+		build_stubbed(:pronoun)
+	end
 end

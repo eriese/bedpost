@@ -1,12 +1,17 @@
 Rails.application.routes.draw do
   scope "/partners" do
     resource :profile, only: [:new, :create]
-    get '/who', to: 'partnerships#who'
-    post '/who', to: 'partnerships#check_who'
+    # resource :who
+    get '/who', to: 'whos#new'
+    post '/who', to: 'whos#create'
+
   end
 
-  resources :partners, controller: "partnerships" do
+  resources :partners, controller: "partnerships", as: "partnerships" do
     resource :profile, except: [:index, :new, :create]
+    get '/who', to: 'whos#new'
+    put '/who', to: 'whos#update'
+    patch '/who', to: 'whos#update'
   end
   resource :user_profile, except: [:show, :new]
   get 'signup', to: 'user_profiles#new'

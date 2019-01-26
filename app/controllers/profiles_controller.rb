@@ -15,7 +15,7 @@ class ProfilesController < ApplicationController
   # GET /partners/1/edit
   def edit
     if @partnership.present? && @profile.is_a?(UserProfile)
-      redirect_to partners_path(@partnership)
+      redirect_to @partnership
     else
       gon_client_validators(@profile)
       gon_toggle({internal_name: @profile.has_internal?})
@@ -27,7 +27,7 @@ class ProfilesController < ApplicationController
   def create
     @profile = Profile.new(req_params)
     if @profile.save
-      redirect_to new_partner_path(p_id: @profile.id)
+      redirect_to new_partnership_path(p_id: @profile.id)
     else
       flash[:profile_attempt] = req_params
       respond_with_submission_error(@profile.errors.messages, new_profile_path)
@@ -49,7 +49,7 @@ class ProfilesController < ApplicationController
   def destroy
     @profile.destroy
     respond_to do |format|
-      format.html { redirect_to partners_url, notice: 'Profile was successfully destroyed.' }
+      format.html { redirect_to partnerships_url, notice: 'Profile was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -57,12 +57,12 @@ class ProfilesController < ApplicationController
   private
     def req_params
       ps = params.require(param_name).permit(profile_params)
-      ps[:internal_name] = nil if params[param_name][:show_internal] == "0" && @profile.internal_name.present?
+      ps[:internal_name] = nil if params[param_name][:show_internal] == "0" && @profile && @profile.internal_name.present?
       return ps
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
-      @partnership = current_user.partnerships.find(params[:partner_id])
+      @partnership = current_user.partnerships.find(params[:partnership_id])
       @profile = Profile.find(@partnership.partner_id)
     end
 
@@ -76,11 +76,10 @@ class ProfilesController < ApplicationController
     end
 
     def edit_path
-      edit_partner_profile_path(@partnership, @profile)
+      edit_partnership_profile_path(@partnership)
     end
 
     def show_path
-      @profile
+      @partnership
     end
-
 end

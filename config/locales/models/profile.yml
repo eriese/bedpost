@@ -1,4 +1,10 @@
 en:
+  profiles: &PROFILES_VIEWS
+    edit:
+      title: Edit partner profile
+      personal_prefs:
+        title: Partner Preferences
+        desc: Customize how BedPost talks about this person and their body
   helpers:
     label:
       profile:

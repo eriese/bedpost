@@ -1,14 +1,12 @@
 class PartnershipsController < ApplicationController
 	after_action :clear_unsaved, only: [:new, :check_who, :who]
+	before_action :set_partnership, only: [:show, :edit, :update]
 
 	def index
 		@partnerships = current_user.partnerships
 	end
 
 	def show
-		@partnership = current_user.partnerships.find(params[:id])
-	rescue Mongoid::Errors::DocumentNotFound
-		redirect_to partners_path
 	end
 
 	def new
@@ -27,26 +25,23 @@ class PartnershipsController < ApplicationController
 
 		partnership = current_user.partnerships.new(ship_params)
 		if partnership.save
-			redirect_to partner_path(partnership)
+			redirect_to partnership
 		else
 			clear_unsaved
-			respond_with_submission_error(partnership.errors.messages, new_partner_path)
+			respond_with_submission_error(partnership.errors.messages, new_partnership_path)
 		end
 	end
 
-	def who
-		@partnership = current_user.partnerships.new(flash[:who_attempt])
-		gon_client_validators(@partnership, {uid: [[:presence]]}, pre_validate: true)
+	def edit
+		gon_client_validators(@partnership)
 	end
 
-	def check_who
-		uid_param = params.require(:partnership).permit(:uid)
-		partnership = current_user.partnerships.new(uid_param)
-		if partnership.valid?
-			redirect_to new_partner_path(p_id: partnership.partner_id)
+	def update
+		ship_params = params.require(:partnership).permit(:nickname, :familiarity, :exclusivity, :communication)
+		if @partnership.update(ship_params)
+			redirect_to @partnership
 		else
-			flash[:who_attempt] = uid_param
-			respond_with_submission_error(partnership.errors.messages, who_path)
+			respond_with_submission_error(@partnership.errors.messages, edit_partnership_path(@partnership))
 		end
 	end
 
@@ -54,4 +49,11 @@ class PartnershipsController < ApplicationController
 	def clear_unsaved
 		current_user.clear_unsaved_partnerships
 	end
+
+	def set_partnership
+		@partnership = current_user.partnerships.find(params[:id])
+	rescue Mongoid::Errors::DocumentNotFound
+		redirect_to partnerships_path
+	end
+
 end

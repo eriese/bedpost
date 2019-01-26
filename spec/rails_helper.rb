@@ -48,6 +48,8 @@ RSpec.configure do |config|
 
   # include factory bot
   config.include FactoryBot::Syntax::Methods
+  config.include FeatureHelpers, type: :feature
+  config.include ActionView::Helpers::SanitizeHelper, type: :feature
 
   # incude UserProfileHelpers
   include UserProfileHelpers

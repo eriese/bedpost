@@ -30,8 +30,8 @@ RSpec.describe ProfilesController, type: :controller do
   # adjust the attributes here as well.
 
   after :each do
-    @prof.destroy unless @prof.nil?
-    @partnership.destroy unless @partnership.nil?
+    @partnership.destroy if @partnership.present? && @partnership.persisted?
+    @prof.destroy if @prof.present? && @prof.persisted?
   end
 
   describe "GET #show" do
@@ -39,7 +39,7 @@ RSpec.describe ProfilesController, type: :controller do
       @prof = create(:profile)
       @partnership = dummy_user.partnerships.create(partner: @prof)
 
-      get :show, params: {partner_id: @partnership.to_param}, session: dummy_user_session
+      get :show, params: {partnership_id: @partnership.to_param}, session: dummy_user_session
       expect(response).to be_successful
       expect(assigns(:profile)).to eq @prof
     end
@@ -57,7 +57,7 @@ RSpec.describe ProfilesController, type: :controller do
       it "returns the edit page for that dummy partner" do
         @prof = create(:profile)
         @partnership = dummy_user.partnerships.create(partner: @prof)
-        get :edit, params: {partner_id: @partnership.to_param}, session: dummy_user_session
+        get :edit, params: {partnership_id: @partnership.to_param}, session: dummy_user_session
         expect(response).to be_successful
         expect(assigns(:profile)).to eq @prof
       end
@@ -67,9 +67,9 @@ RSpec.describe ProfilesController, type: :controller do
       it "redirects the user to the partnership page" do
         @prof = create(:user_profile)
         @partnership = dummy_user.partnerships.create(partner: @prof)
-        get :edit, params: {partner_id: @partnership.to_param}, session: dummy_user_session
+        get :edit, params: {partnership_id: @partnership.to_param}, session: dummy_user_session
 
-        expect(response).to redirect_to partners_path(@partnership)
+        expect(response).to redirect_to @partnership
       end
     end
   end
@@ -99,7 +99,7 @@ RSpec.describe ProfilesController, type: :controller do
       it "redirects to the new partnership page with the new profile as the partner" do
         post :create, params: get_valid_params, session: dummy_user_session
         @prof = Profile.last
-        expect(response).to redirect_to new_partner_path(p_id: @prof.id)
+        expect(response).to redirect_to new_partnership_path(p_id: @prof.id)
       end
     end
 
@@ -111,34 +111,33 @@ RSpec.describe ProfilesController, type: :controller do
     end
   end
 
-  # describe "PUT #update" do
-  #   context "with valid params" do
-  #     let(:new_attributes) {
-  #       skip("Add a hash of attributes valid for your model")
-  #     }
+  describe "PUT #update" do
+    context "with valid params" do
+      before :each do
+        @prof = create(:profile)
+        @partnership = dummy_user.partnerships.create(partner: @prof)
+      end
 
-  #     it "updates the requested profile" do
-  #       profile = Profile.create! valid_attributes
-  #       put :update, params: {id: profile.to_param, profile: new_attributes}, session: dummy_user_session
-  #       profile.reload
-  #       skip("Add assertions for updated state")
-  #     end
+      it "updates the requested profile" do
+        put :update, params: {partnership_id: @partnership.to_param, profile: {external_name: "something"}}, session: dummy_user_session
+        @prof.reload
+        expect(@prof.external_name).to eq "something"
+      end
 
-  #     it "redirects to the profile" do
-  #       profile = Profile.create! valid_attributes
-  #       put :update, params: {id: profile.to_param, profile: valid_attributes}, session: dummy_user_session
-  #       expect(response).to redirect_to(profile)
-  #     end
-  #   end
+      it "redirects to the partnership the profile is attached to" do
+        put :update, params: {partnership_id: @partnership.to_param, profile: {external_name: "something"}}, session: dummy_user_session
+        expect(response).to redirect_to @partnership
+      end
+    end
 
-  #   context "with invalid params" do
-  #     it "returns a success response (i.e. to display the 'edit' template)" do
-  #       profile = Profile.create! valid_attributes
-  #       put :update, params: {id: profile.to_param, profile: invalid_attributes}, session: dummy_user_session
-  #       expect(response).to be_successful
-  #     end
-  #   end
-  # end
+    # context "with invalid params" do
+    #   it "returns a success response (i.e. to display the 'edit' template)" do
+    #     profile = Profile.create! valid_attributes
+    #     put :update, params: {id: profile.to_param, profile: invalid_attributes}, session: dummy_user_session
+    #     expect(response).to be_successful
+    #   end
+    # end
+  end
 
   # describe "DELETE #destroy" do
   #   it "destroys the requested profile" do

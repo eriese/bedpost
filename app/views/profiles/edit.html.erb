@@ -1,6 +1,7 @@
-<h1>Editing Profile</h1>
+<div class="centered-container">
+	<h2><%= t(".title") %></h2>
 
-<%= render 'form', profile: @profile %>
+	<%= render 'form', profile: @profile, url: partnership_profile_path %>
 
-<%= link_to 'Show', @profile %> |
-<%= link_to 'Back', profiles_path %>
+	<%= link_to t(".back"), edit_partnership_path(@partnership) %>
+</div>

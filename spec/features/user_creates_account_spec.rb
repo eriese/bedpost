@@ -11,7 +11,7 @@ feature "User creates account", :slow do
 		end
 
 		scenario "The user sees their previously entered values" do
-			email_val = find_field("Email").value
+			email_val = find_field("Email*").value
 			expect(email_val).to eq @user_params[:email]
 		end
 

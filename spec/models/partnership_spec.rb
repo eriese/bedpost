@@ -186,4 +186,146 @@ RSpec.describe Partnership, type: :model do
 			end
 		end
 	end
+
+	describe '#add_to_partner' do
+		it 'adds the user to the partner as a foreign key in partnered_to' do
+			@user = create(:user_profile)
+			@partner = create(:profile)
+
+			ship = @user.partnerships.new(partner: @partner)
+			ship.send :add_to_partner
+
+			@partner.reload
+			expect(@partner.partnered_to).to include(@user)
+		end
+
+		it 'calls #remove_from_partner to remove itself from the previous partner' do
+			@user = create(:user_profile)
+			@partner = create(:profile)
+
+			ship = @user.partnerships.new(partner: @partner)
+			allow(ship).to receive(:remove_from_partner).and_call_original
+			ship.send :add_to_partner
+
+			expect(ship).to have_received(:remove_from_partner).with(nil)
+		end
+	end
+
+	describe '#remove_from_partner' do
+		it 'removes the user from the given partner as a foreign key in partnered_to' do
+			allow_any_instance_of(Profile).to receive(:delete_if_empty)
+			@user = create(:user_profile)
+			@partner = create(:profile)
+
+			ship = @user.partnerships.new(partner: @partner)
+			ship.send :add_to_partner
+			@partner.reload
+			expect(@partner.partnered_to).to include(@user)
+
+			ship.send :remove_from_partner
+			@partner.reload
+			expect(@partner.partnered_to).to_not include(@user)
+		end
+	end
+
+	describe 'before_save' do
+		it 'adds its user to the partner as a foreign key in #partnered_to' do
+			@user = create(:user_profile)
+			@partner = create(:profile)
+
+			ship = @user.partnerships.new(partner: @partner)
+			allow(ship).to receive(:add_to_partner).and_call_original
+			ship.save
+
+			expect(ship).to have_received(:add_to_partner)
+			@partner.reload
+			expect(@partner.partnered_to).to include(@user)
+		end
+
+		it 'removes its user from the previous partner' do
+			allow_any_instance_of(Profile).to receive(:delete_if_empty)
+			@user = create(:user_profile)
+			@partner = create(:profile)
+			@user2 = create(:profile)
+
+			ship = @user.partnerships.create(partner: @partner)
+			allow(ship).to receive(:remove_from_partner).and_call_original
+			ship.partner = @user2
+			ship.save
+
+			expect(ship).to have_received(:remove_from_partner).with(@partner.id)
+
+			@partner.reload
+			expect(@partner.partnered_to).to_not include(@user)
+		end
+
+		it 'works every time' do
+			allow_any_instance_of(Profile).to receive(:delete_if_empty)
+			@user = create(:user_profile)
+			@partner = create(:profile)
+			@user2 = create(:profile)
+
+			ship = @user.partnerships.create(partner: @user2)
+
+			#test switching partners 4 times
+			partners = [@partner, @user2]
+			4.times do
+				ship.partner = partners[0]
+				ship.save
+
+				partners.each{ |p| p.reload}
+				expect(partners[0].partnered_to.find(@user)).to eq @user
+				expect(partners[1].partnered_to).to_not include(@user)
+
+				partners.reverse!
+			end
+		end
+
+		it 'causes a cascading call to delete an empty partner' do
+			@user = create(:user_profile)
+			@partner = create(:profile)
+			@user2 = create(:profile)
+
+			ship = @user.partnerships.create(partner: @partner)
+			allow(@partner).to receive(:delete_if_empty).and_call_original
+			# don't let the partnership get a fresh reference to partner or it'll break the spy
+			allow(Profile).to receive(:find).and_return(@partner)
+			ship.partner = @user2
+			ship.save
+
+			expect(@partner).to have_received(:delete_if_empty)
+			expect {@partner.reload}.to raise_error(Mongoid::Errors::DocumentNotFound)
+		end
+	end
+
+	describe 'before_destroy' do
+		it 'removes its user from its partner' do
+			allow_any_instance_of(Profile).to receive(:delete_if_empty)
+			@user = create(:user_profile)
+			@partner = create(:profile)
+
+			ship = @user.partnerships.create(partner: @partner)
+
+			@partner.reload
+			expect(@partner.partnered_to).to include(@user)
+
+			ship.destroy
+			@partner.reload
+			expect(@partner.partnered_to).to_not include(@user)
+		end
+
+		it 'causes a cascading call to delete an empty partner' do
+			@user = create(:user_profile)
+			@partner = create(:profile)
+
+			ship = @user.partnerships.create(partner: @partner)
+			allow(@partner).to receive(:delete_if_empty).and_call_original
+			# don't let the partnership get a fresh reference to partner or it'll break the spy
+			allow(Profile).to receive(:find).and_return(@partner)
+			ship.destroy
+
+			expect(@partner).to have_received(:delete_if_empty)
+			expect {@partner.reload}.to raise_error(Mongoid::Errors::DocumentNotFound)
+		end
+	end
 end

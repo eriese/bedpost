@@ -1,0 +1,4 @@
+<%= f.text_field :nickname, tooltip: true %>
+<% [:familiarity, :exclusivity, :communication].each do |field| %>
+	<%= f.select field, options_for_select(1..10), {}, {tooltip: true} %>
+<% end %>

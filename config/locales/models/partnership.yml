@@ -19,3 +19,8 @@ en:
       level_field_html: "%{field}: %{level}"
     index:
       new_partnership: Add a partner
+    edit:
+      partner_html: Edit partnership with <b>%{name}</b>
+  whos:
+    new:
+      new_profile: Make a profile for this partner

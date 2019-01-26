@@ -44,4 +44,53 @@ RSpec.describe Profile, type: :model do
   		expect(has_internal).to be true
   	end
   end
+
+  describe '#delete_if_empty' do
+    it 'deletes itself if it has no relationships and is not a UserProfile' do
+      prof = create(:profile)
+      prof.send :delete_if_empty
+      expect(prof.persisted?).to be false
+    ensure
+      prof.destroy if prof.persisted?
+    end
+
+    it 'does not delete itself if it has relationships' do
+      prof = create(:profile)
+      prof.partnered_to ||= []
+      prof.partnered_to << dummy_user
+      prof.send :delete_if_empty
+      expect(prof.persisted?).to be true
+    ensure
+      prof.destroy if prof.persisted?
+    end
+
+    it 'runs after a relationship is removed' do
+      prof = create(:profile)
+      allow(prof).to receive(:delete_if_empty).and_call_original
+      prof.partnered_to ||= []
+      prof.partnered_to.push(dummy_user)
+      prof.partnered_to.delete(dummy_user)
+
+      expect(prof).to have_received :delete_if_empty
+      expect(prof.persisted?).to be false
+    ensure
+      prof.destroy if prof.persisted?
+    end
+
+    it 'runs after a relationship is removed and does not delete if there are still others' do
+      prof = create(:profile)
+      allow(prof).to receive(:delete_if_empty).and_call_original
+      prof.partnered_to ||= []
+      prof.partnered_to.push(dummy_user)
+      partner = create(:user_profile)
+      prof.partnered_to.push(partner)
+      prof.partnered_to.delete(dummy_user)
+
+      expect(prof).to have_received :delete_if_empty
+      expect(prof.persisted?).to be true
+    ensure
+      prof.destroy if prof.persisted?
+      partner.destroy if partner
+    end
+  end
 end

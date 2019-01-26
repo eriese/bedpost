@@ -37,7 +37,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			ship = profile.partnerships.last
 
 			get :show, params: {id: ship.id}, session: dummy_user_session
-			expect(response).to redirect_to partners_path
+			expect(response).to redirect_to partnerships_path
 		ensure
 			profile.destroy
 		end
@@ -110,7 +110,7 @@ RSpec.describe PartnershipsController, type: :controller do
 				partner = create(:user_profile)
 				post :create, session: {user_id: user.id}, params: {partnership: attributes_for(:partnership).merge({uid: partner.uid})}
 
-				expect(response).to redirect_to partner_path(user.reload.partnerships.last)
+				expect(response).to redirect_to user.reload.partnerships.last
 
 			ensure
 				user.destroy
@@ -123,7 +123,7 @@ RSpec.describe PartnershipsController, type: :controller do
 				user = create(:user_profile)
 				post :create, session: {user_id: user.id}, params: {partnership: attributes_for(:partnership)}
 
-				expect(response).to redirect_to new_partner_path
+				expect(response).to redirect_to new_partnership_path
 			ensure
 				user.destroy
 			end
@@ -139,26 +139,53 @@ RSpec.describe PartnershipsController, type: :controller do
 		end
 	end
 
-	describe 'POST #check_who' do
-		it 'does not leave an unsaved partnership on the user' do
+	describe 'GET #edit' do
+		it 'loads the edit form for the partnership' do
 			user = create(:user_profile)
-			post :check_who, session: {user_id: user.id}, params: {partnership: {uid: "nonsense"}}
+			partner = create(:profile)
+			ship = user.partnerships.create(partner: partner)
 
-			expect(controller.current_user.partnerships.length).to eq 0
+			get :edit, session: {user_id: user.id}, params: {id: ship.id}
+			expect(assigns(:partnership)).to eq ship
 		ensure
 			user.destroy
+			partner.destroy
 		end
 
-		context 'with a valid uid' do
-			it 'forwards to the create partnership page with the partner id of the given user' do
-				user = create(:user_profile)
-				partner = create(:user_profile)
-				post :check_who, session: {user_id: user.id}, params: {partnership: {uid: partner.uid}}
+		it 'redirects to the partnership index page if the partnership does not exist' do
+			get :edit, session: dummy_user_session, params: {id: "nonsense"}
+			expect(request).to redirect_to partnerships_path
+		end
+	end
 
-				expect(response).to redirect_to new_partner_path(p_id: partner.id)
+	describe 'POST #create' do
+		context 'with valid params' do
+			it 'updates the partnership' do
+				user = create(:user_profile)
+				partner = create(:profile)
+				ship = user.partnerships.create(partner: partner)
+
+				new_name = "from camp"
+				post :update, session: {user_id: user.id}, params: {id: ship.id, partnership: {nickname: new_name}}
+
+				ship.reload
+				expect(ship.nickname).to eq new_name
 			ensure
 				user.destroy
 				partner.destroy
+			end
+		end
+
+		context 'with invalid params' do
+			it 'responds with the error' do
+				user = create(:user_profile)
+				ship = user.partnerships.create(partner: dummy_user)
+
+				post :update, session: {user_id: user.id}, params: {id: ship.id, partnership: {familiarity: 11}}
+				expect(response).to redirect_to edit_partnership_path(ship)
+				expect(flash[:submission_error]).to have_key(:familiarity)
+			ensure
+				user.destroy
 			end
 		end
 	end

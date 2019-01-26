@@ -4,6 +4,8 @@
 		<%= f.text_field :uid, {tooltip: {show_always: true}, required: true}%>
 		<%= f.submit %>
 	<% end %>
-	<h3><%= t(".or") %></h3>
-	<%= link_to t(".new_profile"), new_profile_path, "data-animation-type" => "slideLeft"%>
+	<% unless @partnership.persisted? %>
+		<h3><%= t(".or") %></h3>
+		<%= link_to t(".new_profile"), new_profile_path, "data-animation-type" => "slideLeft"%>
+	<% end %>
 </div>

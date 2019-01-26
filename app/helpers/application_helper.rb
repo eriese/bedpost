@@ -8,7 +8,7 @@ module ApplicationHelper
 	NAV_LINKS = {
 		"nav.dashboard" => url_helpers.root_path,
 		"nav.user_profile_edit" => url_helpers.edit_user_profile_path,
-		"nav.partners" => url_helpers.partners_path
+		"nav.partners" => url_helpers.partnerships_path
 	}
 
 	def pronouns
@@ -27,6 +27,4 @@ module ApplicationHelper
 		options[:default] = new_default
 		I18n.t(new_key, options)
 	end
-
-
 end

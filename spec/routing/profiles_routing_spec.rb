@@ -16,23 +16,23 @@ RSpec.describe ProfilesController, type: :routing do
       end
 
       it "routes to #show" do
-        expect(:get => "partners/1/profile").to route_to("profiles#show", :partner_id => "1")
+        expect(:get => "partners/1/profile").to route_to("profiles#show", :partnership_id => "1")
       end
 
       it "routes to #edit" do
-        expect(:get => "partners/1/profile/edit").to route_to("profiles#edit", :partner_id => "1")
+        expect(:get => "partners/1/profile/edit").to route_to("profiles#edit", :partnership_id => "1")
       end
 
       it "routes to #update via PUT" do
-        expect(:put => "partners/1/profile").to route_to("profiles#update", :partner_id => "1")
+        expect(:put => "partners/1/profile").to route_to("profiles#update", :partnership_id => "1")
       end
 
       it "routes to #update via PATCH" do
-        expect(:patch => "partners/1/profile").to route_to("profiles#update", :partner_id => "1")
+        expect(:patch => "partners/1/profile").to route_to("profiles#update", :partnership_id => "1")
       end
 
       it "routes to #destroy" do
-        expect(:delete => "partners/1/profile").to route_to("profiles#destroy", :partner_id => "1")
+        expect(:delete => "partners/1/profile").to route_to("profiles#destroy", :partnership_id => "1")
       end
     end
   end
