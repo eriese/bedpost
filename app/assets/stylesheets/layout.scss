@@ -33,6 +33,8 @@ a, button.not-button, input[type=submit].not-button {
 	color: $link-color;
 	cursor: pointer;
 	-webkit-appearance: none;
+	background-color: transparent;
+	border: none;
 	&:hover {
 		color: $link-hover-color;
 	}
@@ -117,7 +119,7 @@ button.not-button {
 	text-align: center;
 }
 
-.prog-dots {
+.stepper .prog-dots {
 	margin-top: 25px;
 	text-align: center;
 
@@ -136,20 +138,25 @@ button.not-button {
 	}
 
 	.prog-buttons {
-		a {
+		button:not(.last) {
 			text-decoration: none;
 			font-size: 32px;
 			font-weight: bold;
 			margin: 0px 10px;
 			line-height: 32px;
 			vertical-align: middle;
+
+			&:disabled {
+				visibility: hidden;
+			}
 		}
 
-		button {
+		input[type=submit], button.last {
 			line-height: 32px;
 			vertical-align: middle;
 			font-weight: bold;
+			display: inline;
+			width: auto;
 		}
 	}
 }
-

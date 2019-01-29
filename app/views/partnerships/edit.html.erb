@@ -4,7 +4,6 @@
 	<%= link_to t(".edit_partner_uid"), partnership_who_path(@partnership) %>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
 		<%= render "fields", f: f %>
-		<%= f.submit %>
 	<% end %>
 	<%= link_to t(".back"), @partnership %>
 </div>

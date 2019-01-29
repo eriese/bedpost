@@ -55,6 +55,9 @@
 			ariaRequired: function() {
 				return this.vField && this.vField.blank !== undefined;
 			},
+			input: function() {
+				return this.$el.querySelector("input, select")
+			},
 			errorMsg: function() {
 				if (!this.validate || !this.vField ||
 					((!this.vField.$anyError || !this.vField.$dirty) && this.vField.submitted !== false)) {
@@ -114,6 +117,17 @@
 			},
 			onFocus() {
 				this.focused = true;
+			},
+			isValid() {
+				if(this.vField) {
+					this.vField.$touch();
+					return !this.vField.$invalid;
+				}
+
+				return true;
+			},
+			setFocus() {
+				this.input.focus();
 			}
 		}
 	}

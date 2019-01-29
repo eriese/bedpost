@@ -3,6 +3,8 @@ import fieldErrors from "./fieldErrorsComponent.vue"
 import formErrors from "./formErrorsComponent.vue"
 import toggle from "./toggleComponent.vue"
 import {onTransitionTriggered} from "../modules/transitions"
+import formStepper from "./formStepperComponent.vue"
+import formStep from "./formStepComponent.vue"
 
 const submitted = (path) => {
 	let erroredVal = undefined;
@@ -96,7 +98,9 @@ export default {
 	components: {
 		fieldErrors,
 		formErrors,
-		toggle
+		toggle,
+		formStepper,
+		formStep
 	},
 	validations: function() {
 		return {formData: formatValidators(this.$props.validate, gon.validators, [])};
@@ -110,8 +114,8 @@ export default {
 				// find the first errored field and focus it
 				for (var i = 0; i < this.$children.length; i++) {
 					let child = this.$children[i];
-					if (child.vField !== undefined && child.vField.$invalid) {
-						this.$refs[child.field].focus();
+					if (child.isValid && !child.isValid()) {
+						child.setFocus();
 						break;
 					}
 				}
