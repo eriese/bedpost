@@ -59,6 +59,10 @@ button.not-button {
 		width: calc(100% - #{$nav-width});
 		box-sizing: border-box;
 	}
+
+	.js-only {
+		display: none !important;
+	}
 }
 
 #no-js-warning {

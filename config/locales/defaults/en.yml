@@ -49,6 +49,7 @@ en:
     aria:
       invalid: "Invalid: "
     sliders:
+      one: "%{count}"
       other: "%{count}"
   show_password: show password
   hide_password: hide password

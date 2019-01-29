@@ -1,0 +1,165 @@
+@import "_defaults";
+
+$input-background-color: $color-off-white;
+input, select, textarea {
+	background-color: $input-background-color;
+	border-color: $color-purple-dark;
+	border-style: solid;
+	border-radius: 2px;
+	border-width: 1px;
+	box-sizing: border-box;
+
+	form.big & {
+		padding: 5px 10px;
+	}
+
+	form.centered & {
+		display: block;
+		width: 100%;
+		margin-bottom: 3px;
+	}
+
+	&:focus {
+		border-color: $color-purple-light;
+	}
+
+}
+
+$check-box-size: 18px;
+
+input[type=checkbox], input[type=radio] {
+	display: inline-block;
+	vertical-align: middle;
+
+	form.centered & {
+		display: inline-block;
+		width: $check-box-size;
+	}
+}
+
+input[type=checkbox] {
+	-webkit-appearance: none;
+	-moz-appearance:    none;
+	appearance:         none;
+	height: $check-box-size;
+	width: $check-box-size;
+	cursor: pointer;
+	color: $color-purple-dark;
+	position: relative;
+	margin-right: 10px;
+
+	&:checked::after {
+		content: "";
+		display: inline-block;
+		border-left: 2px solid;
+		border-bottom: 2px solid;
+		transform: rotate(-45deg);
+		position: absolute;
+
+		height: 5px;
+	    top: 2px;
+	    width: 11px;
+	    left: 1px;
+	}
+}
+
+input[type=range] {
+	-webkit-appearance: none;
+	border: none;
+	background: transparent;
+	margin: 25px 0px 20px;
+
+	form.centered & {
+		margin-bottom: 10px;
+	}
+
+	$kit-tracks: -webkit-slider-runnable-track -moz-range-track -ms-track;
+	@each $kit in $kit-tracks {
+		&::#{$kit} {
+			width: 100%;
+			background: transparent;
+			height: 10px;
+			border-radius: 6px;
+			background-color: $color-purple-dark;
+			cursor: pointer;
+			transition: all .2s ease;
+			border: none;
+			box-shadow: none;
+		}
+	}
+
+	$kit-thumbs: -webkit-slider-thumb -moz-range-thumb -ms-thumb;
+	@each $kit in $kit-thumbs {
+		&::#{$kit} {
+			height: 30px;
+			width: 20px;
+			background-color: $color-purple-light;
+			box-shadow: none;
+			border-radius: 5px;
+			cursor: pointer;
+			border: none;
+		}
+	}
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		margin-top: -10px;
+	}
+
+	&::-ms-thumb {
+		background: transparent;
+		color: transparent;
+	}
+
+	$ms-fills: -ms-fill-lower -ms-fill-upper;
+	@each $fill in $ms-fills {
+		&::#{$fill} {
+			border: none;
+			background: $color-purple-dark;
+			box-shadow: none;
+			border-radius: 10px;
+		}
+	}
+
+	&:focus {
+		@each $kit in $kit-tracks {
+			&::#{$kit} {
+				background-color: $color-purple-light;
+			}
+		}
+
+		@each $thumb in $kit-thumbs {
+			&::#{$thumb} {
+				background-color: $color-purple-dark;
+			}
+		}
+
+		@each $fill in $ms-fills {
+			&::#{$fill} {
+				background-color: $color-purple-light;
+			}
+		}
+	}
+}
+
+button:not(.not-button), input[type=submit]:not(.not-button) {
+	background-color: $color-purple-light;
+	border-color: $color-purple-light;
+	color: $background-color;
+	padding: 5px 10px;
+	transition: 0.1s linear all;
+	cursor: pointer;
+
+	&:hover, &:focus {
+		background-color: $color-purple-dark;
+		border-color: $color-purple-dark;
+	}
+
+	form.centered & {
+		margin-top: 10px;
+	}
+}
+
+input[type=hidden] {
+	display: none !important;
+}

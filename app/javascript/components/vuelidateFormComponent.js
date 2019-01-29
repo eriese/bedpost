@@ -2,7 +2,6 @@ import { required, email, minLength, maxLength, sameAs, helpers } from 'vuelidat
 import fieldErrors from "./fieldErrorsComponent.vue"
 import formErrors from "./formErrorsComponent.vue"
 import toggle from "./toggleComponent.vue"
-import slider from "vue-slider-component"
 import {onTransitionTriggered} from "../modules/transitions"
 
 const submitted = (path) => {
@@ -97,8 +96,7 @@ export default {
 	components: {
 		fieldErrors,
 		formErrors,
-		toggle,
-		slider
+		toggle
 	},
 	validations: function() {
 		return {formData: formatValidators(this.$props.validate, gon.validators, [])};

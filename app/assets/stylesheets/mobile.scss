@@ -15,6 +15,10 @@
 			}
 		}
 
+		header.small + main {
+			width: 100%;
+		}
+
 		nav-component {
 			order: 2;
 			width: 100%;

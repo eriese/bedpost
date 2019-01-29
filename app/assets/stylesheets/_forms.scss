@@ -1,163 +1,5 @@
 @import "_defaults";
-
-$input-background-color: $color-off-white;
-input, select, textarea {
-	background-color: $input-background-color;
-	border-color: $color-purple-dark;
-	border-style: solid;
-	border-radius: 2px;
-	border-width: 1px;
-	box-sizing: border-box;
-
-	form.big & {
-		padding: 5px 10px;
-	}
-
-	form.centered & {
-		display: block;
-		width: 100%;
-		margin-bottom: 3px;
-	}
-
-	&:focus {
-		border-color: $color-purple-light;
-	}
-
-}
-
-$check-box-size: 18px;
-
-input[type=checkbox], input[type=radio] {
-	display: inline-block;
-	vertical-align: middle;
-
-	form.centered & {
-		display: inline-block;
-		width: $check-box-size;
-	}
-}
-
-input[type=checkbox] {
-	-webkit-appearance: none;
-	-moz-appearance:    none;
-	appearance:         none;
-	height: $check-box-size;
-	width: $check-box-size;
-	cursor: pointer;
-	color: $color-purple-dark;
-	position: relative;
-	margin-right: 10px;
-
-	&:checked::after {
-		content: "";
-		display: inline-block;
-		border-left: 2px solid;
-		border-bottom: 2px solid;
-		transform: rotate(-45deg);
-		position: absolute;
-
-		height: 5px;
-	    top: 2px;
-	    width: 11px;
-	    left: 1px;
-	}
-}
-
-input[type=range] {
-	-webkit-appearance: none;
-	border: none;
-	height: 0px;
-	margin: 25px 0px 20px;
-	form.centered & {
-		margin-bottom: 20px;
-	}
-}
-
-input[type=range]::-webkit-slider-runnable-track {
-	width: 100%;
-	background: transparent;
-	height: 10px;
-	border-radius: 6px;
-	background-color: $color-purple-dark;
-	margin: 20px 0px 10px;
-	cursor: pointer;
-}
-
-input[type=range]::-moz-range-track {
-	width: 100%;
-	background: transparent;
-	height: 10px;
-	border-radius: 6px;
-	background-color: $color-purple-dark;
-	margin: 20px 0px 10px;
-	cursor: pointer;
-}
-
-input[type=range]::-ms-track {
-	width: 100%;
-	background: transparent;
-	height: 10px;
-	border-radius: 6px;
-	background-color: $color-purple-dark;
-	margin: 20px 0px 10px;
-	cursor: pointer;
-}
-
-input[type=range]::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	margin-top: -10px;
-	height: 30px;
-	width: 20px;
-	background-color: $color-purple-light;
-	box-shadow: none;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-input[type=range]::-moz-range-thumb {
-	height: 30px;
-	width: 20px;
-	background-color: $color-purple-light;
-	box-shadow: none;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-input[type=range]::-ms-thumb {
-	/* Hides the slider so custom styles can be added */
-	background: transparent;
-	border-color: transparent;
-	color: transparent;
-	height: 30px;
-	width: 20px;
-	background-color: $color-purple-light;
-	box-shadow: none;
-	border-radius: 5px;
-}
-
-
-
-button:not(.not-button), input[type=submit]:not(.not-button) {
-	background-color: $color-purple-light;
-	border-color: $color-purple-light;
-	color: $background-color;
-	padding: 5px 10px;
-	transition: 0.1s linear all;
-	cursor: pointer;
-
-	&:hover, &:focus {
-		background-color: $color-purple-dark;
-		border-color: $color-purple-dark;
-	}
-
-	form.centered & {
-		margin-top: 10px;
-	}
-}
-
-input[type=hidden] {
-	display: none !important;
-}
+@import "_inputs";
 
 form.centered {
 	max-width: 400px;
@@ -223,18 +65,20 @@ form {
 	}
 
 	div.range-indicator {
-		// height: 20px;
-		// padding: 0px 15px 0px 5px;
+		margin-bottom: 15px;
+
+		&:after {
+			content: "";
+			clear: both;
+		}
 
 		.indicator {
-			// height: 100%;
 			box-sizing: border-box;
 			text-align: center;
 			float: left;
 			width: 33.333%;
 
 			&:last-child {
-				// width: 0px !important;
 				text-align: right;
 			}
 
@@ -242,6 +86,26 @@ form {
 				text-align: left;
 			}
 		}
+	}
+
+	.tooltip {
+		color: $color-green-dark;
+		font-size: 14px;
+		line-height: 1.25;
+		margin: 3px auto;
+	}
+
+	.step {
+		background-color: $color-light-gray;
+		border-radius: 5px;
+		padding: 15px;
+		margin-bottom: 25px;
+	}
+
+
+	.slide-bar-desc {
+		font-size: 14px;
+		clear: both;
 	}
 }
 
@@ -274,55 +138,5 @@ form {
 			}
 		}
 	}
-}
-
-form .tooltip {
-	color: $color-green-dark;
-	font-size: 14px;
-	line-height: 1.25;
-	margin: 3px auto;
-}
-
-form .step {
-	background-color: $color-light-gray;
-	border-radius: 5px;
-	padding: 15px;
-	margin-bottom: 25px;
-}
-
-form {
-	.vue-slider-component .vue-slider, .slide-bar {
-	width: 100%;
-	height: 10px;
-	border-radius: 6px;
-	background-color: $color-purple-dark;
-	margin: 20px 0px 10px;
-	position: relative;
-
-		.vue-slider-dot-handle, .caret {
-			height: 30px;
-			width: 20px;
-			background-color: $color-purple-light;
-			box-shadow: none;
-			border-radius: 5px;
-		}
-
-		.caret{
-
-			margin-top: -10px;
-			position: absolute;
-
-			left: 50%;
-		}
-
-		.vue-slider-process {
-			display: none;
-		}
-	}
-}
-
-form .slide-bar-desc {
-	font-size: 14px;
-	clear: both;
 }
 
