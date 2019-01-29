@@ -5,6 +5,8 @@ en:
       personal_prefs:
         title: Personal Preferences
         desc: Customize how BedPost talks about you and your body
+    show:
+      new_partnership: I met someone
   mongoid:
     errors:
       models:

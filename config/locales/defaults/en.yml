@@ -48,6 +48,8 @@ en:
     navigation_menu: Menu
     aria:
       invalid: "Invalid: "
+    sliders:
+      other: "%{count}"
   show_password: show password
   hide_password: hide password
   join_delimeter: ', '

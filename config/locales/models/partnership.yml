@@ -13,7 +13,7 @@ en:
               taken: You already have a partnership with this person
   partnerships:
     new:
-      partner_html: Create a partnership with <b>%{name}</b>
+      partner_html: Tell us about your relationship with <b>%{name}</b>
     show:
       partner_html: Partnership with <b>%{name} %{nickname}</b>
       level_field_html: "%{field}: %{level}"
@@ -24,3 +24,21 @@ en:
   whos:
     new:
       new_profile: Make a profile for this partner
+  helpers:
+    label:
+      partnership:
+        nickname: Do you want to add a nickname for this person?
+        familiarity: How well do you know this person?
+        exclusivity: How exclusively does this person have sex with you?
+    tooltip:
+      partnership:
+        nickname: This might be something like their last name, or where you met them, something to help you identify them
+        exclusivity: We only care how exclusive this person is with you. Information about how many partners this person has will help us understand how risky they are as a partner to you. Don't worry, that's not the only factor we take into account.
+    sliders:
+      partnership:
+        exclusivity:
+          one: "%{count} - They're super slutty"
+          five: "%{count} - They have some trusted fuck buddies"
+          nine: "%{count} - We're in a closed, multi-person fluid bond"
+          ten: "%{count} - They only have sex with me"
+          other: "%{count}"
