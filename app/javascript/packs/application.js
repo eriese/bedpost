@@ -25,7 +25,12 @@ document.addEventListener('turbolinks:load', () => {
 	document.getElementById("vue-container").classList.remove("no-js")
 	app = new Vue({
 		el: '#vue-container',
-		mounted: animIn
+		mounted: animIn,
+		methods: {
+			t: (scope, options) => {
+				return I18n.t(scope, options)
+			}
+		}
 	})
 });
 addTransitionEvents();

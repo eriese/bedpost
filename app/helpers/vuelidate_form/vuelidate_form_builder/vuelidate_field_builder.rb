@@ -118,6 +118,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		end
 
 		opts_to_pass[:id] ||= "#{label_key}-label"
+		@external_options[:label] = opts_to_pass[:id]
 		@formBuilder.label(label_key, opts_to_pass)
 	end
 

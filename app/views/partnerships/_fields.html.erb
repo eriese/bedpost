@@ -1,4 +1,4 @@
-<%= f.text_field :nickname, tooltip: true %>
-<% [:familiarity, :exclusivity, :communication].each do |field| %>
-	<%= f.select field, options_for_select(1..10), {}, {tooltip: true} %>
+<%= f.text_field :nickname, tooltip: {show_always: true} %>
+<% Partnership::LEVEL_FIELDS.each do |field| %>
+	<%= f.range_field field, in: 1..10%>
 <% end %>

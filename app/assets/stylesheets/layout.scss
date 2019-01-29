@@ -113,3 +113,39 @@ button.not-button {
 	text-align: center;
 }
 
+.prog-dots {
+	margin-top: 25px;
+	text-align: center;
+
+	.prog-dot {
+		$dot-size: 8px;
+		display: inline-block;
+		margin: 0px $dot-size;
+		width: $dot-size;
+		height: $dot-size;
+		border-radius: 50%;
+		background-color: rgba($color-green-light, 0.5);
+
+		&.current {
+			background-color: $color-green-dark;
+		}
+	}
+
+	.prog-buttons {
+		a {
+			text-decoration: none;
+			font-size: 32px;
+			font-weight: bold;
+			margin: 0px 10px;
+			line-height: 32px;
+			vertical-align: middle;
+		}
+
+		button {
+			line-height: 32px;
+			vertical-align: middle;
+			font-weight: bold;
+		}
+	}
+}
+

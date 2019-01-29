@@ -4,7 +4,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	attr_reader :validations
 
-	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field]).each do |selector|
+	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field]).each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})  # def text_field(method, options = {})
         field_builder(method, options).field do
@@ -48,6 +48,51 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   		super
   	end
   end
+
+  def range_field(attribute, **options)
+  	desc_id = "#{attribute}-desc"
+  	options[:"aria-describedby"] = desc_id
+  	options[:min] ||= 1
+  	options[:max] ||= 10
+  	field_builder(attribute, options).field do
+  		super <<
+  		@template.content_tag(:noscript) do
+
+  			@template.content_tag(:div, {class: "range-indicator"}) do
+	  			@template.content_tag(:div, I18n.t("helpers.sliders.#{@object_name}.#{attribute}", count: options[:min]), class: "indicator") +
+	  			@template.content_tag(:div, I18n.t("helpers.sliders.#{@object_name}.#{attribute}", count: options[:max] / 2), class: "indicator") +
+	  			@template.content_tag(:div, I18n.t("helpers.sliders.#{@object_name}.#{attribute}", count: options[:max]), class: "indicator")
+	  			# num_indicators = options[:max] - options[:min]
+	  			# (num_indicators + 1).times do |i|
+	  			# 	inner << @template.content_tag(:div, (i + 1).to_s, style: "width: #{100 / num_indicators}%;", class: "indicator")
+	  			# end
+	  		end
+  		end <<
+  		@template.content_tag(:aside, "{{$root.t('helpers.sliders.#{@object_name}.#{attribute}', {count: #{options[:"v-model"]}, defaults: [{scope: 'helpers.sliders'}]})}}", {id: desc_id, class: "slide-bar-desc", "aria-live" => true})
+  	end
+  end
+
+  def slider(attribute, **options)
+  	field_builder(attribute, options).field do
+  		opts = {}.merge(options)
+  		opts[":tooltip"] = false
+  		opts[":use-keyboard"] = true
+  		opts[":dot-size"] = options.delete(:dot_size) || options.delete(":dot-size") || "null"
+  		opts[":min"] = options.delete(:min) || options.delete(":min") || 1
+  		opts[":max"] = options.delete(:max) || options.delete(":max") || 10
+  		opts[":speed"] = options.delete(:speed) || options.delete(":speed") || "0.3"
+  		opts[":height"] = options.delete(:height) || options.delete(":height") || "null"
+  		desc_id = "#{attribute}-desc"
+  		opts[":descId"] = options[:"aria-descibedby"]
+  		add_to_class(opts, desc_id, :"aria-descibedby")
+  		opts[":labelId"] = options[:label]
+
+  		@template.content_tag(:slider, "", opts) +
+  		@template.content_tag(:aside, "{{$root.t('helpers.sliders.#{@object_name}.#{attribute}', {count: #{options[:"v-model"]}})}}", {id: desc_id, class: "slide-bar-desc"})
+  		# hidden_field(attribute)
+  	end
+	end
+
 
   def password_field(attribute, args={})
   	args[:":type"] = "toggles['password']"

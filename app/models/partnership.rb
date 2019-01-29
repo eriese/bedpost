@@ -1,9 +1,12 @@
 class Partnership
   include Mongoid::Document
+  LEVEL_FIELDS = [:familiarity, :exclusivity, :communication, :trust, :prior_discussion]
   field :nickname, type: String
-  field :familiarity, type: Integer, default: 1
-  field :exclusivity, type: Integer, default: 1
-  field :communication, type: Integer, default: 1
+
+  LEVEL_FIELDS.each do |f|
+  	field f, type: Integer, default: 1
+  	validates f, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10}
+  end
 
   embedded_in :user_profile
   belongs_to :partner, class_name: "Profile"
@@ -16,7 +19,6 @@ class Partnership
   	not_self: {method: :uid},
   	exclusion: {in: ->(partnership) {partnership.user_profile.partnerships.map { |ship| ship == partnership ? nil : ship.uid }}, message: :taken},
   	allow_nil: true
-  validates :familiarity, :exclusivity, :communication, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10}
 
   before_save :add_to_partner
   before_destroy :remove_from_partner
