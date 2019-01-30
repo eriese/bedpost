@@ -12,6 +12,8 @@ module VuelidateForm::VuelidateFormHelper
 	def generate_form_using(method, args, options, block)
 		set_options(options)
 		form_obj = nil
+		stepper_options = options.delete :stepper
+		options[:wizard] ||= stepper_options.present?
 		form_text = send(method, *args) do |f|
 			#grab the form builder during building
 			form_obj = f
@@ -19,7 +21,13 @@ module VuelidateForm::VuelidateFormHelper
 			#add the errors at the top
 			concat(f.form_errors) unless options[:errors] == false
 			#do normal building business
-			block.call(f) if block
+			inner = capture do
+				block.call(f) if block
+			end
+
+			inner = content_tag(:"form-stepper", inner, :"v-bind" =>stepper_options) if options[:wizard]
+
+			concat(inner)
 		end
 
 		#wrap in vue component template

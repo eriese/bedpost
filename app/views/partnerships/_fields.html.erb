@@ -1,10 +1,6 @@
-<form-stepper v-bind="{stepClass: 'step', lastButton: 'submit'}">
-	<form-step><%= f.text_field :nickname, tooltip: {show_always: true}%></form-step>
-	<% Partnership::LEVEL_FIELDS.each do |field| %>
-		<form-step><%= f.range_field field, in: 1..10%></form-step>
-	<% end %>
-	<form-step>Last Step </form-step>
-	<template slot="last-button">
-		<%= f.submit nil, class: "not-button" %>
-	</template>
-</form-stepper>
+<%= f.text_field :nickname, tooltip: {show_always: true}%>
+<% Partnership::LEVEL_FIELDS.each do |field| %>
+	<%= f.range_field field, in: 1..10%>
+<% end %>
+<%= yield %>
+

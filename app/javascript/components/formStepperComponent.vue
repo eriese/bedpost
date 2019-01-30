@@ -17,9 +17,6 @@
 </template>
 
 <script>
-import formStep from "./formStepComponent.vue"
-import fieldErrors from "./fieldErrorsComponent.vue"
-
 export default {
 	name: "form_stepper",
 	data: function () {
@@ -71,8 +68,9 @@ export default {
 				maxHeight = Math.max(maxHeight, child.$el.offsetHeight)
 			}
 		}
-
-		this.$refs.inner.style.height = maxHeight + "px"
+		if (this.uniform) {
+			this.$refs.inner.style.height = maxHeight + "px"
+		}
 	}
 }
 </script>

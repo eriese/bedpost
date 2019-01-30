@@ -21,7 +21,7 @@ class PartnershipsController < ApplicationController
 	end
 
 	def create
-		ship_params = params.require(:partnership).permit(:nickname, :familiarity, :exclusivity, :communication, :partner_id, :uid)
+		ship_params = params.require(:partnership).permit(Partnership::LEVEL_FIELDS + [:nickname, :partner_id, :uid])
 
 		partnership = current_user.partnerships.new(ship_params)
 		if partnership.save
@@ -37,7 +37,7 @@ class PartnershipsController < ApplicationController
 	end
 
 	def update
-		ship_params = params.require(:partnership).permit(:nickname, :familiarity, :exclusivity, :communication)
+		ship_params = params.require(:partnership).permit(Partnership::LEVEL_FIELDS + [:nickname])
 		if @partnership.update(ship_params)
 			redirect_to @partnership
 		else

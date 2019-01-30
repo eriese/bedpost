@@ -18,6 +18,16 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   	VuelidateFieldBuilder.new(attribute, options, self, @template)
   end
 
+  def step(use_step=true)
+  	if use_step
+  		@template.content_tag(:"form-step") do
+  			yield
+  		end
+  	else
+  		yield
+  	end
+  end
+
   def hidden_field(attribute, options={})
   	options = options.merge({label: false, validate: false})
   	field_builder(attribute, options).field do
@@ -131,7 +141,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 
 	def objectify_options(options)
-	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :before_label)
+	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :before_label, :is_step)
 	end
 
 	def add_validation(attribute)

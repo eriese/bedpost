@@ -5,8 +5,6 @@
 </template>
 
 <script>
-
-
 	export default {
 		name: "form_step",
 		data: function() {
