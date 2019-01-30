@@ -93,7 +93,9 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			:":v" => "$v",
 			:":submission-error" => "submissionError",
 			:class => field_class,
-			:":validate" => @validate
+			:":validate" => @validate,
+			:"@input-blur"=> "stepSlot.fieldBlur",
+			:"slot-scope"=> "stepSlot"
 		}
 		@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
 

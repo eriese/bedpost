@@ -1,0 +1,10 @@
+<%= content_tag :"form-stepper", :"v-bind"=> options, ref: "stepper"  do %>
+	<%= content_tag :div, :"slot-scope" => "stepper" do %>
+		<%= yield %>
+	<% end %>
+	<% if content_for(:last_button) %>
+		<%= content_tag :template, slot: "last-button"  do %>
+			<%= content_for :last_button %>
+		<% end %>
+	<% end %>
+<% end %>

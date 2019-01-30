@@ -20,6 +20,8 @@ class Partnership
   	exclusion: {in: ->(partnership) {partnership.user_profile.partnerships.map { |ship| ship == partnership ? nil : ship.uid }}, message: :taken},
   	allow_nil: true
 
+  validates :nickname, presence: true
+
   before_save :add_to_partner
   before_destroy :remove_from_partner
 

@@ -21,13 +21,7 @@ module VuelidateForm::VuelidateFormHelper
 			#add the errors at the top
 			concat(f.form_errors) unless options[:errors] == false
 			#do normal building business
-			inner = capture do
-				block.call(f) if block
-			end
-
-			inner = content_tag(:"form-stepper", inner, :"v-bind" =>stepper_options) if options[:wizard]
-
-			concat(inner)
+			block.call(f) if block
 		end
 
 		#wrap in vue component template

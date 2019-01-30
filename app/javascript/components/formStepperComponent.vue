@@ -1,28 +1,46 @@
 <template>
 	<div class="stepper" :class="stepClass">
 		<div class="step-inner" ref="inner">
-			<slot></slot>
+			<slot :step-ready="setStepReady"></slot>
 		</div>
 		<div class="prog-dots">
+			<div class="prog-buttons">
+				<button class="not-button" @click="back" type="button" :style="curIndex == 0 ? {visibility: 'hidden'} : {}" :title="$root.t('previous')">
+					<svg viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow"></path></svg>
+				</button>
+				<button class="not-button" @click="next" type="button" v-if="curIndex < numSteps - 1" :disabled="curStepPending" :title="$root.t('next')">
+					<svg viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow" transform="translate(100, 100) rotate(180) "></path></svg>
+				</button>
+				<slot name="last-button" v-if="curIndex == numSteps - 1"><button class="not-button last" type="button"@click="next">{{lastButton}}</button></slot>
+			</div>
 			<div>
 				<div v-for="i in numSteps" class="prog-dot" :class="{current: i - 1 == curIndex}"></div>
-			</div>
-			<div class="prog-buttons">
-				<button class="not-button" @click="back" type="button" :disabled="curIndex == 0">&lt</button>
-				<button class="not-button" @click="next" type="button" v-if="curIndex < numSteps - 1">&gt</button>
-				<slot name="last-button" v-if="curIndex == numSteps - 1"><button class="not-button last" type="button"@click="next">{{lastButton}}</button></slot>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import Flickity from 'flickity';
 export default {
 	name: "form_stepper",
 	data: function () {
 		return {
 			curIndex: 0,
-			numSteps: 0
+			numSteps: 0,
+			flik: null,
+			readies: [],
+			curStepPending: true,
+			flickityOptions: {
+				initialIndex: 0,
+				prevNextButtons: false,
+				pageDots: false,
+				wrapAround: false,
+				freeScroll: false,
+				cellSelector: ".form-step",
+				draggable: false
+
+			}
 		}
 	},
 	props: {
@@ -48,29 +66,55 @@ export default {
 			}
 
 			if (this.curIndex < this.numSteps - 1) {
-				this.curIndex++;
-			} else {
-				this.$emit("finished")
+				this.flik.next();
 			}
 		},
 		back: function() {
 			if (this.curIndex > 0) {
-				this.curIndex--;
+				this.flik.previous()
 			}
+		},
+		findNext: function() {
+			let nextInd = this.readies.indexOf(false, this.curIndex);
+			if (nextInd == -1 && this.curIndex > 0) {
+				nextInd = this.readies.indexOf(false)
+			}
+
+			if(nextInd > -1) {
+				this.flik.selectCell(nextInd)
+			}
+		},
+		setIndex: function(newIndex) {
+			this.curIndex = newIndex;
+		},
+		setStepReady: function(isReady) {
+			if (typeof isReady != "boolean") {
+				isReady = this.curStep.checkReady(true);
+			}
+			this.readies[this.curIndex] = isReady;
+			this.curStepPending = !isReady;
+
+			this.flik.options.draggable = isReady;
+			this.flik.updateDraggable();
+		},
+		allReady: function() {
+			return this.readies.indexOf(false) == -1;
 		}
 	},
 	mounted: function() {
-		let maxHeight = 0;
 		for (let i = 0; i < this.$children.length; i++) {
 			let child = this.$children[i]
 			if (child.$options.name == "form_step") {
 				child.index = this.numSteps++;
-				maxHeight = Math.max(maxHeight, child.$el.offsetHeight)
+				this.readies[child.index] = false;
 			}
 		}
-		if (this.uniform) {
-			this.$refs.inner.style.height = maxHeight + "px"
+		this.flickityOptions.on = {
+			settle: this.setStepReady,
+			change: this.setIndex
 		}
+		this.flik = new Flickity(this.$refs.inner, this.flickityOptions)
+		this.setStepReady();
 	}
 }
 </script>

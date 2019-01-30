@@ -108,7 +108,12 @@ export default {
 	methods: {
 		validateForm(e) {
 			this.$v.$touch();
-			if (this.$v.$invalid) {
+			if (this.$refs.stepper && !this.$refs.stepper.allReady()) {
+				e.preventDefault();
+				e.stopPropagation();
+
+				this.$refs.stepper.findNext();
+			} else if (this.$v.$invalid) {
 				e.preventDefault();
 				e.stopPropagation();
 				// find the first errored field and focus it

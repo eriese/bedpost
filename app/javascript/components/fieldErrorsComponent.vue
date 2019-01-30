@@ -58,6 +58,9 @@
 			input: function() {
 				return this.$el.querySelector("input, select")
 			},
+			validity: function() {
+				return !this.vField || !this.vField.$invalid;
+			},
 			errorMsg: function() {
 				if (!this.validate || !this.vField ||
 					((!this.vField.$anyError || !this.vField.$dirty) && this.vField.submitted !== false)) {
@@ -108,10 +111,15 @@
 				return ""
 			}
 		},
+		watch: {
+			validity: function (newVal, oldVal) {
+				this.$emit("input-blur", this, newVal);
+			}
+		},
 		methods: {
 			onBlur() {
 				this.focused = false;
-				if (this.validate) {
+				if(this.vField) {
 					this.vField.$touch();
 				}
 			},

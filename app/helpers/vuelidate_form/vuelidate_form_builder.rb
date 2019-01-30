@@ -18,14 +18,25 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   	VuelidateFieldBuilder.new(attribute, options, self, @template)
   end
 
-  def step(use_step=true)
+  def step(use_step=true, **options)
   	if use_step
-  		@template.content_tag(:"form-step") do
+      options[:"@step-ready"] ||= "stepper.stepReady"
+  		@template.content_tag(:"form-step", options) do
   			yield
   		end
   	else
   		yield
   	end
+  end
+
+  def wizard(options = "")
+    old_wiz_val = @options[:wizard]
+    @options[:wizard] = true
+    stepper = @template.render "wizard", options: options do
+      yield
+    end
+    @options[:wizard] = old_wiz_val
+    return stepper
   end
 
   def hidden_field(attribute, options={})

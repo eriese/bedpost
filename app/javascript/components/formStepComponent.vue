@@ -1,6 +1,6 @@
 <template>
-	<div v-show="index == $parent.curIndex">
-		<slot></slot>
+	<div class="form-step">
+		<slot :field-blur="fieldBlur"></slot>
 	</div>
 </template>
 
@@ -9,7 +9,14 @@
 		name: "form_step",
 		data: function() {
 			return {
-				index: 0
+				index: 0,
+				readies: []
+			}
+		},
+		props: {
+			optional: {
+				type: Boolean,
+				default: false
 			}
 		},
 		computed: {
@@ -18,16 +25,39 @@
 			}
 		},
 		methods: {
-			checkReady: function() {
-				for (var i = 0; i < this.fields.length; i++) {
-					if (!this.fields[i].isValid()) {
-						this.fields[i].setFocus();
-						return false;
-					}
+			checkReady: function(focusSomething) {
+				let falseInd = this.readies.indexOf(false)
+				if (falseInd > -1) {
+					this.fields[falseInd].setFocus();
+					return false;
+				}
+
+				if (focusSomething) {
+					this.fields[0] && this.fields[0].setFocus();
 				}
 
 				return true;
+			},
+			fieldBlur(field, valid) {
+				let ind = this.fields.indexOf(field);
+				let old = this.readies[ind]
+
+				if (old == valid) {
+					return;
+				}
+
+				this.readies[ind] = valid;
+
+				let sendValid = valid;
+				if (valid) {
+					sendValid = this.readies.indexOf(false) == -1;
+				}
+
+				this.$emit("step-ready", sendValid);
 			}
+		},
+		mounted: function() {
+			this.readies = this.fields.map((f) => f.isValid())
 		}
 	}
 </script>
