@@ -37,8 +37,8 @@ en:
     sliders:
       partnership:
         exclusivity:
-          one: "%{count} - They're super slutty"
-          five: "%{count} - They have some trusted fuck buddies"
-          nine: "%{count} - We're in a closed, multi-person fluid bond"
-          ten: "%{count} - They only have sex with me"
+          one: "%{count}: They're super slutty"
+          five: "%{count}: They have some trusted fuck buddies"
+          nine: "%{count}: We're in a closed, multi-person fluid bond"
+          ten: "%{count}: They only have sex with me"
           other: "%{count}"

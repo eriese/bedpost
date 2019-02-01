@@ -21,6 +21,8 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   def step(use_step=true, **options)
   	if use_step
       options[:"@step-ready"] ||= "stepper.stepReady"
+      options[:":num-steps"] = "stepper.numSteps"
+      options[:"aria-role"] = "region"
   		@template.content_tag(:"form-step", options) do
   			yield
   		end
@@ -76,17 +78,9 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   	options[:min] ||= 1
   	options[:max] ||= 10
   	field_builder(attribute, options).field do
-  		super <<
-  		@template.content_tag(:noscript) do
-  			@template.content_tag(:div, {class: "range-indicator"}) do
-  				indicators = ActiveSupport::SafeBuffer.new
-  				t_key = "helpers.sliders.#{@object_name}.#{attribute}"
-  				[options[:min], options[:max]/2, options[:max]].each do |n| indicators << @template.content_tag(:div, I18n.t(t_key, count: n, default: [:"helpers.sliders"]), class: "indicator")
-  				end
-	  			indicators
-	  		end
-  		end <<
-  		@template.content_tag(:aside, "{{$root.t('helpers.sliders.#{@object_name}.#{attribute}', {count: #{options[:"v-model"]}, defaults: [{scope: 'helpers.sliders'}]})}}", {id: desc_id, class: "slide-bar-desc js-only", "aria-live" => true})
+      @template.render "forms/range_field", options: options, attribute: attribute, object_name: @object_name, desc_id: desc_id, t_key: "helpers.sliders.#{@object_name}.#{attribute}" do
+        super
+      end
   	end
   end
 

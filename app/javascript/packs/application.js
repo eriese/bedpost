@@ -22,7 +22,10 @@ Vue.component('vuelidate-form', vuelidateFormComponent);
 let app = null;
 document.addEventListener('turbolinks:load', () => {
 	// remove no-js specific styling
-	document.getElementById("vue-container").classList.remove("no-js")
+	let classList = document.getElementById("vue-container").classList;
+	classList.remove("no-js");
+	classList.add("with-js");
+
 	app = new Vue({
 		el: '#vue-container',
 		mounted: animIn,

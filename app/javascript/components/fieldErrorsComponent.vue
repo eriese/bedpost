@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<slot :scope="{onBlur, onFocus, vField, ariaRequired, ariaInvalid, focused}"></slot>
-		<div :id="field + '-error'" class="field-errors" aria-live="polite" aria-atomic="true" v-if="errorMsg">
+		<div :id="field + '-error'" class="field-errors" aria-live="assertive" aria-atomic="true" v-if="errorMsg">
 			<div class="aria-only" v-html="ariaLabel"></div>
 			<div v-html="errorMsg"></div>
 		</div>

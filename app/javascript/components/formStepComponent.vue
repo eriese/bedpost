@@ -1,5 +1,6 @@
 <template>
 	<div class="form-step">
+		<div id="stepper-aria-label" class="aria-only" aria-live="polite">{{`step ${index + 1} of ${numSteps}`}}</div>
 		<slot :field-blur="fieldBlur"></slot>
 	</div>
 </template>
@@ -16,8 +17,9 @@
 		props: {
 			optional: {
 				type: Boolean,
-				default: false
-			}
+				default: false,
+			},
+			numSteps: Number
 		},
 		computed: {
 			fields: function() {

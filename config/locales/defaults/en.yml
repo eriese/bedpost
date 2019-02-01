@@ -46,6 +46,8 @@ en:
       submit: Submit
     required: '%{content}<b aria-hidden="true">*</b>'
     navigation_menu: Menu
+    form_stepper:
+      button_container: Form navigation buttons
     aria:
       invalid: "Invalid: "
     sliders:
@@ -55,6 +57,8 @@ en:
   hide_password: hide password
   join_delimeter: ', '
   no_script: "You don't have javascript enabled. We've tried to make the site as usable as possible for you, but some stuff might not work as well."
+  next: Next
+  previous: Previous
   nav:
     dashboard: "Dashboard"
     user_profile_edit: "Edit Profile"

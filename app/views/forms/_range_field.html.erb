@@ -1,0 +1,11 @@
+<%= yield %>
+<noscript v-if="false">
+	<div class="range-indicator" id="<%= desc_id %>">
+		<% [options[:min], options[:max] / 2, options[:max]].each do |n| %>
+			<div class="indicator"><%= t(t_key, count: n, default: [:"helpers.sliders"]) %></div>
+		<% end %>
+	</div>
+</noscript>
+<aside class="slide-bar-desc js-only">
+	<%= content_tag :span, "{{$root.t('#{t_key}', {count: #{options[:"v-model"]}, defaults: [{scope: 'helpers.sliders'}]})}}", id: desc_id, :":aria-live" => "slot.scope.focused ? 'polite' : undefined", :"aria-atomic" => true%>
+</aside>

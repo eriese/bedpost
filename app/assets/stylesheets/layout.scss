@@ -49,6 +49,10 @@ button.not-button {
 	padding: 0px;
 }
 
+.with-js noscript {
+	display: none;
+}
+
 .no-js {
 	header.small {
 		position: absolute;
@@ -75,6 +79,12 @@ button.not-button {
 
 .aria-only {
 	font-size: 0px;
+}
+
+.clear-fix:after {
+	content: "";
+	display: block;
+	clear: both;
 }
 
 #logo {
@@ -119,7 +129,7 @@ button.not-button {
 	text-align: center;
 }
 
-.flickity-enabled:focus ~ .prog-dots>.prog-buttons>button {
+.flickity-enabled:focus ~ .step-nav>.prog-buttons>li>button {
 	border: 2px solid $color-green-light;
 }
 
@@ -145,8 +155,9 @@ button.not-button {
 		}
 	}
 
-	.prog-dots {
+	.step-nav {
 		margin-top: 25px;
+		margin-bottom: 10px;
 		text-align: center;
 		position: absolute;
 		bottom: 5px;
@@ -154,8 +165,13 @@ button.not-button {
 		width: 100%;
 		z-index: 1;
 
+		$dot-size: 8px;
+		.prog-dots {
+			height: $dot-size;
+			line-height: 0;
+		}
+
 		.prog-dot {
-			$dot-size: 8px;
 			display: inline-block;
 			margin: 0px $dot-size;
 			width: $dot-size;
@@ -169,12 +185,28 @@ button.not-button {
 		}
 
 		.prog-buttons {
+			list-style: none;
+			padding-inline-start: 0;
+			margin: 0px;
+
+			li {
+				display: inline-block;
+
+				&.next {
+					float: right;
+					margin-right: 20px;
+				}
+
+				&.prev {
+					float: left;
+					margin-left: 20px;
+				}
+			}
 
 			button:not(.last) {
 				text-decoration: none;
 				font-size: 32px;
 				font-weight: bold;
-				margin: 0px 10px;
 				line-height: 32px;
 				vertical-align: middle;
 				border-radius: 50%;
@@ -205,6 +237,7 @@ button.not-button {
 				font-weight: bold;
 				display: inline;
 				width: auto;
+				font-size: 1.75em;
 			}
 		}
 	}

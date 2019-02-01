@@ -93,13 +93,13 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			:":v" => "$v",
 			:":submission-error" => "submissionError",
 			:class => field_class,
-			:":validate" => @validate,
-			:"@input-blur"=> "stepSlot.fieldBlur",
-			:"slot-scope"=> "stepSlot"
+			:":validate" => @validate
 		}
 		@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
 
 		@options[:is_step] = @formBuilder.options[:wizard] unless @options.has_key? :is_step
+
+		@err_args.merge({:"@input-blur"=> "stepSlot.fieldBlur", :"slot-scope"=> "stepSlot"}) if @options[:is_step]
 	end
 
 	def do_setup
