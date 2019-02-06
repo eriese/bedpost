@@ -29,6 +29,11 @@ RSpec.describe ProfilesController, type: :controller do
   # Profile. As you add validations to Profile, be sure to
   # adjust the attributes here as well.
 
+  before :each do
+    @partnership = nil
+    @prof = nil
+  end
+
   after :each do
     @partnership.destroy if @partnership.present? && @partnership.persisted?
     @prof.destroy if @prof.present? && @prof.persisted?
@@ -76,9 +81,9 @@ RSpec.describe ProfilesController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
-      before :each do
-        @prof = nil
-      end
+      # before :each do
+      #   @prof = nil
+      # end
 
       def get_valid_params
         {profile: attributes_for(:profile)}

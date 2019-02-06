@@ -19,7 +19,11 @@
 				type: Boolean,
 				default: false,
 			},
-			numSteps: Number
+			numSteps: Number,
+			opts: {
+				type: Object,
+				default: () => {return {}}
+			}
 		},
 		computed: {
 			fields: function() {

@@ -3,7 +3,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	include VuelidateFormUtils
 
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
-		:field_class, :is_step]
+		:field_class, :is_step, :step_options]
 
 	def initialize(attribute, options, formBuilder, template)
 		@attribute = attribute
@@ -21,7 +21,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 	def field(after_method = nil, selector=:div, &block)
 		@after_method = after_method
-		output = @formBuilder.step(@options[:is_step]) do
+		output = @formBuilder.step(@options[:is_step], @options.delete(:step_options) || {}) do
 			@template.content_tag(:"field-errors", @err_args) do
 				@template.content_tag(selector, @field_args) do
 					field_inner &block

@@ -1,5 +1,9 @@
 // from https://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-with-string-key?noredirect=1&lq=1
 Object.getAtPath = function(o, s) {
+    if (!o) {
+        return;
+    }
+
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
     s = s.replace(/^\./, '');           // strip a leading dot
     let a = s.split('.');

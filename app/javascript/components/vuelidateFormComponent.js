@@ -82,7 +82,7 @@ export default {
 	data: function() {
 		let dt = {
 			formData: gon.form_obj,
-			toggles: gon.form_toggles || {},
+			toggles: {},
 			submissionError: gon.submissionError || {}
 		};
 		if (gon.form_obj.password_digest !== undefined) {
@@ -93,7 +93,8 @@ export default {
 
 	},
 	props: {
-		validate: String
+		validate: String,
+		startToggles: Object
 	},
 	components: {
 		fieldErrors,
@@ -140,5 +141,8 @@ export default {
 				Object.setAtPath(this, clear, null)
 			}
 		}
+	},
+	mounted: function() {
+		this.toggles = this.startToggles;
 	}
 }

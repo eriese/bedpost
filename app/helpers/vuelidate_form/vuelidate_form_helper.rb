@@ -42,7 +42,8 @@ module VuelidateForm::VuelidateFormHelper
 
 	def add_valid_form_wrapper(form_obj, form_text)
 		validations = form_obj.validations.nil? ? "" : form_obj.validations.join(",")
-		content_tag("vuelidate-form", {"inline-template" => "", validate: validations}) do
+		toggles = form_obj.toggles.nil? ? "{}" : form_obj.toggles.to_json
+		content_tag("vuelidate-form", {"inline-template" => "", validate: validations, :":start-toggles" => toggles}) do
 			form_text
 		end
 	end

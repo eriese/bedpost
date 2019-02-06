@@ -2,39 +2,24 @@
 	<h2><%= t(".partner_html", {name: @partnership.partner.name}) %></h2>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
 		<%= f.hidden_field :partner_id %>
-		<div class="step" :step="1">
-			<%= f.slider :exclusivity %>
-			<label for="" id="exclusivity-label"><%= t("helpers.label.partnership.exclusivity") %></label>
-			<slider v-bind="{dotSize: null, speed: 0.3, tooltip: false, height: null, useKeyboard: true, descId: 'exclusivity-desc', labelId: 'exclusivity-label'}" :max="10" :min="1" v-model="formData.partnership.exclusivity"></slider>
-			<aside class="slide-bar-desc" id="exclusivity-desc">{{$root.t("helpers.sliders.partnership.exclusivity", {count: formData.partnership.exclusivity})}}</aside>
-
-			<div class="slide-bar">
-				<div class="caret"></div>
-			</div>
-			<div class="slide-bar-desc">They're super slutty</div>
-			<div class="prog-dots">
-				<div>
-					<div class="prog-dot"></div>
-					<div class="prog-dot"></div>
-					<div class="prog-dot current"></div>
-					<div class="prog-dot"></div>
-					<div class="prog-dot"></div>
+		<%= f.wizard "{stepClass: 'step'}" do %>
+			<%= render "fields", f: f %>
+			<% content_for :last_button do %>
+				<%= f.submit nil, class: "not-button"%>
+			<% end %>
+			<% content_for :additional do %>
+				<div v-if="addSlot.curOpts.showAdditional" class="additional">
+					<p><%= f.toggle_tag :why, :":symbols" => "'Why does this matter?'" %></p>
+					<p v-show="toggles['why']">
+						{{$root.t(`partnerships.new.why.${addSlot.curField}`)}}
+					</p>
+					<p><%= f.toggle_tag :how, :":symbols" => "'How does BedPost use this information?'"  %></p>
+					<p v-show="toggles['how']">
+						{{$root.t(`partnerships.new.how.${addSlot.curField}`)}}
+					</p>
 				</div>
-				<div class="prog-buttons">
-					<a href="">&lt</a>
-					<button class="not-button">Save</a>
-				</div>
-			</div>
-		</div>
-
-		<div class="additional">
-			<p><a href="">Why does this matter?</a></p>
-			<p>
-				<a href="">How does BedPost use this information?</a>
-			</p>
-		</div>
-		<%# render "fields", f: f %>
-		<%# f.submit %>
+			<% end %>
+		<% end %>
 	<% end %>
-	<%# link_to t(".back"), who_path, "data-animation-type" => "slideRight" if @partnership.partner.is_a?(UserProfile) %>
+	<%= link_to t(".back"), who_path, "data-animation-type" => "slideRight" if @partnership.partner.is_a?(UserProfile) %>
 </div>

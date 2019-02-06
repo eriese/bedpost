@@ -7,8 +7,6 @@ module UserProfileHelpers
 	def dummy_user
 		dummy_pronoun
 		@@_dummy_user ||= FactoryBot.create(:user_profile)
-
-		return @@_dummy_user
 	end
 
 	def dummy_pronoun

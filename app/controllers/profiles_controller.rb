@@ -18,7 +18,6 @@ class ProfilesController < ApplicationController
       redirect_to @partnership
     else
       gon_client_validators(@profile)
-      gon_toggle({internal_name: @profile.has_internal?})
     end
   end
 

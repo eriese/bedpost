@@ -10,7 +10,7 @@
 		},
 		props: {
 			symbols: {
-				type: Array,
+				type: [Array, String],
 				default: function() {
 					return ["-", "+"]
 				}
@@ -37,11 +37,19 @@
 		},
 		computed: {
 			toggleState: function() {
-				let key = this.symbols[this.index]
+				let key = typeof this.symbols == "string" ? this.symbols : this.symbols[this.index]
 				return this.translate ? I18n.t(key) : key
 			},
 			index: function() {
-				return this.vals.indexOf(this.val);
+				if (this.val !== undefined) {
+					return this.vals.indexOf(this.val);
+				}
+
+				for (let i = 0; i < this.vals.length; i++) {
+					if (!this.vals[i]) {
+						return i;
+					}
+				}
 			}
 		},
 		methods: {
@@ -57,6 +65,11 @@
 					clear = this.clear
 				}
 				this.$emit("toggle-event", this.$attrs.field, new_val,clear)
+			}
+		},
+		mounted: function() {
+			if (typeof this.symbols == "object" && this.symbols.length != this.vals.length) {
+				console.warn("Toggle component has a mismatched number of values and symbols");
 			}
 		}
 	}

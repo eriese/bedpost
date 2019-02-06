@@ -140,3 +140,120 @@ form {
 	}
 }
 
+.flickity-enabled:focus ~ .step-nav>.prog-buttons>li>button {
+	border: 2px solid $color-green-light;
+}
+
+.stepper {
+	position: relative;
+
+	.step-inner {
+		padding: 15px;
+		border-radius: inherit;
+	}
+
+	.flickity-viewport {
+		padding-bottom: 60px;
+	}
+
+	.form-step {
+		width: 100%;
+		padding: 5px;
+		box-sizing: border-box;
+
+		&:not(.is-selected) {
+			visibility: hidden;
+		}
+	}
+
+	.step-nav {
+		// margin-top: 25px;
+		// margin-bottom: 10px;
+		text-align: center;
+		position: relative;
+		// bottom: 5px;
+		left: 0px;
+		width: 100%;
+		z-index: 1;
+		height: 0px;
+
+		$dot-size: 8px;
+		.prog-dots {
+			height: $dot-size;
+			line-height: 0;
+			position: absolute;
+			width: 100%;
+			bottom: 15px;
+		}
+
+		.prog-dot {
+			display: inline-block;
+			margin: 0px $dot-size;
+			width: $dot-size;
+			height: $dot-size;
+			border-radius: 50%;
+			background-color: rgba($color-green-light, 0.5);
+
+			&.current {
+				background-color: $color-green-dark;
+			}
+		}
+
+		.prog-buttons {
+			list-style: none;
+			padding-inline-start: 0;
+			margin: 0px;
+
+			li {
+				display: inline-block;
+				position: absolute;
+				bottom: 35px;
+
+				&.next {
+					right: 20px;
+				}
+
+				&.prev {
+					left: 20px;
+				}
+			}
+
+			button:not(.last) {
+				text-decoration: none;
+				font-size: 32px;
+				font-weight: bold;
+				line-height: 32px;
+				vertical-align: middle;
+				border-radius: 50%;
+				height: 40px;
+				min-width: 40px;
+
+				&:disabled {
+					opacity: 0.5;
+					cursor: initial;
+				}
+
+				svg {
+					height: 30px;
+					vertical-align: middle;
+					fill: $color-green-light;
+					stroke: $color-green-light;
+				}
+
+				&:not(:disabled):hover svg {
+					fill: $color-green-dark;
+					stroke: $color-green-dark;
+				}
+			}
+
+			input[type=submit], button.last {
+				line-height: 32px;
+				vertical-align: middle;
+				font-weight: bold;
+				display: inline;
+				width: auto;
+				font-size: 1.75em;
+			}
+		}
+	}
+}

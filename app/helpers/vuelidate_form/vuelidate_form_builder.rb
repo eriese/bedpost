@@ -31,7 +31,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   	end
   end
 
-  def wizard(options = "")
+  def wizard(options = "{}")
     old_wiz_val = @options[:wizard]
     @options[:wizard] = true
     stepper = @template.render "wizard", options: options do
@@ -49,14 +49,20 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
-  	add_to_class(args, "inline", :field_class)
+  	add_to_class(args, "inline", :field_class) unless args[:inline] == false
+    toggle_opt = args.delete :toggle
+    if toggle_opt
+      toggle_key = toggle_opt == true ? attribute : toggle_opt
+      args[:"v-model"] = "toggles['#{toggle_key}']"
+      add_toggle(toggle_key, args[:checked])
+    end
   	field_builder(attribute, args).field do
   		super
   	end
   end
 
   def toggle(attribute, options={}, toggle_options={})
-		add_to_class(options, "inline")
+		add_to_class(options, "inline") unless args[:inline] == false
 		options[:before_label] = true unless options.has_key?(:before_label)
 		field_builder(attribute, options).field do
 			toggle_tag(attribute, toggle_options)
@@ -95,7 +101,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   def password_toggle
   	@template.content_tag(:div, {class: "additional", slot: "additional"}) do
   		@template.content_tag(:p) do
-  			toggle_tag(:password, {class: "no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']"})
+  			toggle_tag(:password, {class: "no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
   		end
   	end
   end
@@ -129,21 +135,22 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def toggle_tag(attribute, toggle_options)
+	def toggle_tag(attribute, **toggle_options)
 		clear_opt = toggle_options.delete :":clear"
 		if clear_opt
 			clear_attr = clear_opt == true ? attribute : clear_opt
 			toggle_options[:":clear"] = "'#{full_v_name(clear_attr)}'"
 		end
 
-		toggle_options.merge! ({
+		toggle_options.reverse_merge! ({
 			:"@toggle-event" => "toggle",
 			:":val" => "toggles['#{attribute}']",
 			:field=> attribute
 		})
+
+    add_toggle(attribute, toggle_options.delete(:start_val))
 		@template.content_tag(:toggle, "", toggle_options)
 	end
-
 
 	def objectify_options(options)
 	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :before_label, :is_step)
@@ -153,4 +160,12 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		@validations ||= []
 		@validations << attribute unless @validations.include?(attribute)
 	end
+
+  def add_toggle(attribute, start_val)
+    toggles[attribute] = start_val || false unless toggles.has_key? attribute
+  end
+
+  def toggles
+    @toggles ||= @options.delete(:toggles) || {}
+  end
 end; end

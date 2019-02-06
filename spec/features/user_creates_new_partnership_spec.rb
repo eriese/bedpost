@@ -64,11 +64,11 @@ feature "User creates new partnership", :slow do
 		expect(page).to have_content(t_text("partnerships.new.partner_html", {name: @partner.name}))
 
 		# fill in form and submit
-		lvls = ["5", "7", "9"]
-		fields = [:familiarity, :exclusivity, :communication]
+		fields = Partnership::LEVEL_FIELDS
+		lvls = Array.new(fields.length) {rand(1..10).to_s}
 		indexes = (0...fields.length)
 		indexes.each do |i|
-			select(lvls[i], from: "partnership_#{fields[i]}")
+			fill_in "partnership_#{fields[i]}", with: lvls[i]
 		end
 		find('input[name="commit"]').click
 
