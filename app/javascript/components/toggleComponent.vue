@@ -1,5 +1,5 @@
 <template>
-	<button class="toggle not-button" @click="doToggle" type="button">{{toggleState}}</button>
+	<button class="toggle not-button" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
 </template>
 
 <script>
@@ -33,6 +33,10 @@
 			clearOn: {
 				type: Array,
 				required: false
+			},
+			expandable: {
+				type: Boolean,
+				required: false
 			}
 		},
 		computed: {
@@ -50,6 +54,13 @@
 						return i;
 					}
 				}
+			},
+			expanded: function() {
+				if (!this.expandable) {return;}
+				return (!!this.val).toString();
+			},
+			pressed: function() {
+				return (!!this.val).toString();
 			}
 		},
 		methods: {

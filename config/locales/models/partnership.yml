@@ -15,7 +15,7 @@ en:
     new:
       partner_html: Tell us about your relationship with <b>%{name}</b>
       why:
-        familiarity: TODO add this
+        familiarity: Your familiarity with a person helps you make informed judgments about the other factors of your relationship. For instance, if you rate your trust with a person very high but you don't know them very well, your trust in them is less helpful of a measure.
       how:
         familiarity: TODO add this
     show:
@@ -46,3 +46,7 @@ en:
           nine: "%{count}: We're in a closed, multi-person fluid bond"
           ten: "%{count}: They only have sex with me"
           other: "%{count}"
+    toggles:
+      partnership:
+        why: Why is this important?
+        how: How does BedPost use this information?

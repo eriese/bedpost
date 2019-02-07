@@ -65,11 +65,12 @@ form {
 	}
 
 	div.range-indicator {
-		margin-bottom: 15px;
+		margin-bottom: 10px;
 
 		&:after {
 			content: "";
 			clear: both;
+			display: block;
 		}
 
 		.indicator {
@@ -110,6 +111,9 @@ form {
 }
 
 .field {
+	display: block;
+	margin: 10px 0px 25px;
+
 	> .toggle {
 		display: inline;
 		font-size: 30px;
@@ -140,8 +144,23 @@ form {
 	}
 }
 
-.flickity-enabled:focus ~ .step-nav>.prog-buttons>li>button {
-	border: 2px solid $color-green-light;
+.flickity-enabled {
+	&:focus ~ .step-nav>.prog-buttons>li>button {
+		border: 2px solid $color-green-light;
+	}
+
+	.field {
+		margin-bottom: 0px;
+
+		.additional {
+			height: 80px;
+
+			.explanation {
+				max-height: 40px;
+				overflow-y: auto;
+			}
+		}
+	}
 }
 
 .stepper {
@@ -255,5 +274,11 @@ form {
 				font-size: 1.75em;
 			}
 		}
+	}
+}
+
+.no-js {
+	toggle {
+		color: $color-purple-dark;
 	}
 }

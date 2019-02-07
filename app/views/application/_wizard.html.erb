@@ -3,14 +3,8 @@
 		<%= yield %>
 	<% end %>
 	<% if content_for? :last_button %>
-		<%= content_tag :template, slot: "last-button"  do %>
+		<%= content_tag :span, slot: "last-button"  do %>
 			<%= yield :last_button %>
 		<% end %>
-		<%= content_tag :noscript do %>
-			<%= yield :last_button %>
-		<% end %>
-	<% end %>
-	<%= content_tag :template, slot: "additional", :"slot-scope" => "addSlot" do %>
-		<%= yield :additional %>
 	<% end %>
 <% end %>

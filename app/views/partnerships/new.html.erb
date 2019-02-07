@@ -5,19 +5,7 @@
 		<%= f.wizard "{stepClass: 'step'}" do %>
 			<%= render "fields", f: f %>
 			<% content_for :last_button do %>
-				<%= f.submit nil, class: "not-button"%>
-			<% end %>
-			<% content_for :additional do %>
-				<div v-if="addSlot.curOpts.showAdditional" class="additional">
-					<p><%= f.toggle_tag :why, :":symbols" => "'Why does this matter?'" %></p>
-					<p v-show="toggles['why']">
-						{{$root.t(`partnerships.new.why.${addSlot.curField}`)}}
-					</p>
-					<p><%= f.toggle_tag :how, :":symbols" => "'How does BedPost use this information?'"  %></p>
-					<p v-show="toggles['how']">
-						{{$root.t(`partnerships.new.how.${addSlot.curField}`)}}
-					</p>
-				</div>
+				<%= f.submit nil, :":class"=>'["not-button"]'%>
 			<% end %>
 		<% end %>
 	<% end %>

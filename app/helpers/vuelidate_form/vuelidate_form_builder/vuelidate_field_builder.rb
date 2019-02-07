@@ -3,7 +3,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	include VuelidateFormUtils
 
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
-		:field_class, :is_step, :step_options]
+		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args]
 
 	def initialize(attribute, options, formBuilder, template)
 		@attribute = attribute
@@ -20,7 +20,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	end
 
 	def field(after_method = nil, selector=:div, &block)
-		@after_method = after_method
+		@after_method = after_method if after_method.present?
 		output = @formBuilder.step(@options[:is_step], @options.delete(:step_options) || {}) do
 			@template.content_tag(:"field-errors", @err_args) do
 				@template.content_tag(selector, @field_args) do
@@ -57,7 +57,13 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	end
 
 	def call_after_method
-		@after_method.present? && @formBuilder.respond_to?(@after_method) ? @formBuilder.send(@after_method) : ""
+		return "" if @after_method.nil?
+
+		return @formBuilder.send(@after_method) if @formBuilder.respond_to?(@after_method)
+
+		return @template.send(@after_method, *@after_method_args) if @template.respond_to?(@after_method)
+
+		""
 	end
 
 	def get_validation
@@ -81,6 +87,10 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	end
 
 	def process_options
+		@options[:is_step] = @formBuilder.options[:wizard] unless @options.has_key? :is_step
+		@after_method = @options.delete(:after_method) || @options.delete(:after_content)
+		@after_method_args = @options.delete(:after_method_args)
+
 		field_class = (@options[:field_class] || "") << " field"
 		field_class.strip!
 
@@ -96,8 +106,6 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			:":validate" => @validate
 		}
 		@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
-
-		@options[:is_step] = @formBuilder.options[:wizard] unless @options.has_key? :is_step
 
 		@err_args.merge({:"@input-blur"=> "stepSlot.fieldBlur", :"slot-scope"=> "stepSlot"}) if @options[:is_step]
 	end

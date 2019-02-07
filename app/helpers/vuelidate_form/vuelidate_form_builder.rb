@@ -149,7 +149,15 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		})
 
     add_toggle(attribute, toggle_options.delete(:start_val))
-		@template.content_tag(:toggle, "", toggle_options)
+    content = ""
+    if toggle_options.delete(:js_backup)
+      if toggle_options.has_key?(:symbols)
+        content = toggle_options[:symbols]
+      elsif toggle_options.has_key?(:":symbols")
+        content = toggle_options[:":symbols"][0]
+      end
+    end
+		@template.content_tag(:toggle, content, toggle_options)
 	end
 
 	def objectify_options(options)

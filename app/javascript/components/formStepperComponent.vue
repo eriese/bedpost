@@ -26,7 +26,6 @@
 				</div>
 			</div>
 		</div>
-		<slot name="additional" :cur-opts="curOpts" :cur-field="curField"></slot>
 	</div>
 </template>
 
@@ -43,8 +42,6 @@ export default {
 			flik: null,
 			readies: [],
 			curStepPending: true,
-			curOpts: {},
-			curField: {},
 			flickityOptions: {
 				initialIndex: 0,
 				prevNextButtons: false,
@@ -78,9 +75,6 @@ export default {
 		},
 		processIndex: function(newInd, oldInd) {
 			this.internalInd = this.indexes[newInd];
-			let curStep = this.getCurStep();
-			this.curOpts = curStep.opts;
-			this.curField = curStep.fields[0].field;
 			this.setStepReady();
 		},
 		next: function() {
