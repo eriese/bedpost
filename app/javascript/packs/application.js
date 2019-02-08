@@ -11,14 +11,14 @@ import Vue from 'vue/dist/vue.esm'
 import Vuelidate from 'vuelidate';
 import navComponent from '../components/navComponent'
 import vuelidateFormComponent from '../components/vuelidateFormComponent';
-import VueResource from 'vue-resource';
+import basicStepperComponent from '../components/basicStepperComponent';
 import {animIn, addTransitionEvents} from '../modules/transitions';
 
 Vue.use(TurbolinksAdapter);
 Vue.use(Vuelidate);
-Vue.use(VueResource);
 Vue.component('nav-component', navComponent);
 Vue.component('vuelidate-form', vuelidateFormComponent);
+Vue.component('basic-stepper', basicStepperComponent);
 let app = null;
 document.addEventListener('turbolinks:load', () => {
 	// remove no-js specific styling

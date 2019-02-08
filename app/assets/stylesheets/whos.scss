@@ -1,3 +1,37 @@
 // Place all the styles related to the whos controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#who_form {
+	ul {
+		padding-inline-start: 0px;
+		display: inline-block;
+		margin: 0px auto;
+
+		li {
+			list-style-type: none;
+		}
+	}
+
+	.button-list li {
+		float: left;
+		margin: 0px 20px;
+	}
+
+	button, input[type=submit], a {
+		width: 85px;
+		height: 85px;
+		border-radius: 50%;
+		padding: 0px;
+		font-size: 1.15rem;
+	}
+
+	a:not(.as-button), button.as-link {
+		height: auto;
+		width: auto;
+	}
+
+	form, .options {
+		margin-bottom: 10px;
+	}
+}

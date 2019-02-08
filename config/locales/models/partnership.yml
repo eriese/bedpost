@@ -27,13 +27,20 @@ en:
       partner_html: Edit partnership with <b>%{name}</b>
   whos:
     new:
-      new_profile: Make a profile for this partner
+      title: Great!
+      form_title: Cool, that makes it easier!
+      new_profile:
+        title: No worries. Let's set up a profile for them.
+        desc: You can always connect this partnership with their profile later or invite them to use the one you make.
+      go: Go
+      go_new_profile: Create a profile for your new partner
   helpers:
     label:
       partnership:
         nickname: Do you want to add a nickname for this person?
         familiarity: How well do you know this person?
         exclusivity: How exclusively does this person have sex with you?
+        uid: What's their user id?
     tooltip:
       partnership:
         nickname: This might be something like their last name, or where you met them, something to help you identify them
@@ -50,3 +57,6 @@ en:
       partnership:
         why: Why is this important?
         how: How does BedPost use this information?
+    submit:
+      partnership:
+        create: Next

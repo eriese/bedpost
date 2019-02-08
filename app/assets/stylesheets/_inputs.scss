@@ -142,24 +142,6 @@ input[type=range] {
 	}
 }
 
-button:not(.not-button), input[type=submit]:not(.not-button) {
-	background-color: $color-purple-light;
-	border-color: $color-purple-light;
-	color: $background-color;
-	padding: 5px 10px;
-	transition: 0.1s linear all;
-	cursor: pointer;
-
-	&:hover, &:focus {
-		background-color: $color-purple-dark;
-		border-color: $color-purple-dark;
-	}
-
-	form.centered & {
-		margin-top: 10px;
-	}
-}
-
 input[type=hidden] {
 	display: none !important;
 }

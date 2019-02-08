@@ -59,6 +59,8 @@ en:
   no_script: "You don't have javascript enabled. We've tried to make the site as usable as possible for you, but some stuff might not work as well."
   next: Next
   previous: Previous
+  back: Back
+  edit: Edit
   nav:
     dashboard: "Dashboard"
     user_profile_edit: "Edit Profile"

@@ -29,24 +29,58 @@ main {
 	padding: 10px;
 }
 
-a, button.not-button, input[type=submit].not-button {
+a, button.not-button, input[type=submit].not-button, button.as-link {
 	color: $link-color;
 	cursor: pointer;
 	-webkit-appearance: none;
 	background-color: transparent;
 	border: none;
-	&:hover {
+	&:hover, &:focus {
 		color: $link-hover-color;
 	}
 }
 
-button.not-button {
+button.not-button, button.as-link, input[type=submit].not-button {
 	background: none;
 	border: none;
 	-webkit-appearance: none;
 	-moz-appearance:    none;
 	appearance:         none;
 	padding: 0px;
+}
+
+button.as-link {
+	text-decoration: underline;
+}
+
+button:not(.not-button):not(.as-link), input[type=submit]:not(.not-button), a.as-button {
+	background-color: $button-color;
+	border-color: $button-color;
+	color: $button-text-color;
+	padding: 5px 10px;
+	transition: 0.1s linear all;
+	cursor: pointer;
+
+	&:hover, &:focus {
+		background-color: $button-hover-color;
+		border-color: $button-hover-color;
+	}
+
+	form.centered & {
+		margin-top: 10px;
+	}
+}
+
+a.as-button {
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	align-content: center;
+	box-sizing: border-box;
+	border-style: solid;
+	border-width: 1px;
+	text-align: center;
+	justify-content: center
 }
 
 .with-js noscript {
@@ -127,4 +161,12 @@ button.not-button {
 
 .centered-container {
 	text-align: center;
+}
+
+.desc {
+	h1 + &, h2 + & {
+		line-height: 1;
+		margin-top: -1em;
+		margin-bottom: 1em;
+	}
 }
