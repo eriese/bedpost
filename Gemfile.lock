@@ -49,6 +49,8 @@ GEM
     arel (9.0.0)
     bcrypt (3.1.12)
     bindex (0.5.0)
+    binding_of_caller (0.8.0)
+      debug_inspector (>= 0.0.1)
     bootsnap (1.3.2)
       msgpack (~> 1.0)
     bson (4.4.2)
@@ -79,6 +81,7 @@ GEM
     concurrent-ruby (1.1.4)
     crass (1.0.4)
     database_cleaner (1.7.0)
+    debug_inspector (0.0.3)
     diff-lcs (1.3)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
@@ -169,6 +172,9 @@ GEM
     pry-byebug (3.6.0)
       byebug (~> 10.0)
       pry (~> 0.10)
+    pry-stack_explorer (0.4.9.3)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
     public_suffix (3.0.3)
     puma (3.12.0)
     rack (2.0.6)
@@ -314,6 +320,7 @@ DEPENDENCIES
   normalize-rails
   pry
   pry-byebug
+  pry-stack_explorer
   puma (~> 3.11)
   rack-livereload
   rails (~> 5.2.1)

@@ -15,7 +15,7 @@ module ApplicationHelper
 		Mongoid::QueryCache.cache { Pronoun.all}.to_ary
 	end
 
-	def t_action(key, options={})
+	def t_action(key, **options)
 		options = options.dup
 		default = Array(options.delete(:default)).compact
 
@@ -25,6 +25,6 @@ module ApplicationHelper
 
 		new_key = new_default.shift
 		options[:default] = new_default
-		I18n.t(new_key, options)
+		t(new_key, options)
 	end
 end

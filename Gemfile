@@ -55,6 +55,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry'
   gem 'pry-byebug'
+  gem 'pry-stack_explorer'
 end
 
 group :development do
