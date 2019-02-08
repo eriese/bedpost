@@ -89,7 +89,13 @@ const animIn = function() {
 }
 
 const animOut = function(visitUrl) {
-	getTween(true, Turbolinks.visit, [visitUrl])
+	if (typeof visitUrl == "string") {
+		getTween(true, Turbolinks.visit, [visitUrl])
+	} else if (typeof visitUrl == "function") {
+		getTween(true, visitUrl)
+	} else {
+		getTween(true, animIn)
+	}
 }
 
 let no_visit = true;
@@ -104,8 +110,8 @@ const beforeUnload = function(e) {
 	animOut(e.data.url);
 }
 
-const onTransitionTriggered = function(e) {
-	let dataset = e.target.dataset
+const processClickData = function(dataset) {
+	dataset = dataset || {}
 	for(let propName in props) {
 		let given = dataset[propName]
 		let granted = prop_defaults[propName]
@@ -122,10 +128,15 @@ const onTransitionTriggered = function(e) {
 	}
 }
 
+const onTransitionTriggered = function(e) {
+	let dataset = e.target.dataset;
+	processClickData(dataset);
+}
+
 const addTransitionEvents = function() {
 	document.addEventListener('turbolinks:before-visit', beforeUnload)
 
 	document.addEventListener('turbolinks:click', onTransitionTriggered)
 }
 
-export {animIn, addTransitionEvents, onTransitionTriggered};
+export {animIn, animOut, processClickData, addTransitionEvents, onTransitionTriggered};

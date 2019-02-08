@@ -1,22 +1,22 @@
-<basic-stepper inline-template>
+<basic-stepper inline-template :default-props="{animLength: 0.2}">
 	<div class="centered-container" id="who_form">
 		<div v-if="step == 0">
 			<h2 id="step_0_label">Do they have an account with BedPost?</h2>
 			<ul aria-labeledby="step_0_label" class="button-list clear-fix">
-				<li><button type="button" @click="setStep(1)">Yes</button></li>
-				<li><button type="button" @click="setStep(2)">No/ Unknown</button></li>
+				<li><button type="button" @click="setStep(1, {animationType: 'slideLeft'})">Yes</button></li>
+				<li><button type="button" @click="setStep(2, {animationType: 'slideLeft'})">No/ Unknown</button></li>
 			</ul>
 		</div>
 		<div v-if="step == 1">
 			<h2><%= t(".form_title") %></h2>
 			<%= render "form" %>
-			<button type="button" @click="setStep(0)" class="as-link">Back</button>
+			<button type="button" @click="setStep(0, {animationType: 'slideRight'})" class="as-link">Back</button>
 		</div>
 		<div v-if="step == 2">
 			<h2><%= t(".new_profile.title")%></h2>
 			<aside class="desc"><%= t(".new_profile.desc") %></aside>
 			<div class="options"><%= link_to t(".go"), new_profile_path, "data-animation-type" => "slideLeft", title: t(".go_new_profile"), class: "as-button" %></div>
-			<button type="button" @click="setStep(0)" class="as-link">Back</button>
+			<button type="button" @click="setStep(0, {animationType: 'slideRight'})" class="as-link">Back</button>
 
 		</div>
 	</div>

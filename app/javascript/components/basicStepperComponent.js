@@ -1,3 +1,5 @@
+import {animOut, animIn, processClickData} from "../modules/transitions";
+
 export default {
 	name: "basic_stepper",
 	data: function () {
@@ -6,11 +8,23 @@ export default {
 		}
 	},
 	props: {
-		stepClass: String
+		stepClass: String,
+		animate: {
+			type: Boolean,
+			default: true
+		},
+		defaultProps: {
+			type: Object
+		}
 	},
 	methods: {
-		setStep(newStep) {
-			this.step = newStep;
+		setStep(newStep, animProps) {
+			let props = Object.assign({}, this.defaultProps, animProps)
+			processClickData(props)
+			animOut(() => {
+				this.step = newStep;
+				this.$nextTick(animIn)
+			});
 		}
 	}
 }
