@@ -48,6 +48,7 @@ en:
     navigation_menu: Menu
     form_stepper:
       button_container: Form navigation buttons
+      prog_label: Step %{index} of %{numSteps}
     aria:
       invalid: "Invalid: "
     sliders:

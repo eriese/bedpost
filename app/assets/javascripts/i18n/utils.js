@@ -1,3 +1,4 @@
+// add a pluralization rule that checks english pluralization for any number up to 10 and defaults to other
 I18n.pluralization["en"] = function(count) {
 	switch(parseInt(count)) {
 		case 0: return ["zero", "other"];

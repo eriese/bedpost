@@ -1,4 +1,4 @@
-# monkey-patch to let I18n.translate (and its alias 't') cascade for keys by default
+# monkey-patch I18n cascade to not return a hash while cascading keys
 module I18n
   module Backend
     module Cascade
@@ -24,6 +24,7 @@ module I18n
   end
 end
 
+# monkey-patch to let I18n.translate (and its alias 't') cascade for keys by default
 I18n::Backend::Simple.send(:include, I18n::Backend::Cascade)
 
 ActionView::Base.class_eval do
