@@ -2,7 +2,7 @@
 	<div class="stepper" >
 		<div :class="stepClass">
 			<div class="step-inner" ref="inner" role="form" aria-labeledby="stepper-aria-label">
-				<slot :step-ready="setStepReady" :num-steps="numSteps"></slot>
+				<slot :step-ready="setStepComplete" :num-steps="numSteps"></slot>
 			</div>
 			<div class="step-nav">
 				<ul class="prog-buttons clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
@@ -35,31 +35,31 @@ export default {
 	name: "form_stepper",
 	data: function () {
 		return {
-			curIndex: 0,
-			internalInd: 0,
-			indexes: [],
-			numSteps: 0,
-			flik: null,
-			readies: [],
-			curStepPending: true,
-			flickityOptions: {
+			curIndex: 0, // the current step index
+			internalInd: 0, // the index of the current step in the $children array
+			indexes: [], // an array mapping the step indexes to their internal indexes
+			numSteps: 0, // the number of steps in the stepper
+			flik: null, // the Flickity instance
+			completes: [], // an array to keep track of which steps have been visited and completed
+			curStepPending: true, // is the current step not yet ready?
+			flickityOptions: { // the options for the flickity instance
 				initialIndex: 0,
-				prevNextButtons: false,
-				pageDots: false,
-				wrapAround: false,
-				freeScroll: false,
+				prevNextButtons: false, // we're going to do our own buttons
+				pageDots: false, // we're going to do our own page dots
+				wrapAround: false, // don't wrap around
+				freeScroll: false, // lock on steps
 				cellSelector: ".form-step",
-				draggable: false
+				draggable: false // we're going to manipulate draggable in the code
 			}
 		}
 	},
 	props: {
-		uniform: {
+		uniform: { // should the heights of all the steps be uniform
 			type: Boolean,
 			default: true
 		},
-		stepClass: String,
-		lastButton: String
+		stepClass: String, // a class to add to steps
+		lastButton: String // text of the last button if nothing is provided for the slot
 	},
 	watch: {
 		$children: function(newVal, oldVal) {
@@ -70,82 +70,118 @@ export default {
 		}
 	},
 	methods: {
+		/** get the current step component */
 		getCurStep: function() {
+			// get the child at the internal index
 			return this.$children[this.internalInd];
 		},
+		/** process a change to the index */
 		processIndex: function(newInd, oldInd) {
+			// set the internal index
 			this.internalInd = this.indexes[newInd];
-			this.setStepReady();
+			// get the completeness of the new step
+			this.setStepComplete();
 		},
+		/** move to the next step */
 		next: function() {
-			if (!this.getCurStep().checkReady()) {
+			// don't move forward if the step is not ready
+			if (!this.getCurStep().checkComplete()) {
 				return
 			}
 
+			// move forward using the flikity instance
 			if (this.curIndex < this.numSteps - 1) {
 				this.flik.next();
 			}
 		},
+		/** move to the previous step */
 		back: function() {
+			// only if we're not already on the first one
 			if (this.curIndex > 0) {
 				this.flik.previous()
 			}
 		},
+		/** find the next step that isn't ready */
 		findNext: function() {
-			let nextInd = this.readies.indexOf(false, this.curIndex);
+			// start looking from the current index
+			let nextInd = this.completes.indexOf(false, this.curIndex);
+			// otherwise look in the whole array
 			if (nextInd == -1 && this.curIndex > 0) {
-				nextInd = this.readies.indexOf(false)
+				nextInd = this.completes.indexOf(false)
 			}
 
+			// select that cell
 			if(nextInd > -1) {
 				this.flik.selectCell(nextInd)
 			}
 		},
+		/** set the index (called from FLickity onChange) */
 		setIndex: function(newIndex) {
 			this.curIndex = newIndex;
 		},
-		setStepReady: function(isReady) {
-			if (typeof isReady != "boolean") {
-				isReady = this.getCurStep().checkReady();
+		/** set the readiness of the current step
+		* (called from a lot of places including the blur event on the step's inputs) */
+		setStepComplete: function(isComplete) {
+			// if an isComplete isn't provided, get one from the current step
+			if (typeof isComplete != "boolean") {
+				isComplete = this.getCurStep().checkComplete();
 			}
-			this.readies[this.curIndex] = isReady;
-			this.curStepPending = !isReady;
 
-			this.flik.options.draggable = isReady;
+			// set readiness in the completes array and update whether this step is pending
+			this.completes[this.curIndex] = isComplete;
+			this.curStepPending = !isComplete;
+
+			// allow dragging on the flickity instance if the step is ready
+			this.flik.options.draggable = isComplete;
 			this.flik.updateDraggable();
 		},
+		/** are all steps ready */
 		allReady: function() {
-			return this.readies.indexOf(false) == -1;
+			return this.completes.indexOf(false) == -1;
 		},
+		/** process the children to get information about the steps */
 		processChildren: function(newChildren, oldChildren) {
-			let newSteps = []
-			let newReadies = [];
+			// make new arrays for the data
+			let newCompletes = [];
 			let newIndexes = [];
+
+			// go through all the children
 			for (let i = 0; i < newChildren.length; i++) {
 				let child = newChildren[i];
+				// if it's a form step
 				if (child.$options.name == "form_step") {
+					// get the child's previous index if it had one
 					let oldIndex = child.index;
-					child.index = newSteps.length;
-					newSteps.push(child);
+					// set its new index
+					child.index = newIndexes.length;
+
+					//add the index in the full $children array to the indexes array at the child's new index
 					newIndexes.push(i);
 
-					newReadies.push(oldIndex == child.index ? this.readies[oldIndex] : false)
+					// if the child hasn't changed indexes, keep its old isComplete value, otherwise set it to false
+					// all steps default to not ready because the user must at least visit them for them to be considered complete
+					newCompletes.push(oldIndex == child.index ? this.completes[oldIndex] : false)
 				}
 			}
 
-			this.readies = newReadies;
-			this.numSteps = newSteps.length;
+			// set the data
+			this.completes = newCompletes;
+			this.numSteps = newIndexes.length;
 			this.indexes = newIndexes;
 
+			// re-process the current index
 			this.processIndex(this.curIndex);
-			this.setStepReady();
+			// get whether the current step is complete
+			this.setStepComplete();
 		}
 	},
 	mounted: function() {
+		// make a flikity instance
 		this.flickityOptions.on = {change: this.setIndex}
 		this.flik = new Flickity(this.$refs.inner, this.flickityOptions)
 
-		this.processChildren(this.$children, []);
+		// process the children
+		this.processChildren(this.$children);
 	}
 }
 </script>

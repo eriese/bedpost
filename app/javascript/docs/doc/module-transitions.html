@@ -1,0 +1,3097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: transitions</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: transitions</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p><b>Page transition animation module</b></p>
+<p> Once <a href="module-transitions.html#.addTransitionEvents"><code>module:transitions.addTransitionEvents</code></a> is called, the transition module will run
+    a transition-out animation on any Turbolinks-enabled link click
+    and a transition-in animation on any page load. It relies on three events in the
+    Turbolinks lifecycle:
+    <ol>
+        <li> <em>turbolinks:click</em> - it calls <a href="module-transitions.html#.onTransitionTriggered"><code>module:transitions.onTransitionTriggered</code></a> to
+        process the dataset from the clicked link. This applies link-specific animation properties
+        to the triggered transition </li>
+        <li> <em>turbolinks:before-visit</em> - it calls <a href="module-transitions.html#~beforeUnload"><code>module:transitions~beforeUnload</code></a> to
+        run the triggered out-animation and then put through the visit &lt;/li
+        <li> <em>turbolinks:load</em> - it calls <code>module:transitions~animIn</code> to run the triggered
+        in-animation once the new page has loaded </li>
+    </ol>
+</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+        <p class="code-caption"> To add link-specific transition animations, attach properties to overwrite <a href="module-transitions.html#~prop_defaults"><code>module:transitions~prop_defaults</code></a>
+to the dataset of the links. So: </p>
+    
+    <pre class="prettyprint"><code>// override the animation type for both in and out animations at once
+&lt;a href="someplace" data-animation-type="slideRight"> Slide Right &lt;/a>
+
+//override just the in animation
+&lt;a href="someplace" data-in-animation-type="slideLeft"> Fade out, then slide left in &lt;/a>
+
+//make your own timeline
+&lt;a href="someplace" data-out-animation="new TimelineMax().to(tweenEL, 0.5, {top: '-100%'})"> Run the given timeline out, then fade in &lt;/a>
+
+//make a timeline with the given properties.
+//don't forget that inProps and outProps need to be valid JSON in order to be properly parsed;
+//that means you have to put the attribute in single quotes so that keys can be in double quotes
+&lt;a href="someplace" data-in-props='{"top": "-100%"}' data-in-direction="from" data-anim-length="1">Fade out for 1 second, then slide from top -100% for 1 second &lt;/a></code></pre>
+
+        <p class="code-caption"> Transition animation behavior can also be applied to fake or non-Turbolinks-enabled transition events by passing an object
+with animation properties to <a href="module-transitions.html#.processClickData"><code>module:transitions.processClickData</code></a>, then calling <a href="module-transitions.html#.animOut"><code>module:transitions.animOut</code></a>
+with no parameters or with a callback that calls <a href="module-transitions.html#.animIn"><code>module:transitions.animIn</code></a></p>
+    
+    <pre class="prettyprint"><code>import {animOut, animIn, processClickData} from "./modules/transitions";
+// add click listener to random element
+el.click((e) => {
+	processClickData({animationType: 'slideRight'});
+	animOut(() => {
+		// ... transition code for a fake transition
+		animIn()
+	})
+})</code></pre>
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~animationFunctions"><span class="type-signature">(inner, constant) </span>animationFunctions<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Available animation functions</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>slideLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p><a href="module-transitions.html#~slideLeft"><code>module:transitions~slideLeft</code></a></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>slideRight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p><a href="module-transitions.html#~slideRight"><code>module:transitions~slideRight</code></a></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fade</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p><a href="module-transitions.html#~fade"><code>module:transitions~fade</code></a></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line130">line 130</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~prop_defaults"><span class="type-signature">(inner, constant) </span>prop_defaults<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Default animation properties. These will be used if no other animation data is given with the click</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>animLength</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0.3
+                
+                </td>
+            
+
+            <td class="description last"><p>the length in seconds of animations</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inProps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>the properties to apply to the element with inId during in animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'page-container'
+                
+                </td>
+            
+
+            <td class="description last"><p>the id of the element to apply in animations to</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inDirection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "to"
+                
+                </td>
+            
+
+            <td class="description last"><p>the tween direction for the in animation (&quot;to&quot;, &quot;from&quot;)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outProps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>the properties to apply to the element with outId during out animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'page-container'
+                
+                </td>
+            
+
+            <td class="description last"><p>the id of the element to apply out animations to</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outDirection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "to"
+                
+                </td>
+            
+
+            <td class="description last"><p>the tween direction for the out animation (&quot;to&quot;, &quot;from&quot;)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inAnimation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TweenMax</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>a Tween or Timeline instance to play for the in animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outAnimation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TweenMax</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>a Tween or Timeline instance to play for the out animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inAnimationType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>the animation from <a href="module-transitions.html#~animationFunctions"><code>module:transitions~animationFunctions</code></a> to use for the in animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outAnimationType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>the animation from <a href="module-transitions.html#~animationFunctions"><code>module:transitions~animationFunctions</code></a> to use for the out animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>animationType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <a href="module-transitions.html#~fade"><code>module:transitions~fade</code></a>
+                
+                </td>
+            
+
+            <td class="description last"><p>the animation from <a href="module-transitions.html#~animationFunctions"><code>module:transitions~animationFunctions</code></a> to use as a default for in or out animations that are null</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line152">line 152</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~props"><span class="type-signature">(inner) </span>props<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>The current animation properties. Copies <a href="module-transitions.html#~prop_defaults"><code>module:transitions~prop_defaults</code></a> then is overridden through <a href="module-transitions.html#.processClickData"><code>module:transitions.processClickData</code></a></p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line171">line 171</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".addTransitionEvents"><span class="type-signature">(static) </span>addTransitionEvents<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Begin listening for turbolinks transition events and running animations in response to them</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line355">line 355</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+<h5>Listens to Events:</h5>
+<ul>
+    <li>turbolinks:before-visit</li>
+
+    <li>turbolinks:click</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".animIn"><span class="type-signature">(static) </span>animIn<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary"><p>Animate an in-transition.</p></p>
+    
+
+
+
+<div class="description">
+    <p>Calls <a href="module-transitions.html#~getTween"><code>module:transitions~getTween</code></a> with false</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line233">line 233</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".animOut"><span class="type-signature">(static) </span>animOut<span class="signature">(visitUrl)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary"><p>Animate an out-transition.</p></p>
+    
+
+
+
+<div class="description">
+    <p>Calls <a href="module-transitions.html#~getTween"><code>module:transitions~getTween</code></a> with true. Determines other arguments based on the value of visitUrl</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>visitUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the string URL to visit after the out transition is complete, or the onComplete function to send to <a href="module-transitions.html#~getTween"><code>module:transitions~getTween</code></a></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line243">line 243</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".onTransitionTriggered"><span class="type-signature">(static) </span>onTransitionTriggered<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary"><p>Click listener for turbolinks-enabled links.</p></p>
+    
+
+
+
+<div class="description">
+    <p>Processes the link's dataset with <a href="module-transitions.html#.processClickData"><code>module:transitions.processClickData</code></a></p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the click event</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line344">line 344</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".processClickData"><span class="type-signature">(static) </span>processClickData<span class="signature">(dataset<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Process data from a click event to overwrite properties in <a href="module-transitions.html#~props"><code>module:transitions~props</code></a></p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dataset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-transitions.html#.prop_overrides">module:transitions.prop_overrides</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last"><p>the data to overwrite the defaults</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line306">line 306</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~beforeUnload"><span class="type-signature">(inner) </span>beforeUnload<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary"><p>The callback to be attached to the &quot;turbolinks:before-visit&quot; handler</p></p>
+    
+
+
+
+<div class="description">
+    <p>The first time this is called it cancels the visit so the animation can run. It adds <code>Turbolinks.visit</code> as the onComplete callback for the animation so that the visit can go through.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the visit event</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line267">line 267</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<h5>Fires:</h5>
+<ul>
+    <li>Turbolinks.event:visit if it interrupts the visit event it received</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~fade"><span class="type-signature">(inner) </span>fade<span class="signature">(animatingOut)</span><span class="type-signature"> &rarr; {TimelineMax}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a timeline that fades the appropriate element out</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>animatingOut</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is this timeline animating an out transition? false for in</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line116">line 116</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Yields:</h5>
+
+        
+<div class="param-desc">
+    the timeline
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">TimelineMax</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~getTween"><span class="type-signature">(inner) </span>getTween<span class="signature">(animatingOut, onComplete, onCompleteParams)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary"><p>Play the Tween or Timeline for the given transition animation</p></p>
+    
+
+
+
+<div class="description">
+    <p>This function determines the correct timeline by checking <a href="module-transitions.html#~props"><code>module:transitions~props</code></a> in the following order and running the first non-null value:</p>
+<ol>
+<li>in/outAnimation</li>
+<li>in/outProps</li>
+<li>in/outAnimationType</li>
+<li>animationType</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>animatingOut</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is this an out animation? False for an in animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onComplete</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback to run once the animation is complete</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onCompleteParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>parameters to pass to the onComplete callback</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line186">line 186</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~slide"><span class="type-signature">(inner) </span>slide<span class="signature">(animatingOut, toLeft)</span><span class="type-signature"> &rarr; {TimelineMax}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a timeline that slides the appropriate element in the given direction</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>animatingOut</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is this timeline animating an out transition? false for in</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>toLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is this timeline sliding to the left? false for right</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Yields:</h5>
+
+        
+<div class="param-desc">
+    the timeline
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">TimelineMax</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~slideLeft"><span class="type-signature">(inner) </span>slideLeft<span class="signature">(animatingOut)</span><span class="type-signature"> &rarr; {TimelineMax}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a timeline that slides the appropriate element to the left</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>animatingOut</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is this timeline animating an out transition? false for in</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="module-transitions.html#~slide">module:transitions~slide</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Yields:</h5>
+
+        
+<div class="param-desc">
+    the timeline
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">TimelineMax</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~slideRight"><span class="type-signature">(inner) </span>slideRight<span class="signature">(animatingOut)</span><span class="type-signature"> &rarr; {TimelineMax}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a timeline that slides the appropriate element to the left</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>animatingOut</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is this timeline animating an out transition? false for in</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line107">line 107</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="module-transitions.html#~slide">module:transitions~slide</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Yields:</h5>
+
+        
+<div class="param-desc">
+    the timeline
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">TimelineMax</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".prop_overrides">prop_overrides</h4>
+
+
+
+
+<div class="description">
+    <p>Data to overwrite default animations</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>animLength</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the length in seconds of animations</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inProps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the properties to apply to the element with inId during in animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the id of the element to apply in animations to. Ignored without inProps</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inDirection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the tween direction for in animations. Ignored without inProps</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outProps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the properties to apply to the element with outId during out animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the id of the element to apply out animations to. Ignored without outProps</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outDirection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the tween direction for out animations. Ignored without outProps</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inAnimation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TweenMax</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>a Tween or Timeline instance to play for the in animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outAnimation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TweenMax</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>a Tween or Timeline instance to play for the out animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inAnimationType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the string key for an animation from <a href="module-transitions.html#~animationFunctions"><code>module:transitions~animationFunctions</code></a> to use for the in animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outAnimationType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the string key for an animation from <a href="module-transitions.html#~animationFunctions"><code>module:transitions~animationFunctions</code></a> to use for the out animation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>animationType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the string key for an animation from <a href="module-transitions.html#~animationFunctions"><code>module:transitions~animationFunctions</code></a> to use as a default for in or out animations that are null</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_transitions.js.html">modules/transitions.js</a>, <a href="modules_transitions.js.html#line282">line 282</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="module-transitions.html#~prop_defaults"><code>module:transitions~prop_defaults</code></a> to see what will be overwritten</li>
+        
+            <li><a href="module-transitions.html#~getTween"><code>module:transitions~getTween</code></a> to see the priority of properties in creating an animation</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_basicStepperComponent.html">components/basicStepperComponent</a></li><li><a href="module-transitions.html">transitions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 11 2019 15:28:52 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

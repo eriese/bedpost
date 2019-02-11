@@ -109,3 +109,13 @@ guard 'livereload', js_apple_webkit_extra_wait_time: 50 do
 end
 
 guard :webpack, config: './config/webpack/development.js'
+
+# Add files and commands to this file, like the example:
+#   watch(%r{file/path}) { `command(s)` }
+#
+guard :shell do
+  watch(%r{(?!.*?docs).*app\/javascript\/(.*)\.js}) {|m|
+    puts 're-building jsdoc'
+    `jsdoc -c app/javascript/docs/jsdoc_conf.json`
+  }
+end

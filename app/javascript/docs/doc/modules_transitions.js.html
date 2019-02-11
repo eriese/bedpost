@@ -1,44 +1,72 @@
-import {TimelineMax, TweenMax} from "gsap/TweenMax";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/transitions.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/transitions.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {TimelineMax, TweenMax} from "gsap/TweenMax";
 
 /**
  * @module transitions
- * @description <p><b>Page transition animation module</b></p>
- * <p> Once {@link module:transitions.addTransitionEvents} is called, the transition module will run
+ * @description &lt;p>&lt;b>Page transition animation module&lt;/b>&lt;/p>
+ * &lt;p> Once {@link module:transitions.addTransitionEvents} is called, the transition module will run
  * 	a transition-out animation on any Turbolinks-enabled link click
  * 	and a transition-in animation on any page load. It relies on three events in the
  * 	Turbolinks lifecycle:
- * 	<ol>
- * 		<li> <em>turbolinks:click</em> - it calls {@link module:transitions.onTransitionTriggered} to
+ * 	&lt;ol>
+ * 		&lt;li> &lt;em>turbolinks:click&lt;/em> - it calls {@link module:transitions.onTransitionTriggered} to
  * 		process the dataset from the clicked link. This applies link-specific animation properties
- * 		to the triggered transition </li>
- * 		<li> <em>turbolinks:before-visit</em> - it calls {@link module:transitions~beforeUnload} to
- * 		run the triggered out-animation and then put through the visit </li
- * 		<li> <em>turbolinks:load</em> - it calls {@link module:transitions~animIn} to run the triggered
- * 		in-animation once the new page has loaded </li>
- * 	</ol>
- * </p>
+ * 		to the triggered transition &lt;/li>
+ * 		&lt;li> &lt;em>turbolinks:before-visit&lt;/em> - it calls {@link module:transitions~beforeUnload} to
+ * 		run the triggered out-animation and then put through the visit &lt;/li
+ * 		&lt;li> &lt;em>turbolinks:load&lt;/em> - it calls {@link module:transitions~animIn} to run the triggered
+ * 		in-animation once the new page has loaded &lt;/li>
+ * 	&lt;/ol>
+ * &lt;/p>
  *
  * @example
- * <caption> To add link-specific transition animations, attach properties to overwrite {@link module:transitions~prop_defaults}
- * to the dataset of the links. So: </caption>
+ * &lt;caption> To add link-specific transition animations, attach properties to overwrite {@link module:transitions~prop_defaults}
+ * to the dataset of the links. So: &lt;/caption>
  * // override the animation type for both in and out animations at once
- * <a href="someplace" data-animation-type="slideRight"> Slide Right </a>
+ * &lt;a href="someplace" data-animation-type="slideRight"> Slide Right &lt;/a>
  *
  * //override just the in animation
- * <a href="someplace" data-in-animation-type="slideLeft"> Fade out, then slide left in </a>
+ * &lt;a href="someplace" data-in-animation-type="slideLeft"> Fade out, then slide left in &lt;/a>
  *
  * //make your own timeline
- * <a href="someplace" data-out-animation="new TimelineMax().to(tweenEL, 0.5, {top: '-100%'})"> Run the given timeline out, then fade in </a>
+ * &lt;a href="someplace" data-out-animation="new TimelineMax().to(tweenEL, 0.5, {top: '-100%'})"> Run the given timeline out, then fade in &lt;/a>
  *
  * //make a timeline with the given properties.
  * //don't forget that inProps and outProps need to be valid JSON in order to be properly parsed;
  * //that means you have to put the attribute in single quotes so that keys can be in double quotes
- * <a href="someplace" data-in-props='{"top": "-100%"}' data-in-direction="from" data-anim-length="1">Fade out for 1 second, then slide from top -100% for 1 second </a>
+ * &lt;a href="someplace" data-in-props='{"top": "-100%"}' data-in-direction="from" data-anim-length="1">Fade out for 1 second, then slide from top -100% for 1 second &lt;/a>
  *
  * @example
- * <caption> Transition animation behavior can also be applied to fake or non-Turbolinks-enabled transition events by passing an object
+ * &lt;caption> Transition animation behavior can also be applied to fake or non-Turbolinks-enabled transition events by passing an object
  * with animation properties to {@link module:transitions.processClickData}, then calling {@link module:transitions.animOut}
- * with no parameters or with a callback that calls {@link module:transitions.animIn}</caption>
+ * with no parameters or with a callback that calls {@link module:transitions.animIn}&lt;/caption>
  * import {animOut, animIn, processClickData} from "./modules/transitions";
  * // add click listener to random element
  * el.click((e) => {
@@ -72,7 +100,7 @@ const slide = function(animatingOut, toLeft) {
 	let animProps = {};
 	if (toLeft) {
 		// TODO what?
-		animProps[animatingOut && toLeft || (!animatingOut && !toLeft) ? "right" : "left"] = "100%";
+		animProps[animatingOut &amp;&amp; toLeft || (!animatingOut &amp;&amp; !toLeft) ? "right" : "left"] = "100%";
 	} else {
 		animProps[animatingOut ? "left" : "right"] = "100%";
 	}
@@ -173,12 +201,12 @@ let props = Object.assign({}, prop_defaults);
 /**
  * @summary Play the Tween or Timeline for the given transition animation
  * @description This function determines the correct timeline by checking {@link module:transitions~props} in the following order and running the first non-null value:
- * <ol>
- * <li>in/outAnimation</li>
- * <li>in/outProps</li>
- * <li>in/outAnimationType</li>
- * <li>animationType</li>
- * </ol>
+ * &lt;ol>
+ * &lt;li>in/outAnimation&lt;/li>
+ * &lt;li>in/outProps&lt;/li>
+ * &lt;li>in/outAnimationType&lt;/li>
+ * &lt;li>animationType&lt;/li>
+ * &lt;/ol>
  * @param  {boolean} animatingOut     is this an out animation? False for an in animation
  * @param  {function} onComplete       callback to run once the animation is complete
  * @param  {array} onCompleteParams parameters to pass to the onComplete callback
@@ -356,3 +384,26 @@ export const addTransitionEvents = function() {
 	document.addEventListener('turbolinks:before-visit', beforeUnload)
 	document.addEventListener('turbolinks:click', onTransitionTriggered)
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_basicStepperComponent.html">components/basicStepperComponent</a></li><li><a href="module-transitions.html">transitions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 11 2019 15:28:52 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
