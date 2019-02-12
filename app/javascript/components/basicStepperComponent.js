@@ -4,6 +4,9 @@ import {animOut, animIn, processClickData} from "../modules/transitions";
 /**
  * A component that allows you to put steps on a page and animate navigation
  * @module
+ * @vue-data {number} step=0 the step the stepper is currently showing
+ * @vue-prop {Boolean} [animate=true] whether step transitions should animate
+ * @vue-prop {module:transitions.prop_overrides} [defaultProps] default animation props to apply to animations
  * @example
  * <caption>It's easiest to put the stepper in your html with an inline template. Then use v-ifs to separate your steps,
  * and call {@link module:components/basicStepperComponent.setStep} to change steps</caption>
@@ -24,24 +27,15 @@ import {animOut, animIn, processClickData} from "../modules/transitions";
  * 		... see above example
  * 	</div>
  * </basic-stepper>
+ *
  */
 export default {
 	name: "basic_stepper",
-	/**
-	 * @name module:components/basicStepperComponent~data
-	 * @type {Object}
-	 * @property {number} step=0 the step the stepper is currently showing
-	 */
 	data: function () {
 		return {
 			step: 0
 		}
 	},
-	/**
-	 * @type {Object}
-	 * @property {Boolean} [animate=true] whether step transitions should animate
-	 * @property {module:transitions.prop_overrides} [defaultProps] default animation props to apply to animations
-	 */
 	props: {
 		animate: {
 			type: Boolean,
@@ -51,7 +45,7 @@ export default {
 			type: Object
 		}
 	},
-	/** @lends module:components/basicStepperComponent */
+
 	methods: {
 		/**
 		 * set what step the stepper is on (click handler for navigation)

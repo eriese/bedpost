@@ -3,11 +3,11 @@
         "destination": "./app/javascript/docs/doc/",
         "p": true
     },
-    "plugins": ["plugins/markdown"],
+    "plugins": ["plugins/markdown", "node_modules/jsdoc-vuejs"],
     "recurseDepth": 10,
     "source": {
         "include": ["./app/javascript/modules", "./app/javascript/components"],
-        "includePattern": ".+\\.js(doc|x)?$",
+        "includePattern": ".+\\.(js|vue)(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "sourceType": "module",

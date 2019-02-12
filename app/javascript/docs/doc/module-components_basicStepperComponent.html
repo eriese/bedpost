@@ -38,7 +38,73 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>A component that allows you to put steps on a page and animate navigation</p></div>
+            <div class="description"><p>A component that allows you to put steps on a page and animate navigation</p></p></div></div> 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
+<table data-jsdoc-vuejs="table-props">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Required?</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    <tr>
+        <td><code>animate</code></td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+        <td>No</td>
+        <td>whether step transitions should animate</td>
+    </tr>
+    
+    <tr>
+        <td><code>defaultProps</code></td>
+        <td>module:transitions.prop_overrides</td>
+        <td>-</td>
+        <td>No</td>
+        <td>default animation props to apply to animations</td>
+    </tr>
+    
+    </tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    <tr>
+        <td><code>step</code></td>
+        <td>number</td>
+        <td><code>0</code></td>
+        <td>the step the stepper is currently showing</td>
+    </tr>
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+<div class="container-overview"><div><p> 
+</div>
         
 
         
@@ -85,11 +151,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_basicStepperComponent.js.html">components/basicStepperComponent.js</a>, <a href="components_basicStepperComponent.js.html#line4">line 4</a>
-    </li></ul></dd>
-    
 
     
 
@@ -117,7 +178,7 @@
     <h5>Examples</h5>
     
         <p class="code-caption">It's easiest to put the stepper in your html with an inline template. Then use v-ifs to separate your steps,
-and call <a href="module-components_basicStepperComponent.html#.setStep"><code>module:components/basicStepperComponent.setStep</code></a> to change steps</p>
+and call <code>module:components/basicStepperComponent.setStep</code> to change steps</p>
     
     <pre class="prettyprint"><code>&lt;basic-stepper inline-template :default-props="{animLength: 0.2}">
 	&lt;div v-if="step == 0">
@@ -157,311 +218,6 @@ and call <a href="module-components_basicStepperComponent.html#.setStep"><code>m
     
 
     
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".props"><span class="type-signature">(static) </span>props<span class="type-signature"> :Object</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>animate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    true
-                
-                </td>
-            
-
-            <td class="description last"><p>whether step transitions should animate</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>defaultProps</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-transitions.html#.prop_overrides">module:transitions.prop_overrides</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>default animation props to apply to animations</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_basicStepperComponent.js.html">components/basicStepperComponent.js</a>, <a href="components_basicStepperComponent.js.html#line45">line 45</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="~data"><span class="type-signature">(inner) </span>data<span class="type-signature"> :Object</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>step</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                    0
-                
-                </td>
-            
-
-            <td class="description last"><p>the step the stepper is currently showing</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_basicStepperComponent.js.html">components/basicStepperComponent.js</a>, <a href="components_basicStepperComponent.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -472,7 +228,7 @@ and call <a href="module-components_basicStepperComponent.html#.setStep"><code>m
     
 
     
-    <h4 class="name" id=".setStep"><span class="type-signature">(static) </span>setStep<span class="signature">(newStep, animProps<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setStep"><span class="type-signature"></span>setStep<span class="signature">(newStep, animProps<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -628,7 +384,7 @@ and call <a href="module-components_basicStepperComponent.html#.setStep"><code>m
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_basicStepperComponent.js.html">components/basicStepperComponent.js</a>, <a href="components_basicStepperComponent.js.html#line62">line 62</a>
+        <a href="components_basicStepperComponent.js.html">components/basicStepperComponent.js</a>, <a href="components_basicStepperComponent.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -672,13 +428,13 @@ and call <a href="module-components_basicStepperComponent.html#.setStep"><code>m
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_basicStepperComponent.html">components/basicStepperComponent</a></li><li><a href="module-transitions.html">transitions</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_basicStepperComponent.html">components/basicStepperComponent</a></li><li><a href="module-components_formErrorsComponent.html">components/formErrorsComponent</a></li><li><a href="module-components_formStepComponent.html">components/formStepComponent</a></li><li><a href="module-components_navComponent.html">components/navComponent</a></li><li><a href="module-transitions.html">transitions</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 11 2019 15:28:52 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 11 2019 18:14:51 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

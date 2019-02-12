@@ -5,6 +5,7 @@
     "@rails/webpacker": "3.5",
     "flickity": "^2.2.0",
     "gsap": "^2.0.2",
+    "jsdoc-vuejs": "^2.4.1",
     "vue": "^2.5.17",
     "vue-loader": "14.2.2",
     "vue-resource": "^1.5.1",

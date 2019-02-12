@@ -3,11 +3,14 @@
 </template>
 
 <script>
+	/**
+	 * @module components/formErrorsComponent
+	 * @description A component to render form submission errors
+	 * @vue-prop {Object} submissionError the errors from the last submission attempt on the form
+	 * @vue-computed {String} formErrors the errors to display for the form
+	 */
 	export default {
 		name: "form_errors",
-		data: function () {
-			return {}
-		},
 		props: {
 			submissionError: Object
 		},
