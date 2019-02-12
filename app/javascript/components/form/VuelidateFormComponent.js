@@ -1,10 +1,10 @@
 import { required, email, minLength, maxLength, sameAs, helpers } from 'vuelidate/lib/validators'
-import fieldErrors from "./fieldErrorsComponent.vue"
-import formErrors from "./formErrorsComponent.vue"
-import toggle from "./toggleComponent.vue"
-import {onTransitionTriggered} from "../modules/transitions"
-import formStepper from "./formStepperComponent.vue"
-import formStep from "./formStepComponent.vue"
+import fieldErrors from "./FieldErrorsComponent.vue"
+import formErrors from "./FormErrorsComponent.vue"
+import toggle from "./ToggleComponent.vue"
+import {onTransitionTriggered} from "../../modules/transitions"
+import formStepper from "../stepper/FormStepperComponent.vue"
+import formStep from "../stepper/FormStepComponent.vue"
 
 const submitted = (path) => {
 	let erroredVal = undefined;

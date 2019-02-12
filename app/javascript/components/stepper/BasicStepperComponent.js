@@ -1,4 +1,4 @@
-import {animOut, animIn, processClickData} from "../modules/transitions";
+import {animOut, animIn, processClickData} from "../../modules/transitions";
 
 
 /**
@@ -7,6 +7,7 @@ import {animOut, animIn, processClickData} from "../modules/transitions";
  * @vue-data {number} step=0 the step the stepper is currently showing
  * @vue-prop {Boolean} [animate=true] whether step transitions should animate
  * @vue-prop {module:transitions.prop_overrides} [defaultProps] default animation props to apply to animations
+ *
  * @example
  * <caption>It's easiest to put the stepper in your html with an inline template. Then use v-ifs to separate your steps,
  * and call {@link module:components/basicStepperComponent.setStep} to change steps</caption>
