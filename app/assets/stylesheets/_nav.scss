@@ -26,14 +26,14 @@ nav {
 		.no-js & {
 			display: none;
 		}
-	}
 
-	&.open .burger, .burger:hover, .burger:focus {
-		background-color: $button-hover-color;
-		border-color: $button-hover-color;
+		&.open, &:hover, &:focus {
+			background-color: $button-hover-color;
+			border-color: $button-hover-color;
 
-		.burger-line {
-			background-color: $background-color;
+			.burger-line {
+				background-color: $background-color;
+			}
 		}
 	}
 

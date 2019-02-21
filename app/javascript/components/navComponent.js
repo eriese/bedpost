@@ -1,8 +1,9 @@
-import {TimelineMax, TweenMax} from "gsap/TweenMax"
+import {TimelineMax, TweenMax} from "gsap/TweenMax";
+import renderless from "@mixins/renderless";
 
 /**
  * The nav menu component
- * @module components/navComponent
+ * @module
  * @vue-data {Boolean} isOpen=false is the navigation menu open?
  * @vue-data {TimelineMax} timeLine the animation timeline for opening and closing
  */
@@ -10,19 +11,32 @@ export default {
 	data: function() {
 		return {
 			isOpen: false,
-			timeLine: null
+			timeLine: null,
+			menu: null
+		}
+	},
+	props: ["inner"],
+	mixins: [renderless],
+	computed: {
+		slotScope: function() {
+			return {
+				isOpen: this.isOpen,
+				openMenu: this.openMenu,
+				toggleMenu: this.toggleMenu
+			}
 		}
 	},
 	// on component mounted
 	mounted() {
+		this.menu = this.$scopedSlots.default()[0].context.$refs.menu;
 		// display the menu so the timeline can get correct data about its starting state
-		this.$refs.menu.style.display = "block"
+		this.menu.style.display = "block"
 		// make a new timeline
 		this.timeLine = new TimelineMax()
 		// tween the width till it's closed
-		this.timeLine.to(this.$refs.menu, 0.3, {width: 0})
+		this.timeLine.to(this.menu, 0.3, {width: 0})
 		// then set display none
-		this.timeLine.set(this.$refs.menu, {display: "none", immediateRender: false});
+		this.timeLine.set(this.menu, {display: "none", immediateRender: false});
 		// set the timeline to complete
 		this.timeLine.progress(1);
 	},
@@ -54,7 +68,7 @@ export default {
 		 * @param  {Event} e the click event
 		 */
 		documentClick(e) {
-			let menu = this.$refs.menu;
+			let menu = this.menu;
 			let target = e.target;
 			// if the target is a link or not on the menu, close it
 			if (target.tagName == "A" || (menu !== target & !menu.contains(target))) {

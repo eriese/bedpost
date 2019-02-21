@@ -3,6 +3,11 @@
 </template>
 
 <script>
+	/**
+	 * A component to put a toggle button in a form
+	 * @module
+	 * @vue-prop {String|String[]} symbols
+	 */
 	export default {
 		name: "toggle",
 		data: function() {

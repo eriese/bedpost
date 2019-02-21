@@ -6,13 +6,16 @@
     "flickity": "^2.2.0",
     "gsap": "^2.0.2",
     "jsdoc-vuejs": "^2.4.1",
+    "rails-erb-loader": "^5.5.2",
     "vue": "^2.6.6",
     "vue-loader": "^15.6.2",
     "vue-template-compiler": "^2.6.6",
-    "vue-turbolinks": "^2.0.3",
+    "vue-turbolinks": "^2.0.4",
     "vuelidate": "^0.7.4"
   },
   "devDependencies": {
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.93.0",
     "webpack-dev-server": "^3.1.14"
   }
 }

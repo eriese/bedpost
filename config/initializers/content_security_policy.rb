@@ -17,7 +17,13 @@
 # end
 
 # If you are using UJS then enable automatic nonce generation
-# Rails.application.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
+Rails.application.config.content_security_policy_nonce_generator = -> request do
+	if request.env['HTTP_TURBOLINKS_REFERRER'].present?
+		request.env['HTTP_X_TURBOLINKS_NONCE']
+	else
+		SecureRandom.base64(16)
+	end
+end
 
 # Report CSP violations to a specified URI
 # For further information see the following documentation:
@@ -25,9 +31,7 @@
 # Rails.application.config.content_security_policy_report_only = true
 
 Rails.application.config.content_security_policy do |policy|
-  if Rails.env.development?
-    policy.script_src :self, :https, :unsafe_eval
-  else
-    policy.script_src :self, :https
-  end
+	policy.script_src *[:self, :https, :unsafe_eval]
+
+  policy.script_src *(policy.script_src + ['http://localhost:3035', 'ws://localhost:3035', 'http://localhost:35729']) if Rails.env.development?
 end

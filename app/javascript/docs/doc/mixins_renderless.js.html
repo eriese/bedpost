@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: mixins/renderless.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,33 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: mixins/renderless.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Allows a component to render a scoped slot with no template
+ * @mixin renderless
+ */
+export default {
+	render: function() {
+		let scope = this.slotScope
+		if (this.slotScope == undefined) {
+			console.warn(`Renderless component ${this.$options.name} should implement a prop or computed property called "slotScope". Defaulting to empty scope`);
+			scope = {};
+		}
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+		return this.$scopedSlots.default(scope);
+	}
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

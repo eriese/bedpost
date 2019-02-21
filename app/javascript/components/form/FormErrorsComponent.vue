@@ -4,8 +4,8 @@
 
 <script>
 	/**
-	 * @module components/formErrorsComponent
-	 * @description A component to render form submission errors
+	 * A component to render form submission errors
+	 * @module
 	 * @vue-prop {Object} submissionError the errors from the last submission attempt on the form
 	 * @vue-computed {String} formErrors the errors to display for the form
 	 */

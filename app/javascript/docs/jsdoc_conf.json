@@ -1,12 +1,14 @@
 {
     "opts": {
         "destination": "./app/javascript/docs/doc/",
-        "p": true
+        "p": true,
+        "recurse": true
     },
-    "plugins": ["plugins/markdown", "node_modules/jsdoc-vuejs"],
+    "plugins": ["plugins/markdown", "../jsdoc-vuejs"],
     "recurseDepth": 10,
     "source": {
-        "include": ["./app/javascript/modules", "./app/javascript/components"],
+        "include": ["./app/javascript"],
+        "exclude": ["./app/javascript/docs/scripts"],
         "includePattern": ".+\\.(js|vue)(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },

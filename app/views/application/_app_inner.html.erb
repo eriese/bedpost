@@ -1,0 +1,22 @@
+<div id="vue-container" class="<%= container_class %>">
+  <%= render "nav", {c_user_name: c_user_name} %>
+  <header class=<%=c_user_name.present? ? "small" : ""%>>
+    <%= link_to root_path, id: "logo" do %>
+    Bed<span>Post</span>
+    <% end %>
+  </header>
+  <main id="page-container" ref="container">
+    <div id="flash">
+      <noscript><div id="no-js-warning"><%= t(:no_script) %></div></noscript>
+      <%= flash[:error] %>
+      <% if flash[:message] %>
+      <% flash[:message].each do |key, message| %>
+      <% message.each do |msg| %>
+      <div><%= key + ": " + msg %></div>
+      <% end %>
+      <% end %>
+      <% end %>
+    </div>
+    <div id="page-content"><%= yield %></div>
+  </main>
+</div>

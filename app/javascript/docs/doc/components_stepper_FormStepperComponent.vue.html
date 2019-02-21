@@ -1,30 +1,58 @@
-<template>
-	<div class="stepper" >
-		<div :class="stepClass">
-			<div class="step-inner" ref="inner" role="form" aria-labeledby="stepper-aria-label">
-				<slot :step-ready="setStepComplete" :num-steps="numSteps"></slot>
-			</div>
-			<div class="step-nav">
-				<ul class="prog-buttons clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
-					<li class="next" v-if="curIndex == numSteps - 1">
-						<slot name="last-button"><button class="not-button last" type="button"@click="next">{{lastButton || "Send"}}</button></slot>
-					</li>
-					<li v-for="btn in buttons" v-if="btn.if" :class="btn.clazz">
-						<button v-bind="btn.bind || {}" @click="btn.click" :title="$root.t(btn.key)" class="not-button" type="button">
-							<svg viewBox="0 0 100 100" focusable="false"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow" :transform="btn.transform"></path></svg>
-						</button>
-					</li>
-				</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/stepper/FormStepperComponent.vue</title>
 
-				<div class="prog-dots" role="progressBar" aria-valuemin="1" :aria-valuemax="numSteps" :aria-valuenow="curIndex + 1" tabindex="0">
-					<div v-for="i in numSteps" class="prog-dot" :class="{current: i - 1 == curIndex}"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
 
-<script>
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/stepper/FormStepperComponent.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+	&lt;div class="stepper" >
+		&lt;div :class="stepClass">
+			&lt;div class="step-inner" ref="inner" role="form" aria-labeledby="stepper-aria-label">
+				&lt;slot :step-ready="setStepComplete" :num-steps="numSteps">&lt;/slot>
+			&lt;/div>
+			&lt;div class="step-nav">
+				&lt;ul class="prog-buttons clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
+					&lt;li class="next" v-if="curIndex == numSteps - 1">
+						&lt;slot name="last-button">&lt;button class="not-button last" type="button"@click="next">{{lastButton || "Send"}}&lt;/button>&lt;/slot>
+					&lt;/li>
+					&lt;li v-for="btn in buttons" v-if="btn.if" :class="btn.clazz">
+						&lt;button v-bind="btn.bind || {}" @click="btn.click" :title="$root.t(btn.key)" class="not-button" type="button">
+							&lt;svg viewBox="0 0 100 100" focusable="false">&lt;path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow" :transform="btn.transform">&lt;/path>&lt;/svg>
+						&lt;/button>
+					&lt;/li>
+				&lt;/ul>
+
+				&lt;div class="prog-dots" role="progressBar" aria-valuemin="1" :aria-valuemax="numSteps" :aria-valuenow="curIndex + 1" tabindex="0">
+					&lt;div v-for="i in numSteps" class="prog-dot" :class="{current: i - 1 == curIndex}">&lt;/div>
+				&lt;/div>
+			&lt;/div>
+		&lt;/div>
+	&lt;/div>
+&lt;/template>
+
+&lt;script>
 import Flickity from 'flickity';
 
 /**
@@ -81,7 +109,7 @@ export default {
 			return [{
 				key: "next",
 				clazz: "next",
-				if: this.curIndex < this.numSteps - 1,
+				if: this.curIndex &lt; this.numSteps - 1,
 				bind: {
 					disabled: this.curStepPending
 				},
@@ -90,7 +118,7 @@ export default {
 			}, {
 				key: "previous",
 				clazz: "prev",
-				if: this.numSteps > 1 && this.curIndex > 0,
+				if: this.numSteps > 1 &amp;&amp; this.curIndex > 0,
 				click: this.back
 			}]
 		}
@@ -116,7 +144,7 @@ export default {
 			}
 
 			// move forward using the flikity instance
-			if (this.curIndex < this.numSteps - 1) {
+			if (this.curIndex &lt; this.numSteps - 1) {
 				this.flik.next();
 			}
 		},
@@ -132,7 +160,7 @@ export default {
 			// start looking from the current index
 			let nextInd = this.completes.indexOf(false, this.curIndex);
 			// otherwise look in the whole array
-			if (nextInd == -1 && this.curIndex > 0) {
+			if (nextInd == -1 &amp;&amp; this.curIndex > 0) {
 				nextInd = this.completes.indexOf(false)
 			}
 
@@ -172,7 +200,7 @@ export default {
 			let newIndexes = [];
 
 			// go through all the children
-			for (let i = 0; i < newChildren.length; i++) {
+			for (let i = 0; i &lt; newChildren.length; i++) {
 				let child = newChildren[i];
 				// if it's a form step
 				if (child.$options.name == "form_step") {
@@ -210,4 +238,27 @@ export default {
 		this.processChildren(this.$children);
 	}
 }
-</script>
+&lt;/script>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_form_FormErrorsComponent.html">components/form/FormErrorsComponent</a></li><li><a href="module-components_form_ToggleComponent.html">components/form/ToggleComponent</a></li><li><a href="module-components_NavComponent.html">components/NavComponent</a></li><li><a href="module-components_stepper_BasicStepperComponent.html">components/stepper/BasicStepperComponent</a></li><li><a href="module-components_stepper_FormStepperComponent.html">components/stepper/FormStepperComponent</a></li><li><a href="module-FormStepComponent.html">FormStepComponent</a></li><li><a href="module-transitions.html">transitions</a></li><li><a href="module-turbolinksFixes.html">turbolinksFixes</a></li></ul><h3>Mixins</h3><ul><li><a href="renderless.html">renderless</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 21 2019 17:52:51 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

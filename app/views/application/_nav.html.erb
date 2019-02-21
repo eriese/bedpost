@@ -1,7 +1,7 @@
 <% if current_user %>
-<nav-component inline-template>
-<nav id="nav" :class="{open: isOpen, closed: !isOpen}" role="navigation">
-  <button class="burger not-button" @click.stop="toggleMenu" type="button" :aria-expanded="isOpen ? 'true' : 'false'" aria-controls="nav-list">
+<nav-component v-slot="{isOpen, toggleMenu}">
+<nav id="nav" role="navigation">
+  <button class="burger not-button" :class="{open: isOpen, closed: !isOpen}" @click.stop="toggleMenu" type="button" :aria-expanded="isOpen ? 'true' : 'false'" aria-controls="nav-list">
     <div class="aria-only"><%= t("helpers.navigation_menu") %></div>
     <div class="burger-line"></div>
     <div class="burger-line"></div>
@@ -10,7 +10,7 @@
   <div class="menu" ref="menu">
     <ul id="nav-list">
       <li class="no-link"><%= current_user.name %></li>
-      <% nav_links.each do |key, path| %>
+      <% ApplicationHelper::NAV_LINKS.each do |key, path| %>
         <li>
           <%= link_to_unless_current(t(key), path) do %>
           <span> <%= t(key) %> </span>

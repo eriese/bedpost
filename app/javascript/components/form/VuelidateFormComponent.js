@@ -1,10 +1,6 @@
 import { required, email, minLength, maxLength, sameAs, helpers } from 'vuelidate/lib/validators'
-import fieldErrors from "./FieldErrorsComponent.vue"
-import formErrors from "./FormErrorsComponent.vue"
-import toggle from "./ToggleComponent.vue"
-import {onTransitionTriggered} from "../../modules/transitions"
-import formStepper from "../stepper/FormStepperComponent.vue"
-import formStep from "../stepper/FormStepComponent.vue"
+import {onTransitionTriggered} from "@modules/transitions"
+import renderless from "@mixins/renderless";
 
 const submitted = (path) => {
 	let erroredVal = undefined;
@@ -79,10 +75,12 @@ function formatValidators(formFields, validatorVals, path) {
 }
 
 export default {
+	mixins: [renderless],
 	data: function() {
 		let dt = {
 			formData: gon.form_obj,
 			toggles: {},
+			stepper: null,
 			submissionError: gon.submissionError || {}
 		};
 		if (gon.form_obj.password_digest !== undefined) {
@@ -96,24 +94,30 @@ export default {
 		validate: String,
 		startToggles: Object
 	},
-	components: {
-		fieldErrors,
-		formErrors,
-		toggle,
-		formStepper,
-		formStep
-	},
 	validations: function() {
 		return {formData: formatValidators(this.$props.validate, gon.validators, [])};
+	},
+	computed: {
+		slotScope: function() {
+			return {
+				validateForm: this.validateForm,
+				handleError: this.handleError,
+				toggle: this.toggle,
+				$v: this.$v,
+				toggles: this.toggles,
+				submissionError: this.submissionError,
+				formData: this.formData
+			}
+		}
 	},
 	methods: {
 		validateForm(e) {
 			this.$v.$touch();
-			if (this.$refs.stepper && !this.$refs.stepper.allReady()) {
+			if (this.stepper && !this.stepper.allReady()) {
 				e.preventDefault();
 				e.stopPropagation();
 
-				this.$refs.stepper.findNext();
+				this.stepper.findNext();
 			} else if (this.$v.$invalid) {
 				e.preventDefault();
 				e.stopPropagation();
@@ -144,5 +148,12 @@ export default {
 	},
 	mounted: function() {
 		this.toggles = this.startToggles;
+		for (var i = 0; i < this.$children.length; i++) {
+			let c = this.$children[i];
+			if (c.$options.name == "form_stepper") {
+				this.stepper = c;
+				break;
+			}
+		}
 	}
 }
