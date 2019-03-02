@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: components/stepper/FormStepComponent</title>
+    <title>JSDoc: Module: components/form/VuelidateFormComponent</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: components/stepper/FormStepComponent</h1>
+    <h1 class="page-title">Module: components/form/VuelidateFormComponent</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>A component for a form step. Works with parent component <a href="module-components_stepper_FormStepperComponent.html"><code>FormStepperComponent</code></a></p></p></div></div> 
+            <div class="description"><p>A component to wrap a validated form. Uses <a href="https://monterail.github.io/vuelidate/">Vuelidate</a> for validation</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -55,19 +55,19 @@
     <tbody>
     
     <tr>
-        <td><code>optional</code></td>
-        <td>Boolean</td>
-        <td><code>false</code></td>
-        <td>No</td>
-        <td>is this step optional to complete?</td>
+        <td><code>validate</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td><b>Yes</b></td>
+        <td>a comma-separated string of fields to validate in the form</td>
     </tr>
     
     <tr>
-        <td><code>numSteps</code></td>
-        <td>Number</td>
+        <td><code>startToggles</code></td>
+        <td>Object</td>
         <td>-</td>
         <td><b>Yes</b></td>
-        <td>the number of steps the parent component has as children</td>
+        <td>the starting state of toggles on the form</td>
     </tr>
     
     </tbody>
@@ -88,17 +88,31 @@
     <tbody>
     
     <tr>
-        <td><code>index</code></td>
-        <td>Number</td>
-        <td><code>0</code></td>
-        <td>the index this step has in the list of steps</td>
+        <td><code>formData</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>a JSON representation of the object being modified by the form</td>
     </tr>
     
     <tr>
-        <td><code>completes</code></td>
-        <td>Array.&lt;Boolean></td>
-        <td><code>[]</code></td>
-        <td>an array containing the completeness values for each field in the step</td>
+        <td><code>toggles</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>an object to track toggle states on the form</td>
+    </tr>
+    
+    <tr>
+        <td><code>stepper</code></td>
+        <td>module:components/stepper/FormStepComponent</td>
+        <td>-</td>
+        <td>the stepper in this form, if there is one</td>
+    </tr>
+    
+    <tr>
+        <td><code>submissionError</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>the errors returned from the last submission attempt</td>
     </tr>
     
     </tbody>
@@ -118,9 +132,15 @@
     <tbody>
     
     <tr>
-        <td><code>fields</code></td>
-        <td>Array.&lt;module:components/fieldErrorsComponent></td>
-        <td>the validated fields that are children of this step</td>
+        <td><code>slotScope</code></td>
+        <td>Object</td>
+        <td>the scope to bind to the slot</td>
+    </tr>
+    
+    <tr>
+        <td><code>$v</code></td>
+        <td>Object</td>
+        <td>the vuelidate object</td>
     </tr>
     
     </tbody>
@@ -166,6 +186,14 @@
     
 
     
+        <dt class="mixes">Mixes In:</dt>
+
+        <dd class="mixes"><ul>
+        
+            <li><a href="renderless.html">renderless</a></li>
+        
+        </ul></dd>
+    
 
     
 
@@ -194,7 +222,11 @@
 
 <h5>Listens to Events:</h5>
 <ul>
-    <li><a href="module-components_form_FieldErrorsComponent.html#~event:input-blur">module:components/form/FieldErrorsComponent~event:input-blur</a></li>
+    <li>form.event:onsubmit</li>
+
+    <li>from.ajax:error</li>
+
+    <li><a href="module-components_form_ToggleComponent.html#~event:toggle-event">module:components/form/ToggleComponent~event:toggle-event</a></li>
 </ul>
 
 
@@ -205,17 +237,6 @@
 
 
 
-
-
-    <h5>Example</h5>
-    
-        <p class="code-caption"> Use a form step to wrap a form field or fields in a scoped slot. Don't forget to attach the blur event or have it called from somewhere in your component.</p>
-    
-    <pre class="prettyprint"><code>&lt;form-step :num-steps="stepper.numSteps">
-	&lt;div slot-scope="step">
-		&lt;input @blur="step.fieldBlur">
-	&lt;/div>
-&lt;/form-step></code></pre>
 
 
 
@@ -246,7 +267,7 @@
     
 
     
-    <h4 class="name" id="checkComplete"><span class="type-signature"></span>checkComplete<span class="signature">(focusSomething)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="handleError"><span class="type-signature"></span>handleError<span class="signature">(e)</span><span class="type-signature"></span></h4>
     
 
     
@@ -254,7 +275,7 @@
 
 
 <div class="description">
-    <p>check whether the step is complete and focus on the first incomplete field</p>
+    <p>Handle an ajax error</p>
 </div>
 
 
@@ -290,13 +311,13 @@
 
         <tr>
             
-                <td class="name"><code>focusSomething</code></td>
+                <td class="name"><code>e</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">Event</span>
 
 
             
@@ -306,7 +327,7 @@
 
             
 
-            <td class="description last"><p>should the first field be focused if nothing is incomplete?</p></td>
+            <td class="description last"><p>the error event</p></td>
         </tr>
 
     
@@ -347,7 +368,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_stepper_FormStepComponent.vue.html">components/stepper/FormStepComponent.vue</a>, <a href="components_stepper_FormStepComponent.vue.html#line52">line 52</a>
+        <a href="components_form_VuelidateFormComponent.js.html">components/form/VuelidateFormComponent.js</a>, <a href="components_form_VuelidateFormComponent.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -370,16 +391,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>true if the step is complete, false if it isn't</p>
-</div>
-
-
-
-    
 
 
 
@@ -391,7 +402,7 @@
     
 
     
-    <h4 class="name" id="fieldBlur"><span class="type-signature"></span>fieldBlur<span class="signature">(field, valid)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toggle"><span class="type-signature"></span>toggle<span class="signature">(toggleField, newVal, clear<span class="signature-attributes">nullable</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -399,8 +410,219 @@
 
 
 <div class="description">
-    <p>process the result of a field's validity being changed
-called by a watched property on the field_errors component</p>
+    <p>Toggle a state</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>toggleField</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the field to toggle</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newVal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the value to set the toggled field to</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>clear</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the name of the field to clear with this toggle</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_form_VuelidateFormComponent.js.html">components/form/VuelidateFormComponent.js</a>, <a href="components_form_VuelidateFormComponent.js.html#line122">line 122</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validateForm"><span class="type-signature"></span>validateForm<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Validate the form on submission</p>
 </div>
 
 
@@ -436,13 +658,13 @@ called by a watched property on the field_errors component</p>
 
         <tr>
             
-                <td class="name"><code>field</code></td>
+                <td class="name"><code>e</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">module:components/fieldErrorsComponent</span>
+<span class="param-type">Event</span>
 
 
             
@@ -452,30 +674,7 @@ called by a watched property on the field_errors component</p>
 
             
 
-            <td class="description last"><p>the field sending the event</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>valid</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>whether the field is now valid</p></td>
+            <td class="description last"><p>the form submission event</p></td>
         </tr>
 
     
@@ -516,158 +715,7 @@ called by a watched property on the field_errors component</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_stepper_FormStepComponent.vue.html">components/stepper/FormStepComponent.vue</a>, <a href="components_stepper_FormStepComponent.vue.html#line80">line 80</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<h5>Fires:</h5>
-<ul>
-    <li><a href="module-components_stepper_FormStepComponent.html#~event:step-ready">module:components/stepper/FormStepComponent~event:step-ready</a></li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-        <h3 class="subsection-title">Events</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~event:step-ready">step-ready</h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>An event to update the parent component on whether or not this step is complete</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>isComplete</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>is the step complete?</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_stepper_FormStepComponent.vue.html">components/stepper/FormStepComponent.vue</a>, <a href="components_stepper_FormStepComponent.vue.html#line109">line 109</a>
+        <a href="components_form_VuelidateFormComponent.js.html">components/form/VuelidateFormComponent.js</a>, <a href="components_form_VuelidateFormComponent.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -686,11 +734,6 @@ called by a watched property on the field_errors component</p>
 
 
 
-<h5>Listeners of This Event:</h5>
-<ul>
-    <li><a href="module-components_stepper_FormStepperComponent.html">module:components/stepper/FormStepperComponent</a></li>
-</ul>
-
 
 
 
@@ -701,6 +744,10 @@ called by a watched property on the field_errors component</p>
 
 
         
+    
+
+    
+
     
 </article>
 

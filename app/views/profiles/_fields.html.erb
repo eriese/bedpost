@@ -7,4 +7,4 @@
 <%= f.text_field :anus_name, tooltip: true %>
 <%= f.text_field :external_name, tooltip: true %>
 <%= f.check_box :show_internal, {toggle: :internal_name, :checked => profile.has_internal?, :tooltip => :internal_name, :label_last => true, validate: false} %>
-<%= f.text_field :internal_name, :"v-show" => "toggles['internal_name']", validate: false, tooltip: true %>
+<%= f.text_field :internal_name, :"v-show" => "vf.toggles['internal_name']", validate: false, tooltip: true %>

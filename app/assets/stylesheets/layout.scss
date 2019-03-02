@@ -27,6 +27,11 @@ header {
 main {
 	clear: both;
 	padding: 10px;
+	opacity: 0;
+
+	.no-js & {
+		opacity: 1;
+	}
 }
 
 a, button.not-button, input[type=submit].not-button, button.as-link {
@@ -149,14 +154,9 @@ a.as-button {
 	clear: both;
 }
 
-#page-container {
-	opacity: 0;
+#page-container-inner {
 	max-width: 1000px;
 	margin: 0px auto;
-
-	.no-js & {
-		opacity: 1;
-	}
 }
 
 .centered-container {

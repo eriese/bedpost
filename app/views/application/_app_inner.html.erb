@@ -6,17 +6,19 @@
     <% end %>
   </header>
   <main id="page-container" ref="container">
-    <div id="flash">
-      <noscript><div id="no-js-warning"><%= t(:no_script) %></div></noscript>
-      <%= flash[:error] %>
-      <% if flash[:message] %>
-      <% flash[:message].each do |key, message| %>
-      <% message.each do |msg| %>
-      <div><%= key + ": " + msg %></div>
-      <% end %>
-      <% end %>
-      <% end %>
+    <div id="page-container-inner">
+      <div id="flash">
+        <noscript><div id="no-js-warning"><%= t(:no_script) %></div></noscript>
+        <%= flash[:error] %>
+        <% if flash[:message] %>
+        <% flash[:message].each do |key, message| %>
+        <% message.each do |msg| %>
+        <div><%= key + ": " + msg %></div>
+        <% end %>
+        <% end %>
+        <% end %>
+      </div>
+      <div id="page-content"><%= yield %></div>
     </div>
-    <div id="page-content"><%= yield %></div>
   </main>
 </div>

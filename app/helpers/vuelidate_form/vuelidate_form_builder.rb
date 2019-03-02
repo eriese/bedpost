@@ -53,7 +53,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     toggle_opt = args.delete :toggle
     if toggle_opt
       toggle_key = toggle_opt == true ? attribute : toggle_opt
-      args[:"v-model"] = "toggles['#{toggle_key}']"
+      args[:"v-model"] = "vf.toggles['#{toggle_key}']"
       add_toggle(toggle_key, args[:checked])
     end
   	field_builder(attribute, args).field do
@@ -91,7 +91,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def password_field(attribute, args={})
-  	args[:":type"] = "toggles['password']"
+  	args[:":type"] = "vf.toggles['password']"
   	after_method = args[:show_toggle] ? :password_toggle : nil
   	field_builder(attribute, args).field(after_method) do
   		super
@@ -107,7 +107,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
 	def form_errors
-		@template.content_tag("form-errors", {:":submission-error" => "submissionError"}) do
+		@template.content_tag("form-errors", {:":submission-error" => "vf.submissionError"}) do
 			errors = @template.flash[:submission_error]["form_error"] if @template.flash[:submission_error].present?
 			if errors.present?
 				errors = errors.join(I18n.t(:join_delimeter)) if errors.respond_to? :join
@@ -124,7 +124,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			opts = html_options
 			add_to_class(opts, "show-always")
 		else
-			opts = html_options.merge({role: "tooltip", :"v-show" => "slot.scope.focused"})
+			opts = html_options.merge({role: "tooltip", :"v-show" => "fe.focused"})
 		end
 		opts[:id] = "#{attribute}-tooltip-content"
 		add_to_class(opts, "tooltip")
@@ -139,12 +139,12 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		clear_opt = toggle_options.delete :":clear"
 		if clear_opt
 			clear_attr = clear_opt == true ? attribute : clear_opt
-			toggle_options[:":clear"] = "'#{full_v_name(clear_attr)}'"
+			toggle_options[:":clear"] = "'#{full_v_name(clear_attr, false)}'"
 		end
 
 		toggle_options.reverse_merge! ({
-			:"@toggle-event" => "toggle",
-			:":val" => "toggles['#{attribute}']",
+			:"@toggle-event" => "vf.toggle",
+			:":val" => "vf.toggles['#{attribute}']",
 			:field=> attribute
 		})
 

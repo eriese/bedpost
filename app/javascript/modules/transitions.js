@@ -71,8 +71,7 @@ const slide = function(animatingOut, toLeft) {
 	// set the animation props based on direction
 	let animProps = {};
 	if (toLeft) {
-		// TODO what?
-		animProps[animatingOut && toLeft || (!animatingOut && !toLeft) ? "right" : "left"] = "100%";
+		animProps[animatingOut ? "right" : "left"] = "100%";
 	} else {
 		animProps[animatingOut ? "left" : "right"] = "100%";
 	}
@@ -318,9 +317,10 @@ export const processClickData = function(dataset) {
 				granted = animationFunctions[given];
 			}
 			// make a function that evaluates the JS string for animations
-			else if (propName.indexOf("Animation") > 0) {
-				granted = function() {return eval(given)}
-			}
+			// TODO replace this eval with something
+			// else if (propName.indexOf("Animation") > 0) {
+			// 	granted = function() {return eval(given)}
+			// }
 			// parse props and numbers a JSON object or primitive
 			else if (propName.indexOf("Props") > 0 || propName == "animLength") {
 				granted = JSON.parse(given);

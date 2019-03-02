@@ -10,7 +10,8 @@ module VuelidateForm; module VuelidateFormUtils
 		args[key_name] = new_name.strip
 	end
 
-	def full_v_name(attribute=@attribute)
-		@object_name.blank? ? "formData.#{attribute}" : "formData.#{@object_name}.#{attribute}"
+	def full_v_name(attribute=@attribute, add_scope = true)
+		v_name = add_scope ? "vf." : ""
+		v_name += @object_name.blank? ? "formData.#{attribute}" : "formData.#{@object_name}.#{attribute}"
 	end
 end;end

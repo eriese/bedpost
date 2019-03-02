@@ -37,6 +37,7 @@ import Flickity from 'flickity';
  * @vue-data {Boolean[]} completes an array to keep track of which steps have been visited and completed
  * @vue-data {Boolean} curStepPending is the current step not yet ready?
  * @vue-data {Object} FlickityOptions the options for the flickity instance
+ * @listens module:components/stepper/FormStepComponent~step-ready
  */
 export default {
 	name: "form_stepper",
@@ -208,6 +209,7 @@ export default {
 
 		// process the children
 		this.processChildren(this.$children);
+		this.$emit("stepper-mounted", this);
 	}
 }
 </script>

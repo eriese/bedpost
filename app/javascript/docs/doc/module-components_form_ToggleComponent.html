@@ -57,9 +57,65 @@
     <tr>
         <td><code>symbols</code></td>
         <td>String|Array.&lt;String></td>
+        <td><code>["-", "+"]</code></td>
+        <td>No</td>
+        <td>Strings to use to represent the values of the toggle. The symbol indexes should map the to vals indexes</td>
+    </tr>
+    
+    <tr>
+        <td><code>vals</code></td>
+        <td>Array</td>
+        <td><code>[true,false]</code></td>
+        <td>No</td>
+        <td>values the toggle toggles to. Toggling increases the value index by 1 and then loops around to 0</td>
+    </tr>
+    
+    <tr>
+        <td><code>val</code></td>
+        <td>Boolean|String|Number|Object</td>
         <td>-</td>
         <td><b>Yes</b></td>
+        <td>the current value of the toggle</td>
+    </tr>
+    
+    <tr>
+        <td><code>translate</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>should the symbols be translated?</td>
+    </tr>
+    
+    <tr>
+        <td><code>clear</code></td>
+        <td>Boolean|String</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>should toggling also clear a field on the form? True clears the field of the same name as the toggle, a string will clear the field at the given path</td>
+    </tr>
+    
+    <tr>
+        <td><code>field</code></td>
+        <td>String</td>
         <td>-</td>
+        <td><b>Yes</b></td>
+        <td>the field that is being toggled</td>
+    </tr>
+    
+    <tr>
+        <td><code>clearOn</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>an array of values that the should clear the field supplied by clear. If this property is not supplied, all toggles will clear the clear field</td>
+    </tr>
+    
+    <tr>
+        <td><code>expandable</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>does this toggle expand a menu?</td>
     </tr>
     
     </tbody>
@@ -68,6 +124,44 @@
 
 
 
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    <tr>
+        <td><code>toggleState</code></td>
+        <td>String</td>
+        <td>the label taken from symbols to describe the toggle's current state</td>
+    </tr>
+    
+    <tr>
+        <td><code>index</code></td>
+        <td>Number</td>
+        <td>the index the current value has in the vals array</td>
+    </tr>
+    
+    <tr>
+        <td><code>expanded</code></td>
+        <td>Boolean</td>
+        <td>is the menu this toggle expands exapnded?</td>
+    </tr>
+    
+    <tr>
+        <td><code>expanded</code></td>
+        <td>Boolean</td>
+        <td>should screen readers read this button as pressed?</td>
+    </tr>
+    
+    </tbody>
+</table>
 
 
 
@@ -165,9 +259,322 @@
     
 
     
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
 
     
 
+    
+    <h4 class="name" id="doToggle"><span class="type-signature"></span>doToggle<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Toggle to the next value</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_form_ToggleComponent.vue.html">components/form/ToggleComponent.vue</a>, <a href="components_form_ToggleComponent.vue.html#line94">line 94</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<h5>Fires:</h5>
+<ul>
+    <li><a href="module-components_form_ToggleComponent.html#~event:toggle-event">module:components/form/ToggleComponent~event:toggle-event</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+        <h3 class="subsection-title">Events</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~event:toggle-event">toggle-event</h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>An event to toggle a state</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>field</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the field to toggle</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newVal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the value to set the toggled field to</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>clearField</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the name of the field that is cleared with this toggle</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_form_ToggleComponent.vue.html">components/form/ToggleComponent.vue</a>, <a href="components_form_ToggleComponent.vue.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+<h5>Listeners of This Event:</h5>
+<ul>
+    <li><a href="module-components_form_VuelidateFormComponent.html">module:components/form/VuelidateFormComponent</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+        
     
 </article>
 
@@ -179,13 +586,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_form_FormErrorsComponent.html">components/form/FormErrorsComponent</a></li><li><a href="module-components_form_ToggleComponent.html">components/form/ToggleComponent</a></li><li><a href="module-components_NavComponent.html">components/NavComponent</a></li><li><a href="module-components_stepper_BasicStepperComponent.html">components/stepper/BasicStepperComponent</a></li><li><a href="module-components_stepper_FormStepperComponent.html">components/stepper/FormStepperComponent</a></li><li><a href="module-FormStepComponent.html">FormStepComponent</a></li><li><a href="module-transitions.html">transitions</a></li><li><a href="module-turbolinksFixes.html">turbolinksFixes</a></li></ul><h3>Mixins</h3><ul><li><a href="renderless.html">renderless</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_form_FieldErrorsComponent.html">components/form/FieldErrorsComponent</a></li><li><a href="module-components_form_FormErrorsComponent.html">components/form/FormErrorsComponent</a></li><li><a href="module-components_form_ToggleComponent.html">components/form/ToggleComponent</a></li><li><a href="module-components_form_VuelidateFormComponent.html">components/form/VuelidateFormComponent</a></li><li><a href="module-components_NavComponent.html">components/NavComponent</a></li><li><a href="module-components_stepper_BasicStepperComponent.html">components/stepper/BasicStepperComponent</a></li><li><a href="module-components_stepper_FormStepComponent.html">components/stepper/FormStepComponent</a></li><li><a href="module-components_stepper_FormStepperComponent.html">components/stepper/FormStepperComponent</a></li><li><a href="module-transitions.html">transitions</a></li><li><a href="module-turbolinksFixes.html">turbolinksFixes</a></li><li><a href="module-validators.html">validators</a></li></ul><h3>Events</h3><ul><li><a href="module-components_form_FieldErrorsComponent.html#~event:input-blur">input-blur</a></li><li><a href="module-components_form_ToggleComponent.html#~event:toggle-event">toggle-event</a></li><li><a href="module-components_stepper_FormStepComponent.html#~event:step-ready">step-ready</a></li></ul><h3>Mixins</h3><ul><li><a href="renderless.html">renderless</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 21 2019 17:52:51 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 01 2019 18:36:01 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

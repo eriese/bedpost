@@ -7,12 +7,14 @@
 
 <script>
 	/**
-	 * A component for a form step. Works with parent component {@link module:components/stepper/FormStepperComponent}
+	 * A component for a form step. Works with parent component [FormStepperComponent]{@link module:components/stepper/FormStepperComponent}
+	 * @module
 	 * @vue-data {Number} index=0 the index this step has in the list of steps
 	 * @vue-data {Boolean[]} [completes=[]] an array containing the completeness values for each field in the step
 	 * @vue-prop {Boolean} [optional=false] is this step optional to complete?
 	 * @vue-prop {Number} numSteps the number of steps the parent component has as children
 	 * @vue-computed {module:components/fieldErrorsComponent[]} fields the validated fields that are children of this step
+	 * @listens module:components/form/FieldErrorsComponent~input-blur
 	 *
 	 * @example
 	 * <caption> Use a form step to wrap a form field or fields in a scoped slot. Don't forget to attach the blur event or have it called from somewhere in your component.</caption>
@@ -71,7 +73,7 @@
 			},
 			/** process the result of a field's validity being changed
 			* called by a watched property on the field_errors component
-			* emits a step-ready event with the validity/completeness of the step
+			* @emits module:components/stepper/FormStepComponent~step-ready
 			* @param {module:components/fieldErrorsComponent} field the field sending the event
 			* @param {Boolean} valid whether the field is now valid
 			*/
@@ -110,4 +112,10 @@
 			}
 		}
 	}
+
+	/**
+	 * An event to update the parent component on whether or not this step is complete
+	 * @event module:components/stepper/FormStepComponent~step-ready
+	 * @property {Boolean} isComplete is the step complete?
+	 */
 </script>

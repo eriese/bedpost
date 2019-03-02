@@ -32,9 +32,8 @@ module VuelidateForm::VuelidateFormHelper
 		options[:builder] ||= VuelidateForm::VuelidateFormBuilder
 		options[:html] ||= {}
 		options[:html].reverse_merge! ({
-			"@submit" => "validateForm",
-			"@ajax:error" => "handleError",
-			"ref" => "form",
+			"@submit" => "vf.validateForm",
+			"@ajax:error" => "vf.handleError",
 			"novalidate" => "",
 			"data-type" => "json"
 		})
@@ -46,7 +45,7 @@ module VuelidateForm::VuelidateFormHelper
 		content_tag("vuelidate-form", {
 			validate: validations,
 			:":start-toggles" => toggles,
-			:"v-slot" => "{validateForm, handleError, toggle, $v, toggles, submissionError, formData}"
+			:"v-slot" => "vf"
 		}) do
 			form_text
 		end

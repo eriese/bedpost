@@ -1,4 +1,4 @@
-<%= content_tag :"form-stepper", :"v-bind"=> options, ref: "stepper"  do %>
+<%= content_tag :"form-stepper", :"v-bind"=> options, :"@stepper-mounted" => "vf.addStepper"  do %>
 	<%= content_tag :div, :"slot-scope" => "stepper" do %>
 		<%= yield %>
 	<% end %>
