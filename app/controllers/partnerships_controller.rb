@@ -1,6 +1,6 @@
 class PartnershipsController < ApplicationController
-	after_action :clear_unsaved, only: [:new, :check_who, :who]
-	before_action :set_partnership, only: [:show, :edit, :update]
+	after_action :clear_unsaved, only: [:new]
+	before_action :set_partnership, only: [:show, :edit, :update, :destroy]
 
 	def index
 		@partnerships = current_user.partnerships
@@ -43,6 +43,11 @@ class PartnershipsController < ApplicationController
 		else
 			respond_with_submission_error(@partnership.errors.messages, edit_partnership_path(@partnership))
 		end
+	end
+
+	def destroy
+		@partnership.destroy
+		redirect_to partnerships_path
 	end
 
 	private

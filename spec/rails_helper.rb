@@ -53,6 +53,7 @@ RSpec.configure do |config|
 
   # incude UserProfileHelpers
   include UserProfileHelpers
+  include CleanupHelpers
 
   #clear the dummy user after all the tests are run
   config.after :suite do
