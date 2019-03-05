@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/vueSetup.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,51 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/vueSetup.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import TurbolinksAdapter from 'vue-turbolinks'
+import Vue from 'vue/dist/vue.esm'
+import Vuelidate from 'vuelidate';
 
+import navComponent from '@components/NavComponent'
+import vuelidateFormComponent from '@components/form/VuelidateFormComponent';
+import basicStepperComponent from '@components/stepper/BasicStepperComponent';
+import fieldErrors from "@components/form/FieldErrorsComponent.vue"
+import formErrors from "@components/form/FormErrorsComponent.vue"
+import toggle from "@components/form/ToggleComponent.vue"
+import formStepper from "@components/stepper/FormStepperComponent.vue"
+import formStep from "@components/stepper/FormStepComponent.vue"
+import _root from "@components/Root";
 
-    <h3> </h3>
+/**
+ * Register all vue components and set up the Vue instance
+ * @module vueSetup
+ */
+export default function addVue() {
+	Vue.use(TurbolinksAdapter);
+	Vue.use(Vuelidate);
+	Vue.component('nav-component', navComponent);
+	Vue.component('vuelidate-form', vuelidateFormComponent);
+	Vue.component('basic-stepper', basicStepperComponent);
 
+	Vue.component('field-errors', fieldErrors);
+	Vue.component('form-errors', formErrors);
+	Vue.component('toggle', toggle);
+	Vue.component('form-stepper', formStepper);
+	Vue.component('form-step', formStep);
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+	return new Vue(_root);
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
