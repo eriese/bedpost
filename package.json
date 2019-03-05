@@ -2,6 +2,7 @@
   "name": "bedpost",
   "private": true,
   "dependencies": {
+    "@rails/ujs": "^6.0.0-alpha",
     "@rails/webpacker": "3.5",
     "flickity": "^2.2.0",
     "gsap": "^2.0.2",

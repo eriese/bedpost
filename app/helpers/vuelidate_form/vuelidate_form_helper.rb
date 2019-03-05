@@ -37,6 +37,7 @@ module VuelidateForm::VuelidateFormHelper
 			"novalidate" => "",
 			"data-type" => "json"
 		})
+		options[:html][:autocomplete] = "off" unless options[:autocomplete]
 	end
 
 	def add_valid_form_wrapper(form_obj, form_text)

@@ -1,6 +1,6 @@
 <div class="login">
     <h1>Sign up</h1>
-    <%= vuelidate_form_with model: @profile, url: user_profile_path, html: {class: "centered"}, require_all: true do |f| %>
+    <%= vuelidate_form_with model: @profile, url: user_profile_path, html: {class: "centered"}, require_all: true, autocomplete: true do |f| %>
     <%= f.text_field :name %>
     <%= f.text_field :email %>
     <%= f.password_field :password %>

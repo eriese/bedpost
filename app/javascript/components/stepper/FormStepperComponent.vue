@@ -210,6 +210,9 @@ export default {
 		// process the children
 		this.processChildren(this.$children);
 		this.$emit("stepper-mounted", this);
+	},
+	beforeDestroy: function() {
+		this.flik.destroy();
 	}
 }
 </script>

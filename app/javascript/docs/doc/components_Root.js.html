@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Mixin: renderless</title>
+    <title>JSDoc: Source: components/Root.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,99 +17,69 @@
 
 <div id="main">
 
-    <h1 class="page-title">Mixin: renderless</h1>
+    <h1 class="page-title">Source: components/Root.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>renderless</h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {animIn} from '@modules/transitions';
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>Allows a component to render a scoped slot with no template</p></div>
-        
+/**
+ * The root Vue instance for the application
+ * @module
+ * @vue-data {Object} [confirmations={}] an object tracking the confirmation state of confirmable actions on the page
+ */
+export default {
+	el: '#vue-container',
+	mounted: animIn,
+	data: function() {
+		// get anything with a data-confirm to add to confirmations
+		let confirmations = {};
+		let confNodes = document.querySelectorAll("[data-confirm]");
+		for (let i = 0; i &lt; confNodes.length; i++) {
+			let node = confNodes[i];
+			confirmations[node.id] = null;
+		}
 
-        
+		return {confirmations}
+	},
+	methods: {
+		t: (scope, options) => I18n.t(scope, options),
+		/**
+		 * Is the element's purpose confirmed?
+		 * @param  {String}  message the confirmation message to show
+		 * @param  {HTMLElement}  element the element whose action requires confirmation
+		 * @return {Boolean}         whether the action is confirmed
+		 */
+		isConfirmed: function(message, element) {
+			let id = element.id;
+			// if there's already a message showing for this element's id, this is the second try, so it's confirmed
+			if (this.confirmations[id]) {
+				this.cancelConfirm(id);
+				return true;
+			}
 
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mixins_renderless.js.html">mixins/renderless.js</a>, <a href="mixins_renderless.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+			// otherwise set the message to show and return false
+			this.confirmations[id] = message;
+			return false;
+		},
+		/**
+		 * Cancel a confirmation
+		 * @param  {String} confirmId the id of the element whose confirmation is being canceled
+		 */
+		cancelConfirm: function(confirmId) {
+			// set it back to null
+			this.confirmations[confirmId] = null;
+		}
+	}
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

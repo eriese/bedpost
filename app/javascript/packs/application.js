@@ -9,7 +9,7 @@
 import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
 import Vuelidate from 'vuelidate';
-import {animIn, addTransitionEvents} from '@modules/transitions';
+import {addTransitionEvents} from '@modules/transitions';
 import addTurbolinksFixes from '@modules/turbolinksFixes';
 
 import navComponent from '@components/NavComponent'
@@ -20,6 +20,11 @@ import formErrors from "@components/form/FormErrorsComponent.vue"
 import toggle from "@components/form/ToggleComponent.vue"
 import formStepper from "@components/stepper/FormStepperComponent.vue"
 import formStep from "@components/stepper/FormStepComponent.vue"
+import root from "@components/Root";
+
+import Rails from "@rails/ujs";
+
+Rails.start();
 
 addTurbolinksFixes();
 addTransitionEvents();
@@ -43,13 +48,7 @@ document.addEventListener('turbolinks:load', () => {
 	classList.remove("no-js");
 	classList.add("with-js");
 
-	app = new Vue({
-		el: '#vue-container',
-		mounted: animIn,
-		methods: {
-			t: (scope, options) => {
-				return I18n.t(scope, options)
-			}
-		}
-	})
+	app = new Vue(root)
+
+	Rails.confirm = app.isConfirmed
 });

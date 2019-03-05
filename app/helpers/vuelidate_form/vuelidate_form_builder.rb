@@ -2,6 +2,8 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	include VuelidateFormUtils
 
+  SLOT_SCOPE = "vf"
+
 	attr_reader :validations
 
 	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field]).each do |selector|
@@ -53,7 +55,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     toggle_opt = args.delete :toggle
     if toggle_opt
       toggle_key = toggle_opt == true ? attribute : toggle_opt
-      args[:"v-model"] = "vf.toggles['#{toggle_key}']"
+      args[:"v-model"] = "#{SLOT_SCOPE}.toggles['#{toggle_key}']"
       add_toggle(toggle_key, args[:checked])
     end
   	field_builder(attribute, args).field do
@@ -91,7 +93,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def password_field(attribute, args={})
-  	args[:":type"] = "vf.toggles['password']"
+  	args[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
   	after_method = args[:show_toggle] ? :password_toggle : nil
   	field_builder(attribute, args).field(after_method) do
   		super
@@ -107,7 +109,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
 	def form_errors
-		@template.content_tag("form-errors", {:":submission-error" => "vf.submissionError"}) do
+		@template.content_tag("form-errors", {:":submission-error" => "#{SLOT_SCOPE}.submissionError"}) do
 			errors = @template.flash[:submission_error]["form_error"] if @template.flash[:submission_error].present?
 			if errors.present?
 				errors = errors.join(I18n.t(:join_delimeter)) if errors.respond_to? :join
@@ -143,8 +145,8 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 
 		toggle_options.reverse_merge! ({
-			:"@toggle-event" => "vf.toggle",
-			:":val" => "vf.toggles['#{attribute}']",
+			:"@toggle-event" => "#{SLOT_SCOPE}.toggle",
+			:":val" => "#{SLOT_SCOPE}.toggles['#{attribute}']",
 			:field=> attribute
 		})
 

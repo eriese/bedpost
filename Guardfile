@@ -116,6 +116,6 @@ guard :webpack, config: './config/webpack/development.js'
 guard :shell do
   watch(%r{(?!.*?docs).*app\/javascript\/(.*)\.(js|vue)}) {|m|
     puts 're-building jsdoc'
-    `jsdoc -c app/javascript/docs/jsdoc_conf.json`
+    `rm -r app/javascript/docs/doc; jsdoc -c app/javascript/docs/jsdoc_conf.json`
   }
 end

@@ -117,7 +117,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 				@builder.send(:add_ARIA)
 
-				expect(get_invalid(true)).to eq "slot.scope.ariaInvalid"
+				expect(get_invalid(true)).to eq "#{VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder::SLOT_SCOPE}.ariaInvalid"
 			end
 
 			it 'adds a fallback invalid attribute based off of the flash submission errors' do
@@ -161,7 +161,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 				@builder.send(:add_ARIA)
 
-				expect(get_required(true)).to eq "slot.scope.ariaRequired"
+				expect(get_required(true)).to eq "#{VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder::SLOT_SCOPE}.ariaRequired"
 			end
 
 			it 'adds a fallback required attribute based off of the validators on the attribute' do
@@ -193,7 +193,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 		it 'sets the v-model option' do
 			builder = stub_builder
-			expect(builder.instance_variable_get(:@external_options)[:"v-model"]).to eq "formData.#{@obj_name}.#{@attr}"
+			expect(builder.instance_variable_get(:@external_options)[:"v-model"]).to eq "#{VuelidateForm::VuelidateFormBuilder::SLOT_SCOPE}.formData.#{@obj_name}.#{@attr}"
 		end
 
 		it 'sets the ref option to have the same name as the attribute' do
@@ -203,22 +203,22 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 		it 'sets the blur option if the field validates' do
 			builder = stub_builder options: {validate: true}
-			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "slot.scope.onBlur"
+			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "#{VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder::SLOT_SCOPE}.onBlur"
 		end
 
 		it 'sets the blur option if the field does not validate' do
 			builder = stub_builder
-			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "slot.scope.onBlur"
+			expect(builder.instance_variable_get(:@external_options)[:@blur]).to eq "#{VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder::SLOT_SCOPE}.onBlur"
 		end
 
 		it 'sets the focus option if the field validates' do
 			builder = stub_builder options: {validate: true}
-			expect(builder.instance_variable_get(:@external_options)[:@focus]).to eq "slot.scope.onFocus"
+			expect(builder.instance_variable_get(:@external_options)[:@focus]).to eq "#{VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder::SLOT_SCOPE}.onFocus"
 		end
 
 		it 'sets the focus option if the field does not validate' do
 			builder = stub_builder
-			expect(builder.instance_variable_get(:@external_options)[:@focus]).to eq "slot.scope.onFocus"
+			expect(builder.instance_variable_get(:@external_options)[:@focus]).to eq "#{VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder::SLOT_SCOPE}.onFocus"
 		end
 	end
 

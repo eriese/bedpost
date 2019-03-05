@@ -1,4 +1,6 @@
 module ApplicationHelper
+	include VueHelper
+
 	private
 	def self.url_helpers
 		Rails.application.routes.url_helpers
