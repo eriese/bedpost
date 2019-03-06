@@ -1,4 +1,4 @@
-class WhosController < ApplicationController
+class PartnershipWhosController < ApplicationController
 	after_action :clear_unsaved, only: [:new, :create]
 
 	def new

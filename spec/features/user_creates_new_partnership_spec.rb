@@ -35,7 +35,7 @@ feature "User creates new partnership", :slow do
 			# get redirected to who
 			expect(page).to have_current_path(who_path)
 
-			click_on(t("whos.new.new_profile"))
+			click_on(t("partnership_whos.new.go_new_profile"))
 			expect(page).to have_current_path(new_profile_path)
 
 			partner_params = attributes_for(:no_internal)

@@ -25,7 +25,7 @@ en:
       new_partnership: Add a partner
     edit:
       partner_html: Edit partnership with <b>%{name}</b>
-  whos:
+  partnership_whos:
     new:
       title: Great!
       form_title: Cool, that makes it easier!

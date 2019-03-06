@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe WhosController, type: :controller do
+RSpec.describe PartnershipWhosController, type: :controller do
 	describe 'POST #create' do
 		it 'does not leave an unsaved partnership on the user' do
 			user = create(:user_profile)

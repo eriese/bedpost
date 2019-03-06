@@ -2,16 +2,16 @@ Rails.application.routes.draw do
   scope "/partners" do
     resource :profile, only: [:new, :create]
     # resource :who
-    get '/who', to: 'whos#new'
-    post '/who', to: 'whos#create'
+    get '/who', to: 'partnership_whos#new'
+    post '/who', to: 'partnership_whos#create'
 
   end
 
   resources :partners, controller: "partnerships", as: "partnerships" do
     resource :profile, except: [:index, :new, :create]
-    get '/who', to: 'whos#new'
-    put '/who', to: 'whos#update'
-    patch '/who', to: 'whos#update'
+    get '/who', to: 'partnership_whos#new'
+    put '/who', to: 'partnership_whos#update'
+    patch '/who', to: 'partnership_whos#update'
     resources :encounters
   end
 
