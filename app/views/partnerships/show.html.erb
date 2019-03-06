@@ -5,6 +5,5 @@
 <p><%= link_to t(".back"), partnerships_path %></p>
 <p><%= link_to t(".edit"), edit_partnership_path(@partnership) %></p>
 <p>
-	<!-- <span role="alert">{{confirmations['destroy_partnership']}}</span> -->
 	<%= confirm_link_to t(".destroy"), partnership_path(@partnership), method: :delete, alert_class: "confirmation" %>
 </p>

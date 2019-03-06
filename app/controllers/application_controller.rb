@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
 	end
 
 	def gon_client_validators(obj,opts = {}, skip = [], pre_validate: false)
+		gon.form_obj ||= {}
+		gon.validators ||= {}
+		gon.submissionError ||= {}
+
 		# TODO consider deep copying if it seems like opts needs to be unedited
 		validators = opts
 		adder = validator_adder(obj, validators, skip)
@@ -44,15 +48,15 @@ class ApplicationController < ActionController::Base
 
 				v.attributes.each { |a| adder.call(a, [v.kind, v.options])}
 			end
-			gon.form_obj = {obj.model_name.element => obj}
-			gon.validators = {obj.model_name.element => validators}
+			gon.form_obj.deep_merge!({obj.model_name.element => obj})
+			gon.validators.deep_merge!({obj.model_name.element => validators})
 		else
 			obj.keys.each { |key| adder.call(key, [:presence])}
-			gon.form_obj = obj
-			gon.validators = validators
+			gon.form_obj.deep_merge!(obj)
+			gon.validators.deep_merge!(validators)
 		end
 		flash[:submission_error] ||= obj.errors.messages.stringify_keys if obj.respond_to?(:valid?) && pre_validate && !obj.valid?
-		gon.submissionError = flash[:submission_error]
+		gon.submissionError.deep_merge!(flash[:submission_error]) if flash[:submission_error]
 	end
 
 	private

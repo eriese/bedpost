@@ -27,12 +27,18 @@ class UserProfile < Profile
   end
 
   def update_only_password(new_pass)
-    self.password = new_pass;
+    self.password = new_pass
     return password_valid? && save(validate: false)
   end
 
   def as_json(options = nil)
     super except: [:password_digest]
+  end
+
+  def encounters
+    enc = []
+    partnerships.each {|p| enc += p.encounters}
+    enc
   end
 
   def self.find_by_email(email)

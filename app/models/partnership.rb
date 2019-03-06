@@ -9,6 +9,7 @@ class Partnership
   end
 
   embedded_in :user_profile
+  embeds_many :encounters
   belongs_to :partner, class_name: "Profile"
 
   index({partner_id: 1}, {unique: true})

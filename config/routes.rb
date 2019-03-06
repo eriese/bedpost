@@ -12,7 +12,11 @@ Rails.application.routes.draw do
     get '/who', to: 'whos#new'
     put '/who', to: 'whos#update'
     patch '/who', to: 'whos#update'
+    resources :encounters
   end
+
+  resources :encounters, only: [:index]
+
   resource :user_profile, except: [:show, :new]
   get 'signup', to: 'user_profiles#new'
 

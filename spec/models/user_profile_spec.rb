@@ -38,10 +38,12 @@ RSpec.describe UserProfile, type: :model do
       end
     end
 
-    it "generates a password hash" do
-      pass = BCrypt::Password.new(dummy_user.password_digest)
-      original = attributes_for(:user_profile)[:password]
-      expect(pass).to eq original
+    describe '#password' do
+      it "generates a password hash" do
+        pass = BCrypt::Password.new(dummy_user.password_digest)
+        original = attributes_for(:user_profile)[:password]
+        expect(pass).to eq original
+      end
     end
   end
 
@@ -107,6 +109,26 @@ RSpec.describe UserProfile, type: :model do
         expect(persisted.authenticate(pass)).to eq persisted
       end
     end
+
+    describe '#encounters' do
+      before :each do
+        @user = create(:user_profile)
+      end
+
+      after :each do
+        @user.destroy
+      end
+
+      it 'gets an array of all encounters embedded in the partnerships of the user' do
+        ship = @user.partnerships.create(partner: dummy_user)
+        encounter = ship.encounters.create
+
+        result = @user.encounters
+        expect(result).to include encounter
+        expect(result.size).to eq 1
+      end
+    end
+
   end
 
 
