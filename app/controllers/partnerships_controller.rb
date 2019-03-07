@@ -27,8 +27,8 @@ class PartnershipsController < ApplicationController
 		if partnership.save
 			redirect_to partnership
 		else
-			clear_unsaved
 			respond_with_submission_error(partnership.errors.messages, new_partnership_path)
+			clear_unsaved
 		end
 	end
 

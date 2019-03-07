@@ -1,0 +1,2 @@
+module EncounterWhosHelper
+end
