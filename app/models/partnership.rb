@@ -38,6 +38,10 @@ class Partnership
   	@uid = value if ptnr || self.partner_id.nil?
 	end
 
+  def display
+    "#{partner.name} #{nickname}"
+  end
+
 	def serializable_hash(options)
 		super.merge({uid: uid})
 	end

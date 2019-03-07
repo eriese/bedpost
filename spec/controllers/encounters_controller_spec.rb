@@ -28,6 +28,7 @@ RSpec.describe EncountersController, type: :controller do
 				get :index, params: {partnership_id: ship.id}, session: user_session
 
 				expect(assigns(:encounters)).to eq ship.encounters
+				expect(assigns(:partnership)).to eq ship
 				expect(assigns(:encounters)).to_not eq @user.encounters
 			end
 		end
@@ -37,6 +38,7 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				get :index, session: user_session
 
+				expect(assigns(:partnership)).to be_nil
 				expect(assigns(:encounters)).to eq @user.encounters
 			end
 		end

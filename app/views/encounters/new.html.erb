@@ -1,0 +1,7 @@
+<%= vuelidate_form_with model: @encounter, url: [@partnership, @encounter], html: {class: "centered"} do |f| %>
+	<%= f.date_field :took_place %>
+	<%= f.text_area :notes %>
+	<%= f.check_box :fluids %>
+	<%= f.range_field :self_risk, in: 1..10 %>
+	<%= f.submit %>
+<% end %>

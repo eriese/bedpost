@@ -63,6 +63,7 @@ en:
   back: Back
   edit: Edit
   confirm: Are you sure? Click again to confirm, or click anywhere else to cancel
+  field_html: "<b>%{field}</b>: %{value}"
   nav:
     dashboard: "Dashboard"
     user_profile_edit: "Edit Profile"

@@ -1,0 +1,7 @@
+en:
+  mongoid:
+    attributes:
+      encounter:
+        fluids: Additional fluid exchange
+        self_risk: Self-assessed risk level
+        took_place: Date

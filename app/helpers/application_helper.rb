@@ -17,6 +17,20 @@ module ApplicationHelper
 		Mongoid::QueryCache.cache { Pronoun.all}.to_ary
 	end
 
+	def display_model(model_or_hash)
+		fields = model_or_hash
+		trans_proc = nil
+		unless model_or_hash.is_a? Hash
+			fields = model_or_hash.class.respond_to?(:display_fields) ? model_or_hash.class.display_fields : model_or_hash.fields
+			trans_proc = Proc.new {|k| model_or_hash.class.human_attribute_name(k)}
+		else
+			trans_proc = Proc.new {|k| k}
+		end
+
+		els = fields.map {|f| content_tag(:div, t(".field_html", {field: trans_proc.call(f), value: model_or_hash.send(f)}))}
+		safe_join(els)
+	end
+
 	def t_action(key, **options)
 		options = options.dup
 		default = Array(options.delete(:default)).compact

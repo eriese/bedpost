@@ -1,0 +1,6 @@
+<div class="centered-container" id="who_form">
+	<%= vuelidate_form_with scope: :who, html: {class: "centered single big", "data-animation-type" => "slideLeft"} do |f| %>
+		<%= f.select :partnership_id, options_from_collection_for_select(@partnerships, :id, :display), required: true %>
+		<%= f.submit %>
+	<% end %>
+</div>

@@ -5,7 +5,7 @@ class EncountersController < ApplicationController
 	def index
 		p_param = params[:partnership_id]
 		if p_param
-			@encounters = current_user.partnerships.find(p_param).encounters
+			@encounters = current_user.partnerships.find(p_param).encounters if set_partnership
 		else
 			@encounters = current_user.encounters
 		end

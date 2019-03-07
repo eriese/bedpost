@@ -1,0 +1,3 @@
+<% @encounters.each do |enc| %>
+<%= link_to enc.took_place, partnership_encounter_path(@partnership, enc) %>
+<% end %>
