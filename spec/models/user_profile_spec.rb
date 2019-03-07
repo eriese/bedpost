@@ -128,9 +128,26 @@ RSpec.describe UserProfile, type: :model do
         expect(result.size).to eq 1
       end
     end
-
   end
 
+  context 'nested' do
+    context 'partnerships' do
+      after :each do
+        cleanup(@user, @partner)
+      end
+
+      it 'destroys dummy partners when it is destroyed' do
+        @user = create(:user_profile)
+        @partner = create(:profile)
+
+        @user.partnerships.create(partner: @partner)
+
+        expect{@user.destroy}.to change(Profile, :count).by(-2)
+        expect(@user.persisted?).to be false
+        expect(Profile.where(id: @partner.id).count).to eq 0
+      end
+    end
+  end
 
   context 'validations' do
     it "only requires a pronoun on update" do

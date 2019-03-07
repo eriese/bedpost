@@ -13,7 +13,7 @@ class UserProfile < Profile
   has_secure_password
   has_many :user_tokens
 
-  embeds_many :partnerships
+  embeds_many :partnerships, cascade_callbacks: true
 
   validates_uniqueness_of :uid, :email, case_sensitive: false
   validates_presence_of :email, :password_digest, :uid

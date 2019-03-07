@@ -46,51 +46,87 @@ RSpec.describe Profile, type: :model do
   end
 
   describe '#delete_if_empty' do
+    after :each do
+      cleanup(@prof, @partner)
+    end
+
     it 'deletes itself if it has no relationships and is not a UserProfile' do
-      prof = create(:profile)
-      prof.send :delete_if_empty
-      expect(prof.persisted?).to be false
-    ensure
-      prof.destroy if prof.persisted?
+      @prof = create(:profile)
+      @prof.send :delete_if_empty
+      expect(@prof.persisted?).to be false
     end
 
     it 'does not delete itself if it has relationships' do
-      prof = create(:profile)
-      prof.partnered_to ||= []
-      prof.partnered_to << dummy_user
-      prof.send :delete_if_empty
-      expect(prof.persisted?).to be true
-    ensure
-      prof.destroy if prof.persisted?
+      @prof = create(:profile)
+      @prof.partnered_to << dummy_user
+      @prof.send :delete_if_empty
+      expect(@prof.persisted?).to be true
     end
 
     it 'runs after a relationship is removed' do
-      prof = create(:profile)
-      allow(prof).to receive(:delete_if_empty).and_call_original
-      prof.partnered_to ||= []
-      prof.partnered_to.push(dummy_user)
-      prof.partnered_to.delete(dummy_user)
+      @prof = create(:profile)
+      allow(@prof).to receive(:delete_if_empty).and_call_original
+      @prof.partnered_to.push(dummy_user)
+      @prof.partnered_to.delete(dummy_user)
 
-      expect(prof).to have_received :delete_if_empty
-      expect(prof.persisted?).to be false
-    ensure
-      prof.destroy if prof.persisted?
+      expect(@prof).to have_received :delete_if_empty
+      expect(@prof.persisted?).to be false
     end
 
     it 'runs after a relationship is removed and does not delete if there are still others' do
-      prof = create(:profile)
-      allow(prof).to receive(:delete_if_empty).and_call_original
-      prof.partnered_to ||= []
-      prof.partnered_to.push(dummy_user)
-      partner = create(:user_profile)
-      prof.partnered_to.push(partner)
-      prof.partnered_to.delete(dummy_user)
+      @prof = create(:profile)
+      allow(@prof).to receive(:delete_if_empty).and_call_original
+      @prof.partnered_to.push(dummy_user)
+      @partner = create(:user_profile)
+      @prof.partnered_to.push(@partner)
+      @prof.partnered_to.delete(dummy_user)
 
-      expect(prof).to have_received :delete_if_empty
-      expect(prof.persisted?).to be true
-    ensure
-      prof.destroy if prof.persisted?
-      partner.destroy if partner
+      expect(@prof).to have_received :delete_if_empty
+      expect(@prof.persisted?).to be true
+    end
+  end
+
+  describe '#add_partnered_to' do
+    after :each do
+      cleanup(@prof, @partner)
+    end
+
+    it 'adds a profile to the partnered_to list' do
+      @prof = create(:user_profile)
+      @partner = create(:profile)
+
+      @prof.add_partnered_to(@partner)
+      @prof.reload
+
+      expect(@prof.partnered_to_ids).to include(@partner.id)
+      expect(@prof.partnered_to).to_not be_empty
+    end
+  end
+
+  describe '#remove_partnered_to' do
+    after :each do
+      cleanup(@prof, @partner)
+    end
+
+    it 'removes the profile from the partnered_to list' do
+      @prof = create(:profile)
+      @partner = create(:user_profile)
+
+      @prof.add_partnered_to(@partner)
+      @prof.remove_partnered_to(@partner)
+
+      expect(@prof.partnered_to_ids).to_not include(@partner.id)
+    end
+
+    it 'calls #delete_if_empty' do
+      @prof = create(:profile)
+      @partner = create(:user_profile)
+
+      @prof.add_partnered_to(@partner)
+      allow(@prof).to receive(:delete_if_empty).and_call_original
+      @prof.remove_partnered_to(@partner)
+
+      expect(@prof).to have_received :delete_if_empty
     end
   end
 end

@@ -74,6 +74,7 @@ RSpec.describe PartnershipsController, type: :controller do
 		it 'does not leave an un-saved partnership on the user' do
 			get :new, session: dummy_user_session
 			expect(controller.current_user.partnerships.length).to eq 0
+
 			get :index, session: dummy_user_session
 			expect(assigns(:partnerships).length).to eq 0
 		end
@@ -148,7 +149,7 @@ RSpec.describe PartnershipsController, type: :controller do
 		end
 	end
 
-	describe 'POST #create' do
+	describe 'POST #update' do
 		after :each do
 			cleanup(@user, @partner)
 		end

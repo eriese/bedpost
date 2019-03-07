@@ -50,29 +50,28 @@ RSpec.describe PartnershipWhosController, type: :controller do
 
 	describe 'PUT #update' do
 		context 'with a valid uid' do
-			it 'updates the partner id on the partnership' do
-				user = create(:user_profile)
-				old_partner = create(:profile)
-				ship = user.partnerships.create(partner: old_partner)
+			after :each do
+				cleanup(@user, @old_partner)
+			end
 
-				put :update, session: {user_id: user.id}, params: {partnership_id: ship.to_param, partnership: {uid: dummy_user.uid}}
+			it 'updates the partner id on the partnership' do
+				@user = create(:user_profile)
+				@old_partner = create(:profile)
+				ship = @user.partnerships.create(partner: @old_partner)
+
+				put :update, session: {user_id: @user.id}, params: {partnership_id: ship.to_param, partnership: {uid: dummy_user.uid}}
 				ship.reload
+				expect(response).to redirect_to ship
 				expect(ship.partner_id).to eq dummy_user.id
-			ensure
-				user.destroy
-				old_partner.destroy
 			end
 
 			it 'deletes the orphaned dummy partner' do
-				user = create(:user_profile)
-				old_partner = create(:profile)
-				ship = user.partnerships.create(partner: old_partner)
+				@user = create(:user_profile)
+				@old_partner = create(:profile)
+				ship = @user.partnerships.create(partner: @old_partner)
 
-				put :update, session: {user_id: user.id}, params: {partnership_id: ship.to_param, partnership: {uid: dummy_user.uid}}
-				expect{Profile.find(old_partner.id)}.to raise_error(Mongoid::Errors::DocumentNotFound)
-			ensure
-				user.destroy
-				old_partner.destroy
+				put :update, session: {user_id: @user.id}, params: {partnership_id: ship.to_param, partnership: {uid: dummy_user.uid}}
+				expect{Profile.find(@old_partner.id)}.to raise_error(Mongoid::Errors::DocumentNotFound)
 			end
 		end
 	end

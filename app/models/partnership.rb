@@ -23,7 +23,7 @@ class Partnership
 
   # validates :nickname, presence: true
 
-  before_save :add_to_partner
+  after_save :add_to_partner
   before_destroy :remove_from_partner
 
   def uid
@@ -38,33 +38,23 @@ class Partnership
   	@uid = value if ptnr || self.partner_id.nil?
 	end
 
-	def update_partner(partner_param)
-		old_partner = partner
-		did_update = update(partner_param)
-		if did_update && old_partner.is_base?
-			old_partner.destroy
-		end
-		did_update
-	end
-
 	def serializable_hash(options)
 		super.merge({uid: uid})
 	end
 
 	private
 	def add_to_partner
-		if partner_id_changed?
-			new_partner = Profile.find(partner_id)
-			new_partner.partnered_to ||= []
-			new_partner.partnered_to.push(user_profile)
-			remove_from_partner(partner_id_was)
+    post_persist
+		if previous_changes[:partner_id]
+      prev_partner = previous_changes[:partner_id][0]
+      remove_from_partner(prev_partner) unless prev_partner.nil?
+      Profile.add_partnered_to(partner_id, user_profile)
 		end
 	end
 
 	def remove_from_partner(prev_partner = partner_id)
 		unless prev_partner.nil?
-			old_partner = Profile.find(prev_partner)
-			old_partner.partnered_to.delete(user_profile)
+			Profile.remove_partnered_to(prev_partner, user_profile);
 		end
 	end
 

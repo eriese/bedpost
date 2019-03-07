@@ -2,9 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Partnership, type: :model do
 	after :each do
-		@user.destroy if @user && @user.persisted?
-		@user2.destroy if @user2 && @user2.persisted?
-		@partner.destroy if @partner && @partner.persisted?
+		cleanup(@user, @user2, @partner)
 	end
 
 	describe '#partner' do
@@ -125,6 +123,20 @@ RSpec.describe Partnership, type: :model do
 				expect(ship.partner_id).to eq @user2.id
 				expect(ship.uid).to eq @user2.uid
 			end
+
+			it 'works with update' do
+				@user = create(:user_profile)
+				@partner = create(:user_profile)
+				@user2 = create(:user_profile)
+
+				ship = @user.partnerships.create(partner: @partner)
+				expect(ship.update_attributes(uid: @user2.uid)).to be true
+
+				ship.reload
+
+				expect(ship.partner_id).to eq @user2.id
+				expect(ship.uid).to eq @user2.uid
+			end
 		end
 
 		describe 'getter' do
@@ -199,15 +211,28 @@ RSpec.describe Partnership, type: :model do
 			expect(@partner.partnered_to).to include(@user)
 		end
 
-		it 'calls #remove_from_partner to remove itself from the previous partner' do
+		it 'does not call #remove_from_partner to remove itself from the previous partner if it is new' do
 			@user = create(:user_profile)
 			@partner = create(:profile)
 
 			ship = @user.partnerships.new(partner: @partner)
-			allow(ship).to receive(:remove_from_partner).and_call_original
+			allow(ship).to receive(:remove_from_partner)
 			ship.send :add_to_partner
 
-			expect(ship).to have_received(:remove_from_partner).with(nil)
+			expect(ship).to_not have_received(:remove_from_partner)
+		end
+
+		it 'calls #remove_from_partner to remove itself from the previous partner' do
+			@user = create(:user_profile)
+			@partner = create(:profile)
+			@user2 = create(:profile)
+
+			ship = @user.partnerships.create(partner: @partner)
+			allow(ship).to receive(:remove_from_partner).and_call_original
+			ship.partner = @user2
+			ship.send :add_to_partner
+
+			expect(ship).to have_received(:remove_from_partner).with(@partner.id)
 		end
 	end
 
@@ -218,8 +243,7 @@ RSpec.describe Partnership, type: :model do
 			@partner = create(:profile)
 
 			ship = @user.partnerships.new(partner: @partner)
-			ship.send :add_to_partner
-			@partner.reload
+			@partner.add_partnered_to(@user)
 			expect(@partner.partnered_to).to include(@user)
 
 			ship.send :remove_from_partner
@@ -228,7 +252,7 @@ RSpec.describe Partnership, type: :model do
 		end
 	end
 
-	describe 'before_save' do
+	describe 'after_save' do
 		it 'adds its user to the partner as a foreign key in #partnered_to' do
 			@user = create(:user_profile)
 			@partner = create(:profile)
@@ -250,8 +274,7 @@ RSpec.describe Partnership, type: :model do
 
 			ship = @user.partnerships.create(partner: @partner)
 			allow(ship).to receive(:remove_from_partner).and_call_original
-			ship.partner = @user2
-			ship.save
+			ship.update(partner: @user2)
 
 			expect(ship).to have_received(:remove_from_partner).with(@partner.id)
 
