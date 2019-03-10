@@ -13,4 +13,7 @@ class Pronoun
   	"#{subject}/#{object}/#{obj_possessive}"
   end
 
+  def self.list
+    @@list ||= all.to_ary
+  end
 end

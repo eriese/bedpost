@@ -12,6 +12,7 @@ module VuelidateForm; module VuelidateFormUtils
 
 	def full_v_name(attribute=@attribute, add_scope = true)
 		v_name = add_scope ? "vf." : ""
+		attribute = attribute.to_s.chomp("?") unless @model && @model.dont_strip
 		v_name += @object_name.blank? ? "formData.#{attribute}" : "formData.#{@object_name}.#{attribute}"
 	end
 end;end

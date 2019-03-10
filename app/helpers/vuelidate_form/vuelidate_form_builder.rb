@@ -52,6 +52,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
   def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
   	add_to_class(args, "inline", :field_class) unless args[:inline] == false
+    args[:label_last] = true unless args.has_key? :label_last
     toggle_opt = args.delete :toggle
     if toggle_opt
       toggle_key = toggle_opt == true ? attribute : toggle_opt
@@ -65,7 +66,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
   def toggle(attribute, options={}, toggle_options={})
 		add_to_class(options, "inline") unless args[:inline] == false
-		options[:before_label] = true unless options.has_key?(:before_label)
+		options[:label_last] = true unless options.has_key?(:label_last)
 		field_builder(attribute, options).field do
 			toggle_tag(attribute, toggle_options)
 		end
@@ -163,7 +164,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def objectify_options(options)
-	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :before_label, :is_step)
+	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :label_last, :is_step)
 	end
 
 	def add_validation(attribute)

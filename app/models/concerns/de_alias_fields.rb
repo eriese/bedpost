@@ -1,8 +1,25 @@
 module DeAliasFields
 	extend ActiveSupport::Concern
 
-	def serializable_hash(options)
+	class_methods do
+  	def dont_strip_booleans
+  		self.dont_strip = true
+  	end
+  end
+
+  included do
+  	class_attribute :dont_strip
+  end
+
+	def serializable_hash(options = {})
     original_hash = super(options)
-    Hash[original_hash.map {|k, v| [self.aliased_fields.invert[k] || k , v] }]
+    alias_invert = self.aliased_fields.invert
+    strip_qs = options.has_key?(:strip_qs) ? options[:strip_qs] : !self.dont_strip
+
+    Hash[original_hash.map do |k, v|
+    	key = alias_invert.include?(k) && !k.include?("_id") ? alias_invert[k] : k
+    	key = key.chomp("?") if strip_qs
+    	[key , v]
+    end]
   end
 end

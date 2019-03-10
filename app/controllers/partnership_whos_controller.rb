@@ -5,7 +5,7 @@ class PartnershipWhosController < ApplicationController
 		p_id = params[:partnership_id]
 		@partnership = p_id.present? ? current_user.partnerships.find(p_id) : current_user.partnerships.new
 		@partnership.uid = flash[:who_attempt][:uid] if flash[:who_attempt].present?
-		gon_client_validators(@partnership, {uid: [[:presence]]}, pre_validate: @partnership.uid.present?)
+		gon_client_validators(@partnership, {uid: [[:presence]]}, pre_validate: @partnership.uid.present?, serialize_opts: {only: [:uid], methods: [:uid]})
 		render p_id.present? ? :edit : :new
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to partnerships_path

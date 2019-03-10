@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-shared_examples_for 'an object that dirty-tracks its embedded relations' do |class_obj|
+shared_examples_for 'an object that dirty-tracks its embedded relations' do |class_obj, serialization_defaults|
 
 	class_obj.embedded_relations.each do |name, rel|
 		it "should have a method clear_unsaved_#{name} that clears unpersisted #{name}" do
@@ -19,5 +19,9 @@ shared_examples_for 'an object that dirty-tracks its embedded relations' do |cla
 				expect(class_obj.send(name)).to eq expected
 			end
 		end
+	end
+
+	it 'responds to #embeds_many' do
+		expect(class_obj.class).to respond_to :embeds_many
 	end
 end

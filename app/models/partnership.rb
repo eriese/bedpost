@@ -18,7 +18,7 @@ class Partnership
   validates :uid,
   	foreign_key: {key_class: UserProfile},
   	not_self: {method: :uid},
-  	exclusion: {in: ->(partnership) {partnership.user_profile.partnerships.map { |ship| ship == partnership ? nil : ship.uid }}, message: :taken},
+  	exclusion: {in: ->(ship) {Profile.find(ship.user_profile.partnerships.map { |s| s.partner_id unless s == ship}.compact).pluck(:uid).compact}, message: :taken},
   	allow_nil: true
 
   # validates :nickname, presence: true
@@ -41,10 +41,6 @@ class Partnership
   def display
     "#{partner.name} #{nickname}"
   end
-
-	def serializable_hash(options)
-		super.merge({uid: uid})
-	end
 
 	private
 	def add_to_partner

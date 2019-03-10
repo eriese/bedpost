@@ -31,8 +31,10 @@ class UserProfile < Profile
     return password_valid? && save(validate: false)
   end
 
-  def as_json(options = nil)
-    super except: [:password_digest]
+  def as_json(options = {})
+    options[:except] ||= []
+    options[:except] << :password_digest
+    super
   end
 
   def encounters

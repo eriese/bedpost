@@ -3,8 +3,9 @@
 
 <h2 class="with-desc"><%= t_action(".personal_prefs.title") %></h2>
 <p class="description"><%= t_action(".personal_prefs.desc") %></p>
-<%= f.select :pronoun, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true}%>
+<%= f.select :pronoun_id, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true}%>
 <%= f.text_field :anus_name, tooltip: true %>
 <%= f.text_field :external_name, tooltip: true %>
-<%= f.check_box :show_internal, {toggle: :internal_name, :checked => profile.has_internal?, :tooltip => :internal_name, :label_last => true, validate: false} %>
+<%= f.check_box :can_penetrate?, {tooltip: true} %>
+<%= f.check_box :show_internal, {toggle: :internal_name, :checked => profile.has_internal?, :tooltip => :internal_name, validate: false} %>
 <%= f.text_field :internal_name, :"v-show" => "vf.toggles['internal_name']", validate: false, tooltip: true %>

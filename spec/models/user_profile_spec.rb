@@ -128,6 +128,16 @@ RSpec.describe UserProfile, type: :model do
         expect(result.size).to eq 1
       end
     end
+
+    describe '#as_json' do
+      it 'does not include the passsword digest' do
+        user = build_stubbed(:user_profile)
+        result = user.as_json
+
+        expect(result).to_not include("password_digest")
+        expect(result).to_not include("password")
+      end
+    end
   end
 
   context 'nested' do

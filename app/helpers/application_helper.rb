@@ -14,7 +14,7 @@ module ApplicationHelper
 	}
 
 	def pronouns
-		Mongoid::QueryCache.cache { Pronoun.all}.to_ary
+		Pronoun.list
 	end
 
 	def display_model(model_or_hash)

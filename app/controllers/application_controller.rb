@@ -28,49 +28,61 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
-	def gon_client_validators(obj,opts = {}, skip = [], pre_validate: false)
-		gon.form_obj ||= {}
-		gon.validators ||= {}
-		gon.submissionError ||= {}
-
+	def gon_client_validators(obj,opts = {}, skip = [], pre_validate: false, serialize_opts: {})
 		# TODO consider deep copying if it seems like opts needs to be unedited
 		validators = opts
-		adder = validator_adder(obj, validators, skip)
+		g_validators = validators
+		g_obj = obj
+		adder_obj = obj
+		# adder = nil
 		unless obj.is_a? Hash
-			is_new = obj.new_record?
-			obj.class.validators.each do |v|
-				if !v.options.empty?
-					if v.options.has_key?(:on)
-						on_cond = v.options[:on]
-						next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
-					end
-				end
+			adder = model_validator_mapper(obj, validators, skip)
+			adder_obj = obj.serializable_hash serialize_opts.reverse_merge({strip_qs: true})
 
-				v.attributes.each { |a| adder.call(a, [v.kind, v.options])}
-			end
-			gon.form_obj.deep_merge!({obj.model_name.element => obj})
-			gon.validators.deep_merge!({obj.model_name.element => validators})
+			g_obj = {obj.model_name.element => adder_obj}
+			g_validators = {obj.model_name.element => validators}
 		else
-			obj.keys.each { |key| adder.call(key, [:presence])}
-			gon.form_obj.deep_merge!(obj)
-			gon.validators.deep_merge!(validators)
+			adder = hash_validator_mapper(obj, validators, skip)
 		end
+
+		adder_obj.each(&adder)
+
+		gon.form_obj = (gon.form_obj || {}).deep_merge(g_obj)
+		gon.validators = (gon.validators || {}).deep_merge(g_validators)
+
 		flash[:submission_error] ||= obj.errors.messages.stringify_keys if obj.respond_to?(:valid?) && pre_validate && !obj.valid?
+		gon.submissionError ||= {}
 		gon.submissionError.deep_merge!(flash[:submission_error]) if flash[:submission_error]
 	end
 
 	private
-	def validator_adder(obj, v_hash, skip = [])
-		Proc.new do |atr, validator|
-			unless atr == :password_digest || skip.include?(atr)
-				if obj[atr].is_a? Hash
-					v_hash[atr] ||= {}
-					o_adder = validator_adder(obj[atr], v_hash[atr], skip)
-					obj[atr].keys.each{|key| o_adder.call(key, validator)}
-				else
-					v_hash[atr] ||= []
-					v_hash[atr] << validator
+	def model_validator_mapper(obj, v_hash, skip)
+		is_new = obj.new_record?
+		Proc.new do |atr, val|
+			next if skip.include? atr
+			a_vals = obj.class.validators_on(atr)
+			next if a_vals.empty?
+
+			v_hash[atr] ||= []
+			v_hash[atr] += a_vals.map do |v|
+				if on_cond = v.options[:on]
+					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
 				end
+
+				[v.kind, v.options]
+			end
+		end
+	end
+
+	def hash_validator_mapper(obj, v_hash, skip)
+		Proc.new do |atr, val|
+			return if skip.include? atr
+			if val.is_a? Hash
+				v_hash[atr] ||= {}
+				o_adder = hash_validator_mapper(val, v_hash[atr], skip)
+				val.each(&o_adder)
+			else
+				v_hash[atr] = (v_hash[atr] || []) << [:presence, {}]
 			end
 		end
 	end
