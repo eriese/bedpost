@@ -25,43 +25,47 @@ RSpec.describe DeAliasFields, type: :module do
 		DeAliasFieldsTestModel2.delete_all
 	end
 
-	describe '#serializable_hash' do
-		it 'hashes fields with their aliases' do
-			obj = DeAliasFieldsTestModel.new
-			result = obj.serializable_hash
+	context 'instance methods' do
+		describe '#as_json' do
+			it 'hashes fields with their aliases' do
+				obj = DeAliasFieldsTestModel.new
+				result = obj.as_json
 
-			expect(result).to include("field1")
-			expect(result).to_not include("f_1")
-		end
+				expect(result).to include("field1")
+				expect(result).to_not include("f_1")
+			end
 
-		it 'does not de-alias _id fields' do
-			obj = DeAliasFieldsTestModel.new
-			result = obj.serializable_hash
+			it 'does not de-alias _id fields' do
+				obj = DeAliasFieldsTestModel.new
+				result = obj.as_json
 
-			expect(result).to include("_id")
-			expect(result).to_not include("id")
-			expect(result).to include("other_model_id")
-			expect(result).to_not include("other_model")
-		end
+				expect(result).to include("_id")
+				expect(result).to_not include("id")
+				expect(result).to include("other_model_id")
+				expect(result).to_not include("other_model")
+			end
 
-		it 'strips question marks off by default' do
-			obj = DeAliasFieldsTestModel.new
-			result = obj.serializable_hash
+			it 'strips question marks off by default' do
+				obj = DeAliasFieldsTestModel.new
+				result = obj.as_json
 
-			expect(result).to include("field2")
-			expect(result).to_not include("field2?")
-			expect(result).to_not include("f_2")
+				expect(result).to include("field2")
+				expect(result).to_not include("field2?")
+				expect(result).to_not include("f_2")
+			end
 		end
 	end
 
-	describe 'self#dont_strip_booleans' do
-		it 'turns of the default question mark stripping' do
-			obj = DeAliasFieldsTestModel2.new
-			result = obj.serializable_hash
+	context 'class methods' do
+		describe '.dont_strip_booleans' do
+			it 'turns of the default question mark stripping' do
+				obj = DeAliasFieldsTestModel2.new
+				result = obj.as_json
 
-			expect(result).to include("field2?")
-			expect(result).to_not include("field2")
-			expect(result).to_not include("f_2")
+				expect(result).to include("field2?")
+				expect(result).to_not include("field2")
+				expect(result).to_not include("f_2")
+			end
 		end
 	end
 end

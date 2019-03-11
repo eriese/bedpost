@@ -11,7 +11,7 @@ module DeAliasFields
   	class_attribute :dont_strip
   end
 
-	def serializable_hash(options = {})
+	def as_json(options = {})
     original_hash = super(options)
     alias_invert = self.aliased_fields.invert
     strip_qs = options.has_key?(:strip_qs) ? options[:strip_qs] : !self.dont_strip

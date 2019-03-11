@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
 		# adder = nil
 		unless obj.is_a? Hash
 			adder = model_validator_mapper(obj, validators, skip)
-			adder_obj = obj.serializable_hash serialize_opts.reverse_merge({strip_qs: true})
+			adder_obj = obj.as_json serialize_opts.reverse_merge({strip_qs: true})
 
 			g_obj = {obj.model_name.element => adder_obj}
 			g_validators = {obj.model_name.element => validators}
