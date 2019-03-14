@@ -8,8 +8,8 @@ RSpec.describe Contact::Instrument, type: :model do
 
   	describe '#can_penetrate and #can_be_penetrated_by' do
   		it 'keeps corresponding roles organized' do
-	  		@inst1 = create(:contact_instrument, name: "hand")
-	  		@inst2 = create(:contact_instrument, name: "genitals")
+	  		@inst1 = create(:contact_instrument, name: :hand)
+	  		@inst2 = create(:contact_instrument, name: :genitals)
 
 	  		@inst1.can_penetrate << @inst2
 	  		expect(@inst1.reload.can_penetrate).to include(@inst2)
@@ -72,7 +72,7 @@ RSpec.describe Contact::Instrument, type: :model do
   				inst_name = "hand"
   				inst = build(:contact_instrument, name: inst_name)
 
-  				prc = Proc.new {|given| given*2}
+  				prc = Proc.new {|given| given.to_s*2}
   				result = inst.get_user_name_for(double(), &prc)
 
   				expect(result).to eq prc.call(inst_name)
@@ -127,5 +127,36 @@ RSpec.describe Contact::Instrument, type: :model do
   			expect(inst2.show_for_user(double(), :can_penetrate)).to be true
   		end
   	end
+  end
+
+  context 'class methods' do
+    describe '.by_name' do
+      before :all do
+        @names = ["hand", "mouth", "toys"]
+        @names.each {|n| create(:contact_instrument, name: n)}
+      end
+
+      after :all do
+        Contact::Instrument.delete_all
+      end
+
+      it 'gets a hash of instruments with names as keys' do
+        result = Contact::Instrument.by_name
+        expect(result).to be_a(Hash)
+        @names.each {|n| expect(result).to have_key(n)}
+      end
+
+      it 'gets a hash that gives access for strings or symbols' do
+        names = Contact::Instrument.by_name
+        expect(names[:hand]).to eq names["hand"]
+      end
+
+      it 'caches' do
+        names = Contact::Instrument.by_name
+        allow(Contact::Instrument).to receive(:all){[]}
+        Contact::Instrument.by_name
+        expect(Contact::Instrument).to_not have_received(:all)
+      end
+    end
   end
 end

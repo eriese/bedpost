@@ -1,19 +1,15 @@
 class Contact::Instrument
   include Mongoid::Document
 
-  CONTACT_TYPES = {
-  	can_penetrate: :can_be_penetrated_by,
-  	can_be_penetrated_by: :can_penetrate,
-  	can_touch: :can_touch
-  }
-
-  field :name
+  field :name, type: Symbol
   field :user_override, type: Symbol
   field :conditions, type: Hash
+  index({name: 1}, {unique: true})
 
-  CONTACT_TYPES.each do |key, value|
-  	has_and_belongs_to_many key, class_name: "Contact::Instrument", inverse_of: value
-  	has_and_belongs_to_many (key.to_s + "_self").intern, class_name: "Contact::Instrument", inverse_of: nil
+
+  Contact::ContactType.all.each do |c|
+  	has_and_belongs_to_many c.inst_key, class_name: "Contact::Instrument", inverse_of: c.inverse_inst
+  	has_and_belongs_to_many (c.inst_key.to_s + "_self").intern, class_name: "Contact::Instrument", inverse_of: nil
   end
 
   def get_user_name_for(profile, &t_block)
@@ -31,5 +27,13 @@ class Contact::Instrument
   	c_conditions = conditions[:all] || conditions[contact_type] || conditions[contact_type.to_s.sub("_self", "").intern] if conditions
   	c_conditions.each {|c| return false unless profile.send(c)} if c_conditions
   	true
+  end
+
+  def self.by_name
+    @@by_name ||= HashWithIndifferentAccess[all.map {|i| [i.name, i]}]
+  end
+
+  def self.as_map
+    @@as_map ||= HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
   end
 end

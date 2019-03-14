@@ -7,6 +7,8 @@ class Encounter
   field :took_place, type: Date
 
   embedded_in :partnership
+  embeds_many :contacts
+  accepts_nested_attributes_for :contacts
 
   validates :self_risk, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10}
 
