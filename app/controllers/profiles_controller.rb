@@ -67,7 +67,7 @@ class ProfilesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      [:internal_name, :external_name, :anus_name, :pronoun, :name]
+      [:internal_name, :external_name, :anus_name, :pronoun_id, :name, :can_penetrate]
     end
 
     def param_name

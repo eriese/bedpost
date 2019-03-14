@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
 
 	def hash_validator_mapper(obj, v_hash, skip)
 		Proc.new do |atr, val|
-			return if skip.include? atr
+			next if skip.include? atr
 			if val.is_a? Hash
 				v_hash[atr] ||= {}
 				o_adder = hash_validator_mapper(val, v_hash[atr], skip)

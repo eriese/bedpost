@@ -42,18 +42,22 @@ feature "User creates new partnership", :slow do
 			partner_params.each do |key, val|
 				next if val.nil?
 				input_id = "profile_#{key}"
-				if key.to_s == "pronoun"
+				if key.to_s == "pronoun_id"
 					select(val.display, from: input_id)
+				elsif val.is_a? Boolean
+					check(input_id) if val
 				else
 					fill_in input_id, with: val
 				end
 			end
 
+			p_count = Profile.count
 			find('input[name="commit"]').click
 
+			expect(Profile.count).to eq(p_count + 1)
 			@partner = Profile.last
 			#expect no back button
-			expect(page).to_not have_link("Back")
+			# expect(page).to_not have_link("Back")
 			fill_out_partnership_form
 		end
 	end

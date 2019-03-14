@@ -4,14 +4,16 @@ FactoryBot.define do
     anus_name { "asshole" }
     external_name { "clit" }
     internal_name { "pussy" }
-    pronoun {UserProfileHelpers.dummy_pronoun}
+    pronoun_id {UserProfileHelpers.dummy_pronoun.id}
+    can_penetrate {false}
   end
 
   factory :profile2, class: Profile, aliases: [:no_internal] do
   	name { "Bob" }
     anus_name { "butt" }
     external_name { "dick" }
+    can_penetrate {true}
     internal_name { nil }
-    pronoun {UserProfileHelpers.dummy_pronoun}
+    pronoun_id {UserProfileHelpers.dummy_pronoun.id}
   end
 end
