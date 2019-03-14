@@ -71,6 +71,6 @@ class EncountersController < ApplicationController
 	end
 
 	def e_params
-		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place)
+		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: [:barriers, :order, :contact_type, :partner_instrument_id, :self_instrument_id])
 	end
 end

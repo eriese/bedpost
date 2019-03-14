@@ -98,10 +98,26 @@ RSpec.describe EncountersController, type: :controller do
 		end
 
 		context 'with valid params' do
+			after :all do
+				cleanup(@hand)
+			end
+
 			it 'creates a new encounter on the partnership' do
 				ship = @user.partnerships.first
 				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter)}
 				expect(ship.reload.encounters.count).to eq 1
+			end
+
+			it 'accepts nested parameters for contacts' do
+				ship = @user.partnerships.first
+				@hand = create(:contact_instrument, name: :hand)
+				@hand.can_touch << @hand
+				enc_params = attributes_for(:encounter, contacts_attributes: [attributes_for(:contact, partner_instrument_id: @hand.id, self_instrument_id: @hand.id)])
+				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: enc_params}
+				ship.reload
+
+				expect(ship.encounters.count).to eq 1
+				expect(ship.encounters.first.contacts.count).to eq 1
 			end
 
 			it 'goes to the show page for that encounter' do
