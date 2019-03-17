@@ -1,0 +1,5 @@
+<%= f.fields_for(:contacts) do |cf| %>
+<%#= cf.collection_radio_buttons :partner_instrument, Contact::Instrument.all, :id, :name %>
+<!-- I <%%= cf.collection_radio_buttons :contact_type, Contact::ContactType::TYPES.values, :key, :key %> <%%= partner.pronoun.possessive %> <%%= cf.collection_radio_buttons :partner_instrument, Contact::Instrument.all, :id, :name %> with my <%%= cf.collection_radio_buttons :self_instrument, Contact::Instrument.all.to_ary , :id, :name  %> -->
+<encounter-contact-field base-name="<%= cf.object_name %>" v-model=<%="vf.formData.encounter.contacts[#{cf.index}]"%>></encounter-contact-field>
+<% end %>

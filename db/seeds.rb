@@ -19,10 +19,10 @@ PRONOUNS.each {|pr| Pronoun.create(pr)}
 ############################
 HAND = Contact::Instrument.create(name: "hand")
 EXTERNAL_GENITALS = Contact::Instrument.create(name: "external_genitals", user_override: :external_name, conditions: {
-	can_be_penetrated_by: [:can_penetrate?], can_penetrate: [:can_penetrate?]
+	can_be_penetrated_by: [:can_penetrate], can_penetrate: [:can_penetrate]
 })
 INTERNAL_GENITALS = Contact::Instrument.create(name: "internal_genitals", user_override: :internal_name, conditions: {
-	all: [:has_internal?]
+	all: [:internal_name]
 })
 ANUS = Contact::Instrument.create(name: "anus", user_override: :anus_name)
 MOUTH = Contact::Instrument.create(name: "mouth")

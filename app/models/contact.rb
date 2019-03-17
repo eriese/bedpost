@@ -2,7 +2,7 @@ class Contact
   include Mongoid::Document
   field :barriers
   field :order
-  field :contact_type, type: Contact::ContactType
+  field :contact_type, type: Contact::ContactType, default: :penetrated
 
   embedded_in :encounter
   belongs_to :partner_instrument, class_name: "Contact::Instrument"
@@ -14,5 +14,14 @@ class Contact
   	unless self_instrument.send(contact_type.inst_key).include? partner_instrument
   		errors.add(:contact_type, :invalid, {attribute: :contact_type})
   	end
+  end
+
+  def serializable_hash(options={})
+  	options[:except] ||= []
+  	exclude_contact = options[:except].include? :contact_type
+  	options[:except] << :contact_type unless exclude_contact
+  	hsh = super
+  	hsh[:contact_type] = contact_type.key unless exclude_contact
+  	hsh
   end
 end

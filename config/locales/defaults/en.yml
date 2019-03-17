@@ -64,6 +64,8 @@ en:
   edit: Edit
   confirm: Are you sure? Click again to confirm, or click anywhere else to cancel
   field_html: "<b>%{field}</b>: %{value}"
+  I: I
+  my: my
   nav:
     dashboard: "Dashboard"
     user_profile_edit: "Edit Profile"

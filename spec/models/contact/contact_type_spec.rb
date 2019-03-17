@@ -18,12 +18,6 @@ RSpec.describe Contact::ContactType, type: :model do
 				expect(result).to eq Contact::ContactType::TYPES[:penetrated]
 			end
 		end
-
-		describe '.all' do
-			it 'gets an array of all the types' do
-				expect(Contact::ContactType.all).to eq Contact::ContactType::TYPES.values
-			end
-		end
 	end
 
 	context 'mongoid' do

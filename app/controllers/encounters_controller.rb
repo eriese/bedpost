@@ -17,7 +17,10 @@ class EncountersController < ApplicationController
 	def new
 		return unless set_partnership(encounters_who_path)
 		@partner = @partnership.partner
-		@encounter = @partnership.encounters.new
+		@encounter = @partnership.encounters.new(contacts: [Contact.new])
+		# gon.partnerPronoun = @partner.pronoun
+		# gon.contacts = Contact::ContactType::TYPES
+		gon_encounter_data
 		gon_client_validators(@encounter)
 	end
 
@@ -72,5 +75,15 @@ class EncountersController < ApplicationController
 
 	def e_params
 		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: [:barriers, :order, :contact_type, :partner_instrument_id, :self_instrument_id])
+	end
+
+	def gon_encounter_data
+		gon.encounter_data = {
+			partner: @partnership.partner,
+			contacts: Contact::ContactType::TYPES,
+			self: current_user,
+			instruments: Contact::Instrument.hashed_for_partnership(current_user, @partnership.partner),
+			partnerPronoun: @partnership.partner.pronoun
+		}
 	end
 end

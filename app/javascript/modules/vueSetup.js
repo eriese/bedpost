@@ -10,6 +10,7 @@ import formErrors from "@components/form/FormErrorsComponent.vue"
 import toggle from "@components/form/ToggleComponent.vue"
 import formStepper from "@components/stepper/FormStepperComponent.vue"
 import formStep from "@components/stepper/FormStepComponent.vue"
+import EncounterContactField from "@components/form/EncounterContactField.vue"
 import _root from "@components/Root";
 
 /**
@@ -28,6 +29,7 @@ export default function addVue() {
 	Vue.component('toggle', toggle);
 	Vue.component('form-stepper', formStepper);
 	Vue.component('form-step', formStep);
+	Vue.component('encounter-contact-field', EncounterContactField);
 
 	return new Vue(_root);
 }

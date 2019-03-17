@@ -25,4 +25,20 @@ RSpec.describe Contact, type: :model do
 			end
 		end
 	end
+
+	context 'methods' do
+		describe '#serializable_hash' do
+			it 'includes #contact_type as just its key' do
+				contact = build(:contact)
+				result = contact.serializable_hash
+				expect(result[:contact_type]).to eq contact.contact_type.key
+			end
+
+			it 'does not include #contact_type if it was in the given exclude list' do
+				contact = build(:contact)
+				result = contact.serializable_hash({except: [:contact_type]})
+				expect(result).to_not have_key(:contact_type)
+			end
+		end
+	end
 end

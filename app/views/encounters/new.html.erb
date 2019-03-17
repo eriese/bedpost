@@ -3,5 +3,6 @@
 	<%= f.text_area :notes %>
 	<%= f.check_box :fluids %>
 	<%= f.range_field :self_risk, in: 1..10 %>
+	<%= render "contact_fields",  f:f, partner: @partner %>
 	<%= f.submit %>
 <% end %>

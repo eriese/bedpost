@@ -5,3 +5,12 @@ en:
         fluids: Additional fluid exchange
         self_risk: Self-assessed risk level
         took_place: Date
+  contact:
+    contact_type:
+      penetrated: penetrated
+      touched: touched
+    with: with %{pronoun}
+    instrument:
+      mouth: mouth
+      toys: toys
+      hand: hand
