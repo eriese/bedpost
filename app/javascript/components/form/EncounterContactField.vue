@@ -2,12 +2,12 @@
 <div class="contact-field">
 	<div class="field-section">
 		<div>
-			<input type="radio" value="self" v-model="subj" id="self_first" @change="changeActorOrder">
-			<label for="self_first">{{$root.t("I")}}</label>
+			<input type="radio" value="self" v-model="subj" id="self_subj" @change="changeActorOrder">
+			<label for="self_subj">{{$root.t("I")}}</label>
 		</div>
 		<div>
-			<input type="radio" value="partner" v-model="subj" id="partner_first" @change="changeActorOrder">
-			<label for="partner_first">{{partnerPronoun.subject}}</label>
+			<input type="radio" value="partner" v-model="subj" id="partner_subj" @change="changeActorOrder">
+			<label for="partner_subj">{{partnerPronoun.subject}}</label>
 		</div>
 	</div>
 	<div class="field-section">
@@ -39,30 +39,28 @@
 			<label :for="`${baseID}${actorOrder[0]}_instrument_${si._id}`">{{si[`${subj}_name`]}}</label>
 		</div>
 	</div>
+	<div class="field-section">
+		<div>
+			<input type="checkbox" v-model="_value.barriers" :name="`${baseName}_barriers]`" :id="`${baseID}_barriers`" @change="onInput">
+			<label :for="`${baseID}_barriers`">{{$root.t("encounters.new.contact.barriers")}}</label>
+		</div>
+	</div>
 </div>
-
 </template>
 
 <script>
-	const base_matcher = /^(?!.*[_](by|self|partner)$).*$/
-	const self_matcher = /^(?!.*_by).*_self$/
-	const partner_matcher = /^(?!.*_by).*_partner$/
-
 	const _orders = [["self", "partner"], ["partner", "self"]]
 	const _keys = [["inverse_inst", "inst_key"], ["inst_key", "inverse_inst"]]
 
 	export default {
 		data: function() {
-			let origContact = gon.encounter_data.contacts[this.value.contact_type]
-			return {
-				partnerPronoun: gon.encounter_data.partnerPronoun,
-				instruments: gon.encounter_data.instruments,
-				subj: origContact.subject,
-				obj: origContact.object,
+			return Object.assign({}, gon.encounter_data, {
+				subj: null,
+				obj: null,
 				orderInd: 0,
 				objInsts: [],
-				subjInsts: [],
-			}
+				subjInsts: []
+			})
 		},
 		props: ['value', 'baseName'],
 		computed: {
@@ -70,8 +68,8 @@
 				let contacts = []
 				let isSelf = this.isSelf
 				let curContact = this._value.contact_type.replace(/(_self|_partner|_by)/, "");
-				for(let k in gon.encounter_data.contacts) {
-					let con = gon.encounter_data.contacts[k]
+				for(let k in this.contacts) {
+					let con = this.contacts[k]
 					if ((con.subject == this.subj && con.object == this.obj
 						&& (!isSelf || !con.key.match(/_by/)))
 						|| (!isSelf && !con.subject && !con.object)) {
@@ -84,7 +82,7 @@
 				return this.baseName.replace(/[\[\]\.]/g, "_")
 			},
 			cType: function() {
-				return gon.encounter_data.contacts[this.value.contact_type]
+				return this.contacts[this.value.contact_type]
 			},
 			actorOrder: function() {
 				return _orders[this.orderInd];
@@ -114,6 +112,12 @@
 				}
 			}
 		},
+		watch: {
+			'value._id': function() {
+				console.log("value changed")
+				this.changeActorOrder(null, true);
+			}
+		},
 		methods: {
 			resetInsts(e) {
 				if (e) {this.onInput();}
@@ -133,26 +137,21 @@
 				})
 			},
 			getObjInsts() {
-				return Object.values(gon.encounter_data.instruments).filter(this.instsToShow(false));
+				return Object.values(this.instruments).filter(this.instsToShow(false));
 			},
 			getSubjInsts() {
-				let objInstId = this.value[`${this.actorOrder[1]}_instrument_id`];
-				if (!objInstId) {
+				if (!this.objInst) {
 					return [];
 				}
 
-				let objInst = gon.encounter_data.instruments[objInstId];
+				let objInst = this.instruments[this.objInst];
 				let instKey = this.cType[_keys[this.orderInd][0]] + "_ids"
 				let filter = this.instsToShow(true)
 
 				let ret_insts = [];
-				let usedKeys = {};
 				let insts = objInst[instKey]
 				for (var i = 0; i < insts.length; i++) {
-					let instId = insts[i];
-					if (usedKeys[instId]) {continue;}
-					usedKeys[instId] = true;
-					let inst = gon.encounter_data.instruments[instId];
+					let inst = this.instruments[insts[i]];
 					if (filter(inst)) {
 						ret_insts.push(inst);
 					}
@@ -173,7 +172,7 @@
 					}
 					if(conditions == undefined) {return true;}
 					for (var i = 0; i < conditions.length; i++) {
-						if (!gon.encounter_data[checkUser][conditions[i]]) {
+						if (!this[checkUser][conditions[i]]) {
 							return false;
 						}
 					}
@@ -181,6 +180,12 @@
 				}
 			},
 			changeActorOrder(event, isInit) {
+				if (isInit) {
+					let origContact = this.contacts[this.value.contact_type]
+					this.subj = origContact.subject
+					this.obj = origContact.object
+				}
+
 				let oldOrder = this.actorOrder
 				let newInd = this.subj == this.obj || this.subj == "self" ? 0 : 1;
 				if (newInd != this.orderInd) {
