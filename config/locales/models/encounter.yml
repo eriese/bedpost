@@ -12,5 +12,16 @@ en:
     with: with %{pronoun}
     instrument:
       mouth: mouth
-      toys: toys
+      toy: toy
       hand: hand
+    barrier:
+      none: no barrier
+      fresh: a new barrier
+      old: the same barrier
+      clean_partner: clean %{partner_instrument}
+      clean_self: clean %{self_instrument}
+  encounters:
+    new:
+      contact:
+        barriers:
+

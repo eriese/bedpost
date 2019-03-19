@@ -2,6 +2,7 @@ class Contact::Instrument
   include Mongoid::Document
 
   field :name, type: Symbol
+  field :_id, type: Symbol, default: ->{ name }
   field :user_override, type: Symbol
   field :conditions, type: Hash
   index({name: 1}, {unique: true})

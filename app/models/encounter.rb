@@ -13,6 +13,6 @@ class Encounter
   validates :self_risk, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10}
 
   def self.display_fields
-  	[:took_place, :fluids, :self_risk, :notes]
+  	[:took_place, :fluids, :self_risk, :notes, :contacts]
   end
 end

@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe Contact::Instrument, type: :model do
+  context 'custom id' do
+    after :each do
+      cleanup(@inst)
+    end
+
+    it 'uses the name as the id' do
+      @inst = Contact::Instrument.new(name: :hand);
+      @inst.save
+      expect(@inst.id).to eq @inst.name
+    end
+  end
   context 'HABTM' do
   	after :each do
   		cleanup(@inst1, @inst2)
@@ -17,11 +28,11 @@ RSpec.describe Contact::Instrument, type: :model do
 	  	end
   	end
 
-  	describe '#can_penetrate_self' do
-  		it 'does not keep corresponding roles for self-contact' do
-	  		expect(Contact::Instrument.relations[:can_penetrate_self].forced_nil_inverse?).to be true
-	  	end
-  	end
+  	# describe '#can_penetrate_self' do
+  	# 	it 'keeps corresponding roles for self-contact' do
+	  # 		expect(Contact::Instrument.relations[:can_penetrate_self].forced_nil_inverse?).to be true
+	  # 	end
+  	# end
 
   	describe '#can_touch' do
   		it 'creates a mutual relationship with the same name' do
@@ -37,6 +48,8 @@ RSpec.describe Contact::Instrument, type: :model do
 	  		@inst1 = create(:contact_instrument, name: "hand")
 	  		@inst1.can_touch << @inst1
 	  		expect(@inst1.reload.can_touch).to include(@inst1)
+        expect(@inst1.can_touch.size).to eq 1
+        expect(@inst1.can_touch_ids.size).to eq 1
 	  	end
 	  end
   end

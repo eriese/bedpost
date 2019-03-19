@@ -16,6 +16,10 @@ class Contact::ContactType
 		@key
 	end
 
+	def display
+		return I18n.t(@t_key, scope: "contact.contact_type")
+	end
+
 	class << self
 		def const_missing(name)
 			get(name)

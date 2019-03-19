@@ -1,7 +1,6 @@
 class Contact
   include Mongoid::Document
-  field :barriers
-  field :order
+  field :barriers, type: Array, default: []
   field :contact_type, type: Contact::ContactType, default: :penetrated
 
   embedded_in :encounter
@@ -16,7 +15,11 @@ class Contact
   	end
   end
 
-  def serializable_hash(options={})
+  def barrier_validations
+  end
+
+  def serializable_hash(options=nil)
+  	options = options.present? ? options.deep_dup : {}
   	options[:except] ||= []
   	exclude_contact = options[:except].include? :contact_type
   	options[:except] << :contact_type unless exclude_contact

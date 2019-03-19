@@ -2,28 +2,28 @@
 <div class="contact-field">
 	<div class="field-section">
 		<div>
-			<input type="radio" value="self" v-model="subj" id="self_subj" @change="changeActorOrder">
-			<label for="self_subj">{{$root.t("I")}}</label>
+			<input type="radio" value="self" v-model="subj" :id="`${baseID}_self_subj`" @change="changeActorOrder">
+			<label :for="`${baseID}_self_subj`">{{$root.t("I")}}</label>
 		</div>
 		<div>
-			<input type="radio" value="partner" v-model="subj" id="partner_subj" @change="changeActorOrder">
-			<label for="partner_subj">{{partnerPronoun.subject}}</label>
+			<input type="radio" value="partner" v-model="subj" :id="`${baseID}_partner_subj`" @change="changeActorOrder">
+			<label :for="`${baseID}_partner_subj`">{{partnerPronoun.subject}}</label>
 		</div>
 	</div>
 	<div class="field-section">
 		<div v-for="c in possibleContacts">
-			<input type="radio" :name="`${baseName}[contact_type]`" :value="c.key" :id="c.key" v-model="_value.contact_type" @change="resetInsts">
-			<label :for="c.key">{{$root.t(`contact.contact_type.${c.t_key}`)}}</label>
+			<input type="radio" :name="`${baseName}[contact_type]`" :value="c.key" v-inst="_value.contact_type" :id="`${baseID}_${c.key}`" v-model="_value.contact_type" @change="resetInsts">
+			<label :for="`${baseID}_${c.key}`">{{$root.t(`contact.contact_type.${c.t_key}`)}}</label>
 		</div>
 	</div>
 	<div class="field-section">
 		<div>
-			<input type="radio" value="partner" v-model="obj" id="partner_obj" @change="changeActorOrder">
-			<label for="partner_obj">{{partnerPronoun.possessive}}</label>
+			<input type="radio" value="partner" v-model="obj" :id="`${baseID}_partner_obj`" @change="changeActorOrder">
+			<label :for="`${baseID}_partner_obj`">{{partnerPronoun.possessive}}</label>
 		</div>
 		<div>
-			<input type="radio" value="self" v-model="obj" id="self_obj" @change="changeActorOrder">
-			<label for="self_obj">{{$root.t("my")}}</label>
+			<input type="radio" value="self" v-model="obj" :id="`${baseID}_self_obj`" @change="changeActorOrder">
+			<label :for="`${baseID}_self_obj`">{{$root.t("my")}}</label>
 		</div>
 	</div>
 	<div class="field-section">
@@ -39,16 +39,19 @@
 			<label :for="`${baseID}${actorOrder[0]}_instrument_${si._id}`">{{si[`${subj}_name`]}}</label>
 		</div>
 	</div>
+	<div class="field-section">{{$root.t("contact.with", {pronoun: ""})}}</div>
 	<div class="field-section">
-		<div>
-			<input type="checkbox" v-model="_value.barriers" :name="`${baseName}_barriers]`" :id="`${baseID}_barriers`" @change="onInput">
-			<label :for="`${baseID}_barriers`">{{$root.t("encounters.new.contact.barriers")}}</label>
+		<div v-for="(bType, bKey) in barriers" v-show="!bType.condition || value[bType.condition]">
+			<input type="checkbox" v-model="_value.barriers" :name="`${baseName}[barriers][]`" :id="`${baseID}_barriers_${bKey}`" :value="bKey" @change="onInput">
+			<label :for="`${baseID}_barriers_${bKey}`">{{$root.t(bKey, {scope: "contact.barrier", partner_instrument: partnerName, self_instrument: selfName})}}</label>
 		</div>
 	</div>
 </div>
 </template>
 
 <script>
+	import dynamicFieldListItem from "@mixins/dynamicFieldListItem"
+
 	const _orders = [["self", "partner"], ["partner", "self"]]
 	const _keys = [["inverse_inst", "inst_key"], ["inst_key", "inverse_inst"]]
 
@@ -59,10 +62,11 @@
 				obj: null,
 				orderInd: 0,
 				objInsts: [],
-				subjInsts: []
+				subjInsts: [],
+				onKeyChange: false
 			})
 		},
-		props: ['value', 'baseName'],
+		mixins: [dynamicFieldListItem],
 		computed: {
 			possibleContacts: function() {
 				let contacts = []
@@ -90,8 +94,13 @@
 			isSelf: function() {
 				return this.subj == this.obj;
 			},
-			_value: function() {
-				return Object.assign({}, this.value)
+			partnerName: function() {
+				let p_inst_id = this.value.partner_instrument_id
+				return p_inst_id ? this.instruments[p_inst_id].partner_name : ""
+			},
+			selfName: function() {
+				let s_inst_id = this.value.self_instrument_id
+				return s_inst_id ? this.instruments[s_inst_id].self_name : ""
 			},
 			objInst: {
 				get: function() {
@@ -110,12 +119,6 @@
 					this._value[this.actorOrder[0] + '_instrument_id'] = newVal;
 					this.onInput();
 				}
-			}
-		},
-		watch: {
-			'value._id': function() {
-				console.log("value changed")
-				this.changeActorOrder(null, true);
 			}
 		},
 		methods: {
@@ -180,13 +183,14 @@
 				}
 			},
 			changeActorOrder(event, isInit) {
+				let oldOrder = this.actorOrder
+
 				if (isInit) {
 					let origContact = this.contacts[this.value.contact_type]
-					this.subj = origContact.subject
-					this.obj = origContact.object
+					this.subj = origContact.subject || oldOrder[0]
+					this.obj = origContact.object || oldOrder[1]
 				}
 
-				let oldOrder = this.actorOrder
 				let newInd = this.subj == this.obj || this.subj == "self" ? 0 : 1;
 				if (newInd != this.orderInd) {
 					this.orderInd = newInd;
@@ -224,7 +228,7 @@
 		directives: {
 			'inst': {
 				update: function(el, binding, vnode) {
-					if (vnode.context[binding.expression] == el._value) {
+					if (Object.getAtPath(vnode.context, binding.expression) == el._value) {
 						el.checked = true;
 					}
 				}
