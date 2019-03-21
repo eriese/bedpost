@@ -47,6 +47,10 @@ class Contact::Instrument
   end
 
   def self.as_map
-    @@as_map ||= HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
+    if Rails.env.production?
+      @@as_map ||= HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
+    else
+      HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
+    end
   end
 end

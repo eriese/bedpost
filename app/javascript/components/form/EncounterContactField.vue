@@ -37,7 +37,7 @@
 			<p v-html="subjPossessive"></p>
 		</div>
 		<div class="field-section">
-			<div v-if="subjInsts.length">
+			<div v-if="subjInsts.length > 1">
 				<div v-for="si in subjInsts">
 					<input type="radio" class="mini" :name="`${baseName}[${actorOrder[0]}_instrument_id]`" v-inst="subjInst" v-model="subjInst" :value="si._id" :id="`${baseID}${actorOrder[0]}_instrument_${si._id}`">
 					<label :for="`${baseID}${actorOrder[0]}_instrument_${si._id}`">{{si[`${subj}_name`]}}</label>
@@ -85,7 +85,18 @@
 					if ((con.subject == this.subj && con.object == this.obj
 						&& (!isSelf || !con.key.match(/_by/)))
 						|| (!isSelf && !con.subject && !con.object)) {
-						contacts.push(con)
+
+						// let can_contact = false
+						// for(let i in this.instruments) {
+						// 	if(this.instruments[i][con.inst_key + "_ids"].length) {
+						// 		can_contact = true;
+						// 		break;
+						// 	}
+						// }
+
+						// if (can_contact) {
+							contacts.push(con)
+						// }
 					}
 				}
 				return contacts
@@ -111,7 +122,9 @@
 				return s_inst_id ? this.instruments[s_inst_id].self_name : ""
 			},
 			subjPossessive: function() {
-				if (!this.subjInsts.length) {return ". . ."}
+				if (this.subjInsts.length <= 1) {
+					return "";
+				}
 				return this.$root.t("contact.with", {pronoun: "<br>" + (this.subj == "self" ? this.$root.t("my") : this.partnerPronoun.possessive)})
 			},
 			objInst: {
@@ -144,7 +157,10 @@
 						let instId = this[actorKey];
 						let lstId = actorKey + "s";
 						let newList = this["get" + lstId.slice(0,1).toUpperCase() + lstId.slice(1)]();
-						if (newList.filter((i) => i._id == instId).length == 0) {
+						if (newList.length == 1) {
+							this[actorKey] = newList[0]._id
+						}
+						else if (newList.filter((i) => i._id == instId).length == 0) {
 							this[actorKey] = null;
 						}
 						this[lstId] = newList
@@ -183,7 +199,8 @@
 					if (inst.conditions == null) {return true;}
 					let conditions = inst.conditions.all || inst.conditions[conditionKey];
 					if (conditions == undefined && this.isSelf) {
-						conditions = inst.conditions[conditionKey.replace("_" + this.subj, "")]
+						conditionKey = conditionKey.replace("_self", "");
+						conditions = inst.conditions[conditionKey]
 					}
 					if(conditions == undefined) {return true;}
 					for (var i = 0; i < conditions.length; i++) {
@@ -222,17 +239,23 @@
 			},
 			updateContactType() {
 				let res = this._value.contact_type.replace(/(_self|_partner|_by)/g, "");
+				let didMatch = false;
 				for (let i = 0; i < this.possibleContacts.length; i++) {
 					let con = this.possibleContacts[i];
 					if (con.key.match(res)) {
 						this._value.contact_type = con.key;
-						this.onInput();
-						this.resetInsts()
-						return;
+						didMatch = true;
+						break;
 					}
 				}
-			},
 
+				if (!didMatch) {
+					this._value.contact_type = this.possibleContacts[0].key;
+				}
+				this.onInput();
+				this.resetInsts()
+				return;
+			},
 			onInput() {
 				this.$emit("input", this._value);
 			}

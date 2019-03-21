@@ -9,11 +9,13 @@ en:
     contact_type:
       penetrated: penetrated
       touched: touched
+      sucked: sucked
     with: with %{pronoun}
     instrument:
       mouth: mouth
       toy: toy
       hand: hand
+      tongue: tongue
     barrier:
       none: no barrier
       fresh: a new barrier

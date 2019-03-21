@@ -70,6 +70,11 @@ class Contact::ContactType
 		inverse_inst: :can_touch,
 		object: nil,
 		subject: nil
+	},{
+		key: :sucked,
+		inst_key: :can_suck,
+		inverse_inst: :can_be_sucked_by,
+		inverse_key: :sucked_by
 	}]
 
 	ADDL_OPTS = [{}, {
