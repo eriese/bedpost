@@ -16,6 +16,8 @@ import toggle from "@components/form/ToggleComponent.vue"
 import encounterContactField from "@components/form/EncounterContactField.vue"
 import dynamicFieldList from "@components/form/DynamicFieldList.vue";
 
+import arrowButton from "@components/functional/ArrowButton";
+
 
 /**
  * Register all vue components and set up the Vue instance
@@ -35,6 +37,8 @@ export default function addVue() {
 	Vue.component('form-step', formStep);
 	Vue.component('encounter-contact-field', encounterContactField);
 	Vue.component('dynamic-field-list', dynamicFieldList);
+
+	Vue.component('arrow-button', arrowButton);
 
 	return new Vue(_root);
 }

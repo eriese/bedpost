@@ -10,9 +10,7 @@
 						<slot name="last-button"><button class="not-button last" type="button"@click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
 					<li v-for="btn in buttons" v-if="btn.if" :class="btn.clazz">
-						<button v-bind="btn.bind || {}" @click="btn.click" :title="$root.t(btn.key)" class="not-button" type="button">
-							<svg viewBox="0 0 100 100" focusable="false"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow" :transform="btn.transform"></path></svg>
-						</button>
+						<arrow-button class="not-button" v-bind="btn"  @click="btn.click"></arrow-button>
 					</li>
 				</ul>
 
@@ -80,16 +78,17 @@ export default {
 	computed: {
 		buttons: function() {
 			return [{
-				key: "next",
+				tKey: "next",
 				clazz: "next",
 				if: this.curIndex < this.numSteps - 1,
 				bind: {
 					disabled: this.curStepPending
 				},
 				click: this.next,
-				transform: "translate(100, 100) rotate(180)"
+				// transform: "translate(100, 100) rotate(180)"
+				direction: "right"
 			}, {
-				key: "previous",
+				tKey: "previous",
 				clazz: "prev",
 				if: this.numSteps > 1 && this.curIndex > 0,
 				click: this.back

@@ -237,34 +237,6 @@ form {
 				}
 			}
 
-			button:not(.last) {
-				text-decoration: none;
-				font-size: 32px;
-				font-weight: bold;
-				line-height: 32px;
-				vertical-align: middle;
-				border-radius: 50%;
-				height: 40px;
-				min-width: 40px;
-
-				&:disabled {
-					opacity: 0.5;
-					cursor: initial;
-				}
-
-				svg {
-					height: 30px;
-					vertical-align: middle;
-					fill: $color-green-light;
-					stroke: $color-green-light;
-				}
-
-				&:not(:disabled):hover svg {
-					fill: $color-green-dark;
-					stroke: $color-green-dark;
-				}
-			}
-
 			input[type=submit], button.last {
 				line-height: 32px;
 				vertical-align: middle;
@@ -273,6 +245,24 @@ form {
 				width: auto;
 				font-size: 1.75em;
 			}
+		}
+	}
+}
+
+.dynamic-field {
+	padding: 5px;
+
+	.dynamic-field-buttons button.arrow-button {
+		$button-size: 30px;
+		margin: 0;
+		height: $button-size;
+		width: $button-size;
+		line-height: $button-size;
+
+		svg {
+			$svg-size: $button-size - 10px;
+			height: $svg-size;
+			width: $svg-size;
 		}
 	}
 }

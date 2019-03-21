@@ -1,16 +1,76 @@
 // Place all the styles related to the encounters controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
+@import "_defaults";
 .contact-field {
-	clear: both;
+	display: flex;
 
 	.field-section {
 		float: left;
-		margin-right: 10px;
+		margin-right: 5px;
 
 		label {
 			display: inline
 		}
+
+		p {
+			line-height: 1;
+			margin: 5px 0px;
+			font-size: inherit;
+		}
+	}
+
+	$label-color: $color-purple-light;
+	$label-hover-color: $color-purple-dark;
+	input[type=radio].mini {
+		transform: scale(0, 0);
+		margin: 0px;
+		width: 0px !important;
+		display: inline;
+		border: none;
+
+
+
+		&:focus, &:hover, &:checked {
+			+ label {
+				color: $label-hover-color;
+			}
+		}
+
+		&:checked {
+			&::after {
+				display: none;
+			}
+
+			+ label {
+				font-size: 1.2em;
+				font-weight: bold;
+			}
+		}
+
+		&:focus + label {
+			outline-width: 2px;
+			outline-style: solid;
+			outline-color: Highlight;
+		}
+
+		+ label {
+			cursor: pointer;
+			color: $label-color;
+
+
+			&:hover {
+				color: $label-hover-color;
+			}
+		}
+	}
+}
+
+.contact-barriers > div {
+	float: left;
+	margin-right: 5px;
+
+	label {
+		display: inline
 	}
 }
