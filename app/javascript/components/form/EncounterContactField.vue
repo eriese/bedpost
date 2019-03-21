@@ -1,34 +1,34 @@
 <template>
-<div class="contact-field-container">
+<div class="contact-field-container" :class="{blurred: !focused}">
 	<div class="contact-field">
 		<div class="field-section narrow">
-			<div>
-				<input type="radio" class="mini" value="self" v-model="subj" :id="`${baseID}_self_subj`" @change="changeActorOrder" :name="`${baseName}[subj]`">
+			<div class="input">
+				<input type="radio" class="mini" value="self" v-model="subj" :id="`${baseID}_self_subj`" @change="changeActorOrder" :name="`${baseName}[subj]`" v-inst="subj">
 				<label :for="`${baseID}_self_subj`">{{$root.t("I")}}</label>
 			</div>
-			<div>
-				<input type="radio" class="mini" value="partner" v-model="subj" :id="`${baseID}_partner_subj`" @change="changeActorOrder" :name="`${baseName}[subj]`">
+			<div class="input">
+				<input type="radio" class="mini" value="partner" v-model="subj" :id="`${baseID}_partner_subj`" @change="changeActorOrder" :name="`${baseName}[subj]`" v-inst="subj">
 				<label :for="`${baseID}_partner_subj`">{{partnerPronoun.subject}}</label>
 			</div>
 		</div>
 		<div class="field-section narrow">
-			<div v-for="c in possibleContacts">
+			<div class="input" v-for="c in possibleContacts">
 				<input type="radio" class="mini" :name="`${baseName}[contact_type]`" :value="c.key" v-inst="_value.contact_type" :id="`${baseID}_${c.key}`" v-model="_value.contact_type" @change="resetInsts">
 				<label :for="`${baseID}_${c.key}`">{{$root.t(`contact.contact_type.${c.t_key}`)}}</label>
 			</div>
 		</div>
 		<div class="field-section narrow">
-			<div>
-				<input type="radio" class="mini" value="partner" v-model="obj" :id="`${baseID}_partner_obj`" @change="changeActorOrder" :name="`${baseName}[obj]`">
+			<div class="input">
+				<input type="radio" class="mini" value="partner" v-model="obj" :id="`${baseID}_partner_obj`" @change="changeActorOrder" :name="`${baseName}[obj]`" v-inst="obj">
 				<label :for="`${baseID}_partner_obj`">{{partnerPronoun.possessive}}</label>
 			</div>
-			<div>
+			<div class="input">
 				<input type="radio" class="mini" value="self" v-model="obj" :id="`${baseID}_self_obj`" @change="changeActorOrder" :name="`${baseName}[obj]`">
-				<label :for="`${baseID}_self_obj`">{{$root.t("my")}}</label>
+				<label :for="`${baseID}_self_obj`" v-inst="obj">{{$root.t("my")}}</label>
 			</div>
 		</div>
 		<div class="field-section">
-			<div v-for="oi in objInsts">
+			<div class="input" v-for="oi in objInsts">
 				<input type="radio" class="mini" :name="`${baseName}[${actorOrder[1]}_instrument_id]`" v-inst="objInst" v-model="objInst" :value="oi._id" :id="`${baseID}${actorOrder[1]}_instrument_${oi._id}`" @change="resetInsts(true)">
 				<label :for="`${baseID}${actorOrder[1]}_instrument_${oi._id}`">{{oi[`${obj}_name`]}}</label>
 			</div>
@@ -38,7 +38,7 @@
 		</div>
 		<div class="field-section">
 			<div v-if="subjInsts.length > 1">
-				<div v-for="si in subjInsts">
+				<div class="input" v-for="si in subjInsts">
 					<input type="radio" class="mini" :name="`${baseName}[${actorOrder[0]}_instrument_id]`" v-inst="subjInst" v-model="subjInst" :value="si._id" :id="`${baseID}${actorOrder[0]}_instrument_${si._id}`">
 					<label :for="`${baseID}${actorOrder[0]}_instrument_${si._id}`">{{si[`${subj}_name`]}}</label>
 				</div>
@@ -71,10 +71,16 @@
 				orderInd: 0,
 				objInsts: [],
 				subjInsts: [],
-				onKeyChange: false
+				onKeyChange: false,
+				focused: true
 			})
 		},
 		mixins: [dynamicFieldListItem],
+		watch: {
+			'watchKey': function() {
+				this.changeActorOrder(null, true);
+			}
+		},
 		computed: {
 			possibleContacts: function() {
 				let contacts = []
@@ -125,7 +131,7 @@
 				if (this.subjInsts.length <= 1) {
 					return "";
 				}
-				return this.$root.t("contact.with", {pronoun: "<br>" + (this.subj == "self" ? this.$root.t("my") : this.partnerPronoun.possessive)})
+				return this.$root.t("contact.with", {pronoun: this.subj == "self" ? this.$root.t("my") : this.partnerPronoun.possessive})
 			},
 			objInst: {
 				get: function() {
@@ -258,14 +264,21 @@
 			},
 			onInput() {
 				this.$emit("input", this._value);
+			},
+			blur() {
+				this.focused = false;
+			},
+			focus() {
+				this.focused = true;
+			},
+			getFirstInput() {
+				return this.$el.querySelector(':checked');
 			}
 		},
 		directives: {
 			'inst': {
 				update: function(el, binding, vnode) {
-					if (Object.getAtPath(vnode.context, binding.expression) == el._value) {
-						el.checked = true;
-					}
+					el.checked = binding.value == el.value;
 				}
 			}
 		},

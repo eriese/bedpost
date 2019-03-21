@@ -54,7 +54,7 @@ button.not-button, button.as-link, input[type=submit].not-button {
 	padding: 0px;
 	background-color: transparent;
 
-	&:hover {
+	&:hover, &:focus {
 		background-color: transparent;
 		border: none;
 	}
@@ -77,22 +77,28 @@ button, input[type=submit], a.as-button {
 	}
 }
 
-button, input[type=submit], a.as-button, button.inverse, button.transparent {
+button, input[type=submit], a.as-button {
 	&:hover, &:focus {
 		background-color: $button-hover-color;
 		border-color: $button-hover-color;
 	}
 }
 
+button.inverse, button.transparent {
+	color: $button-color;
+}
+
 button.inverse {
 	background-color: $button-text-color;
-	color: $button-color;
 }
 
 button.transparent {
 	background-color: transparent;
-	color: $button-color;
 	border: none;
+
+	&:hover, &:focus {
+		background-color: transparent;
+	}
 }
 
 button.arrow-button {

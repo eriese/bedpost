@@ -5,7 +5,7 @@
 	<%= f.check_box :fluids %>
 	<%= f.range_field :self_risk, in: 1..10 %>
 
-	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.encounter.contacts" base-name="<%= f.object_name %>[contacts_attributes]"></dynamic-field-list>
+	<dynamic-field-list component-type="encounter-contact-field" :tabbable="true" :list="vf.formData.encounter.contacts" base-name="<%= f.object_name %>[contacts_attributes]"></dynamic-field-list>
 
 	<%#= f.fields_for :contacts  do |cf| %>
 		<%#= cf.collection_check_boxes :barriers, Contact::BarrierType::TYPES.values, :key, :key %>

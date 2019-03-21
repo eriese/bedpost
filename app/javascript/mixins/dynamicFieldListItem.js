@@ -14,9 +14,23 @@ export default {
 			}
 		}
 	},
+	methods: {
+		blur() {},
+		focus() {},
+		focusFirst() {
+			this.focus();
+			let first = this.getFirstInput()
+			if (first) {
+				first.focus();
+			}
+		},
+		getFirstInput() {
+			return this.$el.querySelector("input");
+		}
+	},
 	computed: {
 		_value: function() {
-			return Object.assign({}, this.value)
+			return Object.assign({}, this.value);
 		}
 	}
 }
