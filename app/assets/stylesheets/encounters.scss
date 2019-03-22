@@ -2,159 +2,105 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "_defaults";
-.contact-field {
-	display: flex;
+.contact-field-container {
+	.contact-field {
+		display: flex;
 
-	.field-section {
-		float: left;
-		margin-right: 5px;
+		.field-section {
+			float: left;
+			margin-right: 5px;
 
-		label {
-			display: inline
-		}
+			p {
+				line-height: 1em;
+				margin: 0.15em 0 0;
+				font-size: inherit;
+			}
 
-		p {
-			line-height: 1em;
-			margin: 0.15em 0 0;
-			font-size: inherit;
-		}
-
-		.input {
-			line-height: 1.25em;
+			.input {
+				line-height: 1.25em;
+			}
 		}
 	}
 
-	$label-color: $color-purple-light;
-	$label-hover-color: $color-purple-dark;
-	input[type=radio].mini {
-		transform: scale(0, 0);
-		margin: 0px;
-		width: 0px !important;
-		display: inline;
-		border: none;
+	&.blurred {
+		.contact-field {
+			flex-wrap: wrap;
+			color: $color-purple-dark;
 
-
-
-		&:focus, &:hover, &:checked {
-			+ label {
-				color: $label-hover-color;
+			p {
+				margin-top: 0;
+				line-height: 1.25em;
 			}
 		}
 
-		&:checked {
-			&::after {
+		input[type=radio], input[type=checkbox] {
+			&:checked + label {
+				font-size: 1em;
+				font-weight: normal;
+			}
+
+			&:not(:checked) + label {
 				display: none;
 			}
+		}
 
-			+ label {
-				@media (min-width: 500px) {
-					font-size: 1.2em;
+		.contact-barriers > div {
+			font-size: 0.85em;
+			display: flex;
+			flex-wrap: wrap;
+
+			input[type=checkbox] {
+				border: none;
+				margin: 0;
+
+				&:checked {
+					background-color: transparent;
+					height: 6px;
+					width: 6px;
+
+					&::after {
+						background-color: $color-purple-dark;
+						height: 100%;
+						width: 100%;
+						transform: none;
+						border-radius: 50%;
+						border: none;
+						top: 0px;
+						left: 0px;
+					}
+
+					+ label {
+						margin-right: 10px;
+					}
 				}
-				font-weight: bold;
-			}
-		}
 
-		&:focus + label {
-			outline-width: 2px;
-			outline-style: solid;
-			outline-color: Highlight;
+				&:not(:checked) {
+					height: 0px;
+					width: 0px;
+					display: inline;
 
-			/* WebKit gets its native focus styles.
-			 */
-			@media (-webkit-min-device-pixel-ratio:0) {
-			  .unreal-focus {
-			    outline-color: -webkit-focus-ring-color;
-			    outline-style: auto;
-			  }
-			}
-		}
-
-		+ label {
-			cursor: pointer;
-			color: $label-color;
-
-
-			&:hover {
-				color: $label-hover-color;
+					&::after {
+						display: none;
+					}
+				}
 			}
 		}
 	}
-}
 
-.contact-field-container.blurred {
-	.contact-field {
-		flex-wrap: wrap;
-		color: $color-purple-dark;
-
-		p {
-			margin-top: 0;
-			line-height: 1.25em;
-		}
-	}
-
-	input[type=radio], input[type=checkbox] {
-		&:checked + label {
-			font-size: 1em;
-			font-weight: normal;
-		}
-
-		&:not(:checked) + label {
-			display: none;
-		}
-	}
-
-	.contact-barriers > div {
-		font-size: 0.85em;
+	.contact-barriers {
 		display: flex;
-		flex-wrap: wrap;
 
-		input[type=checkbox] {
-			border: none;
-			margin: 0;
+		> div {
+			float: left;
+			margin-right: 5px;
 
-			&:checked {
-				background-color: transparent;
-				height: 6px;
-				width: 6px;
-
-				&::after {
-					background-color: $color-purple-dark;
-					height: 100%;
-					width: 100%;
-					transform: none;
-					border-radius: 50%;
-					border: none;
-					top: 0px;
-					left: 0px;
-				}
-
-				+ label {
-					margin-right: 10px;
-				}
+			label {
+				display: inline
 			}
 
-			&:not(:checked) {
-				height: 0px;
-				width: 0px;
-				display: inline;
-
-				&::after {
-					display: none;
-				}
+			input[type=checkbox] {
+				margin-right: 0px;
 			}
-		}
-	}
-}
-
-.contact-barriers {
-	display: flex;
-
-	> div {
-		float: left;
-		margin-right: 5px;
-
-		label {
-			display: inline
 		}
 	}
 }
