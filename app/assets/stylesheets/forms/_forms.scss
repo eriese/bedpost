@@ -252,17 +252,26 @@ form {
 .dynamic-field {
 	padding: 5px;
 
-	.dynamic-field-buttons button.arrow-button {
-		$button-size: 30px;
-		margin: 0;
-		height: $button-size;
-		width: $button-size;
-		line-height: $button-size;
+	.dynamic-field-buttons {
+		float: right;
+		margin-top: -10px;
 
-		svg {
-			$svg-size: $button-size - 10px;
-			height: $svg-size;
-			width: $svg-size;
+		+ div {
+			clear: both;
+		}
+
+		button.arrow-button {
+			$button-size: 30px;
+			margin: 0;
+			height: $button-size;
+			width: $button-size;
+			line-height: $button-size;
+
+			svg {
+				$svg-size: $button-size - 10px;
+				height: $svg-size;
+				width: $svg-size;
+			}
 		}
 	}
 }

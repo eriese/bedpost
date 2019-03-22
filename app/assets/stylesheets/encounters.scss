@@ -5,6 +5,7 @@
 .contact-field-container {
 	.contact-field {
 		display: flex;
+		align-items: baseline;
 
 		.field-section {
 			float: left;
@@ -17,7 +18,7 @@
 			}
 
 			.input {
-				line-height: 1.25em;
+				line-height: 1.2;
 			}
 		}
 	}

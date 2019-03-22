@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<div class="clear-fix dynamic-field step" v-for="(comp, index) in list" :key="comp._id" ref="list_item" @focusin="setFocus(index)" @click="setFocus(index, true)">
-			<div class="dynamic-field-buttons" @focusin.stop>
-				<arrow-button class="not-button" v-if="list.length > 1" @click.stop="removeFromList(index)" direction="x" t-key="remove"></arrow-button>
-				<arrow-button class="not-button" v-if="index > 0" v-bind="{direction: 'up', tKey: 'move_up'}" @click.stop="moveSpaces(index,-1)"></arrow-button>
-				<arrow-button class="not-button" v-if="index < list.length - 1" v-bind="{direction: 'down', tKey: 'move_down'}" @click.stop="moveSpaces(index,1)">V</arrow-button>
+		<div class="dynamic-field step" v-for="(comp, index) in list" :key="comp._id" ref="list_item" @focusin="setFocus(index)" @click="setFocus(index, true)">
+			<div class="dynamic-field-buttons clear-fix" @focusin.stop>
+				<arrow-button class="not-button" v-if="index > 0" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(index,-1)"></arrow-button>
+				<arrow-button class="not-button" v-if="index < list.length - 1" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
+				<arrow-button class="not-button" shape="x" v-if="list.length > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
 			</div>
-			<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index"></component>
+			<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" class="clear"></component>
 		</div>
 		<button type="button" @click="addToList">Add Another</button>
 	</div>
@@ -43,6 +43,11 @@
 				TweenLite.to(this.$refs.list_item[index], 0.3, {opacity: 0, onComplete: () => {
 					this.list.splice(index, 1);
 					TweenLite.set(this.$refs.list_item, {opacity: 1});
+					if (index == this.focusIndex) {
+						this.focusIndex = this.list.length;
+					} else if (index < this.focusIndex) {
+						this.focusIndex -= 1;
+					}
 				}})
 
 			},

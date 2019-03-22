@@ -1,5 +1,6 @@
 const _caret = "M 70,90 L 30,50 L 70,10"
 const _x_shape = "M 20,20 L 80,80 M 80,20 L 20,80"
+const _arrow = "M 65,90 L 20,50 L 65,10 M85,50 L30,50"
 
 export default {
 	name: "arrow-button",
@@ -16,11 +17,28 @@ export default {
 			type: Number,
 			default: 100
 		},
-		path: String
+		path: String,
+		shape: {
+			type: String,
+			default: "caret"
+		}
 	},
 	render(createElement, {props, data, parent}) {
 		let transform = props.transform
-		let path = props.path || props.direction == "x" ? _x_shape : _caret
+		let path = props.path;
+		if (!path) {
+			switch(props.shape) {
+				case "x" :
+					path = _x_shape;
+					break;
+				case "arrow" :
+					path = _arrow;
+					break;
+				case "caret":
+				default:
+					path = _caret;
+			}
+		}
 
 		if (!transform) {
 			switch(props.direction) {
