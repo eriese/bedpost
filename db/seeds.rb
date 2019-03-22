@@ -40,7 +40,6 @@ external_genitals.can_touch_self << toy << mouth << tongue
 external_genitals.can_penetrate_self << anus << mouth << toy
 
 mouth.can_touch << anus << mouth << toy << tongue
-mouth.can_penetrate << internal_genitals << anus << mouth << toy
 mouth.can_touch_self << toy
 mouth.can_suck << hand << external_genitals << anus << mouth << toy << tongue
 mouth.can_suck_self << hand << toy << external_genitals

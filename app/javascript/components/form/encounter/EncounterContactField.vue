@@ -2,46 +2,64 @@
 <div class="contact-field-container" :class="{blurred: !focused}">
 	<div class="contact-field">
 		<div class="field-section narrow">
-			<div class="input">
-				<input type="radio" class="mini" value="self" v-model="subj" :id="`${baseID}_self_subj`" @change="changeActorOrder" :name="`${baseName}[subj]`" v-inst="subj">
-				<label :for="`${baseID}_self_subj`">{{$root.t("I")}}</label>
-			</div>
-			<div class="input">
-				<input type="radio" class="mini" value="partner" v-model="subj" :id="`${baseID}_partner_subj`" @change="changeActorOrder" :name="`${baseName}[subj]`" v-inst="subj">
-				<label :for="`${baseID}_partner_subj`">{{partnerPronoun.subject}}</label>
-			</div>
+			<hidden-radio v-for="i in [{labelKey: 'I', value: 'self'}, {label: partnerPronoun.subject, value: 'partner'}]"
+				:key="'subj' + i.value"
+				v-bind="i"
+				:base-name="baseName"
+				model="subj"
+				v-model="subj"
+				@change="changeActorOrder">
+			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
-			<div class="input" v-for="c in possibleContacts">
-				<input type="radio" class="mini" :name="`${baseName}[contact_type]`" :value="c.key" v-inst="_value.contact_type" :id="`${baseID}_${c.key}`" v-model="_value.contact_type" @change="resetInsts">
-				<label :for="`${baseID}_${c.key}`">{{$root.t(`contact.contact_type.${c.t_key}`)}}</label>
-			</div>
+			<hidden-radio v-for="c in possibleContacts"
+				:key="c.key" v-bind="{
+					labelKey: 'contact.contact_type.' + c.t_key,
+					value: c.key,
+					model: 'contact_type',
+					baseName}"
+				v-model="_value.contact_type"
+				@change="resetInsts">
+			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
-			<div class="input">
-				<input type="radio" class="mini" value="partner" v-model="obj" :id="`${baseID}_partner_obj`" @change="changeActorOrder" :name="`${baseName}[obj]`" v-inst="obj">
-				<label :for="`${baseID}_partner_obj`">{{partnerPronoun.possessive}}</label>
-			</div>
-			<div class="input">
-				<input type="radio" class="mini" value="self" v-model="obj" :id="`${baseID}_self_obj`" @change="changeActorOrder" :name="`${baseName}[obj]`">
-				<label :for="`${baseID}_self_obj`" v-inst="obj">{{$root.t("my")}}</label>
-			</div>
+			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, value: 'partner'}, {labelKey: 'my', value: 'self'}]"
+				:key="'obj' + i.value"
+				v-bind="i"
+				:base-name="baseName"
+				model="obj"
+				v-model="obj"
+				@change="changeActorOrder">
+			</hidden-radio>
 		</div>
 		<div class="field-section">
-			<div class="input" v-for="oi in objInsts">
-				<input type="radio" class="mini" :name="`${baseName}[${actorOrder[1]}_instrument_id]`" v-inst="objInst" v-model="objInst" :value="oi._id" :id="`${baseID}${actorOrder[1]}_instrument_${oi._id}`" @change="resetInsts(true)">
-				<label :for="`${baseID}${actorOrder[1]}_instrument_${oi._id}`">{{oi[`${obj}_name`]}}</label>
-			</div>
+			<hidden-radio v-for="oi in objInsts"
+				:key="oi._id"
+				v-bind="{
+					label: oi[obj + '_name'],
+					value: oi._id,
+					model: actorOrder[1] + '_instrument_id',
+					baseName
+				}"
+				v-model="objInst"
+				@change="resetInsts(true)">
+			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
 			<p v-html="subjPossessive"></p>
 		</div>
 		<div class="field-section">
 			<div v-if="subjInsts.length > 1">
-				<div class="input" v-for="si in subjInsts">
-					<input type="radio" class="mini" :name="`${baseName}[${actorOrder[0]}_instrument_id]`" v-inst="subjInst" v-model="subjInst" :value="si._id" :id="`${baseID}${actorOrder[0]}_instrument_${si._id}`">
-					<label :for="`${baseID}${actorOrder[0]}_instrument_${si._id}`">{{si[`${subj}_name`]}}</label>
-				</div>
+				<hidden-radio v-for="si in subjInsts"
+				:key="si._id"
+				v-bind="{
+					label: si[subj + '_name'],
+					value: si._id,
+					model: actorOrder[0] + '_instrument_id',
+					baseName
+				}"
+				v-model="subjInst">
+			</hidden-radio>
 			</div>
 		</div>
 	</div>
@@ -59,6 +77,7 @@
 
 <script>
 	import dynamicFieldListItem from "@mixins/dynamicFieldListItem"
+	import hiddenRadio from "./HiddenRadio.vue"
 
 	const _orders = [["self", "partner"], ["partner", "self"]]
 	const _keys = [["inverse_inst", "inst_key"], ["inst_key", "inverse_inst"]]
@@ -76,6 +95,9 @@
 			})
 		},
 		mixins: [dynamicFieldListItem],
+		components: {
+			"hidden-radio": hiddenRadio
+		},
 		watch: {
 			'watchKey': function() {
 				this.changeActorOrder(null, true);
@@ -156,20 +178,21 @@
 			resetInsts(e) {
 				if (e) {this.onInput();}
 
+				let vm = this;
 				this.$nextTick(() => {
 					let lst = e === true? ['subjInst'] : ['objInst', 'subjInst']
 					for (var s = 0; s < lst.length; s++) {
 						let actorKey = lst[s];
-						let instId = this[actorKey];
+						let instId = vm[actorKey];
 						let lstId = actorKey + "s";
-						let newList = this["get" + lstId.slice(0,1).toUpperCase() + lstId.slice(1)]();
+						let newList = vm["get" + lstId.slice(0,1).toUpperCase() + lstId.slice(1)]();
 						if (newList.length == 1) {
-							this[actorKey] = newList[0]._id
+							vm[actorKey] = newList[0]._id
 						}
 						else if (newList.filter((i) => i._id == instId).length == 0) {
-							this[actorKey] = null;
+							vm[actorKey] = null;
 						}
-						this[lstId] = newList
+						vm[lstId] = newList
 					}
 				})
 			},
@@ -200,17 +223,18 @@
 				let conditionKey = this.cType[_keys[this.orderInd][forSubj ? 1 : 0]]
 				let contactKey = conditionKey + "_ids";
 				let checkUser = forSubj ? this.subj : this.obj;
+				let vm = this;
 				return (inst) => {
 					if (inst[contactKey].length == 0) {return false;}
 					if (inst.conditions == null) {return true;}
 					let conditions = inst.conditions.all || inst.conditions[conditionKey];
-					if (conditions == undefined && this.isSelf) {
+					if (conditions == undefined && vm.isSelf) {
 						conditionKey = conditionKey.replace("_self", "");
 						conditions = inst.conditions[conditionKey]
 					}
 					if(conditions == undefined) {return true;}
 					for (var i = 0; i < conditions.length; i++) {
-						if (!this[checkUser][conditions[i]]) {
+						if (!vm[checkUser][conditions[i]]) {
 							return false;
 						}
 					}
@@ -273,13 +297,6 @@
 			},
 			getFirstInput() {
 				return this.$el.querySelector(':checked');
-			}
-		},
-		directives: {
-			'inst': {
-				update: function(el, binding, vnode) {
-					el.checked = binding.value == el.value;
-				}
 			}
 		},
 		mounted: function() {

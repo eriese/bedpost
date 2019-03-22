@@ -13,8 +13,9 @@ import vuelidateForm from '@components/form/VuelidateFormComponent';
 import fieldErrors from "@components/form/FieldErrorsComponent.vue"
 import formErrors from "@components/form/FormErrorsComponent.vue"
 import toggle from "@components/form/ToggleComponent.vue"
-import encounterContactField from "@components/form/EncounterContactField.vue"
 import dynamicFieldList from "@components/form/DynamicFieldList.vue";
+
+import encounterContactField from "@components/form/encounter/EncounterContactField.vue"
 
 import arrowButton from "@components/functional/ArrowButton";
 

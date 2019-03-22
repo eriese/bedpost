@@ -64,6 +64,62 @@ input[type=radio] {
 		}
 
 	}
+
+	&.hidden-radio {
+		$label-color: $color-purple-light;
+		$label-hover-color: $color-purple-dark;
+
+		margin: 0px;
+		width: 0px !important;
+		display: inline !important;
+		border: none !important;
+
+
+
+		&:focus, &:hover, &:checked {
+			+ label {
+				color: $label-hover-color;
+			}
+		}
+
+		&:checked {
+			&::after {
+				display: none;
+			}
+
+			+ label {
+				@media (min-width: 500px) {
+					font-size: 1.2em;
+				}
+				font-weight: bold;
+			}
+		}
+
+		&:focus + label {
+			outline-width: 2px;
+			outline-style: solid;
+			outline-color: Highlight;
+
+			/* WebKit gets its native focus styles.
+			 */
+			@media (-webkit-min-device-pixel-ratio:0) {
+			  .unreal-focus {
+			    outline-color: -webkit-focus-ring-color;
+			    outline-style: auto;
+			  }
+			}
+		}
+
+		+ label {
+			cursor: pointer;
+			color: $label-color;
+
+
+			&:hover {
+				color: $label-hover-color;
+			}
+		}
+	}
 }
 
 input[type=checkbox] {
