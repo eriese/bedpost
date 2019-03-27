@@ -6,6 +6,7 @@
 	.contact-field {
 		display: flex;
 		align-items: baseline;
+		justify-content: space-between;
 
 		.field-section {
 			float: left;
@@ -17,8 +18,8 @@
 				font-size: inherit;
 			}
 
-			.input {
-				line-height: 1.2;
+			.input label {
+				line-height: 1.25;
 			}
 		}
 	}
@@ -27,6 +28,7 @@
 		.contact-field {
 			flex-wrap: wrap;
 			color: $color-purple-dark;
+			justify-content: flex-start;
 
 			p {
 				margin-top: 0;

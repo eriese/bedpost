@@ -1,20 +1,27 @@
 class Contact::BarrierType
-	attr_reader :key, :condition
+	attr_reader :key, :conditions, :exclude
 
 	def initialize(hsh)
 		@key = hsh[:key]
-		@condition = hsh[:condition]
+		@conditions = hsh[:conditions]
+		@exclude = hsh[:exclude]
+		@encounter_conditions = hsh[:encounter_conditions]
 	end
 
 	TYPES = Hash[[{
-		key: :fresh
+		key: :fresh,
+		exclude: [:old, :clean_partner, :clean_self]
 	},{
-		key: :old
+		key: :old,
+		exclude: [:fresh, :clean_partner, :clean_self],
+		encounter_conditions: [:has_barrier, :index]
 	},{
 		key: :clean_partner,
-		condition: :partner_instrument_id
+		conditions: [:partner_instrument_id],
+		exclude: [:old, :fresh]
 	},{
 		key: :clean_self,
-		condition: :self_instrument_id
+		conditions: [:self_instrument_id],
+		exclude: [:old, :fresh]
 	}].map {|r| res = Contact::BarrierType.new(r); [res.key, res]}]
 end

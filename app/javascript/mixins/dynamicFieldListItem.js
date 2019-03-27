@@ -1,5 +1,5 @@
 export default {
-	props: ["baseName", "watchKey", "value"],
+	props: ["baseName", "watchKey", "value", "tracked"],
 	watch: {
 		watchKey: function() {
 			let func = this.onKeyChange
@@ -31,6 +31,11 @@ export default {
 	computed: {
 		_value: function() {
 			return Object.assign({}, this.value);
+		}
+	},
+	mounted: function() {
+		if (this.$options.track) {
+			this.$emit("track", this.$options.track);
 		}
 	}
 }

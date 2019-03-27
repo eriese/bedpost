@@ -6,7 +6,7 @@
 				<arrow-button class="not-button" v-if="index < list.length - 1" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
 				<arrow-button class="not-button" shape="x" v-if="list.length > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
 			</div>
-			<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" class="clear"></component>
+			<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="trackInList" class="clear" @track="track"></component>
 		</div>
 		<button type="button" @click="addToList">Add Another</button>
 	</div>
@@ -18,10 +18,12 @@
 		name: "dynamic_field_list",
 		data: function() {
 			return {
-				focusIndex: 100
+				focusIndex: 100,
+				// an object for tracking list properties, to be defined by the list items
+				trackInList: {}
 			}
 		},
-		props: ["componentType", "list", "baseName", "dummyKey", "tabbable"],
+		props: ["componentType", "list", "baseName", "dummyKey"],
 		computed: {
 			dummy: function() {
 				return gon[this.dummyKey || "dummy"]
@@ -86,6 +88,14 @@
 						comp.blur();
 					}
 				}
+			},
+			track(key, val) {
+				if (key instanceof Array) {
+					for (var i = 0; i < key.length; i++) {
+						this.$set(this.trackInList, key[i], this.trackInList[key[i]]);
+					}
+				}
+				this.$set(this.trackInList, key, val);
 			}
 		},
 		mounted: function() {

@@ -2,11 +2,10 @@
 <div class="contact-field-container" :class="{blurred: !focused}">
 	<div class="contact-field">
 		<div class="field-section narrow">
-			<hidden-radio v-for="i in [{labelKey: 'I', value: 'self'}, {label: partnerPronoun.subject, value: 'partner'}]"
-				:key="'subj' + i.value"
+			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'self'}, {label: partnerPronoun.subject, inputValue: 'partner'}]"
+				:key="'subj' + i.inputValue"
 				v-bind="i"
 				:base-name="baseName"
-				model="subj"
 				v-model="subj"
 				@change="changeActorOrder">
 			</hidden-radio>
@@ -15,7 +14,7 @@
 			<hidden-radio v-for="c in possibleContacts"
 				:key="c.key" v-bind="{
 					labelKey: 'contact.contact_type.' + c.t_key,
-					value: c.key,
+					inputValue: c.key,
 					model: 'contact_type',
 					baseName}"
 				v-model="_value.contact_type"
@@ -23,11 +22,10 @@
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
-			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, value: 'partner'}, {labelKey: 'my', value: 'self'}]"
-				:key="'obj' + i.value"
+			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, inputValue: 'partner'}, {labelKey: 'my', inputValue: 'self'}]"
+				:key="'obj' + i.inputValue"
 				v-bind="i"
 				:base-name="baseName"
-				model="obj"
 				v-model="obj"
 				@change="changeActorOrder">
 			</hidden-radio>
@@ -37,7 +35,7 @@
 				:key="oi._id"
 				v-bind="{
 					label: oi[obj + '_name'],
-					value: oi._id,
+					inputValue: oi._id,
 					model: actorOrder[1] + '_instrument_id',
 					baseName
 				}"
@@ -54,7 +52,7 @@
 				:key="si._id"
 				v-bind="{
 					label: si[subj + '_name'],
-					value: si._id,
+					inputValue: si._id,
 					model: actorOrder[0] + '_instrument_id',
 					baseName
 				}"
@@ -66,10 +64,23 @@
 	<div class="contact-barriers clear-fix">
 		<div>{{$root.t("contact.with", {pronoun: ""})}}</div>
 		<div>
-			<div v-for="(bType, bKey) in barriers" v-show="!bType.condition || value[bType.condition]">
+			<barrier-input v-for="(bType, bKey) in barriers"
+				:key="baseName + bKey"
+				v-bind="{
+					barrier: bType,
+					contact: value,
+					partnerName,
+					selfName,
+					baseName,
+					encounterData: {has_barrier: tracked.has_barrier, index: watchKey}
+				}"
+				v-model="_value.barriers"
+				@change="updateBarriers">
+			</barrier-input>
+			<!-- <div v-for="(bType, bKey) in barriers" v-show="!bType.condition || value[bType.condition]">
 				<input type="checkbox" v-model="_value.barriers" :name="`${baseName}[barriers][]`" :id="`${baseID}_barriers_${bKey}`" :value="bKey" @change="onInput">
 				<label :for="`${baseID}_barriers_${bKey}`">{{$root.t(bKey, {scope: "contact.barrier", partner_instrument: partnerName, self_instrument: selfName})}}</label>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>
@@ -78,6 +89,7 @@
 <script>
 	import dynamicFieldListItem from "@mixins/dynamicFieldListItem"
 	import hiddenRadio from "./HiddenRadio.vue"
+	import encounterContactBarrier from './EncounterContactBarrier.vue'
 
 	const _orders = [["self", "partner"], ["partner", "self"]]
 	const _keys = [["inverse_inst", "inst_key"], ["inst_key", "inverse_inst"]]
@@ -90,13 +102,14 @@
 				orderInd: 0,
 				objInsts: [],
 				subjInsts: [],
-				onKeyChange: false,
-				focused: true
+				focused: true,
 			})
 		},
 		mixins: [dynamicFieldListItem],
+		track: ["has_barrier"],
 		components: {
-			"hidden-radio": hiddenRadio
+			"hidden-radio": hiddenRadio,
+			"barrier-input": encounterContactBarrier
 		},
 		watch: {
 			'watchKey': function() {
@@ -285,6 +298,16 @@
 				this.onInput();
 				this.resetInsts()
 				return;
+			},
+			updateBarriers(newBarriers) {
+				let hadBarriers = this.value.barriers.indexOf("fresh") >=0
+				let hasBarriers = newBarriers.indexOf("fresh") >= 0
+				if (hadBarriers != hasBarriers) {
+					let oldBarriers = this.tracked.has_barrier || 0;
+					let change = hasBarriers ? 1 : -1
+					this.$emit("track", "has_barrier", oldBarriers + change);
+				}
+				this.onInput();
 			},
 			onInput() {
 				this.$emit("input", this._value);

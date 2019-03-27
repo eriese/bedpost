@@ -220,3 +220,13 @@ input[type=range] {
 input[type=hidden] {
 	display: none !important;
 }
+
+input[disabled=disabled] {
+	opacity: 0.5;
+	cursor: initial;
+
+	+ label {
+		opacity: 0.5;
+		cursor: initial;
+	}
+}
