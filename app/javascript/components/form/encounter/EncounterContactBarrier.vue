@@ -49,8 +49,25 @@
 					}
 				})
 			},
+			cleanKey: function() {
+				if (this.barrier.key.indexOf("clean_") < 0) {
+					return null;
+				}
+
+				return this.barrier.key.replace("clean_", "") + "_instrument_id";
+			},
+			canClean: function() {
+				if (this.cleanKey === null) {return true;}
+				let instID = this.contact[this.cleanKey];
+				if (instID) {
+					return this.encounterData.instruments[instID].can_clean
+				}
+				return true;
+			},
 			shouldShow: function() {
-				return checkConditions(this.barrier.conditions, false, true, (c) => !this.contact[c]) && checkConditions(this.barrier.encounter_conditions, false, true, (c) => !this.encounterData[c]);
+				return checkConditions(this.barrier.conditions, false, true, (c) => !this.contact[c])
+					&& checkConditions(this.barrier.encounter_conditions, false, true, (c) => !this.encounterData[c])
+					&& this.canClean
 			},
 			shouldDisable: function() {
 				return checkConditions(this.barrier.exclude, true, false, (c) => this.modelValue.indexOf(c) >=0)

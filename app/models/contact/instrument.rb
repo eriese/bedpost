@@ -4,6 +4,7 @@ class Contact::Instrument
   field :name, type: Symbol
   field :_id, type: Symbol, default: ->{ name }
   field :user_override, type: Symbol
+  field :can_clean, type: Boolean, default: true
   field :conditions, type: Hash
   index({name: 1}, {unique: true})
 

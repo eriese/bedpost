@@ -72,15 +72,11 @@
 					partnerName,
 					selfName,
 					baseName,
-					encounterData: {has_barrier: tracked.has_barrier, index: watchKey}
+					encounterData: {has_barrier: tracked.has_barrier, index: watchKey, instruments: instruments}
 				}"
 				v-model="_value.barriers"
 				@change="updateBarriers">
 			</barrier-input>
-			<!-- <div v-for="(bType, bKey) in barriers" v-show="!bType.condition || value[bType.condition]">
-				<input type="checkbox" v-model="_value.barriers" :name="`${baseName}[barriers][]`" :id="`${baseID}_barriers_${bKey}`" :value="bKey" @change="onInput">
-				<label :for="`${baseID}_barriers_${bKey}`">{{$root.t(bKey, {scope: "contact.barrier", partner_instrument: partnerName, self_instrument: selfName})}}</label>
-			</div> -->
 		</div>
 	</div>
 </div>
