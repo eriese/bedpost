@@ -1,2 +1,3 @@
 <h2><%= t(".title_html", {partner: @partner.display}) %></h2>
+<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter) %>
 <%= display_model @encounter %>

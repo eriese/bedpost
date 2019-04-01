@@ -46,6 +46,12 @@ Object.setAtPath = function(o, s, val) {
     }
 }
 
+Array.prototype.findLastIndex = function(predicate) {
+    let index = this.slice().reverse().findIndex(predicate);
+    let len = this.length - 1;
+    return index >= 0 ? len - index : index;
+}
+
 Array.move = function(arr, old_index, new_index) {
     while (old_index < 0) {
         old_index += arr.length;

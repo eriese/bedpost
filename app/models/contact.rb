@@ -2,15 +2,18 @@ class Contact
   include Mongoid::Document
   field :barriers, type: Array, default: []
   field :contact_type, type: Contact::ContactType, default: :penetrated
+  field :position, type: Integer, default: -> {encounter.present? ? encounter.contacts.length : 0}
 
   embedded_in :encounter
   belongs_to :partner_instrument, class_name: "Contact::Instrument"
   belongs_to :self_instrument, class_name: "Contact::Instrument"
 
   validate :contact_must_be_possible
+  validates_uniqueness_of :position
+  validates_presence_of :partner_instrument, :self_instrument, :position
 
   def contact_must_be_possible
-  	unless self_instrument.send(contact_type.inst_key).include? partner_instrument
+  	unless self_instrument.present? && self_instrument.send(contact_type.inst_key).include?(partner_instrument)
   		errors.add(:contact_type, :invalid, {attribute: :contact_type})
   	end
   end

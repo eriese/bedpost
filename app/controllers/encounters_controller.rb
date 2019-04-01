@@ -17,7 +17,7 @@ class EncountersController < ApplicationController
 	def new
 		return unless set_partnership(encounters_who_path)
 		@partner = @partnership.partner
-		@encounter = @partnership.encounters.new(contacts: [Contact.new, Contact.new])
+		@encounter = @partnership.encounters.new(contacts: [Contact.new])
 		gon_encounter_data
 		gon_client_validators(@encounter)
 	end
@@ -34,6 +34,7 @@ class EncountersController < ApplicationController
 	end
 
 	def edit
+		gon_encounter_data
 		gon_client_validators(@encounter)
 	end
 
@@ -72,7 +73,7 @@ class EncountersController < ApplicationController
 	end
 
 	def e_params
-		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: [{:barriers => []}, :contact_type, :partner_instrument_id, :self_instrument_id])
+		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: [{:barriers => []}, :_id, :contact_type, :partner_instrument_id, :self_instrument_id, :position, :_destroy])
 	end
 
 	def gon_encounter_data

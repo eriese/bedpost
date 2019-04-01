@@ -1,5 +1,7 @@
 <template>
 <div class="contact-field-container" :class="{blurred: !focused}">
+	<input type="hidden" :value="value._id" :name="baseName + '[_id]'" v-if="!value.newRecord">
+	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
 	<div class="contact-field">
 		<div class="field-section narrow">
 			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'self'}, {label: partnerPronoun.subject, inputValue: 'partner'}]"
@@ -47,17 +49,17 @@
 			<p v-html="subjPossessive"></p>
 		</div>
 		<div class="field-section">
-			<div v-if="subjInsts.length > 1">
+			<div v-show="subjInsts.length > 1">
 				<hidden-radio v-for="si in subjInsts"
-				:key="si._id"
-				v-bind="{
-					label: si[subj + '_name'],
-					inputValue: si._id,
-					model: actorOrder[0] + '_instrument_id',
-					baseName
-				}"
-				v-model="subjInst">
-			</hidden-radio>
+					:key="si._id"
+					v-bind="{
+						label: si[subj + '_name'],
+						inputValue: si._id,
+						model: actorOrder[0] + '_instrument_id',
+						baseName
+					}"
+					v-model="subjInst">
+				</hidden-radio>
 			</div>
 		</div>
 	</div>
@@ -99,6 +101,7 @@
 				objInsts: [],
 				subjInsts: [],
 				focused: true,
+				onKeyChange: false
 			})
 		},
 		mixins: [dynamicFieldListItem],
@@ -275,6 +278,9 @@
 				}
 
 				this.updateContactType();
+				if (isInit) {
+					this.updateBarriers(this.value.barriers, true);
+				}
 			},
 			updateContactType() {
 				let res = this._value.contact_type.replace(/(_self|_partner|_by)/g, "");
@@ -295,10 +301,10 @@
 				this.resetInsts()
 				return;
 			},
-			updateBarriers(newBarriers) {
+			updateBarriers(newBarriers, isInit) {
 				let hadBarriers = this.value.barriers.indexOf("fresh") >=0
 				let hasBarriers = newBarriers.indexOf("fresh") >= 0
-				if (hadBarriers != hasBarriers) {
+				if (isInit || hadBarriers != hasBarriers) {
 					let oldBarriers = this.tracked.has_barrier || 0;
 					let change = hasBarriers ? 1 : -1
 					this.$emit("track", "has_barrier", oldBarriers + change);
