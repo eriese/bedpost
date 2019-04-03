@@ -112,7 +112,7 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				@hand = create(:contact_instrument, name: :hand)
 				@hand.can_touch << @hand
-				contact_params = attributes_for(:contact, partner_instrument_id: @hand.id, self_instrument_id: @hand.id, barriers: ["fresh"])
+				contact_params = attributes_for(:encounter_contact, partner_instrument_id: @hand.id, self_instrument_id: @hand.id, barriers: ["fresh"])
 				enc_params = attributes_for(:encounter, contacts_attributes: [contact_params])
 				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: enc_params}
 				ship.reload

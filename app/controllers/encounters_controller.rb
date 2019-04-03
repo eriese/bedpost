@@ -17,7 +17,7 @@ class EncountersController < ApplicationController
 	def new
 		return unless set_partnership(encounters_who_path)
 		@partner = @partnership.partner
-		@encounter = @partnership.encounters.new(contacts: [Contact.new])
+		@encounter = @partnership.encounters.new(contacts: [EncounterContact.new])
 		gon_encounter_data
 		gon_client_validators(@encounter)
 	end
@@ -85,6 +85,6 @@ class EncountersController < ApplicationController
 			partnerPronoun: @partnership.partner.pronoun,
 			barriers: Contact::BarrierType::TYPES
 		}
-		gon.dummy = Contact.new
+		gon.dummy = EncounterContact.new
 	end
 end
