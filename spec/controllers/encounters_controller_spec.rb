@@ -100,6 +100,7 @@ RSpec.describe EncountersController, type: :controller do
 		context 'with valid params' do
 			after :all do
 				Contact::Instrument.delete_all
+				PossibleContact.delete_all
 			end
 
 			it 'creates a new encounter on the partnership' do
@@ -111,8 +112,8 @@ RSpec.describe EncountersController, type: :controller do
 			it 'accepts nested parameters for contacts' do
 				ship = @user.partnerships.first
 				@hand = create(:contact_instrument, name: :hand)
-				@hand.can_touch << @hand
-				contact_params = attributes_for(:encounter_contact, partner_instrument_id: @hand.id, self_instrument_id: @hand.id, barriers: ["fresh"])
+				create(:possible_contact, subject_instrument: @hand, object_instrument: @hand, contact_type: :touched)
+				contact_params = attributes_for(:encounter_contact, subject_instrument_id: @hand.id, object_instrument_id: @hand.id, barriers: ["fresh"])
 				enc_params = attributes_for(:encounter, contacts_attributes: [contact_params])
 				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: enc_params}
 				ship.reload

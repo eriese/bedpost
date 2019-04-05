@@ -6,10 +6,10 @@ class Contact::ContactType
 		@inst_key = hsh[:inst_key]
 		@inverse_inst = hsh[:inverse_inst]
 		@t_key = hsh[:t_key]
-		@subject = hsh[:subject]
-		@object = hsh[:object]
-		@subject_key = hsh[:subject_key]
-		@object_key = hsh[:object_key]
+		# @subject = hsh[:subject]
+		# @object = hsh[:object]
+		# @subject_key = hsh[:subject_key]
+		# @object_key = hsh[:object_key]
 	end
 
 	def mongoize
@@ -23,10 +23,6 @@ class Contact::ContactType
 	class << self
 		def const_missing(name)
 			get(name)
-		end
-
-		def active
-			@_actives ||= TYPES.select {|k, v| v.is_active }
 		end
 
 		def get(name)
@@ -45,18 +41,18 @@ class Contact::ContactType
 			mongoize(object)
 		end
 
-		def uncache
-			@_actives = nil
+		def inst_methods
+			@methods ||= TYPES.map { |k, t| [t.inst_key, t.inverse_inst, t.inst_key.to_s + "_self", t.inverse_inst.to_s + "_self"] }.flatten.uniq
 		end
 	end
 
 
 	private
 	DEFAULT_OPTS = {
-		subject: :self,
-		object: :partner,
-		subject_key: :self_instrument_id,
-		object_key: :partner_instrument_id
+		# subject: :self,
+		# object: :partner,
+		# subject_key: :self_instrument_id,
+		# object_key: :partner_instrument_id
 	}
 
 	BASES = [{
@@ -68,8 +64,6 @@ class Contact::ContactType
 		key: :touched,
 		inst_key: :can_touch,
 		inverse_inst: :can_touch,
-		object: nil,
-		subject: nil
 	},{
 		key: :sucked,
 		inst_key: :can_suck,
@@ -77,16 +71,18 @@ class Contact::ContactType
 		inverse_key: :sucked_by
 	}]
 
-	ADDL_OPTS = [{}, {
-		key: :_self,
-		object: :self,
-		subject: :self,
-	}, {
-		key: :_partner,
-		inst_add: :_self,
-		subject: :partner,
-		object: :partner
-	}]
+	# ADDL_OPTS = [{}, {
+	# 	key: :_self,
+	# 	object: :self,
+	# 	subject: :self,
+	# }, {
+	# 	key: :_partner,
+	# 	inst_add: :_self,
+	# 	subject: :partner,
+	# 	object: :partner
+	# }]
+
+	ADDL_OPTS = [{}]
 
 	TYPES = Hash[BASES.map do |r|
 		merge_opts = DEFAULT_OPTS.reverse_merge({t_key: r[:key]}).merge(r)
@@ -106,21 +102,21 @@ class Contact::ContactType
 			end
 			all_merged = merge_opts.merge(a).merge(key_opt)
 
-			if r.has_key? :inverse_key
-				inv_opts = {
-					key: has_key ? (r[:inverse_key].to_s + a[:key].to_s).intern : r[:inverse_key],
-					inst_key: all_merged[:inverse_inst],
-					inverse_inst: all_merged[:inst_key],
-					subject_key: all_merged[:object_key],
-					object_key: all_merged[:subject_key],
-					subject: all_merged[:object],
-					object: all_merged[:subject]
-				}
+		# 	if r.has_key? :inverse_key
+		# 		inv_opts = {
+		# 			key: has_key ? (r[:inverse_key].to_s + a[:key].to_s).intern : r[:inverse_key],
+		# 			inst_key: all_merged[:inverse_inst],
+		# 			inverse_inst: all_merged[:inst_key],
+		# 			subject_key: all_merged[:object_key],
+		# 			object_key: all_merged[:subject_key],
+		# 			subject: all_merged[:object],
+		# 			object: all_merged[:subject]
+		# 		}
 
-				inv_merged = all_merged.merge(inv_opts)
-				inv_res = new(inv_merged)
-				ret << [inv_res.key, inv_res]
-			end
+		# 		inv_merged = all_merged.merge(inv_opts)
+		# 		inv_res = new(inv_merged)
+		# 		ret << [inv_res.key, inv_res]
+		# 	end
 
 			res = new(all_merged)
 			ret << [res.key, res]

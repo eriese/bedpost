@@ -18,19 +18,23 @@ class Profile
   validates_presence_of :pronoun, :anus_name, :external_name, :if => :is_base?
 
   def has_internal?
-  	self.internal_name.present?
+  	internal_name.present?
   end
 
   def is_base?
-  	self.instance_of?(Profile)
+  	instance_of?(Profile)
   end
 
   def add_partnered_to(partner_profile)
-    self.partnered_to.push(partner_profile)
+    partnered_to.push(partner_profile)
   end
 
   def remove_partnered_to(partner_profile)
-    self.partnered_to.delete(partner_profile)
+    partnered_to.delete(partner_profile)
+  end
+
+  def as_json_private
+    as_json({only: [:name, :pronoun_id], methods: [:anus_name, :external_name, :internal_name, :can_penetrate]})
   end
 
   def self.add_partnered_to(profile_id, partner_profile)

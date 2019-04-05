@@ -39,6 +39,7 @@ class EncountersController < ApplicationController
 	end
 
 	def update
+		binding.pry
 		if @encounter.update(e_params)
 			redirect_to partnership_encounter_path(@partnership, @encounter)
 		else
@@ -73,14 +74,16 @@ class EncountersController < ApplicationController
 	end
 
 	def e_params
-		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: [{:barriers => []}, :_id, :contact_type, :partner_instrument_id, :self_instrument_id, :position, :_destroy])
+		c_attrs = [{:barriers => []}, :contact_type, :object_instrument_id, :subject_instrument_id, :position, :_destroy, :subject, :object]
+		c_attrs << :_id unless action_name == "create"
+		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: c_attrs)
 	end
 
 	def gon_encounter_data
 		gon.encounter_data = {
-			partner: @partnership.partner,
+			partner: @partnership.partner.as_json_private,
 			contacts: Contact::ContactType::TYPES,
-			self: current_user,
+			self: current_user.as_json_private,
 			instruments: Contact::Instrument.hashed_for_partnership(current_user, @partnership.partner),
 			partnerPronoun: @partnership.partner.pronoun,
 			barriers: Contact::BarrierType::TYPES

@@ -4,16 +4,17 @@
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
 	<div class="contact-field">
 		<div class="field-section narrow">
-			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'self'}, {label: partnerPronoun.subject, inputValue: 'partner'}]"
+			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'user'}, {label: partnerPronoun.subject, inputValue: 'partner'}]"
 				:key="'subj' + i.inputValue"
 				v-bind="i"
 				:base-name="baseName"
-				v-model="subj"
+				v-model="_value.subject"
+				model="subject"
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
-			<hidden-radio v-for="c in possibleContacts"
+			<hidden-radio v-for="c in contacts"
 				:key="c.key" v-bind="{
 					labelKey: 'contact.contact_type.' + c.t_key,
 					inputValue: c.key,
@@ -24,24 +25,25 @@
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
-			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, inputValue: 'partner'}, {labelKey: 'my', inputValue: 'self'}]"
+			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, inputValue: 'partner'}, {labelKey: 'my', inputValue: 'user'}]"
 				:key="'obj' + i.inputValue"
 				v-bind="i"
 				:base-name="baseName"
-				v-model="obj"
+				v-model="_value.object"
+				model="object"
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>
 		<div class="field-section">
-			<hidden-radio v-for="oi in objInsts"
+			<hidden-radio v-for="oi in objectInsts"
 				:key="oi._id"
 				v-bind="{
-					label: oi[obj + '_name'],
+					label: oi[value.object + '_name'],
 					inputValue: oi._id,
-					model: actorOrder[1] + '_instrument_id',
+					model: 'object_instrument_id',
 					baseName
 				}"
-				v-model="objInst"
+				v-model="_value.object_instrument_id"
 				@change="resetInsts(true)">
 			</hidden-radio>
 		</div>
@@ -49,16 +51,17 @@
 			<p v-html="subjPossessive"></p>
 		</div>
 		<div class="field-section">
-			<div v-show="subjInsts.length > 1">
-				<hidden-radio v-for="si in subjInsts"
+			<div v-show="subjectInsts.length > 1">
+				<hidden-radio v-for="si in subjectInsts"
 					:key="si._id"
 					v-bind="{
-						label: si[subj + '_name'],
+						label: si[value.subject + '_name'],
 						inputValue: si._id,
-						model: actorOrder[0] + '_instrument_id',
+						model: 'subject_instrument_id',
 						baseName
 					}"
-					v-model="subjInst">
+					v-model="_value.subject_instrument_id"
+					@change="onInput">
 				</hidden-radio>
 			</div>
 		</div>
@@ -95,11 +98,11 @@
 	export default {
 		data: function() {
 			return Object.assign({}, gon.encounter_data, {
-				subj: null,
-				obj: null,
+				// subj: null,
+				// obj: null,
 				orderInd: 0,
-				objInsts: [],
-				subjInsts: [],
+				objectInsts: [],
+				subjectInsts: [],
 				focused: true,
 				onKeyChange: false
 			})
@@ -119,12 +122,10 @@
 			possibleContacts: function() {
 				let contacts = []
 				let isSelf = this.isSelf
-				let curContact = this._value.contact_type.replace(/(_self|_partner|_by)/, "");
+				// let curContact = this._value.contact_type.replace(/_self/, "");
 				for(let k in this.contacts) {
 					let con = this.contacts[k]
-					if ((con.subject == this.subj && con.object == this.obj
-						&& (!isSelf || !con.key.match(/_by/)))
-						|| (!isSelf && !con.subject && !con.object)) {
+					if (!!con.key.match(/_self$/) == this.isSelf) {
 
 						// let can_contact = false
 						// for(let i in this.instruments) {
@@ -151,7 +152,7 @@
 				return _orders[this.orderInd];
 			},
 			isSelf: function() {
-				return this.subj == this.obj;
+				return this._value.subject == this._value.object;
 			},
 			partnerName: function() {
 				let p_inst_id = this.value.partner_instrument_id
@@ -162,29 +163,29 @@
 				return s_inst_id ? this.instruments[s_inst_id].self_name : ""
 			},
 			subjPossessive: function() {
-				if (this.subjInsts.length <= 1) {
+				if (this.subjectInsts.length <= 1) {
 					return "";
 				}
-				return this.$root.t("contact.with", {pronoun: this.subj == "self" ? this.$root.t("my") : this.partnerPronoun.possessive})
+				return this.$root.t("contact.with", {pronoun: this.value.subject == "user" ? this.$root.t("my") : this.partnerPronoun.possessive})
 			},
-			objInst: {
-				get: function() {
-					return this.value[this.actorOrder[1] + '_instrument_id']
-				},
-				set: function(newVal) {
-					this._value[this.actorOrder[1] + '_instrument_id'] = newVal;
-					this.onInput();
-				}
-			},
-			subjInst: {
-				get: function() {
-					return this.value[this.actorOrder[0] + '_instrument_id']
-				},
-				set: function(newVal) {
-					this._value[this.actorOrder[0] + '_instrument_id'] = newVal;
-					this.onInput();
-				}
-			}
+			// objInst: {
+			// 	get: function() {
+			// 		return this.value['object_instrument_id']
+			// 	},
+			// 	set: function(newVal) {
+			// 		this._value[this.actorOrder[1] + '_instrument_id'] = newVal;
+			// 		this.onInput();
+			// 	}
+			// },
+			// subjInst: {
+			// 	get: function() {
+			// 		return this.value[this.actorOrder[0] + '_instrument_id']
+			// 	},
+			// 	set: function(newVal) {
+			// 		this._value[this.actorOrder[0] + '_instrument_id'] = newVal;
+			// 		this.onInput();
+			// 	}
+			// }
 		},
 		methods: {
 			resetInsts(e) {
@@ -192,32 +193,33 @@
 
 				let vm = this;
 				this.$nextTick(() => {
-					let lst = e === true? ['subjInst'] : ['objInst', 'subjInst']
+					let lst = e === true ? ['subject'] : ['object', 'subject']
 					for (var s = 0; s < lst.length; s++) {
 						let actorKey = lst[s];
-						let instId = vm[actorKey];
-						let lstId = actorKey + "s";
-						let newList = vm["get" + lstId.slice(0,1).toUpperCase() + lstId.slice(1)]();
+						let instId = actorKey + '_instrument_id'
+						let lstId = actorKey + "Insts";
+						let newList = vm[lstId + "Get"]();
 						if (newList.length == 1) {
-							vm[actorKey] = newList[0]._id
+							vm._value[instId] = newList[0]._id
 						}
-						else if (newList.filter((i) => i._id == instId).length == 0) {
-							vm[actorKey] = null;
+						else if (newList.filter((i) => i._id == vm.value[instId]).length == 0) {
+							vm._value[instId] = null;
 						}
 						vm[lstId] = newList
 					}
+					this.onInput();
 				})
 			},
-			getObjInsts() {
+			objectInstsGet() {
 				return Object.values(this.instruments).filter(this.instsToShow(false));
 			},
-			getSubjInsts() {
-				if (!this.objInst) {
+			subjectInstsGet() {
+				if (!this.value.object_instrument_id) {
 					return [];
 				}
 
-				let objInst = this.instruments[this.objInst];
-				let instKey = this.cType[_keys[this.orderInd][0]] + "_ids"
+				let objInst = this.instruments[this.value.object_instrument_id];
+				let instKey = this.getConditionKey(false);
 				let filter = this.instsToShow(true)
 
 				let ret_insts = [];
@@ -231,18 +233,22 @@
 
 				return ret_insts;
 			},
+			getConditionKey(forSubj) {
+				let conditionKey = this.cType[forSubj ? 'inst_key' : 'inverse_inst']
+				if (this.isSelf) {conditionKey += '_self'}
+				return conditionKey;
+			},
 			instsToShow(forSubj) {
-				let conditionKey = this.cType[_keys[this.orderInd][forSubj ? 1 : 0]]
-				let contactKey = conditionKey + "_ids";
-				let checkUser = forSubj ? this.subj : this.obj;
+				let conditionKey = this.getConditionKey(forSubj);
+				// let contactKey = conditionKey;
+				let checkUser = forSubj ? this._value.subject : this._value.object;
 				let vm = this;
 				return (inst) => {
-					if (inst[contactKey].length == 0) {return false;}
+					if (inst[conditionKey].length == 0) {return false;}
 					if (inst.conditions == null) {return true;}
 					let conditions = inst.conditions.all || inst.conditions[conditionKey];
 					if (conditions == undefined && vm.isSelf) {
-						conditionKey = conditionKey.replace("_self", "");
-						conditions = inst.conditions[conditionKey]
+						conditions = inst.conditions[conditionKey.replace("_self", "")]
 					}
 					if(conditions == undefined) {return true;}
 					for (var i = 0; i < conditions.length; i++) {
@@ -254,28 +260,28 @@
 				}
 			},
 			changeActorOrder(event, isInit) {
-				let oldOrder = this.actorOrder
+				// let oldOrder = this.actorOrder
 
-				if (isInit) {
-					let origContact = this.contacts[this.value.contact_type]
-					this.subj = origContact.subject || oldOrder[0]
-					this.obj = origContact.object || oldOrder[1]
-				}
+				// if (isInit) {
+				// 	let origContact = this.contacts[this.value.contact_type]
+				// 	// this.subj = origContact.subject || oldOrder[0]
+				// 	// this.obj = origContact.object || oldOrder[1]
+				// }
 
-				let newInd = this.subj == this.obj || this.subj == "self" ? 0 : 1;
-				if (newInd != this.orderInd) {
-					this.orderInd = newInd;
+				// let newInd = this.subj == this.obj || this.subj == "self" ? 0 : 1;
+				// if (newInd != this.orderInd) {
+				// 	this.orderInd = newInd;
 
-					if (!isInit) {
-						let oldSubjInst = this._value[oldOrder[0] + "_instrument_id"]
-						let oldObjInst = this._value[oldOrder[1] + "_instrument_id"]
+				// 	if (!isInit) {
+				// 		let oldSubjInst = this._value[oldOrder[0] + "_instrument_id"]
+				// 		let oldObjInst = this._value[oldOrder[1] + "_instrument_id"]
 
-						this._value[this.actorOrder[0] + "_instrument_id"] = oldSubjInst;
-						this._value[this.actorOrder[1] + "_instrument_id"] = oldObjInst;
+				// 		this._value[this.actorOrder[0] + "_instrument_id"] = oldSubjInst;
+				// 		this._value[this.actorOrder[1] + "_instrument_id"] = oldObjInst;
 
-						this.onInput()
-					}
-				}
+				// 		this.onInput()
+				// 	}
+				// }
 
 				this.updateContactType();
 				if (isInit) {
@@ -283,20 +289,20 @@
 				}
 			},
 			updateContactType() {
-				let res = this._value.contact_type.replace(/(_self|_partner|_by)/g, "");
-				let didMatch = false;
-				for (let i = 0; i < this.possibleContacts.length; i++) {
-					let con = this.possibleContacts[i];
-					if (con.key.match(res)) {
-						this._value.contact_type = con.key;
-						didMatch = true;
-						break;
-					}
-				}
+				// let res = this._value.contact_type.replace(/(_self|_partner|_by)/g, "");
+				// let didMatch = false;
+				// for (let i = 0; i < this.possibleContacts.length; i++) {
+				// 	let con = this.possibleContacts[i];
+				// 	if (con.key.match(res)) {
+				// 		this._value.contact_type = con.key;
+				// 		didMatch = true;
+				// 		break;
+				// 	}
+				// }
 
-				if (!didMatch) {
-					this._value.contact_type = this.possibleContacts[0].key;
-				}
+				// if (!didMatch) {
+				// 	this._value.contact_type = this.possibleContacts[0].key;
+				// }
 				this.onInput();
 				this.resetInsts()
 				return;

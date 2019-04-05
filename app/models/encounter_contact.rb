@@ -1,15 +1,17 @@
 class EncounterContact < Contact::BaseContact
   field :barriers, type: Array, default: []
   field :position, type: Integer, default: -> {encounter.present? ? encounter.contacts.length : 0}
+  field :object, type: Symbol, default: :partner
+  field :subject, type: Symbol, default: :user
 
   embedded_in :encounter
 
   validate :contact_must_be_possible
-  validates_uniqueness_of :position
-  validates_presence_of :position
+  # validates_uniqueness_of :position
+  validates_presence_of :position, :object, :subject
 
   def contact_must_be_possible
-  	unless self_instrument.present? && self_instrument.send(contact_type.inst_key).include?(partner_instrument)
+  	unless subject_instrument.present? && subject_instrument.send(contact_type.inst_key).include?(object_instrument_id)
   		errors.add(:contact_type, :invalid, {attribute: :contact_type})
   	end
   end

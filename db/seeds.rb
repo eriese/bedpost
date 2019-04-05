@@ -29,25 +29,38 @@ mouth = Contact::Instrument.create(name: :mouth)
 toy = Contact::Instrument.create(name: :toy)
 tongue = Contact::Instrument.create(name: :tongue)
 
-hand.can_touch << external_genitals << anus << mouth << hand << toy << tongue
-hand.can_penetrate << internal_genitals << anus << mouth << toy
-hand.can_touch_self << external_genitals << anus << mouth << hand << toy << tongue
-hand.can_penetrate_self << internal_genitals << anus << mouth << toy
-
-external_genitals.can_touch << anus << mouth << toy << external_genitals << tongue
-external_genitals.can_penetrate << internal_genitals << anus << mouth << toy
-external_genitals.can_touch_self << toy << mouth << tongue
-external_genitals.can_penetrate_self << anus << mouth << toy
-
-mouth.can_touch << anus << mouth << toy << tongue
-mouth.can_touch_self << toy
-mouth.can_suck << hand << external_genitals << anus << mouth << toy << tongue
-mouth.can_suck_self << hand << toy << external_genitals
-
-toy.can_touch << anus << toy << tongue
-toy.can_penetrate << external_genitals << internal_genitals << anus << mouth << toy
-toy.can_touch_self << anus << toy << tongue
-toy.can_penetrate_self << external_genitals << internal_genitals << anus << mouth << toy
-
-tongue.can_touch << tongue
-tongue.can_penetrate << external_genitals << internal_genitals << anus << mouth << toy
+[{
+	el: hand,
+	contacts: {
+		touched: [[external_genitals, true], [anus, true], [mouth, true], [hand, true], [toy, true], [tongue, true]],
+		penetrated: [[internal_genitals, true],[anus, true],[mouth, true],[toy, true]]
+	}
+},{
+	el: external_genitals,
+	contacts: {
+		touched: [[anus,false],[mouth,true],[toy,true],[external_genitals,false],[tongue,true]],
+		penetrated: [[internal_genitals,false], [anus,true], [mouth,true], [toy,true]]
+	}
+},{
+	el: mouth,
+	contacts: {
+		touched: [[anus,false], [mouth,false], [toy,true], [tongue,false]],
+		sucked: [[hand,true], [external_genitals,true], [anus,false], [mouth,false], [toy,true], [tongue,false]]
+	}
+},{
+	el: toy,
+	contacts: {
+		touched: [[anus,true], [toy,true], [tongue,true]],
+		penetrated: [[external_genitals,true], [internal_genitals,true], [anus,true], [mouth,true], [toy,true]]
+	}
+},{
+	el: tongue,
+	contacts: {
+		touched: [[tongue,false]],
+		penetrated: [[external_genitals,false], [internal_genitals,false], [anus,false], [mouth,false], [toy,false]]
+	}
+}].each do |inst|
+	inst[:contacts].each do |c, i_lst|
+		i_lst.each {|i| PossibleContact.new(contact_type: c, subject_instrument: inst[:el], object_instrument: i[0], self_possible: i[1]).upsert}
+	end
+end

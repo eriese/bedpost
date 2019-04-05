@@ -8,10 +8,26 @@ class Contact::Instrument
   field :conditions, type: Hash
   index({name: 1}, {unique: true})
 
+  has_many :as_subject, class_name: 'Contact::BaseContact', inverse_of: :subject_instrument
+  has_many :as_object, class_name: 'Contact::BaseContact', inverse_of: :object_instrument
+
 
   Contact::ContactType::TYPES.each do |k, c|
-    next if relations.has_key? c.inst_key
-  	has_and_belongs_to_many c.inst_key, class_name: "Contact::Instrument", inverse_of: c.inverse_inst
+    continue if respond_to?(c.inst_key) && respond_to?(c.inverse_inst)
+    o_where = {contact_type: c}
+    s_where = {contact_type: c, self_possible: true}
+    self_key = c.inst_key.to_s + "_self"
+
+    if c.inst_key == c.inverse_inst
+      define_method(c.inst_key) {(pluck_opposite(true, o_where) + pluck_opposite(false, o_where)).uniq}
+      define_method(self_key) {(pluck_opposite(true, s_where) + pluck_opposite(false, s_where)).uniq}
+    else
+      define_method(c.inst_key) {pluck_opposite(true, o_where)}
+      define_method(c.inverse_inst) {pluck_opposite(false, o_where)}
+
+      define_method(self_key) {pluck_opposite(true, s_where)}
+      define_method(c.inverse_inst.to_s + "_self") {pluck_opposite(false, s_where)}
+    end
   end
 
   def get_user_name_for(profile, &t_block)
@@ -35,13 +51,12 @@ class Contact::Instrument
 
   def self.hashed_for_partnership(user, partner)
     Hash[as_map.values.map do |i|
-      hsh = i.serializable_hash
+      hsh = i.serializable_hash(methods: Contact::ContactType.inst_methods)
       hsh[:self_name] = i.get_user_name_for(user)
       hsh[:partner_name] = i.get_user_name_for(partner)
       [i.id, hsh]
     end]
   end
-
 
   def self.by_name
     @@by_name ||= HashWithIndifferentAccess[all.map {|i| [i.name, i]}]
@@ -53,5 +68,16 @@ class Contact::Instrument
     else
       HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
     end
+  end
+
+  def self.display_fields
+    [:name]
+  end
+
+  private
+  def pluck_opposite(is_subject, conditions)
+    lst = is_subject ? as_subject : as_object
+    to_pluck = is_subject ? :object_instrument : :subject_instrument
+    lst.where(conditions).pluck(to_pluck)
   end
 end

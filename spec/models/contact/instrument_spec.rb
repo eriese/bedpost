@@ -14,17 +14,17 @@ RSpec.describe Contact::Instrument, type: :model do
   end
   context 'HABTM' do
   	after :each do
-  		cleanup(@inst1, @inst2)
+  		cleanup(@inst1, @inst2, @possible)
   	end
 
   	describe '#can_penetrate and #can_be_penetrated_by' do
   		it 'keeps corresponding roles organized' do
 	  		@inst1 = create(:contact_instrument, name: :hand)
 	  		@inst2 = create(:contact_instrument, name: :genitals)
+        @possible = create(:possible_contact, contact_type: :penetrated, subject_instrument: @inst1, object_instrument: @inst2)
 
-	  		@inst1.can_penetrate << @inst2
-	  		expect(@inst1.reload.can_penetrate).to include(@inst2)
-	  		expect(@inst2.can_be_penetrated_by).to include(@inst1)
+	  		expect(@inst1.reload.can_penetrate).to include(@inst2.id)
+	  		expect(@inst2.can_be_penetrated_by).to include(@inst1.id)
 	  	end
   	end
 
@@ -38,18 +38,18 @@ RSpec.describe Contact::Instrument, type: :model do
   		it 'creates a mutual relationship with the same name' do
   			@inst1 = create(:contact_instrument, name: "hand")
 	  		@inst2 = create(:contact_instrument, name: "genitals")
+        @possible = create(:possible_contact, contact_type: :touched, subject_instrument: @inst1, object_instrument: @inst2)
 
-	  		@inst1.can_touch << @inst2
-	  		expect(@inst1.reload.can_touch).to include(@inst2)
-	  		expect(@inst2.can_touch).to include(@inst1)
+	  		expect(@inst1.reload.can_touch).to include(@inst2.id)
+	  		expect(@inst2.can_touch).to include(@inst1.id)
 	  	end
 
 	  	it 'can connect to itself' do
 	  		@inst1 = create(:contact_instrument, name: "hand")
-	  		@inst1.can_touch << @inst1
-	  		expect(@inst1.reload.can_touch).to include(@inst1)
+        @possible = create(:possible_contact, contact_type: :touched, subject_instrument: @inst1, object_instrument: @inst1)
+	  		# @inst1.can_touch << @inst1
+	  		expect(@inst1.reload.can_touch).to include(@inst1.id)
         expect(@inst1.can_touch.size).to eq 1
-        expect(@inst1.can_touch_ids.size).to eq 1
 	  	end
 	  end
   end
