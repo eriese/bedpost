@@ -1,4 +1,5 @@
 class EncounterContact < Contact::BaseContact
+  include NormalizeBlankValues
   field :barriers, type: Array, default: []
   field :position, type: Integer, default: -> {encounter.present? ? encounter.contacts.length : 0}
   field :object, type: Symbol, default: :partner
@@ -30,6 +31,6 @@ class EncounterContact < Contact::BaseContact
   end
 
   def self.display_fields
-    [:self_instrument, :contact_type, :partner_instrument, :barriers]
+    [:subject_instrument, :contact_type, :object_instrument, :barriers]
   end
 end

@@ -143,8 +143,12 @@
 		},
 		mounted: function() {
 			this.numSubmitting = this.list.length;
-			this.updateIndices(0,0);
-			this.setFocus(this.lastIndex);
+			if (this.numSubmitting == 0 && !this.optional) {
+				this.addToList();
+			} else {
+				this.updateIndices(0,0);
+				this.setFocus(this.lastIndex);
+			}
 		}
 	}
 </script>

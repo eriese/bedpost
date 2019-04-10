@@ -17,9 +17,9 @@ class EncountersController < ApplicationController
 	def new
 		return unless set_partnership(encounters_who_path)
 		@partner = @partnership.partner
-		@encounter = @partnership.encounters.new(contacts: [EncounterContact.new])
+		@encounter = @partnership.encounters.new
 		gon_encounter_data
-		gon_client_validators(@encounter)
+		gon_client_validators(@encounter, serialize_opts: {include: [:contacts]})
 	end
 
 	def create
@@ -39,8 +39,8 @@ class EncountersController < ApplicationController
 	end
 
 	def update
-		binding.pry
-		if @encounter.update(e_params)
+		prms = e_params
+		if @encounter.update(prms)
 			redirect_to partnership_encounter_path(@partnership, @encounter)
 		else
 			respond_with_submission_error(@encounter.errors.messages, edit_partnership_encounter_path(@partnership, @encounter))
@@ -83,7 +83,7 @@ class EncountersController < ApplicationController
 		gon.encounter_data = {
 			partner: @partnership.partner.as_json_private,
 			contacts: Contact::ContactType::TYPES,
-			self: current_user.as_json_private,
+			user: current_user.as_json_private,
 			instruments: Contact::Instrument.hashed_for_partnership(current_user, @partnership.partner),
 			partnerPronoun: @partnership.partner.pronoun,
 			barriers: Contact::BarrierType::TYPES

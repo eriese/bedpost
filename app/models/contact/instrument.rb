@@ -8,8 +8,8 @@ class Contact::Instrument
   field :conditions, type: Hash
   index({name: 1}, {unique: true})
 
-  has_many :as_subject, class_name: 'Contact::BaseContact', inverse_of: :subject_instrument
-  has_many :as_object, class_name: 'Contact::BaseContact', inverse_of: :object_instrument
+  has_many :as_subject, class_name: 'PossibleContact', inverse_of: :subject_instrument, dependent: :restrict_with_error
+  has_many :as_object, class_name: 'PossibleContact', inverse_of: :object_instrument, dependent: :restrict_with_error
 
 
   Contact::ContactType::TYPES.each do |k, c|
@@ -52,7 +52,7 @@ class Contact::Instrument
   def self.hashed_for_partnership(user, partner)
     Hash[as_map.values.map do |i|
       hsh = i.serializable_hash(methods: Contact::ContactType.inst_methods)
-      hsh[:self_name] = i.get_user_name_for(user)
+      hsh[:user_name] = i.get_user_name_for(user)
       hsh[:partner_name] = i.get_user_name_for(partner)
       [i.id, hsh]
     end]

@@ -13,7 +13,7 @@ RSpec.describe Contact, type: :model do
 			end
 
 			after :all do
-				cleanup(@hand, @genitals, @possible)
+				cleanup(@possible, @hand, @genitals)
 			end
 
 			it 'does not allow impossible instruments' do

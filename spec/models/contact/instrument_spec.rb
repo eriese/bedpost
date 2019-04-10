@@ -14,7 +14,8 @@ RSpec.describe Contact::Instrument, type: :model do
   end
   context 'HABTM' do
   	after :each do
-  		cleanup(@inst1, @inst2, @possible)
+      # binding.pry
+  		cleanup(@possible, @inst1, @inst2)
   	end
 
   	describe '#can_penetrate and #can_be_penetrated_by' do
@@ -36,8 +37,8 @@ RSpec.describe Contact::Instrument, type: :model do
 
   	describe '#can_touch' do
   		it 'creates a mutual relationship with the same name' do
-  			@inst1 = create(:contact_instrument, name: "hand")
-	  		@inst2 = create(:contact_instrument, name: "genitals")
+  			@inst1 = create(:contact_instrument, name: :hand)
+	  		@inst2 = create(:contact_instrument, name: :genitals)
         @possible = create(:possible_contact, contact_type: :touched, subject_instrument: @inst1, object_instrument: @inst2)
 
 	  		expect(@inst1.reload.can_touch).to include(@inst2.id)
@@ -45,7 +46,7 @@ RSpec.describe Contact::Instrument, type: :model do
 	  	end
 
 	  	it 'can connect to itself' do
-	  		@inst1 = create(:contact_instrument, name: "hand")
+	  		@inst1 = create(:contact_instrument, name: :hand)
         @possible = create(:possible_contact, contact_type: :touched, subject_instrument: @inst1, object_instrument: @inst1)
 	  		# @inst1.can_touch << @inst1
 	  		expect(@inst1.reload.can_touch).to include(@inst1.id)

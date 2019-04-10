@@ -99,8 +99,8 @@ RSpec.describe EncountersController, type: :controller do
 
 		context 'with valid params' do
 			after :all do
-				Contact::Instrument.delete_all
 				PossibleContact.delete_all
+				Contact::Instrument.delete_all
 			end
 
 			it 'creates a new encounter on the partnership' do
@@ -153,7 +153,7 @@ RSpec.describe EncountersController, type: :controller do
 		end
 
 		after :each do
-			cleanup(@user)
+			cleanup(@user, @possible1, @inst1, @inst2)
 		end
 
 		context 'with valid params' do
@@ -161,11 +161,18 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				encounter = ship.encounters.first
 
+				@inst1 = create(:contact_instrument, name: :hand)
+	  		@inst2 = create(:contact_instrument, name: :genitals)
+        @possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @inst1, object_instrument: @inst2)
+
+        encounter.contacts << build(:encounter_contact, subject_instrument: @inst1, object_instrument: @inst2, subject: :user, object: :user);
+
 				new_notes = "Something else"
-				post :update, session: user_session, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes}}
+				post :update, session: user_session, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes, contacts_attributes: [{_id: encounter.contacts.first.id, object: :partner}]}}
 
 				encounter.reload
 				expect(encounter.notes).to eq new_notes
+				expect(encounter.contacts.first.object).to eq :partner
 				expect(ship.reload.encounters.first.notes).to eq new_notes
 			end
 		end

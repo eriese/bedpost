@@ -9,8 +9,8 @@ RSpec.describe Encounter, type: :model do
 
   		@hand = create(:contact_instrument, name: :hand)
   		@genitals = create(:contact_instrument, name: :genitals)
-  		@hand.can_touch << @genitals
-  		@hand.can_touch << @hand
+      @possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
+      @possible2 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
   	end
 
   	after :each do
@@ -18,16 +18,17 @@ RSpec.describe Encounter, type: :model do
   	end
 
   	after :all do
-  		cleanup(@user, @hand, @genitals)
+  		cleanup(@user, @possible1, @possible2, @hand, @genitals)
   	end
 
   	it 'accepts nested attributes' do
   		enc = create(:encounter, partnership: @ship)
   		expect(enc).to respond_to :contacts_attributes=
-  		result = enc.update_attributes(contacts_attributes: [
-  			attributes_for(:encounter_contact, partner_instrument: @hand, self_instrument: @hand),
-  			attributes_for(:encounter_contact, partner_instrument: @genitals, self_instrument: @hand)
-  		])
+      new_attrs = [
+        attributes_for(:encounter_contact, subject_instrument: @hand, object_instrument: @hand),
+        attributes_for(:encounter_contact, subject_instrument: @genitals, object_instrument: @hand)
+      ]
+  		result = enc.update_attributes(contacts_attributes: new_attrs)
 
   		expect(result).to be true
   		expect(enc.reload.contacts.size).to eq 2
