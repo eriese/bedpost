@@ -7,15 +7,15 @@ module DirtyTrackingEmbedded
 		# override the embedding methods to also make dirty-tracking
 		def embeds_many(name, options= {}, &block)
 			define_method "clear_unsaved_#{name}" do
-				new_list = send(name).select(&:persisted?)
-				send(name.to_s + "=", new_list)
+				send(name).each { |o| remove_child(o) unless o.persisted? }
 			end
 			super
 		end
 
 		def embeds_one(name, options={}, &block)
 			define_method "clear_unsaved_#{name}" do
-				send(name.to_s + "=", nil) unless send(name).persisted?
+				dirty = send(name)
+				remove_child(dirty) unless dirty.persisted?
 			end
 			super
 		end

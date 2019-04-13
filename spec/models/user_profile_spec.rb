@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UserProfile, type: :model do
 
-  it_should_behave_like 'an object that dirty-tracks its embedded relations', UserProfile.new
+  it_should_behave_like 'an object that dirty-tracks its embedded relations', UserProfile, :user_profile
 
   context 'fields' do
     describe "#uid" do

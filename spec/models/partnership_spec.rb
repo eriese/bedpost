@@ -5,6 +5,20 @@ RSpec.describe Partnership, type: :model do
 		cleanup(@user, @user2, @partner)
 	end
 
+	describe '#encounters' do
+		before :all do
+			@user = create(:user_profile)
+			@partner = create(:profile)
+			@obj = @user.partnerships.create(partner: @partner)
+		end
+
+		it_should_behave_like 'an object that dirty-tracks its embedded relations', Partnership, true
+
+		it 'responds to encounters' do
+			expect(@obj).to respond_to :encounters
+		end
+	end
+
 	describe '#partner' do
 		def create_ship(partner_alias)
 			@user = create(:user_profile)

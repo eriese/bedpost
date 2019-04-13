@@ -1,27 +1,39 @@
 require 'rails_helper'
 
-shared_examples_for 'an object that dirty-tracks its embedded relations' do |class_obj, serialization_defaults|
+shared_examples_for 'an object that dirty-tracks its embedded relations' do |clazz, class_obj, opts, skip_destroy_after, &block|
 
-	class_obj.embedded_relations.each do |name, rel|
-		it "should have a method clear_unsaved_#{name} that clears unpersisted #{name}" do
-			expect(class_obj).to respond_to "clear_unsaved_#{name}"
+	before :all do
+		if block
+			@obj = block.call
+		elsif class_obj != true
+			@obj = class_obj.is_a?(Symbol) ? create(class_obj, opts || {}) : class_obj
+		end
+	end
 
-			orig = class_obj.send(name)
+	after :all do
+		@obj.destroy unless skip_destroy_after
+	end
+
+	clazz.new.embedded_relations.each do |rel_name, rel|
+		it "should have a method clear_unsaved_#{rel_name} that clears unpersisted #{rel_name}" do
+			expect(@obj).to respond_to "clear_unsaved_#{rel_name}"
+
+			orig = @obj.send(rel_name)
 			if rel.is_a? Mongoid::Association::Embedded::EmbedsMany
 				orig_num = orig.select(&:persisted?).length
-				class_obj.send(name).new
-				class_obj.send("clear_unsaved_#{name}")
-				expect(class_obj.send(name).length).to eq orig_num
+				@obj.send(rel_name).new
+				@obj.send("clear_unsaved_#{rel_name}")
+				expect(@obj.send(rel_name).length).to eq orig_num
 			else
 				expected = orig.present? && orig.persisted? ? orig : nil
-				class_obj.send("#{name}=", rel.klass.new)
-				class_obj.send("clear_unsaved_#{name}")
-				expect(class_obj.send(name)).to eq expected
+				@obj.send("#{rel_name}=", rel.klass.new)
+				@obj.send("clear_unsaved_#{rel_name}")
+				expect(@obj.send(rel_name)).to eq expected
 			end
 		end
 	end
 
 	it 'responds to #embeds_many' do
-		expect(class_obj.class).to respond_to :embeds_many
+		expect(@obj.class).to respond_to :embeds_many
 	end
 end
