@@ -51,7 +51,8 @@ class Contact::Instrument
 
   def self.hashed_for_partnership(user, partner)
     Hash[as_map.values.map do |i|
-      hsh = i.serializable_hash(methods: Contact::ContactType.inst_methods)
+      hsh = i.serializable_hash
+      # (methods: Contact::ContactType.inst_methods)
       hsh[:user_name] = i.get_user_name_for(user)
       hsh[:partner_name] = i.get_user_name_for(partner)
       [i.id, hsh]

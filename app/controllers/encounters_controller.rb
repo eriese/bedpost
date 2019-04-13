@@ -85,6 +85,7 @@ class EncountersController < ApplicationController
 			contacts: Contact::ContactType::TYPES,
 			user: current_user.as_json_private,
 			instruments: Contact::Instrument.hashed_for_partnership(current_user, @partnership.partner),
+			possibles: PossibleContact.hashed_for_partnership,
 			partnerPronoun: @partnership.partner.pronoun,
 			barriers: Contact::BarrierType::TYPES
 		}

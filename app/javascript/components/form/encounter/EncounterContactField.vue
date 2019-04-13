@@ -167,25 +167,7 @@
 					return "";
 				}
 				return this.$root.t("contact.with", {pronoun: this.value.subject == "user" ? this.$root.t("my") : this.partnerPronoun.possessive})
-			},
-			// objInst: {
-			// 	get: function() {
-			// 		return this.value['object_instrument_id']
-			// 	},
-			// 	set: function(newVal) {
-			// 		this._value[this.actorOrder[1] + '_instrument_id'] = newVal;
-			// 		this.onInput();
-			// 	}
-			// },
-			// subjInst: {
-			// 	get: function() {
-			// 		return this.value[this.actorOrder[0] + '_instrument_id']
-			// 	},
-			// 	set: function(newVal) {
-			// 		this._value[this.actorOrder[0] + '_instrument_id'] = newVal;
-			// 		this.onInput();
-			// 	}
-			// }
+			}
 		},
 		methods: {
 			resetInsts(e) {
@@ -211,40 +193,66 @@
 				})
 			},
 			objectInstsGet() {
-				return Object.values(this.instruments).filter(this.instsToShow(false));
+				// return Object.values(this.instruments).filter(this.instsToShow(false));
+				return this.instsGet(false);
 			},
 			subjectInstsGet() {
 				if (!this.value.object_instrument_id) {
 					return [];
 				}
 
-				let objInst = this.instruments[this.value.object_instrument_id];
-				let instKey = this.getConditionKey(false);
-				let filter = this.instsToShow(true)
+				return this.instsGet(true);
 
-				let ret_insts = [];
-				let insts = objInst[instKey]
-				for (var i = 0; i < insts.length; i++) {
-					let inst = this.instruments[insts[i]];
-					if (filter(inst)) {
-						ret_insts.push(inst);
-					}
-				}
+				// let objInst = this.instruments[this.value.object_instrument_id];
+				// let instKey = this.getConditionKey(false);
+				// let filter = this.instsToShow(true)
 
-				return ret_insts;
+				// let ret_insts = [];
+				// let insts = objInst[instKey]
+				// for (var i = 0; i < insts.length; i++) {
+				// 	let inst = this.instruments[insts[i]];
+				// 	if (filter(inst)) {
+				// 		ret_insts.push(inst);
+				// 	}
+				// }
+
+				// return ret_insts;
 			},
 			getConditionKey(forSubj) {
 				let conditionKey = this.cType[forSubj ? 'inst_key' : 'inverse_inst']
 				if (this.isSelf) {conditionKey += '_self'}
 				return conditionKey;
 			},
+			instsGet(forSubj) {
+				let checkKey = forSubj ? 'subject_instrument_id' : 'object_instrument_id'
+				let filter = this.instsToShow(forSubj);
+
+				let possibles = this.possibles[this.value.contact_type]
+				let toShow = [];
+				let shown = {};
+				for (var i = 0; i < possibles.length; i++) {
+					let pos = possibles[i];
+					let instID = pos[checkKey];
+					if (shown[instID] || (forSubj && pos.object_instrument_id != this.value.object_instrument_id)) {
+						continue;
+					}
+
+					let inst = this.instruments[instID];
+					if (filter(inst)) {
+						toShow.push(inst)
+						shown[instID] = true;
+					}
+
+				}
+				return toShow;
+			},
 			instsToShow(forSubj) {
 				let conditionKey = this.getConditionKey(forSubj);
+
 				// let contactKey = conditionKey;
 				let checkUser = forSubj ? this._value.subject : this._value.object;
 				let vm = this;
 				return (inst) => {
-					if (inst[conditionKey].length == 0) {return false;}
 					if (inst.conditions == null) {return true;}
 					let conditions = inst.conditions.all || inst.conditions[conditionKey];
 					if (conditions == undefined && vm.isSelf) {

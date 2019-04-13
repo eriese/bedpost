@@ -57,7 +57,7 @@ RSpec.configure do |config|
 
   #clear the dummy user after all the tests are run
   config.after :suite do
-    count = Mongoid.default_client.collections.each {|c| puts "#{c.namespace}: #{c.count}"}
+    count = Mongoid.default_client.collections.each {|c| puts "#{c.namespace}: #{c.count}" if c.count > 0}
     UserProfileHelpers.clear_all_dummies
   end
 end
