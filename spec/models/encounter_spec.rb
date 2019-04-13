@@ -25,8 +25,8 @@ RSpec.describe Encounter, type: :model do
   		enc = create(:encounter, partnership: @ship)
   		expect(enc).to respond_to :contacts_attributes=
       new_attrs = [
-        attributes_for(:encounter_contact, subject_instrument: @hand, object_instrument: @hand),
-        attributes_for(:encounter_contact, subject_instrument: @genitals, object_instrument: @hand)
+        attributes_for(:encounter_contact, possible_contact: @possible1),
+        attributes_for(:encounter_contact, possible_contact: @possible2)
       ]
   		result = enc.update_attributes(contacts_attributes: new_attrs)
 

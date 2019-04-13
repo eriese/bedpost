@@ -2,6 +2,7 @@
 <div class="contact-field-container" :class="{blurred: !focused}">
 	<input type="hidden" :value="value._id" :name="baseName + '[_id]'" v-if="!value.newRecord">
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
+	<input type="hidden" :value="value.possible_contact_id" :name="baseName + '[possible_contact_id]'">
 	<div class="contact-field">
 		<div class="field-section narrow">
 			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'user'}, {label: partnerPronoun.subject, inputValue: 'partner'}]"
@@ -18,9 +19,9 @@
 				:key="c.key" v-bind="{
 					labelKey: 'contact.contact_type.' + c.t_key,
 					inputValue: c.key,
-					model: 'contact_type',
+					model: 'null',
 					baseName}"
-				v-model="_value.contact_type"
+				v-model="contact_type"
 				@change="resetInsts">
 			</hidden-radio>
 		</div>
@@ -40,10 +41,10 @@
 				v-bind="{
 					label: oi[value.object + '_name'],
 					inputValue: oi._id,
-					model: 'object_instrument_id',
+					model: null,
 					baseName
 				}"
-				v-model="_value.object_instrument_id"
+				v-model="object_instrument_id"
 				@change="resetInsts(true)">
 			</hidden-radio>
 		</div>
@@ -57,11 +58,11 @@
 					v-bind="{
 						label: si[value.subject + '_name'],
 						inputValue: si._id,
-						model: 'subject_instrument_id',
+						model: null,
 						baseName
 					}"
-					v-model="_value.subject_instrument_id"
-					@change="onInput">
+					v-model="subject_instrument_id"
+					@change="setContact">
 				</hidden-radio>
 			</div>
 		</div>
@@ -74,10 +75,10 @@
 				v-bind="{
 					barrier: bType,
 					contact: value,
-					partnerName,
-					selfName,
+					objectName,
+					subjectName,
 					baseName,
-					encounterData: {has_barrier: tracked.has_barrier, index: watchKey, instruments: instruments}
+					encounterData: {has_barrier: tracked.has_barrier, index: watchKey, instruments, object_instrument_id, subject_instrument_id}
 				}"
 				v-model="_value.barriers"
 				@change="updateBarriers">
@@ -92,19 +93,17 @@
 	import hiddenRadio from "./HiddenRadio.vue"
 	import encounterContactBarrier from './EncounterContactBarrier.vue'
 
-	const _orders = [["self", "partner"], ["partner", "self"]]
-	const _keys = [["inverse_inst", "inst_key"], ["inst_key", "inverse_inst"]]
-
 	export default {
 		data: function() {
 			return Object.assign({}, gon.encounter_data, {
-				// subj: null,
-				// obj: null,
 				orderInd: 0,
 				objectInsts: [],
 				subjectInsts: [],
 				focused: true,
-				onKeyChange: false
+				onKeyChange: false,
+				contact_type: "touched",
+				subject_instrument_id: null,
+				object_instrument_id: null,
 			})
 		},
 		mixins: [dynamicFieldListItem],
@@ -119,48 +118,22 @@
 			}
 		},
 		computed: {
-			possibleContacts: function() {
-				let contacts = []
-				let isSelf = this.isSelf
-				// let curContact = this._value.contact_type.replace(/_self/, "");
-				for(let k in this.contacts) {
-					let con = this.contacts[k]
-					if (!!con.key.match(/_self$/) == this.isSelf) {
-
-						// let can_contact = false
-						// for(let i in this.instruments) {
-						// 	if(this.instruments[i][con.inst_key + "_ids"].length) {
-						// 		can_contact = true;
-						// 		break;
-						// 	}
-						// }
-
-						// if (can_contact) {
-							contacts.push(con)
-						// }
-					}
-				}
-				return contacts
-			},
 			baseID: function() {
 				return this.baseName.replace(/[\[\]\.]/g, "_")
 			},
 			cType: function() {
-				return this.contacts[this.value.contact_type]
-			},
-			actorOrder: function() {
-				return _orders[this.orderInd];
+				return this.contacts[this.contact_type]
 			},
 			isSelf: function() {
 				return this._value.subject == this._value.object;
 			},
-			partnerName: function() {
-				let p_inst_id = this.value.partner_instrument_id
-				return p_inst_id ? this.instruments[p_inst_id].partner_name : ""
+			objectName: function() {
+				let p_inst_id = this.object_instrument_id
+				return p_inst_id ? this.instruments[p_inst_id][this.value.object + '_name'] : ""
 			},
-			selfName: function() {
-				let s_inst_id = this.value.self_instrument_id
-				return s_inst_id ? this.instruments[s_inst_id].self_name : ""
+			subjectName: function() {
+				let p_inst_id = this.subject_instrument_id
+				return p_inst_id ? this.instruments[p_inst_id][this.value.subject + '_name'] : ""
 			},
 			subjPossessive: function() {
 				if (this.subjectInsts.length <= 1) {
@@ -171,52 +144,40 @@
 		},
 		methods: {
 			resetInsts(e) {
-				if (e) {this.onInput();}
-
-				let vm = this;
-				this.$nextTick(() => {
-					let lst = e === true ? ['subject'] : ['object', 'subject']
-					for (var s = 0; s < lst.length; s++) {
-						let actorKey = lst[s];
-						let instId = actorKey + '_instrument_id'
-						let lstId = actorKey + "Insts";
-						let newList = vm[lstId + "Get"]();
-						if (newList.length == 1) {
-							vm._value[instId] = newList[0]._id
-						}
-						else if (newList.filter((i) => i._id == vm.value[instId]).length == 0) {
-							vm._value[instId] = null;
-						}
-						vm[lstId] = newList
+				let lst = e === true ? ['subject'] : ['object', 'subject']
+				for (var s = 0; s < lst.length; s++) {
+					let actorKey = lst[s];
+					let instId = actorKey + '_instrument_id'
+					let lstId = actorKey + "Insts";
+					let newList = this[lstId + "Get"]();
+					if (newList.length == 1) {
+						this[instId] = newList[0]._id
 					}
-					this.onInput();
-				})
+					else if (!newList.find((i) => i._id == this[instId])) {
+						this[instId] = null;
+					}
+					this[lstId] = newList
+				}
+				this.setContact();
+			},
+			setContact() {
+				if (this.contact_type && this.object_instrument_id && this.subject_instrument_id) {
+					let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
+					this._value.possible_contact_id = contact && contact._id;
+				} else {
+					this._value.possible_contact_id = null;
+				}
+				this.onInput();
 			},
 			objectInstsGet() {
-				// return Object.values(this.instruments).filter(this.instsToShow(false));
 				return this.instsGet(false);
 			},
 			subjectInstsGet() {
-				if (!this.value.object_instrument_id) {
+				if (!this.object_instrument_id) {
 					return [];
 				}
 
 				return this.instsGet(true);
-
-				// let objInst = this.instruments[this.value.object_instrument_id];
-				// let instKey = this.getConditionKey(false);
-				// let filter = this.instsToShow(true)
-
-				// let ret_insts = [];
-				// let insts = objInst[instKey]
-				// for (var i = 0; i < insts.length; i++) {
-				// 	let inst = this.instruments[insts[i]];
-				// 	if (filter(inst)) {
-				// 		ret_insts.push(inst);
-				// 	}
-				// }
-
-				// return ret_insts;
 			},
 			getConditionKey(forSubj) {
 				let conditionKey = this.cType[forSubj ? 'inst_key' : 'inverse_inst']
@@ -227,13 +188,13 @@
 				let checkKey = forSubj ? 'subject_instrument_id' : 'object_instrument_id'
 				let filter = this.instsToShow(forSubj);
 
-				let possibles = this.possibles[this.value.contact_type]
+				let possibles = this.possibles[this.contact_type]
 				let toShow = [];
 				let shown = {};
 				for (var i = 0; i < possibles.length; i++) {
 					let pos = possibles[i];
 					let instID = pos[checkKey];
-					if (shown[instID] || (forSubj && pos.object_instrument_id != this.value.object_instrument_id)) {
+					if (shown[instID] || (forSubj && pos.object_instrument_id != this.object_instrument_id)) {
 						continue;
 					}
 
@@ -248,8 +209,6 @@
 			},
 			instsToShow(forSubj) {
 				let conditionKey = this.getConditionKey(forSubj);
-
-				// let contactKey = conditionKey;
 				let checkUser = forSubj ? this._value.subject : this._value.object;
 				let vm = this;
 				return (inst) => {
@@ -268,49 +227,12 @@
 				}
 			},
 			changeActorOrder(event, isInit) {
-				// let oldOrder = this.actorOrder
-
-				// if (isInit) {
-				// 	let origContact = this.contacts[this.value.contact_type]
-				// 	// this.subj = origContact.subject || oldOrder[0]
-				// 	// this.obj = origContact.object || oldOrder[1]
-				// }
-
-				// let newInd = this.subj == this.obj || this.subj == "self" ? 0 : 1;
-				// if (newInd != this.orderInd) {
-				// 	this.orderInd = newInd;
-
-				// 	if (!isInit) {
-				// 		let oldSubjInst = this._value[oldOrder[0] + "_instrument_id"]
-				// 		let oldObjInst = this._value[oldOrder[1] + "_instrument_id"]
-
-				// 		this._value[this.actorOrder[0] + "_instrument_id"] = oldSubjInst;
-				// 		this._value[this.actorOrder[1] + "_instrument_id"] = oldObjInst;
-
-				// 		this.onInput()
-				// 	}
-				// }
-
 				this.updateContactType();
 				if (isInit) {
 					this.updateBarriers(this.value.barriers, true);
 				}
 			},
 			updateContactType() {
-				// let res = this._value.contact_type.replace(/(_self|_partner|_by)/g, "");
-				// let didMatch = false;
-				// for (let i = 0; i < this.possibleContacts.length; i++) {
-				// 	let con = this.possibleContacts[i];
-				// 	if (con.key.match(res)) {
-				// 		this._value.contact_type = con.key;
-				// 		didMatch = true;
-				// 		break;
-				// 	}
-				// }
-
-				// if (!didMatch) {
-				// 	this._value.contact_type = this.possibleContacts[0].key;
-				// }
 				this.onInput();
 				this.resetInsts()
 				return;
@@ -339,6 +261,18 @@
 			}
 		},
 		mounted: function() {
+			if (this.value.possible_contact_id) {
+				for (let p in this.possibles) {
+					let found = this.possibles[p].find((i) => i._id == this.value.possible_contact_id);
+
+					if (found) {
+						this.contact_type = found.contact_type
+						this.subject_instrument_id = found.subject_instrument_id
+						this.object_instrument_id = found.object_instrument_id
+						break;
+					}
+				}
+			}
 			this.changeActorOrder(null, true);
 		}
 	}

@@ -14,7 +14,7 @@ export default {
 			return this.model || (this.$vnode.data.model && this.$vnode.data.model.expression) || "";
 		},
 		inputName: function() {
-			return `${this.baseName}[${this.modelName}]`;
+			return this.model === null ? null : `${this.baseName}[${this.modelName}]`;
 		},
 		inputId: function() {
 			return `${this.baseName}${this.modelName}${this.inputValue || ""}`;

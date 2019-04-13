@@ -22,7 +22,7 @@
 
 	export default {
 		name: 'encounter_contact_barrier_input',
-		props: ['checked', 'barrier', 'partnerName', 'selfName', 'modelValue', 'contact', 'encounterData'],
+		props: ['checked', 'barrier', 'objectName', 'subjectName', 'modelValue', 'contact', 'encounterData'],
 		mixins: [customInput],
 		model: {
 			prop: 'modelValue',
@@ -33,7 +33,7 @@
 				return "barriers][";
 			},
 			labelText: function() {
-				return this.$root.t(this.barrier.key, {scope: "contact.barrier", partner_instrument: this.partnerName, self_instrument: this.selfName})
+				return this.$root.t(this.barrier.key, {scope: "contact.barrier", object_instrument: this.objectName, subject_instrument: this.subjectName})
 			},
 			inputValue: function() {
 				return this.barrier.key

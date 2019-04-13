@@ -20,8 +20,8 @@ en:
       none: no barrier
       fresh: a new barrier
       old: the same barrier
-      clean_partner: clean %{partner_instrument}
-      clean_self: clean %{self_instrument}
+      clean_object: clean %{object_instrument}
+      clean_subject: clean %{subject_instrument}
   encounters:
     new:
       contact:

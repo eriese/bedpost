@@ -112,8 +112,8 @@ RSpec.describe EncountersController, type: :controller do
 			it 'accepts nested parameters for contacts' do
 				ship = @user.partnerships.first
 				@hand = create(:contact_instrument, name: :hand)
-				create(:possible_contact, subject_instrument: @hand, object_instrument: @hand, contact_type: :touched)
-				contact_params = attributes_for(:encounter_contact, subject_instrument_id: @hand.id, object_instrument_id: @hand.id, barriers: ["fresh"])
+				pos = create(:possible_contact, subject_instrument: @hand, object_instrument: @hand, contact_type: :touched)
+				contact_params = attributes_for(:encounter_contact, possible_contact_id: pos.id, barriers: ["fresh"])
 				enc_params = attributes_for(:encounter, contacts_attributes: [contact_params])
 				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: enc_params}
 				ship.reload
@@ -165,7 +165,7 @@ RSpec.describe EncountersController, type: :controller do
 	  		@inst2 = create(:contact_instrument, name: :genitals)
         @possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @inst1, object_instrument: @inst2)
 
-        encounter.contacts << build(:encounter_contact, subject_instrument: @inst1, object_instrument: @inst2, subject: :user, object: :user);
+        encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
 
 				new_notes = "Something else"
 				post :update, session: user_session, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes, contacts_attributes: [{_id: encounter.contacts.first.id, object: :partner}]}}
