@@ -16,6 +16,13 @@ class EncounterContact
   def barrier_validations
   end
 
+  def is_self?
+    return subject == object
+  end
+
+  def has_barrier?
+    barriers.any? && barriers.include?(:old) || barriers.include?(:fresh)
+  end
 
   def self.display_fields
     [:possible_contact, :barriers, :subject, :object]

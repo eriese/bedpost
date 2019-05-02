@@ -1,9 +1,10 @@
 FactoryBot.define do
   factory :diagnosis do
-    name { "" }
+    name { :hpv }
+    _id {name}
     gestation_min { 1 }
     gestation_max { 1 }
-    barriers_effective { false }
-    category { "" }
+    in_fluids { true }
+    category { [:treatable] }
   end
 end

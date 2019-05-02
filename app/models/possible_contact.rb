@@ -1,4 +1,6 @@
 class PossibleContact < Contact::BaseContact
+	include StaticResource
+
 	field :self_possible, type: Boolean, default: false
 
 	belongs_to :subject_instrument, class_name: "Contact::Instrument", inverse_of: :as_subject
@@ -8,8 +10,6 @@ class PossibleContact < Contact::BaseContact
 	has_many :transmission_risks, class_name: 'Diagnosis::TransmissionRisk'
 
 	def self.hashed_for_partnership
-		query = PossibleContact.collection.aggregate([{"$group" => {"_id" => {"contact_type" => "$contact_type"}, "members" => {"$push"=> "$$ROOT"}}}])
-
-		Hash[query.map {|col| [col[:_id][:contact_type], col[:members]]}]
+		grouped_by(:contact_type)
 	end
 end
