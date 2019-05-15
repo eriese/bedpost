@@ -31,13 +31,12 @@ module ApplicationHelper
 				trans_proc = Proc.new {|k| k}
 			end
 
-
 			els = fields.map do |f|
 				val = model_or_hash.send(f);
-				if val.is_a?(Array) && (val[0].is_a?(ActiveModel::Model) || val[0].is_a?(Hash))
+				if val.class.respond_to?(:display_fields) || (val.is_a?(Array) && (val[0].is_a?(ActiveModel::Model) || val[0].is_a?(Hash)))
 					display_model(val)
 				else
-					display_val =  val.display || val
+					display_val = val.display || val
 					content_tag(:div, t(".field_html", {field: trans_proc.call(f), value: display_val}))
 				end
 			end

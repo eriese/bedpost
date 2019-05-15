@@ -12,6 +12,7 @@ class EncountersController < ApplicationController
 	end
 
 	def show
+		Encounter::RiskCalculator.new(@encounter).track
 	end
 
 	def new

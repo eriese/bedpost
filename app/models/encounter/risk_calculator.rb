@@ -18,9 +18,13 @@ class Encounter::RiskCalculator
   	@risk_map = Hash.new(0)
   end
 
-  def track_contact(contact, person = :user)
+  def track(person = :user)
+  	@person = person
+  	@encounter.contacts.each {|c| track_contact(c)}
+  end
+
+  def track_contact(contact)
   	@cur_contact = contact
-  	@cur_person = person
   	@cur_possible = @possibles[contact.possible_contact_id]
   	@cur_keys = contact_keys
   	# get where the fluids are before this contact began
@@ -47,6 +51,7 @@ class Encounter::RiskCalculator
 	  			lvl = risk.risk_to_person(contact, diag_fluids_present)
 	  		end
 
+	  		contact.risk = lvl
 	  		# apply the max risk
 	  		@risk_map[risk.diagnosis_id] = lvl if lvl > old_lvl
 	  	end
@@ -63,7 +68,7 @@ class Encounter::RiskCalculator
   		tracker = @fluid_map[person][inst_id]
   		if is_before
   			tracker.track_before(@cur_contact, is_subject)
-  			fluids_present = true if (@cur_contact.is_self? || @cur_person == person) && tracker.fluids_present?(@cur_contact)
+  			fluids_present = true if (@cur_contact.is_self? || @person == person) && tracker.fluids_present?(@cur_contact)
   		else
   			tracker.track_after(@cur_contact, other_inst)
   		end

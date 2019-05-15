@@ -2,6 +2,8 @@ class EncounterContact
   include Mongoid::Document
   include NormalizeBlankValues
 
+  attr_accessor :risk
+
   field :barriers, type: Array, default: []
   field :position, type: Integer, default: -> {encounter.present? ? encounter.contacts.length : 0}
   field :object, type: Symbol, default: :partner
@@ -25,6 +27,6 @@ class EncounterContact
   end
 
   def self.display_fields
-    [:possible_contact, :barriers, :subject, :object]
+    [:possible_contact, :barriers, :subject, :object, :risk]
   end
 end

@@ -12,11 +12,11 @@ RSpec.describe Diagnosis::TransmissionRisk, type: :model do
   	end
 
   	context 'if the person is both subject and object' do
-  		it 'returns the higher risk level' do
-  			risk = build(:diagnosis_transmission_risk, risk_to_subject: 1, risk_to_object: 3)
+  		it 'returns the risk to self' do
+  			risk = build(:diagnosis_transmission_risk, risk_to_subject: 1, risk_to_object: 3, risk_to_self: 2)
   			contact = build(:encounter_contact, subject: :user, object: :user)
 
-  			expect(risk.risk_to_person(contact, false)).to eq 3
+  			expect(risk.risk_to_person(contact, false)).to eq 2
   		end
   	end
 

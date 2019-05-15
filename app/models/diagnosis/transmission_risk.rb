@@ -10,6 +10,7 @@ class Diagnosis::TransmissionRisk
 
   field :risk_to_subject, type: Integer
   field :risk_to_object, type: Integer
+  field :risk_to_self, type: Integer, default: NO_RISK
   field :barriers_effective, type: Boolean, default: true
   belongs_to :possible_contact, class_name: 'PossibleContact'
   belongs_to :diagnosis, class_name: 'Diagnosis'
@@ -17,7 +18,7 @@ class Diagnosis::TransmissionRisk
   def risk_to_person(encounter_contact, bump_risk, person = :user)
   	lvl = NO_RISK
   	if encounter_contact.subject == person
-  		lvl = encounter_contact.is_self? ? [risk_to_subject, risk_to_object].max : risk_to_subject
+  		lvl = encounter_contact.is_self? ? risk_to_self : risk_to_subject
   	elsif encounter_contact.object == person
   		lvl = risk_to_object
   	end

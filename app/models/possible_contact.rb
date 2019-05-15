@@ -10,6 +10,10 @@ class PossibleContact < Contact::BaseContact
 	has_many :transmission_risks, class_name: 'Diagnosis::TransmissionRisk'
 
 	def self.hashed_for_partnership
-		grouped_by(:contact_type)
+		grouped_by(:contact_type, false)
+	end
+
+	def self.display_fields
+		[:subject_instrument_id, :contact_type, :object_instrument_id]
 	end
 end
