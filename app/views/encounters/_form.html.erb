@@ -2,7 +2,7 @@
 	<%= f.date_field :took_place %>
 	<%= f.text_area :notes %>
 	<%= f.check_box :fluids %>
-	<%= f.range_field :self_risk, in: 1..10 %>
+	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
 	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.encounter.contacts" base-name="<%= f.object_name %>[contacts_attributes]"></dynamic-field-list>
 	<%= f.submit %>
 <% end %>

@@ -2,8 +2,6 @@ class EncounterContact
   include Mongoid::Document
   include NormalizeBlankValues
 
-  attr_accessor :risk
-
   field :barriers, type: Array, default: []
   field :position, type: Integer, default: -> {encounter.present? ? encounter.contacts.length : 0}
   field :object, type: Symbol, default: :partner
@@ -14,6 +12,8 @@ class EncounterContact
 
   validates_uniqueness_of :position
   validates_presence_of :position, :object, :subject
+
+  attr_reader :risks
 
   def barrier_validations
   end
@@ -26,7 +26,12 @@ class EncounterContact
     barriers.any? && barriers.include?(:old) || barriers.include?(:fresh)
   end
 
+  def set_risk(diagnosis_id, lvl)
+    @risks ||= {}
+    @risks[diagnosis_id] = lvl
+  end
+
   def self.display_fields
-    [:possible_contact, :barriers, :subject, :object, :risk]
+    [:possible_contact, :barriers, :subject, :object, :risks]
   end
 end

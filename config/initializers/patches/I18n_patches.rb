@@ -29,8 +29,8 @@ I18n::Backend::Simple.send(:include, I18n::Backend::Cascade)
 
 ActionView::Base.class_eval do
   def translate(key, options = {})
-  	adl_opts = options[:cascade] == false ? {} : {cascade: { skip_root: false, allow_hash: false }}
-    super(key, options.merge(adl_opts))
+  	adl_opts = options[:cascade] == false ? {} : {cascade: { skip_root: false, allow_hash: options.has_key?(:count) }}
+    super(key, options.reverse_merge(adl_opts))
   end
   alias t translate
 end

@@ -34,6 +34,12 @@ main {
 	}
 }
 
+ul {
+	&.no-dots li {
+		list-style-type: none;
+	}
+}
+
 .with-js noscript {
 	display: none;
 }
@@ -67,12 +73,6 @@ main {
 }
 
 .clear {
-	clear: both;
-}
-
-.clear-fix:after {
-	content: "";
-	display: block;
 	clear: both;
 }
 
@@ -123,4 +123,133 @@ main {
 
 span.confirmation {
 	display: block;
+}
+
+.edit-button {
+	float: right;
+}
+
+.rounded-container {
+	border-radius: 10px;
+	padding: 10px;
+	margin-bottom: 10px;
+	.rounded-container-title {
+		text-align: center;
+		margin: 0 0 0.2em 0;
+	}
+}
+
+.dark-container {
+	@extend .rounded-container;
+	background-color: $color-purple-dark;
+	color: $color-off-white;
+
+	button.arrow-button.primary svg {
+		&:hover, &:focus {
+			stroke: $color-purple-light;
+		}
+	}
+}
+
+.light-container {
+	@extend .rounded-container;
+	background-color: $color-purple-light;
+	color: $color-off-white;
+
+	button.arrow-button.primary svg {
+		&:hover, &:focus {
+			stroke: $color-purple-dark;
+		}
+	}
+}
+
+.gray-container {
+	@extend .rounded-container;
+	background-color: $color-light-gray;
+
+	button.arrow-button.primary svg {
+		stroke: $color-purple-light;
+
+		&:hover, &:focus {
+			stroke: $color-purple-dark;
+		}
+	}
+}
+
+.dark-gray-container {
+	@extend .rounded-container;
+	background-color: $color-dark-gray;
+	color: $color-off-white;
+}
+
+.dark-border-container {
+	@extend .rounded-container;
+	border: 2px solid $color-purple-dark;
+}
+
+.light-border-container {
+	@extend .rounded-container;
+	border: 2px solid $color-purple-light;
+}
+
+.gray-border-container {
+	@extend .rounded-container;
+	border: 2px solid $color-light-gray;
+}
+
+.bubble-container {
+	height: 1.9em;
+	position: relative;
+	$arrow-size: 8px;
+
+	.bubble {
+		border-radius: 8px;
+		padding: 0px 5px;
+		display: inline-block;
+		border: 1px solid $color-green-dark;
+		color: $color-green-dark;
+		font-size: 0.8em;
+		position: absolute;
+		max-width: 80vw;
+
+		.arrow {
+			content: "";
+			position: absolute;
+			border: $arrow-size solid transparent;
+		}
+
+		&.bubble-below {
+			margin-top: $arrow-size;
+			.arrow{
+				top: $arrow-size * -2;
+				border-bottom-color: $color-green-dark;
+			}
+		}
+
+		&.bubble-above .arrow {
+			bottom: $arrow-size * -2;
+			border-top-color: $color-green-dark;
+		}
+
+		&.right-justify {
+			margin-left: $arrow-size * 2;
+			.arrow {
+				right: $arrow-size;
+			}
+		}
+
+		&.left-justify {
+			margin-left: $arrow-size * -2;
+			.arrow {
+				left: $arrow-size;
+			}
+		}
+
+		&.center-justify {
+			.arrow {
+				left: 50%;
+				margin-left: -$arrow-size;
+			}
+		}
+	}
 }

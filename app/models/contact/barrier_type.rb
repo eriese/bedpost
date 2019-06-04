@@ -16,12 +16,12 @@ class Contact::BarrierType
 		exclude: [:fresh, :clean_subject, :clean_object],
 		encounter_conditions: [:has_barrier, :index]
 	},{
-		key: :clean_object,
-		encounter_conditions: [:object_instrument_id],
-		exclude: [:old, :fresh]
-	},{
 		key: :clean_subject,
 		encounter_conditions: [:subject_instrument_id],
+		exclude: [:old, :fresh]
+	},{
+		key: :clean_object,
+		encounter_conditions: [:object_instrument_id],
 		exclude: [:old, :fresh]
 	}].map {|r| res = Contact::BarrierType.new(r); [res.key, res]}]
 end

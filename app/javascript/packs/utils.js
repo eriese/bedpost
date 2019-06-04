@@ -68,3 +68,28 @@ Array.move = function(arr, old_index, new_index) {
     arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
     return arr; // for testing purposes
 };
+
+Utils = {}
+
+Utils.getBoundingDocumentRect = function(elem, noOffset) {
+    let rect = elem.getBoundingClientRect();
+    let scrollX = noOffset ? 0 : window.pageXOffset;
+    let scrollY = noOffset ? 0 : window.pageYOffset;
+    let calc = {
+        scrollX: noOffset ? window.pageXOffset : scrollX,
+        scrollY: noOffset ? window.pageYOffset : scrollY,
+        x: rect.x + scrollX,
+        y: rect.y + scrollY,
+        width: rect.width || elem.offsetWidth,
+        height: rect.height || elem.offsetHeight,
+        top: rect.top + scrollY,
+        bottom: rect.bottom + scrollY,
+        left: rect.left + scrollX,
+        right: rect.right + scrollX,
+    }
+
+    calc.centerX = calc.left + calc.width / 2
+    calc.centerY = calc.top + calc.height / 2
+
+    return calc;
+}

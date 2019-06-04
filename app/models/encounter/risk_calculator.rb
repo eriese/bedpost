@@ -1,8 +1,10 @@
 class Encounter::RiskCalculator
 	attr_reader :risk_map
 
-  def initialize(encounter)
+  def initialize(encounter, force = false)
   	@encounter = encounter
+
+  	return unless force || @encounter.risks.nil?
 
   	#get resources
   	@diagnoses = Diagnosis.as_map
@@ -19,8 +21,10 @@ class Encounter::RiskCalculator
   end
 
   def track(person = :user)
+  	return unless @diagnoses.present?
   	@person = person
   	@encounter.contacts.each {|c| track_contact(c)}
+  	@encounter.set_risks @risk_map
   end
 
   def track_contact(contact)
@@ -30,7 +34,7 @@ class Encounter::RiskCalculator
   	# get where the fluids are before this contact began
   	fluids_present = get_fluids(true)
 
-  	unless contact.is_self? && contact.subject != person
+  	unless contact.is_self? && contact.subject != @person
 	  	@risks[@cur_possible._id].each do |risk|
 	  		#we're looking for the highest risk in the encounter, so if the risk is already listed as high, don't bother calculating
 	  		old_lvl = @risk_map[risk.diagnosis_id]
@@ -42,7 +46,7 @@ class Encounter::RiskCalculator
 	  		lvl = nil
 	  		# if it's user to user-self and there aren't fluids on the barrier or instrument, it's low risk
 	  		if contact.is_self? && !diag_fluids_present
-	  			lvl = Diagnosis::TransmissionRisk::NONE
+	  			lvl = Diagnosis::TransmissionRisk::NO_RISK
   			# if barriers are effective and a barrier was used and there are no fluids on the barrier or the infection isn't in fluids, it's low risk
 	  		elsif risk.barriers_effective && contact.has_barrier? && !diag_fluids_present
 	  			lvl = Diagnosis::TransmissionRisk::NEGLIGIBLE
@@ -51,7 +55,7 @@ class Encounter::RiskCalculator
 	  			lvl = risk.risk_to_person(contact, diag_fluids_present)
 	  		end
 
-	  		contact.risk = lvl
+	  		contact.set_risk(risk.diagnosis_id,lvl)
 	  		# apply the max risk
 	  		@risk_map[risk.diagnosis_id] = lvl if lvl > old_lvl
 	  	end

@@ -230,3 +230,68 @@ input[disabled=disabled] {
 		cursor: initial;
 	}
 }
+
+.double-prog-bar {
+	$progbar-height: 15px;
+	position: relative;
+	background-color: $color-light-gray;
+	height: $progbar-height;
+	border: 1px solid $color-green-dark;
+	width: 84%;
+	margin: 5px 8%;
+
+
+	.benchmark {
+		position: absolute;
+		height: $progbar-height + 10px;
+		width: 6px;
+		margin-left: -3px;
+		top: -5px;
+		background-color: darken($color-green-dark, 15);
+		z-index: 1;
+	}
+
+	.fill {
+		position: absolute;
+		height: 100%;
+		left: 0;
+		background-color: $color-green-light;
+	}
+}
+
+.bool-indicator {
+	height: $check-box-size;
+	width: $check-box-size;
+	color: $color-purple-dark;
+	position: relative;
+	margin-left: 5px;
+
+	&.false:before, &.false:after {
+	  position: absolute;
+	  left: 7px;
+	  content: '';
+	  height: $check-box-size;
+	  border-left: 3px solid;
+	}
+
+	&.false:before {
+	  transform: rotate(45deg);
+	}
+	&.false:after {
+	  transform: rotate(-45deg);
+	}
+
+	&.true:after {
+		content: "";
+		display: inline-block;
+		border-left: 3px solid;
+		border-bottom: 3px solid;
+		transform: rotate(-40deg);
+		position: absolute;
+
+		height: 6px;
+	    top: 3px;
+	    width: 12px;
+	    left: 1px;
+	}
+}

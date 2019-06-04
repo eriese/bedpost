@@ -12,6 +12,7 @@ en:
       sucked: sucked
       fisted: fisted
     with: with %{pronoun}
+    using: using
     instrument:
       mouth: mouth
       toy: toy
@@ -21,10 +22,16 @@ en:
       none: no barrier
       fresh: a new barrier
       old: the same barrier
-      clean_object: clean %{object_instrument}
-      clean_subject: clean %{subject_instrument}
+      clean_object: a clean %{object_instrument}
+      clean_subject: a clean %{subject_instrument}
   encounters:
-    new:
-      contact:
-        barriers:
-
+    show:
+      title_html: Encounter with %{partner}
+      took_place: "on %{took_place}"
+      contact_html: "<b>%{subject_pronoun}</b> %{contact_type} <b>%{object_possessive} %{object_instrument}</b> with <b>%{subject_possessive} %{subject_instrument}</b>"
+      contact_with_barriers_html: "<b>%{subject_pronoun}</b> %{contact_type} <b>%{object_possessive} %{object_instrument}</b> with <b>%{subject_possessive} %{subject_instrument}</b> <em>using %{barriers}</em>"
+      risk_line_html: "<span class='risk-level'>%{level}:</span> <span class='diagnoses'>%{diagnosis}</span>"
+      display_risks_drop_down_html: '"Hide Risks" : "Show Risks"'
+      display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
+      self_risk_html: You figured it was <b>%{risk_level}</b>
+      overall_risk_html: We calculated <b>%{risk_level}</b>

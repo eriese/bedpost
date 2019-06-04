@@ -87,11 +87,15 @@ button.arrow-button {
 	}
 
 	svg {
-		height: 30px;
+		height: 75%;
 		vertical-align: middle;
 		fill: transparent;
 		stroke: $button-text-color;
 		stroke-width: 15;
+	}
+
+	&:not(:disabled):hover svg {
+		stroke: $button-hover-color;
 	}
 
 	&.not-button {
@@ -113,6 +117,11 @@ button.arrow-button {
 			stroke: $button-text-color;
 		}
 	}
+
+	&.primary {
+		background-color: transparent;
+		border-color: transparent;
+	}
 }
 
 a.as-button {
@@ -125,4 +134,8 @@ a.as-button {
 	border-width: 1px;
 	text-align: center;
 	justify-content: center
+}
+
+.dropdown.title-as-button > .dropdown-title {
+	cursor: pointer;
 }

@@ -17,6 +17,10 @@ import dynamicFieldList from "@components/form/DynamicFieldList.vue";
 
 import encounterContactField from "@components/form/encounter/EncounterContactField.vue"
 
+import dropDown from "@components/display/DropDown.vue";
+import progBar from "@components/display/ProgBar.vue";
+import bubble from "@components/display/Bubble.vue"
+
 import arrowButton from "@components/functional/ArrowButton";
 
 
@@ -38,6 +42,10 @@ export default function addVue() {
 	Vue.component('form-step', formStep);
 	Vue.component('encounter-contact-field', encounterContactField);
 	Vue.component('dynamic-field-list', dynamicFieldList);
+
+	Vue.component('drop-down', dropDown);
+	Vue.component('prog-bar', progBar);
+	Vue.component('bubble', bubble);
 
 	Vue.component('arrow-button', arrowButton);
 

@@ -107,3 +107,114 @@
 		}
 	}
 }
+
+.encounter-show-container {
+	position: relative;
+	> span.dropdown-button {
+		position: absolute;
+		right: 8px;
+		top: 8px;
+
+		button.arrow-button {
+			height: 30px;
+			width: 30px;
+			line-height: 30px * .80;
+		}
+	}
+
+	>.dropdown-content {
+		padding: 0px 10px;
+	}
+}
+
+.contacts-show {
+	padding-inline-start: 0px;
+
+	.contact-show {
+		clear: both;
+		margin-bottom: 5px;
+
+		>.dropdown {
+			transition: all 0.3s ease-in-out;
+			border-bottom: 1px solid $color-green-dark;
+
+			&:after {
+				clear: both;
+				display: block;
+				content: "";
+			}
+
+			&.open {
+				background-color: $color-dark-gray;
+				color: $color-off-white;
+				padding: 5px;
+				border-radius: 3px;
+
+				.dropdown-title {
+					font-size: 1.2em;
+					margin-bottom: 0.5em;
+				}
+			}
+		}
+
+		.dropdown-title {
+			float: left;
+			width: 75%;
+		}
+		.dropdown-button {
+			float: right;
+			width: 20%;
+			text-align: right;
+		}
+
+		.dropdown-content {
+			clear: both;
+		}
+	}
+}
+
+.risks-show {
+	clear: both;
+	padding-inline-start: 0px;
+	list-style-type: none;
+
+	li {
+		@extend .clear-fix;
+		padding: 5px 10px;
+		font-size: 1.1em;
+
+		&:first-child {
+			border-top-right-radius: 5px;
+			border-top-left-radius: 5px;
+		}
+
+		&:last-child {
+			border-bottom-right-radius: 5px;
+			border-bottom-left-radius: 5px;
+		}
+		@for $i from 1 through 5 {
+			&.risk-#{$i - 1} {
+				background-color: nth($gradient-greens, $i);
+				@if $i < 4 {
+					color: black;
+				}
+				@else {
+					color: white;
+				}
+			}
+		}
+
+		.risk-level {
+			font-weight: bold;
+			font-size: 1.15em;
+			float: left;
+			width: 30%;
+		}
+
+		.diagnoses {
+			float: right;
+			width: 70%;
+			text-align: right;
+		}
+	}
+}

@@ -1,3 +1,33 @@
-<h2><%= t(".title_html", {partner: @partner.display}) %></h2>
-<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter) %>
-<%= display_model @encounter %>
+<h2 style="text-align: center;"><%= t(".title_html", {partner: @partner.name}) %></h2>
+<div class="desc" style="text-align: center;"><%= t(".took_place", {took_place: l(@encounter.took_place, format: :long)}) %></div>
+<div>
+	<bubble target="progbar-benchmark" position="centerX" add-class="bubble-above"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
+	<prog-bar :benchmark="<%= @encounter.self_risk %>" :max="<%= Diagnosis::TransmissionRisk::HIGH %>" :progress="<%= @encounter.overall_risk %>"></prog-bar>
+	<bubble target="progbar-fill" position="right" add-class="bubble-below"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
+</div>
+<h3 class="centered-container">Let's break it down:</h3>
+
+
+<drop-down class="gray-container encounter-show-container" arrow-class="primary" :title-button="true" :start-open="true">
+	<h4 class="rounded-container-title light-purple-text" slot="title">
+		The Sex
+	</h4>
+	<div>
+		<p> <b>Notes:</b> <%= @encounter.notes %></p>
+		<%= display_contacts @encounter %>
+		<p><b>Additional fluid exchange: </b> <span class="bool-indicator <%= @encounter.fluids %>" aria-label="<%= @encounter.fluids %>"></span></p>
+	</div>
+</drop-down>
+<drop-down arrow-class="primary" :title-button="true" class="dark-gray-container encounter-show-container">
+	<h4 class="rounded-container-title" slot="title">The Overall Risks</h4>
+	<%= display_risks @encounter %>
+</drop-down>
+
+<drop-down class="dark-container encounter-show-container" arrow-class="primary" :title-button="true">
+	<h4 class="rounded-container-title" slot="title">Our Advice</h4>
+	<ul class="no-dots">
+		<li>Get tested!</li>
+	</ul>
+</drop-down>
+
+<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>

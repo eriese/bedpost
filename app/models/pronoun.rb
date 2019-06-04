@@ -1,5 +1,6 @@
 class Pronoun
   include Mongoid::Document
+  include StaticResource
 
   field :subject
   field :object

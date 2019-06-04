@@ -37,6 +37,10 @@ class Profile
     as_json({only: [:name, :pronoun_id], methods: [:anus_name, :external_name, :internal_name, :can_penetrate]})
   end
 
+  def name_possessive
+    I18n.t(:name_possessive, {name: name})
+  end
+
   def self.add_partnered_to(profile_id, partner_profile)
     prof = find(profile_id).add_partnered_to(partner_profile)
   end

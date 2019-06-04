@@ -57,6 +57,7 @@ en:
   show_password: show password
   hide_password: hide password
   join_delimeter: ', '
+  and_delimeter: ' and '
   no_script: "You don't have javascript enabled. We've tried to make the site as usable as possible for you, but some stuff might not work as well."
   next: Next
   previous: Previous
@@ -66,6 +67,9 @@ en:
   field_html: "<b>%{field}</b>: %{value}"
   I: I
   my: my
+  you: you
+  your: your
+  name_possessive: "%{name}'s"
   nav:
     dashboard: "Dashboard"
     user_profile_edit: "Edit Profile"

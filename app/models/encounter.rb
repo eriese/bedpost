@@ -10,9 +10,19 @@ class Encounter
   embeds_many :contacts, class_name: 'EncounterContact', order: :position.asc
   accepts_nested_attributes_for :contacts, allow_destroy: true
 
-  validates :self_risk, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10}
+  validates :self_risk, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: Diagnosis::TransmissionRisk::NO_RISK, less_than_or_equal_to: Diagnosis::TransmissionRisk::HIGH}
+
+  attr_reader :risks
+
+  def set_risks(risk_map)
+    @risks = risk_map
+  end
+
+  def overall_risk
+    @risks.values.max
+  end
 
   def self.display_fields
-  	[:took_place, :fluids, :self_risk, :notes, :contacts]
+  	[:fluids, :self_risk, :notes]
   end
 end
