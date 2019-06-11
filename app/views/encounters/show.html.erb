@@ -8,12 +8,14 @@
 <h3 class="centered-container">Let's break it down:</h3>
 
 
-<drop-down class="gray-container encounter-show-container" arrow-class="primary" :title-button="true" :start-open="true">
+<drop-down class="gray-container encounter-show-container" arrow-class="primary" :title-button="true">
 	<h4 class="rounded-container-title light-purple-text" slot="title">
 		The Sex
 	</h4>
 	<div>
-		<p> <b>Notes:</b> <%= @encounter.notes %></p>
+		<% if @encounter.notes.present? %>
+			<p> <b>Notes:</b> <%= @encounter.notes %></p>
+		<% end %>
 		<%= display_contacts @encounter %>
 		<p><b>Additional fluid exchange: </b> <span class="bool-indicator <%= @encounter.fluids %>" aria-label="<%= @encounter.fluids %>"></span></p>
 	</div>
@@ -23,11 +25,10 @@
 	<%= display_risks @encounter %>
 </drop-down>
 
-<drop-down class="dark-container encounter-show-container" arrow-class="primary" :title-button="true">
+<drop-down class="dark-container encounter-show-container" arrow-class="primary" :title-button="true" :start-open="true">
 	<h4 class="rounded-container-title" slot="title">Our Advice</h4>
-	<ul class="no-dots">
-		<li>Get tested!</li>
-	</ul>
+	<p>Based on the risks in this encounter, we think this is a good testing schedule:</p>
+	<%= display_schedule @encounter %>
 </drop-down>
 
 <%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>

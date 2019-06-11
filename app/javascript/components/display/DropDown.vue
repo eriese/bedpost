@@ -40,10 +40,6 @@ export default {
 				TweenMax.from(this.$refs.content, 0.3, {height: "0px", overflow: "hidden", clearProps: "height,overflow"});
 				TweenMax.to(this.$el, 0.3, {className: "+=open"});
 			}
-			// this.isOpen = !this.isOpen;
-
-
-
 		}
 	},
 	mounted() {

@@ -49,12 +49,21 @@ module EncountersHelper
 			a << content_tag(:li, trans, {class: "risk-#{r}"})
 		end
 
-		# button_key = obj.is_a?(Encounter) ? ".display_overall_risks_drop_down_html" : ".display_risks_drop_down_html"
-
 		content_tag(:template, {:"v-slot:button" => "sc"}) do
 			content_tag(:button, "{{sc.isOpen ? #{t(".display_risks_drop_down_html")}}}", {type: "button", class: "not-button"}) unless obj.is_a?(Encounter)
 		end +
 		content_tag(:ul, safe_join(risks), {class: "risks-show"})
+	end
+
+	def display_schedule(encounter)
+		sched = encounter.schedule.keys.sort.each_with_object([]) do |d, ary|
+			ary << content_tag(:li, {class: "schedule-el"}) do
+				content_tag(:span, raw(l(d, format: :best_test_html)), {class: "schedule-date"}) +
+				content_tag(:span, encounter.schedule[d].map { |i| t(i, scope: "diagnosis.name_casual") }.join(t("join_delimeter")), {class: "schedule-diagnoses"})
+			end
+		end
+
+		content_tag(:ul, safe_join(sched), {class: "schedule-show"})
 	end
 
 	private

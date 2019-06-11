@@ -13,4 +13,8 @@ class Diagnosis
 
   has_many :transmission_risks, class_name: 'Diagnosis::TransmissionRisk'
 
+  def best_test
+    @best ||= gestation_min + gestation_max * 0.25
+  end
+
 end

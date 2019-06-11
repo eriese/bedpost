@@ -25,6 +25,16 @@ class Encounter::RiskCalculator
   	@person = person
   	@encounter.contacts.each {|c| track_contact(c)}
   	@encounter.set_risks @risk_map
+    @encounter.set_schedule schedule
+  end
+
+  def schedule
+    @risk_map.keys.each_with_object({}) do |(diag_id), h|
+      diag = @diagnoses[diag_id]
+      test_date = @encounter.took_place + diag.best_test.weeks
+      h[test_date] ||= []
+      h[test_date] << diag.name
+    end
   end
 
   def track_contact(contact)

@@ -247,7 +247,7 @@ input[disabled=disabled] {
 		width: 6px;
 		margin-left: -3px;
 		top: -5px;
-		background-color: darken($color-green-dark, 15);
+		background-color: $color-green-very-dark;
 		z-index: 1;
 	}
 

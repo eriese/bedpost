@@ -12,10 +12,14 @@ class Encounter
 
   validates :self_risk, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: Diagnosis::TransmissionRisk::NO_RISK, less_than_or_equal_to: Diagnosis::TransmissionRisk::HIGH}
 
-  attr_reader :risks
+  attr_reader :risks, :schedule
 
   def set_risks(risk_map)
     @risks = risk_map
+  end
+
+  def set_schedule(schedule)
+    @schedule = schedule
   end
 
   def overall_risk
