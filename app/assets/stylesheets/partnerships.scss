@@ -1,3 +1,46 @@
 // Place all the styles related to the partnerships controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "_defaults";
+
+.partnership-links {
+	list-style-type: none;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: stretch;
+	align-content: flex-start;
+	padding-inline-start: 0px;
+
+	.partnership-link {
+		flex-grow: 0;
+		width: 150px;
+		text-align: center;
+		height: 150px;
+		margin-bottom: 1em;
+
+		> a {
+			background-color: $color-green-dark;
+			color: $background-color;
+			border: 3px solid $color-green-dark;
+			border-radius: 50%;
+			height: 100%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			text-decoration: none;
+
+			&:hover, &:focus {
+				background-color: $background-color;
+				color: $color-green-dark;
+			}
+
+			.partner-name {
+				font-size: 2em;
+				margin-bottom: 0.15em;
+			}
+		}
+	}
+}

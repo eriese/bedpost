@@ -38,8 +38,12 @@ class Partnership
   	@uid = value if ptnr || self.partner_id.nil?
 	end
 
-  def display
-    "#{partner.name} #{nickname}"
+  def last_took_place(if_none = nil)
+    encounters.any? ? encounters.last.took_place : (if_none.nil? ? Date.today : if_none)
+  end
+
+  def display(partner_name = nil)
+    "#{partner_name || partner.name} #{nickname}"
   end
 
 	private

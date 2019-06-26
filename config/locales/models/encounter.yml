@@ -33,5 +33,5 @@ en:
       risk_line_html: "<span class='risk-level'>%{level}:</span> <span class='diagnoses'>%{diagnosis}</span>"
       display_risks_drop_down_html: '"Hide Risks" : "Show Risks"'
       display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
-      self_risk_html: You figured it was <b>%{risk_level}</b>
+      self_risk_html: You figured your risk was <b>%{risk_level}</b>
       overall_risk_html: We calculated <b>%{risk_level}</b>

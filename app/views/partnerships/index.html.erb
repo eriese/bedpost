@@ -1,4 +1,3 @@
-<% @partnerships.each do |partner| %>
-	<div><%= link_to partner.display, partner %></div>
-<% end %>
+<h1>Partnerships</h1>
+<%= display_partners %>
 <%= link_to t(".new_partnership"), who_path %>
