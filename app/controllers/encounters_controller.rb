@@ -3,12 +3,20 @@ class EncountersController < ApplicationController
 	before_action :set_encounter, except: [:index, :new, :create]
 
 	def index
-		p_param = params[:partnership_id]
-		if p_param
-			@encounters = current_user.partnerships.find(p_param).encounters if set_partnership
+		if params[:partnership_id]
+			@partnerships = [@partnership] if set_partnership
 		else
-			@encounters = current_user.encounters
+			@partnerships = current_user.partnerships
 		end
+
+		partner_names = Profile.find(current_user.partnerships.pluck(:partner_id)).pluck(:name)
+
+		partnership_map = {}
+		@partnerships.each_with_index do |p, i|
+			partnership_map[p.id] = p.as_json(only: [:_id, :partner_id], include: {encounters: {only: [:took_place, :notes, :_id]}}).merge({display: p.display(partner_names[i]), index: i})
+		end
+
+		gon.partnerships = partnership_map
 	end
 
 	def show

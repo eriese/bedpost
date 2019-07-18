@@ -1,15 +1,18 @@
 @import "_defaults";
 
-$input-background-color: $color-off-white;
-input, select, textarea {
+input, select, textarea, input[type=input], .vc-reset input {
 	background-color: $input-background-color;
 	border-color: $color-purple-dark;
 	border-style: solid;
 	border-radius: 2px;
 	border-width: 1px;
 	box-sizing: border-box;
+	color: inherit;
+	padding: 0px 5px;
+	line-height: 1;
+	box-shadow: none;
 
-	form.big & {
+	form.big &, form.single & {
 		padding: 5px 10px;
 	}
 
@@ -103,10 +106,9 @@ input[type=radio] {
 			/* WebKit gets its native focus styles.
 			 */
 			@media (-webkit-min-device-pixel-ratio:0) {
-			  .unreal-focus {
 			    outline-color: -webkit-focus-ring-color;
 			    outline-style: auto;
-			  }
+			    outline-width: 5px;
 			}
 		}
 

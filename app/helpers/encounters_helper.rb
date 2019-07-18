@@ -1,5 +1,30 @@
 module EncountersHelper
 
+	def encounters_as_attributes
+		attrs = if @partners.present?
+			@partners.each_with_index.map do |partner, i|
+				partner_name = partner.display(@partner_names[i])
+				partner_class = "partnership-#{i}"
+				partner.encounters.map { |enc| encounter_as_calendar_attr(enc, partner_class, partner_name) }
+			end.flatten
+		else
+			@encounters.map {|enc| encounter_as_calendar_attr(enc)}
+		end
+		attrs.to_json
+	end
+
+	def encounter_as_calendar_attr(encounter, dot_class=false, partner_name=nil)
+		{
+			dates: encounter.took_place.to_json,
+			highlight: dot_class == false,
+			dot: dot_class,
+			popover: {
+				label: partner_name.present? ? "#{partner_name}: #{encounter.notes}" : encounter.notes,
+				visibility: 'focus'
+			}
+		}
+	end
+
 	def display_contacts(encounter)
 		@t_block ||= method(:t)
 		@partner = encounter.partnership.partner

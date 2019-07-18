@@ -4,7 +4,7 @@
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
 	<input type="hidden" :value="value.possible_contact_id" :name="baseName + '[possible_contact_id]'">
 	<div class="contact-field">
-		<div class="field-section narrow">
+		<div class="field-section narrow" role="radiogroup">
 			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'user'}, {label: partnerPronoun.subject, inputValue: 'partner'}]"
 				:key="'subj' + i.inputValue"
 				v-bind="i"
@@ -14,7 +14,7 @@
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow">
+		<div class="field-section narrow" role="radiogroup">
 			<hidden-radio v-for="c in contacts"
 				:key="c.key" v-bind="{
 					labelKey: 'contact.contact_type.' + c.t_key,
@@ -25,7 +25,7 @@
 				@change="resetInsts">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow">
+		<div class="field-section narrow" role="radiogroup">
 			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, inputValue: 'partner'}, {labelKey: 'my', inputValue: 'user'}]"
 				:key="'obj' + i.inputValue"
 				v-bind="i"
@@ -35,7 +35,7 @@
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>
-		<div class="field-section">
+		<div class="field-section" role="radiogroup">
 			<hidden-radio v-for="oi in objectInsts"
 				:key="oi._id"
 				v-bind="{
@@ -48,23 +48,21 @@
 				@change="resetInsts(true)">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow">
+		<div class="field-section narrow" role="radiogroup">
 			<p v-html="subjPossessive"></p>
 		</div>
-		<div class="field-section">
-			<div v-show="subjectInsts.length > 1">
-				<hidden-radio v-for="si in subjectInsts"
-					:key="si._id"
-					v-bind="{
-						label: si[value.subject + '_name'],
-						inputValue: si._id,
-						model: null,
-						baseName
-					}"
-					v-model="subject_instrument_id"
-					@change="setContact">
-				</hidden-radio>
-			</div>
+		<div class="field-section" role="radiogroup">
+			<hidden-radio v-for="si in subjectInsts" v-show="subjectInsts.length > 1"
+				:key="si._id"
+				v-bind="{
+					label: si[value.subject + '_name'],
+					inputValue: si._id,
+					model: null,
+					baseName
+				}"
+				v-model="subject_instrument_id"
+				@change="setContact">
+			</hidden-radio>
 		</div>
 	</div>
 	<div class="contact-barriers clear-fix">

@@ -35,3 +35,8 @@ en:
       display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
       self_risk_html: You figured your risk was <b>%{risk_level}</b>
       overall_risk_html: We calculated <b>%{risk_level}</b>
+    index:
+      toggle_partner:
+        is_true: Hide encounters with %{partner_name}
+        is_false: Show encounters with %{partner_name}
+

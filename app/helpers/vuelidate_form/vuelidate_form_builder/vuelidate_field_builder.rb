@@ -18,6 +18,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		@object_name = @formBuilder.object_name
 
 		@options = options.extract! *FIELD_OPTIONS
+		@slot_scope = options.delete(:slot_scope) || SLOT_SCOPE
 		do_setup
 	end
 
@@ -97,7 +98,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		field_class.strip!
 
 		@field_args = @options.slice :"v-show"
-		@field_args[:"slot-scope"] = SLOT_SCOPE
+		@field_args[:"slot-scope"] = @slot_scope
 		@field_args[:"v-show"] = full_v_name(@options[:show_if]) if @options[:show_if]
 
 		@err_args = {
@@ -155,11 +156,11 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		set_external(:"aria-describedby", "#{desc}-tooltip-content", false) if desc.is_a? Symbol
 
 		if @validate
-			set_external(:":aria-invalid", "#{SLOT_SCOPE}.ariaInvalid")
+			set_external(:":aria-invalid", "#{@slot_scope}.ariaInvalid")
 			sub_error = @template.flash[:submission_error]
 			set_external(:"aria-invalid", @sub_error.present?)
 
-			set_external(:":aria-required", "#{SLOT_SCOPE}.ariaRequired")
+			set_external(:":aria-required", "#{@slot_scope}.ariaRequired")
 			set_external(:"aria-required", @required)
 			add_to_class(@external_options, "#{@attribute}-error", :"aria-describedby", true)
 		end
@@ -170,8 +171,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	def add_v_model
 		set_external(:"v-model", full_v_name)
 		set_external(:ref, @attribute)
-		set_external(:@blur, "#{SLOT_SCOPE}.onBlur")
-		set_external(:@focus, "#{SLOT_SCOPE}.onFocus")
+		set_external(:@blur, "#{@slot_scope}.onBlur")
+		set_external(:@focus, "#{@slot_scope}.onFocus")
 	end
 
 	def add_on(key, addition, add_to_front=false)

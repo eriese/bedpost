@@ -17,6 +17,13 @@ $gradient-purple-4: hsl($hue-purple, 25, 20);
 
 $gradient-purples: $gradient-purple-0 $gradient-purple-1 $gradient-purple-2 $gradient-purple-3 $gradient-purple-4;
 
+$gradient-purples-saturated:
+	scale-color($color-purple-very-dark, $lightness: 65%, $saturation: -65%),
+	scale-color($color-purple-very-dark, $lightness: 50%, $saturation: -50%),
+	scale-color($color-purple-very-dark, $lightness: 35%, $saturation: -35%),
+	scale-color($color-purple-very-dark, $lightness: 20%, $saturation: -20%),
+	$color-purple-very-dark;
+
 $hue-green: 180;
 $color-green-dark: hsl($hue-green,90,18);
 $color-green-light: hsl($hue-green,95,25);
@@ -30,6 +37,13 @@ $gradient-green-4: hsl($hue-green, 25, 20);
 
 $gradient-greens: $gradient-green-0 $gradient-green-1 $gradient-green-2 $gradient-green-3 $gradient-green-4;
 
+$gradient-greens-saturated:
+	scale-color($color-green-very-dark, $lightness: 65%, $saturation: -65%),
+	scale-color($color-green-very-dark, $lightness: 50%, $saturation: -50%),
+	scale-color($color-green-very-dark, $lightness: 35%, $saturation: -35%),
+	scale-color($color-green-very-dark, $lightness: 20%, $saturation: -20%),
+	$color-green-very-dark;
+
 $color-black: rgb(55,50,50);
 $color-off-white: #F3F3F3;
 $color-light-gray: hsl($hue-purple,5,85);
@@ -42,6 +56,11 @@ $button-hover-color: $color-purple-dark;
 $button-text-color: $background-color;
 $link-color: $color-green-light;
 $link-hover-color: $color-green-dark;
+
+// input defaults
+$input-background-color: $color-off-white;
+$input-border-color: $color-purple-dark;
+$input-border-color-focus: $color-purple-light;
 
 // sizing
 $nav-width: 250px;

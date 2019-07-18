@@ -8,6 +8,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field]).each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
+      alias_method :parent_#{selector}, :#{selector}
       def #{selector}(method, options = {})  # def text_field(method, options = {})
         field_builder(method, options).field do
         	super
@@ -44,7 +45,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def hidden_field(attribute, options={})
-  	options = options.merge({label: false, validate: false})
+  	options = options.merge({label: false, validate: false, field_class: "hidden-field"})
   	field_builder(attribute, options).field do
   		super
   	end
@@ -99,6 +100,19 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   	field_builder(attribute, args).field(after_method) do
   		super
   	end
+  end
+
+  def date_field(attribute, **options)
+    field_builder(attribute, options).field do
+      mdl = options.delete(:"v-model")
+      @template.content_tag(:"v-date-picker", "", {:"v-model" => mdl, :":popover" => "{visibility: 'focus'}"}) do
+        options[:"slot-scope"] = 'dp'
+        options[:"v-bind"] = 'dp.inputProps'
+        options[:"v-on"] = 'dp.inputEvents'
+        parent_text_field(attribute, options)
+      end <<
+      hidden_field(attribute)
+    end
   end
 
   def password_toggle

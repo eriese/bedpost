@@ -10,6 +10,9 @@ class Encounter
   embeds_many :contacts, class_name: 'EncounterContact', order: :position.asc
   accepts_nested_attributes_for :contacts, allow_destroy: true
 
+
+  validates_presence_of :took_place
+  validates_length_of :contacts, minimum: 1
   validates :self_risk, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: Diagnosis::TransmissionRisk::NO_RISK, less_than_or_equal_to: Diagnosis::TransmissionRisk::HIGH}
 
   attr_reader :risks, :schedule
@@ -23,7 +26,7 @@ class Encounter
   end
 
   def overall_risk
-    @risks.values.max
+    @risks.values.max || Diagnosis::TransmissionRisk::NO_RISK
   end
 
   def self.display_fields

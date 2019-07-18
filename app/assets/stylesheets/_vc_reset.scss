@@ -1,0 +1,88 @@
+@import "_defaults";
+
+////////////////////////////////////////
+// V-Calendar
+////////////////////////////////////////
+#page-container #page-container-inner {
+	.vc-container {
+		--dot-diameter: 7px;
+		--bar-height: 6px;
+	}
+
+	.vc-popover-content-wrapper .vc-popover-content {
+		border-color: $input-border-color-focus;
+	}
+
+	.vc-bg-white {
+		background-color: $input-background-color;
+	}
+
+	.vc-text-gray-900 {
+		color: $color-black;
+	}
+
+	.vc-text-gray-600 {
+		color: $color-green-light;
+		&.hover\:vc-opacity-50:hover {
+			opacity: 1;
+			color: $color-green-dark;
+		}
+	}
+
+	.vc-text-gray-500 {
+		color: $color-green-dark;
+	}
+
+	.vc-text-white {
+		color: $background-color;
+	}
+
+	.vc-bg-blue-600 {
+		background-color: $input-border-color-focus;
+	}
+
+	.vc-bg-gray-800, .vc-bg-gray-900 {
+		background-color: $color-dark-gray;
+	}
+
+	@mixin toggle-button($bg-color, $is-dark: true) {
+		background-color: $bg-color;
+		border: 2px solid $bg-color;
+
+		&[aria-pressed=false] {
+			background-color: $background-color;
+			color: $color-black;
+
+			@if $is-dark {
+				color: $bg-color;
+			}
+		}
+
+		@if $is-dark {
+			color: $background-color;
+		}
+		@else {
+			color: $color-black;
+		}
+	}
+
+
+	@for $i from 0 through 4 {
+		$partner-ind: $i * 2;
+		$color-ind: length($gradient-purples-saturated) - $i;
+
+		$is-dark: $color-ind > 2;
+
+		.vc-bg-partnership-#{$partner-ind}-600,
+		.vc-bg-partnership-#{$partner-ind}-500,
+		.partnership-#{$partner-ind} {
+			@include toggle-button(nth($gradient-greens-saturated, $color-ind), $is-dark);
+		}
+
+		.vc-bg-partnership-#{$partner-ind + 1}-600,
+		.vc-bg-partnership-#{$partner-ind + 1}-500,
+		.partnership-#{$partner-ind + 1} {
+			@include toggle-button(nth($gradient-purples-saturated, $color-ind), $is-dark);
+		}
+	}
+}

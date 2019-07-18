@@ -27,8 +27,11 @@ class EncounterContact
   end
 
   def set_risk(diagnosis_id, lvl)
+    risks[diagnosis_id] = lvl
+  end
+
+  def risks
     @risks ||= {}
-    @risks[diagnosis_id] = lvl
   end
 
   def self.display_fields

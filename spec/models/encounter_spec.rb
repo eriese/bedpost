@@ -22,7 +22,7 @@ RSpec.describe Encounter, type: :model do
   	end
 
   	it 'accepts nested attributes' do
-  		enc = create(:encounter, partnership: @ship)
+  		enc = build(:encounter, partnership: @ship)
   		expect(enc).to respond_to :contacts_attributes=
       new_attrs = [
         attributes_for(:encounter_contact, possible_contact: @possible1),

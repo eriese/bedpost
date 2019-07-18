@@ -3,6 +3,6 @@ FactoryBot.define do
     notes {"blah blah"}
     fluids {false}
     self_risk {3}
-    took_place {nil}
+    took_place {Date.new}
   end
 end

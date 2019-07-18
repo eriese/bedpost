@@ -1,6 +1,7 @@
-import TurbolinksAdapter from 'vue-turbolinks'
-import Vue from 'vue/dist/vue.esm'
+import Vue from 'vue/dist/vue.esm';
+import TurbolinksAdapter from 'vue-turbolinks';
 import Vuelidate from 'vuelidate';
+import VCalendar from 'v-calendar';
 
 import _root from "@components/Root";
 import nav from '@components/NavComponent'
@@ -23,6 +24,8 @@ import bubble from "@components/display/Bubble.vue"
 
 import arrowButton from "@components/functional/ArrowButton";
 
+import encounterCalendar from '@components/widgets/encounterCalendar/EncounterCalendar.vue';
+
 
 /**
  * Register all vue components and set up the Vue instance
@@ -31,6 +34,7 @@ import arrowButton from "@components/functional/ArrowButton";
 export default function addVue() {
 	Vue.use(TurbolinksAdapter);
 	Vue.use(Vuelidate);
+	Vue.use(VCalendar);
 	Vue.component('nav-component', nav);
 	Vue.component('vuelidate-form', vuelidateForm);
 	Vue.component('basic-stepper', basicStepper);
@@ -48,6 +52,8 @@ export default function addVue() {
 	Vue.component('bubble', bubble);
 
 	Vue.component('arrow-button', arrowButton);
+
+	Vue.component('encounter-calendar', encounterCalendar);
 
 	return new Vue(_root);
 }
