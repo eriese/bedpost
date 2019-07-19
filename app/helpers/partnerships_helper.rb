@@ -22,7 +22,7 @@ module PartnershipsHelper
 	def display_partner(ship, partner)
 		has_encounters = ship.encounters.any?
 		content = content_tag(:span, ship.display(partner.name), {class: "partner-name"})
-		content << content_tag(:span, t(".latest", {class: "last-encounter", took_place: l(ship.last_took_place(Date.new), format: :short)})) if ship.encounters.any?
+		content << content_tag(:span, t(".latest_html", {class: "last-encounter", took_place: l(ship.last_took_place(Date.new), format: :short)})) if ship.encounters.any?
 		content
 	end
 

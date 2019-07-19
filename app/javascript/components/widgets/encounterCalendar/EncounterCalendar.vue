@@ -1,7 +1,11 @@
 <template>
 	<div id="encounter-calendar">
-		<div>
-			<encounter-contact-toggle v-for="(partner,partnerID) in partnerships" :selected="selectedPartners" @click="togglePartner(partnerID)" :partner="partner" :key="partnerID"></encounter-contact-toggle>
+		<div v-if="partnerships.length > 1">
+			<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
+				<template v-slot:selected-option="opt">
+					<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
+				</template>
+			</v-select>
 		</div>
 		<v-calendar v-bind="calendarProps">
 			<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
@@ -29,9 +33,10 @@
 			encounterContactToggle
 		},
 		data() {
+			let partnerships = Object.values(gon.partnerships)
 			return {
-				partnerships: gon.partnerships,
-				selectedPartners: Object.keys(gon.partnerships)
+				partnerships,
+				selectedPartners: partnerships
 			}
 		},
 		computed: {
@@ -45,13 +50,23 @@
 					attributes: this.selectedEncounters
 				}
 			},
+			empty() {
+				return this.availablePartners.length == 0;
+			},
+			availablePartners() {
+				let all = this.partnerships.slice()
+				for (let i = 0; i < this.selectedPartners.length; i++) {
+					all.splice(all.indexOf(this.selectedPartners[i]), 1)
+				}
+				return all;
+			},
 			selectedEncounters() {
 				let highlight = this.selectedPartners.length == 1;
 				let ret = [];
 
 				for (let i = 0; i < this.selectedPartners.length; i++) {
-					let partnerID = this.selectedPartners[i];
-					let partner = this.partnerships[partnerID];
+					let partner = this.selectedPartners[i];
+					// let partner = this.partnerships[partnerID];
 					let partnerClass = `partnership-${partner.index}`
 
 					for (var j = 0; j < partner.encounters.length; j++) {
@@ -61,7 +76,7 @@
 							bar: highlight ? false : partnerClass,
 							highlight: highlight ? partnerClass : false,
 							customData: {
-									partnerID,
+									partnerID: partner._id,
 									encID: enc._id,
 									partnerName: partner.display,
 									notes: enc.notes

@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue.esm';
 import TurbolinksAdapter from 'vue-turbolinks';
 import Vuelidate from 'vuelidate';
 import VCalendar from 'v-calendar';
+import vSelect from 'vue-select';
 
 import _root from "@components/Root";
 import nav from '@components/NavComponent'
@@ -35,6 +36,9 @@ export default function addVue() {
 	Vue.use(TurbolinksAdapter);
 	Vue.use(Vuelidate);
 	Vue.use(VCalendar);
+
+	Vue.component('v-select', vSelect);
+
 	Vue.component('nav-component', nav);
 	Vue.component('vuelidate-form', vuelidateForm);
 	Vue.component('basic-stepper', basicStepper);

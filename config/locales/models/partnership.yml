@@ -23,7 +23,7 @@ en:
       level_field_html: "%{field}: %{level}"
     index:
       new_partnership: Add a partner
-      latest: "Most recent encounter: %{took_place}"
+      latest_html: "Most recent encounter:<br>%{took_place}"
     edit:
       partner_html: Edit partnership with <b>%{name}</b>
   partnership_whos:

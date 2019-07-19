@@ -9,11 +9,11 @@ class EncountersController < ApplicationController
 			@partnerships = current_user.partnerships
 		end
 
-		partner_names = Profile.find(current_user.partnerships.pluck(:partner_id)).pluck(:name)
+		@partner_names = Profile.find(@partnerships.pluck(:partner_id)).pluck(:name)
 
 		partnership_map = {}
 		@partnerships.each_with_index do |p, i|
-			partnership_map[p.id] = p.as_json(only: [:_id, :partner_id], include: {encounters: {only: [:took_place, :notes, :_id]}}).merge({display: p.display(partner_names[i]), index: i})
+			partnership_map[p.id] = p.as_json(only: [:_id, :partner_id], include: {encounters: {only: [:took_place, :notes, :_id]}}).merge({display: p.display(@partner_names[i]), index: i})
 		end
 
 		gon.partnerships = partnership_map

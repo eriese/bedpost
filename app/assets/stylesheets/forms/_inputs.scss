@@ -1,4 +1,5 @@
 @import "_defaults";
+@import "vue-select/src/scss/vue-select.scss";
 
 input, select, textarea, input[type=input], .vc-reset input {
 	background-color: $input-background-color;
