@@ -78,7 +78,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.4)
+    concurrent-ruby (1.1.5)
     crass (1.0.4)
     database_cleaner (1.7.0)
     debug_inspector (0.0.3)
@@ -129,7 +129,7 @@ GEM
     guard-webpack (0.1.2)
       guard (< 3.0)
     http_parser.rb (0.6.0)
-    i18n (1.5.3)
+    i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     i18n-js (3.2.1)
       i18n (>= 0.6.6)
@@ -163,7 +163,7 @@ GEM
     multi_json (1.13.1)
     nenv (0.3.0)
     nio4r (2.3.1)
-    nokogiri (1.10.1)
+    nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     normalize-rails (4.1.1)
     notiffany (0.1.1)
@@ -180,7 +180,7 @@ GEM
       pry (>= 0.9.11)
     public_suffix (3.0.3)
     puma (3.12.0)
-    rack (2.0.6)
+    rack (2.0.7)
     rack-livereload (0.3.17)
       rack
     rack-mini-profiler (1.0.2)
@@ -289,7 +289,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webpacker (3.5.5)
+    webpacker (4.0.7)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -342,7 +342,7 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
-  webpacker
+  webpacker (~> 4.x)
 
 RUBY VERSION
    ruby 2.5.1p57

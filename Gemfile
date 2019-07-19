@@ -13,7 +13,7 @@ gem 'normalize-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
+gem 'webpacker', '~> 4.x'
 # put javascript variables directly from the controller
 gem 'gon'
 # add internationalization to javascript

@@ -34,4 +34,6 @@ Rails.application.config.content_security_policy do |policy|
 	policy.script_src *[:self, :https, :unsafe_eval]
 
   policy.script_src *(policy.script_src + ['http://localhost:3035', 'ws://localhost:3035', 'http://localhost:35729']) if Rails.env.development?
+
+  policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
 end
