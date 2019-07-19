@@ -74,8 +74,8 @@ guard 'livereload', js_apple_webkit_extra_wait_time: 50 do
     css: :css,
     scss: :css,
     sass: :css,
-    js: :js,
-    coffee: :js,
+    # js: :js,
+    # coffee: :js,
     html: :html,
     png: :png,
     gif: :gif,
@@ -108,7 +108,7 @@ guard 'livereload', js_apple_webkit_extra_wait_time: 50 do
   watch(%r{config/locales/.+\.yml})
 end
 
-guard :webpack, config: './config/webpack/development.js'
+# guard :webpack, config: './config/webpack/development.js'
 
 # Add files and commands to this file, like the example:
 #   watch(%r{file/path}) { `command(s)` }
