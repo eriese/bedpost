@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div @mouseover="onFocus" @mouseleave="onBlur">
 		<slot v-bind="{onBlur, onFocus, vField, ariaRequired, ariaInvalid, focused}"></slot>
 		<div :id="field + '-error'" class="field-errors" aria-live="assertive" aria-atomic="true" v-if="errorMsg">
 			<div class="aria-only" v-html="ariaLabel"></div>
@@ -151,6 +151,8 @@
 			 */
 			onBlur() {
 				this.focused = false;
+				this.$emit("child-blur");
+				console.log("blur " + this.field);
 				if(this.vField) {
 					this.vField.$touch();
 				}
@@ -161,6 +163,8 @@
 			 */
 			onFocus() {
 				this.focused = true;
+				this.$emit("child-focus");
+				console.log("focus " + this.field)
 			},
 			/**
 			 * Is this field currently valid? Runs validation before returning

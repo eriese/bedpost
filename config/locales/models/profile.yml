@@ -8,13 +8,23 @@ en:
   helpers:
     label:
       profile:
-        show_internal: Do they also have internal genitals?
-        anus_name: What do they call their anus?
-        external_name: What do they call their external genitals?
-        internal_name: What do they call their internal genitals?
+        show_internal_group: Do they also have internal genitals?
+        show_internal:
+          'true': 'Yes'
+          'false': 'No'
+        anus_name: What's a sexy word they call their anus?
+        external_name: What a sexy word they call their external genitals?
+        internal_name: What a sexy word they call their internal genitals?
         pronoun: What pronouns do they use?
+        password_confirmation: Re-type your password
+        uid: Partnering ID
+        can_penetrate:
+          'true': 'Yes'
+          'false': 'No'
+        can_penetrate_group: Can their external genitals be used for penetration?
     tooltip:
       profile:
+        name: We really only care about their first name, but it's up to you.
         internal_name: Internal genitals are usually medically referred to using words like "vagina"
         external_name: External genitals are usually medically referred to using words like "penis", "vulva", and "clitoris"
   mongoid:

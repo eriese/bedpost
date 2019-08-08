@@ -45,7 +45,7 @@
 					maxDate: new Date(),
 					toDate: new Date(),
 					isExpanded: true,
-					isDark: true,
+					// isDark: true,
 					columns: this.$screens({md: 2, lg: 3}, 1),
 					attributes: this.selectedEncounters
 				}
@@ -73,7 +73,7 @@
 						let enc = partner.encounters[j]
 						ret.push({
 							dates: enc.took_place,
-							bar: highlight ? false : partnerClass,
+							dot: highlight ? false : partnerClass,
 							highlight: highlight ? partnerClass : false,
 							customData: {
 									partnerID: partner._id,

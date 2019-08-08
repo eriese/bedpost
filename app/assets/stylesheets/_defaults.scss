@@ -18,11 +18,11 @@ $gradient-purple-4: hsl($hue-purple, 25, 20);
 $gradient-purples: $gradient-purple-0 $gradient-purple-1 $gradient-purple-2 $gradient-purple-3 $gradient-purple-4;
 
 $gradient-purples-saturated:
-	scale-color($color-purple-very-dark, $lightness: 65%, $saturation: -65%),
-	scale-color($color-purple-very-dark, $lightness: 50%, $saturation: -50%),
-	scale-color($color-purple-very-dark, $lightness: 35%, $saturation: -35%),
-	scale-color($color-purple-very-dark, $lightness: 20%, $saturation: -20%),
-	$color-purple-very-dark;
+	scale-color($color-purple-dark, $lightness: 65%, $saturation: -65%),
+	scale-color($color-purple-dark, $lightness: 50%, $saturation: -50%),
+	scale-color($color-purple-dark, $lightness: 35%, $saturation: -35%),
+	scale-color($color-purple-dark, $lightness: 20%, $saturation: -20%),
+	$color-purple-dark;
 
 $hue-green: 180;
 $color-green-dark: hsl($hue-green,90,18);
@@ -38,11 +38,11 @@ $gradient-green-4: hsl($hue-green, 25, 20);
 $gradient-greens: $gradient-green-0 $gradient-green-1 $gradient-green-2 $gradient-green-3 $gradient-green-4;
 
 $gradient-greens-saturated:
-	scale-color($color-green-very-dark, $lightness: 65%, $saturation: -65%),
-	scale-color($color-green-very-dark, $lightness: 50%, $saturation: -50%),
-	scale-color($color-green-very-dark, $lightness: 35%, $saturation: -35%),
-	scale-color($color-green-very-dark, $lightness: 20%, $saturation: -20%),
-	$color-green-very-dark;
+	scale-color($color-green-dark, $lightness: 65%, $saturation: -65%),
+	scale-color($color-green-dark, $lightness: 50%, $saturation: -50%),
+	scale-color($color-green-dark, $lightness: 35%, $saturation: -35%),
+	scale-color($color-green-dark, $lightness: 20%, $saturation: -20%),
+	$color-green-dark;
 
 $color-black: rgb(55,50,50);
 $color-off-white: #F3F3F3;

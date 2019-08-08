@@ -51,6 +51,32 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   	end
   end
 
+  def toggle(attribute, options={}, toggle_options={})
+    add_to_class(options, "inline") unless args[:inline] == false
+    options[:label_last] = true unless options.has_key?(:label_last)
+    field_builder(attribute, options).field do
+      toggle_tag(attribute, toggle_options)
+    end
+  end
+
+  def get_toggle_options(attribute, options, value)
+    toggle_opt = options.delete :toggle
+    if toggle_opt
+      toggle_key = toggle_opt == true ? attribute : toggle_opt
+      options[:"v-model"] ||= "#{SLOT_SCOPE}.toggles['#{toggle_key}']"
+      start_val = options.has_key?(:checked) ? options[:checked] : @object.send(attribute)
+      add_toggle(toggle_key, start_val)
+
+      clear_opt = options[:clear]
+      if clear_opt
+        clear_attr = clear_opt == true ? attribute : clear_opt
+        clear_attr = full_v_name(clear_attr, false)
+        clear_val = value.is_a?(String) ? "'#{value}'" : value
+        options[:"@change"] = "#{SLOT_SCOPE}.toggle('#{toggle_key}', #{clear_val}, '#{clear_attr}')"
+      end
+    end
+  end
+
   def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
   	add_to_class(args, "inline", :field_class) unless args[:inline] == false
     args[:label_last] = true unless args.has_key? :label_last
@@ -65,13 +91,39 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   	end
   end
 
-  def toggle(attribute, options={}, toggle_options={})
-		add_to_class(options, "inline") unless args[:inline] == false
-		options[:label_last] = true unless options.has_key?(:label_last)
-		field_builder(attribute, options).field do
-			toggle_tag(attribute, toggle_options)
-		end
-	end
+  def radio_button(attribute, value, options={})
+    add_to_class(options, "inline", :field_class) unless options[:inline] == false
+    options[:label_last] = true unless options.has_key? :label_last
+    get_toggle_options(attribute, options, value)
+    field_builder(attribute, options).field do
+      super
+    end
+  end
+
+  def radio_group(attribute, buttons: [[:true], [:false]], options: {})
+    radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: "fe"}
+    radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
+    checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
+    btns =
+
+    group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup})
+    joiner = options.delete(:joiner)
+    builder = field_builder(attribute.to_s + "_group", group_opts)
+
+    btns = buttons.map do |btn|
+      val = btn[0]
+      opts = radio_opts.merge ({label: {value: val.to_s}, checked: checked_val == val, :":value" => val}).merge(btn[1] || {})
+      radio_button(attribute, val, opts)
+    end
+
+    builder.custom_field do
+      @template.content_tag(:div) do
+        builder.field_label <<
+        @template.content_tag(:div, @template.safe_join(btns, joiner), {class: "group-radios"})
+      end <<
+      builder.field_tooltip
+    end
+  end
 
   def select(attribute, choices = nil, options = {}, html_options=nil, &block)
 		html_options ||= options[:html] || {}

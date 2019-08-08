@@ -129,7 +129,24 @@ form {
 		}
 	}
 
+	&.toggler {
+		div[role=radiogroup] > div {
+			display: flex;
+			justify-content: space-between;
+
+			.group-radios {
+				flex-shrink: 0;
+			}
+		}
+
+		.field.inline {
+			margin: 0px;
+		}
+	}
+
 	&.inline {
+		display: inline-block;
+
 		label, input {
 			display: inline;
 			margin-right: 10px;

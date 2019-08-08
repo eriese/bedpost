@@ -13,9 +13,9 @@ en:
         user_profile:
           attributes:
             name:
-              blank: please tell us your name
+              blank: Please tell us your name
             email:
-              taken: an account with that email address already exists
+              taken: An account with that email address already exists
             external_name:
               blank: Please tell us what you call your external genitals.
             uid:
@@ -23,8 +23,13 @@ en:
   helpers:
     label:
       user_profile:
-        show_internal: Do you also have internal genitals?
-        anus_name: What do you call your anus?
-        external_name: What do you call your external genitals?
-        internal_name: What do you call your internal genitals?
+        show_internal_group: Do you also have internal genitals?
+        anus_name: What's a sexy word you call your anus?
+        external_name: What's a sexy word you call your external genitals?
+        internal_name: What's a sexy word you call your internal genitals?
         pronoun: What pronouns do you use?
+        can_penetrate_group: Can your external genitals be used for penetration?
+    tooltip:
+      user_profile:
+        name: We really only care about your first name, but it's up to you.
+        uid: Use this ID like a username to invite partners to connect to your profile.

@@ -70,6 +70,7 @@
 	@for $i from 0 through 4 {
 		$partner-ind: $i * 2;
 		$color-ind: length($gradient-purples-saturated) - $i;
+		$color-ind: $i + 1;
 
 		$is-dark: $color-ind > 2;
 

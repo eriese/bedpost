@@ -69,6 +69,8 @@ en:
   my: my
   you: you
   your: your
+  'yes': 'yes'
+  'no': 'no'
   name_possessive: "%{name}'s"
   nav:
     dashboard: "Dashboard"

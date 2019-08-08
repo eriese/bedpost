@@ -9,13 +9,13 @@ BedPost is a sex diary that helps users track their risk of sexually transmitted
 - ~~Account CRUD~~
 - ~~Account recovery~~
 - Session Management
- * ~~Log in/Log out~~
- * Remember me
- * Session timeout
+ - ~~Log in/Log out~~
+ - Remember me
+ - Session timeout
 - ~~Partnership CRUD~~
 - ~~Encounter CRUD~~
- * ~~Risk Evaluation on Encounter Review~~
- * ~~Testing Advice on Encounter Review~~
+ - ~~Risk Evaluation on Encounter Review~~
+ - ~~Testing Advice on Encounter Review~~
 - STI factsheets on all STIs mentioned
 - Guided first-time flow
 
@@ -24,8 +24,8 @@ BedPost is a sex diary that helps users track their risk of sexually transmitted
 - Partnership risk calculation as part of encounter risk calculation
 - Change password on edit profile page
 - Views:
- * Dashboard
- * Review Partnership
+ - Dashboard
+ - Review Partnership
 - Localization/copy
 - Testing
 - Data entry about diagnoses/risks
@@ -38,8 +38,8 @@ BedPost is a sex diary that helps users track their risk of sexually transmitted
 
 ### Future
 - input test results
- * eventually integrate with apps that receive results directly
- * eventually take existing diagnoses into account for risk calculation
+ - eventually integrate with apps that receive results directly
+ - eventually take existing diagnoses into account for risk calculation
 - invite partner to BedPost using profile you already set up for them
 - current risk overview page
 - user setting for preferred testing schedule

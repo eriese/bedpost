@@ -3,7 +3,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	include VuelidateFormUtils
 
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
-		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args]
+		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role]
 
 	SLOT_SCOPE = "fe"
 
@@ -17,34 +17,39 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		@object = formBuilder.object
 		@object_name = @formBuilder.object_name
 
-		@options = options.extract! *FIELD_OPTIONS
+		@options = (options.delete(:field_options) || {}).merge(options.extract! *FIELD_OPTIONS)
 		@slot_scope = options.delete(:slot_scope) || SLOT_SCOPE
+		@parent_scope = options.delete(:parent_scope)
 		do_setup
 	end
 
 	def field(after_method = nil, selector=:div, &block)
+		custom_field(after_method, selector) do
+			field_inner &block
+		end
+	end
+
+	def custom_field(after_method=nil, selector = :div, &block)
 		@after_method = after_method if after_method.present?
+
 		output = @formBuilder.step(@options[:is_step], @options.delete(:step_options) || {}) do
 			@template.content_tag(:"field-errors", @err_args) do
-				@template.content_tag(selector, @field_args) do
-					field_inner &block
-				end <<
+				@template.content_tag(selector, @field_args, &block) <<
 				no_js_error_field <<
 				call_after_method
 			end
 		end
 
 		@formBuilder.add_validation(@attribute) if @validate
-
 		output
 	end
 
-	private
+
 	def field_inner
 		output = ActiveSupport::SafeBuffer.new
 
-		output << field_tooltip
 		output << yield if block_given?
+		output << field_tooltip
 
 		@options[:label_last] ? output << field_label : output.prepend(field_label)
 	end
@@ -69,6 +74,24 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		""
 	end
 
+	def field_label
+		return "" unless @label_opts.present?
+		@formBuilder.label(@label_key, @label_opts)
+	end
+
+	def field_tooltip
+		tooltip_opt = @options[:tooltip]
+		if tooltip_opt.is_a? Hash
+			key = tooltip_opt.delete(:key) || true
+			html_opts = tooltip_opt
+		else
+			key = tooltip_opt
+			html_opts = {}
+		end
+		@formBuilder.tooltip(@attribute, key, html_opts) if key
+	end
+
+	private
 	def get_validation
 		validators = []
 
@@ -100,17 +123,18 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		@field_args = @options.slice :"v-show"
 		@field_args[:"slot-scope"] = @slot_scope
 		@field_args[:"v-show"] = full_v_name(@options[:show_if]) if @options[:show_if]
+		@field_args[:role] = @options[:field_role] if @options.has_key? :field_role
 
 		@err_args = {
 			field: @attribute,
 			:":v" => "#{VuelidateForm::VuelidateFormBuilder::SLOT_SCOPE}.$v",
 			:":submission-error" => "#{VuelidateForm::VuelidateFormBuilder::SLOT_SCOPE}.submissionError",
 			:class => field_class,
-			:":validate" => @validate
+			:":validate" => @validate,
 		}
 		@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
 
-		@err_args.merge({:"@input-blur"=> "stepSlot.fieldBlur", :"slot-scope"=> "stepSlot"}) if @options[:is_step]
+		@err_args.merge!({:"@input-blur"=> "stepSlot.fieldBlur", :"slot-scope"=> "stepSlot"}) if @options[:is_step]
 	end
 
 	def do_setup
@@ -118,38 +142,28 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		process_options
 		add_ARIA
 		add_v_model
+		process_label_options
 	end
 
-	def field_label
+	def process_label_options
 		label_opt = @options[:label]
-		return "" if label_opt == false
+		return if label_opt == false
 
-		opts_to_pass = {required: @required}
-		label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
+		@label_opts = {required: @required}
+		@label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
 			label_opt
 		elsif label_opt.is_a?(Hash)
-			opts_to_pass = label_opt
+			@label_opts = @label_opts.merge(label_opt)
 			label_opt.has_key?(:key) ? label_opt.delete(:key) : @attribute
 		else
 			@attribute
 		end
 
-		opts_to_pass[:id] ||= "#{label_key}-label"
-		@external_options[:label] = opts_to_pass[:id]
-		@formBuilder.label(label_key, opts_to_pass)
+		@label_opts[:id] ||= "#{@label_key}#{@label_opts[:value]}-label"
+		@field_args[:"aria-labeledby"] = @label_opts[:id] if @field_args.has_key? :role
+		@external_options[:label] = @label_opts[:id]
 	end
 
-	def field_tooltip
-		tooltip_opt = @options[:tooltip]
-		if tooltip_opt.is_a? Hash
-			key = tooltip_opt.delete(:key) || true
-			html_opts = tooltip_opt
-		else
-			key = tooltip_opt
-			html_opts = {}
-		end
-		@formBuilder.tooltip(@attribute, key, html_opts) if key
-	end
 
 	def add_ARIA
 		desc = @external_options[:"aria-describedby"]
@@ -173,6 +187,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		set_external(:ref, @attribute)
 		set_external(:@blur, "#{@slot_scope}.onBlur")
 		set_external(:@focus, "#{@slot_scope}.onFocus")
+
+		@err_args.merge!({:"@child-focus" => "#{@parent_scope}.onFocus", :"@child-blur" => "#{@parent_scope}.onBlur"}) if @parent_scope.present?
 	end
 
 	def add_on(key, addition, add_to_front=false)

@@ -2,7 +2,7 @@
 	<h2><%= t_action(".account_settings") %></h2>
 	<%= render  "profiles/fields", f: f, profile: @profile, show_name: @profile.pronoun.present? do |p| %>
 		<%= f.text_field :email unless @profile.pronoun.nil? %>
-		<%= f.text_field :uid, {tooltip: true} %>
+		<%= f.text_field(:uid, {tooltip: true}) unless @profile.pronoun.nil? %>
 	<% end %>
 	<%= f.submit %>
 <% end %>

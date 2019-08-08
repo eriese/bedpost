@@ -56,7 +56,7 @@ class ProfilesController < ApplicationController
   private
     def req_params
       ps = params.require(param_name).permit(profile_params)
-      ps[:internal_name] = nil if params[param_name][:show_internal] == "0" && @profile && @profile.internal_name.present?
+      ps[:internal_name] = nil if params[param_name][:show_internal] == "false" && @profile && @profile.internal_name.present?
       return ps
     end
     # Use callbacks to share common setup or constraints between actions.

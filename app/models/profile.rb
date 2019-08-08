@@ -8,7 +8,7 @@ class Profile
   field :a_n, as: :anus_name, type: String
   field :e_n, as: :external_name, type: String
   field :i_n, as: :internal_name, type: String
-  field :c_p, as: :can_penetrate, type: Boolean
+  field :c_p, as: :can_penetrate, type: Boolean, default: false
 
   belongs_to :pronoun, optional: true
   has_and_belongs_to_many :partnered_to, class_name: "Profile", inverse_of: nil, after_remove: :delete_if_empty
