@@ -1,9 +1,11 @@
 # Bedpost
-BedPost is a sex diary that helps users track their risk of sexually transmitted infection.
+BedPost is a sex diary that uses user-inputted data to help users track their risk of sexually transmitted infection.
 
 ## Roadmap
 
 ### MVP
+A user should be able to sign up for an account, add their partners, and add their sexual activity. A user should be able to connect to a partner's profile for the purpose of sharing language preferences. Upon adding a sexual encounter, a user should be able to assess the risk of that encounter and receive advice about next steps for acting upon that risk (e.g. learn more about STIs they risked transmission of, learn when to get tested).
+
 #### Functionality
 
 - ~~Account CRUD~~
@@ -20,12 +22,14 @@ BedPost is a sex diary that helps users track their risk of sexually transmitted
 - Guided first-time flow
 
 #### Still needed
-- Mailchimp integration
+- Tranasctional email integration
 - Partnership risk calculation as part of encounter risk calculation
 - Change password on edit profile page
 - Views:
  - Dashboard
  - Review Partnership
+- FAQ page
+- Landing page
 - Localization/copy
 - Testing
 - Data entry about diagnoses/risks
@@ -59,5 +63,6 @@ BedPost is a sex diary that helps users track their risk of sexually transmitted
 - prompt for re-evaluating relationship after time or frequent encounters
 - track pregnancy risk
 - multiple aliases in a single profile
+- put in a level of allowable risk to find out what types of sex are available within the risk category
 
 
