@@ -49,9 +49,9 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		output = ActiveSupport::SafeBuffer.new
 
 		output << yield if block_given?
-		output << field_tooltip
 
 		@options[:label_last] ? output << field_label : output.prepend(field_label)
+		output << field_tooltip
 	end
 
 	def no_js_error_field
@@ -154,7 +154,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			label_opt
 		elsif label_opt.is_a?(Hash)
 			@label_opts = @label_opts.merge(label_opt)
-			label_opt.has_key?(:key) ? label_opt.delete(:key) : @attribute
+			@label_opts.has_key?(:key) ? @label_opts.delete(:key) : @attribute
 		else
 			@attribute
 		end

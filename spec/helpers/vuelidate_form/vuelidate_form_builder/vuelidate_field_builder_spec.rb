@@ -458,19 +458,19 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			expect(result).to_not start_with("<label")
 		end
 
-		it 'uses the order label, tooltip, input by default' do
+		it 'uses the order label, input, tooltip by default' do
 			builder = stub_builder options: {tooltip: true}
 
 			result = builder.send(:field_inner) {"additional"}
-			expect(result).to match(/<label.+tooltip.+additional/)
+			expect(result).to match(/<label.+additional.+tooltip/)
 		end
 
-		it 'uses the order tooltip, input, label if the label_last option is true' do
+		it 'uses the order input, label, tooltip if the label_last option is true' do
 			builder = stub_builder options: {label_last: true, tooltip: true}
 
 			result = builder.send(:field_inner) {"additional"}
 
-			expect(result).to match(/.+tooltip.+additional.+label>/)
+			expect(result).to match(/additional.+label>.+tooltip/)
 		end
 	end
 

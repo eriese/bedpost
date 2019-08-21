@@ -3,9 +3,17 @@ require 'rails_helper'
 RSpec.describe EncountersController, type: :controller do
 	def make_user_and_encounters(num_encounters: 0, num_partners: 1)
 		@user = create(:user_profile)
+		@hand = create(:contact_instrument, name: :hand)
+		@mouth = create(:contact_instrument, name: :mouth)
+		@p1 = create(:possible_contact, contact_type: :penetrated, subject_instrument: @hand, object_instrument: @mouth)
+
 		num_partners.times do
 			ship = @user.partnerships.create(partner: create(:profile))
-			num_encounters.times { ship.encounters << build(:encounter)}
+			num_encounters.times do
+				enc = build(:encounter)
+				enc.contacts << build(:encounter_contact, possible_contact: @p1)
+				ship.encounters << enc
+			end
 		end
 	end
 
@@ -14,7 +22,7 @@ RSpec.describe EncountersController, type: :controller do
 	end
 
 	after :each do
-		cleanup @user
+		cleanup @user, @p1, @p2, @hand, @mouth
 	end
 
 	describe 'GET #index' do
@@ -27,19 +35,17 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				get :index, params: {partnership_id: ship.id}, session: user_session
 
-				expect(assigns(:encounters)).to eq ship.encounters
-				expect(assigns(:partnership)).to eq ship
-				expect(assigns(:encounters)).to_not eq @user.encounters
+				actual = assigns(:partnerships)
+				expect(actual.length).to eq 1
+				expect(actual[0]).to eq ship
 			end
 		end
 
 		context 'without partnership id' do
 			it 'shows the encounters for all partnerships the user has' do
-				ship = @user.partnerships.first
 				get :index, session: user_session
 
-				expect(assigns(:partnership)).to be_nil
-				expect(assigns(:encounters)).to eq @user.encounters
+				expect(assigns(:partnerships)).to eq @user.partnerships
 			end
 		end
 	end
@@ -98,34 +104,31 @@ RSpec.describe EncountersController, type: :controller do
 		end
 
 		context 'with valid params' do
-			after :all do
-				PossibleContact.delete_all
-				Contact::Instrument.delete_all
-			end
 
 			it 'creates a new encounter on the partnership' do
 				ship = @user.partnerships.first
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter)}
+				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
+				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params)}
 				expect(ship.reload.encounters.count).to eq 1
 			end
 
 			it 'accepts nested parameters for contacts' do
 				ship = @user.partnerships.first
-				@hand = create(:contact_instrument, name: :hand)
-				pos = create(:possible_contact, subject_instrument: @hand, object_instrument: @hand, contact_type: :touched)
-				contact_params = attributes_for(:encounter_contact, possible_contact_id: pos.id, barriers: ["fresh"])
-				enc_params = attributes_for(:encounter, contacts_attributes: [contact_params])
+				@p2 = create(:possible_contact, subject_instrument: @hand, object_instrument: @hand, contact_type: :touched)
+				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id), attributes_for(:encounter_contact, possible_contact_id: @p2.id, barriers: ["fresh"])]
+				enc_params = attributes_for(:encounter, contacts_attributes: contact_params)
 				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: enc_params}
 				ship.reload
 
 				expect(ship.encounters.count).to eq 1
-				expect(ship.encounters.first.contacts.count).to eq 1
-				expect(ship.encounters.first.contacts.first.barriers).to eq contact_params[:barriers]
+				expect(ship.encounters.first.contacts.count).to eq 2
+				expect(ship.encounters.first.contacts.last.barriers).to eq contact_params[1][:barriers]
 			end
 
 			it 'goes to the show page for that encounter' do
 				ship = @user.partnerships.first
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter)}
+				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
+				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params)}
 				expect(response).to redirect_to partnership_encounter_path(ship, ship.reload.encounters.last)
 			end
 		end
@@ -153,7 +156,7 @@ RSpec.describe EncountersController, type: :controller do
 		end
 
 		after :each do
-			cleanup(@user, @possible1, @inst1, @inst2)
+			cleanup(@user, @possible1, @genitals)
 		end
 
 		context 'with valid params' do
@@ -161,9 +164,8 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				encounter = ship.encounters.first
 
-				@inst1 = create(:contact_instrument, name: :hand)
-	  		@inst2 = create(:contact_instrument, name: :genitals)
-        @possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @inst1, object_instrument: @inst2)
+	  		@genitals = create(:contact_instrument, name: :genitals)
+        @possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
 
         encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
 
@@ -190,9 +192,6 @@ RSpec.describe EncountersController, type: :controller do
 	end
 
 	describe 'DELETE #destroy' do
-		after :each do
-			cleanup(@user)
-		end
 
 		before :each do
 			make_user_and_encounters num_encounters: 1
@@ -201,6 +200,7 @@ RSpec.describe EncountersController, type: :controller do
 		it 'destroys the requested encounter' do
 			ship = @user.partnerships.first
 			encounter = ship.encounters.first
+			expect(encounter).to_not be_nil
 
 			delete :destroy, params: {id: encounter.to_param, partnership_id: ship.to_param}, session: user_session
 			expect(ship.reload.encounters.count).to eq 0

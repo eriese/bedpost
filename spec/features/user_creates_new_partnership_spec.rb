@@ -45,7 +45,7 @@ feature "User creates new partnership", :slow do
 				if key.to_s == "pronoun_id"
 					select(val.display, from: input_id)
 				elsif val.is_a? Boolean
-					check(input_id) if val
+					choose("#{input_id}_#{val}")
 				else
 					fill_in input_id, with: val
 				end
