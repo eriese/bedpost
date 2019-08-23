@@ -83,6 +83,7 @@ GEM
     database_cleaner (1.7.0)
     debug_inspector (0.0.3)
     diff-lcs (1.3)
+    docile (1.3.2)
     dotenv (0.7.0)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
@@ -141,6 +142,7 @@ GEM
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
+    json (2.2.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -179,6 +181,9 @@ GEM
     pry-byebug (3.6.0)
       byebug (~> 10.0)
       pry (~> 0.10)
+    pry-remote (0.1.8)
+      pry (~> 0.9)
+      slop (~> 3.0)
     pry-stack_explorer (0.4.9.3)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
@@ -264,6 +269,12 @@ GEM
       childprocess (~> 0.5)
       rubyzip (~> 1.2, >= 1.2.2)
     shellany (0.0.1)
+    simplecov (0.16.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
+    slop (3.6.0)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-commands-rspec (1.0.4)
@@ -331,6 +342,7 @@ DEPENDENCIES
   normalize-rails
   pry
   pry-byebug
+  pry-remote
   pry-stack_explorer
   puma (~> 3.11)
   rack-livereload
@@ -340,6 +352,7 @@ DEPENDENCIES
   rspec-rails (~> 3.8)
   sassc-rails
   selenium-webdriver
+  simplecov
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
