@@ -29,4 +29,45 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
   	expected = [risk1.risk_to_subject, risk2.risk_to_subject, risk3.risk_to_subject].max
   	expect(calc.risk_map[risk1.diagnosis_id]).to eq expected
   end
+
+  describe '#track_contact' do
+    describe 'with an effective barrier' do
+      it 'returns negligible risk' do
+        contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1", barriers: [:fresh]})
+        encounter = build(:encounter)
+        encounter.contacts = [contact1]
+        calc = Encounter::RiskCalculator.new(encounter)
+
+        calc.instance_variable_get(:@risks)["contact1"][0].risk_to_subject = Diagnosis::TransmissionRisk::HIGH
+
+        calc.track_contact(contact1)
+
+        expect(contact1.risks[:hpv]).to eq Diagnosis::TransmissionRisk::NEGLIGIBLE
+      end
+    end
+  end
+
+  describe '#track' do
+    it 'tracks all contacts in an encounter' do
+      contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1"})
+      contact2 = build_stubbed(:encounter_contact, {possible_contact_id: "contact2"})
+      contact3 = build_stubbed(:encounter_contact, {possible_contact_id: "contact3"})
+
+      encounter = build(:encounter)
+      encounter.contacts = [contact1, contact2, contact3]
+      calc = Encounter::RiskCalculator.new(encounter)
+      calc.instance_variable_get(:@diagnoses)[:hpv]
+      calc.track
+
+      risks = calc.instance_variable_get(:@risks)
+
+      risk1 = risks[contact1.possible_contact_id][0]
+      risk2 = risks[contact2.possible_contact_id][0]
+      risk3 = risks[contact3.possible_contact_id][0]
+
+      expected = [risk1.risk_to_subject, risk2.risk_to_subject, risk3.risk_to_subject].max
+      expect(calc.risk_map[risk1.diagnosis_id]).to eq expected
+
+    end
+  end
 end

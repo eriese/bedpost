@@ -3,6 +3,7 @@ class Encounter::RiskCalculator
 
   def initialize(encounter, force = false)
   	@encounter = encounter
+    @person = :user
 
   	return unless force || @encounter.risks.nil?
 
@@ -22,7 +23,7 @@ class Encounter::RiskCalculator
 
   def track(person = nil)
   	return unless @diagnoses.present?
-  	@person = person || :user
+  	@person = person if person.present?
   	@encounter.contacts.each {|c| track_contact(c)}
   	@encounter.set_risks @risk_map
     @encounter.set_schedule schedule
@@ -48,7 +49,7 @@ class Encounter::RiskCalculator
 	  	@risks[@cur_possible._id].each do |risk|
 	  		#we're looking for the highest risk in the encounter, so if the risk is already listed as high, don't bother calculating
 	  		old_lvl = @risk_map[risk.diagnosis_id]
-	  		break if old_lvl == Diagnosis::TransmissionRisk::HIGH
+	  		# break if old_lvl == Diagnosis::TransmissionRisk::HIGH
 
 	  		diag = @diagnoses[risk.diagnosis_id]
 	  		diag_fluids_present = fluids_present && diag.in_fluids
@@ -82,7 +83,7 @@ class Encounter::RiskCalculator
   		tracker = @fluid_map[person][inst_id]
   		if is_before
   			tracker.track_before(@cur_contact, is_subject)
-  			fluids_present = true if (@cur_contact.is_self? || @person == person) && tracker.fluids_present?(@cur_contact)
+  			fluids_present = (@cur_contact.is_self? || @person == person) && tracker.fluids_present?(@cur_contact)
   		else
   			tracker.track_after(@cur_contact, other_inst)
   		end
