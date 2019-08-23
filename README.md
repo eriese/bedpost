@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/eriese/bedpost.svg?branch=rails-5)](https://travis-ci.org/eriese/bedpost)
+
 # Bedpost
 BedPost is a sex diary that uses user-inputted data to help users track their risk of sexually transmitted infection.
 
@@ -49,6 +51,8 @@ A user should be able to sign up for an account, add their partners, and add the
 - user setting for preferred testing schedule
 - calendar integration for testing reminders
 - text/email reminders for testing
+- expedited flows (e.g. skip inputting partner info)
+- advice about talking to partners about positive test results
 
 ### Far Future
 - expanded user-inputed dictionary for more customized, less medical feel
@@ -64,5 +68,6 @@ A user should be able to sign up for an account, add their partners, and add the
 - track pregnancy risk
 - multiple aliases in a single profile
 - put in a level of allowable risk to find out what types of sex are available within the risk category
+
 
 

@@ -10,7 +10,6 @@ cache:
 before_install:
   - gem install bundler
 install:
-  - gem install bundler
   - bundle install
   - nvm install node
   - node -v

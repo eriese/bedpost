@@ -51,7 +51,6 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
   config.include ActionView::Helpers::SanitizeHelper, type: :feature
 
-  # incude UserProfileHelpers
   include UserProfileHelpers
   include CleanupHelpers
 
