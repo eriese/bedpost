@@ -10,7 +10,6 @@
 				v-bind="i"
 				:base-name="baseName"
 				v-model="_value.subject"
-				model="subject"
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>
@@ -19,7 +18,6 @@
 				:key="c.key" v-bind="{
 					labelKey: 'contact.contact_type.' + c.t_key,
 					inputValue: c.key,
-					model: 'null',
 					baseName}"
 				v-model="contact_type"
 				@change="resetInsts">
@@ -31,7 +29,6 @@
 				v-bind="i"
 				:base-name="baseName"
 				v-model="_value.object"
-				model="object"
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>
@@ -41,14 +38,13 @@
 				v-bind="{
 					label: oi[value.object + '_name'],
 					inputValue: oi._id,
-					model: null,
 					baseName
 				}"
 				v-model="object_instrument_id"
 				@change="resetInsts(true)">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow" role="radiogroup">
+		<div class="field-section narrow">
 			<p v-html="subjPossessive"></p>
 		</div>
 		<div class="field-section" role="radiogroup">

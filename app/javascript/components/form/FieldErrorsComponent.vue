@@ -152,7 +152,6 @@
 			onBlur() {
 				this.focused = false;
 				this.$emit("child-blur");
-				console.log("blur " + this.field);
 				if(this.vField) {
 					this.vField.$touch();
 				}
@@ -164,7 +163,6 @@
 			onFocus() {
 				this.focused = true;
 				this.$emit("child-focus");
-				console.log("focus " + this.field)
 			},
 			/**
 			 * Is this field currently valid? Runs validation before returning
