@@ -12,8 +12,12 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 #
+#
+require 'simplecov'
+SimpleCov.start 'rails'
+
 #add custom matchers and helpers
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].sort.each {|f| require f}
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # add internationalization easily
