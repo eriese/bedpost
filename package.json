@@ -19,8 +19,48 @@
     "webpack": "^4.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^24.9.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "flow-bin": "^0.93.0",
+    "jest": "^24.9.0",
+    "vue-jest": "^3.0.4",
     "webpack-dev-server": "^3.7.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/app/javascript/tests"
+    ],
+    "verbose": true,
+    "testURL": "http://localhost",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/app/javascript"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1",
+      "^@components/(.*)$": "<rootDir>/app/javascript/components/$1",
+      "^@mixins/(.*)$": "<rootDir>/app/javascript/mixins/$1",
+      "^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,vue}"
+    ]
   }
 }
