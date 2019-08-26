@@ -20,10 +20,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-core": "^6.26.3",
     "babel-jest": "^24.9.0",
-    "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "flow-bin": "^0.93.0",
     "jest": "^24.9.0",
@@ -34,6 +34,39 @@
     "test": "jest"
   },
   "jest": {
+    "globals": {
+      "vue-jest": {
+        "babelConfig": {
+          "presets": [
+            [
+              "env",
+              {
+                "modules": false,
+                "targets": {
+                  "browsers": "> 1%",
+                  "uglify": true
+                },
+                "useBuiltIns": true
+              }
+            ]
+          ],
+          "env": {
+            "test": {
+              "presets": [
+                [
+                  "env",
+                  {
+                    "targets": {
+                      "node": "current"
+                    }
+                  }
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
     "roots": [
       "<rootDir>/app/javascript/tests"
     ],
@@ -55,8 +88,8 @@
       "^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1"
     },
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
     },
     "collectCoverage": true,
     "collectCoverageFrom": [
