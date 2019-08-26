@@ -1,3 +1,3 @@
-web: bundle exec rails s -p 3000
+web: bundle exec rails s -p $PORT
 webpacker: ruby ./bin/webpack-dev-server
 guard: bundle exec guard
