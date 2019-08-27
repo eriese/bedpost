@@ -31,7 +31,7 @@
     "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll"
   },
   "jest": {
     "globals": {
@@ -68,7 +68,7 @@
       }
     },
     "roots": [
-      "<rootDir>/app/javascript/tests"
+      "<rootDir>/app"
     ],
     "verbose": true,
     "testURL": "http://localhost",
@@ -77,10 +77,6 @@
       "json",
       "vue"
     ],
-    "moduleDirectories": [
-      "node_modules",
-      "<rootDir>/app/javascript"
-    ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/$1",
       "^@components/(.*)$": "<rootDir>/app/javascript/components/$1",
@@ -88,12 +84,14 @@
       "^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1"
     },
     "transform": {
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.js$": "babel-jest"
     },
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.{js,vue}"
+      "app/javascript/**/*.{js,vue}",
+      "!app/javascript/docs/**",
+      "!**/node_modules/**"
     ]
   }
 }
