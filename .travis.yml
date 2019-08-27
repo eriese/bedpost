@@ -14,10 +14,12 @@ install:
   - nvm install node
   - node -v
   - npm i -g yarn
+  - npm i -g codecov
   - yarn
 script:
   - bundle exec rails webpacker:compile
   - bundle exec rake
   - yarn jest
+  - codecov
 services:
   - mongodb
