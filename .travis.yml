@@ -18,6 +18,6 @@ install:
 script:
   - bundle exec rails webpacker:compile
   - bundle exec rake
-  - yarn test
+  - yarn jest
 services:
   - mongodb
