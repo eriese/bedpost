@@ -44,9 +44,10 @@ class Encounter::RiskCalculator
   	@cur_keys = contact_keys
   	# get where the fluids are before this contact began
   	fluids_present = get_fluids(true)
+    contact_risks = @risks[@cur_possible.id]
 
-  	unless (contact.is_self? && contact.subject != @person) || !@risks.has_key?(@cur_possible._id)
-	  	@risks[@cur_possible._id].each do |risk|
+  	unless !contact_risks || (contact.is_self? && contact.subject != @person)
+	  	contact_risks.each do |risk|
 	  		#we're looking for the highest risk in the encounter, so if the risk is already listed as high, don't bother calculating
 	  		old_lvl = @risk_map[risk.diagnosis_id]
 	  		# break if old_lvl == Diagnosis::TransmissionRisk::HIGH
