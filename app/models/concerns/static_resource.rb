@@ -3,17 +3,32 @@ module StaticResource
 
 	class_methods do
 		def as_map
-			if Rails.env.production?
-				@@as_map ||= HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
+			unless Rails.env.development?
+				@as_map ||= hash_all
 			else
-				HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
+				hash_all
 			end
 		end
 
 		def grouped_by(column, instantiate=true)
+			@grouped_queries ||= {}
+
 			query = collection.aggregate([{"$group" => {"_id" => "$#{column}", "members" => {"$push"=> "$$ROOT"}}}])
 
-			Hash[query.map {|col| [col[:_id], instantiate ? col[:members].map { |m| new(m) } : col[:members] ]}]
+			if Rails.env.development?
+				hash_query(query)
+			else
+				@grouped_queries["#{column}_#{instantiate}"] ||= hash_query(query)
+			end
+		end
+
+		private
+		def hash_query(query)
+			HashWithIndifferentAccess[query.map {|col| [col[:_id], instantiate ? col[:members].map { |m| new(m) } : col[:members] ]}]
+		end
+
+		def hash_all
+			HashWithIndifferentAccess[all.map {|i| [i.id, i]}]
 		end
 	end
 end
