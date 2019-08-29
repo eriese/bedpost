@@ -136,16 +136,31 @@ RSpec.describe EncountersController, type: :controller do
 		context 'with invalid params' do
 			it 'reloads the page' do
 				ship = @user.partnerships.first
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, self_risk: 11)}
+				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
+				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
 
 				expect(response).to redirect_to new_partnership_encounter_path(ship)
 			end
 
 			it 'does not leave an unsaved partnership on the user' do
 				ship = @user.partnerships.first
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, self_risk: 11)}
+				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
+				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
 
 				expect(controller.current_user.partnerships.first.encounters.length).to eq 0
+			end
+
+			it 'errors gacefully with bad contacts params' do
+				ship = @user.partnerships.first
+				contact_params = [attributes_for(:encounter_contact, possible_contact_id: nil)]
+				encounter_params = attributes_for(:encounter, contacts_attributes: contact_params)
+				post :create, format: :json, session: user_session, params: {partnership_id: ship.to_param, encounter: encounter_params}
+
+				actual = response.body
+				expected_enc = Encounter.new(encounter_params)
+				expected_enc.valid?
+				expected = expected_enc.errors.messages.to_json
+				expect(actual).to eq expected.to_s
 			end
 		end
 	end

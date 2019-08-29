@@ -45,7 +45,7 @@ class Encounter::RiskCalculator
   	# get where the fluids are before this contact began
   	fluids_present = get_fluids(true)
 
-  	unless (contact.is_self? && contact.subject != @person) || @risks[@cur_possible._id].empty?
+  	unless (contact.is_self? && contact.subject != @person) || !@risks.has_key?(@cur_possible._id)
 	  	@risks[@cur_possible._id].each do |risk|
 	  		#we're looking for the highest risk in the encounter, so if the risk is already listed as high, don't bother calculating
 	  		old_lvl = @risk_map[risk.diagnosis_id]
