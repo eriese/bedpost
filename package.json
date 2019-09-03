@@ -7,7 +7,9 @@
     "css-loader": "^3.1.0",
     "flickity": "^2.2.0",
     "gsap": "^2.0.2",
+    "i18n-js": "^3.3.0",
     "jsdoc-vuejs": "^2.4.1",
+    "json-loader": "^0.5.7",
     "rails-erb-loader": "^5.5.2",
     "v-calendar": "^1.0.0-beta.16",
     "vue": "^2.6.10",
@@ -16,7 +18,8 @@
     "vue-template-compiler": "^2.6.10",
     "vue-turbolinks": "^2.0.4",
     "vuelidate": "^0.7.4",
-    "webpack": "^4.0.0"
+    "webpack": "^4.0.0",
+    "yaml-loader": "^0.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -32,7 +35,7 @@
     "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest --watch --collectCoverage=false"
   },
   "jest": {
     "globals": {
@@ -82,7 +85,8 @@
       "^@/(.*)$": "<rootDir>/$1",
       "^@components/(.*)$": "<rootDir>/app/javascript/components/$1",
       "^@mixins/(.*)$": "<rootDir>/app/javascript/mixins/$1",
-      "^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1"
+      "^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1",
+      "^@plugins/(.*)$": "<rootDir>/app/javascript/plugins/$1"
     },
     "transform": {
       ".*\\.(vue)$": "vue-jest",

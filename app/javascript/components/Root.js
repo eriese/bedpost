@@ -20,7 +20,9 @@ export default {
 		return {confirmations}
 	},
 	methods: {
-		t: (scope, options) => I18n.t(scope, options),
+		t: function(scope, options) {
+			return this.$_t(scope, options)
+		},
 		/**
 		 * Is the element's purpose confirmed?
 		 * @param  {String}  message the confirmation message to show

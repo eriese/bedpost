@@ -12,5 +12,4 @@
 //
 
 //= require turbolinks
-//= require i18n
-//= require_tree .
+// = require_tree .

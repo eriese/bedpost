@@ -7,6 +7,10 @@ const path = require('path')
 
 environment.loaders.append('vue', vue)
 environment.plugins.append('VueLoaderPlugin', new VueLoaderPlugin());
+environment.loaders.append('yaml', {
+	test: /\.ya?ml$/,
+    loaders: ['json', 'yaml']
+})
 
 // environment.loaders.append('css', {
 // 	test: /\.s?css$/,
@@ -23,7 +27,8 @@ environment.config.merge({
     alias: {
       '@components': path.resolve(__dirname, '..', '..', 'app/javascript/components'),
       '@mixins': path.resolve(__dirname, '..', '..', 'app/javascript/mixins'),
-      '@modules': path.resolve(__dirname, '..', '..', 'app/javascript/modules')
+      '@modules': path.resolve(__dirname, '..', '..', 'app/javascript/modules'),
+      '@plugins': path.resolve(__dirname, '..', '..', 'app/javascript/plugins'),
     }
   }
 })

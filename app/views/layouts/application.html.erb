@@ -10,9 +10,15 @@
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
-    <%= javascript_pack_tag 'utils' %>
     <%= javascript_include_tag 'application' %>
+    <%= javascript_tag nonce: true do%>
+      I18nConfig = {};
+      I18nConfig.defaultLocale = "<%= I18n.default_locale %>";
+      I18nConfig.locale = "<%= I18n.locale %>";
+    <% end %>
+    <%= javascript_pack_tag 'utils' %>
     <%= javascript_pack_tag 'application' %>
+
 
     <% if Rails.env.development? %>
       <style>

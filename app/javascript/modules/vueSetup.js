@@ -27,15 +27,21 @@ import arrowButton from "@components/functional/ArrowButton";
 
 import encounterCalendar from '@components/widgets/encounterCalendar/EncounterCalendar.vue';
 
+import bedpostVueGlobals from '../plugins/bedpostVueGlobals';
+import i18nConfig from "@modules/i18n-config";
+
 
 /**
  * Register all vue components and set up the Vue instance
  * @module vueSetup
  */
-export default function addVue() {
+export default async function addVue() {
 	Vue.use(TurbolinksAdapter);
 	Vue.use(Vuelidate);
 	Vue.use(VCalendar);
+	await i18nConfig.setup();
+
+	Vue.use(bedpostVueGlobals, {i18nConfig});
 
 	Vue.component('v-select', vSelect);
 
