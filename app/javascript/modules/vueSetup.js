@@ -28,7 +28,6 @@ import arrowButton from "@components/functional/ArrowButton";
 import encounterCalendar from '@components/widgets/encounterCalendar/EncounterCalendar.vue';
 
 import bedpostVueGlobals from '../plugins/bedpostVueGlobals';
-import i18nConfig from "@modules/i18n-config";
 
 
 /**
@@ -39,9 +38,7 @@ export default async function addVue() {
 	Vue.use(TurbolinksAdapter);
 	Vue.use(Vuelidate);
 	Vue.use(VCalendar);
-	await i18nConfig.setup();
-
-	Vue.use(bedpostVueGlobals, {i18nConfig});
+	await bedpostVueGlobals(Vue);
 
 	Vue.component('v-select', vSelect);
 

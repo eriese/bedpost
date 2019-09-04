@@ -1,26 +1,27 @@
 {
-  "application.js": "/packs/application-616f1a00b4e70f3376d3.js",
-  "application.js.map": "/packs/application-616f1a00b4e70f3376d3.js.map",
+  "application.js": "/packs/application-15256b5dca376044353c.js",
+  "application.js.map": "/packs/js/application-0b69957547afbb3166d3.hot-update.js.map",
   "entrypoints": {
     "application": {
       "js": [
-        "/packs/application-616f1a00b4e70f3376d3.js"
+        "/packs/application-15256b5dca376044353c.js"
       ],
       "js.map": [
-        "/packs/application-616f1a00b4e70f3376d3.js.map"
+        "/packs/application-15256b5dca376044353c.js.map",
+        "/packs/js/application-0b69957547afbb3166d3.hot-update.js.map"
       ]
     },
     "utils": {
       "js": [
-        "/packs/utils-616f1a00b4e70f3376d3.js"
+        "/packs/utils-15256b5dca376044353c.js"
       ],
       "js.map": [
-        "/packs/utils-616f1a00b4e70f3376d3.js.map"
+        "/packs/utils-15256b5dca376044353c.js.map"
       ]
     }
   },
-  "locale.js": "/packs/js/locale-356e39bec894c99de127.chunk.js",
-  "locale.js.map": "/packs/js/locale-356e39bec894c99de127.chunk.js.map",
-  "utils.js": "/packs/utils-616f1a00b4e70f3376d3.js",
-  "utils.js.map": "/packs/utils-616f1a00b4e70f3376d3.js.map"
+  "locale.js": "/packs/js/locale-d34853a6965e0870c83d.chunk.js",
+  "locale.js.map": "/packs/js/locale-d34853a6965e0870c83d.chunk.js.map",
+  "utils.js": "/packs/utils-15256b5dca376044353c.js",
+  "utils.js.map": "/packs/utils-15256b5dca376044353c.js.map"
 }

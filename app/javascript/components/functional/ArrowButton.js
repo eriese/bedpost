@@ -23,7 +23,7 @@ export default {
 			default: "caret"
 		}
 	},
-	render(createElement, {props, data, parent}) {
+	render: function(createElement, {props, data, parent}) {
 		let transform = props.transform
 		let path = props.path;
 		if (!path) {
@@ -55,7 +55,7 @@ export default {
 		}
 
 		data.attrs.type = data.attrs.type || "button"
-		data.attrs.title = parent.$root.t(props.tKey)
+		data.attrs.title = parent.$_t(props.tKey)
 		data.props = props.bind
 		data.staticClass = (data.staticClass || "") + " arrow-button"
 

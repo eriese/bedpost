@@ -39,6 +39,10 @@
   },
   "jest": {
     "globals": {
+      "I18nConfig": {
+        "locale": "en",
+        "defaultLocale": "en"
+      },
       "vue-jest": {
         "babelConfig": {
           "presets": [
