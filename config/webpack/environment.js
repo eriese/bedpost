@@ -7,10 +7,6 @@ const path = require('path')
 
 environment.loaders.append('vue', vue)
 environment.plugins.append('VueLoaderPlugin', new VueLoaderPlugin());
-environment.loaders.append('yaml', {
-	test: /\.ya?ml$/,
-    loaders: ['json', 'yaml']
-})
 
 // environment.loaders.append('css', {
 // 	test: /\.s?css$/,

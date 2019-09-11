@@ -9,7 +9,6 @@
     "gsap": "^2.0.2",
     "i18n-js": "^3.3.0",
     "jsdoc-vuejs": "^2.4.1",
-    "json-loader": "^0.5.7",
     "rails-erb-loader": "^5.5.2",
     "v-calendar": "^1.0.0-beta.16",
     "vue": "^2.6.10",
@@ -18,18 +17,16 @@
     "vue-template-compiler": "^2.6.10",
     "vue-turbolinks": "^2.0.4",
     "vuelidate": "^0.7.4",
-    "webpack": "^4.0.0",
-    "yaml-loader": "^0.5.0"
+    "webpack": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/preset-env": "^7.5.5",
     "@vue/test-utils": "^1.0.0-beta.29",
-    "babel-core": "^6.26.3",
+    "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-flow": "^6.23.0",
-    "flow-bin": "^0.93.0",
+    "core-js": "^3.2.1",
     "jest": "^24.9.0",
     "vue-jest": "^3.0.4",
     "webpack-dev-server": "^3.7.2"
@@ -41,37 +38,12 @@
     "globals": {
       "I18nConfig": {
         "locale": "en",
-        "defaultLocale": "en"
+        "defaultLocale": "en",
+        "translations": {}
       },
       "vue-jest": {
         "babelConfig": {
-          "presets": [
-            [
-              "env",
-              {
-                "modules": false,
-                "targets": {
-                  "browsers": "> 1%",
-                  "uglify": true
-                },
-                "useBuiltIns": true
-              }
-            ]
-          ],
-          "env": {
-            "test": {
-              "presets": [
-                [
-                  "env",
-                  {
-                    "targets": {
-                      "node": "current"
-                    }
-                  }
-                ]
-              ]
-            }
-          }
+          "configFile": "./babel.config.js"
         }
       }
     },
@@ -94,8 +66,9 @@
     },
     "transform": {
       ".*\\.(vue)$": "vue-jest",
-      "^.+\\.js$": "babel-jest"
+      ".+\\.js$": "babel-jest"
     },
+    "transformIgnorePatterns": [],
     "collectCoverage": true,
     "collectCoverageFrom": [
       "app/javascript/**/*.{js,vue}",

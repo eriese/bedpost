@@ -58,7 +58,7 @@
 		computed: {
 			toggleState: function() {
 				let key = typeof this.symbols == "string" ? this.symbols : this.symbols[this.index]
-				return this.translate ? I18n.t(key) : key
+				return this.translate ? this.$_t(key) : key
 			},
 			index: function() {
 				// look for the current value in the vals array

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-	import {TweenLite} from "gsap/TweenMax";
+	import {TweenLite} from "gsap/TweenLite";
 	import deletedChild from '@components/functional/DeletedChild.vue';
 
 	export default {
@@ -115,7 +115,7 @@
 			},
 			setFocus(index, focusFirst) {
 				if (index == this.focusIndex) {return;}
-				this.focusIndex = index
+				this.focusIndex = index;
 				for (let i = 0; i < this.$refs.list_component.length; i++) {
 					let comp = this.$refs.list_component[i]
 					if (comp.watchKey == this.focusIndex) {

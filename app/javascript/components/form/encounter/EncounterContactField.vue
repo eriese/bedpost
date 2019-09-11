@@ -62,7 +62,7 @@
 		</div>
 	</div>
 	<div class="contact-barriers clear-fix">
-		<div>{{$root.t("contact.with", {pronoun: ""})}}</div>
+		<div>{{$_t("contact.with", {pronoun: ""})}}</div>
 		<div>
 			<barrier-input v-for="(bType, bKey) in barriers"
 				:key="baseName + bKey"
@@ -133,7 +133,7 @@
 				if (this.subjectInsts.length <= 1) {
 					return "";
 				}
-				return this.$root.t("contact.with", {pronoun: this.value.subject == "user" ? this.$root.t("my") : this.partnerPronoun.possessive})
+				return this.$_t("contact.with", {pronoun: this.value.subject == "user" ? this.$_t("my") : this.partnerPronoun.possessive})
 			}
 		},
 		methods: {
@@ -260,13 +260,14 @@
 					let found = this.possibles[p].find((i) => i._id == this.value.possible_contact_id);
 
 					if (found) {
-						this.contact_type = found.contact_type
+						this.contact_type = found.contact_type.key
 						this.subject_instrument_id = found.subject_instrument_id
 						this.object_instrument_id = found.object_instrument_id
 						break;
 					}
 				}
 			}
+
 			this.changeActorOrder(null, true);
 		}
 	}

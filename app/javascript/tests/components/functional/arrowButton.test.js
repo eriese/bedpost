@@ -1,26 +1,26 @@
-import {createLocalVue, mount, shallowMount} from "@vue/test-utils";
+import {createLocalVue, mount} from "@vue/test-utils";
 import bedpostVueGlobals from "@plugins/bedpostVueGlobals";
 import ArrowButton from "@components/functional/ArrowButton";
 
-async function setup(context) {
+function setup(context) {
 	let localVue = createLocalVue();
-	await bedpostVueGlobals(localVue);
+	localVue.use(bedpostVueGlobals);
 
-	return shallowMount(ArrowButton, {
+	return mount(ArrowButton, {
 		context,
 		localVue
 	});
 }
 
 describe("ArrowButton functional component", () => {
-	test('it exists', async () => {
-		let wrapper = await setup();
+	test('it exists', () => {
+		let wrapper = setup();
 		expect(wrapper.exists()).toBe(true);
 	})
 
 	describe("rendering", () => {
-		test('it is a button', async () => {
-			let wrapper = await setup();
+		test('it is a button', () => {
+			let wrapper = setup();
 			expect(wrapper.is("button")).toBeTruthy();
 		})
 	})

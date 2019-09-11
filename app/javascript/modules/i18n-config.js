@@ -1,9 +1,10 @@
 import I18n from 'i18n-js';
 
-let mod = I18n
-mod.locale = window.I18nConfig.locale;
-mod.defaultLocale = window.I18nConfig.defaultLocale;
-let _isSetup = false;
+let mod = I18n;
+let {locale, defaultLocale, translations} = window.I18nConfig;
+mod.locale = locale;
+mod.defaultLocale = defaultLocale;
+mod.translations = translations
 
 // add a pluralization rule that checks english pluralization for any number up to 10 and defaults to other
 mod.pluralization["en"] = function(count) {
@@ -22,17 +23,5 @@ mod.pluralization["en"] = function(count) {
 		default: return ["other"]
 	}
 }
-
-mod.setup = async function() {
-	let translations = await import(
-		/* webpackExclude /(date|datetime|errors|helpers|i18n|mongoid|number|support|time)\.json$/ */
-		/* webpackChunkName: "locale" */
-		/* webpackMode: "lazy-once" */
-		/* webpackPreload: true */
-		`../locales/${window.I18nConfig.locale}.json`
-	)
-	mod.translations = translations;
-};
-
 
 export default mod;

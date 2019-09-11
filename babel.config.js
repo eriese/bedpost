@@ -15,31 +15,28 @@ module.exports = function(api) {
     )
   }
 
+  var babelPresetOpts = {
+    forceAllTransforms: true,
+    useBuiltIns: 'usage',
+    corejs: 3,
+    modules: false,
+    exclude: ['transform-typeof-symbol']
+  };
+
+  if (isTestEnv) {
+    babelPresetOpts.targets = {
+      node: 'current'
+    }
+    babelPresetOpts.modules = 'auto';
+  }
   return {
     presets: [
-      isTestEnv && [
-        require('@babel/preset-env').default,
-        {
-          targets: {
-            node: 'current'
-          }
-        }
-      ],
-      (isProductionEnv || isDevelopmentEnv) && [
-        require('@babel/preset-env').default,
-        {
-          forceAllTransforms: true,
-          useBuiltIns: 'entry',
-          corejs: 3,
-          modules: false,
-          exclude: ['transform-typeof-symbol']
-        }
-      ]
-    ].filter(Boolean),
+      [require('@babel/preset-env').default, babelPresetOpts]
+    ],
     plugins: [
       require('babel-plugin-macros'),
       require('@babel/plugin-syntax-dynamic-import').default,
-      isTestEnv && require('babel-plugin-dynamic-import-node'),
+      // isTestEnv && require('babel-plugin-dynamic-import-node'),
       require('@babel/plugin-transform-destructuring').default,
       [
         require('@babel/plugin-proposal-class-properties').default,

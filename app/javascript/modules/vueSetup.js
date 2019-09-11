@@ -7,7 +7,7 @@ import vSelect from 'vue-select';
 import _root from "@components/Root";
 import nav from '@components/NavComponent'
 
-import basicStepper from '@components/stepper/BasicStepperComponent';
+// import basicStepper from '@components/stepper/BasicStepperComponent';
 import formStepper from "@components/stepper/FormStepperComponent.vue"
 import formStep from "@components/stepper/FormStepComponent.vue"
 
@@ -34,17 +34,17 @@ import bedpostVueGlobals from '../plugins/bedpostVueGlobals';
  * Register all vue components and set up the Vue instance
  * @module vueSetup
  */
-export default async function addVue() {
+export default function addVue() {
 	Vue.use(TurbolinksAdapter);
 	Vue.use(Vuelidate);
 	Vue.use(VCalendar);
-	await bedpostVueGlobals(Vue);
+	Vue.use(bedpostVueGlobals);
 
 	Vue.component('v-select', vSelect);
 
 	Vue.component('nav-component', nav);
 	Vue.component('vuelidate-form', vuelidateForm);
-	Vue.component('basic-stepper', basicStepper);
+	Vue.component('basic-stepper', import('@components/stepper/BasicStepperComponent'));
 
 	Vue.component('field-errors', fieldErrors);
 	Vue.component('form-errors', formErrors);

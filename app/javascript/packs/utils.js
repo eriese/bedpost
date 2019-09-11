@@ -69,7 +69,7 @@ Array.move = function(arr, old_index, new_index) {
     return arr; // for testing purposes
 };
 
-Utils = {}
+const Utils = {}
 
 Utils.getBoundingDocumentRect = function(elem, noOffset) {
     let rect = elem.getBoundingClientRect();

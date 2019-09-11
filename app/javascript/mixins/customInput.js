@@ -20,7 +20,7 @@ export default {
 			return `${this.baseName}${this.modelName}${this.inputValue || ""}`;
 		},
 		labelText: function() {
-			return this.label || this.$root.t(this.labelKey);
+			return this.label || this.$_t(this.labelKey);
 		}
 	},
 	created: function() {

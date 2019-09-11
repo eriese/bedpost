@@ -25,7 +25,7 @@ document.addEventListener('turbolinks:load', () => {
 	classList.add("with-js");
 
 	// set up vue
-	app = addVue()
+	app = addVue();
 
 	// hook into the vue instance's confirmation method
 	Rails.confirm = app.isConfirmed

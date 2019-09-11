@@ -51,7 +51,7 @@
 			},
 			ariaLabel: function() {
 				// no aria label if this field doesn't validate
-				return this.validate ? I18n.t(this.$attrs["aria-label"] || "helpers.aria.invalid") : null
+				return this.validate ? this.$_t(this.$attrs["aria-label"] || "helpers.aria.invalid") : null
 			},
 			ariaInvalid: function() {
 				// aria should only read it as invalid if it's dirty or has a submission error
@@ -85,7 +85,7 @@
 				if (this.vField.submitted === false) {
 					let msg = getFieldFrom(this.submissionError, this);
 					if (msg && typeof msg.join == "function") {
-						msg = msg.join(I18n.t("join_delimeter"))
+						msg = msg.join(this.$_t("join_delimeter"))
 					}
 					// return the submission error messages joined by commas
 					return msg;
@@ -119,7 +119,7 @@
 						params.defaults = defaults;
 
 						//translate it
-						let trans = I18n.t(transKey, params)
+						let trans = this.$_t(transKey, params)
 
 						// TODO don't do this. make better translations
 						if (trans.indexOf('is') == 0) {
