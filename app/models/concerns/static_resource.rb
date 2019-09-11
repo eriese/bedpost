@@ -16,14 +16,14 @@ module StaticResource
 			query = collection.aggregate([{"$group" => {"_id" => "$#{column}", "members" => {"$push"=> "$$ROOT"}}}])
 
 			if Rails.env.development?
-				hash_query(query)
+				hash_query(query, instantiate)
 			else
-				@grouped_queries["#{column}_#{instantiate}"] ||= hash_query(query)
+				@grouped_queries["#{column}_#{instantiate}"] ||= hash_query(query, instantiate)
 			end
 		end
 
 		private
-		def hash_query(query)
+		def hash_query(query, instantiate)
 			HashWithIndifferentAccess[query.map {|col| [col[:_id], instantiate ? col[:members].map { |m| new(m) } : col[:members] ]}]
 		end
 
