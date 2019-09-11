@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe PossibleContact, type: :model do
   context 'class methods' do
   	before :all do
+      PossibleContact.instance_variable_set(:@grouped_queries, nil)
+
   		@hand = create(:contact_instrument, name: :hand)
   		@mouth = create(:contact_instrument, name: :mouth)
 
@@ -20,6 +22,7 @@ RSpec.describe PossibleContact, type: :model do
   	describe 'hashed_for_partnership' do
   		it 'returns a dictionary with contact_types as keys and arrays of possible contacts as values' do
   			res = PossibleContact.hashed_for_partnership
+
   			expect(res).to have_key(:touched)
   			expect(res[:touched].length).to eq 2
 
