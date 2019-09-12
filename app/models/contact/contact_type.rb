@@ -30,7 +30,7 @@ class Contact::ContactType
 		end
 
 		def demongoize(object)
-			get(object)
+			TYPES[object]
 		end
 
 		def evolve(object)

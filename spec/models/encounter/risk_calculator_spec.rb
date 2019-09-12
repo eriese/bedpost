@@ -33,7 +33,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
   describe '#track_contact' do
     describe 'with an effective barrier' do
       it 'returns negligible risk' do
-        contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1", barriers: [:fresh]})
+        contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1", barriers: ["fresh"]})
         encounter = build(:encounter)
         encounter.contacts = [contact1]
         calc = Encounter::RiskCalculator.new(encounter)
@@ -51,7 +51,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
     it 'tracks all contacts in an encounter' do
       contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1"})
       contact2 = build_stubbed(:encounter_contact, {possible_contact_id: "contact2"})
-      contact3 = build_stubbed(:encounter_contact, {possible_contact_id: "contact3"})
+      contact3 = build_stubbed(:encounter_contact, {possible_contact_id: "contact3", barriers: ["fresh"]})
 
       encounter = build(:encounter)
       encounter.contacts = [contact1, contact2, contact3]
@@ -65,9 +65,9 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
       risk2 = risks[contact2.possible_contact_id][0]
       risk3 = risks[contact3.possible_contact_id][0]
 
-      expected = [risk1.risk_to_subject, risk2.risk_to_subject, risk3.risk_to_subject].max
+      expected = [risk1.risk_to_subject, risk2.risk_to_subject].max
       expect(calc.risk_map[risk1.diagnosis_id]).to eq expected
-
+      expect(contact3.risks[:hpv]).to eq Diagnosis::TransmissionRisk::NEGLIGIBLE
     end
   end
 end

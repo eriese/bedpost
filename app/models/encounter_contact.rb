@@ -2,7 +2,7 @@ class EncounterContact
   include Mongoid::Document
   include NormalizeBlankValues
 
-  field :barriers, type: Array, default: []
+  field :barriers, type: Contact::BarrierType::BarrierArray, default: []
   field :position, type: Integer, default: -> {encounter.present? ? encounter.contacts.length : 0}
   field :object, type: Symbol, default: :partner
   field :subject, type: Symbol, default: :user

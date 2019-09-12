@@ -122,7 +122,7 @@ RSpec.describe EncountersController, type: :controller do
 
 				expect(ship.encounters.count).to eq 1
 				expect(ship.encounters.first.contacts.count).to eq 2
-				expect(ship.encounters.first.contacts.last.barriers).to eq contact_params[1][:barriers]
+				expect(ship.encounters.first.contacts.last.barriers).to eq contact_params[1][:barriers].map(&:intern)
 			end
 
 			it 'goes to the show page for that encounter' do
