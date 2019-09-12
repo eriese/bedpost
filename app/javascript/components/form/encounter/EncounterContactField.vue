@@ -260,7 +260,7 @@
 					let found = this.possibles[p].find((i) => i._id == this.value.possible_contact_id);
 
 					if (found) {
-						this.contact_type = found.contact_type.key
+						this.contact_type = p;
 						this.subject_instrument_id = found.subject_instrument_id
 						this.object_instrument_id = found.object_instrument_id
 						break;

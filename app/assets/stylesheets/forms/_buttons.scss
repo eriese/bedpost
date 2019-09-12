@@ -37,6 +37,7 @@ button, input[type=submit], a.as-button {
 	padding: 5px 10px;
 	transition: 0.1s linear all;
 	cursor: pointer;
+	border-style: solid;
 
 	form.centered & {
 		margin-top: 10px;
