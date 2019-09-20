@@ -4,30 +4,34 @@ import Vuelidate from 'vuelidate';
 import VCalendar from 'v-calendar';
 import vSelect from 'vue-select';
 
+import bedpostVueGlobals from '../plugins/bedpostVueGlobals';
+
 import _root from "@components/Root";
 import nav from '@components/NavComponent'
 
-// import basicStepper from '@components/stepper/BasicStepperComponent';
-import formStepper from "@components/stepper/FormStepperComponent.vue"
-import formStep from "@components/stepper/FormStepComponent.vue"
 
-import vuelidateForm from '@components/form/VuelidateFormComponent';
-import fieldErrors from "@components/form/FieldErrorsComponent.vue"
-import formErrors from "@components/form/FormErrorsComponent.vue"
-import toggle from "@components/form/ToggleComponent.vue"
-import dynamicFieldList from "@components/form/DynamicFieldList.vue";
+const formStepper = () => import (
+	/* webpackChunkName: "components.form-stepper", webpackMode: "lazy" */ "@components/stepper/FormStepperComponent.vue");
+const formStep = () => import (
+	/* webpackChunkName: "components.form-stepper", webpackMode: "lazy" */ "@components/stepper/FormStepComponent.vue");
+const basicStepper = () => import(/* webpackChunkName: "components.basic-stepper" */ '@components/stepper/BasicStepperComponent');
 
-import encounterContactField from "@components/form/encounter/EncounterContactField.vue"
+const vuelidateForm = () => import (/* webpackChunkName: "components.form" */ '@components/form/VuelidateFormComponent');
+const fieldErrors = () => import (/* webpackChunkName: "components.form" */ "@components/form/FieldErrorsComponent.vue");
+const formErrors = () => import (/* webpackChunkName: "components.form" */ "@components/form/FormErrorsComponent.vue");
+const toggle = () => import (/* webpackChunkName: "components.toggle" */ "@components/form/ToggleComponent.vue");
+const dynamicFieldList = () => import (/* webpackChunkName: "components.dynamic-field-list" */ "@components/form/DynamicFieldList.vue");
 
-import dropDown from "@components/display/DropDown.vue";
-import progBar from "@components/display/ProgBar.vue";
-import bubble from "@components/display/Bubble.vue"
+const encounterContactField = () => import (/* webpackChunkName: "components.encounter-contact-field" */ "@components/form/encounter/EncounterContactField.vue");
 
-import arrowButton from "@components/functional/ArrowButton";
+const dropDown = () => import (/* webpackChunkName: "components.dropdown" */ "@components/display/DropDown.vue");
+const progBar = () => import (/* webpackChunkName: "components.prog-bar" */ "@components/display/ProgBar.vue");
+const bubble = () => import (/* webpackChunkName: "bubble" */ "@components/display/Bubble.vue")
 
-import encounterCalendar from '@components/widgets/encounterCalendar/EncounterCalendar.vue';
+const arrowButton = () => import (/* webpackChunkName: "components.arrow-button" */ "@components/functional/ArrowButton");
 
-import bedpostVueGlobals from '../plugins/bedpostVueGlobals';
+const encounterCalendar = () => import (/* webpackChunkName: "components.encounter-calendar" */ '@components/widgets/encounterCalendar/EncounterCalendar.vue');
+
 
 
 /**
@@ -44,7 +48,7 @@ export default function addVue() {
 
 	Vue.component('nav-component', nav);
 	Vue.component('vuelidate-form', vuelidateForm);
-	Vue.component('basic-stepper', import('@components/stepper/BasicStepperComponent'));
+	Vue.component('basic-stepper', basicStepper);
 
 	Vue.component('field-errors', fieldErrors);
 	Vue.component('form-errors', formErrors);
