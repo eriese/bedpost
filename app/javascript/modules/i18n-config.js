@@ -4,7 +4,11 @@ let mod = I18n;
 let {locale, defaultLocale, translations} = window.I18nConfig;
 mod.locale = locale;
 mod.defaultLocale = defaultLocale;
-mod.translations = translations
+mod.setup = async () => {
+	mod.translations = await import(
+		/* webpackPreload: true */
+		`@locales/${locale || defaultLocale}.json`);
+}
 
 // add a pluralization rule that checks english pluralization for any number up to 10 and defaults to other
 mod.pluralization["en"] = function(count) {

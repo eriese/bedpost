@@ -11,6 +11,7 @@ import {addTransitionEvents} from '@modules/transitions';
 import addTurbolinksFixes from '@modules/turbolinksFixes';
 import addVue from '@modules/vueSetup';
 import Rails from '@rails/ujs';
+import I18nConfig from "@modules/i18n-config";
 
 Rails.start();
 
@@ -24,9 +25,11 @@ document.addEventListener('turbolinks:load', () => {
 	classList.remove("no-js");
 	classList.add("with-js");
 
-	// set up vue
-	app = addVue();
+	I18nConfig.setup().then(() => {
+		// set up vue
+		app = addVue();
 
-	// hook into the vue instance's confirmation method
-	Rails.confirm = app.isConfirmed
+		// hook into the vue instance's confirmation method
+		Rails.confirm = app.isConfirmed
+	})
 });

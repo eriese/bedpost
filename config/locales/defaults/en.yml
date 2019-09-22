@@ -45,7 +45,7 @@ en:
       create: Save
       submit: Submit
     required: '%{content}<b aria-hidden="true">*</b>'
-    navigation_menu: Menu
+    navigation_menu: Navigation Menu
     form_stepper:
       button_container: Form navigation buttons
       prog_label: Step %{index} of %{numSteps}

@@ -1,5 +1,5 @@
 <template>
-	<div class="bubble-container">
+	<div v-show="targetEl" class="bubble-container">
 		<div class="bubble" :class="[addClass, cls]" :style="stl" ref="bubble">
 			<slot></slot>
 			<div class="arrow"></div>
@@ -13,7 +13,8 @@
 			return {
 				cls: "",
 				stl: {},
-				debounce: null
+				debounce: null,
+				targetEl: undefined
 			}
 		},
 		props: {
@@ -25,24 +26,24 @@
 			},
 			addClass: String
 		},
-		computed: {
-			targetEl() {
-				return document.getElementById(this.target)
-			}
-		},
 		methods: {
 			onSize() {
+				this.targetEl = this.targetEl || document.getElementById(this.target);
+				if (!this.targetEl) {
+					setTimeout(this.onSize, 100);
+					return;
+				}
 				let rect = Utils.getBoundingDocumentRect(this.targetEl, true);
 				let elRect = Utils.getBoundingDocumentRect(this.$el)
 
 				let pos = {};
 				switch (this.position) {
 					case "centerX":
-						pos.left = rect.centerX;
-						break;
+					pos.left = rect.centerX;
+					break;
 					case "right":
-						pos.left = rect.right;
-						break;
+					pos.left = rect.right;
+					break;
 				}
 
 				let bubWidth = this.$refs.bubble.offsetWidth;

@@ -9,24 +9,15 @@
     <link href="https://fonts.googleapis.com/css?family=Hind+Vadodara:400,700|Lily+Script+One|Londrina+Shadow" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= content_tag :script, nonce: true, id: "locale", type: "application/json" do %>
-      <%= render file: "#{Rails.root}/app/javascript/locales/#{I18n.locale || I18n.default_locale}.json"%>
-    <% end %>
 
     <%= javascript_tag nonce: true do%>
-      const jsonNode = document.getElementById("locale");
-      const jsonText = jsonNode.textContent;
-      const jsonData = JSON.parse(jsonText);
-
       window.I18nConfig = {
         defaultLocale: "<%= I18n.default_locale %>",
-        locale: "<%= I18n.locale %>",
-        translations: jsonData
+        locale: "<%= I18n.locale %>"
       };
     <% end %>
     <%= javascript_include_tag 'application' %>
     <%= javascript_pack_tag 'runtime' %>
-    <%= javascript_pack_tag 'utils' %>
     <%= javascript_pack_tag 'application' %>
 
 

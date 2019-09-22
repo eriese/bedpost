@@ -25,6 +25,7 @@ environment.config.merge({
       '@mixins': path.resolve(__dirname, '..', '..', 'app/javascript/mixins'),
       '@modules': path.resolve(__dirname, '..', '..', 'app/javascript/modules'),
       '@plugins': path.resolve(__dirname, '..', '..', 'app/javascript/plugins'),
+      '@locales': path.resolve(__dirname, '..', '..', 'app/javascript/locales')
     }
   },
   optimization: {
@@ -43,6 +44,14 @@ environment.config.merge({
 
 		            // npm package names are URL-safe, but some servers don't like @ symbols
 		            return `npm.${packageName.replace('@', '')}`;
+		  		}
+		  	},
+		  	locale: {
+		  		test: /[\\/]locales[\\/]/,
+		  		chunks: 'async',
+		  		name(module) {
+		  			const packageName = module.rawRequest.replace(/^.[\\/]/, "").replace(".json", "");
+		  			return `locales.${packageName}`
 		  		}
 		  	}
   		}
