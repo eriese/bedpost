@@ -17,6 +17,7 @@ install:
   - npm i -g codecov
   - yarn
 script:
+  - bundle exec rake i18n:js:export
   - bundle exec rails webpacker:compile
   - bundle exec rake
   - yarn jest
