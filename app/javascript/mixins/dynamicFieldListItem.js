@@ -1,5 +1,8 @@
+import {lazyChild} from "@mixins/lazyCoupled";
+
 export default {
 	props: ["baseName", "watchKey", "value", "tracked"],
+	mixins: [lazyChild],
 	watch: {
 		watchKey: function() {
 			let func = this.onKeyChange
@@ -34,6 +37,7 @@ export default {
 		}
 	},
 	mounted: function() {
+		// this.$emit("present");
 		if (this.$options.track) {
 			this.$emit("track", this.$options.track);
 		}

@@ -18,9 +18,11 @@
 <script>
 	import {TweenLite} from "gsap/TweenLite";
 	import deletedChild from '@components/functional/DeletedChild.vue';
+	import {lazyParent} from '@mixins/lazyCoupled';
 
 	export default {
 		name: "dynamic_field_list",
+		mixins: [lazyParent],
 		components: {
 			'deleted-child': deletedChild
 		},
@@ -115,6 +117,9 @@
 			},
 			setFocus(index, focusFirst) {
 				if (index == this.focusIndex) {return;}
+				if (!this.$refs.list_component) {
+
+				}
 				this.focusIndex = index;
 				for (let i = 0; i < this.$refs.list_component.length; i++) {
 					let comp = this.$refs.list_component[i]
@@ -139,15 +144,15 @@
 						this.$set(this.list[i], 'position', startInd++)
 					}
 				}
-			}
-		},
-		mounted: function() {
-			this.numSubmitting = this.list.length;
-			if (this.numSubmitting == 0 && !this.optional) {
-				this.addToList();
-			} else {
-				this.updateIndices(0,0);
-				this.setFocus(this.lastIndex);
+			},
+			onChildMounted() {
+				this.numSubmitting = this.list.length;
+				if (this.numSubmitting == 0 && !this.optional) {
+					this.addToList();
+				} else {
+					this.updateIndices(0,0);
+					this.setFocus(this.lastIndex);
+				}
 			}
 		}
 	}

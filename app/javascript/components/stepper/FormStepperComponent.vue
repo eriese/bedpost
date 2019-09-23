@@ -24,6 +24,7 @@
 
 <script>
 import Flickity from 'flickity';
+import {lazyParent} from '@mixins/lazyCoupled';
 
 /**
  * A component to make multi-step forms. Uses [Flickity]{@link https://github.com/metafizzy/flickity} to handle form step navigations
@@ -39,6 +40,7 @@ import Flickity from 'flickity';
  */
 export default {
 	name: "form_stepper",
+	mixins: [lazyParent],
 	data: function () {
 		return {
 			curIndex: 0, // the current step index
@@ -199,16 +201,19 @@ export default {
 			this.processIndex(this.curIndex);
 			// get whether the current step is complete
 			this.setStepComplete();
+		},
+		onChildMounted: function() {
+			// make a flikity instance
+			this.flickityOptions.on = {change: this.setIndex}
+			this.flik = new Flickity(this.$refs.inner, this.flickityOptions);
+
+			// process the children
+			this.processChildren(this.$children);
+			this.$emit("stepper-mounted", this);
 		}
 	},
 	mounted: function() {
-		// make a flikity instance
-		this.flickityOptions.on = {change: this.setIndex}
-		this.flik = new Flickity(this.$refs.inner, this.flickityOptions)
 
-		// process the children
-		this.processChildren(this.$children);
-		this.$emit("stepper-mounted", this);
 	},
 	beforeDestroy: function() {
 		this.flik.destroy();

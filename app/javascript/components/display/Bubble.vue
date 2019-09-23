@@ -30,7 +30,7 @@
 			onSize() {
 				this.targetEl = this.targetEl || document.getElementById(this.target);
 				if (!this.targetEl) {
-					setTimeout(this.onSize, 100);
+					this.debounce = setTimeout(this.onSize, 50);
 					return;
 				}
 				let rect = Utils.getBoundingDocumentRect(this.targetEl, true);
@@ -78,7 +78,7 @@
 		},
 		mounted() {
 			this.$nextTick(() => {
-				window.addEventListener('resize', () => {
+				let resizeListener = window.addEventListener('resize', () => {
 					if (this.debounce) {
 						clearTimeout(this.debounce);
 					}
@@ -88,9 +88,19 @@
 					}, 50);
 				});
 
+				this.$once('hook:beforeDestroy', () => {
+					window.removeEventListener('resize', resizeListener);
+					if (this.debounce) {
+						clearTimeout(this.debounce);
+					}
+				})
+
 				this.onSize()
-				setTimeout(this.onSize, 50);
+				this.debounce = setTimeout(this.onSize, 50);
 			})
+		},
+		destroyed() {
+			if (this.debounce) {}
 		}
 	}
 </script>

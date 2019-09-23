@@ -6,6 +6,7 @@
 </template>
 
 <script>
+	import {lazyChild} from "@mixins/lazyCoupled";
 	/**
 	 * A component for a form step. Works with parent component [FormStepperComponent]{@link module:components/stepper/FormStepperComponent}
 	 * @module
@@ -15,6 +16,7 @@
 	 * @vue-prop {Number} numSteps the number of steps the parent component has as children
 	 * @vue-computed {module:components/fieldErrorsComponent[]} fields the validated fields that are children of this step
 	 * @listens module:components/form/FieldErrorsComponent~input-blur
+	 * @mixes lazyChild
 	 *
 	 * @example
 	 * <caption> Use a form step to wrap a form field or fields in a scoped slot. Don't forget to attach the blur event or have it called from somewhere in your component.</caption>
@@ -26,6 +28,7 @@
 	 */
 	export default {
 		name: "form_step",
+		mixins: [lazyChild],
 		data: function() {
 			return {
 				index: 0, // the index this step has in the list of steps
