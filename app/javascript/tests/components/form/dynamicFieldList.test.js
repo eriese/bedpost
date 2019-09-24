@@ -6,6 +6,8 @@ describe("Dynamic Field List Component", () => {
 		dummy: {}
 	}
 
+	Array.prototype.findLastIndex = jest.fn()
+
 	test('It mounts with an empty list', async() => {
 		let list = [];
 		let dfl = shallowMount(DynamicFieldList, {
@@ -16,6 +18,9 @@ describe("Dynamic Field List Component", () => {
 				componentType: "encounter-contact-field",
 				list: [],
 				baseName: "encounter[contacts_attributes]"
+			},
+			stubs: {
+				'encounter-contact-field': true
 			}
 		})
 
