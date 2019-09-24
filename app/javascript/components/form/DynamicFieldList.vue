@@ -116,10 +116,7 @@
 				}
 			},
 			setFocus(index, focusFirst) {
-				if (index == this.focusIndex) {return;}
-				if (!this.$refs.list_component) {
-
-				}
+				if (index == this.focusIndex || !this.$refs.list_component) {return;}
 				this.focusIndex = index;
 				for (let i = 0; i < this.$refs.list_component.length; i++) {
 					let comp = this.$refs.list_component[i]
@@ -146,13 +143,15 @@
 				}
 			},
 			onChildMounted() {
-				this.numSubmitting = this.list.length;
-				if (this.numSubmitting == 0 && !this.optional) {
-					this.addToList();
-				} else {
-					this.updateIndices(0,0);
-					this.setFocus(this.lastIndex);
-				}
+				this.setFocus(this.lastIndex);
+			}
+		},
+		created() {
+			this.numSubmitting = this.list.length;
+			if (this.numSubmitting == 0 && !this.optional) {
+				this.addToList();
+			} else {
+				this.updateIndices(0,0);
 			}
 		}
 	}
