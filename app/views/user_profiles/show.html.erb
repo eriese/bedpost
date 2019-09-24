@@ -1,4 +1,10 @@
-<h1>Hello <%= current_user.name%> !</h1>
+<h1><%= t ".title", {name: current_user.name}%></h1>
 
-<%= link_to t(".new_partnership"), new_partnership_path %>
-<%= link_to t(".new_encounter"), encounters_who_path %>
+<ul class="dash-buttons">
+	<li><%= link_to new_partnership_path do %>
+		<span><%= t(".new_partnership") %></span>
+	<% end%></li>
+	<li><%= link_to encounters_who_path do %>
+		<span><%= t(".new_encounter") %></span>
+	<% end%></li>
+</ul>

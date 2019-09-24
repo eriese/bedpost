@@ -7,6 +7,8 @@ en:
         desc: Customize how BedPost talks about you and your body
     show:
       new_partnership: I met someone
+      new_encounter: I had sex
+      title: Hi %{name}, what's new?
   mongoid:
     errors:
       models:

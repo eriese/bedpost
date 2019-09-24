@@ -29,7 +29,6 @@ A user should be able to sign up for an account, add their partners, and add the
 - Partnership risk calculation as part of encounter risk calculation
 - Change password on edit profile page
 - Views:
- - Dashboard
  - Review Partnership
 - FAQ page
 - Landing page

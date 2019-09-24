@@ -28,7 +28,10 @@ en:
       partner_html: Edit partnership with <b>%{name}</b>
   partnership_whos:
     new:
-      title: Great!
+      step_0:
+        title: Awesome!
+        label: Does this person have an account with BedPost?
+        no_account: No/ Unknown
       form_title: Cool, that makes it easier!
       new_profile:
         title: No worries. Let's set up a profile for them.
