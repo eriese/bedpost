@@ -16,11 +16,14 @@ install:
   - npm i -g yarn
   - npm i -g codecov
   - yarn
+before_script:
+  - gem install brakeman
 script:
   - bundle exec rake i18n:js:export
   - bundle exec rails webpacker:compile
   - bundle exec rake
   - yarn jest
   - codecov
+  - brakeman
 services:
   - mongodb
