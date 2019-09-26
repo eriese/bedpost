@@ -1,8 +1,15 @@
 <%= vuelidate_form_with model: @profile, html: {class: "centered"} do |f| %>
 	<h2><%= t_action(".account_settings") %></h2>
 	<%= render  "profiles/fields", f: f, profile: @profile, show_name: @profile.pronoun.present? do |p| %>
-		<%= f.text_field :email unless @profile.pronoun.nil? %>
 		<%= f.text_field(:uid, {tooltip: true}) unless @profile.pronoun.nil? %>
+	<% end %>
+	<% if @profile.pronoun.present? %>
+		<h2 class="with-desc"><%= t_action(".security_settings.title") %></h2>
+		<p class="description"><%= t_action(".security_settings.desc") %></p>
+		<%= f.password_field :old_password, validate: true %>
+		<%= f.text_field :email unless @profile.pronoun.nil? %>
+		<%= f.password_field :password, validate: true, required: false %>
+		<%= f.password_field :password_confirmation, show_toggle: true, validate: true, required: false %>
 	<% end %>
 	<%= f.submit %>
 <% end %>

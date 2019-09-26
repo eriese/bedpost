@@ -160,9 +160,8 @@ function formatValidators(formFields, validatorVals, path) {
 		}
 
 		// always add a submission error validator
-		validators[field] = {
-			submitted: submitted(this_path)
-		};
+		validators[field] = validators[field] || {}
+		validators[field].submitted = submitted(this_path)
 
 		// if it's an email field, add an email validator
 		if (field == "email") {
@@ -171,6 +170,9 @@ function formatValidators(formFields, validatorVals, path) {
 
 		// go through the configs
 		for (var f = 0; f < f_vals.length; f++) {
+			if (f_vals[f] === null) {
+				continue;
+			}
 			// destructure the array
 			let [type, opts] = f_vals[f];
 
@@ -194,7 +196,7 @@ function formatValidators(formFields, validatorVals, path) {
 					let conf_field = field + "_confirmation";
 					validators[conf_field] = validators[conf_field] || {};
 
-					validators[field].blank = required;
+					// validators[field].blank = required;
 					validators[conf_field].confirmation = sameAs(field);
 					break;
 			}

@@ -79,4 +79,53 @@ RSpec.describe UserProfilesController, type: :controller do
 			end
 		end
 	end
+
+	describe 'PUT #update' do
+		before :each do
+			@user = create(:user_profile)
+		end
+
+		after :each do
+			cleanup @user
+		end
+
+		context 'with valid password' do
+			it 'updates the email address' do
+				pms = {user_profile: {old_password: attributes_for(:user_profile)[:password], email: "newemail@mail.com"}}
+				put :update, params: pms, session: {user_id: @user.id}
+				expect(@user.reload.email).to eq(pms[:user_profile][:email])
+				expect(response).to redirect_to root_path
+			end
+
+			it 'updates the password' do
+				new_password = "testtest"
+				pms = {user_profile: {old_password: attributes_for(:user_profile)[:password], password: new_password, password_confirmation: new_password}}
+				put :update, params: pms, session: {user_id: @user.id}
+				expect(@user.reload.authenticate(new_password)).to be_truthy
+			end
+		end
+
+		context 'with invalid password' do
+			it 'responds with a submission error' do
+				new_password = "testtest"
+				pms = {user_profile: {old_password: "invalid", password: new_password, password_confirmation: new_password}}
+				put :update, params: pms, session: {user_id: @user.id}
+				expect(flash[:submission_error]).to have_key(:old_password)
+			end
+		end
+
+		context 'with no password' do
+			it 'updates non-protected fields' do
+				pms = {user_profile: {external_name: "new name", email: @user.email, old_password: ""}}
+				put :update, params: pms, session: {user_id: @user.id}
+				expect(@user.reload.external_name).to eq(pms[:user_profile][:external_name])
+			end
+
+			it 'responds with a submission error if a protected field is changed' do
+				pms = {user_profile: {external_name: "new name", email: "newemail@mail.com", old_password: ""}}
+				put :update, params: pms, session: {user_id: @user.id}
+				expect(flash[:submission_error]).to have_key(:old_password)
+			end
+		end
+	end
 end

@@ -5,6 +5,9 @@ en:
       personal_prefs:
         title: Personal Preferences
         desc: Customize how BedPost talks about you and your body
+      security_settings:
+        title: Security
+        desc: Enter your password to change any of the following settings
     show:
       new_partnership: I met someone
       new_encounter: I had sex
@@ -31,6 +34,9 @@ en:
         internal_name: What's a sexy word you call your internal genitals?
         pronoun: What pronouns do you use?
         can_penetrate_group: Can your external genitals be used for penetration?
+        old_password: Current password
+        new_password: New password
+        new_password_confirmation: Confirm your new password
     tooltip:
       user_profile:
         name: We really only care about your first name, but it's up to you.

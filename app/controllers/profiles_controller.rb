@@ -17,7 +17,7 @@ class ProfilesController < ApplicationController
     if @partnership.present? && @profile.is_a?(UserProfile)
       redirect_to @partnership
     else
-      gon_client_validators(@profile)
+      gon_client_validators(@profile, edit_validator_opts, serialize_opts: edit_validator_serialize_opts, pre_validate: false)
     end
   end
 
@@ -53,7 +53,7 @@ class ProfilesController < ApplicationController
     end
   end
 
-  private
+  protected
     def req_params
       ps = params.require(param_name).permit(profile_params)
       ps[:internal_name] = nil if params[param_name][:show_internal] == "false" && @profile && @profile.internal_name.present?
@@ -80,5 +80,13 @@ class ProfilesController < ApplicationController
 
     def show_path
       @partnership
+    end
+
+    def edit_validator_serialize_opts
+      {}
+    end
+
+    def edit_validator_opts
+      {}
     end
 end

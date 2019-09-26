@@ -43,7 +43,7 @@ feature "User creates new partnership", :slow do
 				next if val.nil?
 				input_id = "profile_#{key}"
 				if key.to_s == "pronoun_id"
-					select(val.display, from: input_id)
+					select(Pronoun.find(val).display, from: input_id)
 				elsif val.is_a? Boolean
 					choose("#{input_id}_#{val}")
 				else

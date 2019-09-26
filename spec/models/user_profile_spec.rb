@@ -69,7 +69,7 @@ RSpec.describe UserProfile, type: :model do
       end
 
       after :each do
-        @user.destroy
+        cleanup(@user)
       end
 
       it 'does not update if the password is invalid' do
@@ -116,7 +116,7 @@ RSpec.describe UserProfile, type: :model do
       end
 
       after :each do
-        @user.destroy
+        cleanup(@user)
       end
 
       it 'gets an array of all encounters embedded in the partnerships of the user' do
@@ -185,6 +185,37 @@ RSpec.describe UserProfile, type: :model do
     	user2 = build_stubbed(:user_profile, external_name: nil)
     	expect(user2).to_not be_valid
       expect(user2).to have_validation_error_for(:external_name, :blank)
+    end
+
+    context 'updating secured fields' do
+      before :each do
+        @user1 = create(:user_profile)
+      end
+      after :each do
+        cleanup(@user1)
+      end
+
+      context 'with a valid password' do
+        it 'updates the password' do
+          @user1.update({old_password: attributes_for(:user_profile)[:password], password: "newpass", password_confirmation: "newpass"})
+          expect(@user1).to be_valid
+          expect(@user1.password).to eq "newpass"
+        end
+
+        it 'updates the email' do
+          @user1.update({old_password: attributes_for(:user_profile)[:password], email: "newemail@mail.com"})
+          expect(@user1).to be_valid
+          expect(@user1.email).to eq "newemail@mail.com"
+        end
+      end
+
+      context 'with no password' do
+        it 'updates non-protected fields' do
+          expect(@user1.update({external_name: "new name"})).to be true
+          expect(@user1).to be_valid
+          expect(@user1.external_name).to eq "new name"
+        end
+      end
     end
   end
 

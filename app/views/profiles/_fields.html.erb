@@ -1,4 +1,4 @@
-<%= f.text_field :name if show_name%>
+<%= f.text_field :name, tooltip: true if show_name%>
 <%= yield %>
 
 <h2 class="with-desc"><%= t_action(".personal_prefs.title") %></h2>

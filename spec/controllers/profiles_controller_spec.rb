@@ -117,12 +117,12 @@ RSpec.describe ProfilesController, type: :controller do
   end
 
   describe "PUT #update" do
-    context "with valid params" do
-      before :each do
-        @prof = create(:profile)
-        @partnership = dummy_user.partnerships.create(partner: @prof)
-      end
+    before :each do
+      @prof = create(:profile)
+      @partnership = dummy_user.partnerships.create(partner: @prof)
+    end
 
+    context "with valid params" do
       it "updates the requested profile" do
         put :update, params: {partnership_id: @partnership.to_param, profile: {external_name: "something"}}, session: dummy_user_session
         @prof.reload
@@ -135,13 +135,12 @@ RSpec.describe ProfilesController, type: :controller do
       end
     end
 
-    # context "with invalid params" do
-    #   it "returns a success response (i.e. to display the 'edit' template)" do
-    #     profile = Profile.create! valid_attributes
-    #     put :update, params: {id: profile.to_param, profile: invalid_attributes}, session: dummy_user_session
-    #     expect(response).to be_successful
-    #   end
-    # end
+    context "with invalid params" do
+      it "returns a success response (i.e. to display the 'edit' template)" do
+        put :update, params: {partnership_id: @partnership.to_param, profile: {external_name: nil}}, session: dummy_user_session
+        expect(response).to redirect_to edit_partnership_profile_path(@partnership)
+      end
+    end
   end
 
   # describe "DELETE #destroy" do
