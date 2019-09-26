@@ -25,9 +25,12 @@ A user should be able to sign up for an account, add their partners, and add the
 - Guided first-time flow
 
 #### Still needed
-- Tranasctional email integration
+- Transactional email integration
 - Partnership risk calculation as part of encounter risk calculation
 - Change password on edit profile page
+- Guided flow system with flexibility for divergent paths
+- Opt in on signup to have data used anonymously for research
+- Back buttons everywhere
 - Views:
  - Review Partnership
 - FAQ page
@@ -35,11 +38,8 @@ A user should be able to sign up for an account, add their partners, and add the
 - Localization/copy
 - Testing
 - Data entry about diagnoses/risks
-- Back buttons everywhere
 - Accessibility Audit
 - Security Audit
-- Guided flow system with flexibility for divergent paths
-- Opt in on signup to have data used anonymously for research
 - TOU
 
 ### Future

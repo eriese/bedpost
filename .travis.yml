@@ -18,6 +18,7 @@ install:
   - yarn
 before_script:
   - gem install brakeman
+  - gem install bundler-audit
 script:
   - bundle exec rake i18n:js:export
   - bundle exec rails webpacker:compile
@@ -25,5 +26,6 @@ script:
   - yarn jest
   - codecov
   - brakeman
+  - bundle audit --update
 services:
   - mongodb
