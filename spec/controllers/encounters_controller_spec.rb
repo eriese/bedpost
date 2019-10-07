@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe EncountersController, type: :controller do
 	def make_user_and_encounters(num_encounters: 0, num_partners: 1)
 		@user = create(:user_profile)
+		sign_in @user
 		@hand = create(:contact_instrument, name: :hand)
 		@mouth = create(:contact_instrument, name: :mouth)
 		@p1 = create(:possible_contact, contact_type: :penetrated, subject_instrument: @hand, object_instrument: @mouth)
@@ -18,7 +19,6 @@ RSpec.describe EncountersController, type: :controller do
 	end
 
 	def user_session
-		{user_id: @user.id}
 	end
 
 	after :each do

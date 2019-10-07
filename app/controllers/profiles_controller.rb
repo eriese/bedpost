@@ -29,7 +29,7 @@ class ProfilesController < ApplicationController
       redirect_to new_partnership_path(p_id: @profile.id)
     else
       flash[:profile_attempt] = req_params
-      respond_with_submission_error(@profile.errors.messages, new_profile_path)
+      respond_with_submission_error(@profile.errors.messages, new_dummy_profile_path)
     end
   end
 

@@ -40,7 +40,7 @@ RSpec.describe UserProfile, type: :model do
 
     describe '#password' do
       it "generates a password hash" do
-        pass = BCrypt::Password.new(dummy_user.password_digest)
+        pass = BCrypt::Password.new(dummy_user.encrypted_password)
         original = attributes_for(:user_profile)[:password]
         expect(pass).to eq original
       end
@@ -81,7 +81,8 @@ RSpec.describe UserProfile, type: :model do
         pass = "new-pass"
         result = @user.update_only_password(pass)
         expect(result).to be true
-        expect(@user.authenticate(pass)).to be @user
+        enc = BCrypt::Password.new(@user.encrypted_password)
+        expect(enc).to eq pass
       end
 
       it 'does not retain the old password' do
@@ -89,7 +90,8 @@ RSpec.describe UserProfile, type: :model do
         old = attributes_for(:user_profile)[:password]
         result = @user.update_only_password(pass)
         expect(result).to be true
-        expect(@user.authenticate(old)).to be false
+        enc = BCrypt::Password.new(@user.encrypted_password)
+        expect(enc).to_not eq old
       end
 
       it 'works even if the rest of the user is not valid' do
@@ -106,7 +108,8 @@ RSpec.describe UserProfile, type: :model do
 
         persisted = UserProfile.find(@user.id)
         expect(persisted).to eq @user
-        expect(persisted.authenticate(pass)).to eq persisted
+        enc = BCrypt::Password.new(persisted.encrypted_password)
+        expect(enc).to eq pass
       end
     end
 
@@ -187,7 +190,7 @@ RSpec.describe UserProfile, type: :model do
       expect(user2).to have_validation_error_for(:external_name, :blank)
     end
 
-    context 'updating secured fields' do
+    pending context 'updating secured fields' do
       before :each do
         @user1 = create(:user_profile)
       end
@@ -197,13 +200,13 @@ RSpec.describe UserProfile, type: :model do
 
       context 'with a valid password' do
         it 'updates the password' do
-          @user1.update({old_password: attributes_for(:user_profile)[:password], password: "newpass", password_confirmation: "newpass"})
+          @user1.update({current_password: attributes_for(:user_profile)[:password], password: "newpass", password_confirmation: "newpass"})
           expect(@user1).to be_valid
           expect(@user1.password).to eq "newpass"
         end
 
         it 'updates the email' do
-          @user1.update({old_password: attributes_for(:user_profile)[:password], email: "newemail@mail.com"})
+          @user1.update({current_password: attributes_for(:user_profile)[:password], email: "newemail@mail.com"})
           expect(@user1).to be_valid
           expect(@user1.email).to eq "newemail@mail.com"
         end

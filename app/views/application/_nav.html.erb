@@ -17,7 +17,7 @@
           <%end%>
         </li>
       <% end %>
-      <li><%= button_to "Log out", logout_path, method: "delete", class: "not-button" %></li>
+      <li><%= button_to "Log out", destroy_user_profile_session_path, method: "delete", class: "not-button" %></li>
     </ul>
   </div>
 </nav>

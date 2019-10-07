@@ -13,7 +13,7 @@
         <% if flash[:message] %>
         <% flash[:message].each do |key, message| %>
         <% message.each do |msg| %>
-        <div><%= key + ": " + msg %></div>
+        <div><%= "#{key}: #{msg}" unless key == :timedout %></div>
         <% end %>
         <% end %>
         <% end %>

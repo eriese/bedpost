@@ -48,6 +48,12 @@ RSpec.describe ProfilesController, type: :routing do
           expect(:post => "partners/profile").to route_to("profiles#create")
         end
       end
+
+      context "named routes" do
+        it "routes to #create with a named route dummy_profile_path" do
+          expect(:post => dummy_profile_path).to route_to("profiles#create")
+        end
+      end
     end
   end
 end

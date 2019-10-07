@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 	helper_method :current_user
 
 	def current_user
-	  @current_user ||= UserProfile.find(session[:user_id]) if session[:user_id]
+	  current_user_profile
 	end
 
 	def log_in_user(user_profile)
@@ -13,11 +13,12 @@ class ApplicationController < ActionController::Base
 	end
 
 	def require_user
-		redirect_to login_path(r: request.url) unless current_user
+		# redirect_to login_path(r: request.url) unless current_user
+		authenticate_user_profile!
 	end
 
 	def require_no_user
-		redirect_to params[:r] || user_profile_path if current_user
+		require_no_authentication
 	end
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
@@ -65,6 +66,7 @@ class ApplicationController < ActionController::Base
 
 			v_hash[atr] ||= []
 			v_hash[atr] += a_vals.map do |v|
+				next if v.kind == :foreign_key
 				if on_cond = v.options[:on]
 					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
 				end
