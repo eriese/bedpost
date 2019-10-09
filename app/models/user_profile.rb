@@ -40,9 +40,6 @@ class UserProfile < Profile
   index({email: 1}, {unique: true})
   index({uid: 1}, {unique: true})
 
-  # has_secure_password
-  # attr_accessor :old_password
-
   has_many :user_tokens
 
   embeds_many :partnerships, cascade_callbacks: true
@@ -76,6 +73,12 @@ class UserProfile < Profile
     enc = []
     partnerships.each {|p| enc += p.encounters}
     enc
+  end
+
+  def update_without_password(params, *options)
+    params.delete(:email)
+    params.delete(:current_password)
+    super(params)
   end
 
   def self.find_by_email(email)

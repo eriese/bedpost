@@ -1,5 +1,10 @@
 en:
   user_profiles:
+    show:
+      new_partnership: I met someone
+      new_encounter: I had sex
+      title: Hi %{name}, what's new?
+  application:
     edit:
       account_settings: Account Settings
       personal_prefs:
@@ -8,10 +13,6 @@ en:
       security_settings:
         title: Security
         desc: Enter your password to change any of the following settings
-    show:
-      new_partnership: I met someone
-      new_encounter: I had sex
-      title: Hi %{name}, what's new?
   mongoid:
     errors:
       models:

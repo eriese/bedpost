@@ -15,14 +15,17 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
   # end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
-
-  # PUT /resource
-  def update
+  def edit
+    gon_client_validators(resource, {current_password: [[]]}, pre_validate: false, serialize_opts: {methods: [:password, :password_confirmation]})
     super
   end
+
+  # PUT /resource
+  # def update
+  #   super do |resource|
+
+  #   end
+  # end
 
   # DELETE /resource
   # def destroy
@@ -47,12 +50,20 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:email])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:email, :uid, :internal_name, :external_name, :anus_name, :pronoun_id, :name, :can_penetrate])
   end
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
     edit_user_profile_registration_path
+  end
+
+  def update_resource(resource, params)
+    if params[:password].present? || params[:password_confirmation].present? || (params[:email].present? && params[:email] != resource.email)
+      resource.update_with_password(params)
+    else
+      resource.update_without_password(params)
+    end
   end
 
   # The path used after sign up for inactive accounts.

@@ -81,8 +81,7 @@ RSpec.describe UserProfile, type: :model do
         pass = "new-pass"
         result = @user.update_only_password(pass)
         expect(result).to be true
-        enc = BCrypt::Password.new(@user.encrypted_password)
-        expect(enc).to eq pass
+        expect(@user.valid_password?(pass)).to be true
       end
 
       it 'does not retain the old password' do
@@ -90,8 +89,7 @@ RSpec.describe UserProfile, type: :model do
         old = attributes_for(:user_profile)[:password]
         result = @user.update_only_password(pass)
         expect(result).to be true
-        enc = BCrypt::Password.new(@user.encrypted_password)
-        expect(enc).to_not eq old
+        expect(@user.valid_password?(old)).to be false
       end
 
       it 'works even if the rest of the user is not valid' do
@@ -108,8 +106,7 @@ RSpec.describe UserProfile, type: :model do
 
         persisted = UserProfile.find(@user.id)
         expect(persisted).to eq @user
-        enc = BCrypt::Password.new(persisted.encrypted_password)
-        expect(enc).to eq pass
+        expect(persisted.valid_password?(pass)).to be true
       end
     end
 

@@ -70,6 +70,9 @@ class ApplicationController < ActionController::Base
 				if on_cond = v.options[:on]
 					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
 				end
+				if if_cond = v.options[:if]
+					next unless obj.send(if_cond)
+				end
 
 				[v.kind, v.options]
 			end

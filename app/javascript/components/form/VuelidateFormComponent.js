@@ -109,7 +109,7 @@ export default {
 		handleError(e) {
 			let [respJson, status, xhr] = e.detail
 			// set the new submission error
-			this.submissionError = respJson;
+			this.submissionError = respJson.errors ? respJson.errors : respJson;
 			// re-run validations
 			this.$v.$touch();
 		},
