@@ -17,10 +17,12 @@
   <%= f.submit %>
 <% end %>
 
-<div class="centered">
-  <h3>Cancel your account</h3>
+<% if resource.pronoun.present? %>
+  <div class="centered">
+    <h3>Cancel your account</h3>
 
-  <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-</div>
+    <p>Unhappy? <%= confirm_button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+  </div>
 
-<%= link_to "Back", :back %>
+  <%= link_to "Back", :back %>
+<% end %>
