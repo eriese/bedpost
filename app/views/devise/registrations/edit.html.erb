@@ -19,9 +19,9 @@
 
 <% if resource.pronoun.present? %>
   <div class="centered-container">
-    <h2>Cancel your account</h2>
-
-    <p>Unhappy? <%= confirm_button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, alert_class: "confirmation" %></p>
+    <h2 class="with-desc">Cancel your account</h2>
+    <p class="description">This will be very hard to reverse...</p>
+    <%= confirm_button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure? Click again to confirm" }, method: :delete, alert_class: "confirmation" %>
   </div>
 
   <%= link_to "Back", :back %>
