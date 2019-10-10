@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
 	protect_from_forgery
+	before_action :store_user_location!, if: :storable_location?
 	before_action :require_user
 
 	helper_method :current_user
@@ -13,7 +14,6 @@ class ApplicationController < ActionController::Base
 	end
 
 	def require_user
-		# redirect_to login_path(r: request.url) unless current_user
 		authenticate_user_profile!
 	end
 
@@ -91,4 +91,18 @@ class ApplicationController < ActionController::Base
 			end
 		end
 	end
+
+	# Its important that the location is NOT stored if:
+  # - The request method is not GET (non idempotent)
+  # - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an
+  #    infinite redirect loop.
+  # - The request is an Ajax request as this can lead to very unexpected behaviour.
+  def storable_location?
+    request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+  end
+
+  def store_user_location!
+    # :user is the scope we are authenticating
+    store_location_for(:user_profile, request.fullpath)
+  end
 end
