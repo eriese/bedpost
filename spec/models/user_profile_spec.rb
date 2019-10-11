@@ -104,6 +104,64 @@ RSpec.describe UserProfile, type: :model do
         expect(@user.email).to eq oldEmail
       end
     end
+
+    describe '#soft_destroy' do
+      before :each do
+        @user = create(:user_profile)
+      end
+
+      after :each do
+        cleanup(@user)
+      end
+
+      context 'with a user with #opt_in = true' do
+        before :each do
+          @user.update({opt_in: true})
+        end
+
+        it 'clears the email address' do
+          expect(@user.soft_destroy).to be true
+          @user.reload
+          expect(@user.email).to be_nil
+        end
+
+        it 'sets a deleted_at timestamp' do
+          @user.soft_destroy
+          @user.reload
+          expect(@user.deleted_at).to_not be_nil
+        end
+      end
+
+      context 'with a user with #opt_in = false' do
+        before :each do
+          cleanup(@user)
+          @user = create(:user_profile)
+        end
+
+        after :each do
+          cleanup(@user, @partner, @dummy)
+        end
+
+        it 'calls destroy on the user' do
+          allow(@user).to receive(:destroy).and_call_original
+          @user.soft_destroy
+          expect(@user).to have_received(:destroy)
+        end
+
+        it 'creates a placeholder user with the same preferences as the user if the user is partnered to any other user profiles' do
+          @partner = create(:user_profile)
+          @partner.partnerships << build(:partnership, partner_id: @user.id)
+          @user.reload
+
+          expect(@user.partnered_to_ids).to_not be_empty
+
+          @user.soft_destroy
+          @dummy = Profile.last unless Profile.last.id == @partner.id
+          expect(@dummy.name).to eq @user.name
+          expect(@dummy.partnered_to_ids).to eq @user.partnered_to_ids
+        end
+      end
+    end
   end
 
   context 'nested' do

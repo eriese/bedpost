@@ -110,4 +110,21 @@ RSpec.describe UserProfiles::RegistrationsController, type: :controller do
 			end
 		end
 	end
+
+	describe 'DELETE #destroy' do
+		before :each do
+			@user = create(:user_profile)
+			sign_in @user
+		end
+
+		after :each do
+			cleanup @user
+		end
+
+		it 'calls #soft_destroy on the user' do
+			allow_any_instance_of(UserProfile).to receive(:soft_destroy)
+			expect_any_instance_of(UserProfile).to receive(:soft_destroy)
+			delete :destroy
+		end
+	end
 end
