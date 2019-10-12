@@ -13,10 +13,9 @@ A user should be able to sign up for an account, add their partners, and add the
 
 - ~~Account CRUD~~
 - ~~Account recovery~~
-- Session Management
+- ~~Session Management~~
  - ~~Log in/Log out~~
- - Remember me
- - Session timeout
+ - ~~Session timeout~~
 - ~~Partnership CRUD~~
 - ~~Encounter CRUD~~
  - ~~Risk Evaluation on Encounter Review~~
@@ -52,6 +51,7 @@ A user should be able to sign up for an account, add their partners, and add the
 - text/email reminders for testing
 - expedited flows (e.g. skip inputting partner info)
 - advice about talking to partners about positive test results
+- guest access for quick risk assessment without signup
 
 ### Far Future
 - expanded user-inputed dictionary for more customized, less medical feel

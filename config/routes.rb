@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     get 'profile', to: 'user_profiles/registrations#edit', as: :edit_user_profile_registration
     patch 'profile', to: 'user_profiles/registrations#update', as: :user_profile_registration
     put 'profile', to: 'user_profiles/registrations#update'
-    delete 'profile/delete', to: 'user_profiles/registrations#destroy'
+    delete 'profile', to: 'user_profiles/registrations#destroy', as: :destroy_user_profile_registration
   end
   devise_for :user_profiles, skip: [:registrations], path: "", singular: :user_profile, path_names: {
       sign_in: 'login', sign_out: 'logout',

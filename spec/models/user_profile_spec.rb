@@ -106,17 +106,13 @@ RSpec.describe UserProfile, type: :model do
     end
 
     describe '#soft_destroy' do
-      before :each do
-        @user = create(:user_profile)
-      end
-
-      after :each do
-        cleanup(@user)
-      end
 
       context 'with a user with #opt_in = true' do
         before :each do
-          @user.update({opt_in: true})
+          @user = create(:user_profile, opt_in: true)
+        end
+        after :each do
+          cleanup(@user)
         end
 
         it 'clears the email address' do
@@ -126,7 +122,7 @@ RSpec.describe UserProfile, type: :model do
         end
 
         it 'sets a deleted_at timestamp' do
-          @user.soft_destroy
+          expect(@user.soft_destroy).to be true
           @user.reload
           expect(@user.deleted_at).to_not be_nil
         end
@@ -134,7 +130,6 @@ RSpec.describe UserProfile, type: :model do
 
       context 'with a user with #opt_in = false' do
         before :each do
-          cleanup(@user)
           @user = create(:user_profile)
         end
 
@@ -144,7 +139,7 @@ RSpec.describe UserProfile, type: :model do
 
         it 'calls destroy on the user' do
           allow(@user).to receive(:destroy).and_call_original
-          @user.soft_destroy
+          expect(@user.soft_destroy).to be true
           expect(@user).to have_received(:destroy)
         end
 
@@ -155,7 +150,7 @@ RSpec.describe UserProfile, type: :model do
 
           expect(@user.partnered_to_ids).to_not be_empty
 
-          @user.soft_destroy
+          expect(@user.soft_destroy).to be true
           @dummy = Profile.last unless Profile.last.id == @partner.id
           expect(@dummy.name).to eq @user.name
           expect(@dummy.partnered_to_ids).to eq @user.partnered_to_ids

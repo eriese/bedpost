@@ -27,8 +27,8 @@ RSpec.describe UserProfiles::RegistrationsController, type: :routing do
 	  		expect(put: '/profile').to route_to('user_profiles/registrations#update')
 	  	end
 
-	  	it 'routes DELETE /profile/delete to #destroy' do
-	  		expect(delete: '/profile/delete').to route_to('user_profiles/registrations#destroy')
+	  	it 'routes DELETE /profile to #destroy' do
+	  		expect(delete: '/profile').to route_to('user_profiles/registrations#destroy')
 	  	end
 	  end
   end

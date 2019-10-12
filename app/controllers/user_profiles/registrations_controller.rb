@@ -17,6 +17,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
   # GET /resource/edit
   def edit
     gon_client_validators(resource, {current_password: [[]]}, pre_validate: false, serialize_opts: {methods: [:password, :password_confirmation]})
+    gon_client_validators({account_delete: {current_password: ""}})
     super
   end
 
@@ -29,11 +30,15 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 
   # DELETE /resource
   def destroy
-    resource.soft_destroy
-    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
-    set_flash_message! :notice, :destroyed
-    yield resource if block_given?
-    respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
+    pass = params.require(:account_delete).permit(:current_password)[:current_password]
+    if resource.destroy_with_password(pass)
+      Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+      set_flash_message! :notice, :destroyed
+      yield resource if block_given?
+      respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
+    else
+      respond_with resource
+    end
   end
 
   # GET /resource/cancel

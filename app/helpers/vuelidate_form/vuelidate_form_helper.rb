@@ -10,6 +10,7 @@ module VuelidateForm::VuelidateFormHelper
 
 	private
 	def generate_form_using(method, args, options, block)
+		form_opts = options.delete(:vue) || {}
 		set_options(options)
 		form_obj = nil
 		stepper_options = options.delete :stepper
@@ -25,7 +26,7 @@ module VuelidateForm::VuelidateFormHelper
 		end
 
 		#wrap in vue component template
-		add_valid_form_wrapper(form_obj, form_text)
+		add_valid_form_wrapper(form_obj, form_text, form_opts)
 	end
 
 	def set_options(options)
@@ -40,14 +41,14 @@ module VuelidateForm::VuelidateFormHelper
 		options[:html][:autocomplete] = "off" unless options[:autocomplete]
 	end
 
-	def add_valid_form_wrapper(form_obj, form_text)
+	def add_valid_form_wrapper(form_obj, form_text, form_opts)
 		validations = form_obj.validations.nil? ? "" : form_obj.validations.join(",")
 		toggles = form_obj.toggles.nil? ? "{}" : form_obj.toggles.to_json
 		content_tag("vuelidate-form", {
 			validate: validations,
 			:":start-toggles" => toggles,
 			:"v-slot" => "vf"
-		}) do
+		}.merge(form_opts)) do
 			form_text
 		end
 	end

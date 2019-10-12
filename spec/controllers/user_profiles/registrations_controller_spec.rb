@@ -121,10 +121,15 @@ RSpec.describe UserProfiles::RegistrationsController, type: :controller do
 			cleanup @user
 		end
 
-		it 'calls #soft_destroy on the user' do
-			allow_any_instance_of(UserProfile).to receive(:soft_destroy)
+		it 'calls #soft_destroy on the user if the password is correct' do
 			expect_any_instance_of(UserProfile).to receive(:soft_destroy)
-			delete :destroy
+			delete :destroy, params: {account_delete: {current_password: attributes_for(:user_profile)[:password]}}, format: :json
+			expect(response).to_not have_http_status(422)
+		end
+
+		it 'returns an error if the password is not correct' do
+			delete :destroy, params: {account_delete: {current_password: "wrong"}}, format: :json
+			expect(response).to have_http_status(422)
 		end
 	end
 end

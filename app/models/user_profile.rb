@@ -74,10 +74,24 @@ class UserProfile < Profile
     super(params)
   end
 
+  def destroy_with_password(current_password)
+    result = if valid_password?(current_password)
+      soft_destroy
+    else
+      valid?
+      errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+      false
+    end
+
+    result
+  end
+
+
   def soft_destroy
     if opt_in
       update_attribute(:deleted_at, Time.current)
       update_attribute(:email, "")
+      true
     else
       replace_with_dummy
       destroy
