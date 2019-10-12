@@ -38,6 +38,21 @@
 
 - In a separate shell instance, create and setup the database: `rake db:create && rake db:setup`
 
-- Start the local server: `rails s`
+- Start the **rails** server: `rails s`
+
+- Start the server and dev processes: `foreman start -p 3000` (Or if that's giving you trouble, `ruby ./bin/webpack-dev-server`)
+
+
+# Workflow
+
+-----------
+
+- Make sure your packages are updated: `yarn` and `bundle install`
+
+- Start the **mongodb** database: `mongod`
+
+- Setup database: `rake db:setup && rake db:create_indexes`
+
+- Start the **rails** server: `rails s`
 
 - Start the server and dev processes: `foreman start -p 3000` (Or if that's giving you trouble, `ruby ./bin/webpack-dev-server`)
