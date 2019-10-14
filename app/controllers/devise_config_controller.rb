@@ -4,7 +4,7 @@ class DeviseConfigController < ApplicationController
 	respond_to :json, :html
 
 	def render *args
-		gon_client_validators(resource)
+		gon_client_validators(resource) unless @gon == true
 		super
 	end
 end

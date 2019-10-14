@@ -5,9 +5,12 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
   before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    super do |resource|
+      gon_client_validators(resource, serialize_opts: {methods: [:password, :password_confirmation]})
+      @gon = true
+    end
+  end
 
   # POST /resource
   # def create
@@ -18,6 +21,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
   def edit
     gon_client_validators(resource, {current_password: [[]]}, pre_validate: false, serialize_opts: {methods: [:password, :password_confirmation]})
     gon_client_validators({account_delete: {current_password: ""}})
+    @gon = true
     super
   end
 

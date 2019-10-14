@@ -1,6 +1,5 @@
 <div class="login">
   <h1>Log in</h1>
-
   <%= vuelidate_form_with model: resource, as: resource_name, url: session_path(resource_name), class: "big centered", require_all: true do |f| %>
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
     <%= f.password_field :password, autocomplete: "current-password", show_toggle: true %>

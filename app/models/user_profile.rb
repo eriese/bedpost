@@ -105,6 +105,16 @@ class UserProfile < Profile
     !deleted_at ? super : :deleted_account
   end
 
+  def unauthenticated_message
+    if access_locked? || (lock_strategy_enabled?(:failed_attempts) && attempts_exceeded?)
+      :locked
+    elsif lock_strategy_enabled?(:failed_attempts) && last_attempt? && self.class.last_attempt_warning
+      :last_attempt
+    else
+      super
+    end
+  end
+
   private
   def generate_uid
   	SecureRandom.uuid.slice(0,8)

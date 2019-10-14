@@ -1,16 +1,9 @@
-<h2>Resend confirmation instructions</h2>
-
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Resend confirmation instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+<div class="login">
+	<h1>Resend confirmation instructions</h1>
+	<%= vuelidate_form_for(resource, as: resource_name, url: confirmation_path(resource_name), require_all: true, html: { method: :post, class: "big centered"}) do |f| %>
+	  <%= render "devise/shared/error_messages", resource: resource %>
+	  <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+	  <%= f.submit "Resend confirmation instructions" %>
+	  <div class="additional"><%= render "devise/shared/links" %></div>
+	<% end %>
+</div>
