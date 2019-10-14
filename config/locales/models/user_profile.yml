@@ -38,7 +38,12 @@ en:
         old_password: Current password
         new_password: New password
         new_password_confirmation: Confirm your new password
+        opt_in_group: Allow us to use your data (minus name and email) for research purposes?
+        opt_in:
+          'true': 'Yes'
+          'false': 'No'
     tooltip:
       user_profile:
         name: We really only care about your first name, but it's up to you.
         uid: Use this ID like a username to invite partners to connect to your profile.
+        opt_in_group: We will never sell your data to advertisers, but it can help public health researchers learn more about about STI transmission factors, and we think that's exciting.

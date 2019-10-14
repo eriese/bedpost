@@ -2,7 +2,7 @@
   <h2><%= t_action(".account_settings") %></h2>
   <%= render  "profiles/fields", f: f, profile: resource, show_name: resource.pronoun.present? do |p| %>
     <%= f.text_field(:uid, {tooltip: true}) unless resource.pronoun.nil? %>
-    <%= f.check_box :opt_in, {tooltip: true} %>
+    <%= f.radio_group :opt_in, options: {radio_class: "hidden-radio", group_options: {field_class: "toggler", tooltip: true}} %>
   <% end %>
   <% if resource.pronoun.present? %>
     <h2 class="with-desc"><%= t_action(".security_settings.title") %></h2>

@@ -49,8 +49,7 @@ class UserProfile < Profile
   embeds_many :partnerships, cascade_callbacks: true
 
   validates_presence_of :password, :password_confirmation, on: :create
-  # validate :update_secure_only_with_password, on: :update
-  validates_uniqueness_of :uid, :email, case_sensitive: false
+  validates_uniqueness_of :uid, case_sensitive: false
   validates_presence_of :email, :encrypted_password, :uid, if: :active_for_authentication?
   validates_presence_of :pronoun, :anus_name, :external_name, on: :update
   validates :password, length: {minimum: 7, maximum: 72}, allow_blank: true
