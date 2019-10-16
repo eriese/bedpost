@@ -23,6 +23,7 @@
 
 # Ignore application configuration
 /config/application.yml
+/config/master.key
 
 /public/packs
 /public/packs-test
