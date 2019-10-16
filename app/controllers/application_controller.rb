@@ -1,24 +1,7 @@
 class ApplicationController < ActionController::Base
 	protect_from_forgery
-	before_action :require_user
-
-	helper_method :current_user
-
-	def current_user
-	  @current_user ||= UserProfile.find(session[:user_id]) if session[:user_id]
-	end
-
-	def log_in_user(user_profile)
-		session[:user_id] = user_profile.id
-	end
-
-	def require_user
-		redirect_to login_path(r: request.url) unless current_user
-	end
-
-	def require_no_user
-		redirect_to params[:r] || user_profile_path if current_user
-	end
+	before_action :store_user_location!, if: :storable_location?
+	before_action :authenticate_user_profile!
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
 		flash[:submission_error] = error;
@@ -34,7 +17,7 @@ class ApplicationController < ActionController::Base
 		g_validators = validators
 		g_obj = obj
 		adder_obj = obj
-		# adder = nil
+
 		unless obj.is_a? Hash
 			adder = model_validator_mapper(obj, validators, skip)
 			adder_obj = obj.as_json serialize_opts.reverse_merge({strip_qs: true})
@@ -65,8 +48,12 @@ class ApplicationController < ActionController::Base
 
 			v_hash[atr] ||= []
 			v_hash[atr] += a_vals.map do |v|
+				next if v.kind == :foreign_key
 				if on_cond = v.options[:on]
 					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
+				end
+				if if_cond = v.options[:if]
+					next unless obj.send(if_cond)
 				end
 
 				[v.kind, v.options]
@@ -86,4 +73,18 @@ class ApplicationController < ActionController::Base
 			end
 		end
 	end
+
+	# Its important that the location is NOT stored if:
+  # - The request method is not GET (non idempotent)
+  # - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an
+  #    infinite redirect loop.
+  # - The request is an Ajax request as this can lead to very unexpected behaviour.
+  def storable_location?
+    request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+  end
+
+  def store_user_location!
+    # :user is the scope we are authenticating
+    store_location_for(:user_profile, request.fullpath)
+  end
 end

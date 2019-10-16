@@ -106,7 +106,7 @@ module EncountersHelper
 
 	def get_contact_person(contact, is_object)
 		person = is_object ? contact.object : contact.subject
-		person == :user ? current_user : @partner
+		person == :user ? current_user_profile : @partner
 	end
 
 end

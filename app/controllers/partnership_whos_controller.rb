@@ -3,16 +3,16 @@ class PartnershipWhosController < ApplicationController
 
 	def new
 		p_id = params[:partnership_id]
-		@partnership = p_id.present? ? current_user.partnerships.find(p_id) : current_user.partnerships.new
+		@partnership = p_id.present? ? current_user_profile.partnerships.find(p_id) : current_user_profile.partnerships.new
 		@partnership.uid = flash[:who_attempt][:uid] if flash[:who_attempt].present?
-		gon_client_validators(@partnership, {uid: [[:presence]]}, pre_validate: @partnership.uid.present?, serialize_opts: {only: [:uid], methods: [:uid]})
+		gon_client_validators(@partnership, {"uid"=> [[:presence]]}, pre_validate: @partnership.uid.present?, serialize_opts: {only: [:uid], methods: [:uid]})
 		render p_id.present? ? :edit : :new
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to partnerships_path
 	end
 
 	def create
-		@partnership = current_user.partnerships.new(uid_param)
+		@partnership = current_user_profile.partnerships.new(uid_param)
 		if @partnership.valid?
 			redirect_to new_partnership_path(p_id: @partnership.partner_id)
 		else
@@ -21,9 +21,9 @@ class PartnershipWhosController < ApplicationController
 	end
 
 	def update
-		partnership = current_user.partnerships.find(params[:partnership_id])
+		partnership = current_user_profile.partnerships.find(params[:partnership_id])
 		if partnership.update(uid_param)
-			redirect_to partnership
+			redirect_to partnership_path(partnership)
 		else
 			flash_and_respond partnership_who_path(partnership)
 		end
@@ -33,7 +33,7 @@ class PartnershipWhosController < ApplicationController
 
 	private
 	def clear_unsaved
-		current_user.clear_unsaved_partnerships
+		current_user_profile.clear_unsaved_partnerships
 	end
 
 	def uid_param

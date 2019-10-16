@@ -11,7 +11,7 @@ end
 
 RSpec.describe ApplicationController do
 	controller do
-		skip_before_action :require_user
+		skip_before_action :authenticate_user_profile!
 		def index
 			@obj = ApplicationControllerModel.new
 			@obj.valid?

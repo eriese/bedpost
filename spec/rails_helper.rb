@@ -50,6 +50,9 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include FeatureHelpers, type: :feature
   config.include ActionView::Helpers::SanitizeHelper, type: :feature
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
+  config.include Devise::Test::IntegrationHelpers, type: :feature
 
   include UserProfileHelpers
   include CleanupHelpers

@@ -9,8 +9,7 @@ feature "User creates new partnership", :slow do
 	end
 
 	after :each do
-		@user.destroy
-		@partner.destroy if @partner
+		cleanup(@user, @partner)
 	end
 
 	context "with uid from an existing user" do
@@ -34,11 +33,11 @@ feature "User creates new partnership", :slow do
 		scenario "The flow goes who_path, new_profile_path, new_partner_path, partner_path" do
 			# get redirected to who
 			expect(page).to have_current_path(who_path)
+			partner_params = attributes_for(:no_internal)
 
 			click_on(t("partnership_whos.new.go_new_profile"))
-			expect(page).to have_current_path(new_profile_path)
+			expect(page).to have_current_path(new_dummy_profile_path)
 
-			partner_params = attributes_for(:no_internal)
 			partner_params.each do |key, val|
 				next if val.nil?
 				input_id = "profile_#{key}"

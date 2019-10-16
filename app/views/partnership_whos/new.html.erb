@@ -16,7 +16,7 @@
 		<div v-if="step == 2">
 			<h2><%= t(".new_profile.title")%></h2>
 			<aside class="desc"><%= t(".new_profile.desc") %></aside>
-			<div class="options"><%= link_to t(".go"), new_profile_path, "data-animation-type" => "slideLeft", title: t(".go_new_profile"), class: "as-button" %></div>
+			<div class="options"><%= link_to t(".go"), new_dummy_profile_path, "data-animation-type" => "slideLeft", title: t(".go_new_profile"), class: "as-button" %></div>
 			<button type="button" @click="setStep(0, {animationType: 'slideRight'})" class="as-link">Back</button>
 		</div>
 	</div>

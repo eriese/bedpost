@@ -73,7 +73,7 @@ RSpec.describe PartnershipsController, type: :controller do
 
 		it 'does not leave an un-saved partnership on the user' do
 			get :new, session: dummy_user_session
-			expect(controller.current_user.partnerships.length).to eq 0
+			expect(controller.current_user_profile.partnerships.length).to eq 0
 
 			get :index, session: dummy_user_session
 			expect(assigns(:partnerships).length).to eq 0
@@ -81,13 +81,17 @@ RSpec.describe PartnershipsController, type: :controller do
 	end
 
 	describe 'POST #create' do
+		before :each do
+			@user = create(:user_profile)
+			sign_in @user
+		end
+
 		after :each do
 			cleanup(@user, @partner)
 		end
 
 		context 'with a valid partnership' do
 			it 'saves the partnership to the user if the partnership has a partner_id' do
-				@user = create(:user_profile)
 				@partner = create(:profile)
 				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({partner_id: @partner.id})}
 
@@ -95,16 +99,14 @@ RSpec.describe PartnershipsController, type: :controller do
 			end
 
 			it 'saves the partnership to the user if the partnership has a uid' do
-				@user = create(:user_profile)
 				@partner = create(:user_profile)
 				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({uid: @partner.uid})}
 
-				expect(controller.current_user).to eq @user
-				expect(controller.current_user.partnerships.length).to eq 1
+				expect(controller.current_user_profile).to eq @user
+				expect(controller.current_user_profile.partnerships.length).to eq 1
 			end
 
 			it 'redirects to the show partnership page for the new partnership' do
-				@user = create(:user_profile)
 				@partner = create(:user_profile)
 				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({uid: @partner.uid})}
 
@@ -114,17 +116,15 @@ RSpec.describe PartnershipsController, type: :controller do
 
 		context 'with invalid partnership' do
 			it 'reloads the page' do
-				@user = create(:user_profile)
 				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership)}
 
 				expect(response).to redirect_to new_partnership_path
 			end
 
 			it 'does not leave an unsaved partnership on the user' do
-				@user = create(:user_profile)
 				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership)}
 
-				expect(controller.current_user.partnerships.length).to eq 0
+				expect(controller.current_user_profile.partnerships.length).to eq 0
 			end
 		end
 	end
@@ -136,6 +136,7 @@ RSpec.describe PartnershipsController, type: :controller do
 
 		it 'loads the edit form for the partnership' do
 			@user = create(:user_profile)
+			sign_in @user
 			@partner = create(:profile)
 			ship = @user.partnerships.create(partner: @partner)
 
@@ -157,6 +158,7 @@ RSpec.describe PartnershipsController, type: :controller do
 		context 'with valid params' do
 			it 'updates the partnership' do
 				@user = create(:user_profile)
+				sign_in @user
 				@partner = create(:profile)
 				ship = @user.partnerships.create(partner: @partner)
 
@@ -171,6 +173,7 @@ RSpec.describe PartnershipsController, type: :controller do
 		context 'with invalid params' do
 			it 'responds with the error' do
 				@user = create(:user_profile)
+				sign_in @user
 				ship = @user.partnerships.create(partner: dummy_user)
 
 				post :update, session: {user_id: @user.id}, params: {id: ship.id, partnership: {familiarity: 11}}
@@ -187,6 +190,7 @@ RSpec.describe PartnershipsController, type: :controller do
 
 		it 'destroys the requested parnership' do
 			@user = create(:user_profile)
+			sign_in @user
 			ship = @user.partnerships.create(partner: dummy_user)
 
 			delete :destroy, params: {id: ship.to_param}, session: {user_id: @user.id}
@@ -195,6 +199,7 @@ RSpec.describe PartnershipsController, type: :controller do
 
 		it 'redirects to the partnerships index page' do
 			@user = create(:user_profile)
+			sign_in @user
 			ship = @user.partnerships.create(partner: dummy_user)
 
 			delete :destroy, params: {id: ship.to_param}, session: {user_id: @user.id}

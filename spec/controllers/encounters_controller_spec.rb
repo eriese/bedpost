@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe EncountersController, type: :controller do
 	def make_user_and_encounters(num_encounters: 0, num_partners: 1)
 		@user = create(:user_profile)
+		sign_in @user
 		@hand = create(:contact_instrument, name: :hand)
 		@mouth = create(:contact_instrument, name: :mouth)
 		@p1 = create(:possible_contact, contact_type: :penetrated, subject_instrument: @hand, object_instrument: @mouth)
@@ -18,7 +19,6 @@ RSpec.describe EncountersController, type: :controller do
 	end
 
 	def user_session
-		{user_id: @user.id}
 	end
 
 	after :each do
@@ -147,7 +147,7 @@ RSpec.describe EncountersController, type: :controller do
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
 				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
 
-				expect(controller.current_user.partnerships.first.encounters.length).to eq 0
+				expect(controller.current_user_profile.partnerships.first.encounters.length).to eq 0
 			end
 
 			it 'errors gacefully with bad contacts params' do

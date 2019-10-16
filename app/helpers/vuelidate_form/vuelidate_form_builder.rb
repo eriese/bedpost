@@ -104,7 +104,6 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: "fe"}
     radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
     checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
-    btns =
 
     group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup})
     joiner = options.delete(:joiner)

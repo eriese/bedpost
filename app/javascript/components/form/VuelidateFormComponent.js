@@ -22,8 +22,17 @@ import renderless from "@mixins/renderless";
 export default {
 	mixins: [renderless],
 	data: function() {
+		let name = this.name
+		let fd = null
+		if (name) {
+			fd = {}
+			fd[name] = gon.form_obj[name]
+		} else {
+			fd = gon.form_obj
+		}
+
 		let dt = {
-			formData: gon.form_obj,
+			formData: fd,
 			toggles: this.startToggles,
 			stepper: null,
 			submissionError: gon.submissionError || {}
@@ -40,11 +49,18 @@ export default {
 	},
 	props: {
 		validate: String,
-		startToggles: Object
+		startToggles: Object,
+		name: String
 	},
 	validations: function() {
 		// format the validators
-		return {formData: formatValidators(this.$props.validate, gon.validators, [])};
+		let validators = {};
+		if (this.name) {
+			validators[this.name] = gon.validators[this.name]
+		} else {
+			validators = gon.validators
+		}
+		return {formData: formatValidators(this.$props.validate, validators, [])};
 	},
 	computed: {
 		slotScope: function() {
@@ -109,7 +125,7 @@ export default {
 		handleError(e) {
 			let [respJson, status, xhr] = e.detail
 			// set the new submission error
-			this.submissionError = respJson;
+			this.submissionError = respJson.errors;
 			// re-run validations
 			this.$v.$touch();
 		},

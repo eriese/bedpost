@@ -40,76 +40,24 @@ RSpec.describe UserProfile, type: :model do
 
     describe '#password' do
       it "generates a password hash" do
-        pass = BCrypt::Password.new(dummy_user.password_digest)
+        pass = BCrypt::Password.new(dummy_user.encrypted_password)
         original = attributes_for(:user_profile)[:password]
         expect(pass).to eq original
+      end
+
+      it 'requires a minimum length of 7' do
+        validator = UserProfile.validators_on(:password).find {|v| v.is_a?(Mongoid::Validatable::LengthValidator) && v.options[:minimum] == 7}
+        expect(validator).to_not be_nil
+      end
+
+      it 'requires a maximum length of 72' do
+        validator = UserProfile.validators_on(:password).find {|v| v.is_a?(Mongoid::Validatable::LengthValidator) && v.options[:maximum] == 72}
+        expect(validator).to_not be_nil
       end
     end
   end
 
   context 'methods' do
-    describe '#password_valid?' do
-      it 'runs validations on the password' do
-        user1 = build_stubbed(:user_profile)
-        valid = user1.send(:password_valid?)
-        expect(valid).to be true
-      end
-
-      it 'rejects invalid passwords' do
-        pass = "p" * 73
-        user1 = build_stubbed(:user_profile, password: pass)
-        valid = user1.send(:password_valid?)
-        expect(valid).to be false
-      end
-    end
-
-    describe '#update_only_password' do
-      before :each do
-        @user = create(:user_profile)
-      end
-
-      after :each do
-        cleanup(@user)
-      end
-
-      it 'does not update if the password is invalid' do
-        pass = "p" * 6
-        expect(@user.update_only_password(pass)).to be false
-      end
-
-      it 'updates the password digest on the user' do
-        pass = "new-pass"
-        result = @user.update_only_password(pass)
-        expect(result).to be true
-        expect(@user.authenticate(pass)).to be @user
-      end
-
-      it 'does not retain the old password' do
-        pass = "new-pass"
-        old = attributes_for(:user_profile)[:password]
-        result = @user.update_only_password(pass)
-        expect(result).to be true
-        expect(@user.authenticate(old)).to be false
-      end
-
-      it 'works even if the rest of the user is not valid' do
-        @user.pronoun = nil
-        expect(@user).to_not be_valid
-        pass = "new-pass"
-
-        expect(@user.update_only_password(pass)).to be true
-      end
-
-      it 'is persisted in the database' do
-        pass = "new-pass"
-        @user.update_only_password(pass)
-
-        persisted = UserProfile.find(@user.id)
-        expect(persisted).to eq @user
-        expect(persisted.authenticate(pass)).to eq persisted
-      end
-    end
-
     describe '#encounters' do
       before :each do
         @user = create(:user_profile)
@@ -130,12 +78,93 @@ RSpec.describe UserProfile, type: :model do
     end
 
     describe '#as_json' do
-      it 'does not include the passsword digest' do
+      it 'does not include the passsword or encrypted_password' do
         user = build_stubbed(:user_profile)
         result = user.as_json
 
-        expect(result).to_not include("password_digest")
+        expect(result).to_not include("encrypted_password")
         expect(result).to_not include("password")
+      end
+    end
+
+    describe '#update_without_password' do
+      before :each do
+        @user = create(:user_profile)
+      end
+
+      after :each do
+        cleanup(@user)
+      end
+
+      it 'never updates the password' do
+        oldPass = @user.encrypted_password
+        params = {name: "new name", password: "new password", password_confirmation: "new password"}
+        @user.update_without_password(params)
+        @user.reload
+        expect(@user.name).to eq params[:name]
+        expect(@user.encrypted_password).to eq oldPass
+      end
+
+      it 'never updates the email' do
+        oldEmail = @user.email
+        params = {name: "new name", email: "newEmail@mail.com"}
+        @user.update_without_password(params)
+        @user.reload
+        expect(@user.name).to eq params[:name]
+        expect(@user.email).to eq oldEmail
+      end
+    end
+
+    describe '#soft_destroy' do
+
+      context 'with a user with #opt_in = true' do
+        before :each do
+          @user = create(:user_profile, opt_in: true)
+        end
+        after :each do
+          cleanup(@user)
+        end
+
+        it 'clears the email address' do
+          expect(@user.soft_destroy).to be true
+          @user.reload
+          expect(@user.email).to be_nil
+        end
+
+        it 'sets a deleted_at timestamp' do
+          expect(@user.soft_destroy).to be true
+          @user.reload
+          expect(@user.deleted_at).to_not be_nil
+        end
+      end
+
+      context 'with a user with #opt_in = false' do
+        before :each do
+          @user = create(:user_profile)
+        end
+
+        after :each do
+          cleanup(@user, @partner, @dummy)
+        end
+
+        it 'calls destroy on the user' do
+          allow(@user).to receive(:destroy).and_call_original
+          expect(@user.soft_destroy).to be true
+          expect(@user).to have_received(:destroy)
+        end
+
+        it 'creates a placeholder user with the same preferences as the user if the user is partnered to any other user profiles' do
+          @partner = create(:user_profile)
+          @partner.partnerships << build(:partnership, partner_id: @user.id)
+          @user.reload
+
+          expect(@user.partnered_to_ids).to_not be_empty
+
+          expect(@user.soft_destroy).to be true
+          @dummy = Profile.last unless Profile.last.id == @partner.id
+          expect(@dummy.name).to eq @user.name
+          expect(@dummy.partnered_to_ids).to eq @user.partnered_to_ids
+        end
       end
     end
   end
@@ -185,37 +214,6 @@ RSpec.describe UserProfile, type: :model do
     	user2 = build_stubbed(:user_profile, external_name: nil)
     	expect(user2).to_not be_valid
       expect(user2).to have_validation_error_for(:external_name, :blank)
-    end
-
-    context 'updating secured fields' do
-      before :each do
-        @user1 = create(:user_profile)
-      end
-      after :each do
-        cleanup(@user1)
-      end
-
-      context 'with a valid password' do
-        it 'updates the password' do
-          @user1.update({old_password: attributes_for(:user_profile)[:password], password: "newpass", password_confirmation: "newpass"})
-          expect(@user1).to be_valid
-          expect(@user1.password).to eq "newpass"
-        end
-
-        it 'updates the email' do
-          @user1.update({old_password: attributes_for(:user_profile)[:password], email: "newemail@mail.com"})
-          expect(@user1).to be_valid
-          expect(@user1.email).to eq "newemail@mail.com"
-        end
-      end
-
-      context 'with no password' do
-        it 'updates non-protected fields' do
-          expect(@user1.update({external_name: "new name"})).to be true
-          expect(@user1).to be_valid
-          expect(@user1.external_name).to eq "new name"
-        end
-      end
     end
   end
 

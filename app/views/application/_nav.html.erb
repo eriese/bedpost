@@ -1,4 +1,4 @@
-<% if current_user %>
+<% if current_user_profile %>
 <nav-component v-slot="{isOpen, toggleMenu}">
 <nav id="nav" role="navigation">
   <button class="burger inverse" :class="{open: isOpen, closed: !isOpen}" @click.stop="toggleMenu" type="button" :aria-expanded="isOpen ? 'true' : 'false'" aria-controls="nav-list">
@@ -9,7 +9,7 @@
   </button>
   <div class="menu" ref="menu">
     <ul id="nav-list">
-      <li class="no-link"><%= current_user.name %></li>
+      <li class="no-link"><%= current_user_profile.name %></li>
       <% ApplicationHelper::NAV_LINKS.each do |key, path| %>
         <li>
           <%= link_to_unless_current(t(key), path) do %>
@@ -17,7 +17,7 @@
           <%end%>
         </li>
       <% end %>
-      <li><%= button_to "Log out", logout_path, method: "delete", class: "not-button" %></li>
+      <li><%= button_to "Log out", destroy_user_profile_session_path, method: "delete", class: "not-button" %></li>
     </ul>
   </div>
 </nav>
