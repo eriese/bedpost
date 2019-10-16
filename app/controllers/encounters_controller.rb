@@ -6,7 +6,7 @@ class EncountersController < ApplicationController
 		if params[:partnership_id]
 			@partnerships = [@partnership] if set_partnership
 		else
-			@partnerships = current_user.partnerships
+			@partnerships = current_user_profile.partnerships
 		end
 
 		@partner_names = Profile.find(@partnerships.pluck(:partner_id)).pluck(:name)
@@ -64,7 +64,7 @@ class EncountersController < ApplicationController
 
 	private
 	def set_partnership(redirect_path = partnerships_path)
-		@partnership = current_user.partnerships.find(params[:partnership_id])
+		@partnership = current_user_profile.partnerships.find(params[:partnership_id])
 		return true
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to redirect_path
@@ -92,8 +92,8 @@ class EncountersController < ApplicationController
 		gon.encounter_data = {
 			partner: @partnership.partner.as_json_private,
 			contacts: Contact::ContactType::TYPES,
-			user: current_user.as_json_private,
-			instruments: Contact::Instrument.hashed_for_partnership(current_user, @partnership.partner),
+			user: current_user_profile.as_json_private,
+			instruments: Contact::Instrument.hashed_for_partnership(current_user_profile, @partnership.partner),
 			possibles: PossibleContact.hashed_for_partnership,
 			partnerPronoun: @partnership.partner.pronoun,
 			barriers: Contact::BarrierType::TYPES

@@ -1,5 +1,4 @@
 class UserProfile < Profile
-  # include ActiveModel::SecurePassword
   #to allow for serialization for jobs
   include GlobalID::Identification
   # Include default devise modules. Others available are:
@@ -52,10 +51,6 @@ class UserProfile < Profile
   validates_uniqueness_of :uid, case_sensitive: false
   validates_presence_of :email, :encrypted_password, :uid, if: :active_for_authentication?
   validates_presence_of :pronoun, :anus_name, :external_name, on: :update
-  validates :password, length: {minimum: 7, maximum: 72}, allow_blank: true
-
-
-  after_create {SendWelcomeEmailJob.perform_later(self)}
 
   def email=(value)
   	super(value.downcase) unless value == nil

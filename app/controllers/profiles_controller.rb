@@ -61,7 +61,7 @@ class ProfilesController < ApplicationController
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
-      @partnership = current_user.partnerships.find(params[:partnership_id])
+      @partnership = current_user_profile.partnerships.find(params[:partnership_id])
       @profile = Profile.find(@partnership.partner_id)
     end
 

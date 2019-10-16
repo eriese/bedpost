@@ -147,7 +147,7 @@ RSpec.describe EncountersController, type: :controller do
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
 				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
 
-				expect(controller.current_user.partnerships.first.encounters.length).to eq 0
+				expect(controller.current_user_profile.partnerships.first.encounters.length).to eq 0
 			end
 
 			it 'errors gacefully with bad contacts params' do

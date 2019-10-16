@@ -44,6 +44,16 @@ RSpec.describe UserProfile, type: :model do
         original = attributes_for(:user_profile)[:password]
         expect(pass).to eq original
       end
+
+      it 'requires a minimum length of 7' do
+        validator = UserProfile.validators_on(:password).find {|v| v.is_a?(Mongoid::Validatable::LengthValidator) && v.options[:minimum] == 7}
+        expect(validator).to_not be_nil
+      end
+
+      it 'requires a maximum length of 72' do
+        validator = UserProfile.validators_on(:password).find {|v| v.is_a?(Mongoid::Validatable::LengthValidator) && v.options[:maximum] == 72}
+        expect(validator).to_not be_nil
+      end
     end
   end
 

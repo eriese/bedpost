@@ -48,7 +48,7 @@ RSpec.describe UserProfiles::RegistrationsController, type: :controller do
 				post :create, params: valid_params
 				@prof = get_new_prof(valid_params)
 
-				expect(controller.current_user).to eq @prof
+				expect(controller.current_user_profile).to eq @prof
 			end
 
 			it "redirects the user to the edit profile page to submit more information" do

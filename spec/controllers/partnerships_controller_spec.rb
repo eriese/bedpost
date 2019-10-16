@@ -73,7 +73,7 @@ RSpec.describe PartnershipsController, type: :controller do
 
 		it 'does not leave an un-saved partnership on the user' do
 			get :new, session: dummy_user_session
-			expect(controller.current_user.partnerships.length).to eq 0
+			expect(controller.current_user_profile.partnerships.length).to eq 0
 
 			get :index, session: dummy_user_session
 			expect(assigns(:partnerships).length).to eq 0
@@ -102,8 +102,8 @@ RSpec.describe PartnershipsController, type: :controller do
 				@partner = create(:user_profile)
 				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({uid: @partner.uid})}
 
-				expect(controller.current_user).to eq @user
-				expect(controller.current_user.partnerships.length).to eq 1
+				expect(controller.current_user_profile).to eq @user
+				expect(controller.current_user_profile.partnerships.length).to eq 1
 			end
 
 			it 'redirects to the show partnership page for the new partnership' do
@@ -124,7 +124,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			it 'does not leave an unsaved partnership on the user' do
 				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership)}
 
-				expect(controller.current_user.partnerships.length).to eq 0
+				expect(controller.current_user_profile.partnerships.length).to eq 0
 			end
 		end
 	end

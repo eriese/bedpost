@@ -1,25 +1,7 @@
 class ApplicationController < ActionController::Base
 	protect_from_forgery
 	before_action :store_user_location!, if: :storable_location?
-	before_action :require_user
-
-	helper_method :current_user
-
-	def current_user
-	  current_user_profile
-	end
-
-	def log_in_user(user_profile)
-		session[:user_id] = user_profile.id
-	end
-
-	def require_user
-		authenticate_user_profile!
-	end
-
-	def require_no_user
-		require_no_authentication
-	end
+	before_action :authenticate_user_profile!
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
 		flash[:submission_error] = error;
@@ -35,7 +17,7 @@ class ApplicationController < ActionController::Base
 		g_validators = validators
 		g_obj = obj
 		adder_obj = obj
-		# adder = nil
+
 		unless obj.is_a? Hash
 			adder = model_validator_mapper(obj, validators, skip)
 			adder_obj = obj.as_json serialize_opts.reverse_merge({strip_qs: true})

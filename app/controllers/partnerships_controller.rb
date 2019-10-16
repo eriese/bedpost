@@ -3,14 +3,14 @@ class PartnershipsController < ApplicationController
 	before_action :set_partnership, only: [:show, :edit, :update, :destroy]
 
 	def index
-		@partnerships = current_user.partnerships
+		@partnerships = current_user_profile.partnerships
 	end
 
 	def show
 	end
 
 	def new
-		@partnership = current_user.partnerships.new(partner_id: params[:p_id])
+		@partnership = current_user_profile.partnerships.new(partner_id: params[:p_id])
 
 		unless @partnership.partner_id.present? && @partnership.valid?
 			flash[:submission_error] = {"form_error" => @partnership.errors.messages[:partner]}
@@ -23,7 +23,7 @@ class PartnershipsController < ApplicationController
 	def create
 		ship_params = params.require(:partnership).permit(Partnership::LEVEL_FIELDS + [:nickname, :partner_id, :uid])
 
-		partnership = current_user.partnerships.new(ship_params)
+		partnership = current_user_profile.partnerships.new(ship_params)
 		if partnership.save
 			redirect_to partnership
 		else
@@ -52,11 +52,11 @@ class PartnershipsController < ApplicationController
 
 	private
 	def clear_unsaved
-		current_user.clear_unsaved_partnerships
+		current_user_profile.clear_unsaved_partnerships
 	end
 
 	def set_partnership
-		@partnership = current_user.partnerships.find(params[:id])
+		@partnership = current_user_profile.partnerships.find(params[:id])
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to partnerships_path
 	end

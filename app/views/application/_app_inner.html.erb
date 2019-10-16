@@ -1,6 +1,6 @@
 <div id="vue-container" class="<%= container_class %>">
-  <%= render "nav", {c_user_name: c_user_name} %>
-  <header class=<%=c_user_name.present? ? "small" : ""%>>
+  <%= render "nav" %>
+  <header class=<%=current_user_profile.present? ? "small" : ""%>>
     <%= link_to root_path, id: "logo" do %>
     Bed<span>Post</span>
     <% end %>

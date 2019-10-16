@@ -11,7 +11,7 @@ RSpec.describe PartnershipWhosController, type: :controller do
 			sign_in @user
 			post :create, params: {partnership: {uid: "nonsense"}}
 
-			expect(controller.current_user.partnerships.length).to eq 0
+			expect(controller.current_user_profile.partnerships.length).to eq 0
 		end
 
 		context 'with a valid uid' do
