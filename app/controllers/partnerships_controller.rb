@@ -25,7 +25,7 @@ class PartnershipsController < ApplicationController
 
 		partnership = current_user_profile.partnerships.new(ship_params)
 		if partnership.save
-			redirect_to partnership
+			redirect_to partnership_path(partnership)
 		else
 			respond_with_submission_error(partnership.errors.messages, new_partnership_path)
 			clear_unsaved
@@ -39,7 +39,7 @@ class PartnershipsController < ApplicationController
 	def update
 		ship_params = params.require(:partnership).permit(Partnership::LEVEL_FIELDS + [:nickname])
 		if @partnership.update(ship_params)
-			redirect_to @partnership
+			redirect_to partnership_path(@partnership)
 		else
 			respond_with_submission_error(@partnership.errors.messages, edit_partnership_path(@partnership))
 		end

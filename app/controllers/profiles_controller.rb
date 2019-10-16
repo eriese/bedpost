@@ -15,7 +15,7 @@ class ProfilesController < ApplicationController
   # GET /partners/1/edit
   def edit
     if @partnership.present? && @profile.is_a?(UserProfile)
-      redirect_to @partnership
+      redirect_to partnership_path(@partnership)
     else
       gon_client_validators(@profile, edit_validator_opts, serialize_opts: edit_validator_serialize_opts, pre_validate: false)
     end

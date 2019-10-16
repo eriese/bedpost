@@ -23,7 +23,7 @@ class PartnershipWhosController < ApplicationController
 	def update
 		partnership = current_user_profile.partnerships.find(params[:partnership_id])
 		if partnership.update(uid_param)
-			redirect_to partnership
+			redirect_to partnership_path(partnership)
 		else
 			flash_and_respond partnership_who_path(partnership)
 		end
