@@ -26,6 +26,7 @@ module Bedpost
     Mongoid::QueryCache.enabled = true
 
     config.generators.javascript_engine = :js
+    config.action_mailer.delivery_method = :mailjet_api
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

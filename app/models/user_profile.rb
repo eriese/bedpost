@@ -110,6 +110,10 @@ class UserProfile < Profile
     end
   end
 
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
+  end
+
   private
   def generate_uid
   	SecureRandom.uuid.slice(0,8)

@@ -42,6 +42,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'devise'
+gem 'mailjet'
 #mailchimp wrapper gem
 # gem 'gibbon'
 
