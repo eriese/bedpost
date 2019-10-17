@@ -40,9 +40,9 @@ RSpec.describe UserProfile, type: :model do
 
     describe '#password' do
       it "generates a password hash" do
-        pass = BCrypt::Password.new(dummy_user.encrypted_password)
         original = attributes_for(:user_profile)[:password]
-        expect(pass).to eq original
+        actual = dummy_user.valid_password?(original)
+        expect(actual).to be true
       end
 
       it 'requires a minimum length of 7' do
