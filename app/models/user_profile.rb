@@ -118,7 +118,8 @@ class UserProfile < Profile
   end
 
   def send_devise_notification(notification, *args)
-    devise_mailer.send(notification, self, *args).deliver_later
+    logger.debug "queueing devise notification #{notification} with args #{args}"
+    devise_mailer.delay(queue: 'devise_notifications').send(notification, self, *args)
   end
 
   private
