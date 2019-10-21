@@ -52,6 +52,8 @@ class UserProfile < Profile
   validates_presence_of :email, :encrypted_password, :uid, if: :active_for_authentication?
   validates_presence_of :pronoun, :anus_name, :external_name, on: :update
 
+  BLACKLIST_FOR_SERIALIZATION += [:partnerships, :password_digest]
+
   def email=(value)
   	super(value.downcase) unless value == nil
   end
@@ -90,6 +92,11 @@ class UserProfile < Profile
       replace_with_dummy
       destroy
     end
+  end
+
+  def encode_with(coder)
+    super
+    coder['attributes'] = @attributes.except *BLACKLIST_FOR_SERIALIZATION
   end
 
   def active_for_authentication?

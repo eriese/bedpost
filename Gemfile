@@ -42,6 +42,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'mailjet', :git => 'https://github.com/mailjet/mailjet-gem.git'
 
+gem 'delayed_job'
+gem 'delayed_job_mongoid'
+
 #handle env vars
 
 group :development, :test do
