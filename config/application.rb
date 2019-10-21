@@ -38,5 +38,8 @@ module Bedpost
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.available_locales = %w(en)
     config.middleware.use I18n::JS::Middleware
+
+    # Suppress logger output for asset requests.
+    config.assets.quiet = true
   end
 end

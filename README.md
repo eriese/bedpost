@@ -24,7 +24,7 @@ A user should be able to sign up for an account, add their partners, and add the
 - Guided first-time flow
 
 #### Still needed
-- Transactional email integration
+- Email templates
 - Partnership risk calculation as part of encounter risk calculation
 - Guided flow system with flexibility for divergent paths
 - Back buttons everywhere
