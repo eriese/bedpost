@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/mailjet/mailjet-gem.git
+  revision: 98cc7323881ae3dc7a482e4a8d11efd9d4321410
+  specs:
+    mailjet (1.5.4)
+      activesupport (>= 3.1.0)
+      rack (>= 1.4.0)
+      rest-client
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -149,10 +158,6 @@ GEM
     lumberjack (1.0.13)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    mailjet (1.5.4)
-      activesupport (>= 3.1.0)
-      rack (>= 1.4.0)
-      rest-client
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (0.9.2)
@@ -353,7 +358,7 @@ DEPENDENCIES
   i18n-js
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
-  mailjet
+  mailjet!
   mongoid (~> 7.0)
   normalize-rails
   pry
