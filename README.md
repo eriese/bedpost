@@ -14,22 +14,22 @@ A user should be able to sign up for an account, add their partners, and add the
 - ~~Account CRUD~~
 - ~~Account recovery~~
 - ~~Session Management~~
- - ~~Log in/Log out~~
- - ~~Session timeout~~
+  - ~~Log in/Log out~~
+  - ~~Session timeout~~
 - ~~Partnership CRUD~~
 - ~~Encounter CRUD~~
- - ~~Risk Evaluation on Encounter Review~~
- - ~~Testing Advice on Encounter Review~~
+  - ~~Risk Evaluation on Encounter Review~~
+  - ~~Testing Advice on Encounter Review~~
 - STI factsheets on all STIs mentioned
 - Guided first-time flow
 
 #### Still needed
-- Email templates
 - Partnership risk calculation as part of encounter risk calculation
 - Guided flow system with flexibility for divergent paths
 - Back buttons everywhere
 - Views:
- - Review Partnership
+  - Review Partnership
+  - Email templates
 - FAQ page
 - Landing page
 - Localization/copy
@@ -41,8 +41,8 @@ A user should be able to sign up for an account, add their partners, and add the
 
 ### Future
 - input test results
- - eventually integrate with apps that receive results directly
- - eventually take existing diagnoses into account for risk calculation
+  - eventually integrate with apps that receive results directly
+  - eventually take existing diagnoses into account for risk calculation
 - invite partner to BedPost using profile you already set up for them
 - current risk overview page
 - user setting for preferred testing schedule
@@ -55,10 +55,10 @@ A user should be able to sign up for an account, add their partners, and add the
 ### Far Future
 - expanded user-inputed dictionary for more customized, less medical feel
 - user settings to allow certain info to be shared with partners
- * share encounter so only one user needs to put it in
- * share test results for partner's risk calculations
+  * share encounter so only one user needs to put it in
+  * share test results for partner's risk calculations
 - bookmark frequent activities to easily input into encounters
- * do this by prediction?
+  * do this by prediction?
 - hide/unhide activities you never participate in
 - multiple partners in single encounter
 - multiple pronouns
@@ -66,6 +66,3 @@ A user should be able to sign up for an account, add their partners, and add the
 - track pregnancy risk
 - multiple aliases in a single profile
 - put in a level of allowable risk to find out what types of sex are available within the risk category
-
-
-
