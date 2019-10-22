@@ -26,6 +26,7 @@ A user should be able to sign up for an account, add their partners, and add the
 #### Still needed
 - Partnership risk calculation as part of encounter risk calculation
 - Guided flow system with flexibility for divergent paths
+- Caching
 - Back buttons everywhere
 - Views:
   - Review Partnership

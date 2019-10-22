@@ -15,6 +15,6 @@ class Pronoun
   end
 
   def self.list
-    @@list ||= all.to_ary
+    all.to_ary
   end
 end
