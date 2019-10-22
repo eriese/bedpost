@@ -24,8 +24,6 @@ gem "i18n-js"
 gem 'mongoid', '~> 7.0'
 gem 'bson_ext'
 
-# Use CoffeeScript for .coffee assets and views
-# gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -42,8 +40,10 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'devise'
-#mailchimp wrapper gem
-# gem 'gibbon'
+gem 'mailjet', :git => 'https://github.com/mailjet/mailjet-gem.git'
+
+gem 'delayed_job'
+gem 'delayed_job_mongoid'
 
 #handle env vars
 

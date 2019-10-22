@@ -52,6 +52,8 @@ class UserProfile < Profile
   validates_presence_of :email, :encrypted_password, :uid, if: :active_for_authentication?
   validates_presence_of :pronoun, :anus_name, :external_name, on: :update
 
+  BLACKLIST_FOR_SERIALIZATION += [:partnerships, :password_digest]
+
   def email=(value)
   	super(value.downcase) unless value == nil
   end
@@ -92,6 +94,11 @@ class UserProfile < Profile
     end
   end
 
+  def encode_with(coder)
+    super
+    coder['attributes'] = @attributes.except *BLACKLIST_FOR_SERIALIZATION
+  end
+
   def active_for_authentication?
     super && deleted_at.nil?
   end
@@ -108,6 +115,11 @@ class UserProfile < Profile
     else
       super
     end
+  end
+
+  def send_devise_notification(notification, *args)
+    logger.debug "queueing devise notification #{notification} with args #{args}"
+    devise_mailer.delay(queue: 'devise_notifications').send(notification, self, *args)
   end
 
   private
