@@ -46,9 +46,25 @@ class Partnership
     "#{partner_name || partner.name} #{nickname}"
   end
 
+  def risk_mitigator
+    @risk_mitigator ||= 0
+  end
+
+  def any_level_changed?
+    any_changed = false
+    LEVEL_FIELDS.each do |f|
+      if previous_changes[f]
+        any_changed = true
+        break
+      end
+    end
+    any_changed
+  end
+
 	private
 	def add_to_partner
     post_persist
+    @risk_mitigator = nil if any_level_changed?
 		if previous_changes[:partner_id]
       prev_partner = previous_changes[:partner_id][0]
       remove_from_partner(prev_partner) unless prev_partner.nil?

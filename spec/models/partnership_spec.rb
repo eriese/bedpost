@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Partnership, type: :model do
+	def create_ship(partner_alias)
+		@user = create(:user_profile)
+		@partner = create(partner_alias)
+		@ship = @user.partnerships.new(partner: @partner)
+	end
+
 	after :each do
 		cleanup(@user, @user2, @partner)
 	end
@@ -20,12 +26,6 @@ RSpec.describe Partnership, type: :model do
 	end
 
 	describe '#partner' do
-		def create_ship(partner_alias)
-			@user = create(:user_profile)
-	  	@partner = create(partner_alias)
-	  	@ship = @user.partnerships.new(partner: @partner)
-  	end
-
 	  it 'can accept a profile as a partner' do
 	  	create_ship(:profile)
 
@@ -212,6 +212,42 @@ RSpec.describe Partnership, type: :model do
 			end
 		end
 	end
+
+	describe '#last_took_place' do
+		context 'with encounters' do
+			after :each do
+				cleanup(@possible, @hand)
+			end
+			it 'returns the date of the last encounter' do
+				create_ship(:profile)
+				@hand = create(:contact_instrument, name: :hand)
+				@possible = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
+				enc = create(:encounter, partnership: @ship, contacts: [build(:encounter_contact, possible_contact: @possible)])
+				expect(@ship.last_took_place).to eq enc.took_place
+			end
+		end
+
+		context 'without encounters' do
+			it 'returns the date from today if given nothing' do
+				create_ship(:profile)
+				expect(@ship.last_took_place).to eq Date.today
+			end
+
+			it 'returns the given value' do
+				create_ship(:profile)
+				given = "today"
+				expect(@ship.last_took_place(given)).to eq given
+			end
+		end
+	end
+
+	describe '#display' do
+		it 'shows #{partner.name} #{nickname}' do
+			create_ship(:profile)
+			expect(@ship.display).to eq "#{@partner.name} #{@ship.nickname}"
+		end
+	end
+
 
 	describe '#add_to_partner' do
 		it 'adds the user to the partner as a foreign key in partnered_to' do

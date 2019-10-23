@@ -19,11 +19,18 @@ class Encounter::RiskCalculator
   		user: Hash.new { |hsh, key| hsh[key] = Encounter::FluidTracker.new(@instruments[key], :user) },
   	}
   	@risk_map = Hash.new(0)
+    @base_risk = 0
   end
 
   def track(person = nil)
   	return unless @diagnoses.present?
   	@person = person if person.present?
+    @base_risk = case @person
+      when :user
+        @encounter.partnership.risk_mitigator
+      when :partner
+        @encounter.partnership.user_profile.risk_mitigator
+      end
   	@encounter.contacts.each {|c| track_contact(c)}
   	@encounter.set_risks @risk_map
     @encounter.set_schedule schedule
@@ -56,7 +63,7 @@ class Encounter::RiskCalculator
 	  		diag_fluids_present = fluids_present && diag.in_fluids
 
 	  		lvl = nil
-	  		# if it's user to user-self and there aren't fluids on the barrier or instrument, it's low risk
+	  		# if it's user to user-self and there aren't fluids on the barrier or instrument, it's no risk
 	  		if contact.is_self? && !diag_fluids_present
 	  			lvl = Diagnosis::TransmissionRisk::NO_RISK
   			# if barriers are effective and a barrier was used and there are no fluids on the barrier or the infection isn't in fluids, it's low risk
@@ -64,7 +71,13 @@ class Encounter::RiskCalculator
 	  			lvl = Diagnosis::TransmissionRisk::NEGLIGIBLE
 	  		# apply the recorded risk, and bump it if there are fluids
 	  		else
-	  			lvl = risk.risk_to_person(contact, diag_fluids_present)
+	  			lvl = risk.risk_to_person(contact, diag_fluids_present, @person)
+          # mitigate risk by the base risk of the partnership, but do not go lower than negligible if tracking risk to the user
+          lvl -= @base_risk
+
+          min = @person == :user ? Diagnosis::TransmissionRisk::NEGLIGIBLE : Diagnosis::TransmissionRisk::NO_RISK
+
+          lvl = lvl > min ? lvl : min
 	  		end
 
 	  		contact.set_risk(risk.diagnosis_id,lvl)
