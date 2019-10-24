@@ -62,6 +62,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
     end
 
     it 'tracks all contacts in an encounter' do
+      allow(@ship).to receive(:risk_mitigator) {0}
       @calc.track
 
       risks = @calc.instance_variable_get(:@risks)

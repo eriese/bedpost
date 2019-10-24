@@ -268,22 +268,40 @@ RSpec.describe Partnership, type: :model do
 			expect(@ship.any_level_changed?).to be true
 		end
 
-		it 'is called during after_save' do
-			create_ship(:profile)
-			allow(@ship).to receive(:any_level_changed?).and_call_original
+		context 'after_save' do
+			it 'is called during after_save' do
+				create_ship(:profile)
+				allow(@ship).to receive(:any_level_changed?).and_call_original
 
-			@ship.update(exclusivity: @ship.exclusivity + 1)
-			expect(@ship).to have_received(:any_level_changed?)
-		end
+				@ship.update(exclusivity: @ship.exclusivity + 1)
+				expect(@ship).to have_received(:any_level_changed?)
+			end
 
-		it 'is used to clear the risk_mitigator calculation on save' do
-			create_ship(:profile)
-			@ship.risk_mitigator
-			original = @ship.instance_variable_get(:@risk_mitigator)
-			@ship.update(exclusivity: @ship.exclusivity + 1)
-			changed = @ship.instance_variable_get(:@risk_mitigator)
-			expect(changed).to be_nil
-			expect(changed).to_not be original
+			it 'returns true if a level field was changed in the save' do
+				create_ship(:profile)
+				# save to clear any old changes sitting around
+				@ship.save
+
+				expect(@ship).to receive(:any_level_changed?).and_wrap_original do |block|
+					result = block.call
+					expect(result).to be true
+					result
+				end
+				@ship.update(exclusivity: @ship.exclusivity + 1)
+			end
+
+			it 'returns false if a level field was not changed in the save' do
+				create_ship(:profile)
+				# save to clear any old changes sitting around
+				@ship.save
+
+				expect(@ship).to receive(:any_level_changed?).and_wrap_original do |block|
+					result = block.call
+					expect(result).to be false
+					result
+				end
+				@ship.update(nickname: "new nickname")
+			end
 		end
 	end
 
