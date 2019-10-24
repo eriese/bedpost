@@ -248,6 +248,44 @@ RSpec.describe Partnership, type: :model do
 		end
 	end
 
+	describe '#risk_mitigator' do
+		it 'returns a number between 0 and 4' do
+			ship1 = build_stubbed(:partnership, familiarity: 1, exclusivity: 1, communication: 1, trust: 1, prior_discussion: 1)
+			expect(ship1.risk_mitigator).to eq 0
+
+			ship2 = build_stubbed(:partnership, familiarity: 10, exclusivity: 10, communication: 10, trust: 10, prior_discussion: 10)
+			expect(ship2.risk_mitigator).to eq 4
+
+			ship3 = build_stubbed(:partnership, familiarity: 5, exclusivity: 5, communication: 5, trust: 5, prior_discussion: 5)
+			expect(ship3.risk_mitigator).to eq 2
+		end
+	end
+
+	describe '#any_level_changed?' do
+		it 'checks changes on the partnership level fields' do
+			create_ship(:profile)
+			@ship.exclusivity += 1
+			expect(@ship.any_level_changed?).to be true
+		end
+
+		it 'is called during after_save' do
+			create_ship(:profile)
+			allow(@ship).to receive(:any_level_changed?).and_call_original
+
+			@ship.update(exclusivity: @ship.exclusivity + 1)
+			expect(@ship).to have_received(:any_level_changed?)
+		end
+
+		it 'is used to clear the risk_mitigator calculation on save' do
+			create_ship(:profile)
+			@ship.risk_mitigator
+			original = @ship.instance_variable_get(:@risk_mitigator)
+			@ship.update(exclusivity: @ship.exclusivity + 1)
+			changed = @ship.instance_variable_get(:@risk_mitigator)
+			expect(changed).to be_nil
+			expect(changed).to_not be original
+		end
+	end
 
 	describe '#add_to_partner' do
 		it 'adds the user to the partner as a foreign key in partnered_to' do
