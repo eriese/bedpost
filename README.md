@@ -24,7 +24,6 @@ A user should be able to sign up for an account, add their partners, and add the
 - Guided first-time flow
 
 #### Still needed
-- Partnership risk calculation as part of encounter risk calculation
 - Guided flow system with flexibility for divergent paths
 - Caching
 - Back buttons everywhere
@@ -45,6 +44,7 @@ A user should be able to sign up for an account, add their partners, and add the
   - eventually integrate with apps that receive results directly
   - eventually take existing diagnoses into account for risk calculation
 - invite partner to BedPost using profile you already set up for them
+- calculate risk to partner taking user's full risk profile into account
 - current risk overview page
 - user setting for preferred testing schedule
 - calendar integration for testing reminders
