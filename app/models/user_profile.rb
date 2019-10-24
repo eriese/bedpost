@@ -64,6 +64,11 @@ class UserProfile < Profile
     enc
   end
 
+  #TODO implement this when implementing risk-to-partner calculations. take user's activities, risk-taking behavior, results, etc. into account
+  def risk_mitigator
+    0
+  end
+
   def update_without_password(params, *options)
     params.delete(:email)
     params.delete(:current_password)
@@ -81,7 +86,6 @@ class UserProfile < Profile
 
     result
   end
-
 
   def soft_destroy
     if opt_in

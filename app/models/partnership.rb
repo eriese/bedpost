@@ -21,8 +21,6 @@ class Partnership
   	exclusion: {in: ->(ship) {Profile.find(ship.user_profile.partnerships.map { |s| s.partner_id unless s == ship}.compact).pluck(:uid).compact}, message: :taken},
   	allow_nil: true
 
-  # validates :nickname, presence: true
-
   after_save :add_to_partner
   before_destroy :remove_from_partner
 
@@ -46,8 +44,32 @@ class Partnership
     "#{partner_name || partner.name} #{nickname}"
   end
 
+  def risk_mitigator
+    return @risk_mitigator unless @risk_mitigator.nil?
+    @risk_mitigator = 0
+    @risk_mitigator += 2 * trust
+    @risk_mitigator += 2 * exclusivity
+    @risk_mitigator += familiarity
+    @risk_mitigator += communication
+    @risk_mitigator += prior_discussion
+    @risk_mitigator /= 14.0
+    @risk_mitigator = @risk_mitigator.ceil - 1
+  end
+
+  def any_level_changed?
+    any_changed = false
+    LEVEL_FIELDS.each do |f|
+      if changes[f]
+        any_changed = true
+        break
+      end
+    end
+    any_changed
+  end
+
 	private
 	def add_to_partner
+    @risk_mitigator = nil if any_level_changed?
     post_persist
 		if previous_changes[:partner_id]
       prev_partner = previous_changes[:partner_id][0]

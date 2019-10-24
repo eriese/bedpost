@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Partnership, type: :model do
+	def create_ship(partner_alias)
+		@user = create(:user_profile)
+		@partner = create(partner_alias)
+		@ship = @user.partnerships.new(partner: @partner)
+	end
+
 	after :each do
 		cleanup(@user, @user2, @partner)
 	end
@@ -20,12 +26,6 @@ RSpec.describe Partnership, type: :model do
 	end
 
 	describe '#partner' do
-		def create_ship(partner_alias)
-			@user = create(:user_profile)
-	  	@partner = create(partner_alias)
-	  	@ship = @user.partnerships.new(partner: @partner)
-  	end
-
 	  it 'can accept a profile as a partner' do
 	  	create_ship(:profile)
 
@@ -209,6 +209,98 @@ RSpec.describe Partnership, type: :model do
 
 				expect(ship).to_not be_valid
 				expect(ship).to have_validation_error_for :uid, :self_key
+			end
+		end
+	end
+
+	describe '#last_took_place' do
+		context 'with encounters' do
+			after :each do
+				cleanup(@possible, @hand)
+			end
+			it 'returns the date of the last encounter' do
+				create_ship(:profile)
+				@hand = create(:contact_instrument, name: :hand)
+				@possible = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
+				enc = create(:encounter, partnership: @ship, contacts: [build(:encounter_contact, possible_contact: @possible)])
+				expect(@ship.last_took_place).to eq enc.took_place
+			end
+		end
+
+		context 'without encounters' do
+			it 'returns the date from today if given nothing' do
+				create_ship(:profile)
+				expect(@ship.last_took_place).to eq Date.today
+			end
+
+			it 'returns the given value' do
+				create_ship(:profile)
+				given = "today"
+				expect(@ship.last_took_place(given)).to eq given
+			end
+		end
+	end
+
+	describe '#display' do
+		it 'shows #{partner.name} #{nickname}' do
+			create_ship(:profile)
+			expect(@ship.display).to eq "#{@partner.name} #{@ship.nickname}"
+		end
+	end
+
+	describe '#risk_mitigator' do
+		it 'returns a number between 0 and 4' do
+			ship1 = build_stubbed(:partnership, familiarity: 1, exclusivity: 1, communication: 1, trust: 1, prior_discussion: 1)
+			expect(ship1.risk_mitigator).to eq 0
+
+			ship2 = build_stubbed(:partnership, familiarity: 10, exclusivity: 10, communication: 10, trust: 10, prior_discussion: 10)
+			expect(ship2.risk_mitigator).to eq 4
+
+			ship3 = build_stubbed(:partnership, familiarity: 5, exclusivity: 5, communication: 5, trust: 5, prior_discussion: 5)
+			expect(ship3.risk_mitigator).to eq 2
+		end
+	end
+
+	describe '#any_level_changed?' do
+		it 'checks changes on the partnership level fields' do
+			create_ship(:profile)
+			@ship.exclusivity += 1
+			expect(@ship.any_level_changed?).to be true
+		end
+
+		context 'after_save' do
+			it 'is called during after_save' do
+				create_ship(:profile)
+				allow(@ship).to receive(:any_level_changed?).and_call_original
+
+				@ship.update(exclusivity: @ship.exclusivity + 1)
+				expect(@ship).to have_received(:any_level_changed?)
+			end
+
+			it 'returns true if a level field was changed in the save' do
+				create_ship(:profile)
+				# save to clear any old changes sitting around
+				@ship.save
+
+				expect(@ship).to receive(:any_level_changed?).and_wrap_original do |block|
+					result = block.call
+					expect(result).to be true
+					result
+				end
+				@ship.update(exclusivity: @ship.exclusivity + 1)
+			end
+
+			it 'returns false if a level field was not changed in the save' do
+				create_ship(:profile)
+				# save to clear any old changes sitting around
+				@ship.save
+
+				expect(@ship).to receive(:any_level_changed?).and_wrap_original do |block|
+					result = block.call
+					expect(result).to be false
+					result
+				end
+				@ship.update(nickname: "new nickname")
 			end
 		end
 	end
