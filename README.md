@@ -25,7 +25,6 @@ A user should be able to sign up for an account, add their partners, and add the
 
 #### Still needed
 - Guided flow system with flexibility for divergent paths
-- Caching
 - Back buttons everywhere
 - Views:
   - Review Partnership
@@ -52,6 +51,9 @@ A user should be able to sign up for an account, add their partners, and add the
 - expedited flows (e.g. skip inputting partner info)
 - advice about talking to partners about positive test results
 - guest access for quick risk assessment without signup
+- more advanced caching
+  - granular low-level caching
+  - views caching/request caching?
 
 ### Far Future
 - expanded user-inputed dictionary for more customized, less medical feel
