@@ -1,3 +1,4 @@
+# TODO make this a static resource?
 class Contact::ContactType
 	attr_reader :key, :inst_key, :inverse_inst, :t_key, :subject, :object, :subject_key, :object_key
 
