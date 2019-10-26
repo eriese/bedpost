@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/eriese/bedpost.svg)](https://travis-ci.org/eriese/bedpost)
+[![Build Status](https://travis-ci.org/eriese/bedpost.svg?branch=master)](https://travis-ci.org/eriese/bedpost)
 [![Code Coverage](https://codecov.io/gh/eriese/bedpost/branch/master/graph/badge.svg)](https://codecov.io/gh/eriese/bedpost)
 
 # Bedpost
