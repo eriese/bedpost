@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UserProfiles::RegistrationsController, type: :controller do
 	before :each do
+		allow(controller).to receive(:check_first_time)
 		@request.env['devise.mapping'] = Devise.mappings[:user_profile]
 	end
 

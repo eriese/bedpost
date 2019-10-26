@@ -69,6 +69,14 @@ class UserProfile < Profile
     0
   end
 
+  def set_up?
+    pronoun_id.present?
+  end
+
+  def first_time?
+    !embedded_relations.any? { |k, e| send(e.store_as).any? }
+  end
+
   def update_without_password(params, *options)
     params.delete(:email)
     params.delete(:current_password)

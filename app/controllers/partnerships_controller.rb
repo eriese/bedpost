@@ -1,5 +1,6 @@
 class PartnershipsController < ApplicationController
 	after_action :clear_unsaved, only: [:new]
+	skip_before_action :check_first_time, only: [:new, :create]
 	before_action :set_partnership, only: [:show, :edit, :update, :destroy]
 
 	def index

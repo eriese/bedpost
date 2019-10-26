@@ -1,4 +1,5 @@
 class PartnershipWhosController < ApplicationController
+	skip_before_action :check_first_time, only: [:new, :create]
 	after_action :clear_unsaved, only: [:new, :create]
 
 	def new

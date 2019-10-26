@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
 	protect_from_forgery
 	before_action :store_user_location!, if: :storable_location?
 	before_action :authenticate_user_profile!
+	before_action :check_first_time
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
 		flash[:submission_error] = error;
@@ -86,5 +87,20 @@ class ApplicationController < ActionController::Base
   def store_user_location!
     # :user is the scope we are authenticating
     store_location_for(:user_profile, request.fullpath)
+  end
+
+  def check_first_time
+  	return unless user_profile_signed_in?
+
+  	redirect_path =
+	  	# if the user hasn't completed their profile, make them do it
+	  	if !current_user_profile.set_up?
+				edit_user_profile_registration_path
+			# if the user hasn't taken any actions in the app yet, take them to the first time page
+			elsif current_user_profile.first_time?
+				first_time_index_path
+			end
+
+  	redirect_to redirect_path unless redirect_path.nil?
   end
 end

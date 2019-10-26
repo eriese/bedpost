@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe PartnershipsController, type: :controller do
+	before :each do |example|
+		allow(controller).to receive(:check_first_time) unless example.metadata[:no_skip]
+	end
+
 	describe 'GET #index' do
 		after :each do
 			dummy_user.partnerships.destroy_all
@@ -43,7 +47,7 @@ RSpec.describe PartnershipsController, type: :controller do
 		end
 	end
 
-	describe 'GET #new' do
+	describe 'GET #new', no_skip: true do
 		include_context :gon
 		after :each do
 			cleanup(@profile)
@@ -72,15 +76,19 @@ RSpec.describe PartnershipsController, type: :controller do
 		end
 
 		it 'does not leave an un-saved partnership on the user' do
-			get :new, session: dummy_user_session
-			expect(controller.current_user_profile.partnerships.length).to eq 0
+			@profile = create(:user_profile)
+			sign_in(@profile)
+			@profile.partnerships << build(:partnership, partner: dummy_user)
+			get :new
+			expect(controller.current_user_profile.partnerships.length).to eq 1
+
 
 			get :index, session: dummy_user_session
-			expect(assigns(:partnerships).length).to eq 0
+			expect(assigns(:partnerships).length).to eq 1
 		end
 	end
 
-	describe 'POST #create' do
+	describe 'POST #create', no_skip: true do
 		before :each do
 			@user = create(:user_profile)
 			sign_in @user

@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe UserProfile, type: :model do
-
-  it_should_behave_like 'an object that dirty-tracks its embedded relations', UserProfile, :user_profile
-
   context 'fields' do
     describe "#uid" do
       it "generates a uid on initialization" do
@@ -115,6 +112,38 @@ RSpec.describe UserProfile, type: :model do
       end
     end
 
+    describe '#set_up?' do
+      after :each do
+        cleanup(@user)
+      end
+
+      it 'returns false if the user has registered but not filled in all profile details' do
+        @user = UserProfile.create(name: "Name", email: "email@email.com", password: "password", password_confirmation: "password")
+        expect(@user).to be_persisted
+        expect(@user).to_not be_set_up
+      end
+
+      it 'returns true if the user has filled out all profile details' do
+        user = build_stubbed(:user_profile)
+        expect(user).to be_set_up
+      end
+    end
+
+    describe '#first_time?' do
+      it 'returns true if the user has no top-level embedded items' do
+        user = build_stubbed(:user_profile)
+        expect(user).to be_first_time
+      end
+
+      it 'returns false if the user has at least one partnership' do
+        user = build_stubbed(:user_profile)
+        user.partnerships = [build_stubbed(:partnership)]
+        expect(user).to_not be_first_time
+      end
+
+      pending 'returns false if the user has at least one STI test'
+    end
+
     describe '#soft_destroy' do
 
       context 'with a user with #opt_in = true' do
@@ -169,7 +198,9 @@ RSpec.describe UserProfile, type: :model do
     end
   end
 
-  context 'nested' do
+  context 'embedded' do
+    it_should_behave_like 'an object that dirty-tracks its embedded relations', UserProfile, :user_profile
+
     context 'partnerships' do
       after :each do
         cleanup(@user, @partner)

@@ -30,7 +30,7 @@
 			onSize() {
 				this.targetEl = this.targetEl || document.getElementById(this.target);
 				if (!this.targetEl) {
-					this.debounce = setTimeout(this.onSize, 50);
+					this.debounceOnSize();
 					return;
 				}
 				let rect = Utils.getBoundingDocumentRect(this.targetEl, true);
@@ -74,33 +74,32 @@
 
 
 				this.stl = pos
+			},
+			debounceOnSize() {
+				this.clearDebounce();
+				this.debounce = setTimeout(() => {
+					this.stl = {left: 0, top: 0}
+					this.$nextTick(this.onSize)
+				}, 50)
+			},
+			clearDebounce() {
+				if (this.debounce) {
+					clearTimeout(this.debounce);
+				}
 			}
 		},
 		mounted() {
 			this.$nextTick(() => {
-				let resizeListener = window.addEventListener('resize', () => {
-					if (this.debounce) {
-						clearTimeout(this.debounce);
-					}
-					this.debounce = setTimeout(() => {
-						this.stl = {left: 0, top: 0};
-						this.$nextTick(this.onSize)
-					}, 50);
-				});
+				let resizeListener = window.addEventListener('resize', this.debounceOnSize);
 
 				this.$once('hook:beforeDestroy', () => {
 					window.removeEventListener('resize', resizeListener);
-					if (this.debounce) {
-						clearTimeout(this.debounce);
-					}
+					this.clearDebounce();
 				})
 
 				this.onSize()
-				this.debounce = setTimeout(this.onSize, 50);
+				this.debounceOnSize();
 			})
-		},
-		destroyed() {
-			if (this.debounce) {}
 		}
 	}
 </script>

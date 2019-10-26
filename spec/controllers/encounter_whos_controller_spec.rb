@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe EncounterWhosController, type: :controller do
 	describe 'POST #create' do
 		before :each do
+			allow(controller).to receive(:check_first_time)
 			@user = create(:user_profile)
 			sign_in(@user)
 		end
