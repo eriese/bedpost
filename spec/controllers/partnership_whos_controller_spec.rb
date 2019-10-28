@@ -27,10 +27,6 @@ RSpec.describe PartnershipWhosController, type: :controller do
 	end
 
 	describe 'GET #new with a partnership' do
-		before :each do
-			allow(controller).to receive(:check_first_time)
-		end
-
 		context 'with a valid partnership' do
 			it 'puts the partnership on the page to be edited' do
 				@user = create(:user_profile)

@@ -1,5 +1,6 @@
 class FirstTimesController < ApplicationController
 	skip_before_action :check_first_time
+
 	def index
 	end
 

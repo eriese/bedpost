@@ -1,1 +1,13 @@
-let's get started
+<basic-stepper :default-props="{animLength: 0.2}" id="who_form">
+	<div class="centered-container" slot-scope="{step,setStep}">
+		<div v-if="step==0">
+			<h1><%= t(".header", name: current_user_profile.name) %></h1>
+			<h2><%= t(".desc") %></h2>
+			<ul class="button-list">
+				<li><%= link_to new_partnership_path, {class: "as-button", data: {animation_type: 'slideLeft'}} do %>
+					<span><%= t(".new_partnership") %></span>
+				<% end%></li>
+			</ul>
+		</div>
+	</div>
+</basic-stepper>

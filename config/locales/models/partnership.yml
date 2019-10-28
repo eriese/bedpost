@@ -30,8 +30,8 @@ en:
     new:
       step_0:
         title: Awesome!
-        label: Does this person have an account with BedPost?
-        no_account: No/ Unknown
+        label: Did this person tell you their BedPost user ID?
+        no_account: 'No'
       form_title: Cool, that makes it easier!
       new_profile:
         title: No worries. Let's set up a profile for them.
