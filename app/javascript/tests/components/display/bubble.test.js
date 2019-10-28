@@ -1,5 +1,5 @@
 import {mount} from "@vue/test-utils"
-import Bubble from "@components/display/bubble.vue"
+import Bubble from "@components/display/Bubble.vue"
 
 describe("Bubble component", () => {
 	test("It renders the slot content", () => {
