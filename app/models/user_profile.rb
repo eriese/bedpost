@@ -74,8 +74,8 @@ class UserProfile < Profile
   end
 
   def first_time?
-    # !embedded_relations.any? { |k, e| send(e.store_as).any? }
-    true
+    !embedded_relations.any? { |k, e| send(e.store_as).any? }
+    # true
   end
 
   def update_without_password(params, *options)

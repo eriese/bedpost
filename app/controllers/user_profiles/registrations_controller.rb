@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class UserProfiles::RegistrationsController < Devise::RegistrationsController
+  skip_before_action :check_first_time, except: [:destroy]
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
 

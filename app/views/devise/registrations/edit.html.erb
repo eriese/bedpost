@@ -20,10 +20,10 @@
 
 <% if resource.set_up? %>
   <%= vuelidate_form_with scope: :account_delete, html: {class: "centered", method: :delete}, vue: {name: :account_delete}, url: registration_path(resource_name) do |f| %>
-    <h2 class="with-desc">Delete your account</h2>
-    <p class="description">If you opted in to have your data used anonymously for research, we will clear your identifying information and keep the rest of your activity. If you want it all to be deleted from our servers, please opt out first.</p>
+    <h2 class="with-desc"><%= t_action(".delete_profile.title") %></h2>
+    <p class="description"><%= t_action(".delete_profile.desc") %></p>
     <%= f.password_field :current_password, required: true, show_toggle: true %>
-    <%= f.submit "Delete my account" %>
+    <%= f.submit t_action(".delete_profile.submit") %>
   <% end %>
 
   <%= link_to "Back", :back %>

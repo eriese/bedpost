@@ -4,6 +4,7 @@ feature "User creates new partnership", :slow do
 
 	before :each do
 		login_new_user
+		allow_any_instance_of(UserProfile).to receive(:first_time?) {false}
 	end
 
 	after :each do
@@ -14,27 +15,28 @@ feature "User creates new partnership", :slow do
 		scenario 'the partnership who page has a title for step 0' do
 			visit root_path
 			# go to the new partner page
-			find_link(href: new_partnership_path).click
-			expect(page).to have_selector '#step-0-title'
+			find_link(href: who_path).click
+			expect(page).to have_selector 'h1#step-0-title'
 
-			#reload and it should be gone
+			#reload and it should still be there
 			visit(current_path)
-			expect(page).to have_no_selector 'step-0-title'
+			expect(page).to have_no_selector 'h1#step-0-title'
 		end
 	end
 
 	context 'from anywhere else' do
 		scenario 'the partnership who page has no title for step 0' do
 			visit partnerships_path
-			find_link(href: new_partnership_path).click
-			expect(page).to have_no_selector 'step-0-title'
+			find_link(href: who_path).click
+			expect(page).to have_no_selector 'h1#step-0-title'
 		end
 	end
 
 	context "with uid from an existing user" do
 		scenario "The flow goes who_path, new_partner_path, partner_path" do
+			visit root_path
 			# go to the new partner page
-			find_link(href: new_partnership_path).click
+			find_link(href: who_path).click
 
 			@partner = create(:user_profile)
 
@@ -54,7 +56,8 @@ feature "User creates new partnership", :slow do
 	context "with no uid" do
 		scenario "The flow goes who_path, new_profile_path, new_partner_path, partner_path" do
 			# go to the new partner page
-			find_link(href: new_partnership_path).click
+			visit root_path
+			find_link(href: who_path).click
 
 			# get redirected to who
 			expect(page).to have_current_path(who_path)

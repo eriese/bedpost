@@ -1,7 +1,7 @@
 <h1><%= t ".title", {name: current_user_profile.name}%></h1>
 
 <ul class="dash-buttons">
-	<li><%= link_to new_partnership_path do %>
+	<li><%= link_to who_path do %>
 		<span><%= t(".new_partnership") %></span>
 	<% end%></li>
 	<li><%= link_to encounters_who_path do %>
