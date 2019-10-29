@@ -24,6 +24,10 @@ RSpec.describe FirstTimesController, type: :controller do
 	end
 
 	describe 'GET #show' do
+		after :each do
+			cleanup(@tour)
+		end
+
 		it 'returns json {has_tour: true} if the page has a tour that the user has already seen' do
 			@user.tour("page")
 			get :show, params: {id: "page"}
@@ -31,8 +35,10 @@ RSpec.describe FirstTimesController, type: :controller do
 		end
 
 		it 'returns a json representation of the tour if the page has a tour that the user has not seen' do
-			get :show, params: {id: "page"}
-			expect(response.body).to eq true.to_json
+			page_name = "page"
+			@tour = create(:tour, page_name: page_name)
+			get :show, params: {id: page_name}
+			expect(response.body).to eq @tour.to_json
 		end
 
 		it 'returns json {has_tour: false} if the page has no tour' do
@@ -51,6 +57,7 @@ RSpec.describe FirstTimesController, type: :controller do
 		end
 
 		it 'always returns a 204' do
+			allow(controller).to receive(:tour_exists?) {true}
 			@user.tour("page")
 			patch :update, params: {id: "page"}
 			expect(response).to have_http_status(204)

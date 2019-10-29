@@ -26,6 +26,6 @@ class FirstTimesController < ApplicationController
 	end
 
 	def tour_exists?(page)
-		true
+		Tour.find_cached(page, field: :page_name)
 	end
 end
