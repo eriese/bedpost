@@ -1,4 +1,4 @@
-class FirstTimesController < ApplicationController
+class ToursController < ApplicationController
 	before_action :require_first_time, only: [:index]
 	skip_before_action :check_first_time
 

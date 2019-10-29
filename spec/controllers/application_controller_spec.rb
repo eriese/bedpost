@@ -103,7 +103,7 @@ RSpec.describe ApplicationController do
 				get :show, params: {id: "id"}
 				expect(user).to be_set_up
 				expect(user).to be_first_time
-				expect(response).to redirect_to first_time_index_path
+				expect(response).to redirect_to first_time_path
 			end
 
 			it 'does not redirect if the user if fully set up and has taken any actions' do

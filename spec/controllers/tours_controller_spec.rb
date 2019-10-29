@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FirstTimesController, type: :controller do
+RSpec.describe ToursController, type: :controller do
 	before :each do
 		@user = create(:user_profile)
 		sign_in @user

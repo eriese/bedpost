@@ -34,8 +34,8 @@ Rails.application.routes.draw do
 
   resources :encounters, only: [:index]
 
-  # resource :first_time, only: [:index]
-  resources :first_time, only: [:index, :show, :update], controller: :first_times
+  get 'first_time', to: 'tours#index'
+  resources :tours, only: [:show, :update]
 
   #TODO this is temporary
   root to: 'devise/sessions#new'

@@ -70,7 +70,7 @@ feature "User creates account", :slow do
 			register_user
 			fill_in_profile
 
-			expect(page).to have_current_path(first_time_index_path)
+			expect(page).to have_current_path(first_time_path)
 		end
 	end
 end

@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
 				edit_user_profile_registration_path
 			# if the user hasn't taken any actions in the app yet, take them to the first time page
 			elsif current_user_profile.first_time?
-				first_time_index_path
+				first_time_path
 			end
 
   	redirect_to redirect_path unless redirect_path.nil?

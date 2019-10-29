@@ -10,6 +10,6 @@ require 'rails_helper'
 #     end
 #   end
 # end
-RSpec.describe FirstTimesHelper, type: :helper do
+RSpec.describe ToursHelper, type: :helper do
   pending "add some examples to (or delete) #{__FILE__}"
 end
