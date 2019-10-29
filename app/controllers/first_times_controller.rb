@@ -6,12 +6,26 @@ class FirstTimesController < ApplicationController
 	end
 
 	def show
+		page = params[:id]
+		if current_user_profile.has_toured?(page)
+			render json: {has_tour: true}
+		elsif tour = tour_exists?(page)
+			render json: tour
+		else
+			render json: {has_tour: false}
+		end
 	end
 
 	def update
+		page = params[:id]
+		current_user_profile.tour(page) if tour_exists?(page)
 	end
 
 	def require_first_time
 		redirect_to root_path unless current_user_profile.first_time?
+	end
+
+	def tour_exists?(page)
+		true
 	end
 end

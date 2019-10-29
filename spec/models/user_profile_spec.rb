@@ -144,6 +144,38 @@ RSpec.describe UserProfile, type: :model do
       pending 'returns false if the user has at least one STI test'
     end
 
+    describe '#has_toured?' do
+      it 'returns true if the user has toured the given page' do
+        user = build_stubbed(:user_profile)
+        user.tours = ["page"]
+        expect(user).to have_toured("page")
+      end
+
+      it 'returns false if the user has not toured the given page' do
+        user = build_stubbed(:user_profile)
+        expect(user).to_not have_toured("page")
+      end
+    end
+
+    describe '#tour' do
+      after :each do
+        cleanup @user
+      end
+
+      it 'adds a page to a the tour set and saves' do
+        @user = create(:user_profile)
+        expect(@user.tour("page")).to be true
+        @user.reload
+        expect(@user.tours).to be_a Set
+        expect(@user.tours).to include("page")
+      end
+
+      it 'returns true if the user has already toured the page, but does not add a duplicate' do
+        @user = create(:user_profile, tours: ["page"])
+        expect(@user.tour("page")).to be true
+      end
+    end
+
     describe '#soft_destroy' do
 
       context 'with a user with #opt_in = true' do

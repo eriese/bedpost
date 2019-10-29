@@ -40,6 +40,7 @@ class UserProfile < Profile
   field :uid, type: String, default: ->{generate_uid}
   field :min_window, type: Integer, default: 6
   field :opt_in, type: Boolean, default: false
+  field :tours, type: Set
   index({email: 1}, {unique: true})
   index({uid: 1}, {unique: true})
 
@@ -52,7 +53,7 @@ class UserProfile < Profile
   validates_presence_of :email, :encrypted_password, :uid, if: :active_for_authentication?
   validates_presence_of :pronoun, :anus_name, :external_name, on: :update
 
-  BLACKLIST_FOR_SERIALIZATION += [:partnerships, :password_digest]
+  BLACKLIST_FOR_SERIALIZATION += [:partnerships, :password_digest, :tours]
 
   def email=(value)
   	super(value.downcase) unless value == nil
@@ -69,13 +70,34 @@ class UserProfile < Profile
     0
   end
 
+  # Is the user's profile fully set up?
+  # @return [true] if the user has completed full profile setup
   def set_up?
     pronoun_id.present?
   end
 
+  # Is this the user's first time using the app?
+  # @return [true] if the user has no saved relations
   def first_time?
     !embedded_relations.any? { |k, e| send(e.store_as).any? }
     # true
+  end
+
+  # Has the user been given a tour of the given page?
+  # @param [String] page the page url
+  # @return [true] if the user has toured the page
+  def has_toured?(page)
+    tours.present? && tours.include?(page)
+  end
+
+  # Mark the user as having toured the given page
+  # @param [String] page the page url
+  # @return [true] if the user was saved properly
+  def tour(page)
+    tmp = self.tours
+    tmp << page
+    self.tours = tmp
+    changed? ? save : true
   end
 
   def update_without_password(params, *options)
