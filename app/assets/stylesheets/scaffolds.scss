@@ -9,14 +9,14 @@ body {
 
 p, ol, ul, td {
   // font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.813rem;
+  line-height: 1.125rem;
 }
 
 pre {
   background-color: #eee;
-  padding: 10px;
-  font-size: 11px;
+  padding: 0.625rem;
+  font-size: 0.688rem;
 }
 
 // a {
@@ -33,11 +33,11 @@ pre {
 // }
 
 th {
-  padding-bottom: 5px;
+  padding-bottom: .313rem;
 }
 
 td {
-  padding: 0 5px 7px;
+  padding: 0 .313rem 0.438rem;
 }
 
 // div {
@@ -57,24 +57,24 @@ td {
 // }
 
 #error_explanation {
-  width: 450px;
-  border: 2px solid red;
-  padding: 7px 7px 0;
-  margin-bottom: 20px;
+  width: 28.125rem;
+  border: .125rem solid red;
+  padding: 0.438rem 0.438rem 0;
+  margin-bottom: 1.25rem;
   background-color: #f0f0f0;
 
   h2 {
     text-align: left;
     font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px -7px 0;
+    padding: .313rem .313rem .313rem 1rem;
+    font-size: .75rem;
+    margin: -0.438rem -0.438rem 0;
     background-color: #c00;
     color: #fff;
   }
 
   ul li {
-    font-size: 12px;
+    font-size: .75rem;
     list-style: square;
   }
 }

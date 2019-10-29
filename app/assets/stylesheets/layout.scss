@@ -2,6 +2,7 @@
 
 html, body {
 	height: 100%;
+  font-size: $root-font-size;
 }
 
 body {
@@ -12,7 +13,7 @@ body {
 
 h1 {
 	font-weight: unset;
-	font-size: 40px;
+	font-size: 2.5rem;
 	color: $color-purple-dark;
 	text-align: center;
 }
@@ -28,7 +29,7 @@ header {
 
 main {
 	clear: both;
-	padding: 10px;
+	padding: .625rem;
 	opacity: 0;
 
 	.no-js & {
@@ -53,7 +54,7 @@ ul {
 .no-js {
 	header.small {
 		position: absolute;
-		margin-left: 10px;
+		margin-left: .625rem;
 	}
 
 	header.small + main {
@@ -71,11 +72,11 @@ ul {
 #no-js-warning {
 	text-align: center;
 	font-weight: bold;
-	border: 1px solid $color-green-light;
+	border: .062rem solid $color-green-light;
 }
 
 .aria-only {
-	font-size: 0px;
+	font-size: 0rem;
 }
 
 .clear {
@@ -84,24 +85,24 @@ ul {
 
 #logo {
 	font-family: $script-font;
-	font-size: 55px;
+	font-size: 3.438rem;
 	color: $color-purple-light;
 	text-decoration: none;
 
 	span {
 		font-family: $outline-font;
-		font-size: 58px;
+		font-size: 3.625rem;
 		color: $color-purple-dark;
 	}
 
 	header.small & {
 		text-align: left;
-		font-size: 39px;
+		font-size: 2.438rem;
 		float: left;
-		padding-top: 10px;
+		padding-top: .625rem;
 
 		span {
-			font-size: 41px;
+			font-size: 2.563rem;
 		}
 	}
 }
@@ -111,7 +112,7 @@ ul {
 }
 
 #page-container-inner {
-	max-width: 1000px;
+	max-width: 62.5rem;
 	margin: 0px auto;
 }
 
@@ -121,9 +122,9 @@ ul {
 
 .desc {
 	h1 + &, h2 + & {
-		line-height: 1;
-		margin-top: -1em;
-		margin-bottom: 1em;
+		line-height: .062rem;
+		margin-top: -1rem;
+		margin-bottom: 1rem;
 	}
 }
 
@@ -136,12 +137,12 @@ span.confirmation {
 }
 
 .rounded-container {
-	border-radius: 10px;
-	padding: 10px;
-	margin-bottom: 10px;
+	border-radius: .625rem;
+	padding: .625rem;
+	margin-bottom: .625rem;
 	.rounded-container-title {
 		text-align: center;
-		margin: 0 0 0.2em 0;
+		margin: 0 0 0.2rem 0;
 	}
 }
 
@@ -190,31 +191,31 @@ span.confirmation {
 
 .dark-border-container {
 	@extend .rounded-container;
-	border: 2px solid $color-purple-dark;
+	border: .125rem solid $color-purple-dark;
 }
 
 .light-border-container {
 	@extend .rounded-container;
-	border: 2px solid $color-purple-light;
+	border: .125rem solid $color-purple-light;
 }
 
 .gray-border-container {
 	@extend .rounded-container;
-	border: 2px solid $color-light-gray;
+	border: .125rem solid $color-light-gray;
 }
 
 .bubble-container {
-	height: 1.9em;
+	height: 1.9rem;
 	position: relative;
-	$arrow-size: 8px;
+	$arrow-size: .5rem;
 
 	.bubble {
-		border-radius: 8px;
-		padding: 0px 5px;
+		border-radius: .5rem;
+		padding: 0rem .313rem;
 		display: inline-block;
-		border: 1px solid $color-green-dark;
+		border: .063rem solid $color-green-dark;
 		color: $color-green-dark;
-		font-size: 0.8em;
+		font-size: 0.8rem;
 		position: absolute;
 		max-width: 80vw;
 

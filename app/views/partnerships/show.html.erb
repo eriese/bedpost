@@ -1,10 +1,13 @@
 <h2><%= t(".partner_html", {name: @partnership.partner.name, nickname: @partnership.nickname}) %></h2>
+
 <% Partnership::LEVEL_FIELDS.each do |field| %>
 	<div><%= t(".field_html", {value: @partnership[field], field: field}) %></div>
 <% end %>
+
 <p><%= link_to t(".encounters"), partnership_encounters_path(@partnership) %></p>
 <p><%= link_to t(".back"), partnerships_path %></p>
 <p><%= link_to t(".edit"), edit_partnership_path(@partnership) %></p>
+
 <p>
 	<%= confirm_link_to t(".destroy"), partnership_path(@partnership), method: :delete, alert_class: "confirmation" %>
 </p>

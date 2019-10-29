@@ -1,4 +1,5 @@
 // fonts
+$root-font-size: 16px;
 $script-font: 'Lily Script One', cursive;
 $outline-font: 'Londrina Shadow', sans-serif;
 $text-font: 'Hind Vadodara', sans-serif;;
@@ -63,7 +64,7 @@ $input-border-color: $color-purple-dark;
 $input-border-color-focus: $color-purple-light;
 
 // sizing
-$nav-width: 250px;
+$nav-width: 15.625rem;
 
 .clear-fix{
 	&:after {

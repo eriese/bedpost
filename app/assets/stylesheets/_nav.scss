@@ -2,25 +2,25 @@
 
 nav {
 	position: relative;
-	left: 0px;
-	top: 0px;
+	left: 0rem;
+	top: 0rem;
 	z-index: 100;
 	float: left;
 
 	.burger {
-		margin: 10px;
-		width: 35px;
-		border: 2px solid $button-color;
-		border-radius: 5px;
+		margin: .625rem;
+		width: 2.188rem;
+		border: .125rem solid $button-color;
+		border-radius: .313rem;
 		position: relative;
 		z-index: 2;
-		padding: 0px;
+		padding: 0rem;
 		box-sizing: content-box;
 
 		.burger-line {
-			height: 3px;
+			height: .188rem;
 			background-color: $button-color;
-			margin: 6.5px 5px;
+			margin: .406rem .313rem;
 		}
 
 		.no-js & {
@@ -40,10 +40,10 @@ nav {
 	.menu {
 		overflow: hidden;
 		position: absolute;
-		padding-top: 57px;
-		top: 0px;
+		padding-top: 3.563rem;
+		top: 0rem;
 
-		margin: 0px;
+		margin: 0rem;
 		z-index: 1;
 		height: 100vh;
 		box-sizing: border-box;
@@ -56,8 +56,8 @@ nav {
 	}
 
 	ul {
-		padding-inline-start: 0px;
-		margin: 0px;
+		padding-inline-start: 0rem;
+		margin: 0rem;
 		width: $nav-width;
 		background-color: $color-purple-dark;
 		height: 100%;
@@ -65,11 +65,11 @@ nav {
 
 	li {
 		list-style: none;
-		font-size: 26px;
-		line-height: 26px;
+		font-size: 1.625rem;
+		line-height: 1.625rem;
 
 		&.no-link {
-			padding: 15px 10px 10px;
+			padding: 1rem .625rem .625rem;
 			color: $color-green-light;
 		}
 
@@ -84,7 +84,7 @@ nav {
 			color: $color-light-gray;
 			display: block;
 			height: 100%;
-			padding: 15px 5px 15px 15px;
+			padding: 1rem .313rem 1rem 1rem;
 		}
 
 		a, form>input[type=submit].not-button {

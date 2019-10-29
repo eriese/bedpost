@@ -51,8 +51,8 @@
 
 - Start the **mongodb** database: `mongod`
 
-- Setup database: `rake db:setup && rake db:create_indexes`
+- In a new instance, setup database: `rake db:setup && rake db:create_indexes`
 
-- Start the **rails** server: `rails s`
+- In another new instance, start the **rails** server: `rails s`
 
-- Start the server and dev processes: `foreman start -p 3000` (Or if that's giving you trouble, `ruby ./bin/webpack-dev-server`)
+- In another new instance, start the server and dev processes: `foreman start -p 3000` (Or if that's giving you trouble, `ruby ./bin/webpack-dev-server`)
