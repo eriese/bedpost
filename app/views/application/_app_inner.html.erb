@@ -21,7 +21,7 @@
         <% end %>
       </div>
       <div id="page-content">
-        <button @click="loadTour" v-if="hasTour" class="tourguide-button">?</button>
+        <button type="button" @click="loadTour" v-if="hasTour" class="tourguide-button" title="<%= t("guide_button") %>">?</button>
         <%= yield %>
 
       </div>

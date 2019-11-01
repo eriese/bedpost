@@ -19,5 +19,11 @@ RSpec.describe Tour, type: :model do
   			Tour.by_page(tour.page_name)
   		end
   	end
+
+    describe '#by_page!' do
+      it 'does not raise an error on document not found' do
+        expect{Tour.by_page!("page")}.to_not raise_error
+      end
+    end
   end
 end

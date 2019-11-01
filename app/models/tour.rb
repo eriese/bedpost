@@ -6,11 +6,13 @@ class Tour
 
   index({page_name: 1}, {unique: true})
 
+  #search by page and cache
   def self.by_page(page_name)
   	find_cached(page_name, field: :page_name)
   end
 
-  def self.tour_exists?(page_name)
+  #search and cache a page without throwing an error if it doesn't exist
+  def self.by_page!(page_name)
   	by_page(page_name)
   rescue Mongoid::Errors::DocumentNotFound
   	false
