@@ -89,6 +89,7 @@ class ApplicationController < ActionController::Base
     store_location_for(:user_profile, request.fullpath)
   end
 
+  # check if the user has unfinished parts of the first time experience
   def check_first_time
   	return unless user_profile_signed_in?
 

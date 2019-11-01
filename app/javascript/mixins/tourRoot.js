@@ -8,7 +8,6 @@ import axios from 'axios'
  * @vue-data {Boolean} hasTour=false does the page have a tour?
  * @vue-data {Object} tourData=null the data returned from a request for the page's tour
  * @vue-computed {String} tourPage the string representation of the current page's path for requesting and closing the tour
- * @listens tour-requested
  * @listens tour-stopped
  */
 export default {
@@ -41,7 +40,6 @@ export default {
 		},
 		/**
 		 * Load the tour data if there is any
-		 * @listens tour-requested
 		 */
 		loadTour: async function() {
 			// if there's already a tour loaded, just use that

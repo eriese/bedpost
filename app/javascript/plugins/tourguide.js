@@ -4,7 +4,7 @@ const importTourComponent = (compName) => {
 
 /**
  * A plugin that installs vue-tour and its components
- * Basically copied from vue-tour's plugin, but using dynamic imports
+ * Basically copied from {@link https://pulsar.gitbooks.io/vue-tour/ vue-tour}'s plugin, but using dynamic imports
  * @module
  */
 export default {

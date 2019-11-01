@@ -4,6 +4,7 @@ class PartnershipWhosController < ApplicationController
 
 	def new
 		p_id = params[:partnership_id]
+		#did the user get to this page for the dashboard?
 		@from_dash = request.referer && URI(request.referer).path == root_path
 		@partnership = p_id.present? ? current_user_profile.partnerships.find(p_id) : current_user_profile.partnerships.new
 		@partnership.uid = flash[:who_attempt][:uid] if flash[:who_attempt].present?
