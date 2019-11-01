@@ -7,7 +7,7 @@ RSpec.describe ToursController, type: :controller do
 	end
 
 	after :each do
-		cleanup @user
+		cleanup @user, @tour
 	end
 
 	describe 'GET #index' do
@@ -24,13 +24,11 @@ RSpec.describe ToursController, type: :controller do
 	end
 
 	describe 'GET #show' do
-		after :each do
-			cleanup(@tour)
-		end
-
 		it 'returns json {has_tour: true} if the page has a tour that the user has already seen' do
-			@user.tour("page")
-			get :show, params: {id: "page"}
+			page_name = "page"
+			@tour = create(:tour, page_name: page_name)
+			@user.tour(page_name)
+			get :show, params: {id: page_name}
 			expect(response.body).to eq({has_tour: true}.to_json)
 		end
 
@@ -42,25 +40,49 @@ RSpec.describe ToursController, type: :controller do
 		end
 
 		it 'returns json {has_tour: false} if the page has no tour' do
-			allow(controller).to receive(:tour_exists?) {false}
 			get :show, params: {id: "page"}
 			expect(response.body).to eq({has_tour: false}.to_json)
+		end
+
+		context 'with force: true' do
+			it 'returns a json representation of the tour if the page has a tour, regardless of whether the user has seen it' do
+				page_name = "page"
+				@user.tour(page_name)
+				@tour = create(:tour, page_name: page_name)
+				get :show, params: {id: page_name, force: true}
+				expect(response.body).to eq @tour.to_json
+			end
+
+			it 'returns json {has_tour: false} if the page has no tour' do
+				get :show, params: {id: "page", force: true}
+				expect(response.body).to eq({has_tour: false}.to_json)
+			end
 		end
 	end
 
 	describe 'PUT/PATCH #update' do
+
 		it 'adds the page to the pages the user has toured' do
-			allow(controller).to receive(:tour_exists?) {true}
-			put :update, params: {id: "page"}
+			page_name = "page"
+			@tour = create(:tour, page_name: page_name)
+			put :update, params: {id: page_name}
 			@user.reload
-			expect(@user).to have_toured("page")
+			expect(@user).to have_toured(page_name)
 		end
 
 		it 'always returns a 204' do
-			allow(controller).to receive(:tour_exists?) {true}
-			@user.tour("page")
-			patch :update, params: {id: "page"}
+			page_name = "page"
+			@tour = create(:tour, page_name: page_name)
+			@user.tour(page_name)
+			patch :update, params: {id: page_name}
 			expect(response).to have_http_status(204)
+		end
+
+		it 'does not add a non-existent tour to the user' do
+			page_name = "page"
+			patch :update, params: {id: page_name}
+			@user.reload
+			expect(@user).to_not have_toured(page_name)
 		end
 	end
 end

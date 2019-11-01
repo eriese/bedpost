@@ -19,17 +19,17 @@ addTurbolinksFixes();
 addTransitionEvents();
 
 let app = null;
-document.addEventListener('turbolinks:load', () => {
+document.addEventListener('turbolinks:load', async () => {
 	// remove no-js specific styling
 	let classList = document.getElementById("vue-container").classList;
 	classList.remove("no-js");
 	classList.add("with-js");
 
-	I18nConfig.setup().then(() => {
-		// set up vue
-		app = addVue();
+	await I18nConfig.setup()
+	// set up vue
+	app = addVue();
 
-		// hook into the vue instance's confirmation method
-		Rails.confirm = app.isConfirmed
-	})
+	// hook into the vue instance's confirmation method
+	Rails.confirm = app.isConfirmed
+
 });

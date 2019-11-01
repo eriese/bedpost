@@ -1,4 +1,5 @@
 import {animIn} from '@modules/transitions';
+import {tourData, setTourSteps} from '@plugins/tourguide.js'
 
 /**
  * The root Vue instance for the application
@@ -17,7 +18,7 @@ export default {
 			confirmations[node.id] = null;
 		}
 
-		return {confirmations}
+		return {confirmations, ...tourData}
 	},
 	methods: {
 		t: function(scope, options) {
@@ -48,6 +49,7 @@ export default {
 		cancelConfirm: function(confirmId) {
 			// set it back to null
 			this.confirmations[confirmId] = null;
-		}
+		},
+		setTourSteps
 	}
 }

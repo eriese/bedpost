@@ -20,7 +20,12 @@
           <% end %>
         <% end %>
       </div>
-      <div id="page-content"><%= yield %></div>
+      <div id="page-content">
+        <tour-button @tour="setTourSteps"></tour-button>
+        <%= yield %>
+
+      </div>
+      <tour-holder :steps="tourSteps" :plays="tourPlays"></tour-holder>
     </div>
   </main>
 </div>

@@ -4,7 +4,8 @@ import Vuelidate from 'vuelidate';
 import VCalendar from 'v-calendar';
 import vSelect from 'vue-select';
 
-import bedpostVueGlobals from '../plugins/bedpostVueGlobals';
+import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
+import tourguide from '@plugins/tourguide';
 
 import _root from "@components/Root";
 import nav from '@components/NavComponent'
@@ -26,7 +27,7 @@ const encounterContactField = () => import (/* webpackChunkName: "components.enc
 
 const dropDown = () => import (/* webpackChunkName: "components.dropdown", webpackPreload: true */ "@components/display/DropDown.vue");
 const progBar = () => import (/* webpackChunkName: "components.prog-bar", webpackPreload: true */ "@components/display/ProgBar.vue");
-const bubble = () => import (/* webpackChunkName: "bubble", webpackPreload: true */ "@components/display/Bubble.vue")
+const bubble = () => import (/* webpackChunkName: "components.bubble", webpackPreload: true */ "@components/display/Bubble.vue")
 
 const arrowButton = () => import (/* webpackChunkName: "components.arrow-button", webpackPreload: true */ "@components/functional/ArrowButton");
 
@@ -43,6 +44,7 @@ export default function addVue() {
 	Vue.use(Vuelidate);
 	Vue.use(VCalendar);
 	Vue.use(bedpostVueGlobals);
+	Vue.use(tourguide);
 
 	Vue.component('v-select', vSelect);
 

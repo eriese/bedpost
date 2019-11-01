@@ -4,19 +4,18 @@ const vue = require('./loaders/vue')
 // const erb =  require('./loaders/erb')
 const path = require('path')
 
+// fix webpacker's outdated setup
+const sassLoader = environment.loaders.get('sass');
+sassLoader.use.unshift({loader: 'vue-style-loader', options: {}});
+
+const cssLoader = sassLoader.use.find(function(el){
+  return el.loader == 'css-loader'
+})
+cssLoader.options['modules'] = {localIdentName: cssLoader.options.localIdentName}
+delete cssLoader.options.localIdentName
 
 environment.loaders.append('vue', vue)
 environment.plugins.append('VueLoaderPlugin', new VueLoaderPlugin());
-
-// environment.loaders.append('css', {
-// 	test: /\.s?css$/,
-// 	use: [
-// 	'vue-style-loader',
-// 	'style-loader',
-// 	'css-loader',
-// 	'sass-loader'
-// 	]
-// })
 
 environment.config.merge({
   resolve: {

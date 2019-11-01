@@ -4,7 +4,8 @@
   "dependencies": {
     "@rails/ujs": "^6.0.0-alpha",
     "@rails/webpacker": "^4.0.7",
-    "css-loader": "^3.1.0",
+    "axios": "^0.19.0",
+    "css-loader": "^3.2.0",
     "flickity": "^2.2.0",
     "gsap": "^2.0.2",
     "i18n-js": "^3.3.0",
@@ -15,6 +16,7 @@
     "vue-loader": "^15.7.1",
     "vue-select": "^3.1.0",
     "vue-template-compiler": "^2.6.10",
+    "vue-tour": "^1.1.0",
     "vue-turbolinks": "^2.0.4",
     "vuelidate": "^0.7.4",
     "webpack": "^4.0.0"
@@ -28,6 +30,8 @@
     "babel-jest": "^24.9.0",
     "core-js": "^3.2.1",
     "jest": "^24.9.0",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0",
     "vue-jest": "^3.0.4",
     "webpack-dev-server": "^3.7.2"
   },
