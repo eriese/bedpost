@@ -33,6 +33,7 @@ yarn-debug.log*
 
 /coverage
 /app/javascript/locales
+/app/javascript/docs/doc
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key

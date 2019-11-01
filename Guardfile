@@ -113,9 +113,9 @@ end
 # Add files and commands to this file, like the example:
 #   watch(%r{file/path}) { `command(s)` }
 #
-# guard :shell do
-#   watch(%r{(?!.*?docs).*app\/javascript\/(.*)\.(js|vue)}) {|m|
-#     puts 're-building jsdoc'
-#     `rm -r app/javascript/docs/doc; jsdoc -c app/javascript/docs/jsdoc_conf.json`
-#   }
-# end
+guard :shell do
+  watch(%r{(?!.*?docs).*app\/javascript\/(.*)\.(js|vue)}) {|m|
+    puts 're-building jsdoc'
+    `rm -r app/javascript/docs/doc; jsdoc -c app/javascript/docs/jsdoc_conf.json`
+  }
+end
