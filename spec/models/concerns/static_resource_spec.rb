@@ -21,6 +21,10 @@ RSpec.describe StaticResource, type: :module do
 		Rails.cache.exist?(cache_name, namespace: StaticResourceTestModel.name)
 	end
 
+	before :all do
+		Rails.cache.clear
+	end
+
 	after :each do
 		Rails.cache.clear
 		StaticResourceTestModel.destroy_all
