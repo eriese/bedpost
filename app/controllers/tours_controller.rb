@@ -17,7 +17,7 @@ class ToursController < ApplicationController
 			{has_tour: false}
 		end
 
-		# tour = {tour_nodes: [{target: "#nav", content: "blah blah blah"}]}
+		# tour = {tour_nodes: [{target: "#nav", content: "blah blah blah"}, {target: "header", content: "and blah blah"}, {target: "#page-content", content: "and scene"}]}
 
 		render json: tour
 	end

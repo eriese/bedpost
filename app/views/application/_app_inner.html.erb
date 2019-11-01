@@ -21,7 +21,7 @@
         <% end %>
       </div>
       <div id="page-content">
-        <tour-button @tour="setTourSteps"></tour-button>
+        <button @click="loadTour" v-if="hasTour" class="tourguide-button">?</button>
         <%= yield %>
 
       </div>

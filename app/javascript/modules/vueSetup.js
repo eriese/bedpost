@@ -10,7 +10,6 @@ import tourguide from '@plugins/tourguide';
 import _root from "@components/Root";
 import nav from '@components/NavComponent'
 
-
 const formStepper = () => import (
 	/* webpackChunkName: "components.form-stepper", webpackMode: "lazy", webpackPreload: true */ "@components/stepper/FormStepperComponent.vue");
 const formStep = () => import (

@@ -3,40 +3,135 @@ import tourRoot from "@mixins/tourRoot.js";
 import TourHolder from "@components/tour/TourHolder.vue";
 import TourButton from "@components/tour/TourButton.vue";
 
+import axios from 'axios';
+jest.mock('axios')
+
+const getFalse = () => Promise.resolve({
+	data: {has_tour: false}
+})
+
+const getTrue = () => Promise.resolve({
+	data: {has_tour: true}
+})
+
+const tourData = {page_name: "page", tour_nodes: []}
+const getTour = () => Promise.resolve({
+	data: tourData
+})
+
+const mountBase = (mock, options) => {
+	axios.get.mockClear();
+	if (mock) {
+		axios.get.mockImplementationOnce(mock);
+	}
+
+	return mount({
+		template: "<div/>",
+		mixins: [tourRoot]
+	}, options)
+}
+
+axios.get.mockImplementation(getFalse);
+
 describe("Tour Root mixin", () => {
-	test("it adds null tourSteps data property", () => {
-		const wrapper = mount({
-			template: "<div/>",
-			mixins: [tourRoot]
-		})
+	test("it adds {tourSteps: null, hasTour: false, and tourData: null} to data", () => {
+		const wrapper = mountBase()
 
 		expect(wrapper.vm.tourSteps).toBe(null);
+		expect(wrapper.vm.hasTour).toBe(false);
+		expect(wrapper.vm.tourData).toBe(null);
 	})
 
-	describe("setTourSteps method", () => {
-		test("it sets the tourSteps data property", () => {
-			const wrapper = mount({
-				template: "<div/>",
-				mixins: [tourRoot]
-			})
+	describe("methods", () => {
+		describe("setTourSteps", () => {
+			test("it sets the tourSteps data property", () => {
+				const wrapper = mountBase()
 
-			const steps = [1, 2]
-			wrapper.vm.setTourSteps(steps)
-			expect(wrapper.vm.tourSteps).toBe(steps)
+				const steps = []
+				wrapper.setData({tourData: {tour_nodes: steps}})
+				wrapper.vm.setTourSteps()
+				expect(wrapper.vm.tourSteps).toBe(steps)
+			})
 		})
-	})
 
-	describe("onTourStop method", () => {
-		test("it sets the tourSteps back to null", () => {
-			const wrapper = mount({
-				template: "<div/>",
-				mixins: [tourRoot]
+		describe("onTourStop", () => {
+			test("it sets the tourSteps back to null", () => {
+				const wrapper = mountBase()
+
+				const steps = [1, 2]
+				wrapper.setData({tourSteps: steps});
+				wrapper.vm.onTourStop();
+				expect(wrapper.vm.tourSteps).toBe(null);
 			})
 
-			const steps = [1, 2]
-			wrapper.vm.setTourSteps(steps);
-			wrapper.vm.onTourStop();
-			expect(wrapper.vm.tourSteps).toBe(null);
+			test("it posts the tour completion", () => {
+				const wrapper = mountBase();
+				const put = jest.fn()
+				axios.put.mockImplementationOnce(put)
+
+				wrapper.vm.onTourStop()
+				expect(put).toHaveBeenCalledTimes(1);
+			})
+		})
+
+		describe("loadTour", () => {
+			test("it is called on create", () => {
+				const loadTour = jest.fn()
+				const wrapper = mount({
+					template: "<div/>",
+					mixins: [tourRoot]
+				}, {
+					methods: {
+						loadTour
+					}
+				})
+
+				expect(loadTour).toHaveBeenCalledTimes(1);
+			})
+
+			describe("when there is a tour for the page that the user has not seen", () => {
+				test("it sets the tour steps after loading", async () => {
+					const wrapper = mountBase(getTour);
+					await wrapper.vm.$nextTick(() => {
+						expect(wrapper.vm.tourSteps).toEqual(tourData.tour_nodes)
+					})
+				})
+			})
+
+			describe("when a tour has already been loaded", () => {
+				test("it does not make an axios call", async () => {
+					const wrapper = mountBase(getTour)
+					axios.get.mockClear();
+					await wrapper.vm.$nextTick(() => {
+						wrapper.vm.loadTour();
+
+						expect(axios.get).not.toHaveBeenCalled()
+					})
+				})
+
+				test("it does set the tourSteps", async() => {
+					const wrapper = mountBase(getTour)
+					wrapper.setData({tourSteps: null})
+					wrapper.vm.loadTour()
+					await wrapper.vm.$nextTick(() => {
+						expect(wrapper.vm.tourSteps).toEqual(tourData.tour_nodes)
+					})
+				} )
+			})
+
+			describe("when a tour exists but the user has seen it", () => {
+				test("it sets hasTour to true but does not set the tourSteps", async() => {
+					const setTourSteps = jest.fn()
+					const wrapper = mountBase(getTrue, {
+						methods: {setTourSteps}
+					});
+
+					await wrapper.vm.$nextTick(() => {
+						expect(wrapper.vm.hasTour).toBe(true)
+						expect(setTourSteps).not.toHaveBeenCalled()
+					})
+				})
+			})
 		})
 	})
 
@@ -48,17 +143,6 @@ describe("Tour Root mixin", () => {
 			})
 
 			expect(wrapper.contains(TourHolder)).toBe(true);
-		})
-
-		test("it adds the TourButton component", () => {
-			TourButton.created = jest.fn()
-
-			const wrapper = mount({
-				template: "<div><tour-button/></div>",
-				mixins: [tourRoot],
-			})
-
-			expect(wrapper.contains(TourButton)).toBe(true);
 		})
 	})
 })

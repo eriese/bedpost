@@ -12,6 +12,7 @@ import addTurbolinksFixes from '@modules/turbolinksFixes';
 import addVue from '@modules/vueSetup';
 import Rails from '@rails/ujs';
 import I18nConfig from "@modules/i18n-config";
+import axios from 'axios';
 
 Rails.start();
 
@@ -24,6 +25,11 @@ document.addEventListener('turbolinks:load', async () => {
 	let classList = document.getElementById("vue-container").classList;
 	classList.remove("no-js");
 	classList.add("with-js");
+
+	// add csrf headers to axios
+	axios.defaults.headers.common['X-CSRF-Token'] = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute('content');
 
 	await I18nConfig.setup()
 	// set up vue
