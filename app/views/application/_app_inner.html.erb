@@ -25,7 +25,7 @@
         <%= yield %>
 
       </div>
-      <tour-holder :steps="tourSteps" :plays="tourPlays"></tour-holder>
+      <tour-holder :steps="tourSteps" @tour-stopped="onTourStop"></tour-holder>
     </div>
   </main>
 </div>

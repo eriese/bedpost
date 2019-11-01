@@ -9,12 +9,12 @@ class ToursController < ApplicationController
 		page = params[:id]
 		tour = if tour = Tour.tour_exists?(page)
 			if current_user_profile.has_toured?(page) && !params[:force]
-				seen_tour
+				{has_tour: true}
 			else
 				tour
 			end
 		else
-			no_tour
+			{has_tour: false}
 		end
 
 		# tour = {tour_nodes: [{target: "#nav", content: "blah blah blah"}]}
@@ -30,13 +30,4 @@ class ToursController < ApplicationController
 	def require_first_time
 		redirect_to root_path unless current_user_profile.first_time?
 	end
-
-	def no_tour
-		{has_tour: false}
-	end
-
-	def seen_tour
-		{has_tour: true}
-	end
-
 end

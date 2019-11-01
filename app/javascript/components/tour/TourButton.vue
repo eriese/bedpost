@@ -5,6 +5,9 @@
 <script>
 	import axios from 'axios'
 
+	/**
+	 * @module
+	 */
 	export default {
 		name: "tour-button",
 		data: function() {

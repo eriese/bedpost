@@ -1,5 +1,5 @@
 <template>
-	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks"/>
+	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks" ref="tour-el"/>
 </template>
 
 <script>
@@ -15,48 +15,42 @@
 
 	const VTour = () => import(/* webpackChunkName: "v-tour", webpackPrefetch: true */"vue-tour/src/components/VTour.vue")
 
+	/**
+	 * @module
+	 */
 	export default {
 		data: function() {
 			return {
-				running: false,
 				callbacks: {
-					onStart: this.onStart,
 					onStop: this.onStop
 				}
 			}
 		},
 		props: {
-			steps: Array,
-			plays: Number
+			steps: Array
 		},
 		computed: {
 			componentType: function() {
 				return this.steps ? VTour : emptyGuide
-			}
-		},
-		watch: {
-			plays: function(newVal) {
-				if (newVal > 1) {
-					this.startTour();
-				}
+			},
+			tour() {
+				return this.steps ? this.$refs['tour-el'].$tours.tour : null;
+			},
+			running() {
+				this.tour && this.tour.isRunning
 			}
 		},
 		methods: {
 			checkTour() {
-				if (this.steps) {
-					this.startTour()
+				if (this.steps && !this.running) {
+					this.startTour();
 				}
 			},
 			startTour() {
-				if (!this.running) {
-					this.$tours.tour.start()
-				}
-			},
-			onStart() {
-				this.running = true;
+				this.tour && this.tour.start()
 			},
 			onStop() {
-				this.running = false;
+				this.$emit('tour-stopped');
 			}
 		}
 	}
