@@ -1,7 +1,6 @@
 import {mount} from "@vue/test-utils";
 import tourRoot from "@mixins/tourRoot.js";
 import TourHolder from "@components/tour/TourHolder.vue";
-import TourButton from "@components/tour/TourButton.vue";
 
 import axios from 'axios';
 jest.mock('axios')
