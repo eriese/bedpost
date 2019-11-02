@@ -20,18 +20,18 @@ A user should be able to sign up for an account, add their partners, and add the
 - ~~Encounter CRUD~~
   - ~~Risk Evaluation on Encounter Review~~
   - ~~Testing Advice on Encounter Review~~
-- STI factsheets on all STIs mentioned
-- Guided first-time flow
+- ~~Guided first-time flow~~
 
 #### Still needed
-- Guided flow system with flexibility for divergent paths
 - Back buttons everywhere
 - Views:
   - Review Partnership
   - Email templates
 - FAQ page
 - Landing page
+- STI factsheets on all STIs mentioned
 - Localization/copy
+- Copy for page tours
 - Testing
 - Data entry about diagnoses/risks
 - Accessibility Audit
