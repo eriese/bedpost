@@ -1,5 +1,5 @@
 en:
-  first_times:
+  tours:
     index:
       header: Hi %{name}
       desc: Let's get you started by adding your first partnership.
