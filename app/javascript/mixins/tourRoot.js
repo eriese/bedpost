@@ -20,7 +20,8 @@ export default {
 	},
 	computed: {
 		tourPage() {
-			return `/tours/${window.location.pathname.replace(/\//g, "-")}.json`
+			let path = window.location.pathname.replace(/\//g, "-");
+			return `/tours/${path}.json`
 		}
 	},
 	methods: {
@@ -36,7 +37,7 @@ export default {
 		 */
 		onTourStop() {
 			this.tourSteps = null;
-			axios.put(this.tourPage)
+			axios.put(this.tourPage).catch(function (e) {})
 		},
 		/**
 		 * Load the tour data if there is any
@@ -48,23 +49,27 @@ export default {
 				return;
 			}
 
-			// request the tour data for this page
-			let response = await axios.get(this.tourPage, {
-				params: {force: this.hasTour}
-			});
+			try {
+				// request the tour data for this page
+				let response = await axios.get(this.tourPage, {
+					params: {force: this.hasTour}
+				});
 
-			// if there is a tour
-			if (response.data.has_tour !== false) {
+				// if there is a tour
+				if (response.data.has_tour !== false) {
 
-				// show the tour button on the page
-				this.hasTour = true;
+					// show the tour button on the page
+					this.hasTour = true;
 
-				// if a tour was returned (the user hasn't seen it before)
-				if(response.data.tour_nodes) {
-					// save the data and set the steps
-					this.tourData = response.data
-					this.setTourSteps();
+					// if a tour was returned (the user hasn't seen it before)
+					if(response.data.tour_nodes) {
+						// save the data and set the steps
+						this.tourData = response.data
+						this.setTourSteps();
+					}
 				}
+			} catch(e) {
+				console.debug(e.response)
 			}
 		}
 	},

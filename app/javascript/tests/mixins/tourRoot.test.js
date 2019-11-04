@@ -30,7 +30,10 @@ const mountBase = (mock, options) => {
 	}, options)
 }
 
+const getPromise = () => Promise.resolve()
+
 axios.get.mockImplementation(getFalse);
+axios.put.mockImplementation(getPromise)
 
 describe("Tour Root mixin", () => {
 	test("it adds {tourSteps: null, hasTour: false, and tourData: null} to data", () => {
@@ -65,11 +68,10 @@ describe("Tour Root mixin", () => {
 
 			test("it posts the tour completion", () => {
 				const wrapper = mountBase();
-				const put = jest.fn()
-				axios.put.mockImplementationOnce(put)
+				axios.put.mockClear()
 
 				wrapper.vm.onTourStop()
-				expect(put).toHaveBeenCalledTimes(1);
+				expect(axios.put).toHaveBeenCalledTimes(1);
 			})
 		})
 
