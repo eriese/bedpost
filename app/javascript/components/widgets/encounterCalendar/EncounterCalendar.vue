@@ -17,7 +17,7 @@
 				    :key="attr.key"
 				    :attribute="attr">
 				    <span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-				    <a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes }}</a>
+				    <a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes || $_t('encounters.index.no_notes')}}</a>
 				</v-popover-row>
 			</div>
 		</v-calendar>
@@ -43,7 +43,7 @@
 			calendarProps() {
 				return {
 					maxDate: new Date(),
-					toDate: new Date(),
+					toPage: this.mostRecent,
 					isExpanded: true,
 					// isDark: true,
 					columns: this.$screens({md: 2, lg: 3}, 1),
@@ -70,7 +70,8 @@
 					let partnerClass = `partnership-${partner.index}`
 
 					for (var j = 0; j < partner.encounters.length; j++) {
-						let enc = partner.encounters[j]
+						let enc = partner.encounters[j];
+
 						ret.push({
 							dates: enc.took_place,
 							dot: highlight ? false : partnerClass,
@@ -89,6 +90,18 @@
 				}
 
 				return ret;
+			},
+			mostRecent() {
+				let max = null;
+				for (let i = 0; i < this.selectedEncounters.length; i++) {
+					let enc = this.selectedEncounters[i]
+					let encDate = new Date(enc.dates)
+					if (encDate > max) {
+						max = encDate
+					}
+				}
+				// ridiculously, v-calendar wants the calendar number of the month rather than the 0-index
+				return {month: max.getMonth() + 1, year: max.getFullYear()};
 			}
 		},
 		methods: {
