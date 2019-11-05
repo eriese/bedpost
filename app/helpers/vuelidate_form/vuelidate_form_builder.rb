@@ -44,6 +44,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     return stepper
   end
 
+  alias_method :parent_hidden_field, :hidden_field
   def hidden_field(attribute, options={})
   	options = options.merge({label: false, validate: false, field_class: "hidden-field"})
   	field_builder(attribute, options).field do
@@ -154,15 +155,16 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def date_field(attribute, **options)
+    options[:is_date] = true
     field_builder(attribute, options).field do
       mdl = options.delete(:"v-model")
-      @template.content_tag(:"v-date-picker", "", {:"v-model" => mdl, :":popover" => "{visibility: 'focus'}"}) do
+      @template.content_tag(:"v-date-picker", "", {:"v-model" => mdl, :":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
         options[:"slot-scope"] = 'dp'
         options[:"v-bind"] = 'dp.inputProps'
         options[:"v-on"] = 'dp.inputEvents'
         parent_text_field(attribute, options)
       end <<
-      hidden_field(attribute)
+      parent_hidden_field(attribute, {:"v-model"=> mdl})
     end
   end
 

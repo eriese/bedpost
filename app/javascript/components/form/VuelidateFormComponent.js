@@ -35,7 +35,8 @@ export default {
 			formData: fd,
 			toggles: this.startToggles,
 			stepper: null,
-			submissionError: gon.submissionError || {}
+			submissionError: gon.submissionError || {},
+			finalized: false
 		};
 
 		// get rid of passwords
@@ -144,7 +145,27 @@ export default {
 				Object.setAtPath(this, toClear, null);
 			}
 		}
+	},
+	// it's really gross to add this tight coupling, but this whole component needs major refactoring, and this is a stop gap until I get to it
+	updated() {
+		if (this.finalized || this.$children.length == 0) {
+			return;
+		}
+		// only run this once
+		this.finalized = true;
+
+		// go through all the children in order to make sure dates are properly formatted for the date selector
+		for (var i = 0; i < this.$children.length; i++) {
+			let child = this.$children[i]
+			if (child.isDate) {
+				let fieldParent = this.formData[child.modelName] || this.formData;
+				let origDate = fieldParent[child.field]
+				// make a date object from the string
+				fieldParent[child.field] = new Date(origDate);
+			}
+		}
 	}
+
 }
 
 /**
