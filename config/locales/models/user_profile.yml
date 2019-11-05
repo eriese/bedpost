@@ -13,6 +13,10 @@ en:
       security_settings:
         title: Security
         desc: Enter your password to change any of the following settings
+      delete_profile:
+        title: Delete your account
+        desc: If you opted in to have your data used anonymously for research, we will clear your identifying information and keep the rest of your activity. If you want it all to be deleted from our servers, please opt out above and save your profile before deleting.
+        submit: Delete my account
   mongoid:
     errors:
       models:

@@ -20,7 +20,12 @@
           <% end %>
         <% end %>
       </div>
-      <div id="page-content"><%= yield %></div>
+      <div id="page-content">
+        <button type="button" @click="loadTour" v-if="hasTour" class="tourguide-button" title="<%= t("guide_button") %>">?</button>
+        <%= yield %>
+
+      </div>
+      <tour-holder :steps="tourSteps" @tour-stopped="onTourStop"></tour-holder>
     </div>
   </main>
 </div>

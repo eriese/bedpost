@@ -1,4 +1,5 @@
 class ProfilesController < ApplicationController
+  skip_before_action :check_first_time
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
 
   # GET /partners/1

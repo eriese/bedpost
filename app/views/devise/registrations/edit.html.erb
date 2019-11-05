@@ -1,10 +1,10 @@
 <%= vuelidate_form_with model: resource, html: {class: "centered", method: :put}, vue: {name: resource_name}, url: registration_path(resource_name) do |f| %>
   <h2><%= t_action(".account_settings") %></h2>
-  <%= render  "profiles/fields", f: f, profile: resource, show_name: resource.pronoun.present? do |p| %>
-    <%= f.text_field(:uid, {tooltip: true}) unless resource.pronoun.nil? %>
+  <%= render  "profiles/fields", f: f, profile: resource, show_name: resource.set_up? do |p| %>
+    <%= f.text_field(:uid, {tooltip: true}) if resource.set_up? %>
     <%= f.radio_group :opt_in, options: {radio_class: "hidden-radio", group_options: {field_class: "toggler", tooltip: true}} %>
   <% end %>
-  <% if resource.pronoun.present? %>
+  <% if resource.set_up? %>
     <h2 class="with-desc"><%= t_action(".security_settings.title") %></h2>
     <p class="description"><%= t_action(".security_settings.desc") %></p>
     <%= f.password_field :current_password, validate: true %>
@@ -18,12 +18,12 @@
   <%= f.submit %>
 <% end %>
 
-<% if resource.pronoun.present? %>
+<% if resource.set_up? %>
   <%= vuelidate_form_with scope: :account_delete, html: {class: "centered", method: :delete}, vue: {name: :account_delete}, url: registration_path(resource_name) do |f| %>
-    <h2 class="with-desc">Delete your account</h2>
-    <p class="description">If you opted in to have your data used anonymously for research, we will clear your identifying information and keep the rest of your activity. If you want it all to be deleted from our servers, please opt out first.</p>
+    <h2 class="with-desc"><%= t_action(".delete_profile.title") %></h2>
+    <p class="description"><%= t_action(".delete_profile.desc") %></p>
     <%= f.password_field :current_password, required: true, show_toggle: true %>
-    <%= f.submit "Delete my account" %>
+    <%= f.submit t_action(".delete_profile.submit") %>
   <% end %>
 
   <%= link_to "Back", :back %>

@@ -21,6 +21,10 @@ RSpec.describe EncountersController, type: :controller do
 	def user_session
 	end
 
+	before :each do
+		allow(controller).to receive(:check_first_time)
+	end
+
 	after :each do
 		cleanup @user, @p1, @p2, @hand, @mouth
 	end

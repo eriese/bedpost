@@ -48,6 +48,10 @@ RSpec.describe PartnershipWhosController, type: :controller do
 	end
 
 	describe 'PUT #update' do
+		before :each do
+			allow(controller).to receive(:check_first_time)
+		end
+
 		context 'with a valid uid' do
 
 			it 'updates the partner id on the partnership' do

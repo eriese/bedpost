@@ -34,7 +34,8 @@ Rails.application.routes.draw do
 
   resources :encounters, only: [:index]
 
-  resource :user_profile, except: [:show, :new]
+  get 'first_time', to: 'tours#index'
+  resources :tours, only: [:show, :update]
 
   #TODO this is temporary
   root to: 'devise/sessions#new'

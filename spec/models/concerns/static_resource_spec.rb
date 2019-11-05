@@ -21,6 +21,10 @@ RSpec.describe StaticResource, type: :module do
 		Rails.cache.exist?(cache_name, namespace: StaticResourceTestModel.name)
 	end
 
+	before :all do
+		Rails.cache.clear
+	end
+
 	after :each do
 		Rails.cache.clear
 		StaticResourceTestModel.destroy_all
@@ -102,7 +106,7 @@ RSpec.describe StaticResource, type: :module do
 			end
 		end
 
-		describe 'as_map' do
+		describe '#as_map' do
 			it 'gets a HashWithIndifferentAccess of all entries with their ids as keys' do
 				num_models = 3
 				make_models(num_models)
@@ -120,7 +124,7 @@ RSpec.describe StaticResource, type: :module do
 			end
 		end
 
-		describe 'grouped_by' do
+		describe '#grouped_by' do
 			it 'caches by column and instantiation arguments' do
 				make_models(2, f_1: "first")
 				make_models(3, f_1: "second")
@@ -160,6 +164,28 @@ RSpec.describe StaticResource, type: :module do
 					expect(result["second"].size).to be num_second
 					expect(result[:first][0]).to be_a(Hash)
 				end
+			end
+		end
+
+		describe '#find_cached' do
+			it 'finds an entry by its id' do
+				model = StaticResourceTestModel.create
+				found = StaticResourceTestModel.find_cached(model.id)
+				expect(found).to eq model
+			end
+
+			it 'caches the found entry' do
+				model = StaticResourceTestModel.create
+				expect(StaticResourceTestModel).to receive(:find).with(model.id).once
+				StaticResourceTestModel.find_cached(model.id)
+				StaticResourceTestModel.find_cached(model.id)
+				expect(in_cache?("_id:#{model.id}")).to be true
+			end
+
+			it 'accepts an optional argument to look for a field other than id' do
+				model = StaticResourceTestModel.create(f_1: "other")
+				found = StaticResourceTestModel.find_cached(model.f_1, field: :f_1)
+				expect(found).to eq model
 			end
 		end
 	end

@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe UserProfile, type: :model do
-
-  it_should_behave_like 'an object that dirty-tracks its embedded relations', UserProfile, :user_profile
-
   context 'fields' do
     describe "#uid" do
       it "generates a uid on initialization" do
@@ -115,6 +112,70 @@ RSpec.describe UserProfile, type: :model do
       end
     end
 
+    describe '#set_up?' do
+      after :each do
+        cleanup(@user)
+      end
+
+      it 'returns false if the user has registered but not filled in all profile details' do
+        @user = UserProfile.create(name: "Name", email: "email@email.com", password: "password", password_confirmation: "password")
+        expect(@user).to be_persisted
+        expect(@user).to_not be_set_up
+      end
+
+      it 'returns true if the user has filled out all profile details' do
+        user = build_stubbed(:user_profile)
+        expect(user).to be_set_up
+      end
+    end
+
+    describe '#first_time?' do
+      it 'returns true if the user has no top-level embedded items' do
+        user = build_stubbed(:user_profile)
+        expect(user).to be_first_time
+      end
+
+      it 'returns false if the user has at least one partnership' do
+        user = build_stubbed(:user_profile)
+        user.partnerships = [build_stubbed(:partnership)]
+        expect(user).to_not be_first_time
+      end
+
+      pending 'returns false if the user has at least one STI test'
+    end
+
+    describe '#has_toured?' do
+      it 'returns true if the user has toured the given page' do
+        user = build_stubbed(:user_profile)
+        user.tours = ["page"]
+        expect(user).to have_toured("page")
+      end
+
+      it 'returns false if the user has not toured the given page' do
+        user = build_stubbed(:user_profile)
+        expect(user).to_not have_toured("page")
+      end
+    end
+
+    describe '#tour' do
+      after :each do
+        cleanup @user
+      end
+
+      it 'adds a page to a the tour set and saves' do
+        @user = create(:user_profile)
+        expect(@user.tour("page")).to be true
+        @user.reload
+        expect(@user.tours).to be_a Set
+        expect(@user.tours).to include("page")
+      end
+
+      it 'returns true if the user has already toured the page, but does not add a duplicate' do
+        @user = create(:user_profile, tours: ["page"])
+        expect(@user.tour("page")).to be true
+      end
+    end
+
     describe '#soft_destroy' do
 
       context 'with a user with #opt_in = true' do
@@ -169,7 +230,9 @@ RSpec.describe UserProfile, type: :model do
     end
   end
 
-  context 'nested' do
+  context 'embedded' do
+    it_should_behave_like 'an object that dirty-tracks its embedded relations', UserProfile, :user_profile
+
     context 'partnerships' do
       after :each do
         cleanup(@user, @partner)

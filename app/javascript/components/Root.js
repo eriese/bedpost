@@ -1,13 +1,16 @@
 import {animIn} from '@modules/transitions';
+import tourRoot from '@mixins/tourRoot';
 
 /**
  * The root Vue instance for the application
  * @module
  * @vue-data {Object} [confirmations={}] an object tracking the confirmation state of confirmable actions on the page
+ * @mixes tourRoot
  */
 export default {
 	el: '#vue-container',
 	mounted: animIn,
+	mixins: [tourRoot],
 	data: function() {
 		// get anything with a data-confirm to add to confirmations
 		let confirmations = {};
