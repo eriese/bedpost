@@ -43,13 +43,12 @@
 				return this.steps ? this.$refs['tour-el'].$tours.tour : null;
 			},
 			running() {
-				this.tour && this.tour.isRunning
+				return this.tour && this.tour.isRunning
 			}
 		},
 		methods: {
 			/**
 			 * checks to see if a tour should run when a new component mounts
-			 * @return {[type]} [description]
 			 */
 			checkTour() {
 				if (this.steps && !this.running) {
@@ -58,7 +57,6 @@
 			},
 			/**
 			 * starts the tour if there is one
-			 * @return {[type]} [description]
 			 */
 			startTour() {
 				this.tour && this.tour.start()
