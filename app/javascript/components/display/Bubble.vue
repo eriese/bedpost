@@ -1,6 +1,6 @@
 <template>
-	<div v-show="targetEl" class="bubble-container">
-		<div class="bubble" :class="[addClass, cls]" :style="stl" ref="bubble">
+	<div class="bubble-container">
+		<div v-show="targetEl" class="bubble" :class="[addClass, cls]" :style="stl" ref="bubble">
 			<slot></slot>
 			<div class="arrow"></div>
 		</div>
@@ -28,11 +28,6 @@
 		},
 		methods: {
 			onSize() {
-				this.targetEl = this.targetEl || document.getElementById(this.target);
-				if (!this.targetEl) {
-					this.debounceOnSize();
-					return;
-				}
 				let rect = Utils.getBoundingDocumentRect(this.targetEl, true);
 				let elRect = Utils.getBoundingDocumentRect(this.$el)
 
@@ -75,31 +70,37 @@
 
 				this.stl = pos
 			},
-			debounceOnSize() {
+			debounceTargetEl() {
 				this.clearDebounce();
-				this.debounce = setTimeout(() => {
-					this.stl = {left: 0, top: 0}
-					this.$nextTick(this.onSize)
-				}, 50)
+				this.debounce = requestAnimationFrame(this.getTargetEl);
 			},
 			clearDebounce() {
 				if (this.debounce) {
-					clearTimeout(this.debounce);
+					cancelAnimationFrame(this.debounce);
+				}
+			},
+			getTargetEl() {
+				let hadEl = this.targetEl;
+				this.targetEl = hadEl || document.getElementById(this.target);
+
+				if (hadEl) {
+					this.onSize();
+				} else if (this.targetEl) {
+					this.$nextTick(this.onSize)
+				} else {
+					this.debounceTargetEl();
 				}
 			}
 		},
 		mounted() {
-			this.$nextTick(() => {
-				let resizeListener = window.addEventListener('resize', this.debounceOnSize);
+			let resizeListener = window.addEventListener('resize', this.debounceTargetEl);
 
-				this.$once('hook:beforeDestroy', () => {
-					window.removeEventListener('resize', resizeListener);
-					this.clearDebounce();
-				})
-
-				this.onSize()
-				this.debounceOnSize();
+			this.$once('hook:beforeDestroy', () => {
+				window.removeEventListener('resize', resizeListener);
+				this.clearDebounce();
 			})
+
+			this.getTargetEl();
 		}
 	}
 </script>

@@ -5,8 +5,8 @@
   "components.arrow-button.js.map": "/packs/js/components.arrow-button-b34bdd026a38835e21e3.chunk.js.map",
   "components.basic-stepper.js": "/packs/js/components.basic-stepper-3418b3057aaacb97a005.chunk.js",
   "components.basic-stepper.js.map": "/packs/js/components.basic-stepper-3418b3057aaacb97a005.chunk.js.map",
-  "components.bubble.js": "/packs/js/components.bubble-be3803f5a3dbc5e427a2.chunk.js",
-  "components.bubble.js.map": "/packs/js/components.bubble-be3803f5a3dbc5e427a2.chunk.js.map",
+  "components.bubble.js": "/packs/js/components.bubble-a8fc03b5b9e105668653.chunk.js",
+  "components.bubble.js.map": "/packs/js/components.bubble-4afb72abe96a61ff1807.hot-update.js.map",
   "components.dropdown.js": "/packs/js/components.dropdown-4c2815890eb0e30a0748.chunk.js",
   "components.dropdown.js.map": "/packs/js/components.dropdown-4c2815890eb0e30a0748.chunk.js.map",
   "components.dynamic-field-list.js": "/packs/js/components.dynamic-field-list-dece2a83b795a302d1d4.chunk.js",
@@ -18,7 +18,7 @@
   "components.form-stepper.js": "/packs/js/components.form-stepper-6d059c639f2f16e94489.chunk.js",
   "components.form-stepper.js.map": "/packs/js/components.form-stepper-6d059c639f2f16e94489.chunk.js.map",
   "components.form.js": "/packs/js/components.form-7b2d69a380795e8657b5.chunk.js",
-  "components.form.js.map": "/packs/js/components.form-63916952c3765ccff3bd.hot-update.js.map",
+  "components.form.js.map": "/packs/js/components.form-7b2d69a380795e8657b5.chunk.js.map",
   "components.prog-bar.js": "/packs/js/components.prog-bar-8ed5edb00bb5f980da36.chunk.js",
   "components.prog-bar.js.map": "/packs/js/components.prog-bar-8ed5edb00bb5f980da36.chunk.js.map",
   "components.toggle.js": "/packs/js/components.toggle-3b68dfa280f9a09d8f59.chunk.js",
@@ -26,11 +26,11 @@
   "entrypoints": {
     "application": {
       "js": [
-        "/packs/runtime-7be8cf02e87171e7f3cb.js",
+        "/packs/runtime-86ecb081d99652fe01f0.js",
         "/packs/js/application-051588d6cbd5d18b1b20.chunk.js"
       ],
       "js.map": [
-        "/packs/runtime-7be8cf02e87171e7f3cb.js.map",
+        "/packs/runtime-86ecb081d99652fe01f0.js.map",
         "/packs/js/application-051588d6cbd5d18b1b20.chunk.js.map"
       ]
     }
@@ -49,8 +49,8 @@
   "npm.vue-tour.js.map": "/packs/js/npm.vue-tour-f02137580ab3ac9acb1d.chunk.js.map",
   "npm.vuelidate.js": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js",
   "npm.vuelidate.js.map": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js.map",
-  "runtime.js": "/packs/runtime-7be8cf02e87171e7f3cb.js",
-  "runtime.js.map": "/packs/runtime-7be8cf02e87171e7f3cb.js.map",
+  "runtime.js": "/packs/runtime-86ecb081d99652fe01f0.js",
+  "runtime.js.map": "/packs/runtime-86ecb081d99652fe01f0.js.map",
   "vendors~components.form-stepper.js": "/packs/js/vendors~components.form-stepper-433868c51d2b8a9a0f10.chunk.js",
   "vendors~components.form-stepper.js.map": "/packs/js/vendors~components.form-stepper-433868c51d2b8a9a0f10.chunk.js.map",
   "vendors~v-tour0.js": "/packs/js/vendors~v-tour0-7be8ec3c14de47ef13a6.chunk.js",
