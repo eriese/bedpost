@@ -39,10 +39,11 @@
 					case "right":
 					pos.left = rect.right;
 					break;
+					// TODO implement more positions as needed
 				}
 
 				let bubWidth = this.$refs.bubble.offsetWidth;
-				let bubHeight = this.$refs.bubble.offsetHeight;
+				// let bubHeight = this.$refs.bubble.offsetHeight;
 
 				if (pos.left !== undefined)  {
 					pos.left -= elRect.left;
@@ -63,30 +64,27 @@
 					pos.left += "px";
 				}
 
-				if (pos.top !== undefined) {
-					pos.top += "px";
-				}
+				// if (pos.top !== undefined) {
+				// 	pos.top += "px";
+				// }
 
 
 				this.stl = pos
 			},
 			debounceTargetEl() {
 				this.clearDebounce();
-				this.debounce = requestAnimationFrame(this.getTargetEl);
+				this.debounce = setTimeout(this.getTargetEl, 50);
 			},
 			clearDebounce() {
 				if (this.debounce) {
-					cancelAnimationFrame(this.debounce);
+					clearTimeout(this.debounce);
 				}
 			},
 			getTargetEl() {
-				let hadEl = this.targetEl;
-				this.targetEl = hadEl || document.getElementById(this.target);
+				this.targetEl = this.targetEl || document.getElementById(this.target);
 
-				if (hadEl) {
+				if (this.targetEl) {
 					this.onSize();
-				} else if (this.targetEl) {
-					this.$nextTick(this.onSize)
 				} else {
 					this.debounceTargetEl();
 				}
