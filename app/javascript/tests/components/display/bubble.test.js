@@ -21,6 +21,22 @@ describe("Bubble component", () => {
 	describe("on mount", () => {
 		test("It looks for its target", () => {
 			const mockGetTarget = jest.fn();
+
+			const wrapper = mount(Bubble, {
+				slots: {
+					default: "some text"
+				},
+				methods: {
+					getTargetEl: mockGetTarget
+				}
+			})
+
+			expect(mockGetTarget).toHaveBeenCalledTimes(1);
+		})
+
+		test("If there is a target, it positions itself", () => {
+			mockOnSize.mockClear();
+			const mockDebounce = jest.fn();
 			document.getElementById = () => "here"
 
 			const wrapper = mount(Bubble, {
@@ -28,15 +44,17 @@ describe("Bubble component", () => {
 					default: "some text"
 				},
 				methods: {
-					getTargetEl: mockGetTarget,
-					onSize: mockOnSize
+					onSize: mockOnSize,
+					debounceTargetEl: mockDebounce
 				}
 			})
 
-			expect(mockGetTarget).toHaveBeenCalledTimes(1);
+			expect(mockOnSize).toHaveBeenCalledTimes(1);
+			expect(mockDebounce).not.toHaveBeenCalled();
 		})
 
 		test("If there is no target, it queues another check", () => {
+			mockOnSize.mockClear()
 			const mockDebounce = jest.fn();
 			document.getElementById = () => undefined
 
@@ -46,10 +64,12 @@ describe("Bubble component", () => {
 				},
 				methods: {
 					debounceTargetEl: mockDebounce,
+					onSize: mockOnSize
 				}
 			})
 
 			expect(mockDebounce).toHaveBeenCalledTimes(1);
+			expect(mockOnSize).not.toHaveBeenCalled();
 		})
 
 		test("It adds a resize event listener", () => {

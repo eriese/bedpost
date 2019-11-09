@@ -49,7 +49,6 @@
 		methods: {
 			/**
 			 * checks to see if a tour should run when a new component mounts
-			 * @return {[type]} [description]
 			 */
 			checkTour() {
 				if (this.steps && !this.running) {
@@ -58,7 +57,6 @@
 			},
 			/**
 			 * starts the tour if there is one
-			 * @return {[type]} [description]
 			 */
 			startTour() {
 				this.tour && this.tour.start()
