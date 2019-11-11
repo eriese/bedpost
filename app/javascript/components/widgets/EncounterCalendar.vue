@@ -17,7 +17,7 @@
 				    :key="attr.key"
 				    :attribute="attr">
 				    <span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-				    <a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes || $_t('encounters.index.no_notes')}}</a>
+				    <a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes}}</a>
 				</v-popover-row>
 			</div>
 		</v-calendar>
@@ -96,7 +96,7 @@
 								partnerID: partner._id,
 								encID: enc._id,
 								partnerName: partner.display,
-								notes: enc.notes
+								notes: enc.notes || this.$_t('encounters.index.no_notes')
 							},
 							// show popover on focus
 							popover: {
