@@ -1,7 +1,7 @@
 import {mount} from "@vue/test-utils"
 import Bubble from "@components/display/Bubble.vue"
 
-const mockOnSize = jest.fn();
+const mockPosition = jest.fn();
 
 describe("Bubble component", () => {
 	test("It renders the slot content", () => {
@@ -11,7 +11,7 @@ describe("Bubble component", () => {
 				default: txt
 			},
 			methods: {
-				onSize: mockOnSize
+				setPosition: mockPosition
 			}
 		})
 
@@ -35,7 +35,7 @@ describe("Bubble component", () => {
 		})
 
 		test("If there is a target, it positions itself", () => {
-			mockOnSize.mockClear();
+			mockPosition.mockClear();
 			const mockDebounce = jest.fn();
 			document.getElementById = () => "here"
 
@@ -44,17 +44,17 @@ describe("Bubble component", () => {
 					default: "some text"
 				},
 				methods: {
-					onSize: mockOnSize,
+					setPosition: mockPosition,
 					debounceTargetEl: mockDebounce
 				}
 			})
 
-			expect(mockOnSize).toHaveBeenCalledTimes(1);
+			expect(mockPosition).toHaveBeenCalledTimes(1);
 			expect(mockDebounce).not.toHaveBeenCalled();
 		})
 
 		test("If there is no target, it queues another check", () => {
-			mockOnSize.mockClear()
+			mockPosition.mockClear()
 			const mockDebounce = jest.fn();
 			document.getElementById = () => undefined
 
@@ -64,12 +64,12 @@ describe("Bubble component", () => {
 				},
 				methods: {
 					debounceTargetEl: mockDebounce,
-					onSize: mockOnSize
+					setPosition: mockPosition
 				}
 			})
 
 			expect(mockDebounce).toHaveBeenCalledTimes(1);
-			expect(mockOnSize).not.toHaveBeenCalled();
+			expect(mockPosition).not.toHaveBeenCalled();
 		})
 
 		test("It adds a resize event listener", () => {
@@ -108,7 +108,7 @@ describe("Bubble component", () => {
 		expect(mockRemove).toHaveBeenCalledWith('resize', listener);
 	})
 
-	describe("onSize method", () => {
+	describe("setPosition method", () => {
 		let targetRect;
 		let elRect;
 		let count = 0;
@@ -136,7 +136,7 @@ describe("Bubble component", () => {
 		}
 
 		const expectPosition = (expectedLeft, expectedClass) => {
-			wrapper.vm.onSize();
+			wrapper.vm.setPosition();
 
 			expect(wrapper.vm.cls).toEqual(expectedClass)
 			expect(wrapper.vm.stl.left).toEqual(`${expectedLeft}px`)
