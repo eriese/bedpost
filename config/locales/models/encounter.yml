@@ -40,4 +40,5 @@ en:
         one: Your Encounters with %{partner_name}
         other: Your Encounters
       new: Add an Encounter
+      no_notes: (No notes)
 
