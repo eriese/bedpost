@@ -91,7 +91,8 @@ class ApplicationController < ActionController::Base
 
   # check if the user has unfinished parts of the first time experience
   def check_first_time
-  	return unless user_profile_signed_in?
+  	# only run if a user is signed in and the request is storable
+  	return unless user_profile_signed_in? && storable_location?
 
   	redirect_path =
 	  	# if the user hasn't completed their profile, make them do it

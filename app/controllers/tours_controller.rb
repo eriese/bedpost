@@ -3,6 +3,14 @@ class ToursController < ApplicationController
 	skip_before_action :check_first_time
 
 	def index
+		@num_partnerships = current_user_profile.partnerships.count
+		@has_partnerships = @num_partnerships > 0
+		@first_partner = current_user_profile.partnerships.first
+	end
+
+	def create
+		current_user_profile.update({first_time: false})
+		redirect_to root_path
 	end
 
 	def show

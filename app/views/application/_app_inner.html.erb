@@ -1,8 +1,12 @@
 <div id="vue-container" class="<%= container_class %>">
-  <%= render "nav" %>
-  <header class=<%=current_user_profile.present? ? "small" : ""%>>
-    <%= link_to root_path, id: "logo" do %>
-    Bed<span>Post</span>
+  <%= render "nav" unless current_user_profile.first_time?%>
+  <header class=<%=current_user_profile.present? && !current_user_profile.first_time? ? "small" : ""%>>
+    <% if current_user_profile.first_time? %>
+      <span id="logo">Bed<span>Post</span></span>
+    <% else %>
+      <%= link_to root_path, id: "logo" do %>
+      Bed<span>Post</span>
+      <% end %>
     <% end %>
   </header>
   <main id="page-container" ref="container">
@@ -25,7 +29,7 @@
         <%= yield %>
 
       </div>
-      <tour-holder :steps="tourSteps" @tour-stopped="onTourStop"></tour-holder>
+      <% unless current_user_profile.present? %><tour-holder :steps="tourSteps" @tour-stopped="onTourStop"></tour-holder><% end %>
     </div>
   </main>
 </div>
