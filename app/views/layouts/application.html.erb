@@ -40,6 +40,15 @@
       <%= include_gon(need_tag: false)%>
     <% end %>
 
-    <%= render "app_inner", container_class: "no-js", is_js: false %>
+    <div id="vue-container" class="no-js">
+      <%= yield :nav%>
+      <%= yield :header %>
+      <main id="page-container" ref="container">
+        <div id="page-container-inner">
+          <%= render "flash" %>
+          <%= yield :main %>
+        </div>
+      </main>
+    </div>
   </body>
 </html>
