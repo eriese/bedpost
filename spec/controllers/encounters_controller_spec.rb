@@ -37,19 +37,19 @@ RSpec.describe EncountersController, type: :controller do
 		context 'with partnership id' do
 			it 'shows the encounters for only that partnership' do
 				ship = @user.partnerships.first
-				get :index, params: {partnership_id: ship.id}, session: user_session
+				get :index, params: {partnership_id: ship.id}
 
 				actual = assigns(:partnerships)
-				expect(actual.length).to eq 1
-				expect(actual[0]).to eq ship
+				expect(actual.size).to eq 1
+				expect(actual[0]["_id"]).to eq ship.id
 			end
 		end
 
 		context 'without partnership id' do
 			it 'shows the encounters for all partnerships the user has' do
-				get :index, session: user_session
+				get :index
 
-				expect(assigns(:partnerships)).to eq @user.partnerships
+				expect(assigns(:partnerships).size).to eq @user.partnerships.size
 			end
 		end
 	end

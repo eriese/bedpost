@@ -66,7 +66,10 @@
 
 				for (let i = 0; i < this.selectedPartners.length; i++) {
 					let partner = this.selectedPartners[i];
-					// let partner = this.partnerships[partnerID];
+					if (partner.encounters === undefined) {
+						continue;
+					}
+
 					let partnerClass = `partnership-${partner.index}`
 
 					for (var j = 0; j < partner.encounters.length; j++) {
