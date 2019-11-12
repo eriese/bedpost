@@ -5,22 +5,6 @@ RSpec.describe PartnershipsController, type: :controller do
 		allow(controller).to receive(:check_first_time) unless example.metadata[:no_skip]
 	end
 
-	describe 'GET #index' do
-		after :each do
-			dummy_user.partnerships.destroy_all
-		end
-
-		it "shows all the partnerships the user has" do
-			profiles = create_list(:profile, 3)
-			profiles.each{|prof| dummy_user.partnerships << build(:partnership, partner: prof)}
-			dummy_user.save
-
-			get :index, session: dummy_user_session
-			expect(response).to be_successful
-			expect(assigns(:partnerships)).to eq dummy_user.partnerships
-		end
-	end
-
 	describe 'GET #show' do
 		after :each do
 			cleanup(@ship, @profile)
@@ -80,11 +64,10 @@ RSpec.describe PartnershipsController, type: :controller do
 			sign_in(@profile)
 			@profile.partnerships << build(:partnership, partner: dummy_user)
 			get :new
-			expect(controller.current_user_profile.partnerships.length).to eq 1
+			expect(controller.current_user_profile.partnerships.length).to be 1
 
-
-			get :index, session: dummy_user_session
-			expect(assigns(:partnerships).length).to eq 1
+			get :index
+			expect(controller.current_user_profile.partnerships.length).to be 1
 		end
 	end
 

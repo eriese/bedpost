@@ -4,7 +4,6 @@ class PartnershipsController < ApplicationController
 	before_action :set_partnership, only: [:show, :edit, :update, :destroy]
 
 	def index
-		@partnerships = current_user_profile.partnerships
 	end
 
 	def show

@@ -7,22 +7,21 @@ module PartnershipsHelper
 	end
 
 	def display_partners
-		p_sorted = @partnerships.sort_by{|ship| ship.last_took_place}
-		partner_users = Profile.find(p_sorted.pluck(:partner_id))
-		agg = p_sorted.map.with_index do |ship, i|
+		p_sorted = current_user_profile.partners_with_most_recent
+		agg = p_sorted.map do |ship|
 			content_tag(:li, {class: "partnership-link"}) do
-				link_to(ship) do
-					display_partner(ship, partner_users[i])
+				link_to(partnership_path(ship["_id"])) do
+					display_partner(ship)
 				end
 			end
 		end
 		content_tag(:ul, safe_join(agg), {class: "partnership-links"})
 	end
 
-	def display_partner(ship, partner)
-		has_encounters = ship.encounters.any?
-		content = content_tag(:span, ship.display(partner.name), {class: "partner-name"})
-		content << content_tag(:span, t(".latest_html", {class: "last-encounter", took_place: l(ship.last_took_place(Date.new), format: :short)})) if ship.encounters.any?
+	def display_partner(ship)
+		content = content_tag(:span, Partnership.make_display(ship["partner_name"], ship["nickname"]), {class: "partner-name"})
+		most_recent = ship["most_recent"]
+		content << content_tag(:span, t(".latest_html", {class: "last-encounter", took_place: l(most_recent, format: :most_recent)})) if most_recent
 		content
 	end
 

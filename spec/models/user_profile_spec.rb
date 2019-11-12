@@ -176,6 +176,84 @@ RSpec.describe UserProfile, type: :model do
       end
     end
 
+    describe '#partners_with_most_recent' do
+      before :all do
+        @hand = create(:contact_instrument, name: :hand)
+        @pos = create(:possible_contact, subject_instrument: @hand, object_instrument: @hand)
+      end
+
+      after :all do
+        cleanup @pos, @hand
+      end
+
+      before :each do
+        @user = create(:user_profile)
+        @p1 = create(:profile)
+        @p2 = create(:profile)
+
+        @p1_nickname = "friend"
+        @p2_nickname = "lover"
+        @user.partnerships = [build(:partnership, partner: @p1, nickname: @p1_nickname), build(:partnership, partner: @p2, nickname: @p2_nickname)]
+      end
+
+      after :each do
+        cleanup @user
+      end
+
+      it 'gets a query of the partners the user has with the partnership id, most recent encounter, nickname, and partner name' do
+        p1_last = Date.new(2019, 10, 31)
+        p2_last = Date.new(2019, 8, 24)
+
+        @user.partnerships.first.encounters = [
+          build(:encounter, took_place: p1_last, contacts: [build(:encounter_contact, possible_contact: @pos)]),
+          build(:encounter, took_place: p1_last - 1.day, contacts: [build(:encounter_contact, possible_contact: @pos)])
+        ]
+        @user.partnerships.last.encounters = [
+          build(:encounter, took_place: p2_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
+        ]
+
+        result = @user.partners_with_most_recent.to_a
+
+        ship1 = result[0]
+        expect(ship1["_id"]).to eq @user.partnerships.first.id
+        expect(ship1["most_recent"]).to eq p1_last
+        expect(ship1["nickname"]).to eq @p1_nickname
+        expect(ship1["partner_name"]).to eq @p1.name
+
+        ship2 = result[1]
+        expect(ship2["_id"]).to eq @user.partnerships.last.id
+        expect(ship2["most_recent"]).to eq p2_last
+        expect(ship2["nickname"]).to eq @p2_nickname
+        expect(ship2["partner_name"]).to eq @p2.name
+      end
+
+      it 'sorts by most recent' do
+        p1_last = Date.new(2019, 8, 24)
+        p2_last = Date.new(2019, 10, 31)
+
+        @user.partnerships.first.encounters = [
+          build(:encounter, took_place: p1_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
+        ]
+        @user.partnerships.last.encounters = [
+          build(:encounter, took_place: p2_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
+        ]
+
+        result = @user.partners_with_most_recent.to_a
+        expect(result[0]["most_recent"]).to eq p2_last
+      end
+
+      it 'gracefully handles partnerships with no encounters' do
+        @user.partnerships.first.encounters = [
+          build(:encounter, took_place: Date.new(2019, 10, 31), contacts: [build(:encounter_contact, possible_contact: @pos)])
+        ]
+
+        result = @user.partners_with_most_recent.to_a
+        expect(result.size).to be 2
+        expect(result[0]["_id"]).to eq @user.partnerships.first.id
+        expect(result[1]["most_recent"]).to be_nil
+      end
+    end
+
     describe '#soft_destroy' do
 
       context 'with a user with #opt_in = true' do

@@ -3,6 +3,7 @@
 	<div><%= t(".field_html", {value: @partnership[field], field: field}) %></div>
 <% end %>
 <p><%= link_to t(".encounters"), partnership_encounters_path(@partnership) %></p>
+<p><%= link_to t(".new_encounter"), new_partnership_encounter_path(@partnership) %></p>
 <p><%= link_to t(".back"), partnerships_path %></p>
 <p><%= link_to t(".edit"), edit_partnership_path(@partnership) %></p>
 <p>

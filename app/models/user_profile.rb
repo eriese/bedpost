@@ -100,6 +100,27 @@ class UserProfile < Profile
     changed? ? save : true
   end
 
+  # An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter
+  def partners_with_most_recent
+    UserProfile.collection.aggregate([
+      {"$match" => {"_id" => id}},
+      {"$unwind" => "$partnerships"},
+      {"$replaceRoot" => {newRoot: "$partnerships"}},
+      {"$lookup" => {
+        from: "profiles",
+        localField: "partner_id",
+        foreignField: "_id",
+        as: "partner"
+      }},
+      {"$project" => {
+        most_recent: {"$max" => "$encounters.took_place"},
+        nickname: 1,
+        partner_name: {"$arrayElemAt" => ["$partner.name", 0]}
+      }},
+      {"$sort" => {most_recent: -1}}
+    ])
+  end
+
   def update_without_password(params, *options)
     params.delete(:email)
     params.delete(:current_password)
