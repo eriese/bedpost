@@ -1,4 +1,4 @@
 <h2 class="centered-text"><%= t(".title", count: @partnerships.size, partner_name: @partnerships[0]["display"]) %></h2>
-<div class="desc"><%= link_to t(".all"), encounters_path %></div>
+<div class="desc"><%= link_to(t(".all"), encounters_path) if @partnerships.size == 1 %></div>
 <encounter-calendar></encounter-calendar>
 <div class="edit-button"><%= link_to t(".new"), @partnerships.size == 1 ? new_partnership_encounter_path(@partnerships[0]["_id"]) : encounters_who_path %></div>
