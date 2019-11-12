@@ -114,11 +114,21 @@ RSpec.describe PartnershipsController, type: :controller do
 				expect(controller.current_user_profile.partnerships.length).to eq 1
 			end
 
-			it 'redirects to the show partnership page for the new partnership' do
-				@partner = create(:user_profile)
-				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({uid: @partner.uid})}
+			describe 'redirects' do
+				it 'redirects to the show partnership page for the new partnership if it is not part of an encounter flow' do
+					@partner = create(:user_profile)
+					post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({uid: @partner.uid})}
 
-				expect(response).to redirect_to @user.reload.partnerships.last
+					expect(response).to redirect_to @user.reload.partnerships.last
+				end
+
+				it 'redirects to the new encounter form for the partnerhip if it is part of an encounter flow' do
+					@partner = create(:profile)
+					post :create, session: {new_encounter: true}, params: {partnership: attributes_for(:partnership, partner_id: @partner.id)}
+
+					ship = @user.reload.partnerships.last
+					expect(response).to redirect_to new_partnership_encounter_path(ship)
+				end
 			end
 		end
 
