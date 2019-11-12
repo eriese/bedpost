@@ -35,6 +35,7 @@ en:
       display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
       self_risk_html: You figured your risk was <b>%{risk_level}</b>
       overall_risk_html: We calculated <b>%{risk_level}</b>
+      routine: "These ones probably don't call for getting tested ASAP, just get checked on your regular schedule:"
     index:
       title:
         one: Your Encounters with %{partner_name}

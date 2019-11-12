@@ -22,7 +22,7 @@ class Encounter::RiskCalculator
     @base_risk = 0
   end
 
-  def track(person = nil)
+  def track(person = nil, force = false)
   	return unless @diagnoses.present?
   	@person = person if person.present?
     @base_risk = case @person
@@ -33,13 +33,19 @@ class Encounter::RiskCalculator
       end
   	@encounter.contacts.each {|c| track_contact(c)}
   	@encounter.set_risks @risk_map
-    @encounter.set_schedule schedule
+    @encounter.set_schedule schedule(force)
   end
 
-  def schedule
-    @risk_map.keys.each_with_object({}) do |(diag_id), h|
+  def schedule(force = false)
+    @risk_map.each_with_object({}) do |(diag_id, diag_risk), h|
       diag = @diagnoses[diag_id]
-      test_date = @encounter.took_place + diag.best_test.weeks
+      #recommend a test date for low to high risks
+      test_date = if force || diag_risk > Diagnosis::TransmissionRisk::NEGLIGIBLE
+        @encounter.took_place + diag.best_test.weeks
+      else
+        #recommend waiting until routine testing for negligible and no risks
+        :routine
+      end
       h[test_date] ||= []
       h[test_date] << diag.name
     end

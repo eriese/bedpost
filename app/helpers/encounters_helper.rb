@@ -83,8 +83,12 @@ module EncountersHelper
 	def display_schedule(encounter)
 		sched = encounter.schedule.keys.sort.each_with_object([]) do |d, ary|
 			ary << content_tag(:li, {class: "schedule-el"}) do
-				content_tag(:span, raw(l(d, format: :best_test_html)), {class: "schedule-date"}) +
-				content_tag(:span, encounter.schedule[d].map { |i| t(i, scope: "diagnosis.name_casual") }.join(t("join_delimeter")), {class: "schedule-diagnoses"})
+				span = if d == :routine
+					content_tag(:span, t(".routine"), {class: "schedule-routine"})
+				else
+					content_tag(:span, raw(l(d, format: :best_test_html)), {class: "schedule-date"})
+				end
+				span + content_tag(:span, encounter.schedule[d].map { |i| t(i, scope: "diagnosis.name_casual") }.join(t("join_delimeter")), {class: "schedule-diagnoses"})
 			end
 		end
 

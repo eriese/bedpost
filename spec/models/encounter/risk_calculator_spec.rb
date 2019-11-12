@@ -126,4 +126,66 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
         end
     end
   end
+
+  describe '#schedule' do
+    before :each do
+      @encounter = build_stubbed(:encounter)
+    end
+
+    it 'returns a hash with best test dates as keys and arrays of diagnoses as values' do
+      calc = Encounter::RiskCalculator.new(@encounter)
+      calc.instance_variable_set :@risk_map, {
+        hpv: Diagnosis::TransmissionRisk::MODERATE,
+        hsv: Diagnosis::TransmissionRisk::HIGH
+      }
+
+      result = calc.schedule
+      diags = calc.instance_variable_get(:@diagnoses)
+      expected_hpv_best = diags[:hpv].best_test
+      expected_hiv_best = diags[:hpv].best_test
+
+      expect(expected_hiv_best).to eq expected_hpv_best
+      expected_date = @encounter.took_place + expected_hpv_best.weeks
+      expect(result).to have_key expected_date
+      expect(result[expected_date].length).to be 2
+      expect(result[expected_date]).to include(:hpv)
+      expect(result[expected_date]).to include(:hsv)
+    end
+
+    it 'keys NO_RISK and NEGLIGIBLE risk diagnoses with :routine' do
+      calc = Encounter::RiskCalculator.new(@encounter)
+      calc.instance_variable_set :@risk_map, {
+        hpv: Diagnosis::TransmissionRisk::NEGLIGIBLE,
+        hsv: Diagnosis::TransmissionRisk::NO_RISK,
+        hiv: Diagnosis::TransmissionRisk::MODERATE
+      }
+
+      result = calc.schedule
+      diags = calc.instance_variable_get(:@diagnoses)
+      best_hiv = @encounter.took_place + diags[:hiv].best_test.weeks
+
+      expect(result[best_hiv]).to eq [:hiv]
+      expect(result[:routine]).to include(:hpv)
+      expect(result[:routine]).to include(:hsv)
+    end
+
+    it 'keys NO_RISK and NEGLIGIBLE risk diagnoses with their best dates if passed force = true' do
+      calc = Encounter::RiskCalculator.new(@encounter)
+      calc.instance_variable_set :@risk_map, {
+        hpv: Diagnosis::TransmissionRisk::NEGLIGIBLE,
+        hsv: Diagnosis::TransmissionRisk::NO_RISK,
+        hiv: Diagnosis::TransmissionRisk::MODERATE
+      }
+      result = calc.schedule(true)
+      diags = calc.instance_variable_get(:@diagnoses)
+      best_hiv = @encounter.took_place + diags[:hiv].best_test.weeks
+      best_hsv = @encounter.took_place + diags[:hsv].best_test.weeks
+      best_hpv = @encounter.took_place + diags[:hpv].best_test.weeks
+
+      expect(result).to_not have_key :routine
+      expect(result[best_hiv]).to include(:hiv)
+      expect(result[best_hpv]).to include(:hpv)
+      expect(result[best_hsv]).to include(:hsv)
+    end
+  end
 end
