@@ -25,6 +25,7 @@ class PartnershipsController < ApplicationController
 
 		partnership = current_user_profile.partnerships.new(ship_params)
 		if partnership.save
+			# if they were making a new encounter, send them to do that
 			redirect_to session.delete(:new_encounter) ? new_partnership_encounter_path(partnership) : partnership_path(partnership)
 		else
 			respond_with_submission_error(partnership.errors.messages, new_partnership_path)

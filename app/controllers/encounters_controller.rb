@@ -3,9 +3,12 @@ class EncountersController < ApplicationController
 	before_action :set_encounter, except: [:index, :new, :create]
 
 	def index
+		#use an aggregation to get all necessary data about partnerships and encounters
 		@partnerships = current_user_profile.partners_with_encounters(params[:partnership_id]).to_a
 		@partnerships.each_with_index do |ship, i|
+			#add an index
 			ship[:index] = i
+			#create the display name
 			ship[:display] = Partnership.make_display(ship["partner_name"], ship["nickname"])
 		end
 
