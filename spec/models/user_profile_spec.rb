@@ -283,51 +283,64 @@ RSpec.describe UserProfile, type: :model do
         @user.partnerships.last.encounters = [
           build(:encounter, took_place: p2_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
         ]
+
+        @user.save
       end
 
       after :each do
         cleanup @user
       end
 
-      it 'gets a query of the partners the user has with the partnership id, nickname, partner name, and encounters took_place and notes' do
-        result = @user.partners_with_encounters.to_a
+      context 'without a partnership_id' do
+        it 'gets a query of the partners the user has with the partnership id, nickname, partner name, and encounters took_place and notes' do
+          result = @user.partners_with_encounters.to_a
 
-        expect(result.size).to be @user.partnerships.size
+          expect(result.size).to be @user.partnerships.size
 
-        r_ship1 = result[0]
-        u_ship1 = @user.partnerships[0]
-        expect(r_ship1["_id"]).to eq u_ship1.id
-        expect(r_ship1["encounters"].size).to be u_ship1.encounters.size
-        expect(r_ship1["partner_name"]).to eq @p1.name
-        expect(r_ship1["nickname"]).to eq u_ship1.nickname
+          r_ship1 = result[0]
+          u_ship1 = @user.partnerships[0]
+          expect(r_ship1["_id"]).to eq u_ship1.id
+          expect(r_ship1["encounters"].size).to be u_ship1.encounters.size
+          expect(r_ship1["partner_name"]).to eq @p1.name
+          expect(r_ship1["nickname"]).to eq u_ship1.nickname
 
-        r_ship1_enc0 = r_ship1["encounters"][0]
-        u_ship1_enc0 = u_ship1.encounters[0]
-        expect(r_ship1_enc0["_id"]).to eq u_ship1_enc0.id
-        expect(r_ship1_enc0).to have_key "took_place"
-        expect(r_ship1_enc0).to have_key "notes"
+          r_ship1_enc0 = r_ship1["encounters"][0]
+          u_ship1_enc0 = u_ship1.encounters[0]
+          expect(r_ship1_enc0["_id"]).to eq u_ship1_enc0.id
+          expect(r_ship1_enc0).to have_key "took_place"
+          expect(r_ship1_enc0).to have_key "notes"
+        end
+
+        it 'excludes partners with no encounters' do
+          @user.partnerships.last.encounters.destroy_all
+
+          result = @user.partners_with_encounters.to_a
+          expect(result.size).to be @user.partnerships.size - 1
+          expect(result.any? {|ship| ship["_id"] == @user.partnerships.last.id}).to be false
+        end
       end
 
-      it 'gets details on just one partner if a partner_id is given' do
-        u_ship2 = @user.partnerships[1]
-        result = @user.partners_with_encounters(u_ship2.id).to_a
+      context 'with a partnership_id' do
+        it 'gets details on just one partner if a partner_id is given' do
+          u_ship2 = @user.partnerships[1]
+          result = @user.partners_with_encounters(u_ship2.id).to_a
 
-        expect(result.size).to be 1
-        r_ship2 = result[0]
-        expect(r_ship2["_id"]).to eq u_ship2.id
-        expect(r_ship2["encounters"].size).to be u_ship2.encounters.size
-        expect(r_ship2["partner_name"]).to eq @p2.name
-        expect(r_ship2["nickname"]).to eq u_ship2.nickname
+          expect(result.size).to be 1
+          r_ship2 = result[0]
+          expect(r_ship2["_id"]).to eq u_ship2.id
+          expect(r_ship2["encounters"].size).to be u_ship2.encounters.size
+          expect(r_ship2["partner_name"]).to eq @p2.name
+          expect(r_ship2["nickname"]).to eq u_ship2.nickname
+        end
+
+        it 'works with a string id' do
+          u_ship1 = @user.partnerships[0]
+          id_string = u_ship1.id.to_s
+          result = @user.partners_with_encounters(id_string).to_a
+
+          expect(result.size).to be 1
+        end
       end
-
-      it 'works with a string id' do
-        u_ship1 = @user.partnerships[0]
-        id_string = u_ship1.id.to_s
-        result = @user.partners_with_encounters(id_string).to_a
-
-        expect(result.size).to be 1
-      end
-
     end
 
     describe '#soft_destroy' do

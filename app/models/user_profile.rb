@@ -113,18 +113,26 @@ class UserProfile < Profile
   end
 
   # An aggregate query to get the user's partnerships (including partner names) with all of their encounters
-  def partners_with_encounters(partner_id = nil)
+  def partners_with_encounters(partnership_id = nil)
     lookup = partners_lookup
-    if partner_id
-      partner_id = BSON::ObjectId(partner_id) unless partner_id.is_a? BSON::ObjectId
-      lookup.insert(lookup_index, {"$match" => {"_id" => partner_id}})
+    if partnership_id
+      partnership_id = BSON::ObjectId(partnership_id) unless partnership_id.is_a? BSON::ObjectId
+      lookup.insert(lookup_index, {"$match" => {"_id" => partnership_id}})
+    else
+      lookup.insert(lookup_index, {"$redact" => {
+        "$cond" => {
+          if: {"$and" => [{"$isArray" => "$encounters"}, {"$gt" => [{"$size" => "$encounters"}, 0]}]},
+          then: "$$KEEP",
+          else: "$$PRUNE"
+          }
+        }
+      })
     end
 
     UserProfile.collection.aggregate(lookup + [
       {"$project" => {
         encounters: {took_place: 1, notes: 1, _id: 1},
         nickname: 1,
-        partner_id: 1,
         partner_name: {"$arrayElemAt" => ["$partner.name", 0]}
       }},
     ])
