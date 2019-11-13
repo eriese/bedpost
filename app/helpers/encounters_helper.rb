@@ -80,24 +80,63 @@ module EncountersHelper
 		content_tag(:ul, safe_join(risks), {class: "risks-show"})
 	end
 
+	# write the html to display the recommended testing schedule based on the risks in this encounter
 	def display_schedule(encounter, **options, &block)
-		sched = encounter.schedule.keys.sort.each_with_object([]) do |d, ary|
-			ary << content_tag(:li, {class: "schedule-el"}) do
-				if d == :routine
-					clss = "schedule-routine"
-					text = t_action('.advice.routine')
-					text = capture(&block).prepend(text) if block_given?
+		# was this schedule created with force = true?
+		was_forced = false
+
+		# sort the schedule dates, then loop
+		sched = encounter.schedule.keys.sort do |a,b|
+			if a.is_a?(Symbol)
+				1
+			elsif b.is_a? Symbol
+				-1
+			else
+				a <=> b
+			end
+		end.each_with_object([]) do |dt, ary|
+			#add a list item to the array
+			ary << content_tag(:li, {class: 'schedule-el'}) do
+				# if the date is :routing
+				if dt == :routine
+					clss = 'schedule-routine'
+					# give advice about getting routine testing
+					date_txt = t('encounters.show.advice.routine')
+					# add the given force button
+					date_txt = capture(&block).prepend(date_txt) if block_given?
 				else
-					text = raw(l(d, format: :best_test_html))
-					clss = "schedule-date"
+					# otherwise, format the date
+					date_txt = raw(l(dt, format: :best_test_html))
+					clss = 'schedule-date'
 				end
 
-				content_tag(:span, text, {class: clss}) +
-				content_tag(:span, encounter.schedule[d].map { |i| t(i, scope: "diagnosis.name_casual") }.join(t("join_delimeter")), {class: "schedule-diagnoses"})
+				# make a diagnosis string by mapping all the diagnoses to be tested for on the date
+				diag_string = encounter.schedule[dt].map do |i|
+					# translate the diagnosis name
+					named = t(i, scope: 'diagnosis.name_casual')
+					# if this would have been marked routine but isn't
+					if dt != :routine && encounter.risks[i] <= Diagnosis::TransmissionRisk::ROUTINE_TEST_RISK
+						# add an asterisk and mark that this is a forced schedule
+						named += '*'
+						was_forced = true
+					end
+					#return the string
+					named
+					#join them with the join delimeter
+				end.join(t('join_delimeter'))
+
+				# make the html with the resulting strings
+				content_tag(:span, date_txt, {class: clss}) +
+				content_tag(:span, diag_string, {class: 'schedule-diagnoses'})
 			end
 		end
 
-		content_tag(:ul, safe_join(sched), options.merge({class: "schedule-show"}))
+		# make a ul to hold the generated list
+		ul = content_tag(:ul, safe_join(sched), options.merge({class: 'schedule-show'}))
+		# if it was forced, add a key
+		ul += content_tag(:div, t('encounters.show.advice.key_html'), {class: 'schedule-key'}) if was_forced
+
+		ul
 	end
 
 	private

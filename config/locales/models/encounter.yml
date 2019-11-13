@@ -50,6 +50,7 @@ en:
         show_anyway: Show me anyway
         hide_lower_risk: Hide test dates for lower risk infections
         no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
+        key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such a low risk"
     index:
       title:
         one: Your Encounters with %{partner_name}

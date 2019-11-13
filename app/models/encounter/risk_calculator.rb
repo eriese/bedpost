@@ -39,7 +39,7 @@ class Encounter::RiskCalculator
     @risk_map.each_with_object({}) do |(diag_id, diag_risk), h|
       diag = @diagnoses[diag_id]
       #recommend a test date for low to high risks
-      test_date = if force || diag_risk > Diagnosis::TransmissionRisk::LOW
+      test_date = if force || diag_risk > Diagnosis::TransmissionRisk::ROUTINE_TEST_RISK
         @encounter.took_place + diag.best_test.weeks
       else
         #recommend waiting until routine testing for negligible and no risks
