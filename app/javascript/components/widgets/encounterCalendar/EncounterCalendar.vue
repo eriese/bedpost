@@ -7,7 +7,8 @@
 				</template>
 			</v-select>
 		</div>
-		<v-calendar v-bind="calendarProps">
+		<toggle :symbols="['list_view', 'calendar_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" :as-button="true" @toggle-event="onToggle"></toggle>
+		<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
 			<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 				<div class="popover-day-title">
 					{{ dayTitle }}
@@ -17,26 +18,34 @@
 				    :key="attr.key"
 				    :attribute="attr">
 				    <span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-				    <a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes }}</a>
+				    <a :href="attr.customData.href">{{ attr.customData.notes }}</a>
 				</v-popover-row>
 			</div>
 		</v-calendar>
+		<div v-if="viewType=='list'">
+			<ul class="no-dots">
+				<encounter-list-item v-for="enc in selectedEncounters" :key="enc.customData.encID" :encounter="enc"></encounter-list-item>
+			</ul>
+		</div>
 	</div>
 </template>
 
 <script>
 	import encounterContactToggle from './EncounterContactToggle.vue';
+	import encounterListItem from "@components/functional/EncounterListItem";
 
 	export default {
 		name: 'encounter-calendar',
 		components: {
-			encounterContactToggle
+			encounterContactToggle,
+			encounterListItem
 		},
 		data() {
 			let partnerships = Object.values(gon.partnerships)
 			return {
 				partnerships,
-				selectedPartners: partnerships
+				selectedPartners: partnerships,
+				viewType: "calendar"
 			}
 		},
 		computed: {
@@ -79,7 +88,9 @@
 									partnerID: partner._id,
 									encID: enc._id,
 									partnerName: partner.display,
-									notes: enc.notes
+									notes: enc.notes,
+									partnerClass: partnerClass,
+									href: `/partners/${partner._id}/encounters/${enc._id}`
 								},
 							popover: {
 								visibility: 'focus'
@@ -88,7 +99,7 @@
 					}
 				}
 
-				return ret;
+				return ret.sort((a, b) => new Date(b.dates) - new Date(a.dates));
 			}
 		},
 		methods: {
@@ -106,6 +117,9 @@
 			},
 			isSelected(partnerID) {
 				return this.selectedPartners.indexOf(partnerID) >= 0;
+			},
+			onToggle(field, newVal) {
+				this[field] = newVal
 			}
 		}
 	}

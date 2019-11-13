@@ -1,5 +1,5 @@
 <template>
-	<button class="toggle not-button" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
+	<button :class="['toggle', {'not-button': !asButton}]" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
 </template>
 
 <script>
@@ -9,11 +9,12 @@
 	 * @vue-prop {String|String[]} [symbols = ["-", "+"]] Strings to use to represent the values of the toggle. The symbol indexes should map the to vals indexes
 	 * @vue-prop {Array} [vals=[true,false]] values the toggle toggles to. Toggling increases the value index by 1 and then loops around to 0
 	 * @vue-prop {Boolean|String|Number|Object} val the current value of the toggle
-	 * @vue-prop {Boolean} [translate=false] should the symbols be translated?
+	 * @vue-prop {Boolean|String} [translate=false] should the symbols be translated? If passed a string, the string will be used as the translation scope
 	 * @vue-prop {Boolean|String} [clear=false] should toggling also clear a field on the form? True clears the field of the same name as the toggle, a string will clear the field at the given path
 	 * @vue-prop {String} field the field that is being toggled
 	 * @vue-prop {Array} [clearOn] an array of values that the should clear the field supplied by clear. If this property is not supplied, all toggles will clear the clear field
 	 * @vue-prop {Boolean} [expandable=false] does this toggle expand a menu?
+	 * @vue-prop {Boolean} [asButton=false] should the toggle be styled as a button?
 	 * @vue-computed {String} toggleState the label taken from symbols to describe the toggle's current state
 	 * @vue-computed {Number} index the index the current value has in the vals array
 	 * @vue-computed {Boolean} expanded is the menu this toggle expands exapnded?
@@ -33,7 +34,7 @@
 			},
 			val: [Boolean, String, Number, Object],
 			translate: {
-				type: Boolean,
+				type: [Boolean, String],
 				default: false
 			},
 			vals: {
@@ -53,12 +54,19 @@
 			expandable: {
 				type: Boolean,
 				required: false
+			},
+			asButton: {
+				type: Boolean,
+				default: false
 			}
 		},
 		computed: {
 			toggleState: function() {
-				let key = typeof this.symbols == "string" ? this.symbols : this.symbols[this.index]
-				return this.translate ? this.$_t(key) : key
+				let key = typeof this.symbols == "string" ? this.symbols : this.symbols[this.index];
+				if (this.translate) {
+					return this.translate === true ? this.$_t(key) : this.$_t(key, {scope: this.translate})
+				}
+				return key
 			},
 			index: function() {
 				// look for the current value in the vals array

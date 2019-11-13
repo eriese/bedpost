@@ -5,6 +5,13 @@
 	<prog-bar :benchmark="<%= @encounter.self_risk %>" :max="<%= Diagnosis::TransmissionRisk::HIGH %>" :progress="<%= @encounter.overall_risk %>"></prog-bar>
 	<bubble target="progbar-fill" position="right" add-class="bubble-below"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
 </div>
+
+<% if @encounter.notes.present? %>
+<div class="centered-container">
+	<h3 class="with-desc">Your notes:</h3>
+	<p class="desc"><b><%= @encounter.notes %></b></p>
+</div>
+<% end %>
 <h3 class="centered-container">Let's break it down:</h3>
 
 
@@ -13,9 +20,6 @@
 		The Sex
 	</h4>
 	<div>
-		<% if @encounter.notes.present? %>
-			<p> <b>Notes:</b> <%= @encounter.notes %></p>
-		<% end %>
 		<%= display_contacts @encounter %>
 		<p><b>Additional fluid exchange: </b> <span class="bool-indicator <%= @encounter.fluids %>" aria-label="<%= @encounter.fluids %>"></span></p>
 	</div>
