@@ -36,6 +36,7 @@ en:
       self_risk_html: You figured your risk was <b>%{risk_level}</b>
       overall_risk_html: We calculated <b>%{risk_level}</b>
       routine: "These ones probably don't call for getting tested ASAP, just get checked on your regular schedule:"
+      no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
     index:
       title:
         one: Your Encounters with %{partner_name}

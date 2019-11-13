@@ -129,6 +129,11 @@ class UserProfile < Profile
     end
   end
 
+  def timeout_in
+    Rails.env.development? ? 1.year : 30.minutes
+  end
+
+
   def encode_with(coder)
     super
     coder['attributes'] = @attributes.except *BLACKLIST_FOR_SERIALIZATION

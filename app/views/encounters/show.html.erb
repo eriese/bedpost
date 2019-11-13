@@ -31,8 +31,12 @@
 
 <drop-down class="dark-container encounter-show-container" arrow-class="primary" :title-button="true" :start-open="true">
 	<h4 class="rounded-container-title" slot="title">Our Advice</h4>
-	<p>Based on the risks in this encounter, we think this is a good testing schedule:</p>
-	<%= display_schedule @encounter %>
+	<% if @encounter.schedule.any? %>
+		<p>Based on the risks in this encounter, we think this is a good testing schedule:</p>
+		<%= display_schedule @encounter %>
+	<% else %>
+		<p><%= t(".no_schedule") %></p>
+	<% end %>
 </drop-down>
 
 <%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>

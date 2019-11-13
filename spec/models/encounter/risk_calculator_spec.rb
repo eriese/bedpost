@@ -152,11 +152,11 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
       expect(result[expected_date]).to include(:hsv)
     end
 
-    it 'keys NO_RISK and NEGLIGIBLE risk diagnoses with :routine' do
+    it 'keys LOW and NEGLIGIBLE risk diagnoses with :routine' do
       calc = Encounter::RiskCalculator.new(@encounter)
       calc.instance_variable_set :@risk_map, {
         hpv: Diagnosis::TransmissionRisk::NEGLIGIBLE,
-        hsv: Diagnosis::TransmissionRisk::NO_RISK,
+        hsv: Diagnosis::TransmissionRisk::LOW,
         hiv: Diagnosis::TransmissionRisk::MODERATE
       }
 
@@ -169,11 +169,11 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
       expect(result[:routine]).to include(:hsv)
     end
 
-    it 'keys NO_RISK and NEGLIGIBLE risk diagnoses with their best dates if passed force = true' do
+    it 'keys LOW and NEGLIGIBLE risk diagnoses with their best dates if passed force = true' do
       calc = Encounter::RiskCalculator.new(@encounter)
       calc.instance_variable_set :@risk_map, {
         hpv: Diagnosis::TransmissionRisk::NEGLIGIBLE,
-        hsv: Diagnosis::TransmissionRisk::NO_RISK,
+        hsv: Diagnosis::TransmissionRisk::LOW,
         hiv: Diagnosis::TransmissionRisk::MODERATE
       }
       result = calc.schedule(true)
