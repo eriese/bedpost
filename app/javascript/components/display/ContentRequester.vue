@@ -38,7 +38,7 @@
 				type: Boolean,
 				default: true
 			},
-			url: String
+			url: String,
 			toggleBack: String
 		},
 		methods:{
