@@ -80,19 +80,24 @@ module EncountersHelper
 		content_tag(:ul, safe_join(risks), {class: "risks-show"})
 	end
 
-	def display_schedule(encounter)
+	def display_schedule(encounter, **options, &block)
 		sched = encounter.schedule.keys.sort.each_with_object([]) do |d, ary|
 			ary << content_tag(:li, {class: "schedule-el"}) do
-				is_routine = d == :routine
-				text = is_routine ? t(".routine") : raw(l(d, format: :best_test_html))
-				clss = is_routine ? "schedule-routine" : "schedule-date"
+				if d == :routine
+					clss = "schedule-routine"
+					text = t_action('.advice.routine')
+					text = capture(&block).prepend(text) if block_given?
+				else
+					text = raw(l(d, format: :best_test_html))
+					clss = "schedule-date"
+				end
 
 				content_tag(:span, text, {class: clss}) +
 				content_tag(:span, encounter.schedule[d].map { |i| t(i, scope: "diagnosis.name_casual") }.join(t("join_delimeter")), {class: "schedule-diagnoses"})
 			end
 		end
 
-		content_tag(:ul, safe_join(sched), {class: "schedule-show"})
+		content_tag(:ul, safe_join(sched), options.merge({class: "schedule-show"}))
 	end
 
 	private

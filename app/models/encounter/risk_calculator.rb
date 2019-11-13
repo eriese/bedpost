@@ -1,11 +1,9 @@
 class Encounter::RiskCalculator
 	attr_reader :risk_map
 
-  def initialize(encounter, force = false)
+  def initialize(encounter)
   	@encounter = encounter
     @person = :user
-
-  	return unless force || @encounter.risks.nil?
 
   	#get resources
   	@diagnoses = Diagnosis.as_map
@@ -22,8 +20,9 @@ class Encounter::RiskCalculator
     @base_risk = 0
   end
 
-  def track(person = nil, force = false)
+  def track(person = nil, force: false)
   	return unless @diagnoses.present?
+    return unless force || @encounter.risks.nil?
   	@person = person if person.present?
     @base_risk = case @person
       when :user

@@ -30,6 +30,7 @@ document.addEventListener('turbolinks:load', async () => {
 	axios.defaults.headers.common['X-CSRF-Token'] = document
     .querySelector('meta[name="csrf-token"]')
     .getAttribute('content');
+    axios.defaults.headers.common['Accept'] = 'application/json'
 
 	await I18nConfig.setup()
 	// set up vue

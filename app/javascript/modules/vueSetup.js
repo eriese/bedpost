@@ -27,6 +27,7 @@ const encounterContactField = () => import (/* webpackChunkName: "components.enc
 const dropDown = () => import (/* webpackChunkName: "components.dropdown", webpackPreload: true */ "@components/display/DropDown.vue");
 const progBar = () => import (/* webpackChunkName: "components.prog-bar", webpackPreload: true */ "@components/display/ProgBar.vue");
 const bubble = () => import (/* webpackChunkName: "components.bubble", webpackPreload: true */ "@components/display/Bubble.vue")
+const contentRequester = () => import (/* webpackChunkName: "components.content-requester", webpackPreload: true */ "@components/display/ContentRequester.vue")
 
 const arrowButton = () => import (/* webpackChunkName: "components.arrow-button", webpackPreload: true */ "@components/functional/ArrowButton");
 
@@ -62,6 +63,7 @@ export default function addVue() {
 	Vue.component('drop-down', dropDown);
 	Vue.component('prog-bar', progBar);
 	Vue.component('bubble', bubble);
+	Vue.component('content-requester', contentRequester);
 
 	Vue.component('arrow-button', arrowButton);
 

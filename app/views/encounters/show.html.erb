@@ -8,35 +8,40 @@
 
 <% if @encounter.notes.present? %>
 <div class="centered-container">
-	<h3 class="with-desc">Your notes:</h3>
+	<h3 class="with-desc"> <%= t('.notes.title') %></h3>
 	<p class="desc"><b><%= @encounter.notes %></b></p>
 </div>
 <% end %>
-<h3 class="centered-container">Let's break it down:</h3>
+<h3 class="centered-container"><%= t('.breakdown') %></h3>
 
 
 <drop-down class="gray-container encounter-show-container" arrow-class="primary" :title-button="true">
-	<h4 class="rounded-container-title light-purple-text" slot="title">
-		The Sex
-	</h4>
+	<h4 class="rounded-container-title light-purple-text" slot="title"><%= t('.sex.title') %></h4>
 	<div>
 		<%= display_contacts @encounter %>
-		<p><b>Additional fluid exchange: </b> <span class="bool-indicator <%= @encounter.fluids %>" aria-label="<%= @encounter.fluids %>"></span></p>
+		<p><b><%= t('.sex.fluid_exchange') %></b> <span class="bool-indicator <%= @encounter.fluids %>" aria-label="<%= @encounter.fluids %>"></span></p>
 	</div>
 </drop-down>
 <drop-down arrow-class="primary" :title-button="true" class="dark-gray-container encounter-show-container">
-	<h4 class="rounded-container-title" slot="title">The Overall Risks</h4>
+	<h4 class="rounded-container-title" slot="title"><%= t('.risks.title') %></h4>
 	<%= display_risks @encounter %>
 </drop-down>
 
 <drop-down class="dark-container encounter-show-container" arrow-class="primary" :title-button="true" :start-open="true">
-	<h4 class="rounded-container-title" slot="title">Our Advice</h4>
+	<h4 class="rounded-container-title" slot="title"><%= t('.advice.title') %></h4>
 	<% if @encounter.schedule.any? %>
-		<p>Based on the risks in this encounter, we think this is a good testing schedule:</p>
-		<%= display_schedule @encounter %>
+		<p><%= t('.advice.desc') %></p>
+		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>">
+			<%= display_schedule @encounter, :"slot-scope" => "{clickHandler, show}" do %>
+				<br><a href="<%= partnership_encounter_path(@partnership, @encounter, {force: true}) %>" @click="clickHandler"><%= t('.advice.show_anyway') %></a>
+			<% end %>
+		</content-requester>
+		<% if @force %>
+			<%= link_to t('.advice.hide_lower_risk'), partnership_encounter_path(@partnership, @encounter) %>
+		<% end %>
 	<% else %>
-		<p><%= t(".no_schedule") %></p>
+		<p><%= t('.advice.no_schedule') %></p>
 	<% end %>
 </drop-down>
 
-<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>
+<%= link_to t('.edit'), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>

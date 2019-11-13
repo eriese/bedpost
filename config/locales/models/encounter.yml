@@ -35,8 +35,21 @@ en:
       display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
       self_risk_html: You figured your risk was <b>%{risk_level}</b>
       overall_risk_html: We calculated <b>%{risk_level}</b>
-      routine: "These ones probably don't call for getting tested ASAP, just get checked on your regular schedule:"
-      no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
+      notes:
+        title: Your Notes
+      breakdown: "Let's break it down:"
+      sex:
+        title: The Sex
+        fluid_exchange: Additional fluid exchange
+      risks:
+        title: The Overall Risks
+      advice:
+        title: Our Advice
+        desc: "Based on the risks in this encounter, we think this is a good testing schedule:"
+        routine: "These ones probably don't call for getting tested ASAP; you can just get checked on your regular schedule"
+        show_anyway: Show me anyway
+        hide_lower_risk: Hide test dates for lower risk infections
+        no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
     index:
       title:
         one: Your Encounters with %{partner_name}

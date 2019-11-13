@@ -20,7 +20,12 @@ class EncountersController < ApplicationController
 	end
 
 	def show
-		Encounter::RiskCalculator.new(@encounter).track
+		@force = params[:force]
+		Encounter::RiskCalculator.new(@encounter).track(force: @force)
+		respond_to do |format|
+			format.json {render inline: helpers.display_schedule(@encounter)}
+			format.html {render :show}
+		end
 	end
 
 	def new
