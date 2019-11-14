@@ -20,7 +20,7 @@ export default {
 			confirmations[node.id] = null;
 		}
 
-		return {confirmations}
+		return {confirmations, additional: {}}
 	},
 	methods: {
 		t: function(scope, options) {
@@ -51,6 +51,14 @@ export default {
 		cancelConfirm: function(confirmId) {
 			// set it back to null
 			this.confirmations[confirmId] = null;
+		},
+		/**
+		 * Add an additional field to the additional object (basically a junk drawer)
+		 * @param {[String]} fieldName the name of the field
+		 * @param value     the value of the field
+		 */
+		additionalField: function(fieldName, value) {
+			this.$set(this.additional, fieldName, value)
 		}
 	}
 }

@@ -33,7 +33,7 @@
 			},
 			val: [Boolean, String, Number, Object],
 			translate: {
-				type: Boolean,
+				type: [Boolean, String],
 				default: false
 			},
 			vals: {
@@ -110,6 +110,7 @@
 			}
 		},
 		mounted: function() {
+			this.$emit("toggle-mounted")
 			if (process.NODE_ENV !== 'production') {
 				// check for mismatched symbols and values ammount
 				if (typeof this.symbols == "object" && this.symbols.length != this.vals.length) {
@@ -125,5 +126,10 @@
 	 * @property {string} field the field to toggle
 	 * @property {Boolean|String} newVal the value to set the toggled field to
 	 * @property {?String} clearField the name of the field that is cleared with this toggle
+	 */
+
+	/**
+	 * An event to announce that a toggle component has been mounted
+	 * @event module:components/form/ToggleComponent~toggle-mounted
 	 */
 </script>

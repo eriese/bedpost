@@ -31,7 +31,7 @@ const bubble = () => import (/* webpackChunkName: "components.bubble", webpackPr
 const arrowButton = () => import (/* webpackChunkName: "components.arrow-button", webpackPreload: true */ "@components/functional/ArrowButton");
 
 const encounterCalendar = () => import (/* webpackChunkName: "components.encounter-calendar", webpackPreload: true */ '@components/widgets/encounterCalendar/EncounterCalendar.vue');
-
+const partnershipChart = () => import(/* webpackChunkName: "components.radar-chart", webpackPreload: true */ "@components/widgets/PartnershipChart.js");
 
 
 /**
@@ -66,6 +66,7 @@ export default function addVue() {
 	Vue.component('arrow-button', arrowButton);
 
 	Vue.component('encounter-calendar', encounterCalendar);
+	Vue.component('partnership-chart', partnershipChart);
 
 	return new Vue(_root);
 }

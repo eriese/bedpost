@@ -44,6 +44,7 @@ en:
       update: Save
       create: Save
       submit: Submit
+      destroy: Remove
     required: '%{content}<b aria-hidden="true">*</b>'
     navigation_menu: Navigation Menu
     form_stepper:
@@ -78,3 +79,6 @@ en:
     partners: "Partners"
     encounters: "Encounters"
   guide_button: "Load a guide to this page"
+  list_view: List View
+  chart_view: Chart View
+  calendar_view: Calendar View
