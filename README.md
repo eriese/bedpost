@@ -4,6 +4,9 @@
 # Bedpost
 BedPost is a sex diary that uses user-inputted data to help users track their risk of sexually transmitted infection.
 
+## Thinking of contributing?
+Check out our [[Startup guide](https://github.com/eriese/bedpost/wiki/Startup-Guide)](https://github.com/eriese/bedpost/wiki/Startup-Guide)
+
 ## Roadmap
 
 ### MVP
