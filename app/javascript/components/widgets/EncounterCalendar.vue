@@ -112,13 +112,11 @@
 				// max date
 				let max = null;
 				// go through the selected encounters
-				for (let i = 0; i < this.selectedEncounters.length; i++) {
-					let enc = this.selectedEncounters[i]
-					// make this one the max if it's sooner than the current max
-					if (enc.dates > max) {
-						max = enc.dates
-					}
-				}
+				const mostRecentEncounter = this.selectedEncounters.reduce((prev, curr) => (new Date(prev.dates) > new Date(curr.dates)) ? prev : curr);
+				const mostRecentEncounterDate = new Date(mostRecentEncounter.dates)
+
+				// ridiculously, v-calendar wants the calendar number of the month rather than the 0-index
+				return {month: mostRecentEncounterDate.getMonth() + 1, year: mostRecentEncounterDate.getFullYear()};
 
 				// ridiculously, v-calendar wants the calendar number of the month rather than the 0-index
 				return {month: max.getMonth() + 1, year: max.getFullYear()};
