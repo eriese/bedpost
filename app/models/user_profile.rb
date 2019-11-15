@@ -42,8 +42,8 @@ class UserProfile < Profile
   field :opt_in, type: Boolean, default: false
   field :first_time, type: Boolean, default: true
   field :tours, type: Set
-  index({email: 1}, {unique: true})
-  index({uid: 1}, {unique: true})
+  index({email: 1}, {unique: true, sparse: true})
+  index({uid: 1}, {unique: true, sparse: true})
 
   has_many :user_tokens
 
