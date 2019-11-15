@@ -1,0 +1,20 @@
+<% content_for :nav do %>
+	<%= render "nav" %>
+<% end %>
+
+<% content_for :header  do%>
+	<header class="small">
+		<%= link_to root_path, id: "logo" do %>
+	      Bed<span>Post</span>
+	      <% end %>
+	</header>
+<% end %>
+
+<% content_for :main do %>
+	<button type="button" @click="loadTour" v-if="hasTour" class="tourguide-button" title="<%= t("guide_button") %>">?</button>
+        <%= yield %>
+
+    <tour-holder :steps="tourSteps" @tour-stopped="onTourStop"></tour-holder>
+<% end %>
+
+<%= render template: "layouts/application" %>

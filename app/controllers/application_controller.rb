@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 	before_action :authenticate_user_profile!
 	before_action :check_first_time
 
+	layout :choose_layout
+
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
 		flash[:submission_error] = error;
 		respond_to do |format|
@@ -91,7 +93,8 @@ class ApplicationController < ActionController::Base
 
   # check if the user has unfinished parts of the first time experience
   def check_first_time
-  	return unless user_profile_signed_in?
+  	# only run if a user is signed in and the request is storable
+  	return unless user_profile_signed_in? && storable_location?
 
   	redirect_path =
 	  	# if the user hasn't completed their profile, make them do it
@@ -103,5 +106,10 @@ class ApplicationController < ActionController::Base
 			end
 
   	redirect_to redirect_path unless redirect_path.nil?
+  end
+
+  # set the layout based on whether there is a user who should be able to access all authorize features
+  def choose_layout
+  	user_profile_signed_in? && !current_user_profile.first_time? ? "authed" : "no_auth"
   end
 end

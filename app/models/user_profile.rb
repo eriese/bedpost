@@ -40,6 +40,7 @@ class UserProfile < Profile
   field :uid, type: String, default: ->{generate_uid}
   field :min_window, type: Integer, default: 6
   field :opt_in, type: Boolean, default: false
+  field :first_time, type: Boolean, default: true
   field :tours, type: Set
   index({email: 1}, {unique: true})
   index({uid: 1}, {unique: true})
@@ -77,9 +78,9 @@ class UserProfile < Profile
   end
 
   # Is this the user's first time using the app?
-  # @return [true] if the user has no saved relations
+  # @return [true] if the user has not completed any actions that set first_time to false
   def first_time?
-    !embedded_relations.any? { |k, e| send(e.store_as).any? }
+    first_time
     # true
   end
 

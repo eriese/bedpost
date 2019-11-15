@@ -12,7 +12,7 @@ RSpec.describe ToursController, type: :controller do
 
 	describe 'GET #index' do
 		it 'redirects to dashboard if the user has already experienced the first time flow' do
-			allow_any_instance_of(UserProfile).to receive(:first_time?) {false}
+			@user.update({first_time: false});
 			get :index
 			expect(response).to redirect_to root_path
 		end
@@ -20,6 +20,19 @@ RSpec.describe ToursController, type: :controller do
 		it 'renders index if the user has not experienced the first time flow' do
 			get :index
 			expect(response).to render_template :index
+		end
+	end
+
+	describe 'POST #create' do
+		it 'marks the user as having completed the first time flow' do
+			post :create
+			# TODO update this to false after merging fixes to normalize_blank_values
+			expect(@user.reload.first_time?).to be_falsy
+		end
+
+		it 'redirects to the dashboard' do
+			post :create
+			expect(response).to redirect_to root_path
 		end
 	end
 
