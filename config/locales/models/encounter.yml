@@ -43,8 +43,11 @@ en:
       overall_risk_html: We calculated <b>%{risk_level}</b>
     index:
       title:
-        one: Your Encounters with %{partner_name}
-        other: Your Encounters
+        with_partner: Your Encounters with %{partner_name}
+        all: Your Encounters
+      no_encounters:
+        with_partner: You don't have any encounters with %{partner_name} yet
+        all: You don't have any encounters yet
       new: Add an Encounter
       no_notes: (No notes)
   encounter_whos:

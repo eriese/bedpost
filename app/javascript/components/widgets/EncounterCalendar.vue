@@ -1,13 +1,13 @@
 <template>
 	<div id="encounter-calendar">
-		<div v-if="partnerships.length > 1">
+		<div v-if="partnerships.length > 1 && selectedEncounters.length">
 			<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
 				<template v-slot:selected-option="opt">
 					<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
 				</template>
 			</v-select>
 		</div>
-		<v-calendar v-bind="calendarProps">
+		<v-calendar v-if="selectedEncounters.length" v-bind="calendarProps">
 			<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 				<div class="popover-day-title">
 					{{ dayTitle }}
@@ -21,6 +21,7 @@
 				</v-popover-row>
 			</div>
 		</v-calendar>
+		<slot v-if="selectedEncounters.length==0" ></slot>
 	</div>
 </template>
 
@@ -125,6 +126,7 @@
 					}
 				}
 
+				max = max || new Date();
 				// ridiculously, v-calendar wants the calendar number of the month rather than the 0-index
 				return {month: max.getMonth() + 1, year: max.getFullYear()};
 			}
