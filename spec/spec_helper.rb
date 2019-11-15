@@ -13,11 +13,13 @@
 # it.
 #
 #
-require 'simplecov'
-SimpleCov.start 'rails'
+if ENV['CI'] == 'true'
+  require 'simplecov'
+  SimpleCov.start 'rails'
 
-require 'codecov'
-SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
 
 #add custom matchers and helpers
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].sort.each {|f| require f}

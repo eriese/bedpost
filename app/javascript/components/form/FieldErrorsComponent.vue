@@ -42,7 +42,8 @@
 			submissionError: Object,
 			field: String,
 			modelName: String,
-			validate: Boolean
+			validate: Boolean,
+			isDate: Boolean
 		},
 		computed: {
 			vField: function() {

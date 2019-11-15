@@ -59,7 +59,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			expect(gon['submissionError']['form_error']).to include msg
 		end
 
-		it 'does not leave an un-saved partnership on the user' do
+		it 'does not leave an un-saved partnership on the user', no_skip: false do
 			@profile = create(:user_profile)
 			sign_in(@profile)
 			@profile.partnerships << build(:partnership, partner: dummy_user)
