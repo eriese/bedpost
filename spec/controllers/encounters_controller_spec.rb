@@ -25,10 +25,13 @@ RSpec.describe EncountersController, type: :controller do
 	describe 'GET #index' do
 		before :each do
 			allow(controller).to receive(:check_first_time)
-			make_user_and_encounters(num_encounters: 2, num_partners: 2)
 		end
 
 		context 'with partnership id' do
+			before :each do
+				make_user_and_encounters(num_encounters: 2, num_partners: 2)
+			end
+
 			it 'shows the encounters for only that partnership' do
 				ship = @user.partnerships.first
 				get :index, params: {partnership_id: ship.id}
@@ -37,13 +40,27 @@ RSpec.describe EncountersController, type: :controller do
 				expect(actual.size).to eq 1
 				expect(actual[0]["_id"]).to eq ship.id
 			end
+
+			it 'indicates that this is a request for only one partner' do
+				ship = @user.partnerships.first
+				get :index, params: {partnership_id: ship.id}
+				expect(assigns(:is_partner)).to be true
+			end
 		end
 
 		context 'without partnership id' do
 			it 'shows the encounters for all partnerships the user has' do
+				num_partners = 2
+				make_user_and_encounters(num_encounters: 2, num_partners: num_partners)
 				get :index
 
-				expect(assigns(:partnerships).size).to eq @user.partnerships.size
+				expect(assigns(:partnerships).size).to eq num_partners
+			end
+
+			it 'indicates that this is a request for all partners even if there is only one partner' do
+				make_user_and_encounters(num_encounters: 2, num_partners: 1)
+				get :index
+				expect(assigns(:is_partner)).to be false
 			end
 		end
 	end
