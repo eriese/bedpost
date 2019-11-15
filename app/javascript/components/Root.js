@@ -54,7 +54,7 @@ export default {
 		},
 		/**
 		 * Add an additional field to the additional object (basically a junk drawer)
-		 * @param {[String]} fieldName the name of the field
+		 * @param {String} fieldName the name of the field
 		 * @param value     the value of the field
 		 */
 		additionalField: function(fieldName, value) {

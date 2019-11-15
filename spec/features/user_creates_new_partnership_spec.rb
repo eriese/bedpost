@@ -104,9 +104,7 @@ feature "User creates new partnership", :slow do
 		find('input[name="commit"]').click
 
 		# expect to go to the show partnership page
-		expect(page).to have_content(t_text("partnerships.show.partner_html", name: @partner.name, nickname: nil))
-		indexes.each do |i|
-			expect(page).to have_content(t_text("partnerships.show.level_field_html", field: fields[i], level: lvls[i]))
-		end
+		expect(page).to have_content(t_text("partnerships.show.partner_html", name: @partner.name))
+		expect(page).to have_current_path(partnership_path(@user.reload.partnerships.last))
 	end
 end
