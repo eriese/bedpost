@@ -5,6 +5,7 @@ class EncountersController < ApplicationController
 
 	def index
 		#use an aggregation to get all necessary data about partnerships and encounters
+		@is_partner = params[:partnership_id].present?
 		@partnerships = current_user_profile.partners_with_encounters(params[:partnership_id]).to_a
 		@partnerships.each_with_index do |ship, i|
 			#add an index
