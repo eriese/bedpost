@@ -75,21 +75,13 @@
 				let ret = [];
 
 				// for each selected partner
-				for (let i = 0; i < this.selectedPartners.length; i++) {
-					let partner = this.selectedPartners[i];
-
-					if (partner.encounters === undefined) {
-						continue;
-					}
-
+				this.selectedPartners.forEach((partner, partnerIndex) => {
+					if (partner.encounters == undefined) {return;}
 					// each partner gets their own class, tied to their index in the partnership array so it doesn't change as selectedPartner changed
-					let partnerClass = `partnership-${partner.index}`
+					const partnerClass = `partnership-${partner.index}`
 
 					// for each of the partner's encounters
-					for (var j = 0; j < partner.encounters.length; j++) {
-						let enc = partner.encounters[j];
-
-
+					partner.encounters.forEach((enc, encIndex) => {
 						ret.push({
 							// the date it took place
 							dates: new Date(enc.took_place),
@@ -109,8 +101,8 @@
 								visibility: 'focus'
 							}
 						})
-					}
-				}
+					})
+				})
 
 				return ret;
 			},
