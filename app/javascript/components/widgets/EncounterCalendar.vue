@@ -1,13 +1,13 @@
 <template>
 	<div id="encounter-calendar">
-		<div v-if="partnerships.length > 1 && selectedEncounters.length">
+		<div v-if="partnerships.length > 1 && hasEncounters">
 			<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
 				<template v-slot:selected-option="opt">
 					<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
 				</template>
 			</v-select>
 		</div>
-		<v-calendar v-if="selectedEncounters.length" v-bind="calendarProps">
+		<v-calendar v-if="hasEncounters" v-bind="calendarProps">
 			<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 				<div class="popover-day-title">
 					{{ dayTitle }}
@@ -21,7 +21,7 @@
 				</v-popover-row>
 			</div>
 		</v-calendar>
-		<slot v-if="selectedEncounters.length==0" ></slot>
+		<slot v-if="!hasEncounters" ></slot>
 	</div>
 </template>
 
@@ -43,18 +43,19 @@
 			let partnerships = Object.values(gon.partnerships)
 			return {
 				partnerships,
-				selectedPartners: partnerships
+				selectedPartnersArray: partnerships,
+				hasEncounters: partnerships.some((p) => p.encounters && p.encounters.length),
 			}
 		},
 		computed: {
 			calendarProps() {
 				return {
 					maxDate: new Date(),
-					toPage: this.mostRecent,
 					isExpanded: true,
 					// isDark: true,
 					columns: this.$screens({md: 2, lg: 3}, 1),
-					attributes: this.selectedEncounters
+					attributes: this.selectedEncounters,
+					toPage: this.mostRecent,
 				}
 			},
 			empty() {
@@ -68,6 +69,14 @@
 					all.splice(all.indexOf(this.selectedPartners[i]), 1)
 				}
 				return all;
+			},
+			selectedPartners: {
+				get() {
+					return this.selectedPartnersArray
+				},
+				set(newVal) {
+					this.selectedPartnersArray = newVal.length ? newVal : this.partnerships;
+				}
 			},
 			selectedEncounters() {
 				// highlight if there's only one partner
@@ -122,26 +131,6 @@
 			}
 		},
 		methods: {
-			/**
-			 * toggle a partner's selected status
-			 * @param  {String} partnerID the id of the partner
-			 */
-			togglePartner(partnerID) {
-				let partnerInd = this.selectedPartners.indexOf(partnerID);
-				// if the partner isn't selected
-				if (partnerInd == -1) {
-					// select it
-					this.selectedPartners.push(partnerID)
-				} else {
-					// otherwise remove it
-					this.selectedPartners.splice(partnerInd, 1);
-				}
-
-				// if selected partners is now empty, put all the partners in
-				if (this.selectedPartners.length == 0) {
-					this.selectedPartners = Object.keys(this.partnerships)
-				}
-			},
 			/**
 			 * is the given partner selected?
 			 * @param  {String}  partnerID the id of the partner

@@ -50,6 +50,10 @@ en:
         all: You don't have any encounters yet
       new: Add an Encounter
       no_notes: (No notes)
+      no_partners:
+        title: Oops
+        desc: You haven't told us about any partnerships yet
+      make_partner: Add a partner
   encounter_whos:
     new:
       title: Cool!

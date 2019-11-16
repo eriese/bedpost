@@ -4,8 +4,11 @@ class EncountersController < ApplicationController
 	before_action :set_encounter, except: [:index, :new, :create]
 
 	def index
-		#use an aggregation to get all necessary data about partnerships and encounters
+		# the page needs to know whether a specific partner was requested
 		@is_partner = params[:partnership_id].present?
+		# and whether the user has any partnerships regardless of whether or not those partnerships have encounters
+		@has_partners = current_user_profile.partnerships.any?
+		#use an aggregation to get all necessary data about partnerships that have encounters
 		@partnerships = current_user_profile.partners_with_encounters(params[:partnership_id]).to_a
 		@partnerships.each_with_index do |ship, i|
 			#add an index
