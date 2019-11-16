@@ -1,13 +1,25 @@
 <basic-stepper :default-props="{animLength: 0.2}" id="who_form">
 	<div class="centered-container" slot-scope="{step,setStep}">
 		<div v-if="step==0">
-			<h1><%= t(".header", name: current_user_profile.name) %></h1>
-			<h2><%= t(".desc") %></h2>
+			<h1 class="with-desc"><%= t(@has_partnerships ? ".header2" : ".header", name: current_user_profile.name) %></h1>
+			<% if @has_partnerships %>
+				<p class="desc"><%= t(".desc2", {count: @num_partnerships, partner_name: @num_partnerships > 1 ? nil : @first_partner.partner.name}) %></p>
+			<% else %>
+				<h2 class="desc"><%= t(".desc") %></h2>
+			<% end %>
 			<ul class="button-list">
 				<li><%= link_to new_partnership_path, {class: "as-button", data: {animation_type: 'slideLeft'}} do %>
-					<span><%= t(".new_partnership") %></span>
+					<span><%= t(".add_partnership", {count: @num_partnerships}) %></span>
 				<% end%></li>
+				<% if @has_partnerships %>
+					<li>
+						<%= link_to (@num_partnerships == 1 ? new_partnership_encounter_path(@first_partner) : encounters_who_path) , {class: "as-button", data: {animation_type: 'slideLeft'}} do %>
+							<span><%= t(".add_encounter") %></span>
+						<% end %>
+					</li>
+				<% end %>
 			</ul>
 		</div>
 	</div>
 </basic-stepper>
+<div class="centered-container"><%= button_to t(".exit"), first_time_path, {method: :post} %></div>

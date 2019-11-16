@@ -1,0 +1,13 @@
+<div id="flash">
+  <noscript><div id="no-js-warning"><%= t(:no_script) %></div></noscript>
+  <% if flash[:error] %><div class="flash-error"><%= flash[:error] %></div><% end %>
+  <% if notice %><div class="flash-notice"><%= notice %></div><% end %>
+  <% if alert %><div class="flash-alert"><%= alert %></div><% end %>
+  <% if flash[:message] %>
+    <% flash[:message].each do |key, message| %>
+      <% message.each do |msg| %>
+        <div class="flash-message"><%= "#{key}: #{msg}" unless key == :timedout %></div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

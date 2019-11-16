@@ -1,4 +1,3 @@
-<% if current_user_profile %>
 <nav-component v-slot="{isOpen, toggleMenu}">
 <nav id="nav" role="navigation">
   <button class="burger inverse" :class="{open: isOpen, closed: !isOpen}" @click.stop="toggleMenu" type="button" :aria-expanded="isOpen ? 'true' : 'false'" aria-controls="nav-list">
@@ -22,4 +21,3 @@
   </div>
 </nav>
 </nav-component>
-<% end %>

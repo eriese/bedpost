@@ -43,7 +43,7 @@
 				return this.steps ? this.$refs['tour-el'].$tours.tour : null;
 			},
 			running() {
-				this.tour && this.tour.isRunning
+				return this.tour && this.tour.isRunning
 			}
 		},
 		methods: {

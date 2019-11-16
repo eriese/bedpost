@@ -130,18 +130,10 @@ RSpec.describe UserProfile, type: :model do
     end
 
     describe '#first_time?' do
-      it 'returns true if the user has no top-level embedded items' do
+      it 'defaults to true' do
         user = build_stubbed(:user_profile)
         expect(user).to be_first_time
       end
-
-      it 'returns false if the user has at least one partnership' do
-        user = build_stubbed(:user_profile)
-        user.partnerships = [build_stubbed(:partnership)]
-        expect(user).to_not be_first_time
-      end
-
-      pending 'returns false if the user has at least one STI test'
     end
 
     describe '#has_toured?' do

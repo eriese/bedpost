@@ -1,8 +1,11 @@
-[![Build Status](https://travis-ci.org/eriese/bedpost.svg)](https://travis-ci.org/eriese/bedpost)
+[![Build Status](https://travis-ci.org/eriese/bedpost.svg?branch=master)](https://travis-ci.org/eriese/bedpost)
 [![Code Coverage](https://codecov.io/gh/eriese/bedpost/branch/master/graph/badge.svg)](https://codecov.io/gh/eriese/bedpost)
 
 # Bedpost
 BedPost is a sex diary that uses user-inputted data to help users track their risk of sexually transmitted infection.
+
+## Thinking of contributing?
+Check out our [Startup guide](https://github.com/eriese/bedpost/wiki/Startup-Guide)
 
 ## Roadmap
 

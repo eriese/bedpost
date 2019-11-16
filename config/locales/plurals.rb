@@ -19,7 +19,7 @@ FIRST_ELEVEN = {
 I18n.backend.store_translations :en, i18n: {
 	plural: {
 		default_key: :other,
-		required_keys: [:zero, :one, :other],
+		required_keys: [:zero, :other],
 		rule: lambda { |n|
 			FIRST_ELEVEN.has_key?(n) ? FIRST_ELEVEN[n] : :other
 		}
