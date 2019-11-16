@@ -43,7 +43,7 @@
 			field: String,
 			modelName: String,
 			validate: Boolean,
-			isDate: Boolean
+			isDate: Boolean,
 		},
 		computed: {
 			vField: function() {
