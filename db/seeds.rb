@@ -1,7 +1,3 @@
-if Rails.env.development? || Rails.env.test?
-
-end
-
 ############################
 # Pronouns
 ############################
@@ -11,6 +7,21 @@ end
 	{subject: "he", object: "him", possessive: "his", obj_possessive: "his", reflexive: "himself"},
 	{subject: "they", object: "them", possessive: "their", obj_possessive: "theirs", reflexive: "themself"}
 ].each {|pr| Pronoun.create(pr)}
+
+# seed a dev user who is already confirmed
+if Rails.env.development?
+	user = UserProfile.create(
+		email: "devuser@bedpost.me",
+		password: "password",
+		password_confirmation: "password",
+		confirmed_at: Time.now,
+		name: "Dev User",
+		anus_name: "anus",
+		external_name: "external genitals",
+		can_penetrate: true,
+		pronoun: Pronoun.last
+	)
+end
 
 ############################
 # Contact Instruments
