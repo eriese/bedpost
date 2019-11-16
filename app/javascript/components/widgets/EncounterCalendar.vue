@@ -123,6 +123,7 @@
 				return ret.sort((a, b) => b.dates - a.dates);
 			},
 			mostRecent() {
+
 				// they're already sorted to have the most recent at the top
 				let max = this.selectedEncounters[0].dates;
 
