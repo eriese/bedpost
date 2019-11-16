@@ -18,16 +18,13 @@ RSpec.describe EncountersController, type: :controller do
 		end
 	end
 
-	before :each do
-		allow(controller).to receive(:check_first_time)
-	end
-
 	after :each do
 		cleanup @user, @p1, @p2, @hand, @mouth
 	end
 
 	describe 'GET #index' do
 		before :each do
+			allow(controller).to receive(:check_first_time)
 			make_user_and_encounters(num_encounters: 2, num_partners: 2)
 		end
 
@@ -203,6 +200,7 @@ RSpec.describe EncountersController, type: :controller do
 
 	describe 'POST #update' do
 		before :each do
+			allow(controller).to receive(:check_first_time)
 			make_user_and_encounters num_encounters: 1
 		end
 
@@ -245,6 +243,7 @@ RSpec.describe EncountersController, type: :controller do
 	describe 'DELETE #destroy' do
 
 		before :each do
+			allow(controller).to receive(:check_first_time)
 			make_user_and_encounters num_encounters: 1
 		end
 

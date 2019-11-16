@@ -3,7 +3,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	include VuelidateFormUtils
 
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
-		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role]
+		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role, :is_date]
 
 	SLOT_SCOPE = "fe"
 
@@ -131,6 +131,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			:":submission-error" => "#{VuelidateForm::VuelidateFormBuilder::SLOT_SCOPE}.submissionError",
 			:class => field_class,
 			:":validate" => @validate,
+			:":is-date" => @options.delete(:is_date)
 		}
 		@err_args[:"model-name"] = @formBuilder.object_name unless @formBuilder.object_name.blank?
 

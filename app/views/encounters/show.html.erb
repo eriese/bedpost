@@ -44,4 +44,9 @@
 	<% end %>
 </drop-down>
 
-<%= link_to t('.edit'), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>
+
+<% if current_user_profile.first_time? %>
+	<%= link_to(".continue_first_time", first_time_path) %>
+<% else %>
+	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>
+<% end %>

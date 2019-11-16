@@ -9,7 +9,8 @@ module NormalizeBlankValues
 
   def normalize_blank_values
     attributes.each do |column, value|
-      self[column] = nil unless self[column].present?
+    	next if value.present?
+      self[column] = fields[column].type == Mongoid::Boolean ? false : nil
     end
   end
 end

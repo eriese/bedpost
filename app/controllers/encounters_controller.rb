@@ -1,4 +1,5 @@
 class EncountersController < ApplicationController
+	skip_before_action :check_first_time, only: [:new, :create, :show]
 	after_action :clear_unsaved, only: [:new]
 	before_action :set_encounter, except: [:index, :new, :create]
 

@@ -60,4 +60,5 @@ en:
       list_view: List view
       calendar_view: Calendar view
       list_item_html: <span class="item-date">%{date}</span> with <span class="item-partner"> %{partner_name}:</span> <span class="item-notes"><a href="%{href}">%{notes}</a></span>
+      no_notes: (No notes)
 

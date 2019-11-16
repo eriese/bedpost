@@ -4,7 +4,7 @@ feature "User creates new partnership", :slow do
 
 	before :each do
 		login_new_user
-		allow_any_instance_of(UserProfile).to receive(:first_time?) {false}
+		@user.update({first_time: false})
 	end
 
 	after :each do

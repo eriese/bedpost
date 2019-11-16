@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   resources :encounters, only: [:index]
 
   get 'first_time', to: 'tours#index'
+  post 'first_time', to: 'tours#create'
   resources :tours, only: [:show, :update]
 
   #TODO this is temporary

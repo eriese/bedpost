@@ -22,7 +22,7 @@ class Encounter::RiskCalculator
 
   def track(person = nil, force: false)
   	return unless @diagnoses.present?
-    return unless force || @encounter.risks.nil?
+    return unless force || @encounter.risks.empty?
   	@person = person if person.present?
     @base_risk = case @person
       when :user

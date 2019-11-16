@@ -31,7 +31,7 @@ const contentRequester = () => import (/* webpackChunkName: "components.content-
 
 const arrowButton = () => import (/* webpackChunkName: "components.arrow-button", webpackPreload: true */ "@components/functional/ArrowButton");
 
-const encounterCalendar = () => import (/* webpackChunkName: "components.encounter-calendar", webpackPreload: true */ '@components/widgets/encounterCalendar/EncounterCalendar.vue');
+const encounterCalendar = () => import (/* webpackChunkName: "components.encounter-calendar", webpackPreload: true */ '@components/widgets/EncounterCalendar.vue');
 
 
 
