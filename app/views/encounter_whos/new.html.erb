@@ -1,6 +1,13 @@
 <div class="centered-container" id="who_form">
-	<%= vuelidate_form_with scope: :who, html: {class: "centered single big", "data-animation-type" => "slideLeft"} do |f| %>
-		<%= f.select :partnership_id, options_from_collection_for_select(@partnerships, :id, :display), required: true %>
-		<%= f.submit %>
+	<% if @from_dash %>
+		<h1 class="with-desc"><%= t(".title") %></h1>
+	<% end %>
+	<%= vuelidate_form_with scope: :who, require_all: true, html: {class: "centered single big", "data-animation-type" => "slideLeft"} do |f| %>
+		<%= f.select :partnership_id do %>
+			<option value=""><%= t(".prompt") %></option>
+			<optgroup><%= options_from_collection_for_select(@partnerships, :id, :display)%></optgroup>
+			<optgroup label="_____________________"><option value="<%= @dummy_id %>"><%= t(".new_partner") %></option></optgroup>
+		<% end %>
+		<%= f.submit t(".submit") %>
 	<% end %>
 </div>

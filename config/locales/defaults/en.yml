@@ -30,6 +30,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  time:
+    formats:
+      most_recent: '%d %b, %Y'
   errors:
     messages:
       email: Please enter a valid email address.
