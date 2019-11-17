@@ -6,23 +6,32 @@ module PartnershipsHelper
 		end
 	end
 
+	# display all the partners with their most recent encounters
 	def display_partners
-		p_sorted = @partnerships.sort_by{|ship| ship.last_took_place}
-		partner_users = Profile.find(p_sorted.pluck(:partner_id))
-		agg = p_sorted.map.with_index do |ship, i|
+		# get an aggregate query of necessary info for the partnerships and their most recent encounter
+		p_sorted = current_user_profile.partners_with_most_recent
+		agg = p_sorted.map do |ship|
+			# make a list item
 			content_tag(:li, {class: "partnership-link"}) do
-				link_to(ship) do
-					display_partner(ship, partner_users[i])
+				# link to that partnership's show page
+				link_to(partnership_path(ship["_id"])) do
+					display_partner(ship)
 				end
 			end
 		end
+		# join and nest
 		content_tag(:ul, safe_join(agg), {class: "partnership-links"})
 	end
 
-	def display_partner(ship, partner)
-		has_encounters = ship.encounters.any?
-		content = content_tag(:span, ship.display(partner.name), {class: "partner-name"})
-		content << content_tag(:span, t(".latest_html", {class: "last-encounter", took_place: l(ship.last_took_place(Date.new), format: :short)})) if ship.encounters.any?
+	# display a partner and their most recent encounter
+	def display_partner(ship)
+		ship_name = Partnership.make_display(ship["partner_name"], ship["nickname"])
+		content = content_tag(:span, ship_name, {class: "partner-name"})
+
+		#add the most recent if there is one
+		most_recent = ship["most_recent"]
+		content << content_tag(:span, t(".latest_html", {class: "last-encounter", took_place: l(most_recent, format: :most_recent)})) if most_recent
+
 		content
 	end
 

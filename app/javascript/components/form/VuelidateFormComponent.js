@@ -161,7 +161,7 @@ export default {
 				let fieldParent = this.formData[child.modelName] || this.formData;
 				let origDate = fieldParent[child.field]
 				// make a date object from the string
-				fieldParent[child.field] = new Date(origDate);
+				fieldParent[child.field] = origDate ? new Date(origDate) : new Date();
 			}
 		}
 	}

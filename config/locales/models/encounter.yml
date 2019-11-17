@@ -5,6 +5,12 @@ en:
         fluids: Additional fluid exchange
         self_risk: Self-assessed risk level
         took_place: Date
+    errors:
+      models:
+        who:
+          attributes:
+            partnership_id:
+              blank: Please choose a partner
   contact:
     contact_type:
       penetrated: penetrated
@@ -37,8 +43,24 @@ en:
       overall_risk_html: We calculated <b>%{risk_level}</b>
     index:
       title:
-        one: Your Encounters with %{partner_name}
-        other: Your Encounters
+        with_partner: Your Encounters with %{partner_name}
+        all: Your Encounters
+      no_encounters:
+        with_partner: You don't have any encounters with %{partner_name} yet
+        all: You don't have any encounters yet
       new: Add an Encounter
       no_notes: (No notes)
-
+      no_partners:
+        title: Oops
+        desc: You haven't told us about any partnerships yet
+      make_partner: Add a partner
+  encounter_whos:
+    new:
+      title: Cool!
+      submit: Next
+      new_partner: Someone new
+      prompt: Choose a partner
+  helpers:
+    label:
+      who:
+        partnership_id: Who did you have sex with?
