@@ -1,13 +1,12 @@
 export default {
 	props: {
-		value: [Object, String, Number, Boolean],
+		value: [Object, String, Number, Boolean, Date],
 	},
 	computed: {
 		model: {
 			get() {return this.value},
 			set(v) {
 				this.$emit("input", v);
-				console.log(`Setting ${this.$options.name} value to ${v}`)
 			}
 		},
 		nestedSlotScope() {

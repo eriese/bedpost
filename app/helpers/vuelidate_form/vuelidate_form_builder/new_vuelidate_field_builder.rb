@@ -5,7 +5,7 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
 		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role, :is_date,
-		:slot_scope, :parent_scope, :model_value
+		:slot_scope, :parent_scope, :model_value, :skip_value
 	]
 
 	DEFAULT_MODEL_VALUE = "value"
@@ -30,6 +30,7 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 	end
 
 	def field(after_method = nil, selector = :div, &block)
+		@formBuilder.add_value(@attribute) unless @options[:skip_value]
 		@after_method = after_method
 		custom_field do
 			field_inner &block
@@ -37,9 +38,7 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 	end
 
 	def custom_field(after_method=nil, selector = :div, &block)
-		@formBuilder.add_value(@attribute)
 		@after_method = after_method if after_method.present?
-
 		@formBuilder.step(@is_step, @options.delete(:step_options) || {}) do
 			@template.content_tag(:"field-errors", @error_wrapper_options) do
 				@template.content_tag(selector, @error_inner_options, &block) <<
@@ -172,8 +171,12 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 		@validate = @options.has_key?(:validate) ? @options[:validate] : (@required || validators.any?)
 
 		if @validate
-			mapped_validators = VuelidateFormUtils.map_validators_for_form(validators, @object)
-			@formBuilder.add_validation(@attribute, mapped_validators)
+			mapped_validators = if @object.present?
+				VuelidateFormUtils.map_validators_for_form(validators, @object)
+			elsif @required
+				[[:presence]]
+			end
+			@formBuilder.add_validation(@attribute, mapped_validators) if mapped_validators
 		end
 
 		flash_error = @template.flash[:submission_error]

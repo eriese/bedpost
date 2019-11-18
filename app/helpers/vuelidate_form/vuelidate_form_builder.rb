@@ -6,6 +6,19 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	attr_reader :validations
 
+  def initialize(object_name, object, template, options)
+    super
+    return unless value_include = options[:value_include]
+    value_include.each do |v|
+      case v
+      when Symbol
+        add_value(v)
+      when Hash
+        v.each {|k, vv| add_value(k, vv)}
+      end
+    end
+  end
+
 	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field]).each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       alias_method :parent_#{selector}, :#{selector}
@@ -102,9 +115,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def radio_group(attribute, buttons: [[:true], [:false]], options: {})
-    radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: "fe"}
+    radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: NewVuelidateFieldBuilder::SLOT_SCOPE}
     radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
-    checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
+    radio_opts[:skip_value] = true
+
+    checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object.send(attribute)
 
     group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup})
     joiner = options.delete(:joiner)
@@ -115,6 +130,8 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
       opts = radio_opts.merge ({label: {value: val.to_s}, checked: checked_val == val, :":value" => val}).merge(btn[1] || {})
       radio_button(attribute, val, opts)
     end
+
+    add_value(attribute, checked_val)
 
     builder.custom_field do
       @template.content_tag(:div) do
@@ -136,9 +153,9 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
   def range_field(attribute, **options)
   	desc_id = "#{attribute}-desc"
-  	options[:"aria-describedby"] = desc_id
-  	options[:min] ||= 1
-  	options[:max] ||= 10
+  	options["aria-describedby"] = desc_id
+  	options[:min] ||= options[:in].min
+  	options[:max] ||= options[:in].max
   	field_builder(attribute, options).field do
       @template.render "forms/range_field", options: options, attribute: attribute, object_name: @object_name, desc_id: desc_id, t_key: "helpers.sliders.#{@object_name}.#{attribute}" do
         super
@@ -157,8 +174,8 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   def date_field(attribute, **options)
     options[:is_date] = true
     field_builder(attribute, options).field do
-      mdl = options.delete(:"v-model")
-      @template.content_tag(:"v-date-picker", "", {:"v-model" => mdl, :":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
+      mdl = options.delete "v-model"
+      @template.content_tag(:"v-date-picker", "", {"v-model" => mdl, ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
         options[:"slot-scope"] = 'dp'
         options[:"v-bind"] = 'dp.inputProps'
         options[:"v-on"] = 'dp.inputEvents'
@@ -194,7 +211,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			opts = html_options
 			add_to_class(opts, "show-always")
 		else
-			opts = html_options.merge({role: "tooltip", :"v-show" => "fe.focused"})
+			opts = html_options.merge({role: "tooltip", :"v-show" => "#{NewVuelidateFieldBuilder::SLOT_SCOPE}.focused"})
 		end
 		opts[:id] = "#{attribute}-tooltip-content"
 		add_to_class(opts, "tooltip")
@@ -246,8 +263,12 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     @value ||= {}
   end
 
-  def add_value(attribute)
-    value[attribute] = @object.send(attribute)
+  def add_value(attribute, attr_value = nil)
+    if attr_value
+      value[attribute] = attr_value
+    elsif @object.respond_to?(attribute)
+      value[attribute] = @object.send(attribute)
+    end
   end
 
   def add_toggle(attribute, start_val)

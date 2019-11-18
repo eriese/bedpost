@@ -55,6 +55,7 @@ en:
     aria:
       invalid: "Invalid: "
     sliders:
+      zero: "%{count}"
       one: "%{count}"
       other: "%{count}"
   show_password: show password
