@@ -1,6 +1,6 @@
 <template>
 	<div @mouseover="onFocus" @mouseleave="onBlur">
-		<slot v-bind="{onBlur, onFocus, vField, ariaRequired, ariaInvalid, focused}"></slot>
+		<slot v-bind="{onBlur, onFocus, vField, ariaRequired, ariaInvalid, focused, ...nestedSlotScope, field}"></slot>
 		<div :id="field + '-error'" class="field-errors" aria-live="assertive" aria-atomic="true" v-if="errorMsg">
 			<div class="aria-only" v-html="ariaLabel"></div>
 			<div v-html="errorMsg"></div>
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+	import nestedInput from '@mixins/nestedInput'
 	/**
 	 * A component that wraps a form control and uses its validations to display error messages
 	 * @module
@@ -32,6 +33,7 @@
 	 */
 	export default {
 		name: "field_errors",
+		mixins: [nestedInput],
 		data: function() {
 			return {
 				focused: false

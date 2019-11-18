@@ -18,7 +18,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def field_builder(attribute, options)
-  	VuelidateFieldBuilder.new(attribute, options, self, @template)
+  	NewVuelidateFieldBuilder.new(attribute, options, self, @template)
   end
 
   def step(use_step=true, **options)
@@ -234,10 +234,21 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :label_last, :is_step)
 	end
 
-	def add_validation(attribute)
-		@validations ||= []
-		@validations << attribute unless @validations.include?(attribute)
+  def validations
+    @validations ||= {}
+  end
+
+	def add_validation(attribute, attr_validators)
+    validations[attribute] = (validations[attribute] || []).concat(attr_validators)
 	end
+
+  def value
+    @value ||= {}
+  end
+
+  def add_value(attribute)
+    value[attribute] = @object.send(attribute)
+  end
 
   def add_toggle(attribute, start_val)
     toggles[attribute] = start_val || false unless toggles.has_key? attribute

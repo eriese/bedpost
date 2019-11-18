@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<h1>.</h1>
+	<h1>.</h1>
+	<div id="app">
+		<fancy-form>
+			<form slot-scope="vf">
+			<input-slot v-model="vf.model.person.val2">
+
+					<div slot-scope="sc"><pre>{{sc}}</pre>
+						<input  type="text" v-model="sc.model" @input="sc.$listeners.input($event.target.value)"/></div>
+				<!-- <input-slot slot-scope="scs" v-model="scs.model"> -->
+
+				<!-- </input-slot> -->
+			</input-slot>
+			</form>
+		</fancy-form>
+	</div>
+</body>
+<script>
+Object.setAtPath = function(o, s, val) {
+	s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+    s = s.replace(/^\./, '');           // strip a leading dot
+    let a = s.split('.');
+    for (let i = 0, n = a.length; i < n; ++i) {
+    	if (typeof o != "object") {
+    		return false;
+    	}
+
+    	let k = a[i];
+
+		// if it's the last part of the path, set and return true
+		if (i == n - 1){
+			o[k] = val;
+			return true;
+		}
+
+		if (k in o) {
+			o = o[k];
+		} else {
+        	// if nothing exists at that path, add the right type of object
+        	let new_o = isNaN(parseInt(a[i+1])) ? {} : []
+        	o[k] = new_o;
+        	o = o[k]
+        }
+    }
+}
+
+const form = {
+  data: function() {
+    return {
+    	formObj: {
+    		person: {
+      			val1: {
+      				one: 1,
+      				two: 2,
+      			},
+      			val2: "another",
+      		}
+      	}
+    }
+  },
+  template: "<div>{{formObj}}<slot v-bind='{model: formObj}'></slot></div>"
+}
+
+const nestedInput = {
+	props: {
+		value: [String, Object, Number],
+	},
+	computed: {
+		nestedSlotScope() {
+			return {
+				model: this.model,
+				$listeners: this.$listeners
+			}
+		},
+		model: {
+			get() {return this.value},
+			set(v) {
+				console.log(`Setting ${this.$options.name} value to ${v}`)
+				this.$emit("input", v);
+			}
+		},
+	}
+}
+
+
+const inputSlot = {
+	mixins: [nestedInput],
+	template: "<div><slot v-bind='{...nestedSlotScope}'></slot></div>",
+}
+
+const inputter = {
+	mixins: [nestedInput],
+	template: "<input type='text' v-model='model'>",
+}
+
+const slotEl = {
+	data: function() {
+		return {
+			something: "something"
+		}
+	},
+	template: '<div><slot></slot></div>'
+}
+
+Vue.component('fancy-form', form)
+Vue.component('input-slot', inputSlot)
+Vue.component('inputter', inputter)
+Vue.component('slot-el', slotEl)
+
+
+let app = new Vue({el: "#app"})
+	</script>
+</html>

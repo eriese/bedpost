@@ -22,36 +22,19 @@ import renderless from "@mixins/renderless";
 export default {
 	mixins: [renderless],
 	data: function() {
-		let name = this.name
-		let fd = null
-		if (name) {
-			fd = {}
-			fd[name] = gon.form_obj[name]
-		} else {
-			fd = gon.form_obj
-		}
-
-		let dt = {
-			formData: fd,
+		return {
+			formData: this.value[this.name],
 			toggles: this.startToggles,
 			stepper: null,
 			submissionError: gon.submissionError || {},
 			finalized: false
 		};
-
-		// get rid of passwords
-		// TODO this should not be necessary. make the json work properly from the back end
-		if (gon.form_obj.password_digest !== undefined) {
-			dt.password = dt.password || "";
-			dt.password_confirmation = dt.password_confirmation || "";
-		}
-		return dt;
-
 	},
 	props: {
-		validate: String,
+		validate: Object,
 		startToggles: Object,
-		name: String
+		value: Object,
+		name: String,
 	},
 	validations: function() {
 		// format the validators
@@ -192,7 +175,7 @@ function formatValidators(formFields, validatorVals, path) {
 		}
 
 		// if the field is not in the list, continue
-		if (formFields.indexOf(field) < 0) {
+		if (formFields[field] == undefined) {
 			continue;
 		}
 

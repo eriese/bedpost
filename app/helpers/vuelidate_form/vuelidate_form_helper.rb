@@ -30,11 +30,13 @@ module VuelidateForm::VuelidateFormHelper
 	end
 
 	def set_options(options)
-		options[:builder] ||= VuelidateForm::VuelidateFormBuilder
+		builder = VuelidateForm::VuelidateFormBuilder
+		options[:builder] ||= builder
 		options[:html] ||= {}
 		options[:html].reverse_merge! ({
-			"@submit" => "vf.validateForm",
-			"@ajax:error" => "vf.handleError",
+			"slot-scope" => "#{builder::SLOT_SCOPE}",
+			"@submit" => "#{builder::SLOT_SCOPE}.validateForm",
+			"@ajax:error" => "#{builder::SLOT_SCOPE}.handleError",
 			"novalidate" => "",
 			"data-type" => "json"
 		})
@@ -42,12 +44,13 @@ module VuelidateForm::VuelidateFormHelper
 	end
 
 	def add_valid_form_wrapper(form_obj, form_text, form_opts)
-		validations = form_obj.validations.nil? ? "" : form_obj.validations.join(",")
-		toggles = form_obj.toggles.nil? ? "{}" : form_obj.toggles.to_json
+		validations = form_obj.validations.to_json
+		toggles = form_obj.toggles.to_json
 		content_tag("vuelidate-form", {
-			validate: validations,
-			:":start-toggles" => toggles,
-			:"v-slot" => "vf"
+			":validate" => form_obj.validations.to_json,
+			":start-toggles" => form_obj.toggles.to_json,
+			":value" => {form_obj.object_name => form_obj.value}.to_json,
+			"name" => form_obj.object_name
 		}.merge(form_opts)) do
 			form_text
 		end
