@@ -31,7 +31,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def field_builder(attribute, options)
-  	NewVuelidateFieldBuilder.new(attribute, options, self, @template)
+  	VuelidateFieldBuilder.new(attribute, options, self, @template)
   end
 
   def step(use_step=true, **options)
@@ -121,7 +121,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
   def radio_group(attribute, buttons: [[:true], [:false]], options: {})
     options = convert_options(options)
-    radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: NewVuelidateFieldBuilder::SLOT_SCOPE}
+    radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: VuelidateFieldBuilder::SLOT_SCOPE}
     radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
     radio_opts[:skip_value] = true
 
@@ -225,7 +225,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			opts = html_options
 			add_to_class(opts, "show-always")
 		else
-			opts = html_options.merge({role: "tooltip", :"v-show" => "#{NewVuelidateFieldBuilder::SLOT_SCOPE}.focused"})
+			opts = html_options.merge({role: "tooltip", :"v-show" => "#{VuelidateFieldBuilder::SLOT_SCOPE}.focused"})
 		end
 		opts[:id] = "#{attribute}-tooltip-content"
 		add_to_class(opts, "tooltip")
