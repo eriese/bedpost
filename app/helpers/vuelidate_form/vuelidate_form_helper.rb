@@ -49,8 +49,8 @@ module VuelidateForm::VuelidateFormHelper
 		content_tag("vuelidate-form", {
 			":validate" => form_obj.validations.to_json,
 			":start-toggles" => form_obj.toggles.to_json,
-			":value" => {form_obj.object_name => form_obj.value}.to_json,
-			"name" => form_obj.object_name
+			":value" => form_obj.value.to_json,
+			":error" => flash[:submission_error],
 		}.merge(form_opts)) do
 			form_text
 		end

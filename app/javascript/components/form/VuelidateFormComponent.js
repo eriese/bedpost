@@ -1,6 +1,6 @@
-import { required, email, minLength, maxLength, sameAs, helpers } from 'vuelidate/lib/validators'
+import { required, email, minLength, maxLength, sameAs, helpers } from 'vuelidate/lib/validators';
 import {submitted} from '@modules/validators';
-import {onTransitionTriggered} from "@modules/transitions"
+import {onTransitionTriggered} from "@modules/transitions";
 import renderless from "@mixins/renderless";
 
 /**
@@ -23,28 +23,34 @@ export default {
 	mixins: [renderless],
 	data: function() {
 		return {
-			formData: this.value[this.name],
-			toggles: this.startToggles,
 			stepper: null,
-			submissionError: gon.submissionError || {},
-			finalized: false
+			submissionError: this.error,
+			finalized: false,
+			// need these because vue doesn't like it when you mutate props
+			formData: this.value,
+			toggles: this.startToggles,
 		};
 	},
 	props: {
-		validate: Object,
-		startToggles: Object,
-		value: Object,
-		name: String,
+		validate: {
+			type: Object,
+			default: objectFactory
+		},
+		startToggles: {
+			type: Object,
+			default: objectFactory
+		},
+		value: {
+			type: Object,
+			default: objectFactory
+		},
+		error: {
+			type: Object,
+			default: objectFactory
+		},
 	},
 	validations: function() {
-		// format the validators
-		let validators = {};
-		if (this.name) {
-			validators[this.name] = gon.validators[this.name]
-		} else {
-			validators = gon.validators
-		}
-		return {formData: formatValidators(this.$props.validate, validators, [])};
+		return {formData: formatValidators(this.validate, [], this.formData)};
 	},
 	computed: {
 		slotScope: function() {
@@ -125,7 +131,7 @@ export default {
 			// set the clear field to null if there is one
 			if (clear) {
 				let toClear = clear === true ? toggleField : clear
-				Object.setAtPath(this, toClear, null);
+				Object.setAtPath(this, `formData.${toClear}`, null);
 			}
 		}
 	},
@@ -151,31 +157,31 @@ export default {
 
 }
 
+function objectFactory() {
+	return {};
+}
+
 /**
  * Process the fields on the form to apply the correct validations to each. Uses recursion to process each level of nested validations
- * @param  {String} formFields    a comma-separated string of field names indicating which form fields want validation
- * @param  {Object} an object mapping arrays of validator arguments to their fields
+ * @param  {Object} validatorVals an object mapping arrays of validator arguments to their fields
  * @param  {String[]} path          the path to this level in recursive searching
+ * @param  {Object} fields 			the fields available in the form
  * @return {Object}               the validator config for this level
  */
-function formatValidators(formFields, validatorVals, path) {
+function formatValidators(validatorVals, path, fields) {
 	// make an empty object to hold validation config
 	let validators = {}
 	// each field in this level
-	for (let field in validatorVals) {
+	for (let field in fields) {
 		// get the validator configs for it
 		let f_vals = validatorVals[field];
 		// add the field to the path
 		let this_path = path.concat(field);
-		// if the validator configs is another object, run the formatter on it as a new level
-		if (f_vals.length === undefined) {
-			// send this object and this path
-			validators[field] = formatValidators(formFields, f_vals, this_path);
-			continue;
-		}
 
-		// if the field is not in the list, continue
-		if (formFields[field] == undefined) {
+		// if the validator configs is another object, run the formatter on it as a new level
+		if (f_vals && f_vals.length === undefined) {
+			// send this object and this path
+			validators[field] = formatValidators(f_vals, this_path, fields[field]);
 			continue;
 		}
 
@@ -184,8 +190,13 @@ function formatValidators(formFields, validatorVals, path) {
 		validators[field].submitted = submitted(this_path)
 
 		// if it's an email field, add an email validator
-		if (field == "email") {
+		if (field.match(/email/i)) {
 			validators[field].email = email;
+		}
+
+		// if there are no specific validators, move on
+		if(f_vals === undefined) {
+			continue;
 		}
 
 		// go through the configs
@@ -214,9 +225,13 @@ function formatValidators(formFields, validatorVals, path) {
 				case "confirmation":
 					// a confirmation validator will look for a match on a field with "_confirmation" appended to it
 					let conf_field = field + "_confirmation";
-					validators[conf_field] = validators[conf_field] || {};
 
-					// validators[field].blank = required;
+					// only add this validator if the confirmation field is also on the form
+					if(fields[conf_field] === undefined) {
+						break;
+					}
+
+					validators[conf_field] = validators[conf_field] || {};
 					validators[conf_field].confirmation = sameAs(field);
 					break;
 			}

@@ -1,8 +1,8 @@
 <template>
 	<div @mouseover="onFocus" @mouseleave="onBlur">
-		<slot v-bind="{onBlur, onFocus, vField, ariaRequired, ariaInvalid, focused, ...nestedSlotScope, field}"></slot>
+		<slot v-bind="slotScope"></slot>
 		<div :id="field + '-error'" class="field-errors" aria-live="assertive" aria-atomic="true" v-if="errorMsg">
-			<div class="aria-only" v-html="ariaLabel"></div>
+			<div class="aria-only" v-html="$_t('helpers.aria.invalid')"></div>
 			<div v-html="errorMsg"></div>
 		</div>
 		<slot name="additional"></slot>
@@ -36,42 +36,34 @@
 		mixins: [nestedInput],
 		data: function() {
 			return {
-				focused: false
+				focused: false,
+				input: null
 			}
 		},
 		props: {
-			v: Object,
-			submissionError: Object,
-			field: String,
-			modelName: String,
-			validate: Boolean,
+			vField: Object,
+			submissionError: Array,
 			isDate: Boolean,
+			modelName: String
 		},
 		computed: {
-			vField: function() {
-				// no vField if this field doesn't validate
-				return this.validate ? getFieldFrom(this.v.formData, this) : null
-			},
-			ariaLabel: function() {
-				// no aria label if this field doesn't validate
-				return this.validate ? this.$_t(this.$attrs["aria-label"] || "helpers.aria.invalid") : null
-			},
-			ariaInvalid: function() {
-				// aria should only read it as invalid if it's dirty or has a submission error
-				return this.vField && this.vField.$invalid &&
-					(this.vField.$dirty || this.vField.submitted === false)
-			},
-			ariaRequired: function() {
-				// aria should read it as required if it has a validation for presence
-				return this.vField && this.vField.blank !== undefined;
-			},
-			input: function() {
-				// get the input or select
-				return this.$el.querySelector("input, select")
+			field() {
+				let expression = this.$vnode.data.model.expression.split(".")
+				return expression[expression.length -1]
 			},
 			validity: function() {
 				// it's valid if it doesn't have validation or is not invalid
 				return !this.vField || !this.vField.$invalid;
+			},
+			slotScope() {
+				return {
+					...this.nestedSlotScope,
+					onBlur: this.onBlur,
+					onFocus: this.onFocus,
+					ariaRequired: this.vField && this.vField.blank !== undefined,
+					ariaInvalid: this.vField && this.vField.$invalid && (this.vField.$dirty || this.vField.submitted === false),
+					focused: this.focused,
+				}
 			},
 			errorMsg: function() {
 				// if it's not meant to validate
@@ -86,7 +78,7 @@
 
 				// if it's got a submission error
 				if (this.vField.submitted === false) {
-					let msg = getFieldFrom(this.submissionError, this);
+					let msg = this.submissionError;
 					if (msg && typeof msg.join == "function") {
 						msg = msg.join(this.$_t("join_delimeter"))
 					}
@@ -185,6 +177,12 @@
 			setFocus() {
 				this.input.focus();
 			}
+		},
+		mounted() {
+			this.input = this.$el.querySelector("input, select")
+			if (this.isDate) {
+				this.model = new Date(this.model);
+			}
 		}
 	}
 
@@ -209,17 +207,6 @@
 			defaults.unshift({scope: `mongoid.errors.models.${modelName}.attributes.${field}.${validator}`})
 		}
 		return defaults;
-	}
-
-	/**
-	 * get the component's field from the given object
-	 * @param  {Object} obj the object to find the field in
-	 * @param  {VueComponent} vm  the component
-	 * @return      the value of the field within the object
-	 */
-	function getFieldFrom(obj, vm) {
-		// get by model name, or just field name
-		return obj[vm.modelName] ? obj[vm.modelName][vm.field] : obj[vm.field]
 	}
 
 	/**

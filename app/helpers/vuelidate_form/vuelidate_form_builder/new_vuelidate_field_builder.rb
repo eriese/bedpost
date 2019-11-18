@@ -119,16 +119,19 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 	def error_wrapper_options
 		defaults = {
 			'v-model' => "vf.formData.#{@attribute}",
-			field: @attribute,
+			':submission-error' => "vf.submissionError.#{@attribute}",
+			'model-name' => @object_name,
+			:class => "#{@options[:field_class]} field".strip,
 		}
 		defaults.merge!({:"@input-blur"=> "stepSlot.fieldBlur", :"slot-scope"=> "stepSlot"}) if @is_step
+		defaults[':v-field'] = "vf.$v.formData.#{@attribute}"
+		defaults[':is-date'] = true if @options[:is_date]
 		defaults
 	end
 
 	def error_inner_options
 		defaults = @options.slice[:"v-show"] || {}.merge({
 			'slot-scope' => @slot_scope,
-			:class => "#{@options[:field_class]} field".strip,
 		})
 		defaults[:"v-show"] = "model.#{options[:show_if]}" if @options[:show_if]
 		defaults[:role] = @options[:field_role] if @options.has_key? :field_role
@@ -168,7 +171,10 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 		@required = @options.has_key?(:required) ? @options[:required] : (@formBuilder.options[:require_all] || filter_validators(:presence, validators))
 		@validate = @options.has_key?(:validate) ? @options[:validate] : (@required || validators.any?)
 
-		@formBuilder.add_validation(@attribute, validators) if @validate
+		if @validate
+			mapped_validators = VuelidateFormUtils.map_validators_for_form(validators, @object)
+			@formBuilder.add_validation(@attribute, mapped_validators)
+		end
 
 		flash_error = @template.flash[:submission_error]
 		@sub_error = flash_error[@attribute.to_s] if flash_error.present?
