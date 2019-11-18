@@ -249,7 +249,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			builder = stub_builder
 			builder.send(:do_setup)
 
-			expect(@f_builder.validations).to be_nil
+			expect(@f_builder.validations).to eq({})
 		end
 	end
 

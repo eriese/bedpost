@@ -20,7 +20,7 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 		@object = formBuilder.object
 		@object_name = @formBuilder.object_name
 
-		@options = (options.delete(:field_options) || {}).merge(options.extract! *FIELD_OPTIONS)
+		@options = HashWithIndifferentAccess.new(options.delete(:field_options) || {}).merge(options.extract! *FIELD_OPTIONS)
 		do_setup
 	end
 
@@ -39,7 +39,8 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 
 	def custom_field(after_method=nil, selector = :div, &block)
 		@after_method = after_method if after_method.present?
-		@formBuilder.step(@is_step, @options.delete(:step_options) || {}) do
+		step_options = @options.delete(:step_options) || {}
+		@formBuilder.step(@is_step, step_options.symbolize_keys) do
 			@template.content_tag(:"field-errors", @error_wrapper_options) do
 				@template.content_tag(selector, @error_inner_options, &block) <<
 				no_js_error_field <<
@@ -96,6 +97,8 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 
 	private
 	def input_options
+		desc = @input_options['aria-describedby']
+		desc = desc.to_s + '-tooltip-content' if desc.present?
 		defaults = {
 			'v-model' => "#{@slot_scope}.model",
 			ref: @attribute,
@@ -104,7 +107,7 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 			'@input' => "#{@slot_scope}.$listeners.input($event.target.#{@options[:model_value] || DEFAULT_MODEL_VALUE})",
 			aria: {
 				required: @required,
-				describedby: "#{@attribute}-error #{@attribute}-tooltip-content #{@input_options['aria-describedby']}".strip,
+				describedby: "#{@attribute}-error #{@attribute}-tooltip-content #{desc}".strip,
 				invalid: @sub_error.present?
 			},
 			':aria-required' => "#{@slot_scope}.ariaRequired",
@@ -146,12 +149,12 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 			label_opt
 		elsif label_opt.is_a?(Hash)
 			defaults.merge!(label_opt)
-			defaults.has_key?(:key) ? defaults.delete(:key) : @attribute
+			defaults.has_key?("key") ? defaults.delete("key") : @attribute
 		else
 			@attribute
 		end
 
-		defaults[:id] ||= "#{@label_key}#{defaults[:value]}-label"
+		defaults[:id] ||= "#{@label_key}#{defaults["value"]}-label"
 		defaults
 	end
 
@@ -188,7 +191,7 @@ module VuelidateForm; class VuelidateFormBuilder; class NewVuelidateFieldBuilder
 		@slot_scope = @options.delete(:slot_scope) || SLOT_SCOPE
 		@parent_scope = @options.delete(:parent_scope)
 
-		@is_step = @formBuilder.options[:wizard] unless @options.has_key? :is_step
+		@is_step = @options.has_key?(:is_step) ? @options[:is_step] : @formBuilder.options[:wizard]
 
 		@after_method = @options.delete(:after_method) || @options.delete(:after_content)
 		@after_method_args = @options.delete(:after_method_args)

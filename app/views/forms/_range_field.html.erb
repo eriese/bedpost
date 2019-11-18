@@ -1,5 +1,5 @@
 <%= yield %>
-<noscript v-if="false">
+<noscript>
 	<div class="range-indicator" id="<%= desc_id %>">
 		<% [options[:min], options[:max] / 2, options[:max]].each do |n| %>
 			<div class="indicator"><%= t(t_key, count: n, default: [:"helpers.sliders"]) %></div>

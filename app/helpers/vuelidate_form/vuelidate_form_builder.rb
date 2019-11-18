@@ -60,12 +60,14 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   alias_method :parent_hidden_field, :hidden_field
   def hidden_field(attribute, options={})
   	options = options.merge({label: false, validate: false, field_class: "hidden-field"})
+    options = convert_options(options)
   	field_builder(attribute, options).field do
   		super
   	end
   end
 
   def toggle(attribute, options={}, toggle_options={})
+    options = convert_options(options)
     add_to_class(options, "inline") unless args[:inline] == false
     options[:label_last] = true unless options.has_key?(:label_last)
     field_builder(attribute, options).field do
@@ -74,6 +76,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def get_toggle_options(attribute, options, value)
+    options = convert_options(options)
     toggle_opt = options.delete :toggle
     if toggle_opt
       toggle_key = toggle_opt == true ? attribute : toggle_opt
@@ -92,6 +95,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
+    args = convert_options(args)
   	add_to_class(args, "inline", :field_class) unless args[:inline] == false
     args[:label_last] = true unless args.has_key? :label_last
     toggle_opt = args.delete :toggle
@@ -106,6 +110,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def radio_button(attribute, value, options={})
+    options = convert_options(options)
     add_to_class(options, "inline", :field_class) unless options[:inline] == false
     options[:label_last] = true unless options.has_key? :label_last
     get_toggle_options(attribute, options, value)
@@ -115,6 +120,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def radio_group(attribute, buttons: [[:true], [:false]], options: {})
+    options = convert_options(options)
     radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: NewVuelidateFieldBuilder::SLOT_SCOPE}
     radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
     radio_opts[:skip_value] = true
@@ -127,7 +133,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
     btns = buttons.map do |btn|
       val = btn[0]
-      opts = radio_opts.merge ({label: {value: val.to_s}, checked: checked_val == val, :":value" => val}).merge(btn[1] || {})
+      opts = radio_opts.merge({
+        label: {value: val.to_s},
+        checked: checked_val == val,
+        ":value" => val
+      }).merge(btn[1] || {})
       radio_button(attribute, val, opts)
     end
 
@@ -143,6 +153,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def select(attribute, choices = nil, options = {}, html_options=nil, &block)
+    options = convert_options(options)
 		html_options ||= options[:html] || {}
 		html_options[:label] = options.delete(:label) if html_options[:label].nil?
 		html_options[:class] ||= options.delete(:class)
@@ -152,6 +163,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def range_field(attribute, **options)
+    options = convert_options(options)
   	desc_id = "#{attribute}-desc"
   	options["aria-describedby"] = desc_id
   	options[:min] ||= options[:in].min
@@ -164,6 +176,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def password_field(attribute, args={})
+    options = convert_options(options)
   	args[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
   	after_method = args[:show_toggle] ? :password_toggle : nil
   	field_builder(attribute, args).field(after_method) do
@@ -172,6 +185,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def date_field(attribute, **options)
+    options = convert_options(options)
     options[:is_date] = true
     field_builder(attribute, options).field do
       mdl = options.delete "v-model"
@@ -277,5 +291,9 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
   def toggles
     @toggles ||= @options.delete(:toggles) || {}
+  end
+
+  def convert_options(options)
+    HashWithIndifferentAccess.new(options)
   end
 end; end

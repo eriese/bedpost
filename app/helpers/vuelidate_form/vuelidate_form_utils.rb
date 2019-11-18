@@ -6,7 +6,7 @@ module VuelidateForm; module VuelidateFormUtils
 	end
 
 	def self.map_validators_for_form(validators, object)
-		is_new = object.new_record?
+		is_new = object.respond_to?(:new_record?) && object.new_record?
 		validators.map do |v|
 			next if v.kind == :foreign_key
 			if on_cond = v.options[:on]
