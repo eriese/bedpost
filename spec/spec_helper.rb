@@ -12,13 +12,31 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 #
-#
+
+
+# a formatter to hide pending test output
+module FormatterOverrides
+  def example_pending(_)
+  end
+
+  def dump_pending(_)
+  end
+end
+
 if ENV['CI'] == 'true'
   require 'simplecov'
   SimpleCov.start 'rails'
 
   require 'codecov'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
+  RSpec::Core::Formatters::DocumentationFormatter.prepend FormatterOverrides
+  RSpec::Core::Formatters::ProgressFormatter.prepend FormatterOverrides
+end
+
+if ENV['SKIP_PENDING']
+  RSpec::Core::Formatters::DocumentationFormatter.prepend FormatterOverrides
+  RSpec::Core::Formatters::ProgressFormatter.prepend FormatterOverrides
 end
 
 #add custom matchers and helpers
