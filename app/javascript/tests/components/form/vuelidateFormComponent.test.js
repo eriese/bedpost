@@ -132,6 +132,64 @@ describe("VuelidateForm Component", () => {
 					expect(wrapper.vm.$v.formData.name.submitted).toBe(true);
 				})
 			})
+
+			describe("with a stepper", () => {
+				test("it does not submit if the stepper is not ready, even if the form is valid", () => {
+					const wrapper = mountWrapper({
+						validate: {
+							name: [["presence"]],
+						},
+						value: {
+							name: "something",
+						},
+					});
+
+					const stepper = {
+						allReady: () => false,
+						findNext: jest.fn()
+					}
+
+					wrapper.vm.slotScope.addStepper(stepper);
+
+					const event = {
+						preventDefault: jest.fn(),
+						stopPropagation: jest.fn()
+					}
+
+					wrapper.vm.validateForm(event);
+					expect(event.preventDefault).toHaveBeenCalled();
+					expect(event.stopPropagation).toHaveBeenCalled();
+					expect(stepper.findNext).toHaveBeenCalled();
+				})
+
+				test("it submits if the stepper is ready and the form is valid", () => {
+					const wrapper = mountWrapper({
+						validate: {
+							name: [["presence"]],
+						},
+						value: {
+							name: "something",
+						},
+					});
+
+					const stepper = {
+						allReady: () => true,
+						findNext: jest.fn()
+					}
+
+					wrapper.vm.slotScope.addStepper(stepper);
+
+					const event = {
+						preventDefault: jest.fn(),
+						stopPropagation: jest.fn()
+					}
+
+					wrapper.vm.validateForm(event);
+					expect(event.preventDefault).not.toHaveBeenCalled();
+					expect(event.stopPropagation).not.toHaveBeenCalled();
+					expect(stepper.findNext).not.toHaveBeenCalled();
+				})
+			})
 		})
 
 		describe("handleError", () => {

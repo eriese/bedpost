@@ -7,12 +7,14 @@ import renderless from "@mixins/renderless";
  * A component to wrap a validated form. Uses [Vuelidate]{@link https://monterail.github.io/vuelidate/} for validation
  * @module
  * @mixes renderless
- * @vue-data {Object} formData a JSON representation of the object being modified by the form
- * @vue-data {Object} toggles an object to track toggle states on the form
  * @vue-data {?module:components/stepper/FormStepComponent} stepper the stepper in this form, if there is one
- * @vue-data {Object} [submissionError={}] the errors returned from the last submission attempt
- * @vue-prop {String} validate a comma-separated string of fields to validate in the form
+ * @vue-data {Object} [submissionError={}] a mutatable copy of the errors returned from the last submission attempt
+ * @vue-data {Object} formData a mutatable copy of the object being modified by the form
+ * @vue-data {Object} toggles a mutatable copy of an object to track toggle states on the form
+ * @vue-prop {String} validate an object containing information on what types of validation, if any, each field in the form needs
  * @vue-prop {Object} startToggles the starting state of toggles on the form
+ * @vue-prop {Object} value the starting state of the value of the object modified by the form
+ * @vue-prop {Object} error the starting state of the errors from the last submission attempt
  * @vue-computed {Object} slotScope the scope to bind to the slot
  * @vue-computed {Object} $v the vuelidate object
  * @listens form.onsubmit
@@ -24,9 +26,8 @@ export default {
 	data: function() {
 		return {
 			stepper: null,
-			submissionError: this.error,
-			finalized: false,
 			// need these because vue doesn't like it when you mutate props
+			submissionError: this.error,
 			formData: this.value,
 			toggles: this.startToggles,
 		};
@@ -135,26 +136,6 @@ export default {
 			}
 		}
 	},
-	// it's really gross to add this tight coupling, but this whole component needs major refactoring, and this is a stop gap until I get to it
-	updated() {
-		if (this.finalized || this.$children.length == 0) {
-			return;
-		}
-		// only run this once
-		this.finalized = true;
-
-		// go through all the children in order to make sure dates are properly formatted for the date selector
-		for (var i = 0; i < this.$children.length; i++) {
-			let child = this.$children[i]
-			if (child.isDate) {
-				let fieldParent = this.formData[child.modelName] || this.formData;
-				let origDate = fieldParent[child.field]
-				// make a date object from the string
-				fieldParent[child.field] = origDate ? new Date(origDate) : new Date();
-			}
-		}
-	}
-
 }
 
 function objectFactory() {
