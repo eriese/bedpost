@@ -1,3 +1,4 @@
+if Rails.env.development?
 require 'colorize'
 
 namespace :push do
@@ -26,4 +27,5 @@ namespace :push do
 			puts "Please fix these errors before pushing".colorize(color: :red, mode: :bold)
 		end
 	end
+end
 end
