@@ -16,8 +16,6 @@ class EncountersController < ApplicationController
 			#create the display name
 			ship[:display] = Partnership.make_display(ship["partner_name"], ship["nickname"])
 		end
-
-		gon.partnerships = @partnerships
 	end
 
 	def show
@@ -29,7 +27,6 @@ class EncountersController < ApplicationController
 		@partner = @partnership.partner
 		@encounter = @partnership.encounters.new
 		gon_encounter_data
-		gon_client_validators(@encounter, serialize_opts: {include: [:contacts]})
 	end
 
 	def create
@@ -45,7 +42,6 @@ class EncountersController < ApplicationController
 
 	def edit
 		gon_encounter_data
-		gon_client_validators(@encounter)
 	end
 
 	def update

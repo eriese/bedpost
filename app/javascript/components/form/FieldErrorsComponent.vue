@@ -181,7 +181,7 @@
 		mounted() {
 			this.input = this.$el.querySelector("input, select")
 			if (this.isDate) {
-				this.model = new Date(this.model);
+				this.model = this.model ? new Date(this.model) : new Date();
 			}
 		}
 	}
