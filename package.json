@@ -35,7 +35,8 @@
     "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
-    "test": "jest --watch --collectCoverage=false"
+    "test": "jest --collectCoverage=false",
+    "test-watch": "jest --watch --collectCoverage=false"
   },
   "jest": {
     "globals": {

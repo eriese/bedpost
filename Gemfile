@@ -50,9 +50,6 @@ gem 'delayed_job_mongoid'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails', '~> 3.8'
-  gem "rails-controller-testing"
-  gem 'factory_bot_rails'
   gem 'pry'
   gem 'pry-remote'
   gem 'pry-byebug'
@@ -76,9 +73,16 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'rack-mini-profiler', require: false
   gem 'foreman'
+
+  gem 'brakeman'
+  gem 'bundler-audit'
+  gem 'colorize'
 end
 
 group :test do
+  gem 'rspec-rails', '~> 3.8'
+  gem "rails-controller-testing"
+  gem 'factory_bot_rails'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
