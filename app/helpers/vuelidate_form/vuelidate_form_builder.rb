@@ -23,6 +23,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       alias_method :parent_#{selector}, :#{selector}
       def #{selector}(method, options = {})  # def text_field(method, options = {})
+        options = convert_options(options)
         field_builder(method, options).field do
         	super
         end
