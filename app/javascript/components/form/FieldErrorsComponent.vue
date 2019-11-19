@@ -10,30 +10,27 @@
 </template>
 
 <script>
-	import nestedInput from '@mixins/nestedInput'
+	import inputSlot from '@mixins/inputSlot'
 	/**
-	 * A component that wraps a form control and uses its validations to display error messages
+	 * A component that wraps a form control and uses its validations to display error messages. Works best with parent [VuelidateFormComponent]{@link module:components/form/VuelidateFormComponent}
 	 * @module
 	 * @vue-data {Boolean} focused=false is the component's form control focused?
-	 * @vue-prop {Object} v the vuelidate object passed from the parent [VuelidateFormComponent]{@link module:components/form/VuelidateFormComponent}
-	 * @vue-prop {Object} submissionError errors returned from the last submission attempt
-	 * @vue-prop {String} field the name of the field this form input is for
+	 * @vue-data {HTMLElement} input=null the element of the slotted form control
+	 * @vue-prop {Object} vField the vuelidate validations for this field object passed from the parent
+	 * @vue-prop {Object} submissionError errors for this field returned from the last submission attempt
 	 * @vue-prop {String} modelName the name of the model this form is for
+	 * @vue-computed {String} field the name of the field this form input is for
 	 * @vue-prop {Boolean} validate does this field have validations to run?
-	 * @vue-computed {?Object} vField the field's validation configuration
-	 * @vue-computed {?String} [ariaLabel="Invalid: "] an additional screen-reader specific label to preceed error messages
-	 * @vue-computed {Boolean} ariaInvalid should screen readers indicate that this field is invalid?
-	 * @vue-computed {Boolean} ariaRequired should screen readers indicate that this field is required?
-	 * @vue-computed {HTMLInputElement} the form control element for this field
 	 * @vue-computed {Boolean} validity whether this field is currently valid. This doesn't take dirty state or anything besides pure validity into account
 	 * @vue-computed {String} errorMsg the error message to display. chooses the first validation error and displays it
+	 * @mixes inputSlot
 	 * @emits module:components/form/FieldErrorsComponent~input-blur with new validity value whenever validity changes
 	 * @listens input.onfocus
 	 * @listens input.onblur
 	 */
 	export default {
 		name: "field_errors",
-		mixins: [nestedInput],
+		mixins: [inputSlot],
 		data: function() {
 			return {
 				focused: false,
@@ -57,7 +54,7 @@
 			},
 			slotScope() {
 				return {
-					...this.nestedSlotScope,
+					...this.inputSlotScope,
 					onBlur: this.onBlur,
 					onFocus: this.onFocus,
 					ariaRequired: this.vField && this.vField.blank !== undefined,
@@ -179,7 +176,9 @@
 			}
 		},
 		mounted() {
+			// get the input
 			this.input = this.$el.querySelector("input, select")
+			// if this is a date, convert the value to a date object
 			if (this.isDate) {
 				this.model = this.model ? new Date(this.model) : new Date();
 			}

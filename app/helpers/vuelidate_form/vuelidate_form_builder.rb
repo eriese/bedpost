@@ -1,13 +1,13 @@
+# a field builder to generate the expected html for use with the vue component VuelidateFormComponent while making use of rails form helpers
 module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuilder
 
 	include VuelidateFormUtils
 
   SLOT_SCOPE = "vf"
 
-	attr_reader :validations
-
   def initialize(object_name, object, template, options)
     super
+    # if any values that haven't automatically been added by form fields are needed, add them
     return unless value_include = options[:value_include]
     value_include.each do |v|
       case v
@@ -105,6 +105,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
       args[:"v-model"] = "#{SLOT_SCOPE}.toggles['#{toggle_key}']"
       add_toggle(toggle_key, args[:checked])
     end
+    args[:model_value] = "checked"
   	field_builder(attribute, args).field do
   		super
   	end
@@ -266,18 +267,22 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	  super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :label_last, :is_step)
 	end
 
+  # get the validations that will be run on data from this form
   def validations
-    @validations ||= {}
+    @validations ||= Hash.new { |hsh, key| hsh[key] = []}
   end
 
+  #add validations for the given attribute
 	def add_validation(attribute, attr_validators)
-    validations[attribute] = (validations[attribute] || []).concat(attr_validators)
+    validations[attribute].concat(attr_validators)
 	end
 
+  # get the values of fields in this form
   def value
     @value ||= {}
   end
 
+  # add a field value to the form
   def add_value(attribute, attr_value = nil)
     if attr_value
       value[attribute] = attr_value
@@ -286,14 +291,18 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     end
   end
 
+  # add a toggle field and its starting value to the form
   def add_toggle(attribute, start_val)
     toggles[attribute] = start_val || false unless toggles.has_key? attribute
   end
 
+  # get the toggles on this form
   def toggles
     @toggles ||= @options.delete(:toggles) || {}
   end
 
+  # convert options into a HashWithIndifferentAccess for easier key access
+  # @note we do this here so that the same object is passed to the field builder for processing as is passed to the parent method for input generating
   def convert_options(options)
     HashWithIndifferentAccess.new(options)
   end

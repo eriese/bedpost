@@ -239,6 +239,11 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 				expect(builder.instance_variable_get(:@validate)).to be true
 			end
 		end
+
+		it 'uses @require to set validation' do
+			builder = stub_builder options: {required: true}
+			expect(builder.instance_variable_get(:@validate)).to be true
+		end
 	end
 
 	describe '#field_label' do
@@ -380,10 +385,10 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 	end
 
 	describe '#field' do
-		it 'adds its attribute to the validation list on the form builder if it validates' do
-			stub_form_builder
+		it 'adds its attribute to the validation list on the form builder if has validations' do
+			stub_form_builder(validators:[double("PresenceValidator", {kind: :presence, options: {}})])
 			@attr = :name
-			@f_builder.text_field(@attr, {validate: true})
+			@f_builder.text_field(@attr)
 			expect(@f_builder.validations).to have_key @attr
 		end
 

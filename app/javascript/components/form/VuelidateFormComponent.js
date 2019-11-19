@@ -182,9 +182,6 @@ function formatValidators(validatorVals, path, fields) {
 
 		// go through the configs
 		for (var f = 0; f < f_vals.length; f++) {
-			if (f_vals[f] === null) {
-				continue;
-			}
 			// destructure the array
 			let [type, opts] = f_vals[f];
 
