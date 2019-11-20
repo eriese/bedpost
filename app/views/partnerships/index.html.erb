@@ -1,3 +1,6 @@
 <h1>Partnerships</h1>
+<% if current_user_profile.partnerships.empty? %>
+	<h2 class="desc"><%= t('.no_partnerships') %></h2>
+<% end %>
 <%= display_partners %>
 <%= link_to t(".new_partnership"), who_path %>

@@ -8,8 +8,9 @@ module NormalizeBlankValues
   end
 
   def normalize_blank_values
-    attributes.each do |column, value|
-      self[column] = nil unless self[column].present?
+    fields.each do |column, config|
+    	next if self[column].present?
+      self[column] = config.options[:type] == Mongoid::Boolean ? false : nil
     end
   end
 end

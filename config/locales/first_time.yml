@@ -3,4 +3,12 @@ en:
     index:
       header: Hi %{name}
       desc: Let's get you started by adding your first partnership.
-      new_partnership: Go
+      header2: What's next, %{name}?
+      desc2:
+        one: You can add another partner, or you can tell us about a sexual encounter you had with %{partner_name}.
+        other: You can add another partner, or you can tell us about a sexual encounter with one of the partners you've already added
+      exit: Exit this tutorial
+      add_encounter: Add an encounter
+      add_partnership:
+        zero: Add a partner
+        other: Add another partner

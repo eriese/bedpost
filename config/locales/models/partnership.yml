@@ -39,6 +39,7 @@ en:
           communication: Communication
           prior_discussion: Risk Discussion
     index:
+      no_partnerships: You don't have any partnerships yet
       new_partnership: Add a partner
       latest_html: "Most recent encounter:<br>%{took_place}"
     edit:

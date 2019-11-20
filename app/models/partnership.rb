@@ -41,7 +41,7 @@ class Partnership
   end
 
   def display(partner_name = nil)
-    "#{partner_name || partner.name} #{nickname}"
+    self.class.make_display(partner_name || partner.name, nickname)
   end
 
   def risk_mitigator
@@ -65,6 +65,10 @@ class Partnership
       end
     end
     any_changed
+  end
+
+  def self.make_display(partner_name, nickname)
+    "#{partner_name} #{nickname}"
   end
 
 	private

@@ -40,9 +40,10 @@ class UserProfile < Profile
   field :uid, type: String, default: ->{generate_uid}
   field :min_window, type: Integer, default: 6
   field :opt_in, type: Boolean, default: false
+  field :first_time, type: Boolean, default: true
   field :tours, type: Set
-  index({email: 1}, {unique: true})
-  index({uid: 1}, {unique: true})
+  index({email: 1}, {unique: true, sparse: true})
+  index({uid: 1}, {unique: true, sparse: true})
 
   has_many :user_tokens
 
@@ -77,9 +78,9 @@ class UserProfile < Profile
   end
 
   # Is this the user's first time using the app?
-  # @return [true] if the user has no saved relations
+  # @return [true] if the user has not completed any actions that set first_time to false
   def first_time?
-    !embedded_relations.any? { |k, e| send(e.store_as).any? }
+    first_time
     # true
   end
 
@@ -98,6 +99,44 @@ class UserProfile < Profile
     tmp << page
     self.tours = tmp
     changed? ? save : true
+  end
+
+  # An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter
+  def partners_with_most_recent
+    UserProfile.collection.aggregate(partners_lookup + [
+      {"$project" => {
+        most_recent: {"$max" => "$encounters.took_place"},
+        nickname: 1,
+        partner_name: {"$arrayElemAt" => ["$partner.name", 0]}
+      }},
+      {"$sort" => {most_recent: -1}}
+    ])
+  end
+
+  # An aggregate query to get the user's partnerships (including partner names) with all of their encounters
+  def partners_with_encounters(partnership_id = nil)
+    lookup = partners_lookup
+    if partnership_id
+      partnership_id = BSON::ObjectId(partnership_id) unless partnership_id.is_a? BSON::ObjectId
+      lookup.insert(lookup_index, {"$match" => {"_id" => partnership_id}})
+    else
+      lookup.insert(lookup_index, {"$redact" => {
+        "$cond" => {
+          if: {"$and" => [{"$isArray" => "$encounters"}, {"$gt" => [{"$size" => "$encounters"}, 0]}]},
+          then: "$$KEEP",
+          else: "$$PRUNE"
+          }
+        }
+      })
+    end
+
+    UserProfile.collection.aggregate(lookup + [
+      {"$project" => {
+        encounters: {took_place: 1, notes: 1, _id: 1},
+        nickname: 1,
+        partner_name: {"$arrayElemAt" => ["$partner.name", 0]}
+      }},
+    ])
   end
 
   def update_without_password(params, *options)
@@ -167,5 +206,24 @@ class UserProfile < Profile
     dummy = Profile.create(name: name, anus_name: anus_name, external_name: external_name, internal_name: internal_name, can_penetrate: can_penetrate, pronoun_id: pronoun_id)
     # TODO this can probably be optimized
     UserProfile.find(partnered_to_ids).each {|u| u.partnerships.find_by({partner_id: id}).update({partner_id: dummy.id})}
+  end
+
+  # an aggregation query pipeline that uses a lookup to join with the partners' profiles
+  def partners_lookup
+    [
+      {"$match" => {"_id" => id}},
+      {"$unwind" => "$partnerships"},
+      {"$replaceRoot" => {newRoot: "$partnerships"}},
+      {"$lookup" => {
+        from: "profiles",
+        localField: "partner_id",
+        foreignField: "_id",
+        as: "partner"
+      }
+    }]
+  end
+
+  def lookup_index
+    partners_lookup.index {|q| q.has_key? "$lookup"}
   end
 end

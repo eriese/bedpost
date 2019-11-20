@@ -5,7 +5,7 @@ class Encounter::RiskCalculator
   	@encounter = encounter
     @person = :user
 
-  	return unless force || @encounter.risks.nil?
+  	return unless force || @encounter.risks.empty?
 
   	#get resources
   	@diagnoses = Diagnosis.as_map

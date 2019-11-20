@@ -15,7 +15,10 @@
 
 </div>
 <div class="additional">
-	<p><%= link_to t(".encounters", {name: @partnership.partner.name}), partnership_encounters_path(@partnership) %></p>
+	<% if @partnership.encounters.size > 0 %>
+		<p><%= link_to t(".encounters"), partnership_encounters_path(@partnership) %></p>
+	<% end %>
+	<p><%= link_to t(".new_encounter"), new_partnership_encounter_path(@partnership) %></p>
 	<p><%= link_to t(".back"), partnerships_path %></p>
 	<p><%= link_to t(".edit"), edit_partnership_path(@partnership) %></p>
 	<p>

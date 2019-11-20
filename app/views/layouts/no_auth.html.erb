@@ -1,0 +1,11 @@
+<% content_for :header do %>
+	<header>
+		<span id="logo">Bed<span>Post</span></span>
+	</header>
+<% end %>
+
+<% content_for :main  do %>
+	<%= yield %>
+<% end %>
+
+<%= render template: "layouts/application" %>
