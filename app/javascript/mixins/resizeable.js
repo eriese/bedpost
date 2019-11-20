@@ -1,5 +1,6 @@
 /**
  * Add a debounced reaction to window resize events
+ *
  * @mixin resizeable
  * TODO mix this into bubble after bubble fixes are merged
  * REQUIRES AN `onSize` METHOD TO WORK.
@@ -8,7 +9,7 @@ export default {
 	data() {
 		return {
 			debounce: null
-		}
+		};
 	},
 	methods: {
 		debounceOnSize() {
@@ -23,7 +24,7 @@ export default {
 		if (process.NODE_ENV !== 'production') {
 			if (this.onSize == undefined) {
 				console.warn(`Resizeable compoenent does ${this.$options.name} does not implement an onSize function, so it will not react to window resize events`);
-				this.onSize = function() {}
+				this.onSize = function() {};
 			}
 		}
 	},
@@ -35,8 +36,8 @@ export default {
 			window.removeEventListener('resize', resizeListener);
 			// clear existing debounce timeouts
 			this.clearDebounce();
-		})
+		});
 
 		this.onSize();
 	}
-}
+};
