@@ -63,7 +63,7 @@ export default {
 			if (this.translate) {
 				let opts = {};
 				if (this.translate !== true) { opts.scope = this.translate; }
-				return this.$_t(key);
+				return this.$_t(key, opts);
 			}
 
 			return key;

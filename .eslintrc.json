@@ -1,12 +1,15 @@
 {
 	"env": {
 		"browser": true,
-		"es6": true
+		"es6": true,
+		"jest/globals": true
 	},
 	"extends": [
 		"eslint:recommended",
 		"plugin:vue/essential",
-		"plugin:jsdoc/recommended"
+		"plugin:jsdoc/recommended",
+		"plugin:jest/recommended",
+		"plugin:jest/style"
 	],
 	"globals": {
 		"Atomics": "readonly",
@@ -20,7 +23,8 @@
 	},
 	"plugins": [
 		"vue",
-		"jsdoc"
+		"jsdoc",
+		"jest"
 	],
 	"rules": {
 		"indent": [
