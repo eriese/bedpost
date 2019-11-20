@@ -7,5 +7,5 @@
 	</div>
 </noscript>
 <aside class="slide-bar-desc js-only">
-	<%= content_tag :span, "{{$root.t('#{t_key}', {count: #{options[:"v-model"]}, defaults: [{scope: 'helpers.sliders'}]})}}", id: desc_id, :":aria-live" => "fe.focused ? 'polite' : undefined", :"aria-atomic" => true%>
+	<%= content_tag :span, "{{$_t('#{t_key}', {count: #{options[:"v-model"]}, defaults: [{scope: 'helpers.sliders'}]})}}", id: desc_id, :":aria-live" => "fe.focused ? 'polite' : undefined", :"aria-atomic" => true%>
 </aside>
