@@ -1,4 +1,4 @@
-import {TimelineMax, TweenMax} from "gsap/TweenMax";
+import { gsap } from 'gsap';
 
 /**
  * @module transitions
@@ -22,24 +22,24 @@ import {TimelineMax, TweenMax} from "gsap/TweenMax";
  * <caption> To add link-specific transition animations, attach properties to overwrite {@link module:transitions~prop_defaults}
  * to the dataset of the links. So: </caption>
  * // override the animation type for both in and out animations at once
- * <a href="someplace" data-animation-type="slideRight"> Slide Right </a>
+ * <a href='someplace' data-animation-type='slideRight'> Slide Right </a>
  *
  * //override just the in animation
- * <a href="someplace" data-in-animation-type="slideLeft"> Fade out, then slide left in </a>
+ * <a href='someplace' data-in-animation-type='slideLeft'> Fade out, then slide left in </a>
  *
  * //make your own timeline
- * <a href="someplace" data-out-animation="new TimelineMax().to(tweenEL, 0.5, {top: '-100%'})"> Run the given timeline out, then fade in </a>
+ * <a href='someplace' data-out-animation='gsap.timeline().to(tweenEL, 0.5, {top: '-100%'})'> Run the given timeline out, then fade in </a>
  *
  * //make a timeline with the given properties.
  * //don't forget that inProps and outProps need to be valid JSON in order to be properly parsed;
  * //that means you have to put the attribute in single quotes so that keys can be in double quotes
- * <a href="someplace" data-in-props='{"top": "-100%"}' data-in-direction="from" data-anim-length="1">Fade out for 1 second, then slide from top -100% for 1 second </a>
+ * <a href='someplace' data-in-props='{'top': '-100%'}' data-in-direction='from' data-anim-length='1'>Fade out for 1 second, then slide from top -100% for 1 second </a>
  *
  * @example
  * <caption> Transition animation behavior can also be applied to fake or non-Turbolinks-enabled transition events by passing an object
  * with animation properties to {@link module:transitions.processClickData}, then calling {@link module:transitions.animOut}
  * with no parameters or with a callback that calls {@link module:transitions.animIn}</caption>
- * import {animOut, animIn, processClickData} from "./modules/transitions";
+ * import {animOut, animIn, processClickData} from './modules/transitions';
  * // add click listener to random element
  * el.click((e) => {
  * 	processClickData({animationType: 'slideRight'});
@@ -52,31 +52,32 @@ import {TimelineMax, TweenMax} from "gsap/TweenMax";
 
 /**
  * Get a timeline that slides the appropriate element in the given direction
+ *
  * @param  {boolean} animatingOut is this timeline animating an out transition? false for in
  * @param  {boolean} toLeft       is this timeline sliding to the left? false for right
- * @yields {TimelineMax}              the timeline
+ * @return {TimelineMax}              the timeline
  */
 const slide = function(animatingOut, toLeft) {
 	// get the direction name
-	let dir = animatingOut ? "out" : "in";
+	let dir = animatingOut ? 'out' : 'in';
 	// get the right container
 	let container = document.getElementById(props[`${dir}Id`]);
 
 	// make a timeline
-	let tl = new TimelineMax();
+	let tl = gsap.timeline();
 	// start by setting the position, location, and height of the element and its parent so they maintain during sliding
-	tl.set(container.parentElement, {position: "relative", overflow: "hidden", height: container.parentElement.offsetHeight})
-	tl.set(container, {position: "absolute", width: container.offsetWidth, top: container.offsetTop, opacity: 1});
+	tl.set(container.parentElement, {position: 'relative', overflow: 'hidden', height: container.parentElement.offsetHeight});
+	tl.set(container, {position: 'absolute', width: container.offsetWidth, top: container.offsetTop, opacity: 1});
 
 	// set the animation props based on direction
 	let animProps = {};
 	if (toLeft) {
-		animProps[animatingOut ? "right" : "left"] = "100%";
+		animProps[animatingOut ? 'right' : 'left'] = '100%';
 	} else {
-		animProps[animatingOut ? "left" : "right"] = "100%";
+		animProps[animatingOut ? 'left' : 'right'] = '100%';
 	}
 	// animate to if we're animating out, from if we're animating in
-	tl[animatingOut ? "to" : "from"](container, props.animLength, animProps);
+	tl[animatingOut ? 'to' : 'from'](container, props.animLength, animProps);
 	// clear the props after the animation is complete
 	tl.set([container, container.parentElement], {clearProps: 'all'});
 
@@ -113,10 +114,10 @@ const slideRight = function(animatingOut) {
  * @yields {TimelineMax}              the timeline
  */
 const fade = function(animatingOut) {
-	let dir = animatingOut ? "out" : "in";
+	let dir = animatingOut ? 'out' : 'in';
 	let container = document.getElementById(props[`${dir}Id`]);
 	let animProps = animatingOut ? {opacity: 0} : {opacity: 1};
-	return new TimelineMax().to(container, props.animLength, animProps);
+	return gsap.timeline().to(container, props.animLength, animProps);
 };
 
 /**
@@ -138,12 +139,12 @@ const animationFunctions = {
  * @property {Number} animLength=0.3 the length in seconds of animations
  * @property {?Object} inProps=null the properties to apply to the element with inId during in animation
  * @property {String} inId='page-container' the id of the element to apply in animations to
- * @property {String} inDirection="to" the tween direction for the in animation ("to", "from")
+ * @property {String} inDirection='to' the tween direction for the in animation ('to', 'from')
  * @property {?Object} outProps=null the properties to apply to the element with outId during out animation
  * @property {String} outId='page-container' the id of the element to apply out animations to
- * @property {String} outDirection="to" the tween direction for the out animation ("to", "from")
- * @property {?TweenMax} inAnimation=null a Tween or Timeline instance to play for the in animation
- * @property {?TweenMax} outAnimation=null a Tween or Timeline instance to play for the out animation
+ * @property {String} outDirection='to' the tween direction for the out animation ('to', 'from')
+ * @property {?tween} inAnimation=null a Tween or Timeline instance to play for the in animation
+ * @property {?tween} outAnimation=null a Tween or Timeline instance to play for the out animation
  * @property {?function} inAnimationType=null the animation from {@link module:transitions~animationFunctions} to use for the in animation
  * @property {?function} outAnimationType=null the animation from {@link module:transitions~animationFunctions} to use for the out animation
  * @property {function} [animationType={@link module:transitions~fade}] the animation from {@link module:transitions~animationFunctions} to use as a default for in or out animations that are null
@@ -184,7 +185,7 @@ let props = Object.assign({}, prop_defaults);
  */
 const getTween = function(animatingOut, onComplete, onCompleteParams) {
 	// get the direction
-	let dir = animatingOut ? "out" : "in";
+	let dir = animatingOut ? 'out' : 'in';
 
 	// try to get the animation
 	let anim = props[`${dir}Animation`];
@@ -194,7 +195,7 @@ const getTween = function(animatingOut, onComplete, onCompleteParams) {
 		if (props[`${dir}Props`]) {
 			// make a timeline using the props
 			let container = document.getElementById(props[`${dir}Id`]);
-			anim = new TimelineMax()[`${dir}Direction`](container, props.animLength, props[`${dir}Props`]);
+			anim = gsap.timeline()[`${dir}Direction`](container, props.animLength, props[`${dir}Props`]);
 		}
 		// otherwise check for an animation type
 		else if (props[`${dir}AnimationType`]) {
@@ -208,13 +209,13 @@ const getTween = function(animatingOut, onComplete, onCompleteParams) {
 	}
 
 	// if it's a function to get a tween, get the tween using the animation direction
-	if (typeof anim == "function") {
+	if (typeof anim == 'function') {
 		anim = anim(animatingOut);
 	}
 
 	// add onComplete
 	if (onComplete) {
-		anim.eventCallback("onComplete", onComplete, onCompleteParams)
+		anim.eventCallback('onComplete', onComplete, onCompleteParams)
 	}
 
 	// play it
@@ -241,11 +242,11 @@ export const animIn = function() {
  */
 export const animOut = function(visitUrl) {
 	// if visitUrl is a string, it's the url to go to after the transition
-	if (typeof visitUrl == "string") {
+	if (typeof visitUrl == 'string') {
 		getTween(true, Turbolinks.visit, [visitUrl])
 	}
 	// if it's a function, it's the onComplete
-	else if (typeof visitUrl == "function") {
+	else if (typeof visitUrl == 'function') {
 		getTween(true, visitUrl)
 	}
 	// otherwise send animIn as the onComplete
@@ -258,7 +259,7 @@ export const animOut = function(visitUrl) {
 let no_visit = true;
 
 /**
- * @summary The callback to be attached to the "turbolinks:before-visit" handler
+ * @summary The callback to be attached to the 'turbolinks:before-visit' handler
  * @description  The first time this is called it cancels the visit so the animation can run. It adds {@link Turbolinks.visit} as the onComplete callback for the animation so that the visit can go through.
  * @fires Turbolinks.visit if it interrupts the visit event it received
  * @param  {Event} e the visit event
@@ -288,8 +289,8 @@ const beforeUnload = function(e) {
  * @property {Object} [outProps] the properties to apply to the element with outId during out animation
  * @property {String} [outId] the id of the element to apply out animations to. Ignored without outProps
  * @property {String} [outDirection] the tween direction for out animations. Ignored without outProps
- * @property {TweenMax} [inAnimation] a Tween or Timeline instance to play for the in animation
- * @property {TweenMax} [outAnimation] a Tween or Timeline instance to play for the out animation
+ * @property {tween} [inAnimation] a Tween or Timeline instance to play for the in animation
+ * @property {tween} [outAnimation] a Tween or Timeline instance to play for the out animation
  * @property {String} [inAnimationType] the string key for an animation from {@link module:transitions~animationFunctions} to use for the in animation
  * @property {String} [outAnimationType] the string key for an animation from {@link module:transitions~animationFunctions} to use for the out animation
  * @property {String} [animationType] the string key for an animation from {@link module:transitions~animationFunctions} to use as a default for in or out animations that are null
@@ -303,26 +304,26 @@ const beforeUnload = function(e) {
  * @param  {module:transitions.prop_overrides} [dataset={}] the data to overwrite the defaults
  */
 export const processClickData = function(dataset) {
-	dataset = dataset || {}
+	dataset = dataset || {};
 	// go through each property in props
 	for(let propName in props) {
 		// get the property from the dataset
-		let given = dataset[propName]
+		let given = dataset[propName];
 		// get the property from the defaults
-		let granted = prop_defaults[propName]
+		let granted = prop_defaults[propName];
 		// if there's something from the dataset
 		if (given) {
 			// get animationType functions from animationFunctions
-			if (propName.indexOf("Type") > 0) {
+			if (propName.indexOf('Type') > 0) {
 				granted = animationFunctions[given];
 			}
 			// make a function that evaluates the JS string for animations
 			// TODO replace this eval with something
-			// else if (propName.indexOf("Animation") > 0) {
+			// else if (propName.indexOf('Animation') > 0) {
 			// 	granted = function() {return eval(given)}
 			// }
 			// parse props and numbers a JSON object or primitive
-			else if (propName.indexOf("Props") > 0 || propName == "animLength") {
+			else if (propName.indexOf('Props') > 0 || propName == 'animLength') {
 				granted = JSON.parse(given);
 			}
 			// otherwise keep the string
@@ -333,7 +334,7 @@ export const processClickData = function(dataset) {
 		// set whatever resulted in the props
 		props[propName] = granted;
 	}
-}
+};
 
 /**
  * @summary Click listener for turbolinks-enabled links.
@@ -344,15 +345,16 @@ export const processClickData = function(dataset) {
 export const onTransitionTriggered = function(e) {
 	let dataset = e.target.dataset;
 	processClickData(dataset);
-}
+};
 
 /**
  * Begin listening for turbolinks transition events and running animations in response to them
+ *
  * @function
  * @listens turbolinks:before-visit
  * @listens turbolinks:click
  */
 export const addTransitionEvents = function() {
-	document.addEventListener('turbolinks:before-visit', beforeUnload)
-	document.addEventListener('turbolinks:click', onTransitionTriggered)
-}
+	document.addEventListener('turbolinks:before-visit', beforeUnload);
+	document.addEventListener('turbolinks:click', onTransitionTriggered);
+};
