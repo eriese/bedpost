@@ -16,7 +16,7 @@
 </template>
 
 <script>
-	import {TweenLite} from "gsap/TweenLite";
+	import { gsap } from 'gsap';
 	import deletedChild from '@components/functional/DeletedChild.vue';
 	import {lazyParent} from '@mixins/lazyCoupled';
 
@@ -61,7 +61,7 @@
 				})
 			},
 			removeFromList(index) {
-				TweenLite.to(this.$refs.list_item[index], 0.3, {opacity: 0, onComplete: () => {
+				gsap.to(this.$refs.list_item[index], 0.3, {opacity: 0, onComplete: () => {
 					let deleted = this.list.splice(index, 1)[0];
 					deleted._destroy = true;
 					let oldPos = deleted.position;
@@ -72,7 +72,7 @@
 					this.numSubmitting -= 1;
 
 					this.$nextTick(() => {
-						TweenLite.set(this.$refs.list_item, {opacity: 1});
+						gsap.set(this.$refs.list_item, {opacity: 1});
 						if (index == this.focusIndex) {
 							this.focusIndex = this.list.length;
 						} else if (index < this.focusIndex) {
