@@ -11,13 +11,13 @@
 			<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 				<div class="popover-day-title">
 					{{ dayTitle }}
-			    </div>
-			    <v-popover-row
-				    v-for="attr in attributes"
-				    :key="attr.key"
-				    :attribute="attr">
-				    <span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-				    <a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes}}</a>
+					</div>
+					<v-popover-row
+						v-for="attr in attributes"
+						:key="attr.key"
+						:attribute="attr">
+						<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
+						<a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes}}</a>
 				</v-popover-row>
 			</div>
 		</v-calendar>

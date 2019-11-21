@@ -19,8 +19,25 @@ en:
       how:
         familiarity: TODO add this
     show:
-      partner_html: Partnership with <b>%{name} %{nickname}</b>
+      partner_html: Partnership with <b>%{name}</b>
       level_field_html: "%{field}: %{level}"
+      encounters: Encounters with %{name}
+      edit: Edit this partnership
+      destroy:
+        text: Delete this partnership
+        confirm: Are you sure? You won't be able to undo this, and you will lose all encounter data connected to this partnership. If you really mean it, click again to confirm.
+      chart:
+        aria_label: A radar chart showing the levels you desribed this partnership with. This data is available as an accessible table if you click the 'List View' button.
+        desc: The more the chart is covered, the more this partnership reduces risk.
+        list_view: List View
+        chart_view: Chart View
+      fields:
+        short:
+          familiarity: Familiarity
+          exclusivity: Exclusivity
+          trust: Trust
+          communication: Communication
+          prior_discussion: Risk Discussion
     index:
       no_partnerships: You don't have any partnerships yet
       new_partnership: Add a partner
@@ -45,6 +62,9 @@ en:
         nickname: Do you want to add a nickname for this person?
         familiarity: How well do you know this person?
         exclusivity: How exclusively does this person have sex with you?
+        trust: How much do you trust this person?
+        communication: How much ongoing communication does this person have with you?
+        prior_discussion: How much did you and this person discuss risk management before having sex?
         uid: What's their user id?
     tooltip:
       partnership:

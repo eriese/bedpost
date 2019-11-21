@@ -1,0 +1,65 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"jest/globals": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:vue/essential",
+		"plugin:jsdoc/recommended",
+		"plugin:jest/recommended",
+		"plugin:jest/style"
+	],
+	"globals": {
+		"Atomics": "readonly",
+		"SharedArrayBuffer": "readonly",
+		"process": "readonly",
+		"Utils": "readonly"
+	},
+	"parserOptions": {
+		"ecmaVersion": 2018,
+		"sourceType": "module"
+	},
+	"plugins": [
+		"vue",
+		"jsdoc",
+		"jest"
+	],
+	"rules": {
+		"indent": [
+			"error",
+			"tab"
+		],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": [
+			"error",
+			"always"
+		],
+		"jsdoc/check-tag-names": [
+			"error",
+			{
+				"definedTags": [
+					"vue-data",
+					"vue-prop",
+					"vue-computed"
+				]
+			}
+		]
+	},
+	"settings": {
+		"jsdoc": {
+			"tagNamePreference": {
+				"returns": "return",
+				"fires": "emits"
+			}
+		}
+	}
+}
