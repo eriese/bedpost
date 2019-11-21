@@ -2,7 +2,7 @@
 	<div id="encounter-calendar">
 		<slot v-if="!hasEncounters" ></slot>
 		<div v-else>
-			<div v-if="partnerships.length > 1 && hasEncounters">
+			<div v-if="partnerships.length > 1">
 				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
 					<template v-slot:selected-option="opt">
 						<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
@@ -14,13 +14,13 @@
 				<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 					<div class="popover-day-title">
 						{{ dayTitle }}
-				    </div>
-				    <v-popover-row
-					    v-for="attr in attributes"
-					    :key="attr.key"
-					    :attribute="attr">
-					    <span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-					    <a :href="attr.customData.href">{{ attr.customData.notes }}</a>
+						</div>
+						<v-popover-row
+							v-for="attr in attributes"
+							:key="attr.key"
+							:attribute="attr">
+							<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
+							<a :href="attr.customData.href">{{ attr.customData.notes }}</a>
 					</v-popover-row>
 				</div>
 			</v-calendar>

@@ -27,7 +27,7 @@ describe("Bubble component", () => {
 					default: "some text"
 				},
 				methods: {
-					getTargetEl: mockGetTarget
+					onSize: mockGetTarget
 				}
 			})
 
@@ -45,7 +45,7 @@ describe("Bubble component", () => {
 				},
 				methods: {
 					setPosition: mockPosition,
-					debounceTargetEl: mockDebounce
+					debounceOnSize: mockDebounce
 				}
 			})
 
@@ -63,7 +63,7 @@ describe("Bubble component", () => {
 					default: "some text"
 				},
 				methods: {
-					debounceTargetEl: mockDebounce,
+					debounceOnSize: mockDebounce,
 					setPosition: mockPosition
 				}
 			})
@@ -81,11 +81,11 @@ describe("Bubble component", () => {
 					default: "some text"
 				},
 				methods: {
-					getTargetEl: jest.fn(),
+					onSize: jest.fn(),
 				}
 			})
 
-			expect(mockAdd).toHaveBeenCalledWith('resize', wrapper.vm.debounceTargetEl);
+			expect(mockAdd).toHaveBeenCalledWith('resize', wrapper.vm.debounceOnSize);
 		})
 	})
 
@@ -100,7 +100,7 @@ describe("Bubble component", () => {
 				default: "some text"
 			},
 			methods: {
-				getTargetEl: jest.fn(),
+				onSize: jest.fn(),
 			}
 		})
 		wrapper.destroy();

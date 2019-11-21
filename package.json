@@ -1,83 +1,89 @@
 {
-  "name": "bedpost",
-  "private": true,
-  "dependencies": {
-    "@rails/ujs": "^6.0.0-alpha",
-    "@rails/webpacker": "^4.0.7",
-    "axios": "^0.19.0",
-    "css-loader": "^3.2.0",
-    "flickity": "^2.2.0",
-    "gsap": "^2.0.2",
-    "i18n-js": "^3.3.0",
-    "rails-erb-loader": "^5.5.2",
-    "v-calendar": "^1.0.0-beta.16",
-    "vue": "^2.6.10",
-    "vue-loader": "^15.7.1",
-    "vue-select": "^3.1.0",
-    "vue-template-compiler": "^2.6.10",
-    "vue-tour": "^1.1.0",
-    "vue-turbolinks": "^2.0.4",
-    "vuelidate": "^0.7.4",
-    "webpack": "^4.0.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-transform-runtime": "^7.6.0",
-    "@babel/preset-env": "^7.5.5",
-    "@vue/test-utils": "^1.0.0-beta.29",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^24.9.0",
-    "core-js": "^3.2.1",
-    "jest": "^24.9.0",
-    "node-sass": "^4.13.0",
-    "sass-loader": "^8.0.0",
-    "vue-jest": "^3.0.4",
-    "webpack-dev-server": "^3.7.2"
-  },
-  "scripts": {
-    "test": "jest --collectCoverage=false",
-    "test-watch": "jest --watch --collectCoverage=false"
-  },
-  "jest": {
-    "globals": {
-      "I18nConfig": {
-        "locale": "en",
-        "defaultLocale": "en",
-        "translations": {}
-      },
-      "vue-jest": {
-        "babelConfig": {
-          "configFile": "./babel.config.js"
-        }
-      }
-    },
-    "roots": [
-      "<rootDir>/app"
-    ],
-    "verbose": true,
-    "testURL": "http://localhost",
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "vue"
-    ],
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/$1",
-      "^@components/(.*)$": "<rootDir>/app/javascript/components/$1",
-      "^@mixins/(.*)$": "<rootDir>/app/javascript/mixins/$1",
-      "^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1",
-      "^@plugins/(.*)$": "<rootDir>/app/javascript/plugins/$1"
-    },
-    "transform": {
-      ".*\\.(vue)$": "vue-jest",
-      ".+\\.js$": "babel-jest"
-    },
-    "transformIgnorePatterns": [],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "app/javascript/**/*.{js,vue}",
-      "!app/javascript/docs/**",
-      "!**/node_modules/**"
-    ]
-  }
+	"name": "bedpost",
+	"private": true,
+	"dependencies": {
+		"@rails/ujs": "^6.0.0-alpha",
+		"@rails/webpacker": "^4.0.7",
+		"axios": "^0.19.0",
+		"chart.js": "^2.9.2",
+		"css-loader": "^3.2.0",
+		"flickity": "^2.2.0",
+		"gsap": "^2.0.2",
+		"i18n-js": "^3.3.0",
+		"rails-erb-loader": "^5.5.2",
+		"v-calendar": "1.0.0-beta.16",
+		"vue": "^2.6.10",
+		"vue-chartjs": "^3.5.0",
+		"vue-loader": "^15.7.1",
+		"vue-select": "^3.1.0",
+		"vue-template-compiler": "^2.6.10",
+		"vue-tour": "^1.1.0",
+		"vue-turbolinks": "^2.0.4",
+		"vuelidate": "^0.7.4",
+		"webpack": "^4.0.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.5.5",
+		"@babel/plugin-transform-runtime": "^7.6.0",
+		"@babel/preset-env": "^7.5.5",
+		"@vue/test-utils": "^1.0.0-beta.29",
+		"babel-core": "7.0.0-bridge.0",
+		"babel-jest": "^24.9.0",
+		"core-js": "^3.2.1",
+		"eslint": "^6.6.0",
+		"eslint-plugin-jest": "^23.0.4",
+		"eslint-plugin-jsdoc": "^18.1.4",
+		"eslint-plugin-vue": "^6.0.1",
+		"jest": "^24.9.0",
+		"node-sass": "^4.13.0",
+		"sass-loader": "^8.0.0",
+		"vue-jest": "^3.0.4",
+		"webpack-dev-server": "^3.7.2"
+	},
+	"scripts": {
+		"test": "jest --collectCoverage=false",
+		"test-watch": "jest --watch --collectCoverage=false"
+	},
+	"jest": {
+		"globals": {
+			"I18nConfig": {
+				"locale": "en",
+				"defaultLocale": "en",
+				"translations": {}
+			},
+			"vue-jest": {
+				"babelConfig": {
+					"configFile": "./babel.config.js"
+				}
+			}
+		},
+		"roots": [
+			"<rootDir>/app"
+		],
+		"verbose": true,
+		"testURL": "http://localhost",
+		"moduleFileExtensions": [
+			"js",
+			"json",
+			"vue"
+		],
+		"moduleNameMapper": {
+			"^@/(.*)$": "<rootDir>/$1",
+			"^@components/(.*)$": "<rootDir>/app/javascript/components/$1",
+			"^@mixins/(.*)$": "<rootDir>/app/javascript/mixins/$1",
+			"^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1",
+			"^@plugins/(.*)$": "<rootDir>/app/javascript/plugins/$1"
+		},
+		"transform": {
+			".*\\.(vue)$": "vue-jest",
+			".+\\.js$": "babel-jest"
+		},
+		"transformIgnorePatterns": [],
+		"collectCoverage": true,
+		"collectCoverageFrom": [
+			"app/javascript/**/*.{js,vue}",
+			"!app/javascript/docs/**",
+			"!**/node_modules/**"
+		]
+	}
 }
