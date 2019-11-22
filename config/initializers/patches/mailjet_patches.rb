@@ -15,7 +15,6 @@ class Mailjet::APIMailer
 		version = options[:version] || Mailjet.config.api_version
 
 		if (version == 'v3.1')
-			binding.pry
 			Mailjet::Send.create({
 				Messages: [setContentV3_1(mail)],
 				SandboxMode: !Rails.env.production?
