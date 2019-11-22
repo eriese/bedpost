@@ -7,7 +7,7 @@ module StaticResource
 	end
 
 	def clear_all_caches
-		Rails.cache.delete_matched(//, namespace: self.class.name)
+		Rails.cache.delete_matched('*', namespace: self.class.name)
 	end
 
 	class_methods do

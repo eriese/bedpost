@@ -96,6 +96,8 @@ group :test do
 	# Easy installation and use of chromedriver to run system tests with Chrome
 	gem 'simplecov', require: false
 	gem 'codecov', require: false
+
+	gem 'fakeredis', :require => 'fakeredis/rspec'
 end
 
 group :production do
