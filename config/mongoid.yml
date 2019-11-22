@@ -172,7 +172,6 @@ production:
      # Use environment variables or a config file to keep your
      # credentials safe e.g. <%= ENV['MONGODB_URI'] %>.
      uri: <%= ENV['MONGODB_URI'] %>
-     database: <%= ENV['DATABASE_NAME'] %>
 
      options:
        # The default timeout is 5, which is the time in seconds

@@ -40,7 +40,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'devise'
-gem 'mailjet', :git => 'https://github.com/mailjet/mailjet-gem.git'
+gem 'mailjet'
 
 gem 'delayed_job'
 gem 'delayed_job_mongoid'
