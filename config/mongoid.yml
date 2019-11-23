@@ -172,7 +172,7 @@ production:
       # Use environment variables or a config file to keep your
       # credentials safe e.g. <%= ENV['MONGODB_URI'] %>.
       # uri: <%= Rails.application.credentials.mongodb[:uri] %>
-      database: <%= ENV['DATABASE_NAME'] %>
+      database: bedpost_<%= ENV['CNAME'] %>
       hosts: <%= Rails.application.credentials.mongodb[:hosts] %>
       options:
         user: <%= Rails.application.credentials.mongodb[:user] %>
