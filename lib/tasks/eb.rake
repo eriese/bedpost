@@ -19,6 +19,17 @@ namespace :eb do
 			puts 'Skipping setting RAILS_MASTER_KEY because no key file was found'
 		end
 
-		sh 'eb deploy'
+		branch_name = `git symbolic-ref --quiet --short HEAD`.chomp
+		branch_name = '' if branch_name == 'master'
+		commit_name = `git rev-parse --short HEAD`.chomp
+
+		unless environment_name
+			envs = `eb list`.split("\n")
+			environment_name = envs.find { |n| n.start_with? '*' }[2..-1]
+		end
+
+		build_name = "#{environment_name}:#{branch_name}#{branch_name.empty? ? '' : '.'}#{commit_name}"
+		puts "Deploying build #{build_name} to #{environment_name}"
+		sh "eb deploy -l #{build_name}"
 	end
 end
