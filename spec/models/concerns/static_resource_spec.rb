@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'fakeredis/rspec'
 
 class StaticResourceTestModel
 	include Mongoid::Document

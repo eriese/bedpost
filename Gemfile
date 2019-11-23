@@ -98,7 +98,7 @@ group :test do
 	gem 'simplecov', require: false
 	gem 'codecov', require: false
 
-	gem 'fakeredis', :require => 'fakeredis/rspec'
+	gem 'fakeredis'
 end
 
 group :production do
