@@ -167,16 +167,22 @@ test:
 production:
   clients:
     default:
-     # The standard MongoDB connection URI allows for easy
-     # replica set connection setup.
-     # Use environment variables or a config file to keep your
-     # credentials safe e.g. <%= ENV['MONGODB_URI'] %>.
-     uri: <%= ENV['MONGODB_URI'] %>
+      # The standard MongoDB connection URI allows for easy
+      # replica set connection setup.
+      # Use environment variables or a config file to keep your
+      # credentials safe e.g. <%= ENV['MONGODB_URI'] %>.
+      # uri: <%= Rails.application.credentials.mongodb[:uri] %>
+      database: bedpost_<%= ENV['CNAME'] %>
+      hosts: <%= Rails.application.credentials.mongodb[:hosts] %>
+      options:
+        user: <%= Rails.application.credentials.mongodb[:user] %>
+        password: <%= Rails.application.credentials.mongodb[:password] %>
+        auth_source: admin
+        ssl: true
 
-     options:
-       # The default timeout is 5, which is the time in seconds
-       # for a connection to time out.
-       # We recommend 15 because it allows for plenty of time
-       # in most operating environments.
-       connect_timeout: 15
-       retry_writes: false
+        # The default timeout is 5, which is the time in seconds
+        # for a connection to time out.
+        # We recommend 15 because it allows for plenty of time
+        # in most operating environments.
+        # connect_timeout: 15
+        # retry_writes: true

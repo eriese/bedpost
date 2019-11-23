@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'fakeredis/rspec'
 
 class StaticResourceTestModel
 	include Mongoid::Document
@@ -10,22 +11,18 @@ end
 
 RSpec.describe StaticResource, type: :module do
 	def make_models(num_models, f_1: nil, f_2: nil)
-		num_models.times { |t| StaticResourceTestModel.create(f_1: f_1, f_2: f_2) }
+		num_models.times { StaticResourceTestModel.create(f_1: f_1, f_2: f_2) }
 	end
 
 	def cache_data
-		Rails.cache.instance_variable_get(:@data)
+		Rails.cache.redis.data
 	end
 
 	def in_cache?(cache_name = "list")
 		Rails.cache.exist?(cache_name, namespace: StaticResourceTestModel.name)
 	end
 
-	before :all do
-		Rails.cache.clear
-	end
-
-	after :each do
+	after do
 		Rails.cache.clear
 		StaticResourceTestModel.destroy_all
 	end
