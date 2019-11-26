@@ -1,11 +1,11 @@
 @import "_defaults";
 @import "vue-select/src/scss/vue-select.scss";
 
-input, select, textarea, input[type=input], .vc-reset input {
+input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
 	background-color: $input-background-color;
-	border-color: $color-purple-dark;
+	border-color: $input-border-color;
 	border-style: solid;
-	border-radius: 2px;
+	border-radius: 2rem;
 	border-width: 1px;
 	box-sizing: border-box;
 	color: inherit;
@@ -24,7 +24,7 @@ input, select, textarea, input[type=input], .vc-reset input {
 	}
 
 	&:focus {
-		border-color: $color-purple-light;
+		border-color: $input-border-color-focus;
 	}
 
 }
@@ -41,7 +41,7 @@ input[type=checkbox], input[type=radio] {
 	height: $check-box-size;
 	width: $check-box-size;
 	cursor: pointer;
-	color: $color-purple-dark;
+	color: $input-border-color;
 	position: relative;
 	margin-right: 10px;
 
@@ -54,7 +54,7 @@ input[type=checkbox], input[type=radio] {
 input[type=radio] {
 	border-radius: 50%;
 	&:checked{
-		background-color: $color-purple-dark;
+		background-color: $input-border-color;
 		&::after {
 			content: "";
 			display: inline-block;
@@ -70,8 +70,8 @@ input[type=radio] {
 	}
 
 	&.hidden-radio {
-		$label-color: $color-purple-light;
-		$label-hover-color: $color-purple-dark;
+		$label-color: $input-border-color-focus;
+		$label-hover-color: $input-border-color;
 
 		margin: 0px;
 		width: 0px !important;
@@ -107,9 +107,9 @@ input[type=radio] {
 			/* WebKit gets its native focus styles.
 			 */
 			@media (-webkit-min-device-pixel-ratio:0) {
-			    outline-color: -webkit-focus-ring-color;
-			    outline-style: auto;
-			    outline-width: 5px;
+					outline-color: -webkit-focus-ring-color;
+					outline-style: auto;
+					outline-width: 5px;
 			}
 		}
 
@@ -161,9 +161,9 @@ input[type=checkbox] {
 		position: absolute;
 
 		height: 5px;
-	    top: 2px;
-	    width: 11px;
-	    left: 1px;
+			top: 2px;
+			width: 11px;
+			left: 1px;
 	}
 }
 
@@ -184,7 +184,7 @@ input[type=range] {
 			background: transparent;
 			height: 10px;
 			border-radius: 6px;
-			background-color: $color-purple-dark;
+			background-color: $input-border-color;
 			cursor: pointer;
 			transition: all .2s ease;
 			border: none;
@@ -197,7 +197,7 @@ input[type=range] {
 		&::#{$kit} {
 			height: 30px;
 			width: 20px;
-			background-color: $color-purple-light;
+			background-color: $input-border-color-focus;
 			box-shadow: none;
 			border-radius: 5px;
 			cursor: pointer;
@@ -219,7 +219,7 @@ input[type=range] {
 	@each $fill in $ms-fills {
 		&::#{$fill} {
 			border: none;
-			background: $color-purple-dark;
+			background: $input-border-color;
 			box-shadow: none;
 			border-radius: 10px;
 		}
@@ -228,19 +228,19 @@ input[type=range] {
 	&:focus {
 		@each $kit in $kit-tracks {
 			&::#{$kit} {
-				background-color: $color-purple-light;
+				background-color: $input-border-color-focus;
 			}
 		}
 
 		@each $thumb in $kit-thumbs {
 			&::#{$thumb} {
-				background-color: $color-purple-dark;
+				background-color: $input-border-color;
 			}
 		}
 
 		@each $fill in $ms-fills {
 			&::#{$fill} {
-				background-color: $color-purple-light;
+				background-color: $input-border-color-focus;
 			}
 		}
 	}
@@ -291,23 +291,23 @@ input[disabled=disabled] {
 .bool-indicator {
 	height: $check-box-size;
 	width: $check-box-size;
-	color: $color-purple-dark;
+	color: $input-border-color;
 	position: relative;
 	margin-left: 5px;
 
 	&.false:before, &.false:after {
-	  position: absolute;
-	  left: 7px;
-	  content: '';
-	  height: $check-box-size;
-	  border-left: 3px solid;
+		position: absolute;
+		left: 7px;
+		content: '';
+		height: $check-box-size;
+		border-left: 3px solid;
 	}
 
 	&.false:before {
-	  transform: rotate(45deg);
+		transform: rotate(45deg);
 	}
 	&.false:after {
-	  transform: rotate(-45deg);
+		transform: rotate(-45deg);
 	}
 
 	&.true:after {
@@ -319,8 +319,8 @@ input[disabled=disabled] {
 		position: absolute;
 
 		height: 6px;
-	    top: 3px;
-	    width: 12px;
-	    left: 1px;
+			top: 3px;
+			width: 12px;
+			left: 1px;
 	}
 }

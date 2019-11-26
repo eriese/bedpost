@@ -1,7 +1,10 @@
+$root-font-size: 16px;
+
 // fonts
 $script-font: 'Lily Script One', cursive;
 $outline-font: 'Londrina Shadow', sans-serif;
-$text-font: 'Hind Vadodara', sans-serif;;
+$text-font: 'Open Sans', sans-serif;
+$header-font: 'Baloo', cursive;
 
 // colors
 $hue-purple: 316;
@@ -49,18 +52,58 @@ $color-off-white: #F3F3F3;
 $color-light-gray: hsl($hue-purple,5,85);
 $color-dark-gray: hsl($hue-green,3,20);
 
+///////////////////////
+// new colors
+///////////////////////
+
+$color-black: #333;
+$color-off-white: #EEE;
+$color-white: #FFF;
+
+$colors1-button-primary: #7A405E;
+$colors1-button-secondary: #AF6A64;
+$colors1-h1: #433060;
+$colors1-h2: $color-black;
+$colors1-text: $color-black;
+$colors1-background: $color-white;
+$colors1-background-secondary: #AF5C87;
+
+$colors2-button-primary: #C78DAB;
+$colors2-button-secondary: #FC9890;
+$colors2-h1: #FFD6CC;
+$colors2-h2: #EEE;
+$colors2-text: $color-white;
+$colors2-background: #2E2143;
+$colors2-background-secondary: #FC9890;
+
+$stn-border-radius: 0.95rem;
+$stn-box-shadow: 0px 0px 2px 1px rgba($color-black,0.5);
+
 // widget colors
-$background-color: #fcfcfc;
-$button-color: $color-purple-light;
-$button-hover-color: $color-purple-dark;
-$button-text-color: $background-color;
-$link-color: $color-green-light;
-$link-hover-color: $color-green-dark;
+$background-color: $color-white;
+$button-color: $colors1-button-primary;
+$button-text-color: $color-white;
+$button-hover-color: $color-white;
+$button-hover-text-color: $colors1-button-primary;
+$link-color: $colors1-button-primary;
+$link-hover-color: $colors1-button-secondary;
+
+$background-color-secondary: $colors2-background;
+$button-color-secondary: $colors2-button-primary;
+$button-text-color-secondary: $colors2-background;
+$button-hover-color-secondary: $colors2-background;
+$button-hover-text-color-secondary: $colors2-button-primary;
+$link-color-secondary: $colors2-button-secondary;
+$link-hover-color-secondary: $colors2-button-primary;
 
 // input defaults
-$input-background-color: $color-off-white;
-$input-border-color: $color-purple-dark;
-$input-border-color-focus: $color-purple-light;
+$input-background-color: $color-white;
+$input-border-color: $colors1-button-primary;
+$input-border-color-focus: $colors1-button-secondary;
+
+$input-background-color: $color-white;
+$input-border-color: $colors2-button-primary;
+$input-border-color-focus: $colors2-button-secondary;
 
 // sizing
 $nav-width: 250px;
@@ -72,3 +115,5 @@ $nav-width: 250px;
 		clear: both;
 	}
 }
+
+

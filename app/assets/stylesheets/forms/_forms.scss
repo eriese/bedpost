@@ -1,5 +1,10 @@
 @import "_defaults";
 
+label {
+	padding-left: 0.75rem;
+	font-weight: bold;
+}
+
 form.centered {
 	max-width: 400px;
 	padding: 0px 15px;
@@ -21,6 +26,10 @@ form.centered {
 			margin: 0;
 		}
 	}
+
+	.buttons {
+		text-align: center;
+	}
 }
 
 form.single {
@@ -33,7 +42,7 @@ form.single {
 	}
 
 	label {
-		font-size: 20px;
+		// font-size: 20px;
 	}
 
 	.tooltip {
@@ -44,13 +53,17 @@ form.single {
 form {
 	div.field-errors {
 		text-align: right;
-		color: $color-purple-light;
-		font-size: 12px;
+		color: $colors1-h1;
+		font-weight: bold;
 		line-height: 1;
+
+		body.secondary &, body.secondary.with-cards .card & {
+			color: $colors2-h1;
+		}
 	}
 
 	div.errors {
-		color: $color-purple-light;
+		color: $colors1-h1;
 	}
 
 	div.range-indicator {
@@ -79,14 +92,14 @@ form {
 	}
 
 	.tooltip {
-		color: $color-green-dark;
+		color: $colors1-button-primary;
 		font-size: 14px;
 		line-height: 1.25;
 		margin: 3px auto;
 	}
 
 	.step {
-		background-color: $color-light-gray;
+		background-color: $colors2-background;
 		border-radius: 5px;
 		// padding: 15px;
 		margin-bottom: 25px;

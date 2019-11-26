@@ -1,17 +1,30 @@
 // Place all the styles related to the sessions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "_defaults";
 
-.login {
-	padding: 20px;
-	padding-top: 0px;
-
-	h1 {
-		text-align: center;
-		margin: 0px 0px 10px;
+.columns {
+	.column {
+		padding: 0rem 2.5rem 2rem;
+	}
+	.landing-text {
+		flex-basis: 1.5;
 	}
 
-	label {
-		text-transform: uppercase;
+	.login {
+		flex-basis: 1;
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 31.25 * $root-font-size) {
+		flex-direction: column;
+
+		.column {
+			padding: 0rem 1rem 1rem;
+		}
+
+		.login {
+			padding-bottom: 2.5rem;
+		}
 	}
 }

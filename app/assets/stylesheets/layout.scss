@@ -8,18 +8,57 @@ body {
 	font-family: $text-font;
 	color: $color-black;
 	background-color: $background-color;
+	font-size: 0.95em;
+
+	&.with-cards {
+		background-color: $colors1-background-secondary;
+		color: $color-white;
+
+		.card {
+			background-color: $background-color;
+			color: $color-black;
+		}
+	}
+
+	&.secondary {
+		background-color: $colors2-background;
+		color: $color-white;
+
+		&.with-cards {
+			background-color: $colors2-background-secondary;
+
+			.card {
+				background-color: $colors2-background;
+				color: $color-white;
+			}
+		}
+	}
 }
 
 h1 {
-	font-weight: unset;
-	font-size: 40px;
-	color: $color-purple-dark;
+	font-family: $header-font;
+	font-size: 2.45em;
+	color: $colors1-h1;
 	text-align: center;
+
+	body.secondary &, body.secondary.with-cards .card &{
+		color: $colors2-h1;
+	}
+
+	body.secondary.with-cards & {
+		color: $colors1-h1;
+	}
 }
 
 h2 {
-	color: $color-green-dark;
+	color: $colors1-h2;
+	font-weight: 700;
+	font-size: 1.5em;
 	text-align: center;
+
+	body.secondary & {
+		color: $colors2-h2;
+	}
 }
 
 header {
@@ -48,6 +87,10 @@ h2.with-desc {
 
 p.description {
 	margin-top: 0;
+}
+
+.card {
+	border-radius: $stn-border-radius;
 }
 
 .centered-text {
@@ -117,15 +160,21 @@ p.description {
 }
 
 #logo {
-	font-family: $script-font;
+	font-family: $header-font;
 	font-size: 55px;
-	color: $color-purple-light;
+	color: $colors1-button-primary;
 	text-decoration: none;
 
-	span {
-		font-family: $outline-font;
-		font-size: 58px;
-		color: $color-purple-dark;
+	body.with-cards & {
+		color: $colors1-background;
+	}
+
+	body.secondary & {
+		color: $colors2-button-secondary;
+	}
+
+	body.secondary.with-cards & {
+		color: $colors2-background;
 	}
 
 	header.small & {
@@ -142,6 +191,28 @@ p.description {
 
 #flash {
 	clear: both;
+}
+
+#vue-container {
+	body.vertical-center & {
+		display: flex;
+		flex-direction: column;
+		align-items:  stretch;
+		justify-content: space-around;
+		height: 100%;
+		width: 100%;
+
+		header {
+			flex-grow: 1;
+			display: flex;
+			align-self: center;
+			align-items: center;
+		}
+
+		main {
+			flex-grow: 2;
+		}
+	}
 }
 
 #page-container-inner {
@@ -292,4 +363,14 @@ span.confirmation {
 			}
 		}
 	}
+}
+
+.columns {
+	display: flex;
+}
+
+.vertical-center {
+	display: flex;
+	align-items: center;
+	align-content: center;
 }
