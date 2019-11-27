@@ -1,5 +1,5 @@
 <template>
-	<button class="toggle not-button" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
+	<button :class="['toggle', {'not-button': !asButton}]" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
 </template>
 
 <script>
@@ -13,8 +13,9 @@
  * @vue-prop {Boolean|String} [translate=false] should the symbols be translated? If a string is passed it will be used as the translation scope
  * @vue-prop {Boolean|String} [clear=false] should toggling also clear a field on the form? True clears the field of the same name as the toggle, a string will clear the field at the given path
  * @vue-prop {String} field the field that is being toggled
- * @vue-prop {Array} [clearOn] an array of values that the should clear the field supplied by clear. If this property is not supplied, all toggles will clear the clear field
+ * @vue-prop {Array} [clearOn] an array of values that should clear the field supplied by clear. If this property is not supplied, all toggles will clear the clear field
  * @vue-prop {Boolean} [expandable=false] does this toggle expand a menu?
+ * @vue-prop {Boolean} [asButton=false] should the toggle be styled as a button?
  * @vue-computed {String} toggleState the label taken from symbols to describe the toggle's current state
  * @vue-computed {Number} index the index the current value has in the vals array
  * @vue-computed {Boolean} expanded is the menu this toggle expands exapnded?
@@ -55,15 +56,17 @@ export default {
 		expandable: {
 			type: Boolean,
 			required: false
+		},
+		asButton: {
+			type: Boolean,
+			default: false
 		}
 	},
 	computed: {
 		toggleState: function() {
 			let key = typeof this.symbols == 'string' ? this.symbols : this.symbols[this.index];
 			if (this.translate) {
-				let opts = {};
-				if (this.translate !== true) { opts.scope = this.translate; }
-				return this.$_t(key, opts);
+				return this.translate === true ? this.$_t(key) : this.$_t(key, {scope: this.translate});
 			}
 
 			return key;

@@ -8,6 +8,8 @@ class Diagnosis::TransmissionRisk
   MODERATE = 3
   HIGH = 4
 
+  ROUTINE_TEST_RISK = LOW
+
   field :risk_to_subject, type: Integer
   field :risk_to_object, type: Integer
   field :risk_to_self, type: Integer, default: NO_RISK
