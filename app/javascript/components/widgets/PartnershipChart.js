@@ -38,7 +38,7 @@ const defaultOptions = {
  * @return {string}         the full rgba color declaration
  */
 const dataColor = (opacity) => `rgba(169,30,132,${opacity})`;
-/** @type {object} default properties for the dataset */
+/** {object} default properties for the dataset */
 const datasetDefaults = {
 	backgroundColor: dataColor(0.5),
 	borderColor: dataColor(0.8),

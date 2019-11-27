@@ -44,26 +44,36 @@ const mountOptions = {
 	},
 	stubs: {
 		'v-select': true,
-		'v-calendar': true
+		'v-calendar': true,
+		'toggle': true
 	}
 }
 
 describe("Encounter calendar component", () => {
 	describe("computed values", () => {
+		test("selectedEncounters sorts by date descending", () => {
+			const wrapper = shallowMount(EncounterCalendar, mountOptions);
+			let selected = wrapper.vm.selectedEncounters;
+			let selectedSorted = selected.slice().sort((a, b) => new Date(b.dates) - new Date(a.dates))
+			expect(selected).toEqual(selectedSorted);
+			expect(selected[0].customData.encID).toEqual("encounter4")
+		})
+
 		test("mostRecent is the month and year of the most recent encounter in selectedEncounters", () => {
 			const wrapper = shallowMount(EncounterCalendar, mountOptions);
 			let selected = wrapper.vm.selectedEncounters;
-			let lastEnc = selected[selected.length - 1];
-			expect(lastEnc.customData.encID).toEqual("encounter4");
-			expect(wrapper.vm.mostRecent).toEqual({month: lastEnc.dates.getMonth() + 1, year: lastEnc.dates.getFullYear()});
+			let mostRecentEnc = selected[0];
+			expect(mostRecentEnc.customData.encID).toEqual("encounter4");
+			let mostRecentDate = mostRecentEnc.dates
+			expect(wrapper.vm.mostRecent).toEqual({month: mostRecentDate.getMonth() + 1, year: mostRecentDate.getFullYear()});
 		})
 
 		test("selectedEncounters adds encounters.index.no_notes if the encounter has no notes", () => {
 			const wrapper = shallowMount(EncounterCalendar, mountOptions);
 			let selected = wrapper.vm.selectedEncounters;
-			let firstEnc = selected[0];
-			expect(firstEnc.customData.encID).toEqual("encounter1");
-			expect(firstEnc.customData.notes).toEqual("encounters.index.no_notes");
+			let noNotesEnc = selected[2];
+			expect(noNotesEnc.customData.encID).toEqual("encounter1");
+			expect(noNotesEnc.customData.notes).toEqual("encounters.index.no_notes");
 		})
 	})
 

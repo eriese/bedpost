@@ -202,7 +202,7 @@ describe('Toggle Component', () => {
 				},
 			});
 
-			expect($_t).toHaveBeenCalledWith('a', {});
+			expect($_t).toHaveBeenCalledWith('a');
 		});
 
 		it('accepts a string, which will be used as the scope to translate the key', () => {
