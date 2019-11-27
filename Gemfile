@@ -40,8 +40,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'devise'
-gem 'mailjet', :git => 'https://github.com/mailjet/mailjet-gem.git'
+gem 'mailjet'
 
+gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_mongoid'
 
@@ -96,6 +97,8 @@ group :test do
 	# Easy installation and use of chromedriver to run system tests with Chrome
 	gem 'simplecov', require: false
 	gem 'codecov', require: false
+
+	gem 'fakeredis'
 end
 
 group :production do

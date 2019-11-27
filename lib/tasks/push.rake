@@ -16,7 +16,7 @@ if Rails.env.development?
 				sh command do |ok, response|
 					unless ok
 						puts "stopping because of #{key} failure: ", response
-						errors << response
+						errors << {key: response}
 						break
 					end
 				end
@@ -35,14 +35,14 @@ if Rails.env.development?
 				puts "Gemfile: #{bundle_ruby}"
 				puts ".ruby-version: #{ruby_v}"
 				puts ".travis.yml: #{travis_ruby}"
-				errors << 'inconsistent ruby versions'
+				errors << { 'ruby install' => 'inconsistent ruby versions' }
 			end
 
 			if errors.empty?
 				puts 'All checks passed. You are ready to push!'.blue.bold
 			else
 				puts 'Please fix the following errors before pushing:'.red.bold
-				errors.each { |e| puts e.to_s.red }
+				errors.each { |k, e| puts "#{k}: #{e}".to_s.red }
 			end
 		end
 	end
