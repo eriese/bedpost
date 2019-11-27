@@ -6,31 +6,22 @@ html, body {
 
 body {
 	font-family: $text-font;
-	color: $color-black;
-	background-color: $background-color;
+	@include color-and-secondary(color, $color-black $color-white, true);
+	@include color-and-secondary(background-color, $background-colors, true);
 	font-size: 0.95em;
 
 	&.with-cards {
-		background-color: $colors1-background-secondary;
-		color: $color-white;
+		@include color-and-secondary(background-color, $background-colors-secondary, true);
+		@include color-and-secondary(color, $color-white $color-black, true);
 
 		.card {
-			background-color: $background-color;
+			background-color: nth($background-colors, 1);
 			color: $color-black;
 		}
-	}
 
-	&.secondary {
-		background-color: $colors2-background;
-		color: $color-white;
-
-		&.with-cards {
-			background-color: $colors2-background-secondary;
-
-			.card {
-				background-color: $colors2-background;
-				color: $color-white;
-			}
+		&.secondary .card {
+			background-color: nth($background-colors, 2);
+			color: $color-white;
 		}
 	}
 }
@@ -51,14 +42,10 @@ h1 {
 }
 
 h2 {
-	color: $colors1-h2;
+	@include color-and-secondary(color, $colors-h2);
 	font-weight: 700;
 	font-size: 1.5em;
 	text-align: center;
-
-	body.secondary & {
-		color: $colors2-h2;
-	}
 }
 
 header {
@@ -122,32 +109,47 @@ p.description {
 #no-js-warning {
 	text-align: center;
 	font-weight: bold;
-	border: 1px solid $color-green-light;
+	border: 1px solid;
+	@include color-and-secondary(border-color, $background-colors-secondary);
 }
 
 #flash {
 	text-align: center;
 	font-weight: bold;
+	clear: both;
 
 	> div {
 		padding: 0.25rem;
 		border: 3px solid transparent;
+		border-radius: $stn-border-radius;
 	}
 
 	.flash-notice {
-		border-color: $color-green-dark;
+		@include color-and-secondary(border-color, $background-colors-secondary);
+		body.with-cards & {
+			border-color: nth($colors-h1, 1);
+		}
+		body.with-cards.secondary & {
+			border-color: nth($colors-h1, 2);
+		}
 	}
 
 	.flash-alert {
-		border-color: $color-purple-light;
+		@include color-and-secondary(border-color, $background-colors-secondary);
+		body.with-cards & {
+			border-color: nth($colors-h1, 1);
+		}
+		body.with-cards.secondary & {
+			border-color: nth($colors-h1, 2);
+		}
 	}
 
 	.flash-error {
-		border-color: $color-purple-dark;
+		@include color-and-secondary(border-color, $button-colors);
 	}
 
 	.flash-message {
-		border-color: $color-green-light;
+		@include color-and-secondary(border-color, $button-hover-colors);
 	}
 }
 
@@ -162,19 +164,12 @@ p.description {
 #logo {
 	font-family: $header-font;
 	font-size: 55px;
-	color: $colors1-button-primary;
 	text-decoration: none;
 
+	@include color-and-secondary(color, $colors1-button-primary $colors2-button-secondary);
+
 	body.with-cards & {
-		color: $colors1-background;
-	}
-
-	body.secondary & {
-		color: $colors2-button-secondary;
-	}
-
-	body.secondary.with-cards & {
-		color: $colors2-background;
+		@include color-and-secondary(color, $background-colors, true);
 	}
 
 	header.small & {
@@ -187,10 +182,6 @@ p.description {
 			font-size: 41px;
 		}
 	}
-}
-
-#flash {
-	clear: both;
 }
 
 #vue-container {

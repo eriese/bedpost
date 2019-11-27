@@ -9,17 +9,20 @@ nav {
 
 	.burger {
 		margin: 10px;
-		width: 35px;
-		border: 2px solid $button-color;
+		width: 2.188rem;
+		min-width: unset;
+		border: 2px solid;
+		@include color-and-secondary(border-color, $button-colors);
 		border-radius: 5px;
 		position: relative;
 		z-index: 2;
 		padding: 0px;
 		box-sizing: content-box;
+		@include color-and-secondary(box-shadow, none none);
 
 		.burger-line {
 			height: 3px;
-			background-color: $button-color;
+			@include color-and-secondary(background-color, $button-colors);
 			margin: 6.5px 5px;
 		}
 
@@ -28,11 +31,11 @@ nav {
 		}
 
 		&.open, &:hover, &:focus {
-			background-color: $button-hover-color;
-			border-color: $button-hover-color;
+			@include color-and-secondary(background-color, $button-colors);
+			@include color-and-secondary(border-color, $button-colors);
 
 			.burger-line {
-				background-color: $background-color;
+				@include color-and-secondary(background-color, $background-colors);
 			}
 		}
 	}
@@ -59,8 +62,11 @@ nav {
 		padding-inline-start: 0px;
 		margin: 0px;
 		width: $nav-width;
-		background-color: $color-purple-dark;
+		@include color-and-secondary(background-color, $background-colors-secondary);
+		border-right: 1px solid;
+		@include color-and-secondary(border-color, $background-colors);
 		height: 100%;
+		box-sizing: border-box;
 	}
 
 	li {
@@ -70,7 +76,8 @@ nav {
 
 		&.no-link {
 			padding: 15px 10px 10px;
-			color: $color-green-light;
+			color: $color-off-white;
+			font-weight: bold;
 		}
 
 		form>input[type=submit].not-button {
@@ -81,22 +88,22 @@ nav {
 
 		a, span, form>input[type=submit].not-button {
 			text-decoration: none;
-			color: $color-light-gray;
+			@include color-and-secondary(color, $background-colors);
 			display: block;
 			height: 100%;
 			padding: 15px 5px 15px 15px;
 		}
 
 		a, form>input[type=submit].not-button {
+			box-shadow: none;
 			&:hover, &:focus {
-				background-color: rgba($color-purple-light, 0.5);
-				color: $color-off-white;
+				@include color-and-secondary(background-color, rgba($colors2-button-primary, 0.5) rgba($colors1-button-primary, 0.5));
+				@include color-and-secondary(color, $background-colors);
 			}
 		}
 
 		span {
-			background-color: $color-purple-light;
-			color: $color-off-white;
+			@include color-and-secondary(background-color, $colors2-button-secondary $colors1-button-primary);
 		}
 	}
 }

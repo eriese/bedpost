@@ -11,41 +11,37 @@ ul.dash-buttons {
 	align-items: stretch;
 	align-content: stretch;
 	padding-inline-start: 0;
+	max-width: 50rem;
+	margin: 0 auto;
 
 	li {
-		flex-basis: 40%;
+		flex-basis: 50%;
 		flex-shrink: 0;
-		font-size: 2.5em;
-
-		@media (max-width: 500px) {
-			font-size: 2em;
-		}
+		flex-grow: 0;
+		padding: 1rem;
+		box-sizing: border-box;
+		width: 0;
 
 		a {
-			background-color: $color-green-dark;
-			color: $background-color;
+			font-weight: bold;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			padding: 50% 0;
-			padding: calc(50% - 3px) 0;
 			height: 0px;
 			line-height: 1;
 			text-align: center;
 			text-decoration: none;
-			border: 3px solid $color-green-dark;
 			box-sizing: border-box;
-			border-radius: 50%;
 
-			&:hover {
-				background-color: $background-color;
-				color: $color-green-dark;
-			}
+			h2 {
+				font-size: 3rem;
+				text-transform: none;
+				color: inherit;
 
-			span {
-				display: block;
-				flex-basis: 100%;
-				padding: 10px;
+				@media (max-width: 500px) {
+					font-size: 1.5rem;
+				}
 			}
 		}
 	}

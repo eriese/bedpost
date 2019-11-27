@@ -78,6 +78,7 @@ $colors2-background-secondary: #FC9890;
 
 $stn-border-radius: 0.95rem;
 $stn-box-shadow: 0px 0px 2px 1px rgba($color-black,0.5);
+$stn-box-shadow-secondary: 0px 0px 2px 1px rgba($color-white,0.5);
 
 // widget colors
 $background-color: $color-white;
@@ -95,6 +96,19 @@ $button-hover-color-secondary: $colors2-background;
 $button-hover-text-color-secondary: $colors2-button-primary;
 $link-color-secondary: $colors2-button-secondary;
 $link-hover-color-secondary: $colors2-button-primary;
+
+$background-colors: $background-color $background-color-secondary;
+$background-colors-secondary: $colors1-background-secondary $colors2-background-secondary;
+$button-colors: $button-color $button-color-secondary;
+$button-colors-secondary: $colors1-button-secondary $colors1-button-secondary;
+$button-hover-colors: $button-hover-color $button-hover-color-secondary;
+$button-text-colors: $button-text-color $button-text-color-secondary;
+$button-hover-text-colors: $button-hover-text-color $button-hover-text-color-secondary;
+$link-colors: $link-color $link-color-secondary;
+$link-hover-colors: $link-hover-color $link-hover-color-secondary;
+$box-shadows: $stn-box-shadow, $stn-box-shadow-secondary;
+$colors-h1: $colors1-h1 $colors2-h1;
+$colors-h2: $colors1-h2 $colors2-h2;
 
 // input defaults
 $input-background-color: $color-white;
@@ -116,4 +130,17 @@ $nav-width: 250px;
 	}
 }
 
+@mixin color-and-secondary($prop, $vals, $on-body: false) {
+	#{$prop}: nth($vals, 1);
+
+	@if $on-body {
+		&.secondary {
+			#{$prop}: nth($vals, 2);
+		}
+	} @else {
+		body.secondary & {
+			#{$prop}: nth($vals, 2);
+		}
+	}
+}
 
