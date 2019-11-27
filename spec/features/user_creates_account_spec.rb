@@ -35,7 +35,7 @@ feature "User creates account", :slow do
 		def register_user
 			visit new_user_profile_registration_path
 			@user_params = attributes_for(:user_profile)
-			fill_in 'Name*', with: @user_params[:name]
+			fill_in 'First name*', with: @user_params[:name]
 			fill_in 'Email*', with: @user_params[:email]
 			fill_in 'Password*', with: @user_params[:password]
 			fill_in 'Re-type your password*', with: @user_params[:password]

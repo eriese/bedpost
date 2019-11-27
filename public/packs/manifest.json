@@ -28,17 +28,17 @@
   "entrypoints": {
     "application": {
       "js": [
-        "/packs/runtime-47fb04056cddeca33051.js",
+        "/packs/runtime-4354670863b1bd978a20.js",
         "/packs/js/application-8cc489a81ecadc32c162.chunk.js"
       ],
       "js.map": [
-        "/packs/runtime-47fb04056cddeca33051.js.map",
+        "/packs/runtime-4354670863b1bd978a20.js.map",
         "/packs/js/application-8cc489a81ecadc32c162.chunk.js.map"
       ]
     }
   },
-  "locales.en.js": "/packs/js/locales.en-9612d98111c97a853fd7.chunk.js",
-  "locales.en.js.map": "/packs/js/locales.en-9612d98111c97a853fd7.chunk.js.map",
+  "locales.en.js": "/packs/js/locales.en-80c82cbd09e1eb687d05.chunk.js",
+  "locales.en.js.map": "/packs/js/locales.en-10d78c5687dbd01ee8ed.hot-update.js.map",
   "npm.chart.js.js": "/packs/js/npm.chart.js-ba2f912f457ab7c2462a.chunk.js",
   "npm.chart.js.js.map": "/packs/js/npm.chart.js-ba2f912f457ab7c2462a.chunk.js.map",
   "npm.core-js.js": "/packs/js/npm.core-js-46b25bcbaa109b0b675f.chunk.js",
@@ -55,8 +55,8 @@
   "npm.vue-tour.js.map": "/packs/js/npm.vue-tour-f02137580ab3ac9acb1d.chunk.js.map",
   "npm.vuelidate.js": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js",
   "npm.vuelidate.js.map": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js.map",
-  "runtime.js": "/packs/runtime-47fb04056cddeca33051.js",
-  "runtime.js.map": "/packs/runtime-47fb04056cddeca33051.js.map",
+  "runtime.js": "/packs/runtime-4354670863b1bd978a20.js",
+  "runtime.js.map": "/packs/runtime-4354670863b1bd978a20.js.map",
   "vendors~components.form-stepper.js": "/packs/js/vendors~components.form-stepper-433868c51d2b8a9a0f10.chunk.js",
   "vendors~components.form-stepper.js.map": "/packs/js/vendors~components.form-stepper-433868c51d2b8a9a0f10.chunk.js.map",
   "vendors~v-tour0.js": "/packs/js/vendors~v-tour0-7be8ec3c14de47ef13a6.chunk.js",

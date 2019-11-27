@@ -6,8 +6,8 @@
 			<% end %>
 			<h2 id="step_0_label"><%= t(".step_0.label") %></h2>
 			<ul aria-labeledby="step_0_label" class="button-list clear-fix">
-				<li><button type="button" @click="setStep(1, {animationType: 'slideLeft'})"><%= t("yes").capitalize %></button></li>
-				<li><button type="button" @click="setStep(2, {animationType: 'slideLeft'})"><%= t(".step_0.no_account") %></button></li>
+				<li><button type="button" @click="setStep(1, {animationType: 'slideLeft'})"><%= t("yes") %></button></li>
+				<li><button type="button" @click="setStep(2, {animationType: 'slideLeft'})" class="secondary-button"><%= t(".step_0.no_account") %></button></li>
 			</ul>
 		</div>
 		<div v-if="step == 1">

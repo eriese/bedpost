@@ -62,7 +62,7 @@ nav {
 		padding-inline-start: 0px;
 		margin: 0px;
 		width: $nav-width;
-		@include color-and-secondary(background-color, $background-colors-secondary);
+		@include color-and-secondary(background-color, $button-colors);
 		border-right: 1px solid;
 		@include color-and-secondary(border-color, $background-colors);
 		height: 100%;
