@@ -13,7 +13,8 @@ en:
               taken: You already have a partnership with this person
   partnerships:
     new:
-      partner_html: Tell us about your relationship with <b>%{name}</b>
+      title_html: Relationship with <b>%{name}</b>
+      desc_html: Tell us all about it!
       why:
         familiarity: Your familiarity with a person helps you make informed judgments about the other factors of your relationship. For instance, if you rate your trust with a person very high but you don't know them very well, your trust in them is less helpful of a measure.
       how:
@@ -68,7 +69,7 @@ en:
         uid: What's their user id?
     tooltip:
       partnership:
-        nickname: This might be something like their last name, or where you met them, something to help you identify them
+        nickname: This might be something like their last name, or where you met them, something to help you identify them. You can leave it blank
         exclusivity: We only care how exclusive this person is with you. Information about how many partners this person has will help us understand how risky they are as a partner to you. Don't worry, that's not the only factor we take into account.
     sliders:
       partnership:

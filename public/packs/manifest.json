@@ -30,17 +30,17 @@
   "entrypoints": {
     "application": {
       "js": [
-        "/packs/runtime-e10267d05e57fcbea737.js",
+        "/packs/runtime-69b2c0b23a443e53bb86.js",
         "/packs/js/application-85fc99cccc713dca4e15.chunk.js"
       ],
       "js.map": [
-        "/packs/runtime-e10267d05e57fcbea737.js.map",
+        "/packs/runtime-69b2c0b23a443e53bb86.js.map",
         "/packs/js/application-85fc99cccc713dca4e15.chunk.js.map"
       ]
     }
   },
-  "locales.en.js": "/packs/js/locales.en-7060308688a44b086009.chunk.js",
-  "locales.en.js.map": "/packs/js/locales.en-f604771eaf3f5e201c47.hot-update.js.map",
+  "locales.en.js": "/packs/js/locales.en-6944b08ef9f0130d56d7.chunk.js",
+  "locales.en.js.map": "/packs/js/locales.en-6944b08ef9f0130d56d7.chunk.js.map",
   "npm.chart.js.js": "/packs/js/npm.chart.js-ba2f912f457ab7c2462a.chunk.js",
   "npm.chart.js.js.map": "/packs/js/npm.chart.js-ba2f912f457ab7c2462a.chunk.js.map",
   "npm.core-js.js": "/packs/js/npm.core-js-5c4a98bec1f2a2c521c8.chunk.js",
@@ -51,14 +51,14 @@
   "npm.moment.js.map": "/packs/js/npm.moment-88df4057a75ab5c8722e.chunk.js.map",
   "npm.popper.js.js": "/packs/js/npm.popper.js-e9f373e33278d33bcd87.chunk.js",
   "npm.popper.js.js.map": "/packs/js/npm.popper.js-e9f373e33278d33bcd87.chunk.js.map",
-  "npm.vue-tour.css": "/packs/css/npm.vue-tour-e6fc7391.chunk.css",
-  "npm.vue-tour.css.map": "/packs/css/npm.vue-tour-e6fc7391.chunk.css.map",
-  "npm.vue-tour.js": "/packs/js/npm.vue-tour-f02137580ab3ac9acb1d.chunk.js",
-  "npm.vue-tour.js.map": "/packs/js/npm.vue-tour-f604771eaf3f5e201c47.hot-update.js.map",
+  "npm.vue-tour.css": "/packs/css/npm.vue-tour-ec4ecd4e.chunk.css",
+  "npm.vue-tour.css.map": "/packs/css/npm.vue-tour-ec4ecd4e.chunk.css.map",
+  "npm.vue-tour.js": "/packs/js/npm.vue-tour-b063901842cf7a3e9914.chunk.js",
+  "npm.vue-tour.js.map": "/packs/js/npm.vue-tour-b063901842cf7a3e9914.chunk.js.map",
   "npm.vuelidate.js": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js",
   "npm.vuelidate.js.map": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js.map",
-  "runtime.js": "/packs/runtime-e10267d05e57fcbea737.js",
-  "runtime.js.map": "/packs/runtime-e10267d05e57fcbea737.js.map",
+  "runtime.js": "/packs/runtime-69b2c0b23a443e53bb86.js",
+  "runtime.js.map": "/packs/runtime-69b2c0b23a443e53bb86.js.map",
   "vendors~components.form-stepper.js": "/packs/js/vendors~components.form-stepper-433868c51d2b8a9a0f10.chunk.js",
   "vendors~components.form-stepper.js.map": "/packs/js/vendors~components.form-stepper-433868c51d2b8a9a0f10.chunk.js.map",
   "vendors~v-tour0.js": "/packs/js/vendors~v-tour0-7be8ec3c14de47ef13a6.chunk.js",

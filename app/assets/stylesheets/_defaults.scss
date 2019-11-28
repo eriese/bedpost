@@ -115,9 +115,12 @@ $input-background-color: $color-white;
 $input-border-color: $colors1-button-primary;
 $input-border-color-focus: $colors1-button-secondary;
 
-$input-background-color: $color-white;
-$input-border-color: $colors2-button-primary;
-$input-border-color-focus: $colors2-button-secondary;
+$input-background-color-secondary: $color-white;
+$input-border-color-secondary: $colors2-button-primary;
+$input-border-color-focus-secondary: $colors2-button-secondary;
+
+$input-border-colors: $input-border-color $input-border-color-secondary;
+$input-border-colors-focus: $input-border-color-focus $input-border-color-focus-secondary;
 
 // sizing
 $nav-width: 250px;
@@ -130,16 +133,40 @@ $nav-width: 250px;
 	}
 }
 
-@mixin color-and-secondary($prop, $vals, $on-body: false) {
+@mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
 	#{$prop}: nth($vals, 1);
 
 	@if $on-body {
+		@if $and-card {
+			&.with-cards .card {
+				#{$prop}: nth($vals, 1);
+			}
+		}
+
 		&.secondary {
 			#{$prop}: nth($vals, 2);
+
+			@if $and-card {
+				&.with-cards .card {
+					#{$prop}: nth($vals, 2);
+				}
+			}
 		}
 	} @else {
+		@if $and-card {
+			body.with-cards .card & {
+				#{$prop}: nth($vals, 2);
+			}
+		}
+
 		body.secondary & {
 			#{$prop}: nth($vals, 2);
+		}
+
+		@if $and-card {
+			body.secondary.with-cards .card & {
+				#{$prop}: nth($vals, 2);
+			}
 		}
 	}
 }

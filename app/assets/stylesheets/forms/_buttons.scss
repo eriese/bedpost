@@ -4,19 +4,15 @@ a, button.not-button, input[type=submit].not-button, button.as-link {
 	cursor: pointer;
 	-webkit-appearance: none;
 	border: none;
-	@include color-and-secondary(background-color, transparent transparent);
-	@include color-and-secondary(color, $link-colors);
+	@include color-and-secondary(background-color, transparent transparent, $and-card: true);
+	@include color-and-secondary(color, $link-colors, $and-card: true);
 
 	&:hover, &:focus {
-		@include color-and-secondary(color, $link-hover-colors);
+		@include color-and-secondary(color, $link-hover-colors, $and-card: true);
 	}
 
-	body.secondary & {
-		background-color: transparent;
-		color: $link-color-secondary;
-		&:hover, &:focus {
-			color: $link-hover-color-secondary;
-		}
+	body.with-cards & {
+		@include color-and-secondary(color, $colors-h2);
 	}
 }
 

@@ -205,7 +205,7 @@ input[type=range] {
 			background: transparent;
 			height: 10px;
 			border-radius: $input-border-radius;
-			background-color: $input-border-color;
+			@include color-and-secondary(background-color, $input-border-colors);
 			cursor: pointer;
 			transition: all .2s ease;
 			border: none;
@@ -217,10 +217,10 @@ input[type=range] {
 	@each $kit in $kit-thumbs {
 		&::#{$kit} {
 			height: 30px;
-			width: 20px;
-			background-color: $input-border-color-focus;
+			width: 15px;
+			@include color-and-secondary(background-color, $input-border-colors-focus);
 			box-shadow: none;
-			border-radius: 5px;
+			border-radius: $stn-border-radius;
 			cursor: pointer;
 			border: none;
 		}

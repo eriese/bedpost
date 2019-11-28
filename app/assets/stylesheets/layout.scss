@@ -6,38 +6,38 @@ html, body {
 
 body {
 	font-family: $text-font;
-	@include color-and-secondary(color, $color-black $color-white, true);
-	@include color-and-secondary(background-color, $background-colors, true);
+	@include color-and-secondary(color, $color-black $color-white, true, true);
+	@include color-and-secondary(background-color, $background-colors, true, true);
 	font-size: 0.95em;
 
 	&.with-cards {
-		@include color-and-secondary(background-color, $background-colors-secondary, true);
-		@include color-and-secondary(color, $color-white $color-black, true);
-
-		.card {
-			background-color: nth($background-colors, 1);
-			color: $color-black;
-		}
-
-		&.secondary .card {
-			background-color: nth($background-colors, 2);
-			color: $color-white;
-		}
+		@include color-and-secondary(background-color, $background-colors-secondary, $on-body: true);
+		@include color-and-secondary(color, $color-white $color-black, $on-body: true);
 	}
 }
 
 h1 {
 	font-family: $header-font;
 	font-size: 2.45em;
-	color: $colors1-h1;
+	margin: 0.5em 0;
 	text-align: center;
+	line-height: 1.15;
 
-	body.secondary &, body.secondary.with-cards .card &{
-		color: $colors2-h1;
+	&:first-of-type {
+		margin-top: 0;
 	}
 
-	body.secondary.with-cards & {
+	@include color-and-secondary(color, $colors-h1);
+
+	body.with-cards & {
+		color: $color-white;
+	}
+
+	body.with-cards .card & {
 		color: $colors1-h1;
+	}
+	body.secondary.with-cards .card & {
+		color: $colors2-h1;
 	}
 }
 
@@ -46,6 +46,17 @@ h2 {
 	font-weight: 700;
 	font-size: 1.5em;
 	text-align: center;
+
+	body.with-cards & {
+		color: $color-white;
+	}
+
+	body.with-cards .card & {
+		color: $colors1-h2;
+	}
+	body.secondary.with-cards .card & {
+		color: $colors2-h2;
+	}
 }
 
 header {
@@ -78,6 +89,8 @@ p.description {
 
 .card {
 	border-radius: $stn-border-radius;
+	border: 2px solid;
+	@include color-and-secondary(border-color, $colors-h1);
 }
 
 .centered-text {
@@ -169,7 +182,7 @@ p.description {
 	@include color-and-secondary(color, $colors1-button-primary $colors2-button-secondary);
 
 	body.with-cards & {
-		@include color-and-secondary(color, $background-colors, true);
+		@include color-and-secondary(color, $colors-h1, true);
 	}
 
 	header.small & {

@@ -1,8 +1,9 @@
 <div class="centered-container">
-	<h2><%= t(".partner_html", {name: @partnership.partner.name}) %></h2>
+	<h1><%= t('.title_html', {name: @partnership.partner.name}) %></h1>
+	<h2><%= t('.desc_html') %></h2>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
 		<%= f.hidden_field :partner_id %>
-		<%= f.wizard "{stepClass: 'step'}" do %>
+		<%= f.wizard "{stepClass: 'step card'}" do %>
 			<%= render "fields", f: f %>
 			<% content_for :last_button do %>
 				<%= f.submit nil, :":class"=>'["not-button"]'%>

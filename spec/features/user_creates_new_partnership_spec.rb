@@ -92,7 +92,7 @@ feature "User creates new partnership", :slow do
 	def fill_out_partnership_form
 		# get sent to a page to make a partnership with the person
 		expect(page).to have_current_path(new_partnership_path(p_id: @partner.id))
-		expect(page).to have_content(t_text("partnerships.new.partner_html", {name: @partner.name}))
+		expect(page).to have_content(t_text("partnerships.new.title_html", {name: @partner.name}))
 
 		# fill in form and submit
 		fields = Partnership::LEVEL_FIELDS
