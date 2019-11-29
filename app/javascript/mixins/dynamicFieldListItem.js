@@ -1,14 +1,22 @@
-import {lazyChild} from "@mixins/lazyCoupled";
+import {lazyChild} from '@mixins/lazyCoupled';
 
 export default {
-	props: ["baseName", "watchKey", "value", "tracked"],
+	props: {
+		baseName: String,
+		watchKey: String,
+		value: Object,
+		tracked: {
+			type: Object,
+			default: function() { return {}; },
+		},
+	},
 	mixins: [lazyChild],
 	watch: {
 		watchKey: function() {
-			let func = this.onKeyChange
+			let func = this.onKeyChange;
 			if (func) {
-				if (typeof func == "function") {
-					func()
+				if (typeof func == 'function') {
+					func();
 				} else {
 					this[func[0]].call(func[1]);
 				}
@@ -22,13 +30,13 @@ export default {
 		focus() {},
 		focusFirst() {
 			this.focus();
-			let first = this.getFirstInput()
+			let first = this.getFirstInput();
 			if (first) {
 				first.focus();
 			}
 		},
 		getFirstInput() {
-			return this.$el.querySelector("input");
+			return this.$el.querySelector('input');
 		}
 	},
 	computed: {
@@ -37,9 +45,9 @@ export default {
 		}
 	},
 	mounted: function() {
-		// this.$emit("present");
+		// this.$emit('present');
 		if (this.$options.track) {
-			this.$emit("track", this.$options.track);
+			this.$emit('track', this.$options.track);
 		}
 	}
-}
+};
