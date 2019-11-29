@@ -1,5 +1,6 @@
 class EncounterWhosController < ApplicationController
 	include WhosController
+	skip_before_action :check_first_time, only: [:new, :create]
 
 	# the id to indicate that the user has to make a new dummy before creating the encounter
 	DUMMY_ID = "dummy"
