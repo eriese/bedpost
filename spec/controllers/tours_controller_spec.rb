@@ -12,12 +12,12 @@ RSpec.describe ToursController, type: :controller do
 
 	describe 'GET #index' do
 		it 'redirects to dashboard if the user has already experienced the first time flow' do
-			@user.update({first_time: false});
 			get :index
 			expect(response).to redirect_to root_path
 		end
 
 		it 'renders index if the user has not experienced the first time flow' do
+			@user.update({first_time: true})
 			get :index
 			expect(response).to render_template :index
 		end
