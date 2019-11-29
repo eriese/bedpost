@@ -122,6 +122,11 @@ $input-border-color-focus-secondary: $colors2-button-secondary;
 $input-border-colors: $input-border-color $input-border-color-secondary;
 $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-secondary;
 
+:export {
+	backgroundColors: $background-colors;
+	backgroundColorsSecondary: $background-colors-secondary;
+	buttonColors: $button-colors;
+}
 // sizing
 $nav-width: 250px;
 

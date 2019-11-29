@@ -14,7 +14,7 @@ module PartnershipsHelper
 			# make a list item
 			content_tag(:li, {class: "partnership-link"}) do
 				# link to that partnership's show page
-				link_to(partnership_path(ship["_id"])) do
+				link_to(partnership_path(ship["_id"]), class: 'as-button') do
 					display_partner(ship)
 				end
 			end

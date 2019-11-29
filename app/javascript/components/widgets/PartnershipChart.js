@@ -1,4 +1,5 @@
 import {Radar} from 'vue-chartjs';
+import sassColors from '@modules/sassColors';
 
 /** the color for grid and angle lines on the chart */
 const lineColor = 'rgba(0,0,0,0.4)';
@@ -37,7 +38,7 @@ const defaultOptions = {
  * @param  {number|string} opacity the opacity of the color
  * @return {string}         the full rgba color declaration
  */
-const dataColor = (opacity) => `rgba(169,30,132,${opacity})`;
+const dataColor = (opacity) => sassColors.asRgba('backgroundColorSecondary', opacity);
 /** {object} default properties for the dataset */
 const datasetDefaults = {
 	backgroundColor: dataColor(0.5),

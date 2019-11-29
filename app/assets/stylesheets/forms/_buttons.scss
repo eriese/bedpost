@@ -4,6 +4,7 @@ a, button.not-button, input[type=submit].not-button, button.as-link {
 	cursor: pointer;
 	-webkit-appearance: none;
 	border: none;
+	@include color-and-secondary(box-shadow, none none, $and-card: true);
 	@include color-and-secondary(background-color, transparent transparent, $and-card: true);
 	@include color-and-secondary(color, $link-colors, $and-card: true);
 
