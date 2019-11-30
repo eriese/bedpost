@@ -302,4 +302,16 @@
 			font-size: 1rem;
 		}
 	}
+
+	input[readonly=readonly] {
+		display: none;
+	}
+
+	.vs--unsearchable .vs__dropdown-toggle {
+		cursor: initial;
+	}
+
+	.vs__search, .vs__search:focus {
+		border-left: 1px solid $input-border-color-focus;
+	}
 }
