@@ -26,10 +26,11 @@ en:
       tongue: tongue
     barrier:
       none: no barrier
-      fresh: a new barrier
-      old: the same barrier
-      clean_object: a clean %{object_instrument}
-      clean_subject: a clean %{subject_instrument}
+      fresh: with a new barrier
+      old: with the same barrier
+      clean:
+        zero: "%{name} %{instrument} was clean"
+        one: "%{name} %{instrument} were clean"
   encounters:
     show:
       title_html: Encounter with %{partner}

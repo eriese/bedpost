@@ -3,7 +3,7 @@ import {lazyChild} from '@mixins/lazyCoupled';
 export default {
 	props: {
 		baseName: String,
-		watchKey: String,
+		watchKey: [String, Number],
 		value: Object,
 		tracked: {
 			type: Object,
