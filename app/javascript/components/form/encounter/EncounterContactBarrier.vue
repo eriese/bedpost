@@ -108,7 +108,7 @@ export default {
 			this.$emit('change', newValue);
 		},
 		getPersonName(person) {
-			return person == 'user' ? this.$_t('my') : this.$_t('name_possessive', {name: this.encounterData.partnerName})
+			return person == 'user' ? this.$_t('my') : this.$_t('name_possessive', {name: this.encounterData.partnerName});
 		}
 	},
 	updated: function() {

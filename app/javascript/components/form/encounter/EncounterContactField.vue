@@ -255,7 +255,12 @@ export default {
 			return this.$el.querySelector(':checked');
 		},
 		onKeyChange() {
-			this.changeActorOrder(null, true);
+			this.changeActorOrder();
+			this.$nextTick(() => {
+				// for some reason this is necessary for keeping the boxes checked on the barrier inputs when the order is changed...
+				this._value.barriers = this.value.barriers;
+				this.onInput();
+			});
 		},
 	},
 	mounted: function() {
@@ -272,7 +277,7 @@ export default {
 			}
 		}
 
-		this.changeActorOrder(null, true);
+		this.changeActorOrder(null, false);
 	},
 };
 </script>

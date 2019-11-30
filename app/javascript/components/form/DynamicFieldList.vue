@@ -132,8 +132,9 @@
 					for (var i = 0; i < key.length; i++) {
 						this.$set(this.trackInList, key[i], this.trackInList[key[i]]);
 					}
+				} else {
+					this.$set(this.trackInList, key, val);
 				}
-				this.$set(this.trackInList, key, val);
 			},
 			updateIndices(startVal, startInd) {
 				for (var i = startVal; i < this.list.length; i++) {

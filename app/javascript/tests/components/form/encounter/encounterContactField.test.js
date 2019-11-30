@@ -167,7 +167,7 @@ describe('Encounter Contact Field Component', () => {
 	describe('updateBarriers', () => {
 		it('never emits a number lower than 0', () => {
 			const wrapper = setup({}, {tracked: {
-				has_barrier: null
+				has_barrier: undefined
 			}});
 
 			expect(wrapper.emitted().track[0]).toEqual([['has_barrier']]);
