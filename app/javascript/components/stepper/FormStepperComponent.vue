@@ -50,6 +50,7 @@ export default {
 			flik: null, // the Flickity instance
 			completes: [], // an array to keep track of which steps have been visited and completed
 			curStepPending: true, // is the current step not yet ready?
+			isTouchDevice: Utils.isTouchDevice(), // is this a touch device
 			flickityOptions: { // the options for the flickity instance
 				initialIndex: 0,
 				prevNextButtons: false, // we're going to do our own buttons
@@ -159,9 +160,11 @@ export default {
 			this.completes[this.curIndex] = isComplete;
 			this.curStepPending = !isComplete;
 
-			// allow dragging on the flickity instance if the step is ready
-			this.flik.options.draggable = isComplete;
-			this.flik.updateDraggable();
+			if (this.isTouchDevice) {
+				// allow dragging on the flickity instance if the step is ready
+				this.flik.options.draggable = isComplete;
+				this.flik.updateDraggable();
+			}
 		},
 		/** are all steps ready */
 		allReady: function() {
