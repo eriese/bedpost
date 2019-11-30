@@ -82,7 +82,15 @@ describe('Encounter Contact Field Component', () => {
 				subject: 'they',
 				_id: '5bdb87db72c3e67e31d1b542'
 			},
-			barriers: {}
+			barriers: {},
+			partner: {
+				name: 'Alice',
+				'pronoun_id': '5bdb87db72c3e67e31d1b542',
+				anus_name: 'a_n',
+				external_name: 'e_n',
+				internal_name: 'i_n',
+				can_penetrate: false
+			},
 		},
 		dummy: {
 			barriers: [],
@@ -154,5 +162,23 @@ describe('Encounter Contact Field Component', () => {
 		}
 
 		expect(partnerObjectRadio).not.toBeNull();
+	});
+
+	describe('updateBarriers', () => {
+		it('never emits a number lower than 0', () => {
+			const wrapper = setup({}, {tracked: {
+				has_barrier: null
+			}});
+
+			expect(wrapper.emitted().track[0]).toEqual([['has_barrier']]);
+
+			wrapper.setProps({
+				tracked: {has_barrier: 0},
+				value: Object.assign({}, global.gon.dummy, {barriers: ['fresh']}),
+			});
+
+			wrapper.vm.updateBarriers([]);
+			expect(wrapper.emitted().track[1]).toEqual(['has_barrier', 0]);
+		});
 	});
 });

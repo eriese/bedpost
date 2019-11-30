@@ -8,15 +8,28 @@
 <script>
 import customInput from '@mixins/customInput';
 
+/**
+ * Check a list of conditions against an enumerator function
+ *
+ * @param  {Array} conditions  the conditions to check
+ * @param  {boolean} foundVal    the value to return if the enumerator returns true
+ * @param  {boolean} notFoundVal the value to return if the enumerator returns false
+ * @param  {Function} checkFunc   the enumerator function
+ * @return {boolean}             whether the conditions were found
+ */
 function checkConditions(conditions, foundVal, notFoundVal, checkFunc) {
+	// if there aren't any conditions, return not found
 	if (!conditions) {return notFoundVal;}
 
+	// go through the conditions
 	for (var i = 0; i < conditions.length; i++) {
+		// if the condition applies, we found it
 		if (checkFunc(conditions[i])) {
 			return foundVal;
 		}
 	}
 
+	// we didn't find any
 	return notFoundVal;
 }
 

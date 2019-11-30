@@ -237,7 +237,8 @@ export default {
 			if (isInit || hadBarriers != hasBarriers) {
 				let oldBarriers = this.tracked.has_barrier || 0;
 				let change = hasBarriers ? 1 : -1;
-				this.$emit('track', 'has_barrier', oldBarriers + change);
+				let newBarrierCount = Math.max(oldBarriers + change, 0);
+				this.$emit('track', 'has_barrier', newBarrierCount);
 			}
 			this.onInput();
 		},
