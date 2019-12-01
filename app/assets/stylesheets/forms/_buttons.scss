@@ -23,7 +23,7 @@ button.not-button, button.as-link, input[type=submit].not-button {
 	-webkit-appearance: none;
 	-moz-appearance:    none;
 	appearance:         none;
-	padding: 0px;
+	padding: 0rem;
 	background-color: transparent;
 	font-weight: 400;
 	text-transform: none;
@@ -46,7 +46,7 @@ button, input[type=submit], a.as-button {
 	@include color-and-secondary(background-color, $button-colors);
 	@include color-and-secondary(border-color, $button-colors);
 	@include color-and-secondary(box-shadow, $box-shadows);
-	padding: 0.625rem;
+	padding: rem(10px);
 	transition: 0.1s linear all;
 	cursor: pointer;
 	border-style: none;
@@ -60,6 +60,10 @@ button, input[type=submit], a.as-button {
 		@include color-and-secondary(color, $button-hover-text-colors);
 		@include color-and-secondary(background-color, $button-hover-colors);
 		@include color-and-secondary(border-color, $button-hover-colors);
+	}
+
+	form.centered & {
+		margin-top: rem(10px);
 	}
 
 	&.secondary-button {
@@ -97,16 +101,16 @@ button.transparent {
 
 button.arrow-button {
 	text-decoration: none;
-	font-size: 32px;
+	font-size: rem(32px);
 	font-weight: bold;
-	line-height: 32px;
+	line-height: rem(32px);
 	vertical-align: middle;
 	border-radius: 50%;
-	height: 40px;
-	width: 40px;
+	height: rem(40px);
+	width: rem(40px);
 
 	&:not(.not-button):not(.as-link) {
-		padding: 0px;
+		padding: 0rem;
 	}
 
 	&:disabled {

@@ -1,6 +1,11 @@
 $root-font-size: 16px;
 
 // fonts
+$root-font-size: 16px;
+
+@function rem($numPx) {
+	@return ($numPx / $root-font-size) * 1rem;
+}
 $script-font: 'Lily Script One', cursive;
 $outline-font: 'Londrina Shadow', sans-serif;
 $text-font: 'Open Sans', sans-serif;
@@ -128,7 +133,7 @@ $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-
 	buttonColors: $button-colors;
 }
 // sizing
-$nav-width: 250px;
+$nav-width: rem(250px);
 
 .clear-fix{
 	&:after {

@@ -10,14 +10,14 @@
 	justify-content: space-evenly;
 	align-items: stretch;
 	align-content: flex-start;
-	padding-inline-start: 0px;
+	padding-inline-start: 0rem;
 
 	.partnership-link {
 		flex-grow: 0;
-		width: 150px;
+		width: rem(150px);
 		text-align: center;
-		height: 150px;
-		margin-bottom: 1em;
+		height: rem(150px);
+		margin-bottom: 1rem;
 
 		> a {
 			border-radius: $stn-border-radius;
@@ -31,8 +31,8 @@
 			text-transform: none;
 
 			.partner-name {
-				font-size: 1.75em;
-				margin-bottom: 0.15em;
+				font-size: 1.75rem;
+				margin-bottom: 0.15rem;
 				line-height: 1.15;
 			}
 		}

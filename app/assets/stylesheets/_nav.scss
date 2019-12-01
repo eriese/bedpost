@@ -2,28 +2,28 @@
 
 nav {
 	position: relative;
-	left: 0px;
-	top: 0px;
+	left: 0rem;
+	top: 0rem;
 	z-index: 100;
 	float: left;
 
 	.burger {
-		margin: 10px;
-		width: 2.188rem;
 		min-width: unset;
-		border: 2px solid;
+		border: rem(2px) solid;
 		@include color-and-secondary(border-color, $button-colors);
-		border-radius: 5px;
+		margin: rem(10px);
+		width: rem(35px);
+		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
-		padding: 0px;
+		padding: 0rem;
 		box-sizing: content-box;
 		@include color-and-secondary(box-shadow, none none);
 
 		.burger-line {
-			height: 3px;
 			@include color-and-secondary(background-color, $button-colors);
-			margin: 6.5px 5px;
+			height: rem(3px);
+			margin: rem(6.5px) rem(5px);
 		}
 
 		.no-js & {
@@ -43,10 +43,10 @@ nav {
 	.menu {
 		overflow: hidden;
 		position: absolute;
-		padding-top: 57px;
-		top: 0px;
+		padding-top: rem(57px);
+		top: 0rem;
 
-		margin: 0px;
+		margin: 0rem;
 		z-index: 1;
 		height: 100vh;
 		box-sizing: border-box;
@@ -59,8 +59,8 @@ nav {
 	}
 
 	ul {
-		padding-inline-start: 0px;
-		margin: 0px;
+		padding-inline-start: 0rem;
+		margin: 0rem;
 		width: $nav-width;
 		@include color-and-secondary(background-color, $button-colors);
 		border-right: 1px solid;
@@ -71,13 +71,15 @@ nav {
 
 	li {
 		list-style: none;
-		font-size: 26px;
-		line-height: 26px;
+		font-size: rem(26px);
+		line-height: rem(26px);
+		overflow: hidden;
+		white-space: nowrap;
 
 		&.no-link {
-			padding: 15px 10px 10px;
 			color: $color-off-white;
 			font-weight: bold;
+			padding: rem(15px) rem(10px) rem(10px);
 		}
 
 		form>input[type=submit].not-button {
@@ -91,7 +93,7 @@ nav {
 			@include color-and-secondary(color, $background-colors);
 			display: block;
 			height: 100%;
-			padding: 15px 5px 15px 15px;
+			padding: rem(15px) rem(5px) rem(15px) rem(15px);
 		}
 
 		a, form>input[type=submit].not-button {
