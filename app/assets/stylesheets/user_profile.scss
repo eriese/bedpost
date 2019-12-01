@@ -17,7 +17,7 @@ ul.dash-buttons {
 		flex-shrink: 0;
 		font-size: 2.5rem;
 
-		@media (max-width: 31.25rem) {
+		@media (max-width: rem(500px)) {
 			font-size: 2rem;
 		}
 
@@ -28,12 +28,12 @@ ul.dash-buttons {
 			align-items: center;
 			justify-content: center;
 			padding: 50% 0;
-			padding: calc(50% - 0.188rem) 0;
+			padding: calc(50% - rem(3px)) 0;
 			height: 0rem;
 			line-height: 1;
 			text-align: center;
 			text-decoration: none;
-			border: 0.188rem solid $color-green-dark;
+			border: rem(3px) solid $color-green-dark;
 			box-sizing: border-box;
 			border-radius: 50%;
 
@@ -45,7 +45,7 @@ ul.dash-buttons {
 			span {
 				display: block;
 				flex-basis: 100%;
-				padding: 0.625rem;
+				padding: rem(10px);
 			}
 		}
 	}

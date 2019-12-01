@@ -1,6 +1,7 @@
 // Place all the styles related to the whos controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "_defaults";
 
 #who_form {
 	ul {
@@ -15,12 +16,12 @@
 
 	.button-list li {
 		float: left;
-		margin: 0rem 1.25rem;
+		margin: 0rem rem(20px);
 	}
 
 	button, input[type=submit], a {
-		width: 5.313rem;
-		height: 5.313rem;
+		width: rem(85px);
+		height: rem(85px);
 		border-radius: 50%;
 		padding: 0rem;
 		font-size: 1.15rem;
@@ -32,7 +33,7 @@
 	}
 
 	form, .options {
-		margin-bottom: 0.625rem;
+		margin-bottom: rem(10px);
 	}
 
 	form {
@@ -41,7 +42,7 @@
 		}
 
 		#partnership_uid, #uid-error {
-			width: 9.375rem;
+			width: rem(150px);
 			margin-left: auto;
 			margin-right: auto;
 			text-align: center;

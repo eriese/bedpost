@@ -10,11 +10,11 @@
 
 		.field-section {
 			float: left;
-			margin-right: .313rem;
+			margin-right: rem(5px);
 
 			p {
 				line-height: 1rem;
-				margin: 0.15rem 0 0;
+				margin: 0.15rem 0 0 0;
 				font-size: inherit;
 			}
 
@@ -32,7 +32,7 @@
 
 			p {
 				margin-top: 0;
-				line-height: 1.25rem;
+				line-height: rem(20px);
 			}
 		}
 
@@ -58,8 +58,8 @@
 
 				&:checked {
 					background-color: transparent;
-					height: 0.375rem;
-					width: 0.375rem;
+					height: rem(6px);
+					width: rem(6px);
 
 					&::after {
 						background-color: $color-purple-dark;
@@ -73,7 +73,7 @@
 					}
 
 					+ label {
-						margin-right: .625rem;
+						margin-right: rem(10px);
 					}
 				}
 
@@ -95,10 +95,10 @@
 
 		> div {
 			float: left;
-			margin-right: .313rem;
+			margin-right: rem(5px);
 
 			label {
-				display: inline
+				display: inline;
 			}
 
 			input[type=checkbox] {
@@ -112,18 +112,19 @@
 	position: relative;
 	> span.dropdown-button {
 		position: absolute;
-		right: .5rem;
-		top: .5rem;
+		right: rem(8px);
+		top: rem(8px);
 
 		button.arrow-button {
-			height: 1.875rem;
-			width: 1.875rem;
-			line-height: 1.5rem;
+			$size: 30px;
+			height: rem($size);
+			width: rem($size);
+			line-height: rem($size * 0.8);
 		}
 	}
 
 	>.dropdown-content {
-		padding: 0rem .625rem;
+		padding: 0rem rem(10px);
 	}
 }
 
@@ -132,11 +133,11 @@
 
 	.contact-show {
 		clear: both;
-		margin-bottom: 0.313rem;
+		margin-bottom: rem(5px);
 
 		>.dropdown {
 			transition: all 0.3s ease-in-out;
-			border-bottom: .063rem solid $color-green-dark;
+			border-bottom: rem(1px) solid $color-green-dark;
 
 			&:after {
 				clear: both;
@@ -145,7 +146,7 @@
 			}
 
 			&.open {
-				padding: 0.313rem;
+				padding: rem(5px);
 
 				.dropdown-title {
 					font-size: 1.2rem;
@@ -177,17 +178,17 @@
 
 	li {
 		@extend .clear-fix;
-		padding: 0.313rem 0.625rem;
+		padding: rem(5px) rem(10px);
 		font-size: 1.1rem;
 
 		&:first-child {
-			border-top-right-radius: 0.313rem;
-			border-top-left-radius: 0.313rem;
+			border-top-right-radius: rem(5px);
+			border-top-left-radius: rem(5px);
 		}
 
 		&:last-child {
-			border-bottom-right-radius: 0.313rem;
-			border-bottom-left-radius: 0.313rem;
+			border-bottom-right-radius: rem(5px);
+			border-bottom-left-radius: rem(5px);
 		}
 		@for $i from 1 through 5 {
 			&.risk-#{$i - 1} {
@@ -226,8 +227,8 @@
 		align-items: center;
 
 		.schedule-date {
-			border: .125rem solid $color-dark-gray;
-			margin-bottom: 0.625rem;
+			border: rem(2px) solid $color-dark-gray;
+			margin-bottom: rem(10px);
 			text-align: center;
 			width: 3.5rem;
 			height: 3.5rem;
@@ -259,7 +260,7 @@
 
 		.schedule-diagnoses {
 			flex-grow: 1;
-			margin-left: 1.25rem;
+			margin-left: rem(20px);
 			font-size: 1.5rem;
 		}
 	}
@@ -272,16 +273,16 @@
 	}
 
 	.encounter-partner-name {
-		margin-right: 0.313rem;
+		margin-right: rem(5px);
 	}
 
 	.vc-bars {
-		box-shadow: .063rem 0rem .125rem 0rem rgba(255,255,255,.1), 0rem .063rem 0.313rem 0rem rgba(255,255,255,.1);
+		box-shadow: rem(1px) 0rem rem(2px) 0rem rgba(255,255,255,.1), 0rem rem(1px) rem(5px) 0rem rgba(255,255,255,.1);
 	}
 
 	.encounter-contact-toggle {
-		margin-left: 0.625rem;
-		margin-bottom: 0.625rem;
+		margin-left: rem(10px);
+		margin-bottom: rem(10px);
 	}
 
 	.partner-indicator {
@@ -289,7 +290,7 @@
 		height: 1.15rem;
 		width: 2rem;
 		vertical-align: middle;
-		margin-right: 0.5rem;
+		margin-right: rem(8px);
 		margin-bottom: 0.175rem;
 	}
 }

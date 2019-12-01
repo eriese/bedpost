@@ -1,6 +1,6 @@
 @import "_defaults";
 
-@media (max-width: 31.25 * $root-font-size) {
+@media (max-width: rem(500px)) {
 	.no-js {
 		display: flex;
 		flex-wrap: wrap;
@@ -41,11 +41,11 @@
 					text-align: center;
 
 					li {
-						font-size: 1.25rem;
+						font-size: rem(20px);
 						line-height: 1;
 
 						a, &.no-link, span {
-							padding: .313rem;
+							padding: rem(5px);
 						}
 					}
 				}

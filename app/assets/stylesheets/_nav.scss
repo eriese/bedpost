@@ -8,19 +8,19 @@ nav {
 	float: left;
 
 	.burger {
-		margin: .625rem;
-		width: 2.188rem;
-		border: .125rem solid $button-color;
-		border-radius: .313rem;
+		margin: rem(10px);
+		width: rem(35px);
+		border: rem(2px) solid $button-color;
+		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
 		padding: 0rem;
 		box-sizing: content-box;
 
 		.burger-line {
-			height: .188rem;
+			height: rem(3px);
 			background-color: $button-color;
-			margin: .406rem .313rem;
+			margin: rem(6.5px) rem(5px);
 		}
 
 		.no-js & {
@@ -40,7 +40,7 @@ nav {
 	.menu {
 		overflow: hidden;
 		position: absolute;
-		padding-top: 3.563rem;
+		padding-top: rem(57px);
 		top: 0rem;
 
 		margin: 0rem;
@@ -65,11 +65,13 @@ nav {
 
 	li {
 		list-style: none;
-		font-size: 1.625rem;
-		line-height: 1.625rem;
+		font-size: rem(26px);
+		line-height: rem(26px);
+		overflow: hidden;
+		white-space: nowrap;
 
 		&.no-link {
-			padding: 1rem .625rem .625rem;
+			padding: rem(15px) rem(10px) rem(10px);
 			color: $color-green-light;
 		}
 
@@ -84,7 +86,7 @@ nav {
 			color: $color-light-gray;
 			display: block;
 			height: 100%;
-			padding: 1rem .313rem 1rem 1rem;
+			padding: rem(15px) rem(5px) rem(15px) rem(15px);
 		}
 
 		a, form>input[type=submit].not-button {

@@ -14,15 +14,15 @@
 
 	.partnership-link {
 		flex-grow: 0;
-		width: 9.375rem;
+		width: rem(150px);
 		text-align: center;
-		height: 9.375;
+		height: rem(150px);
 		margin-bottom: 1rem;
 
 		> a {
 			background-color: $color-green-dark;
 			color: $background-color;
-			border: .188rem solid $color-green-dark;
+			border: rem(3px) solid $color-green-dark;
 			border-radius: 50%;
 			height: 100%;
 			width: 100%;

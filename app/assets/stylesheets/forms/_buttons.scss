@@ -34,13 +34,13 @@ button, input[type=submit], a.as-button {
 	background-color: $button-color;
 	border-color: $button-color;
 	color: $button-text-color;
-	padding: .313rem .625rem;
+	padding: rem(5px) rem(10px);
 	transition: 0.1s linear all;
 	cursor: pointer;
 	border-style: solid;
 
 	form.centered & {
-		margin-top: .625rem;
+		margin-top: rem(10px);
 	}
 }
 
@@ -70,13 +70,13 @@ button.transparent {
 
 button.arrow-button {
 	text-decoration: none;
-	font-size: 2rem;
+	font-size: rem(32px);
 	font-weight: bold;
-	line-height: 2rem;
+	line-height: rem(32px);
 	vertical-align: middle;
 	border-radius: 50%;
-	height: 2.5rem;
-	width: 2.5rem;
+	height: rem(40px);
+	width: rem(40px);
 
 	&:not(.not-button):not(.as-link) {
 		padding: 0rem;
@@ -132,7 +132,7 @@ a.as-button {
 	align-content: center;
 	box-sizing: border-box;
 	border-style: solid;
-	border-width: .062rem;
+	border-width: 1px;
 	text-align: center;
 	justify-content: center
 }
