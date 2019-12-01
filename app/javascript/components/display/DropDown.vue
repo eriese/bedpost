@@ -1,5 +1,5 @@
 <template>
-	<div class="dropdown" :class="{'title-as-button': titleButton}">
+	<div class="dropdown" :class="[{'title-as-button': titleButton}]">
 		<span class="dropdown-title" @click="toggle(true)"><slot name="title"></slot></span>
 		<span class="dropdown-button" @click="toggle(false)">
 			<slot name="button" v-bind="{isOpen}"><arrow-button :class="$attrs['arrow-class']" :direction="isOpen ? 'up' : 'down'"></arrow-button></slot>
@@ -16,7 +16,8 @@ import { gsap } from 'gsap';
 export default {
 	data: function() {
 		return {
-			isOpen: false
+			isOpen: false,
+			// addedClass:
 		};
 	},
 	props: {
@@ -34,11 +35,9 @@ export default {
 
 			if (this.isOpen) {
 				gsap.to(this.$refs.content, 0.3, {height: '0px', overflow: 'hidden', clearProps: 'height,overflow', onComplete: ()=> { this.isOpen = false; }});
-				gsap.to(this.$el, 0.3, {className: '-=open'});
 			} else {
 				this.isOpen = true;
 				gsap.from(this.$refs.content, 0.3, {height: '0px', overflow: 'hidden', clearProps: 'height,overflow'});
-				gsap.to(this.$el, 0.3, {className: '+=open'});
 			}
 		}
 	},

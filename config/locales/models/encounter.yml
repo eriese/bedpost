@@ -31,6 +31,8 @@ en:
       clean:
         zero: "%{name} %{instrument} was clean"
         one: "%{name} %{instrument} were clean"
+      clean_subject: "%{subject_possessive} clean %{subject_instrument}"
+      clean_object: "%{object_possessive} clean %{object_instrument"
   encounters:
     show:
       title_html: Encounter with %{partner}
@@ -50,6 +52,8 @@ en:
         fluid_exchange: Additional fluid exchange
       risks:
         title: The Overall Risks
+        no_risks: None! Nothing you did carried any risk
+        no_risks_contact: This activity carries no risk
       advice:
         title: Our Advice
         desc: "Based on the risks in this encounter, we think this is a good testing schedule:"

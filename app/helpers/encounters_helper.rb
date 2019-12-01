@@ -48,7 +48,7 @@ module EncountersHelper
 		t_key = ".contact"
 		if contact.barriers.any?
 			t_key += "_with_barriers"
-			barrier_args = keys.slice(:object_instrument, :subject_instrument).merge({scope: "contact.barrier"})
+			barrier_args = keys.merge(scope: 'contact.barrier')
 			keys[:barriers] = contact.barriers.map { |b| t(b, barrier_args) }.join(t("and_delimeter"))
 		end
 
@@ -69,9 +69,16 @@ module EncountersHelper
 			o[v] ||= []
 			o[v] << t(k, scope: "diagnosis.name_casual")
 		end
-		risks = grouped.each_with_object([]) do |(r, lst), a|
-			trans = t(".risk_line_html", {diagnosis: lst.join(t("join_delimeter")), level: t("diagnosis.transmission_risk.risk_level", {count: r})})
-			a << content_tag(:li, trans, {class: "risk-#{r}"})
+
+		risks = if grouped.empty?
+			[content_tag(:li, {class: 'risk-{0}'}) do
+				content_tag(:span, t('.risks.no_risks' + (obj.is_a?(Encounter) ? '' : '_contact')))
+			end]
+		else
+			grouped.each_with_object([]) do |(r, lst), a|
+				trans = t(".risk_line_html", {diagnosis: lst.join(t("join_delimeter")), level: t("diagnosis.transmission_risk.risk_level", {count: r})})
+				a << content_tag(:li, trans, {class: "risk-#{r}"})
+			end
 		end
 
 		content_tag(:template, {:"v-slot:button" => "sc"}) do
