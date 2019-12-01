@@ -44,3 +44,18 @@
 		}
 	}
 }
+
+#view-toggle {
+	z-index: 1;
+	position: relative;
+}
+.partnership-chart-container {
+	width: 30rem;
+	max-width: 100%;
+	margin: 0rem auto;
+	text-align: center;
+
+	#radar-chart {
+		margin: -5rem 0rem;
+	}
+}

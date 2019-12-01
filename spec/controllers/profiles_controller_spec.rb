@@ -29,14 +29,8 @@ RSpec.describe ProfilesController, type: :controller do
   # Profile. As you add validations to Profile, be sure to
   # adjust the attributes here as well.
 
-  before :each do
-    @partnership = nil
-    @prof = nil
-  end
-
   after :each do
-    @partnership.destroy if @partnership.present? && @partnership.persisted?
-    @prof.destroy if @prof.present? && @prof.persisted?
+    cleanup @partnership, @prof
   end
 
   describe "GET #show" do
@@ -111,7 +105,7 @@ RSpec.describe ProfilesController, type: :controller do
     context "with invalid params" do
       it "redirects to the new partner profile page to try again" do
         post :create, params: {profile: {name: "name"}}, session: dummy_user_session
-        expect(response).to redirect_to new_profile_path
+        expect(response).to redirect_to new_dummy_profile_path
       end
     end
   end

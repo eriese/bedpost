@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import {TweenMax} from "gsap/TweenMax";
+import { gsap } from 'gsap';
 
 export default {
 	data: function() {
 		return {
 			isOpen: false
-		}
+		};
 	},
 	props: {
 		titleButton: {
@@ -33,12 +33,12 @@ export default {
 			}
 
 			if (this.isOpen) {
-				TweenMax.to(this.$refs.content, 0.3, {height: "0rem", overflow: "hidden", clearProps: "height,overflow", onComplete: ()=> {this.isOpen = false}})
-				TweenMax.to(this.$el, 0.3, {className: "-=open"});
+				gsap.to(this.$refs.content, 0.3, {height: '0px', overflow: 'hidden', clearProps: 'height,overflow', onComplete: ()=> { this.isOpen = false; }});
+				gsap.to(this.$el, 0.3, {className: '-=open'});
 			} else {
 				this.isOpen = true;
-				TweenMax.from(this.$refs.content, 0.3, {height: "0rem", overflow: "hidden", clearProps: "height,overflow"});
-				TweenMax.to(this.$el, 0.3, {className: "+=open"});
+				gsap.from(this.$refs.content, 0.3, {height: '0px', overflow: 'hidden', clearProps: 'height,overflow'});
+				gsap.to(this.$el, 0.3, {className: '+=open'});
 			}
 		}
 	},
@@ -47,5 +47,5 @@ export default {
 			this.isOpen = true;
 		}
 	}
-}
+};
 </script>

@@ -156,7 +156,7 @@ form {
 			float: right;
 
 			.tooltip-icon {
-				top: -rem(5px);
+				top: rem(-5px);
 			}
 		}
 	}
@@ -272,7 +272,7 @@ form {
 
 	.dynamic-field-buttons {
 		float: right;
-		margin-top: -rem(10px);
+		margin-top: rem(-10px);
 
 		+ div {
 			clear: both;

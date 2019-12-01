@@ -8,7 +8,7 @@ RSpec.describe "profiles/new", type: :view do
   it "renders new profile form" do
     render
 
-    assert_select "form[action=?][method=?]", profile_path, "post" do
+    assert_select "form[action=?][method=?]", dummy_profile_path, "post" do
     end
   end
 end

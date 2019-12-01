@@ -43,6 +43,14 @@ ul {
 	}
 }
 
+h2.with-desc {
+	margin-bottom: 0.25em;
+}
+
+p.description {
+	margin-top: 0;
+}
+
 .centered-text {
 	text-align: center;
 }
@@ -73,6 +81,32 @@ ul {
 	text-align: center;
 	font-weight: bold;
 	border: rem(1px) solid $color-green-light;
+}
+
+#flash {
+	text-align: center;
+	font-weight: bold;
+
+	> div {
+		padding: 0.25rem;
+		border: 3px solid transparent;
+	}
+
+	.flash-notice {
+		border-color: $color-green-dark;
+	}
+
+	.flash-alert {
+		border-color: $color-purple-light;
+	}
+
+	.flash-error {
+		border-color: $color-purple-dark;
+	}
+
+	.flash-message {
+		border-color: $color-green-light;
+	}
 }
 
 .aria-only {

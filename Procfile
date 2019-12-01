@@ -1,3 +1,4 @@
-web: bundle exec rails s -p $PORT
+web: rails s -p $PORT
+worker: rake jobs:work
 webpacker: ruby ./bin/webpack-dev-server
 guard: bundle exec guard

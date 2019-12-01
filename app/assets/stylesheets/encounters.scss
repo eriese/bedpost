@@ -293,4 +293,14 @@
 		margin-right: rem(8px);
 		margin-bottom: 0.175rem;
 	}
+
+	.encounter-list-item {
+		.item-partner {
+			font-weight: bold;
+		}
+
+		.item-date {
+			font-size: 1rem;
+		}
+	}
 }

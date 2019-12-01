@@ -24,7 +24,7 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "rspec -f doc" do
+guard :rspec, cmd: "SKIP_PENDING=true rspec -f doc" do
   require "guard/rspec/dsl"
   dsl = Guard::RSpec::Dsl.new(self)
 
@@ -113,9 +113,12 @@ end
 # Add files and commands to this file, like the example:
 #   watch(%r{file/path}) { `command(s)` }
 #
-# guard :shell do
-#   watch(%r{(?!.*?docs).*app\/javascript\/(.*)\.(js|vue)}) {|m|
-#     puts 're-building jsdoc'
-#     `rm -r app/javascript/docs/doc; jsdoc -c app/javascript/docs/jsdoc_conf.json`
-#   }
-# end
+guard :shell do
+  watch(%r{(?!.*?docs).*app\/javascript\/(.*)\.(js|vue)}) {|m|
+    n "change in #{m[0]}" "Javascript changes"
+    puts 're-building jsdoc'
+    `rm -r app/javascript/docs/doc; jsdoc -c app/javascript/docs/jsdoc_conf.json`
+    puts 'running tests'
+    system("yarn test -o --verbose=false")
+  }
+end

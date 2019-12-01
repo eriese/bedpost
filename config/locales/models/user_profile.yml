@@ -1,5 +1,10 @@
 en:
   user_profiles:
+    show:
+      new_partnership: I met someone
+      new_encounter: I had sex
+      title: Hi %{name}, what's new?
+  application:
     edit:
       account_settings: Account Settings
       personal_prefs:
@@ -8,10 +13,10 @@ en:
       security_settings:
         title: Security
         desc: Enter your password to change any of the following settings
-    show:
-      new_partnership: I met someone
-      new_encounter: I had sex
-      title: Hi %{name}, what's new?
+      delete_profile:
+        title: Delete your account
+        desc: If you opted in to have your data used anonymously for research, we will clear your identifying information and keep the rest of your activity. If you want it all to be deleted from our servers, please opt out above and save your profile before deleting.
+        submit: Delete my account
   mongoid:
     errors:
       models:
@@ -37,7 +42,12 @@ en:
         old_password: Current password
         new_password: New password
         new_password_confirmation: Confirm your new password
+        opt_in_group: Allow us to use your data (minus name and email) for research purposes?
+        opt_in:
+          'true': 'Yes'
+          'false': 'No'
     tooltip:
       user_profile:
         name: We really only care about your first name, but it's up to you.
         uid: Use this ID like a username to invite partners to connect to your profile.
+        opt_in_group: We will never sell your data to advertisers, but it can help public health researchers learn more about about STI transmission factors, and we think that's exciting.

@@ -26,14 +26,21 @@ module Bedpost
     Mongoid::QueryCache.enabled = true
 
     config.generators.javascript_engine = :js
+    config.action_mailer.delivery_method = :mailjet_api
+
+    config.active_job.queue_adapter = :delayed_job
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
     config.i18n.default_locale = :en
+    config.i18n.fallbacks = [I18n.default_locale]
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.available_locales = %w(en)
     config.middleware.use I18n::JS::Middleware
+
+    # Suppress logger output for asset requests.
+    config.assets.quiet = true
   end
 end

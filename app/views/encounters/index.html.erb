@@ -1,4 +1,14 @@
-<h2 class="centered-text"><%= t(".title", count: @partnerships.size, partner_name: @partnerships[0].display(@partner_names[0])) %></h2>
-<div class="desc"><%= link_to t(".all"), encounters_path %></div>
-<encounter-calendar></encounter-calendar>
-<div class="edit-button"><%= link_to t(".new"), @partnership.present? ? new_partnership_encounter_path(@partnership) : encounters_who_path %></div>
+<% if @has_partners %>
+	<% trans_key = @is_partner ? '.with_partner' : '.all' %>
+	<% first_partner = @partnerships[0] || {} %>
+	<h2 class="centered-text"><%= t(".title.#{trans_key}", partner_name: first_partner["display"]) %></h2>
+	<div class="desc"><%= link_to(t(".all"), encounters_path) if @is_partner %></div>
+	<encounter-calendar>
+		<h3><%= t(".no_encounters.#{trans_key}", partner_name: first_partner["partner_name"]) %></h3>
+	</encounter-calendar>
+	<div><%= link_to t(".new"), @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path %></div>
+<% else %>
+	<h1 class="with-desc"><%= t('.no_partners.title') %></h1>
+	<h2 class="desc"><%= t('.no_partners.desc') %></h2>
+	<%= link_to t('.make_partner'), who_path %>
+<% end %>

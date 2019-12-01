@@ -15,7 +15,8 @@ module UserProfileHelpers
 	end
 
 	def dummy_user_session
-		{user_id: dummy_user.id}
+		sign_in dummy_user
+		nil
 	end
 
 	def clear_dummy_user
@@ -26,6 +27,6 @@ module UserProfileHelpers
 	def clear_all_dummies
 		clear_dummy_user
 		@@_dummy_pronoun.destroy if @@_dummy_pronoun
-		@@dummy_pronoun = nil
+		@@_dummy_pronoun = nil
 	end
 end

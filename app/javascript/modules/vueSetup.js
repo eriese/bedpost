@@ -4,11 +4,11 @@ import Vuelidate from 'vuelidate';
 import VCalendar from 'v-calendar';
 import vSelect from 'vue-select';
 
-import bedpostVueGlobals from '../plugins/bedpostVueGlobals';
+import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
+import tourguide from '@plugins/tourguide';
 
 import _root from "@components/Root";
 import nav from '@components/NavComponent'
-
 
 const formStepper = () => import (
 	/* webpackChunkName: "components.form-stepper", webpackMode: "lazy", webpackPreload: true */ "@components/stepper/FormStepperComponent.vue");
@@ -26,12 +26,14 @@ const encounterContactField = () => import (/* webpackChunkName: "components.enc
 
 const dropDown = () => import (/* webpackChunkName: "components.dropdown", webpackPreload: true */ "@components/display/DropDown.vue");
 const progBar = () => import (/* webpackChunkName: "components.prog-bar", webpackPreload: true */ "@components/display/ProgBar.vue");
-const bubble = () => import (/* webpackChunkName: "bubble", webpackPreload: true */ "@components/display/Bubble.vue")
+const bubble = () => import (/* webpackChunkName: "components.bubble", webpackPreload: true */ "@components/display/Bubble.vue")
+const contentRequester = () => import (/* webpackChunkName: "components.content-requester", webpackPreload: true */ "@components/display/ContentRequester.vue")
 
 const arrowButton = () => import (/* webpackChunkName: "components.arrow-button", webpackPreload: true */ "@components/functional/ArrowButton");
 
-const encounterCalendar = () => import (/* webpackChunkName: "components.encounter-calendar", webpackPreload: true */ '@components/widgets/encounterCalendar/EncounterCalendar.vue');
 
+const partnershipChart = () => import(/* webpackChunkName: "components.radar-chart", webpackPreload: true */ "@components/widgets/PartnershipChart.js");
+const encounterCalendar = () => import (/* webpackChunkName: "components.encounter-calendar", webpackPreload: true */ '@components/widgets/EncounterCalendar.vue');
 
 
 /**
@@ -43,6 +45,7 @@ export default function addVue() {
 	Vue.use(Vuelidate);
 	Vue.use(VCalendar);
 	Vue.use(bedpostVueGlobals);
+	Vue.use(tourguide);
 
 	Vue.component('v-select', vSelect);
 
@@ -61,10 +64,12 @@ export default function addVue() {
 	Vue.component('drop-down', dropDown);
 	Vue.component('prog-bar', progBar);
 	Vue.component('bubble', bubble);
+	Vue.component('content-requester', contentRequester);
 
 	Vue.component('arrow-button', arrowButton);
 
 	Vue.component('encounter-calendar', encounterCalendar);
+	Vue.component('partnership-chart', partnershipChart);
 
 	return new Vue(_root);
 }

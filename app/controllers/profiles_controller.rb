@@ -1,4 +1,5 @@
 class ProfilesController < ApplicationController
+  skip_before_action :check_first_time
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
 
   # GET /partners/1
@@ -15,7 +16,7 @@ class ProfilesController < ApplicationController
   # GET /partners/1/edit
   def edit
     if @partnership.present? && @profile.is_a?(UserProfile)
-      redirect_to @partnership
+      redirect_to partnership_path(@partnership)
     else
       gon_client_validators(@profile, edit_validator_opts, serialize_opts: edit_validator_serialize_opts, pre_validate: false)
     end
@@ -29,7 +30,7 @@ class ProfilesController < ApplicationController
       redirect_to new_partnership_path(p_id: @profile.id)
     else
       flash[:profile_attempt] = req_params
-      respond_with_submission_error(@profile.errors.messages, new_profile_path)
+      respond_with_submission_error(@profile.errors.messages, new_dummy_profile_path)
     end
   end
 
@@ -61,7 +62,7 @@ class ProfilesController < ApplicationController
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
-      @partnership = current_user.partnerships.find(params[:partnership_id])
+      @partnership = current_user_profile.partnerships.find(params[:partnership_id])
       @profile = Profile.find(@partnership.partner_id)
     end
 

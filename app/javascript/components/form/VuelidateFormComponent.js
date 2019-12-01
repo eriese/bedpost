@@ -22,11 +22,21 @@ import renderless from "@mixins/renderless";
 export default {
 	mixins: [renderless],
 	data: function() {
+		let name = this.name
+		let fd = null
+		if (name) {
+			fd = {}
+			fd[name] = gon.form_obj[name]
+		} else {
+			fd = gon.form_obj
+		}
+
 		let dt = {
-			formData: gon.form_obj,
+			formData: fd,
 			toggles: this.startToggles,
 			stepper: null,
-			submissionError: gon.submissionError || {}
+			submissionError: gon.submissionError || {},
+			finalized: false
 		};
 
 		// get rid of passwords
@@ -40,11 +50,18 @@ export default {
 	},
 	props: {
 		validate: String,
-		startToggles: Object
+		startToggles: Object,
+		name: String
 	},
 	validations: function() {
 		// format the validators
-		return {formData: formatValidators(this.$props.validate, gon.validators, [])};
+		let validators = {};
+		if (this.name) {
+			validators[this.name] = gon.validators[this.name]
+		} else {
+			validators = gon.validators
+		}
+		return {formData: formatValidators(this.$props.validate, validators, [])};
 	},
 	computed: {
 		slotScope: function() {
@@ -109,7 +126,7 @@ export default {
 		handleError(e) {
 			let [respJson, status, xhr] = e.detail
 			// set the new submission error
-			this.submissionError = respJson;
+			this.submissionError = respJson.errors;
 			// re-run validations
 			this.$v.$touch();
 		},
@@ -128,7 +145,27 @@ export default {
 				Object.setAtPath(this, toClear, null);
 			}
 		}
+	},
+	// it's really gross to add this tight coupling, but this whole component needs major refactoring, and this is a stop gap until I get to it
+	updated() {
+		if (this.finalized || this.$children.length == 0) {
+			return;
+		}
+		// only run this once
+		this.finalized = true;
+
+		// go through all the children in order to make sure dates are properly formatted for the date selector
+		for (var i = 0; i < this.$children.length; i++) {
+			let child = this.$children[i]
+			if (child.isDate) {
+				let fieldParent = this.formData[child.modelName] || this.formData;
+				let origDate = fieldParent[child.field]
+				// make a date object from the string
+				fieldParent[child.field] = origDate ? new Date(origDate) : new Date();
+			}
+		}
 	}
+
 }
 
 /**

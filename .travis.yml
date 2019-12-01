@@ -1,16 +1,16 @@
 dist: trusty
 language: ruby
 rvm:
- - 2.5.1
+ - 2.5.7
 cache:
   bundler: true
   directories:
     - node_modules
   yarn: true
 before_install:
-  - gem install bundler
+  - gem update bundler
 install:
-  - bundle install
+  - bundle install --without production
   - nvm install node
   - node -v
   - npm i -g yarn
@@ -21,10 +21,10 @@ before_script:
   - gem install bundler-audit
 script:
   - bundle exec rails webpacker:compile
-  - bundle exec rake
-  - yarn jest
+  - SKIP_PENDING=true bundle exec rake
+  - yarn jest --verbose=false
   - codecov
-  - brakeman
+  - brakeman -q
   - bundle audit --update
 services:
   - mongodb

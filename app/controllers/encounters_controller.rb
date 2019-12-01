@@ -1,26 +1,33 @@
 class EncountersController < ApplicationController
+	skip_before_action :check_first_time, only: [:new, :create, :show]
 	after_action :clear_unsaved, only: [:new]
 	before_action :set_encounter, except: [:index, :new, :create]
 
 	def index
-		if params[:partnership_id]
-			@partnerships = [@partnership] if set_partnership
-		else
-			@partnerships = current_user.partnerships
+		# the page needs to know whether a specific partner was requested
+		@is_partner = params[:partnership_id].present?
+		# and whether the user has any partnerships regardless of whether or not those partnerships have encounters
+		@has_partners = current_user_profile.partnerships.any?
+		#use an aggregation to get all necessary data about partnerships that have encounters
+		@partnerships = current_user_profile.partners_with_encounters(params[:partnership_id]).to_a
+		@partnerships.each_with_index do |ship, i|
+			#add an index
+			ship[:index] = i
+			#create the display name
+			ship[:display] = Partnership.make_display(ship["partner_name"], ship["nickname"])
 		end
 
-		@partner_names = Profile.find(@partnerships.pluck(:partner_id)).pluck(:name)
-
-		partnership_map = {}
-		@partnerships.each_with_index do |p, i|
-			partnership_map[p.id] = p.as_json(only: [:_id, :partner_id], include: {encounters: {only: [:took_place, :notes, :_id]}}).merge({display: p.display(@partner_names[i]), index: i})
-		end
-
-		gon.partnerships = partnership_map
+		gon.partnerships = @partnerships
 	end
 
 	def show
-		Encounter::RiskCalculator.new(@encounter).track
+		@force = params[:force]
+		Encounter::RiskCalculator.new(@encounter).track(force: @force)
+		respond_to do |format|
+			# just send the alternate schedule html if it's a json request
+			format.json {render inline: helpers.display_schedule(@encounter)}
+			format.html {render :show}
+		end
 	end
 
 	def new
@@ -64,7 +71,7 @@ class EncountersController < ApplicationController
 
 	private
 	def set_partnership(redirect_path = partnerships_path)
-		@partnership = current_user.partnerships.find(params[:partnership_id])
+		@partnership = current_user_profile.partnerships.find(params[:partnership_id])
 		return true
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to redirect_path
@@ -92,8 +99,8 @@ class EncountersController < ApplicationController
 		gon.encounter_data = {
 			partner: @partnership.partner.as_json_private,
 			contacts: Contact::ContactType::TYPES,
-			user: current_user.as_json_private,
-			instruments: Contact::Instrument.hashed_for_partnership(current_user, @partnership.partner),
+			user: current_user_profile.as_json_private,
+			instruments: Contact::Instrument.hashed_for_partnership(current_user_profile, @partnership.partner),
 			possibles: PossibleContact.hashed_for_partnership,
 			partnerPronoun: @partnership.partner.pronoun,
 			barriers: Contact::BarrierType::TYPES

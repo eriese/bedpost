@@ -1,7 +1,9 @@
 <basic-stepper :default-props="{animLength: 0.2}">
 	<div class="centered-container" id="who_form" slot-scope="{step, setStep}">
 		<div v-if="step == 0">
-			<h1><%= t(".step_0.title") %></h1>
+			<% if @from_dash %>
+				<h1 id="step-0-title"><%= t(".step_0.title") %></h1>
+			<% end %>
 			<h2 id="step_0_label"><%= t(".step_0.label") %></h2>
 			<ul aria-labeledby="step_0_label" class="button-list clear-fix">
 				<li><button type="button" @click="setStep(1, {animationType: 'slideLeft'})"><%= t("yes").capitalize %></button></li>
@@ -16,7 +18,7 @@
 		<div v-if="step == 2">
 			<h2><%= t(".new_profile.title")%></h2>
 			<aside class="desc"><%= t(".new_profile.desc") %></aside>
-			<div class="options"><%= link_to t(".go"), new_profile_path, "data-animation-type" => "slideLeft", title: t(".go_new_profile"), class: "as-button" %></div>
+			<div class="options"><%= link_to t(".go"), new_dummy_profile_path, "data-animation-type" => "slideLeft", title: t(".go_new_profile"), class: "as-button" %></div>
 			<button type="button" @click="setStep(0, {animationType: 'slideRight'})" class="as-link">Back</button>
 		</div>
 	</div>

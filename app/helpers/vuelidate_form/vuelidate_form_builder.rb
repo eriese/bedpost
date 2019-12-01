@@ -44,6 +44,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     return stepper
   end
 
+  alias_method :parent_hidden_field, :hidden_field
   def hidden_field(attribute, options={})
   	options = options.merge({label: false, validate: false, field_class: "hidden-field"})
   	field_builder(attribute, options).field do
@@ -104,7 +105,6 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
     radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: "fe"}
     radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
     checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
-    btns =
 
     group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup})
     joiner = options.delete(:joiner)
@@ -155,15 +155,16 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
   end
 
   def date_field(attribute, **options)
+    options[:is_date] = true
     field_builder(attribute, options).field do
       mdl = options.delete(:"v-model")
-      @template.content_tag(:"v-date-picker", "", {:"v-model" => mdl, :":popover" => "{visibility: 'focus'}"}) do
+      @template.content_tag(:"v-date-picker", "", {:"v-model" => mdl, :":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
         options[:"slot-scope"] = 'dp'
         options[:"v-bind"] = 'dp.inputProps'
         options[:"v-on"] = 'dp.inputEvents'
         parent_text_field(attribute, options)
       end <<
-      hidden_field(attribute)
+      parent_hidden_field(attribute, {:"v-model"=> mdl})
     end
   end
 

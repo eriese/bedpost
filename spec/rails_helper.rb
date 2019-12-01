@@ -9,6 +9,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 # require 'capybara/rails'
 require 'capybara/rspec'
+require 'fakeredis/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -26,45 +27,53 @@ require 'capybara/rspec'
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
-  # RSpec Rails can automatically mix in different behaviours to your tests
-  # based on their file location, for example enabling you to call `get` and
-  # `post` in specs under `spec/controllers`.
-  #
-  # You can disable this behaviour by removing the line below, and instead
-  # explicitly tag your specs with their type, e.g.:
-  #
-  #     RSpec.describe UsersController, :type => :controller do
-  #       # ...
-  #     end
-  #
-  # The different available types are documented in the features, such as in
-  # https://relishapp.com/rspec/rspec-rails/docs
-  config.infer_spec_type_from_file_location!
+	# RSpec Rails can automatically mix in different behaviours to your tests
+	# based on their file location, for example enabling you to call `get` and
+	# `post` in specs under `spec/controllers`.
+	#
+	# You can disable this behaviour by removing the line below, and instead
+	# explicitly tag your specs with their type, e.g.:
+	#
+	#     RSpec.describe UsersController, :type => :controller do
+	#       # ...
+	#     end
+	#
+	# The different available types are documented in the features, such as in
+	# https://relishapp.com/rspec/rspec-rails/docs
+	config.infer_spec_type_from_file_location!
 
-  # Filter lines from Rails gems in backtraces.
-  config.filter_rails_from_backtrace!
-  # arbitrary gems may also be filtered via:
-  # config.filter_gems_from_backtrace("gem name")
+	# Filter lines from Rails gems in backtraces.
+	config.filter_rails_from_backtrace!
+	# arbitrary gems may also be filtered via:
+	# config.filter_gems_from_backtrace("gem name")
 
-  # include factory bot
-  config.include FactoryBot::Syntax::Methods
-  config.include FeatureHelpers, type: :feature
-  config.include ActionView::Helpers::SanitizeHelper, type: :feature
+	# include factory bot
+	config.include FactoryBot::Syntax::Methods
+	config.include FeatureHelpers, type: :feature
+	config.include ActionView::Helpers::SanitizeHelper, type: :feature
+	config.include Devise::Test::ControllerHelpers, type: :controller
+	config.include Devise::Test::ControllerHelpers, type: :view
+	config.include Devise::Test::IntegrationHelpers, type: :feature
 
-  include UserProfileHelpers
-  include CleanupHelpers
+	include UserProfileHelpers
+	include CleanupHelpers
 
-  #clear the dummy user after all the tests are run
-  config.after :suite do
-    UserProfileHelpers.clear_all_dummies
-    db_has = false
-    Mongoid.default_client.collections.each do |c|
-      if c.count > 0
-        db_has = true
-        puts "#{c.namespace}: #{c.count}"
-      end
-    end
+	config.before :suite do
+		FakeRedis.enable
+	end
 
-    puts "Database is clean" unless db_has
-  end
+	#clear the dummy user after all the tests are run
+	config.after :suite do
+		Delayed::Backend::Mongoid::Job.destroy_all
+		UserProfileHelpers.clear_all_dummies
+		db_has = false
+		Mongoid.default_client.collections.each do |c|
+			if c.count > 0
+				db_has = true
+				puts "#{c.namespace}: #{c.count}"
+			end
+		end
+
+		puts "Database is clean" unless db_has
+	end
 end

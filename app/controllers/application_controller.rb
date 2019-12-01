@@ -1,24 +1,10 @@
 class ApplicationController < ActionController::Base
 	protect_from_forgery
-	before_action :require_user
+	before_action :store_user_location!, if: :storable_location?
+	before_action :authenticate_user_profile!
+	before_action :check_first_time
 
-	helper_method :current_user
-
-	def current_user
-	  @current_user ||= UserProfile.find(session[:user_id]) if session[:user_id]
-	end
-
-	def log_in_user(user_profile)
-		session[:user_id] = user_profile.id
-	end
-
-	def require_user
-		redirect_to login_path(r: request.url) unless current_user
-	end
-
-	def require_no_user
-		redirect_to params[:r] || user_profile_path if current_user
-	end
+	layout :choose_layout
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
 		flash[:submission_error] = error;
@@ -34,7 +20,7 @@ class ApplicationController < ActionController::Base
 		g_validators = validators
 		g_obj = obj
 		adder_obj = obj
-		# adder = nil
+
 		unless obj.is_a? Hash
 			adder = model_validator_mapper(obj, validators, skip)
 			adder_obj = obj.as_json serialize_opts.reverse_merge({strip_qs: true})
@@ -65,8 +51,12 @@ class ApplicationController < ActionController::Base
 
 			v_hash[atr] ||= []
 			v_hash[atr] += a_vals.map do |v|
+				next if v.kind == :foreign_key
 				if on_cond = v.options[:on]
 					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
+				end
+				if if_cond = v.options[:if]
+					next unless obj.send(if_cond)
 				end
 
 				[v.kind, v.options]
@@ -86,4 +76,40 @@ class ApplicationController < ActionController::Base
 			end
 		end
 	end
+
+	# Its important that the location is NOT stored if:
+  # - The request method is not GET (non idempotent)
+  # - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an
+  #    infinite redirect loop.
+  # - The request is an Ajax request as this can lead to very unexpected behaviour.
+  def storable_location?
+    request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+  end
+
+  def store_user_location!
+    # :user is the scope we are authenticating
+    store_location_for(:user_profile, request.fullpath)
+  end
+
+  # check if the user has unfinished parts of the first time experience
+  def check_first_time
+  	# only run if a user is signed in and the request is storable
+  	return unless user_profile_signed_in? && storable_location?
+
+  	redirect_path =
+	  	# if the user hasn't completed their profile, make them do it
+	  	if !current_user_profile.set_up?
+				edit_user_profile_registration_path
+			# if the user hasn't taken any actions in the app yet, take them to the first time page
+			elsif current_user_profile.first_time?
+				first_time_path
+			end
+
+  	redirect_to redirect_path unless redirect_path.nil?
+  end
+
+  # set the layout based on whether there is a user who should be able to access all authorize features
+  def choose_layout
+  	user_profile_signed_in? && !current_user_profile.first_time? ? "authed" : "no_auth"
+  end
 end

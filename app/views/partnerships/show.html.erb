@@ -1,13 +1,27 @@
-<h2><%= t(".partner_html", {name: @partnership.partner.name, nickname: @partnership.nickname}) %></h2>
+<h2><%= t(".partner_html", {name: @partnership.display}) %></h2>
+<toggle :symbols="['chart_view', 'list_view']" translate="partnerships.show.chart" field="showList" :val="additional.showList" @toggle-event="additionalField" @toggle-mounted="additionalField('showList', false)" id="view-toggle"></toggle>
+<div v-show="!additional.showList" class="partnership-chart-container">
+	<partnership-chart :partnership="<%= @partnership.to_json({only: Partnership::LEVEL_FIELDS}) %>"></partnership-chart>
+	<h3><%= t('.chart.desc') %></h3>
+</div>
+<table v-show="additional.showList">
+	<% Partnership::LEVEL_FIELDS.each do |field| %>
+	<tr>
+		<td><%= t(field, scope: 'helpers.label.partnership') %></td>
+		<td><%= @partnership[field] %></td>
+	</tr>
+	<% end %>
+</table>
 
-<% Partnership::LEVEL_FIELDS.each do |field| %>
-	<div><%= t(".field_html", {value: @partnership[field], field: field}) %></div>
-<% end %>
-
-<p><%= link_to t(".encounters"), partnership_encounters_path(@partnership) %></p>
-<p><%= link_to t(".back"), partnerships_path %></p>
-<p><%= link_to t(".edit"), edit_partnership_path(@partnership) %></p>
-
-<p>
-	<%= confirm_link_to t(".destroy"), partnership_path(@partnership), method: :delete, alert_class: "confirmation" %>
-</p>
+</div>
+<div class="additional">
+	<% if @partnership.encounters.size > 0 %>
+		<p><%= link_to t(".encounters", {name: @partnership.partner.name}), partnership_encounters_path(@partnership) %></p>
+	<% end %>
+	<p><%= link_to t(".new_encounter"), new_partnership_encounter_path(@partnership) %></p>
+	<p><%= link_to t(".back"), partnerships_path %></p>
+	<p><%= link_to t(".edit"), edit_partnership_path(@partnership) %></p>
+	<p>
+		<%= confirm_link_to t(".destroy.text"), partnership_path(@partnership), method: :delete, alert_class: "confirmation", data: {confirm: t(".destroy.confirm")} %>
+	</p>
+</div>

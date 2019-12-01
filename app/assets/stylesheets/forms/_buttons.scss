@@ -140,3 +140,10 @@ a.as-button {
 .dropdown.title-as-button > .dropdown-title {
 	cursor: pointer;
 }
+
+button.vs__deselect{
+	&:hover, &:focus {
+		background-color: transparent;
+		fill: $button-hover-color;
+	}
+}

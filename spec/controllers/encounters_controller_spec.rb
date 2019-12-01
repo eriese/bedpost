@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe EncountersController, type: :controller do
 	def make_user_and_encounters(num_encounters: 0, num_partners: 1)
 		@user = create(:user_profile)
+		sign_in @user
 		@hand = create(:contact_instrument, name: :hand)
 		@mouth = create(:contact_instrument, name: :mouth)
 		@p1 = create(:possible_contact, contact_type: :penetrated, subject_instrument: @hand, object_instrument: @mouth)
@@ -17,35 +18,49 @@ RSpec.describe EncountersController, type: :controller do
 		end
 	end
 
-	def user_session
-		{user_id: @user.id}
-	end
-
 	after :each do
 		cleanup @user, @p1, @p2, @hand, @mouth
 	end
 
 	describe 'GET #index' do
 		before :each do
-			make_user_and_encounters(num_encounters: 2, num_partners: 2)
+			allow(controller).to receive(:check_first_time)
 		end
 
 		context 'with partnership id' do
+			before :each do
+				make_user_and_encounters(num_encounters: 2, num_partners: 2)
+			end
+
 			it 'shows the encounters for only that partnership' do
 				ship = @user.partnerships.first
-				get :index, params: {partnership_id: ship.id}, session: user_session
+				get :index, params: {partnership_id: ship.id}
 
 				actual = assigns(:partnerships)
-				expect(actual.length).to eq 1
-				expect(actual[0]).to eq ship
+				expect(actual.size).to eq 1
+				expect(actual[0]["_id"]).to eq ship.id
+			end
+
+			it 'indicates that this is a request for only one partner' do
+				ship = @user.partnerships.first
+				get :index, params: {partnership_id: ship.id}
+				expect(assigns(:is_partner)).to be true
 			end
 		end
 
 		context 'without partnership id' do
 			it 'shows the encounters for all partnerships the user has' do
-				get :index, session: user_session
+				num_partners = 2
+				make_user_and_encounters(num_encounters: 2, num_partners: num_partners)
+				get :index
 
-				expect(assigns(:partnerships)).to eq @user.partnerships
+				expect(assigns(:partnerships).size).to eq num_partners
+			end
+
+			it 'indicates that this is a request for all partners even if there is only one partner' do
+				make_user_and_encounters(num_encounters: 2, num_partners: 1)
+				get :index
+				expect(assigns(:is_partner)).to be false
 			end
 		end
 	end
@@ -54,15 +69,50 @@ RSpec.describe EncountersController, type: :controller do
 		context 'with valid encounter' do
 			before do
 				make_user_and_encounters num_encounters: 1
+				allow(Diagnosis).to receive(:as_map) {{hpv: build_stubbed(:diagnosis, name: :hpv)}}
+				allow_any_instance_of(Encounter::RiskCalculator).to receive(:schedule) { {routine: [:hpv]}}
 			end
 
 			it 'shows the encounter' do
 				ship = @user.partnerships.first
 				enc = ship.encounters.first
-				get :show, params: {partnership_id: ship.to_param, id: enc.to_param}, session: user_session
+				get :show, params: {partnership_id: ship.to_param, id: enc.to_param}
 
 				expect(assigns[:partnership]).to eq ship
 				expect(assigns[:encounter]).to eq enc
+				expect(assigns[:encounter].schedule).to_not be_nil
+			end
+
+			describe 'params[:force]' do
+				it 'default runs without force' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					expect_any_instance_of(Encounter::RiskCalculator).to receive(:track).with(force: nil)
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param}
+					expect(assigns(:force)).to be_nil
+				end
+
+				it 'forces test scheduling even on lower risks when force is true' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					expect_any_instance_of(Encounter::RiskCalculator).to receive(:track).with(force: "true")
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param, force: "true"}
+					expect(assigns(:force)).to eq "true"
+				end
+
+				it 'responds with the html representation of the forced schedule if requested in json' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param, force: "true"}, format: :json
+					expect(response.body).to eq controller.helpers.display_schedule(assigns(:encounter))
+				end
+
+				it 'responds with the full show page if requested in html' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param, force: "true"}
+					expect(response).to render_template :show
+				end
 			end
 		end
 
@@ -73,7 +123,7 @@ RSpec.describe EncountersController, type: :controller do
 
 			it 'redirects back or to the encounters_path' do
 				ship = @user.partnerships.first
-				get :show, params: {partnership_id: ship.to_param, id: "whatever"}, session: user_session
+				get :show, params: {partnership_id: ship.to_param, id: "whatever"}
 
 				expect(response).to redirect_to encounters_path
 			end
@@ -86,13 +136,13 @@ RSpec.describe EncountersController, type: :controller do
 		end
 
 		it 'redirects to the encounter who page if the partnership param is invalid' do
-			get :new, session: user_session, params: {partnership_id: "whatever"}
+			get :new, params: {partnership_id: "whatever"}
 			expect(response).to redirect_to encounters_who_path
 		end
 
 		it 'makes a new encounter and includes the correct partner' do
 			ship = @user.partnerships.first
-			get :new, session: user_session, params: {partnership_id: ship.to_param}
+			get :new, params: {partnership_id: ship.to_param}
 			expect(assigns[:encounter]).to be_a Encounter
 			expect(assigns[:partner]).to eq ship.partner
 		end
@@ -108,7 +158,7 @@ RSpec.describe EncountersController, type: :controller do
 			it 'creates a new encounter on the partnership' do
 				ship = @user.partnerships.first
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params)}
+				post :create, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params)}
 				expect(ship.reload.encounters.count).to eq 1
 			end
 
@@ -117,7 +167,7 @@ RSpec.describe EncountersController, type: :controller do
 				@p2 = create(:possible_contact, subject_instrument: @hand, object_instrument: @hand, contact_type: :touched)
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id), attributes_for(:encounter_contact, possible_contact_id: @p2.id, barriers: ["fresh"])]
 				enc_params = attributes_for(:encounter, contacts_attributes: contact_params)
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: enc_params}
+				post :create, params: {partnership_id: ship.to_param, encounter: enc_params}
 				ship.reload
 
 				expect(ship.encounters.count).to eq 1
@@ -128,7 +178,7 @@ RSpec.describe EncountersController, type: :controller do
 			it 'goes to the show page for that encounter' do
 				ship = @user.partnerships.first
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params)}
+				post :create, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params)}
 				expect(response).to redirect_to partnership_encounter_path(ship, ship.reload.encounters.last)
 			end
 		end
@@ -137,7 +187,7 @@ RSpec.describe EncountersController, type: :controller do
 			it 'reloads the page' do
 				ship = @user.partnerships.first
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
+				post :create, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
 
 				expect(response).to redirect_to new_partnership_encounter_path(ship)
 			end
@@ -145,16 +195,16 @@ RSpec.describe EncountersController, type: :controller do
 			it 'does not leave an unsaved partnership on the user' do
 				ship = @user.partnerships.first
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: @p1.id)]
-				post :create, session: user_session, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
+				post :create, params: {partnership_id: ship.to_param, encounter: attributes_for(:encounter, contacts_attributes: contact_params, self_risk: 11)}
 
-				expect(controller.current_user.partnerships.first.encounters.length).to eq 0
+				expect(controller.current_user_profile.partnerships.first.encounters.length).to eq 0
 			end
 
 			it 'errors gacefully with bad contacts params' do
 				ship = @user.partnerships.first
 				contact_params = [attributes_for(:encounter_contact, possible_contact_id: nil)]
 				encounter_params = attributes_for(:encounter, contacts_attributes: contact_params)
-				post :create, format: :json, session: user_session, params: {partnership_id: ship.to_param, encounter: encounter_params}
+				post :create, format: :json, params: {partnership_id: ship.to_param, encounter: encounter_params}
 
 				actual = response.body
 				expected_enc = Encounter.new(encounter_params)
@@ -167,6 +217,7 @@ RSpec.describe EncountersController, type: :controller do
 
 	describe 'POST #update' do
 		before :each do
+			allow(controller).to receive(:check_first_time)
 			make_user_and_encounters num_encounters: 1
 		end
 
@@ -185,7 +236,7 @@ RSpec.describe EncountersController, type: :controller do
         encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
 
 				new_notes = "Something else"
-				post :update, session: user_session, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes, contacts_attributes: [{_id: encounter.contacts.first.id, object: :partner}]}}
+				post :update, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes, contacts_attributes: [{_id: encounter.contacts.first.id, object: :partner}]}}
 
 				encounter.reload
 				expect(encounter.notes).to eq new_notes
@@ -199,7 +250,7 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				encounter = ship.encounters.first
 
-				post :update, session: user_session, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {self_risk: 11}}
+				post :update, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {self_risk: 11}}
 				expect(response).to redirect_to edit_partnership_encounter_path(ship, encounter)
 				expect(flash[:submission_error]).to have_key(:self_risk)
 			end
@@ -209,6 +260,7 @@ RSpec.describe EncountersController, type: :controller do
 	describe 'DELETE #destroy' do
 
 		before :each do
+			allow(controller).to receive(:check_first_time)
 			make_user_and_encounters num_encounters: 1
 		end
 
@@ -217,7 +269,7 @@ RSpec.describe EncountersController, type: :controller do
 			encounter = ship.encounters.first
 			expect(encounter).to_not be_nil
 
-			delete :destroy, params: {id: encounter.to_param, partnership_id: ship.to_param}, session: user_session
+			delete :destroy, params: {id: encounter.to_param, partnership_id: ship.to_param}
 			expect(ship.reload.encounters.count).to eq 0
 		end
 
@@ -225,7 +277,7 @@ RSpec.describe EncountersController, type: :controller do
 			ship = @user.partnerships.first
 			encounter = ship.encounters.first
 
-			delete :destroy, params: {id: encounter.to_param, partnership_id: ship.to_param}, session: user_session
+			delete :destroy, params: {id: encounter.to_param, partnership_id: ship.to_param}
 			expect(response).to redirect_to encounters_path
 		end
 	end
