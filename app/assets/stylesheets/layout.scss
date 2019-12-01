@@ -9,7 +9,7 @@ body {
 	font-family: $text-font;
 	@include color-and-secondary(color, $color-black $color-white, true, true);
 	@include color-and-secondary(background-color, $background-colors, true, true);
-	font-size: 0.95em;
+	font-size: rem(15px);
 
 	&.with-cards {
 		@include color-and-secondary(background-color, $background-colors-secondary, $on-body: true);
@@ -19,7 +19,7 @@ body {
 
 h1 {
 	font-family: $header-font;
-	font-size: 2.45rem;
+	font-size: rem(40px);
 	margin: 0.5rem 0;
 	text-align: center;
 	line-height: 1.15;
@@ -45,7 +45,7 @@ h1 {
 h2 {
 	@include color-and-secondary(color, $colors-h2);
 	font-weight: 700;
-	font-size: 1.5em;
+	font-size: rem(24px);
 	text-align: center;
 
 	body.with-cards & {
@@ -90,7 +90,7 @@ p.description {
 
 .card {
 	border-radius: $stn-border-radius;
-	border: 2px solid;
+	border: rem(2px) solid;
 	@include color-and-secondary(border-color, $colors-h1);
 }
 
@@ -134,7 +134,7 @@ p.description {
 
 	> div {
 		padding: 0.25rem;
-		border: 3px solid transparent;
+		border: rem(3px) solid transparent;
 		border-radius: $stn-border-radius;
 	}
 
