@@ -5,22 +5,22 @@ input, select, textarea, input[type=input], .vc-reset input {
 	background-color: $input-background-color;
 	border-color: $color-purple-dark;
 	border-style: solid;
-	border-radius: 2px;
-	border-width: 1px;
+	border-radius: rem(2px);
+	border-width: rem(1px);
 	box-sizing: border-box;
 	color: inherit;
-	padding: 0px 5px;
+	padding: 0rem rem(5px);
 	line-height: 1;
 	box-shadow: none;
 
 	form.big &, form.single & {
-		padding: 5px 10px;
+		padding: rem(5px) rem(10px);
 	}
 
 	form.centered & {
 		display: block;
 		width: 100%;
-		margin-bottom: 3px;
+		margin-bottom: rem(3px);
 	}
 
 	&:focus {
@@ -29,7 +29,7 @@ input, select, textarea, input[type=input], .vc-reset input {
 
 }
 
-$check-box-size: 18px;
+$check-box-size: rem(18px);
 
 input[type=checkbox], input[type=radio] {
 	display: inline-block;
@@ -43,7 +43,7 @@ input[type=checkbox], input[type=radio] {
 	cursor: pointer;
 	color: $color-purple-dark;
 	position: relative;
-	margin-right: 10px;
+	margin-right: rem(10px);
 
 	form.centered & {
 		display: inline-block;
@@ -59,10 +59,10 @@ input[type=radio] {
 			content: "";
 			display: inline-block;
 			position: absolute;
-			height: $check-box-size - 10px;
-			width: $check-box-size - 10px;
-			left: 4px;
-			top: 4px;
+			height: $check-box-size - rem(10px);
+			width: $check-box-size - rem(10px);
+			left: rem(4px);
+			top: rem(4px);
 			background-color: $input-background-color;
 			border-radius: 50%;
 		}
@@ -73,8 +73,8 @@ input[type=radio] {
 		$label-color: $color-purple-light;
 		$label-hover-color: $color-purple-dark;
 
-		margin: 0px;
-		width: 0px !important;
+		margin: 0rem;
+		width: 0rem !important;
 		display: inline !important;
 		border: none !important;
 
@@ -92,24 +92,24 @@ input[type=radio] {
 			}
 
 			+ label {
-				@media (min-width: 500px) {
-					font-size: 1.2em;
+				@media (min-width: rem(500px)) {
+					font-size: 1.2rem;
 				}
 				font-weight: bold;
 			}
 		}
 
 		&:focus + label {
-			outline-width: 2px;
+			outline-width: rem(2px);
 			outline-style: solid;
 			outline-color: Highlight;
 
 			/* WebKit gets its native focus styles.
 			 */
 			@media (-webkit-min-device-pixel-ratio:0) {
-			    outline-color: -webkit-focus-ring-color;
-			    outline-style: auto;
-			    outline-width: 5px;
+					outline-color: -webkit-focus-ring-color;
+					outline-style: auto;
+					outline-width: rem(5px);
 			}
 		}
 
@@ -133,10 +133,10 @@ input[type=radio] {
 				border-radius: 50%;
 				background-color: $background-color;
 				color: $button-color;
-				border: 2px solid $button-color;
+				border: rem(2px) solid $button-color;
 				text-align: center;
-				font-size: 1em;
-				margin-right: 0.5em;
+				font-size: 1rem;
+				margin-right: 0.5rem;
 			}
 
 			&:focus, &:hover, &:checked {
@@ -155,15 +155,15 @@ input[type=checkbox] {
 	&:checked::after {
 		content: "";
 		display: inline-block;
-		border-left: 2px solid;
-		border-bottom: 2px solid;
+		border-left: rem(2px) solid;
+		border-bottom: rem(2px) solid;
 		transform: rotate(-45deg);
 		position: absolute;
 
-		height: 5px;
-	    top: 2px;
-	    width: 11px;
-	    left: 1px;
+		height: rem(5px);
+		top: rem(2px);
+		width: rem(11px);
+		left: rem(1px);
 	}
 }
 
@@ -171,10 +171,10 @@ input[type=range] {
 	-webkit-appearance: none;
 	border: none;
 	background: transparent;
-	margin: 25px 0px 20px;
+	margin: rem(25px) 0 rem(20px) 0;
 
 	form.centered & {
-		margin-bottom: 10px;
+		margin-bottom: rem(10px);
 	}
 
 	$kit-tracks: -webkit-slider-runnable-track -moz-range-track -ms-track;
@@ -182,8 +182,8 @@ input[type=range] {
 		&::#{$kit} {
 			width: 100%;
 			background: transparent;
-			height: 10px;
-			border-radius: 6px;
+			height: rem(10px);
+			border-radius: rem(6px);
 			background-color: $color-purple-dark;
 			cursor: pointer;
 			transition: all .2s ease;
@@ -195,11 +195,11 @@ input[type=range] {
 	$kit-thumbs: -webkit-slider-thumb -moz-range-thumb -ms-thumb;
 	@each $kit in $kit-thumbs {
 		&::#{$kit} {
-			height: 30px;
-			width: 20px;
+			height: rem(30px);
+			width: rem(20px);
 			background-color: $color-purple-light;
 			box-shadow: none;
-			border-radius: 5px;
+			border-radius: rem(5px);
 			cursor: pointer;
 			border: none;
 		}
@@ -207,7 +207,7 @@ input[type=range] {
 
 	&::-webkit-slider-thumb {
 		-webkit-appearance: none;
-		margin-top: -10px;
+		margin-top: rem(-10px);
 	}
 
 	&::-ms-thumb {
@@ -221,7 +221,7 @@ input[type=range] {
 			border: none;
 			background: $color-purple-dark;
 			box-shadow: none;
-			border-radius: 10px;
+			border-radius: rem(10px);
 		}
 	}
 
@@ -261,21 +261,21 @@ input[disabled=disabled] {
 }
 
 .double-prog-bar {
-	$progbar-height: 15px;
+	$progbar-height: rem(15px);
 	position: relative;
 	background-color: $color-light-gray;
 	height: $progbar-height;
-	border: 1px solid $color-green-dark;
+	border: rem(1px) solid $color-green-dark;
 	width: 84%;
-	margin: 5px 8%;
+	margin: rem(5px) 8%;
 
 
 	.benchmark {
 		position: absolute;
-		height: $progbar-height + 10px;
-		width: 6px;
-		margin-left: -3px;
-		top: -5px;
+		height: $progbar-height + rem(10px);
+		width: rem(6px);
+		margin-left: rem(-3px);
+		top: rem(-5px);
 		background-color: $color-green-very-dark;
 		z-index: 1;
 	}
@@ -293,34 +293,34 @@ input[disabled=disabled] {
 	width: $check-box-size;
 	color: $color-purple-dark;
 	position: relative;
-	margin-left: 5px;
+	margin-left: rem(5px);
 
 	&.false:before, &.false:after {
-	  position: absolute;
-	  left: 7px;
-	  content: '';
-	  height: $check-box-size;
-	  border-left: 3px solid;
+		position: absolute;
+		left: rem(7px);
+		content: '';
+		height: $check-box-size;
+		border-left: rem(3px) solid;
 	}
 
 	&.false:before {
-	  transform: rotate(45deg);
+		transform: rotate(45deg);
 	}
 	&.false:after {
-	  transform: rotate(-45deg);
+		transform: rotate(-45deg);
 	}
 
 	&.true:after {
 		content: "";
 		display: inline-block;
-		border-left: 3px solid;
-		border-bottom: 3px solid;
+		border-left: rem(3px) solid;
+		border-bottom: rem(3px) solid;
 		transform: rotate(-40deg);
 		position: absolute;
 
-		height: 6px;
-	    top: 3px;
-	    width: 12px;
-	    left: 1px;
+		height: rem(6px);
+		top: rem(3px);
+		width: rem(12px);
+		left: rem(1px);
 	}
 }

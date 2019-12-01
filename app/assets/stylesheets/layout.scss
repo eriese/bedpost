@@ -2,6 +2,7 @@
 
 html, body {
 	height: 100%;
+	font-size: $root-font-size;
 }
 
 body {
@@ -12,7 +13,7 @@ body {
 
 h1 {
 	font-weight: unset;
-	font-size: 40px;
+	font-size: 2.5rem;
 	color: $color-purple-dark;
 	text-align: center;
 }
@@ -28,7 +29,7 @@ header {
 
 main {
 	clear: both;
-	padding: 10px;
+	padding: rem(10px);
 	opacity: 0;
 
 	.no-js & {
@@ -61,7 +62,7 @@ p.description {
 .no-js {
 	header.small {
 		position: absolute;
-		margin-left: 10px;
+		margin-left: rem(10px);
 	}
 
 	header.small + main {
@@ -79,7 +80,7 @@ p.description {
 #no-js-warning {
 	text-align: center;
 	font-weight: bold;
-	border: 1px solid $color-green-light;
+	border: rem(1px) solid $color-green-light;
 }
 
 #flash {
@@ -109,7 +110,7 @@ p.description {
 }
 
 .aria-only {
-	font-size: 0px;
+	font-size: 0rem;
 }
 
 .clear {
@@ -118,24 +119,24 @@ p.description {
 
 #logo {
 	font-family: $script-font;
-	font-size: 55px;
+	font-size: rem(55px);
 	color: $color-purple-light;
 	text-decoration: none;
 
 	span {
 		font-family: $outline-font;
-		font-size: 58px;
+		font-size: rem(58px);
 		color: $color-purple-dark;
 	}
 
 	header.small & {
 		text-align: left;
-		font-size: 39px;
+		font-size: rem(39px);
 		float: left;
-		padding-top: 10px;
+		padding-top: rem(10px);
 
 		span {
-			font-size: 41px;
+			font-size: rem(41px);
 		}
 	}
 }
@@ -145,8 +146,8 @@ p.description {
 }
 
 #page-container-inner {
-	max-width: 1000px;
-	margin: 0px auto;
+	max-width: rem(1000px);
+	margin: 0 auto;
 }
 
 .centered-container {
@@ -155,9 +156,9 @@ p.description {
 
 .desc {
 	h1 + &, h2 + & {
-		line-height: 1;
-		margin-top: -1em;
-		margin-bottom: 1em;
+		line-height: 1rem;
+		margin-top: -1rem;
+		margin-bottom: 1rem;
 	}
 }
 
@@ -170,12 +171,12 @@ span.confirmation {
 }
 
 .rounded-container {
-	border-radius: 10px;
-	padding: 10px;
-	margin-bottom: 10px;
+	border-radius: rem(10px);
+	padding: rem(10px);
+	margin-bottom: rem(10px);
 	.rounded-container-title {
 		text-align: center;
-		margin: 0 0 0.2em 0;
+		margin: 0 0 0.2rem 0;
 	}
 }
 
@@ -224,31 +225,31 @@ span.confirmation {
 
 .dark-border-container {
 	@extend .rounded-container;
-	border: 2px solid $color-purple-dark;
+	border: rem(2px) solid $color-purple-dark;
 }
 
 .light-border-container {
 	@extend .rounded-container;
-	border: 2px solid $color-purple-light;
+	border: rem(2px) solid $color-purple-light;
 }
 
 .gray-border-container {
 	@extend .rounded-container;
-	border: 2px solid $color-light-gray;
+	border: rem(2px) solid $color-light-gray;
 }
 
 .bubble-container {
-	height: 1.9em;
+	height: 1.9rem;
 	position: relative;
-	$arrow-size: 8px;
+	$arrow-size: rem(8px);
 
 	.bubble {
-		border-radius: 8px;
-		padding: 0px 5px;
+		border-radius: rem(8px);
+		padding: 0rem rem(5px);
 		display: inline-block;
-		border: 1px solid $color-green-dark;
+		border: rem(1px) solid $color-green-dark;
 		color: $color-green-dark;
-		font-size: 0.8em;
+		font-size: 0.8rem;
 		position: absolute;
 		max-width: 80vw;
 

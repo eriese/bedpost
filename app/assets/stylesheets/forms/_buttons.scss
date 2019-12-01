@@ -17,7 +17,7 @@ button.not-button, button.as-link, input[type=submit].not-button {
 	-webkit-appearance: none;
 	-moz-appearance:    none;
 	appearance:         none;
-	padding: 0px;
+	padding: 0rem;
 	background-color: transparent;
 
 	&:hover, &:focus {
@@ -34,13 +34,13 @@ button, input[type=submit], a.as-button {
 	background-color: $button-color;
 	border-color: $button-color;
 	color: $button-text-color;
-	padding: 5px 10px;
+	padding: rem(5px) rem(10px);
 	transition: 0.1s linear all;
 	cursor: pointer;
 	border-style: solid;
 
 	form.centered & {
-		margin-top: 10px;
+		margin-top: rem(10px);
 	}
 }
 
@@ -70,16 +70,16 @@ button.transparent {
 
 button.arrow-button {
 	text-decoration: none;
-	font-size: 32px;
+	font-size: rem(32px);
 	font-weight: bold;
-	line-height: 32px;
+	line-height: rem(32px);
 	vertical-align: middle;
 	border-radius: 50%;
-	height: 40px;
-	width: 40px;
+	height: rem(40px);
+	width: rem(40px);
 
 	&:not(.not-button):not(.as-link) {
-		padding: 0px;
+		padding: 0rem;
 	}
 
 	&:disabled {

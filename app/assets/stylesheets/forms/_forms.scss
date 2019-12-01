@@ -1,12 +1,20 @@
 @import "_defaults";
 
 form.centered {
-	max-width: 400px;
-	padding: 0px 15px;
-	margin: 0px auto;
+	max-width: rem(400px);
+	padding: 0rem rem(15px);
+	margin: 0rem auto;
 
 	h2, p.description, div.errors {
 		text-align: center;
+	}
+
+	h2.with-desc {
+		margin-bottom: 0.25rem;
+	}
+
+	p.description {
+		margin-top: 0;
 	}
 
 	label {
@@ -33,11 +41,11 @@ form.single {
 	}
 
 	label {
-		font-size: 20px;
+		font-size: rem(20px);
 	}
 
 	.tooltip {
-		font-size: 18px;
+		font-size: rem(18px);
 	}
 }
 
@@ -45,7 +53,7 @@ form {
 	div.field-errors {
 		text-align: right;
 		color: $color-purple-light;
-		font-size: 12px;
+		font-size: rem(12px);
 		line-height: 1;
 	}
 
@@ -54,7 +62,7 @@ form {
 	}
 
 	div.range-indicator {
-		margin-bottom: 10px;
+		margin-bottom: rem(10px);
 
 		&:after {
 			content: "";
@@ -80,28 +88,28 @@ form {
 
 	.tooltip {
 		color: $color-green-dark;
-		font-size: 14px;
+		font-size: rem(14px);
 		line-height: 1.25;
-		margin: 3px auto;
+		margin: rem(3px) auto;
 	}
 
 	.step {
 		background-color: $color-light-gray;
-		border-radius: 5px;
+		border-radius: rem(5px);
 		// padding: 15px;
-		margin-bottom: 25px;
+		margin-bottom: rem(25px);
 	}
 
 
 	.slide-bar-desc {
-		font-size: 14px;
+		font-size: rem(14px);
 		clear: both;
 	}
 }
 
 .field {
 	display: block;
-	margin: 10px 0px 25px;
+	margin: rem(10px) 0 rem(25px) 0;
 
 	&.hidden-field {
 		margin: 0;
@@ -109,12 +117,12 @@ form {
 
 	> .toggle {
 		display: inline;
-		font-size: 30px;
+		font-size: rem(30px);
 		font-weight: bold;
 		color: $color-purple-dark;
 		vertical-align: middle;
-		line-height: 16px;
-		margin-right: 5px;
+		line-height: 1rem;
+		margin-right: rem(5px);
 
 		&:hover, &:focus {
 			color: $color-purple-light;
@@ -132,7 +140,7 @@ form {
 		}
 
 		.field.inline {
-			margin: 0px;
+			margin: 0rem;
 		}
 	}
 
@@ -141,14 +149,14 @@ form {
 
 		label, input {
 			display: inline;
-			margin-right: 10px;
+			margin-right: rem(10px);
 		}
 
 		.tooltip {
 			float: right;
 
 			.tooltip-icon {
-				top: -5px;
+				top: rem(-5px);
 			}
 		}
 	}
@@ -156,17 +164,17 @@ form {
 
 .flickity-enabled {
 	&:focus ~ .step-nav>.prog-buttons>li>button {
-		border: 2px solid $color-green-light;
+		border: rem(2px) solid $color-green-light;
 	}
 
 	.field {
-		margin-bottom: 0px;
+		margin-bottom: 0rem;
 
 		.additional {
-			height: 80px;
+			height: rem(80px);
 
 			.explanation {
-				max-height: 40px;
+				max-height: rem(40px);
 				overflow-y: auto;
 			}
 		}
@@ -177,17 +185,17 @@ form {
 	position: relative;
 
 	.step-inner {
-		padding: 15px;
+		padding: rem(15px);
 		border-radius: inherit;
 	}
 
 	.flickity-viewport {
-		padding-bottom: 60px;
+		padding-bottom: rem(60px);
 	}
 
 	.form-step {
 		width: 100%;
-		padding: 5px;
+		padding: rem(5px);
 		box-sizing: border-box;
 
 		&:not(.is-selected) {
@@ -201,23 +209,23 @@ form {
 		text-align: center;
 		position: relative;
 		// bottom: 5px;
-		left: 0px;
+		left: 0rem;
 		width: 100%;
 		z-index: 1;
-		height: 0px;
+		height: 0rem;
 
-		$dot-size: 8px;
+		$dot-size: rem(8px);
 		.prog-dots {
 			height: $dot-size;
 			line-height: 0;
 			position: absolute;
 			width: 100%;
-			bottom: 15px;
+			bottom: rem(15px);
 		}
 
 		.prog-dot {
 			display: inline-block;
-			margin: 0px $dot-size;
+			margin: 0rem $dot-size;
 			width: $dot-size;
 			height: $dot-size;
 			border-radius: 50%;
@@ -231,54 +239,54 @@ form {
 		.prog-buttons {
 			list-style: none;
 			padding-inline-start: 0;
-			margin: 0px;
+			margin: 0rem;
 
 			li {
 				display: inline-block;
 				position: absolute;
-				bottom: 35px;
+				bottom: rem(35px);
 
 				&.next {
-					right: 20px;
+					right: rem(20px);
 				}
 
 				&.prev {
-					left: 20px;
+					left: rem(20px);
 				}
 			}
 
 			input[type=submit], button.last {
-				line-height: 32px;
+				line-height: rem(32px);
 				vertical-align: middle;
 				font-weight: bold;
 				display: inline;
 				width: auto;
-				font-size: 1.75em;
+				font-size: 1.75rem;
 			}
 		}
 	}
 }
 
 .dynamic-field {
-	padding: 5px;
+	padding: rem(5px);
 
 	.dynamic-field-buttons {
 		float: right;
-		margin-top: -10px;
+		margin-top: rem(-10px);
 
 		+ div {
 			clear: both;
 		}
 
 		button.arrow-button {
-			$button-size: 30px;
+			$button-size: rem(30px);
 			margin: 0;
 			height: $button-size;
 			width: $button-size;
 			line-height: $button-size;
 
 			svg {
-				$svg-size: $button-size - 10px;
+				$svg-size: $button-size - rem(10px);
 				height: $svg-size;
 				width: $svg-size;
 			}
