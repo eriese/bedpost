@@ -69,6 +69,8 @@ RSpec.describe EncountersController, type: :controller do
 		context 'with valid encounter' do
 			before do
 				make_user_and_encounters num_encounters: 1
+				allow(Diagnosis).to receive(:as_map) {{hpv: build_stubbed(:diagnosis, name: :hpv)}}
+				allow_any_instance_of(Encounter::RiskCalculator).to receive(:schedule) { {routine: [:hpv]}}
 			end
 
 			it 'shows the encounter' do
@@ -78,6 +80,39 @@ RSpec.describe EncountersController, type: :controller do
 
 				expect(assigns[:partnership]).to eq ship
 				expect(assigns[:encounter]).to eq enc
+				expect(assigns[:encounter].schedule).to_not be_nil
+			end
+
+			describe 'params[:force]' do
+				it 'default runs without force' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					expect_any_instance_of(Encounter::RiskCalculator).to receive(:track).with(force: nil)
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param}
+					expect(assigns(:force)).to be_nil
+				end
+
+				it 'forces test scheduling even on lower risks when force is true' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					expect_any_instance_of(Encounter::RiskCalculator).to receive(:track).with(force: "true")
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param, force: "true"}
+					expect(assigns(:force)).to eq "true"
+				end
+
+				it 'responds with the html representation of the forced schedule if requested in json' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param, force: "true"}, format: :json
+					expect(response.body).to eq controller.helpers.display_schedule(assigns(:encounter))
+				end
+
+				it 'responds with the full show page if requested in html' do
+					ship = @user.partnerships.first
+					enc = ship.encounters.first
+					get :show, params: {partnership_id: ship.to_param, id: enc.to_param, force: "true"}
+					expect(response).to render_template :show
+				end
 			end
 		end
 

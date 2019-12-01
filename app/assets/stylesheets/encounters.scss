@@ -10,11 +10,11 @@
 
 		.field-section {
 			float: left;
-			margin-right: 5px;
+			margin-right: rem(5px);
 
 			p {
-				line-height: 1em;
-				margin: 0.15em 0 0;
+				line-height: 1rem;
+				margin: 0.15rem 0 0 0;
 				font-size: inherit;
 			}
 
@@ -32,13 +32,13 @@
 
 			p {
 				margin-top: 0;
-				line-height: 1.25em;
+				line-height: rem(20px);
 			}
 		}
 
 		input[type=radio], input[type=checkbox] {
 			&:checked + label {
-				font-size: 1em;
+				font-size: 1rem;
 				font-weight: normal;
 			}
 
@@ -48,7 +48,7 @@
 		}
 
 		.contact-barriers > div {
-			font-size: 0.85em;
+			font-size: 0.85rem;
 			display: flex;
 			flex-wrap: wrap;
 
@@ -58,8 +58,8 @@
 
 				&:checked {
 					background-color: transparent;
-					height: 6px;
-					width: 6px;
+					height: rem(6px);
+					width: rem(6px);
 
 					&::after {
 						background-color: $color-purple-dark;
@@ -68,18 +68,18 @@
 						transform: none;
 						border-radius: 50%;
 						border: none;
-						top: 0px;
-						left: 0px;
+						top: 0rem;
+						left: 0rem;
 					}
 
 					+ label {
-						margin-right: 10px;
+						margin-right: rem(10px);
 					}
 				}
 
 				&:not(:checked) {
-					height: 0px;
-					width: 0px;
+					height: 0rem;
+					width: 0rem;
 					display: inline;
 
 					&::after {
@@ -95,14 +95,14 @@
 
 		> div {
 			float: left;
-			margin-right: 5px;
+			margin-right: rem(5px);
 
 			label {
-				display: inline
+				display: inline;
 			}
 
 			input[type=checkbox] {
-				margin-right: 0px;
+				margin-right: 0rem;
 			}
 		}
 	}
@@ -112,31 +112,32 @@
 	position: relative;
 	> span.dropdown-button {
 		position: absolute;
-		right: 8px;
-		top: 8px;
+		right: rem(8px);
+		top: rem(8px);
 
 		button.arrow-button {
-			height: 30px;
-			width: 30px;
-			line-height: 30px * .80;
+			$size: 30px;
+			height: rem($size);
+			width: rem($size);
+			line-height: rem($size * 0.8);
 		}
 	}
 
 	>.dropdown-content {
-		padding: 0px 10px;
+		padding: 0rem rem(10px);
 	}
 }
 
 .contacts-show {
-	padding-inline-start: 0px;
+	padding-inline-start: 0rem;
 
 	.contact-show {
 		clear: both;
-		margin-bottom: 5px;
+		margin-bottom: rem(5px);
 
 		>.dropdown {
 			transition: all 0.3s ease-in-out;
-			border-bottom: 1px solid $color-green-dark;
+			border-bottom: rem(1px) solid $color-green-dark;
 
 			&:after {
 				clear: both;
@@ -145,11 +146,11 @@
 			}
 
 			&.open {
-				padding: 5px;
+				padding: rem(5px);
 
 				.dropdown-title {
-					font-size: 1.2em;
-					margin-bottom: 0.5em;
+					font-size: 1.2rem;
+					margin-bottom: 0.5rem;
 				}
 			}
 		}
@@ -172,22 +173,22 @@
 
 .risks-show {
 	clear: both;
-	padding-inline-start: 0px;
+	padding-inline-start: 0rem;
 	list-style-type: none;
 
 	li {
 		@extend .clear-fix;
-		padding: 5px 10px;
-		font-size: 1.1em;
+		padding: rem(5px) rem(10px);
+		font-size: 1.1rem;
 
 		&:first-child {
-			border-top-right-radius: 5px;
-			border-top-left-radius: 5px;
+			border-top-right-radius: rem(5px);
+			border-top-left-radius: rem(5px);
 		}
 
 		&:last-child {
-			border-bottom-right-radius: 5px;
-			border-bottom-left-radius: 5px;
+			border-bottom-right-radius: rem(5px);
+			border-bottom-left-radius: rem(5px);
 		}
 		@for $i from 1 through 5 {
 			&.risk-#{$i - 1} {
@@ -203,7 +204,7 @@
 
 		.risk-level {
 			font-weight: bold;
-			font-size: 1.15em;
+			font-size: 1.15rem;
 			float: left;
 			width: 30%;
 		}
@@ -217,7 +218,7 @@
 }
 
 .schedule-show {
-	padding-inline-start: 0px;
+	padding-inline-start: 0rem;
 	list-style-type: none;
 
 	li {
@@ -226,11 +227,11 @@
 		align-items: center;
 
 		.schedule-date {
-			border: 2px solid $color-dark-gray;
-			margin-bottom: 10px;
+			border: rem(2px) solid $color-dark-gray;
+			margin-bottom: rem(10px);
 			text-align: center;
-			width: 3.5em;
-			height: 3.5em;
+			width: 3.5rem;
+			height: 3.5rem;
 			box-sizing: border-box;
 			display: flex;
 			flex-direction: column;
@@ -239,28 +240,28 @@
 
 			.month-year {
 				background-color: $color-dark-gray;
-				font-size: 1.15em;
+				font-size: 1.15rem;
 			}
 
 			.day {
 				color: $color-black;
 				font-weight: bold;
-				font-size: 1.5em;
+				font-size: 1.5rem;
 				flex-grow: 1;
 				display: flex;
 				align-items: center;
 
 				span {
 					display: inline-block;
-					margin: 0px auto;
+					margin: 0rem auto;
 				}
 			}
 		}
 
 		.schedule-diagnoses {
 			flex-grow: 1;
-			margin-left: 20px;
-			font-size: 1.5em;
+			margin-left: rem(20px);
+			font-size: 1.5rem;
 		}
 	}
 }
@@ -268,28 +269,38 @@
 #page-container #page-container-inner #encounter-calendar {
 	.popover-day-title {
 		text-align: center;
-		font-size: 1.15em;
+		font-size: 1.15rem;
 	}
 
 	.encounter-partner-name {
-		margin-right: 5px;
+		margin-right: rem(5px);
 	}
 
 	.vc-bars {
-		box-shadow: 1px 0px 2px 0px rgba(255,255,255,.1), 0px 1px 5px 0px rgba(255,255,255,.1);
+		box-shadow: rem(1px) 0rem rem(2px) 0rem rgba(255,255,255,.1), 0rem rem(1px) rem(5px) 0rem rgba(255,255,255,.1);
 	}
 
 	.encounter-contact-toggle {
-		margin-left: 10px;
-		margin-bottom: 10px;
+		margin-left: rem(10px);
+		margin-bottom: rem(10px);
 	}
 
 	.partner-indicator {
 		display: inline-block;
-		height: 1.15em;
-		width: 2em;
+		height: 1.15rem;
+		width: 2rem;
 		vertical-align: middle;
-		margin-right: 0.5em;
-		margin-bottom: 0.175em;
+		margin-right: rem(8px);
+		margin-bottom: 0.175rem;
+	}
+
+	.encounter-list-item {
+		.item-partner {
+			font-weight: bold;
+		}
+
+		.item-date {
+			font-size: 1rem;
+		}
 	}
 }

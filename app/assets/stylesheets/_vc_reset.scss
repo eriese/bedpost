@@ -5,8 +5,8 @@
 ////////////////////////////////////////
 #page-container #page-container-inner {
 	.vc-container {
-		--dot-diameter: 7px;
-		--bar-height: 6px;
+		--dot-diameter: rem(7px);
+		--bar-height: rem(6px);
 	}
 
 	.vc-popover-content-wrapper .vc-popover-content {
@@ -47,7 +47,7 @@
 
 	@mixin toggle-button($bg-color, $is-dark: true) {
 		background-color: $bg-color;
-		border: 2px solid $bg-color;
+		border: rem(2px) solid $bg-color;
 
 		&[aria-pressed=false] {
 			background-color: $background-color;

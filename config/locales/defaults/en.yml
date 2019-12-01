@@ -83,6 +83,7 @@ en:
     partners: "Partners"
     encounters: "Encounters"
   guide_button: "Load a guide to this page"
+  loading: Loading...
   list_view: List View
   chart_view: Chart View
   calendar_view: Calendar View

@@ -1,31 +1,41 @@
 <template>
 	<div id="encounter-calendar">
-		<div v-if="partnerships.length > 1 && hasEncounters">
-			<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
-				<template v-slot:selected-option="opt">
-					<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
-				</template>
-			</v-select>
-		</div>
-		<v-calendar v-if="hasEncounters" v-bind="calendarProps">
-			<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
-				<div class="popover-day-title">
-					{{ dayTitle }}
-					</div>
-					<v-popover-row
-						v-for="attr in attributes"
-						:key="attr.key"
-						:attribute="attr">
-						<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-						<a :href="`/partners/${attr.customData.partnerID}/encounters/${attr.customData.encID}`">{{ attr.customData.notes}}</a>
-				</v-popover-row>
-			</div>
-		</v-calendar>
 		<slot v-if="!hasEncounters" ></slot>
+		<div v-else>
+			<div v-if="partnerships.length > 1">
+				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
+					<template v-slot:selected-option="opt">
+						<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
+					</template>
+				</v-select>
+			</div>
+			<toggle :symbols="['list_view', 'calendar_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" :as-button="true" @toggle-event="onToggle"></toggle>
+			<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
+				<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
+					<div class="popover-day-title">
+						{{ dayTitle }}
+						</div>
+						<v-popover-row
+							v-for="attr in attributes"
+							:key="attr.key"
+							:attribute="attr">
+							<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
+							<a :href="attr.customData.href">{{ attr.customData.notes }}</a>
+					</v-popover-row>
+				</div>
+			</v-calendar>
+			<div v-if="viewType=='list'">
+				<ul class="no-dots">
+					<encounter-list-item v-for="enc in selectedEncounters" :key="enc.customData.encID" :encounter="enc"></encounter-list-item>
+				</ul>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
+	import encounterListItem from "@components/functional/EncounterListItem";
+
 	/**
 	 * A calendar component to display a user's encounters with one or more partners
 	 * @module
@@ -39,10 +49,14 @@
 	 */
 	export default {
 		name: 'encounter-calendar',
+		components: {
+			encounterListItem
+		},
 		data() {
 			return {
 				selectedPartnersArray: this.partnerships,
 				hasEncounters: this.partnerships.some((p) => p.encounters && p.encounters.length),
+				viewType: "calendar",
 			}
 		},
 		props: {
@@ -101,11 +115,13 @@
 							highlight: highlight ? partnerClass : false,
 							// data to pass to the popover
 							customData: {
-								partnerID: partner._id,
-								encID: enc._id,
-								partnerName: partner.display,
-								notes: enc.notes || this.$_t('encounters.index.no_notes')
-							},
+									partnerID: partner._id,
+									encID: enc._id,
+									partnerName: partner.display,
+									notes: enc.notes || this.$_t('encounters.index.no_notes'),
+									partnerClass: partnerClass,
+									href: `/partners/${partner._id}/encounters/${enc._id}`
+								},
 							// show popover on focus
 							popover: {
 								visibility: 'focus'
@@ -114,17 +130,11 @@
 					})
 				})
 
-				return ret;
+				return ret.sort((a, b) => b.dates - a.dates);
 			},
 			mostRecent() {
-				// max date
-				let max = null;
-				// go through the selected encounters
-				const mostRecentEncounter = this.selectedEncounters.reduce((prev, curr) => (new Date(prev.dates) > new Date(curr.dates)) ? prev : curr);
-				const mostRecentEncounterDate = new Date(mostRecentEncounter.dates)
-
-				// ridiculously, v-calendar wants the calendar number of the month rather than the 0-index
-				return {month: mostRecentEncounterDate.getMonth() + 1, year: mostRecentEncounterDate.getFullYear()};
+				// they're already sorted to have the most recent at the top
+				let max = this.selectedEncounters[0].dates;
 
 				max = max || new Date();
 				// ridiculously, v-calendar wants the calendar number of the month rather than the 0-index
@@ -139,6 +149,9 @@
 			 */
 			isSelected(partnerID) {
 				return this.selectedPartners.indexOf(partnerID) >= 0;
+			},
+			onToggle(field, newVal) {
+				this[field] = newVal
 			}
 		}
 	}
