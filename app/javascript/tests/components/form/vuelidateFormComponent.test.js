@@ -306,6 +306,21 @@ describe('VuelidateForm Component', () => {
 				expect(newKeys).not.toEqual(oldKeys);
 
 			});
+
+			it('is updated via slotScope method addValidation', () => {
+				const wrapper = mountWrapper({
+					value: {
+						name: null,
+					},
+				});
+
+				const oldKeys = Object.keys(wrapper.vm.$v.formData.name);
+
+				wrapper.vm.slotScope.addValidation('name', {too_long: (v) => v > 5});
+				const newKeys = Object.keys(wrapper.vm.$v.formData.name);
+
+				expect(newKeys).not.toEqual(oldKeys);
+			});
 		});
 
 		it('it adds a submitted validator to every field, even if the field has no other validators', () => {

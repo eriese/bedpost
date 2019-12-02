@@ -7,7 +7,7 @@
 					<arrow-button class="not-button" v-if="index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
 					<arrow-button class="not-button" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
 				</div>
-				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="trackInList" class="clear" @track="track" @should-validate="addValidation"></component>
+				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="trackInList" class="clear" @track="track"></component>
 			</div>
 			<deleted-child v-else :base-name="`${baseName}[${index}]`" :item="list[index]" :id-key="idKey"></deleted-child>
 		</div>
@@ -33,13 +33,9 @@ export default {
 			trackInList: {},
 			numSubmitting: 0,
 			toDelete: [],
-			validate: {}
 		};
 	},
 	props: ['componentType', 'list', 'baseName', 'dummyKey', 'showDeleted', 'optional'],
-	validations() {
-		return this.validate;
-	},
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];
@@ -148,11 +144,6 @@ export default {
 		},
 		onChildMounted() {
 			this.setFocus(this.lastIndex);
-		},
-		addValidation(childValidation) {
-			if(!this.validate.list) {
-				this.validate.list = childValidation;
-			}
 		}
 	},
 	created() {

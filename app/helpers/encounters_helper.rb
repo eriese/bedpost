@@ -57,34 +57,22 @@ module EncountersHelper
 		content_tag(:li, {class: "contact-show"}) do
 			content_tag(:"drop-down") do
 				content_tag(:span, t(t_key, keys), {slot: "title"}) +
-				display_risks(contact)
+					content_tag(:template, "v-slot:button": 'sc') do
+						button_text = "{{sc.isOpen ? #{t('.display_risks_drop_down_html')}}}"
+						content_tag(:button, button_text, type: 'button', class: 'not-button')
+					end +
+					display_risks(contact)
 			end
 		end
 	end
 
 	def display_risks(obj)
-		@diagnoses ||= Diagnosis.as_map
-		grouped = obj.risks.each_with_object({}) do |(k,v), o|
-			next if v == Diagnosis::TransmissionRisk::NO_RISK
-			o[v] ||= []
-			o[v] << t(k, scope: "diagnosis.name_casual")
+		is_encounter = obj.is_a? Encounter
+		content_tag(:ul, class: 'risks-show') do
+			grouped = group_risks_by_diagnosis(obj)
+			risk_items = risk_inner_html(grouped, is_encounter)
+			safe_join(risk_items)
 		end
-
-		risks = if grouped.empty?
-			[content_tag(:li, {class: 'risk-{0}'}) do
-				content_tag(:span, t('.risks.no_risks' + (obj.is_a?(Encounter) ? '' : '_contact')))
-			end]
-		else
-			grouped.each_with_object([]) do |(r, lst), a|
-				trans = t(".risk_line_html", {diagnosis: lst.join(t("join_delimeter")), level: t("diagnosis.transmission_risk.risk_level", {count: r})})
-				a << content_tag(:li, trans, {class: "risk-#{r}"})
-			end
-		end
-
-		content_tag(:template, {:"v-slot:button" => "sc"}) do
-			content_tag(:button, "{{sc.isOpen ? #{t(".display_risks_drop_down_html")}}}", {type: "button", class: "not-button"}) unless obj.is_a?(Encounter)
-		end +
-		content_tag(:ul, safe_join(risks), {class: "risks-show"})
 	end
 
 	# write the html to display the recommended testing schedule based on the risks in this encounter
@@ -155,6 +143,7 @@ module EncountersHelper
 	end
 
 	private
+
 	def get_possible(contact)
 		@possibles ||= PossibleContact.as_map
 		@possibles[contact.possible_contact_id]
@@ -172,4 +161,33 @@ module EncountersHelper
 		person == :user ? current_user_profile : @partner
 	end
 
+	def display_risk(risk_level, risk_list)
+		trans = t(
+			'.risk_line_html',
+			diagnosis: risk_list.join(t('join_delimeter')),
+			level: t('diagnosis.transmission_risk.risk_level', count: risk_level)
+		)
+		content_tag(:li, trans, class: "risk-#{risk_level}")
+	end
+
+	def risk_inner_html(risk_groups, is_encounter)
+		if risk_groups.empty?
+			[content_tag(:li, class: 'risk-0') do
+				content_tag(:span) do
+					t('.risks.no_risks' + (is_encounter ? '' : '_contact'))
+				end
+			end]
+		else
+			risk_groups.each_with_object([]) { |(r, lst), a| a << display_risk(r, lst) }
+		end
+	end
+
+	def group_risks_by_diagnosis(obj)
+		obj.risks.each_with_object({}) do |(k, v), o|
+			next if v == Diagnosis::TransmissionRisk::NO_RISK
+
+			o[v] ||= []
+			o[v] << t(k, scope: 'diagnosis.name_casual')
+		end
+	end
 end

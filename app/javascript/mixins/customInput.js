@@ -35,7 +35,7 @@ export default {
 		}
 	},
 	mounted: function() {
-		if (process.NODE_ENV !== 'production' && !this.$vnode.data.model) {
+		if (process.NODE_ENV === 'development' && !this.$vnode.data.model) {
 			console.warn(`Custom input field ${this.$vnode.tag} does not have a v-model directive on it.`);
 		}
 	}

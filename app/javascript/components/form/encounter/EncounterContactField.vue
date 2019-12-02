@@ -12,7 +12,7 @@
 				:base-name="baseName"
 				v-model="_value.subject"
 				model="subject"
-				@change="changeActorOrder">
+				@change="updateContactType">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow" role="radiogroup">
@@ -32,7 +32,7 @@
 				:base-name="baseName"
 				v-model="_value.object"
 				model="object"
-				@change="changeActorOrder">
+				@change="updateContactType">
 			</hidden-radio>
 		</div>
 		<div class="field-section" role="radiogroup">
@@ -95,7 +95,7 @@
 import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
 import hiddenRadio from './HiddenRadio.vue';
 import encounterContactBarrier from './EncounterContactBarrier.vue';
-import { required, minLength, not } from 'vuelidate/lib/validators';
+import { required, minLength } from 'vuelidate/lib/validators';
 
 export default {
 	data: function() {
@@ -127,9 +127,6 @@ export default {
 		};
 	},
 	computed: {
-		baseID: function() {
-			return this.baseName.replace(/[\[\]\.]/g, '_');
-		},
 		cType: function() {
 			return this.contacts[this.contact_type];
 		},
@@ -157,8 +154,7 @@ export default {
 	methods: {
 		resetInsts(e) {
 			let lst = e === true ? ['subject'] : ['object', 'subject'];
-			for (var s = 0; s < lst.length; s++) {
-				let actorKey = lst[s];
+			lst.forEach((actorKey) => {
 				let instId = actorKey + '_instrument_id';
 				let lstId = actorKey + 'Insts';
 				let newList = this[lstId + 'Get']();
@@ -169,7 +165,7 @@ export default {
 					this[instId] = null;
 				}
 				this[lstId] = newList;
-			}
+			});
 			this.setContact();
 		},
 		setContact() {
@@ -238,12 +234,6 @@ export default {
 				return true;
 			};
 		},
-		changeActorOrder(event, isInit) {
-			this.updateContactType();
-			if (isInit) {
-				this.updateBarriers(this.value.barriers, true);
-			}
-		},
 		updateContactType() {
 			this.onInput();
 			this.resetInsts();
@@ -274,11 +264,9 @@ export default {
 			return this.$el.querySelector(':checked');
 		},
 		onKeyChange() {
-			this.changeActorOrder();
+			// on next tick so everything has re-rendered
 			this.$nextTick(() => {
-				// for some reason this is necessary for keeping the boxes checked on the barrier inputs when the order is changed...
-				this._value.barriers = this.value.barriers;
-				this.onInput();
+				this.updateContactType();
 			});
 		},
 	},
@@ -308,7 +296,7 @@ export default {
 			}
 		});
 
-		this.changeActorOrder(null, false);
+		this.updateContactType();
 	},
 };
 </script>
