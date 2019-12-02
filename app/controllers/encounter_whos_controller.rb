@@ -9,7 +9,6 @@ class EncounterWhosController < ApplicationController
 		@from_dash = from_dash?
 		@partnerships = current_user_profile.partnerships
 		@dummy_id = DUMMY_ID
-		gon_client_validators({who: {partnership_id: nil}})
 	end
 
 	def create

@@ -1,41 +1,42 @@
 import {mount, shallowMount} from "@vue/test-utils"
 import EncounterCalendar from "@components/widgets/EncounterCalendar.vue"
 
-global.gon = {
-	partnerships: {
-		partner1: {
-			display: "Alice (OKC)",
-			index: 0,
-			partner_id: "partner_dummy1",
-			_id: "partner1",
-			encounters: [{
-				notes: undefined,
-				took_place: "2019-07-12",
-				_id: "encounter1"
-			},{
-				notes: "some notes",
-				took_place: "2019-07-15",
-				_id: "encounter2"
-			}]
-		}, partner2: {
-			display: "Bob (OKC)",
-			index: 0,
-			partner_id: "partner_dummy2",
-			_id: "partner2",
-			encounters: [{
-				notes: "another one",
-				took_place: "2019-07-11",
-				_id: "encounter3"
-			},{
-				notes: "more notes",
-				took_place: "2019-07-25",
-				_id: "encounter4"
-			}]
-		}
-	}
-}
+
+const partnerships = [{
+	display: "Alice (OKC)",
+	index: 0,
+	partner_id: "partner_dummy1",
+	_id: "partner1",
+	encounters: [{
+		notes: undefined,
+		took_place: "2019-07-12",
+		_id: "encounter1"
+	},{
+		notes: "some notes",
+		took_place: "2019-07-15",
+		_id: "encounter2"
+	}]
+},{
+	display: "Bob (OKC)",
+	index: 0,
+	partner_id: "partner_dummy2",
+	_id: "partner2",
+	encounters: [{
+		notes: "another one",
+		took_place: "2019-07-11",
+		_id: "encounter3"
+	},{
+		notes: "more notes",
+		took_place: "2019-07-25",
+		_id: "encounter4"
+	}]
+}]
+
 
 const mountOptions = {
+	propsData: {
+		partnerships
+	},
 	methods: {
 		$_t(key) {return key;}
 	},
@@ -76,6 +77,4 @@ describe("Encounter calendar component", () => {
 			expect(noNotesEnc.customData.notes).toEqual("encounters.index.no_notes");
 		})
 	})
-
-
 })

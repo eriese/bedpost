@@ -1,8 +1,8 @@
-<%= vuelidate_form_with model: encounter, url: [partnership, encounter], html: {class: "centered"} do |f| %>
+<%= vuelidate_form_with model: encounter, url: [partnership, encounter], html: {class: "centered"}, value_include: [:contacts] do |f| %>
 	<%= f.date_field :took_place %>
 	<%= f.text_area :notes %>
 	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
-	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.encounter.contacts" base-name="<%= f.object_name %>[contacts_attributes]"></dynamic-field-list>
+	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.contacts" base-name="<%= f.object_name %>[contacts_attributes]"></dynamic-field-list>
 	<%= f.check_box :fluids %>
 	<%= f.submit %>
 <% end %>
