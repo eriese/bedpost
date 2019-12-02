@@ -1,5 +1,5 @@
 <template>
-	<div class="dropdown" :class="[{'title-as-button': titleButton}]">
+	<div class="dropdown" :class="{'title-as-button': titleButton}">
 		<span class="dropdown-title" @click="toggle(true)"><slot name="title"></slot></span>
 		<span class="dropdown-button" @click="toggle(false)">
 			<slot name="button" v-bind="{isOpen}"><arrow-button :class="$attrs['arrow-class']" :direction="isOpen ? 'up' : 'down'"></arrow-button></slot>
@@ -17,7 +17,6 @@ export default {
 	data: function() {
 		return {
 			isOpen: false,
-			// addedClass:
 		};
 	},
 	props: {
