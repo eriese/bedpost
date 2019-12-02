@@ -30,7 +30,6 @@
 <drop-down class="dark-container encounter-show-container" arrow-class="primary" :title-button="true" :start-open="true">
 	<h4 class="rounded-container-title" slot="title"><%= t('.advice.title') %></h4>
 	<% if @encounter.schedule.any? %>
-		<p><%= t('.advice.desc') %></p>
 		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>">
 			<%= display_schedule @encounter, :"slot-scope" => "{clickHandler, show}" do %>
 				<br><a href="<%= partnership_encounter_path(@partnership, @encounter, {force: true}) %>" @click="clickHandler"><%= t('.advice.show_anyway') %></a>

@@ -93,7 +93,7 @@ module EncountersHelper
 		was_forced = false
 
 		# sort the schedule dates, then loop
-		sched = encounter.schedule.keys.sort do |a,b|
+		sorted_keys = encounter.schedule.keys.sort do |a,b|
 			if a.is_a?(Symbol)
 				1
 			elsif b.is_a? Symbol
@@ -101,7 +101,8 @@ module EncountersHelper
 			else
 				a <=> b
 			end
-		end.each_with_object([]) do |dt, ary|
+		end
+		sched = sorted_keys.each_with_object([]) do |dt, ary|
 			#add a list item to the array
 			ary << content_tag(:li, {class: 'schedule-el'}) do
 				# if the date is :routing
@@ -138,12 +139,19 @@ module EncountersHelper
 			end
 		end
 
-		# make a ul to hold the generated list
-		ul = content_tag(:ul, safe_join(sched), options.merge({class: 'schedule-show'}))
-		# if it was forced, add a key
-		ul += content_tag(:div, t('encounters.show.advice.key_html'), {class: 'schedule-key'}) if was_forced
+		div = content_tag(:div, options) do
+			inner = if was_forced || sorted_keys[0] != :routine
+				content_tag(:p, t('encounters.show.advice.desc'))
+			else
+				ActiveSupport::SafeBuffer.new
+			end
 
-		ul
+			inner += content_tag(:ul, safe_join(sched), class: 'schedule-show')
+			if was_forced
+				inner += content_tag(:div, t('encounters.show.advice.key_html'), {class: 'schedule-key'})
+			end
+			inner
+		end
 	end
 
 	private

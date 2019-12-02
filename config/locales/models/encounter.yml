@@ -57,8 +57,8 @@ en:
       advice:
         title: Our Advice
         desc: "Based on the risks in this encounter, we think this is a good testing schedule:"
-        routine: "These ones probably don't call for getting tested ASAP; you can just get checked on your regular schedule"
-        show_anyway: Show me anyway
+        routine: "You probably don't need to get tested ASAP, but we think you should get checked for these on your regular schedule:"
+        show_anyway: Show me when my earliest test opportunities are anyway
         hide_lower_risk: Hide test dates for lower risk infections
         no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
         key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such a low risk"
