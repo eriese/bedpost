@@ -39,3 +39,48 @@
 		}
 	}
 }
+
+
+@mixin heading1 {
+	font-family: $font-header;
+	font-size: rem(40px);
+	margin: 0.5rem 0;
+	text-align: center;
+	line-height: 1.15;
+
+	&.header {
+		margin-top: 0;
+	}
+
+	@include color-and-secondary(color, $colors-h1);
+
+	body.with-cards & {
+		color: $color-white;
+	}
+
+	body.with-cards .card & {
+		color: $colors1-h1;
+	}
+	body.secondary.with-cards .card & {
+		color: $colors2-h1;
+	}
+}
+
+@mixin heading2 {
+	@include color-and-secondary(color, $colors-h2);
+	font-weight: 700;
+	font-size: rem(24px);
+	text-align: center;
+
+	body.with-cards & {
+		color: $color-white;
+	}
+
+	body.with-cards .card & {
+		color: $colors1-h2;
+	}
+	
+	body.secondary.with-cards .card & {
+		color: $colors2-h2;
+	}
+}
