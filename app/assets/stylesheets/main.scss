@@ -1,24 +1,17 @@
-@import 'resets';
-@import 'vendor/all';
+@import 'vendor/*';
 
-@import 'defauts';
+@import 'defaults';
 @import 'mixins';
+@import 'shapes';
 
 @import 'scaffolds';
 @import 'layout';
 @import 'forms/*';
 
 @import 'mobile';
-@import 'nav';
-@import 'shapes';
 
 @import 'vc_reset';
 
-@import 'encounters/*';
-
-@import 'first_times';
-@import 'partnerships/*';
-
-@import 'profiles';
 @import 'sessions';
-@import 'user_profile';
+
+@import 'components/**/*';

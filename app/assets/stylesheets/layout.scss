@@ -1,5 +1,3 @@
-@import "_defaults";
-
 html, body {
 	height: 100%;
 	font-size: $root-font-size;
@@ -55,9 +53,7 @@ p.description {
 	@include color-and-secondary(border-color, $colors-h1);
 }
 
-.centered-text {
-	text-align: center;
-}
+
 
 .with-js noscript {
 	display: none;
@@ -186,6 +182,10 @@ p.description {
 	text-align: center;
 }
 
+.centered-text {
+	text-align: center;
+}
+	
 .desc {
 	h1 + &, h2 + & {
 		line-height: 1rem;
