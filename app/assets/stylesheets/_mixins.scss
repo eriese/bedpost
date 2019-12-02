@@ -79,8 +79,12 @@
 	body.with-cards .card & {
 		color: $colors1-h2;
 	}
-	
+
 	body.secondary.with-cards .card & {
 		color: $colors2-h2;
+	}
+
+	&.with-desc {
+		margin-bottom: 0.25em;
 	}
 }
