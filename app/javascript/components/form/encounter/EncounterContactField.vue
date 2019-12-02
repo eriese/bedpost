@@ -1,5 +1,6 @@
 <template>
-<div class="contact-field-container" :class="{blurred: !focused}">
+<div class="contact-field-container" :class="{blurred: !focused, invalid: incomplete}">
+	<div v-if="incomplete" class="contact-error">{{$_t('mongoid.errors.models.contact.incomplete')}}</div>
 	<input type="hidden" :value="value._id" :name="baseName + '[_id]'" v-if="!value.newRecord">
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
 	<input type="hidden" :value="value.possible_contact_id" :name="baseName + '[possible_contact_id]'">
@@ -94,6 +95,7 @@
 import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
 import hiddenRadio from './HiddenRadio.vue';
 import encounterContactBarrier from './EncounterContactBarrier.vue';
+import { required, minLength, not } from 'vuelidate/lib/validators';
 
 export default {
 	data: function() {
@@ -112,6 +114,17 @@ export default {
 	components: {
 		'hidden-radio': hiddenRadio,
 		'barrier-input': encounterContactBarrier
+	},
+	validations() {
+		return {
+			value: {
+				subject: {blank: required},
+				object: {blank: required},
+			},
+			contact_type: {blank: required},
+			subject_instrument_id: {blank: required},
+			object_instrument_id: {blank: required},
+		};
 	},
 	computed: {
 		baseID: function() {
@@ -136,6 +149,9 @@ export default {
 				return '';
 			}
 			return this.$_t('contact.with', {pronoun: this.value.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
+		},
+		incomplete() {
+			return this.$v.$invalid && this.$v.$anyDirty;
 		}
 	},
 	methods: {
@@ -249,6 +265,7 @@ export default {
 		},
 		blur() {
 			this.focused = false;
+			this.$v.$touch();
 		},
 		focus() {
 			this.focused = true;
@@ -278,6 +295,18 @@ export default {
 				}
 			}
 		}
+
+		this.$parent.$emit('should-validate', 'contacts', {
+			tooShort: minLength(1),
+			$each: {
+				subject: {blank: required},
+				object: {blank: required},
+				position: {blank: required},
+				possible_contact_id: {
+					blank: (v) => v !== null,
+				},
+			}
+		});
 
 		this.changeActorOrder(null, false);
 	},

@@ -1,6 +1,7 @@
 import {createLocalVue, mount} from '@vue/test-utils';
 import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
 import EncounterContactField from '@components/form/encounter/EncounterContactField.vue';
+import Vuelidate from 'Vuelidate';
 import HiddenRadio from '@components/form/encounter/HiddenRadio.vue';
 
 describe('Encounter Contact Field Component', () => {
@@ -104,9 +105,15 @@ describe('Encounter Contact Field Component', () => {
 		baseName: 'encounter[contacts_attributes][1]',
 	};
 
-	function setup(assign, propsData) {
-		let localVue = createLocalVue();
+	function setupLocalVue() {
+		const localVue = createLocalVue();
 		localVue.use(bedpostVueGlobals);
+		localVue.use(Vuelidate);
+		return localVue;
+	}
+
+	function setup(assign, propsData) {
+		const localVue = setupLocalVue();
 
 		let value = Object.assign({}, global.gon.dummy, assign || {});
 		propsData = Object.assign({value}, defaultProps, propsData || {});
@@ -179,6 +186,36 @@ describe('Encounter Contact Field Component', () => {
 
 			wrapper.vm.updateBarriers([]);
 			expect(wrapper.emitted().track[1]).toEqual(['has_barrier', 0]);
+		});
+	});
+
+	describe('validation', () => {
+		it('has internal validation', () => {
+			const wrapper = setup();
+			expect(wrapper.vm.$v).not.toBeUndefined();
+		});
+
+		it('emits a validation configuration from its parent', () => {
+			const localVue = setupLocalVue();
+
+			const parent = mount({
+				template: '<div><encounter-contact-field v-bind="fieldProps"></encounter-contact-field></div>',
+				components: {
+					'encounter-contact-field': EncounterContactField
+				},
+				data() {
+					return {
+						fieldProps: {
+							value: { ...global.gon.dummy },
+							...defaultProps,
+						}
+					};
+				},
+			}, {
+				localVue,
+			});
+
+			expect(parent.emitted()['should-validate']).toBeTruthy();
 		});
 	});
 });

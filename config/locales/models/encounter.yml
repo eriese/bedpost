@@ -11,6 +11,8 @@ en:
           attributes:
             partnership_id:
               blank: Please choose a partner
+        contact:
+          incomplete: Oops, you left something blank here
   contact:
     contact_type:
       penetrated: penetrated
