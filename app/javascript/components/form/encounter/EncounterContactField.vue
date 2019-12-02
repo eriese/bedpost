@@ -10,6 +10,7 @@
 				v-bind="i"
 				:base-name="baseName"
 				v-model="_value.subject"
+				model="subject"
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>
@@ -29,6 +30,7 @@
 				v-bind="i"
 				:base-name="baseName"
 				v-model="_value.object"
+				model="object"
 				@change="changeActorOrder">
 			</hidden-radio>
 		</div>

@@ -10,7 +10,6 @@ class ProfilesController < ApplicationController
   # GET /partners/new
   def new
     @profile = Profile.new
-    gon_client_validators(@profile)
   end
 
   # GET /partners/1/edit
@@ -18,7 +17,6 @@ class ProfilesController < ApplicationController
     if @partnership.present? && @profile.is_a?(UserProfile)
       redirect_to partnership_path(@partnership)
     else
-      gon_client_validators(@profile, edit_validator_opts, serialize_opts: edit_validator_serialize_opts, pre_validate: false)
     end
   end
 
@@ -81,13 +79,5 @@ class ProfilesController < ApplicationController
 
     def show_path
       @partnership
-    end
-
-    def edit_validator_serialize_opts
-      {}
-    end
-
-    def edit_validator_opts
-      {}
     end
 end

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       sign_in: 'login', sign_out: 'logout',
       password: 'recover', confirmation: 'confirm',
       unlock: 'unlock',
-  }, controllers: {passwords: 'user_profiles/passwords'}
+  }
 
   scope "partners" do
     resource :profile, only: [:new, :create], as: :dummy_profile
