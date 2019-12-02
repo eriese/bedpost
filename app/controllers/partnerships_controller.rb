@@ -17,7 +17,6 @@ class PartnershipsController < ApplicationController
 			flash[:who_attempt] = {partner_id: params[:p_id]}
 			redirect_to who_path
 		end
-		gon_client_validators(@partnership)
 	end
 
 	def create
@@ -34,7 +33,6 @@ class PartnershipsController < ApplicationController
 	end
 
 	def edit
-		gon_client_validators(@partnership)
 	end
 
 	def update

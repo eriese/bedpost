@@ -14,69 +14,7 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
-	def gon_client_validators(obj,opts = {}, skip = [], pre_validate: false, serialize_opts: {})
-		# TODO consider deep copying if it seems like opts needs to be unedited
-		validators = opts
-		g_validators = validators
-		g_obj = obj
-		adder_obj = obj
-
-		unless obj.is_a? Hash
-			adder = model_validator_mapper(obj, validators, skip)
-			adder_obj = obj.as_json serialize_opts.reverse_merge({strip_qs: true})
-
-			g_obj = {obj.model_name.element => adder_obj}
-			g_validators = {obj.model_name.element => validators}
-		else
-			adder = hash_validator_mapper(obj, validators, skip)
-		end
-
-		adder_obj.each(&adder)
-
-		gon.form_obj = (gon.form_obj || {}).deep_merge(g_obj)
-		gon.validators = (gon.validators || {}).deep_merge(g_validators)
-
-		flash[:submission_error] ||= obj.errors.messages.stringify_keys if obj.respond_to?(:valid?) && pre_validate && !obj.valid?
-		gon.submissionError ||= {}
-		gon.submissionError.deep_merge!(flash[:submission_error]) if flash[:submission_error]
-	end
-
 	private
-	def model_validator_mapper(obj, v_hash, skip)
-		is_new = obj.new_record?
-		Proc.new do |atr, val|
-			next if skip.include? atr
-			a_vals = obj.class.validators_on(atr)
-			next if a_vals.empty?
-
-			v_hash[atr] ||= []
-			v_hash[atr] += a_vals.map do |v|
-				next if v.kind == :foreign_key
-				if on_cond = v.options[:on]
-					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
-				end
-				if if_cond = v.options[:if]
-					next unless obj.send(if_cond)
-				end
-
-				[v.kind, v.options]
-			end
-		end
-	end
-
-	def hash_validator_mapper(obj, v_hash, skip)
-		Proc.new do |atr, val|
-			next if skip.include? atr
-			if val.is_a? Hash
-				v_hash[atr] ||= {}
-				o_adder = hash_validator_mapper(val, v_hash[atr], skip)
-				val.each(&o_adder)
-			else
-				v_hash[atr] = (v_hash[atr] || []) << [:presence, {}]
-			end
-		end
-	end
-
 	# Its important that the location is NOT stored if:
   # - The request method is not GET (non idempotent)
   # - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an

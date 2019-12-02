@@ -32,7 +32,6 @@ RSpec.describe PartnershipsController, type: :controller do
 	end
 
 	describe 'GET #new', no_skip: true do
-		include_context :gon
 		after :each do
 			cleanup(@profile)
 		end
@@ -56,7 +55,6 @@ RSpec.describe PartnershipsController, type: :controller do
 
 			msg = I18n.t("mongoid.errors.models.partnership.attributes.partner.blank", attribute: "Partner", default: [:"mongoid.errors.messages.blank", :"errors.messages.blank"])
 			expect(flash[:submission_error]["form_error"]).to include msg
-			expect(gon['submissionError']['form_error']).to include msg
 		end
 
 		it 'does not leave an un-saved partnership on the user', no_skip: false do
