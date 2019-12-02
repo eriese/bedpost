@@ -3,13 +3,10 @@ $root-font-size: 16px;
 // fonts
 $root-font-size: 16px;
 
-@function rem($numPx) {
-	@return ($numPx / $root-font-size) * 1rem;
-}
-$script-font: 'Lily Script One', cursive;
-$outline-font: 'Londrina Shadow', sans-serif;
+$font-script: 'Lily Script One', cursive;
+$font-outline: 'Londrina Shadow', sans-serif;
 $text-font: 'Open Sans', sans-serif;
-$header-font: 'Baloo', cursive;
+$font-header: 'Baloo', cursive;
 
 // colors
 $hue-purple: 316;
@@ -142,42 +139,3 @@ $nav-width: rem(250px);
 		clear: both;
 	}
 }
-
-@mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
-	#{$prop}: nth($vals, 1);
-
-	@if $on-body {
-		@if $and-card {
-			&.with-cards .card {
-				#{$prop}: nth($vals, 1);
-			}
-		}
-
-		&.secondary {
-			#{$prop}: nth($vals, 2);
-
-			@if $and-card {
-				&.with-cards .card {
-					#{$prop}: nth($vals, 2);
-				}
-			}
-		}
-	} @else {
-		@if $and-card {
-			body.with-cards .card & {
-				#{$prop}: nth($vals, 2);
-			}
-		}
-
-		body.secondary & {
-			#{$prop}: nth($vals, 2);
-		}
-
-		@if $and-card {
-			body.secondary.with-cards .card & {
-				#{$prop}: nth($vals, 2);
-			}
-		}
-	}
-}
-

@@ -18,7 +18,7 @@ body {
 }
 
 h1 {
-	font-family: $header-font;
+	font-family: $font-header;
 	font-size: rem(40px);
 	margin: 0.5rem 0;
 	text-align: center;
@@ -176,7 +176,7 @@ p.description {
 }
 
 #logo {
-	font-family: $header-font;
+	font-family: $font-header;
 	font-size: rem(55px);
 	text-decoration: none;
 
