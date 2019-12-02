@@ -1,8 +1,30 @@
 module VuelidateForm; module VuelidateFormUtils
-	def full_v_name(attribute=@attribute, add_scope = true)
-		v_name = add_scope ? "vf." : ""
-		attribute = attribute.to_s.chomp("?") unless @model && @model.dont_strip
-		v_name += @object_name.blank? ? "formData.#{attribute}" : "formData.#{@object_name}.#{attribute}"
+	# Map the validators to a format that can be used by the form
+	# @param validators [Array] an array of validators
+	# @param object [Object] the object that the validators will validate
+	def self.map_validators_for_form(validators, object)
+		is_new = false
+		validators.each_with_object([]) do |v, ary|
+			# foreign keys can't be checked by the front end
+			next if v.kind == :foreign_key
+
+			# if there's an on condition for the validator
+			if on_cond = v.options[:on]
+				# get whether it's new
+				is_new ||= object.respond_to?(:new_record?) && object.new_record?
+				# don't add it if the condition is false
+				next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
+			end
+
+			# if there's an if condition on the validator
+			if if_cond = v.options[:if]
+				# don't add if it's false
+				next unless object.send(if_cond)
+			end
+
+			# add it to the array
+			ary << [v.kind, v.options]
+		end
 	end
 
 	protected

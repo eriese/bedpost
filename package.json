@@ -85,6 +85,7 @@
 			"app/javascript/**/*.{js,vue}",
 			"!app/javascript/docs/**",
 			"!**/node_modules/**"
-		]
+		],
+		"setupFilesAfterEnv": ["<rootDir>/app/assets/javascripts/utils.js"]
 	}
 }

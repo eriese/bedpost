@@ -170,13 +170,13 @@ production:
       # The standard MongoDB connection URI allows for easy
       # replica set connection setup.
       # Use environment variables or a config file to keep your
-      # credentials safe e.g. <%= ENV['MONGODB_URI'] %>.
-      # uri: <%= Rails.application.credentials.mongodb[:uri] %>
+      # credentials safe e.g. <%#= ENV['MONGODB_URI'] %>.
+      # uri: <%#= Rails.application.credentials.mongodb[:uri] %>
       database: bedpost_<%= ENV['CNAME'] %>
-      hosts: <%= Rails.application.credentials.mongodb[:hosts] %>
+      hosts: <%= Rails.application.credentials.dig :mongodb, :hosts %>
       options:
-        user: <%= Rails.application.credentials.mongodb[:user] %>
-        password: <%= Rails.application.credentials.mongodb[:password] %>
+        user: <%= Rails.application.credentials.dig :mongodb, :user %>
+        password: <%= Rails.application.credentials.dig :mongodb, :password %>
         auth_source: admin
         ssl: true
 

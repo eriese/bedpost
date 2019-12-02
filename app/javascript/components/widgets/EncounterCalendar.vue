@@ -53,13 +53,14 @@
 			encounterListItem
 		},
 		data() {
-			let partnerships = Object.values(gon.partnerships)
 			return {
-				partnerships,
+				selectedPartnersArray: this.partnerships,
+				hasEncounters: this.partnerships.some((p) => p.encounters && p.encounters.length),
 				viewType: "calendar",
-				selectedPartnersArray: partnerships,
-				hasEncounters: partnerships.some((p) => p.encounters && p.encounters.length),
 			}
+		},
+		props: {
+			partnerships: Array
 		},
 		computed: {
 			calendarProps() {
