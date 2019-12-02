@@ -1,7 +1,7 @@
 import {createLocalVue, mount} from '@vue/test-utils';
 import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
 import EncounterContactField from '@components/form/encounter/EncounterContactField.vue';
-import Vuelidate from 'Vuelidate';
+import Vuelidate from 'vuelidate';
 import HiddenRadio from '@components/form/encounter/HiddenRadio.vue';
 
 describe('Encounter Contact Field Component', () => {
