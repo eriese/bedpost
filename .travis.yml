@@ -1,16 +1,13 @@
 dist: trusty
 language: ruby
-rvm:
- - 2.5.7
 cache:
-  bundler: true
   directories:
     - node_modules
   yarn: true
+bundler_args: --without production
 install:
-  - bundle install
   - nvm install node 12.12.0
-  - node -v
+  - nvm use 12.12.0
   - npm i -g yarn
   - npm i -g codecov
   - yarn
