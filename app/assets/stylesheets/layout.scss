@@ -55,6 +55,7 @@ p.description {
 	border-radius: $stn-border-radius;
 	border: rem(2px) solid;
 	@include color-and-secondary(border-color, $colors-h1);
+	padding: $spacing-medium;
 }
 
 .with-js noscript {
