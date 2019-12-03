@@ -53,8 +53,6 @@ p.description {
 	@include color-and-secondary(border-color, $colors-h1);
 }
 
-
-
 .with-js noscript {
 	display: none;
 }
@@ -335,4 +333,12 @@ span.confirmation {
 	display: flex;
 	align-items: center;
 	align-content: center;
+}
+
+.clear-fix{
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
 }
