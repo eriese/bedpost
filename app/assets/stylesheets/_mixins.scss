@@ -1,3 +1,6 @@
+///////////////////////
+// theming
+///////////////////////
 @mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
 	#{$prop}: nth($vals, 1);
 
@@ -36,6 +39,9 @@
 	}
 }
 
+///////////////////////
+// text styles
+///////////////////////
 @mixin heading1 {
 	font-family: $font-header;
 	font-size: rem(40px);
@@ -82,4 +88,9 @@
 	&.with-desc {
 		margin-bottom: 0.25em;
 	}
+}
+
+@mixin base-text {
+	font-size: rem(13px);
+	line-height: rem(18px);
 }
