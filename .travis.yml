@@ -8,12 +8,13 @@ cache:
     - node_modules
   yarn: true
 install:
-  - bundle install --without production
+  - bundle install --with test
   - nvm install node
   - node -v
   - npm i -g yarn
   - npm i -g codecov
   - yarn
+  - npm rebuild node-sass
 before_script:
   - gem install brakeman
   - gem install bundler-audit
