@@ -1,3 +1,7 @@
+* {
+	box-sizing: border-box;
+}
+
 html, body {
 	height: 100%;
 	font-size: $root-font-size;
@@ -323,10 +327,6 @@ span.confirmation {
 			}
 		}
 	}
-}
-
-.columns {
-	display: flex;
 }
 
 .vertical-center {

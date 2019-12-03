@@ -16,19 +16,22 @@
 			<p> And if you want to figure out how to reduce your risk? We've got tips for that too, but we're not pushy about it.</p>
 
 		</div>
-		<div class="login column card">
-			<h1>Log in</h1>
-			<%= vuelidate_form_with model: resource, as: resource_name, url: session_path(resource_name), class: "big centered", require_all: true do |f| %>
-				<%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-				<%= f.password_field :password, autocomplete: "current-password", show_toggle: true %>
-				<% if devise_mapping.rememberable? %>
-					<%= f.check_box :remember_me %>
-					<% end %>
-				<%= f.submit "Log in" %>
-				<div class="additional">
-					<%= render "devise/shared/links" %>
-				</div>
-			<% end %>
+		<div class="login column">
+			<div class="card">
+				<h1>Log in</h1>
+				<%= vuelidate_form_with model: resource, as: resource_name, url: session_path(resource_name), class: "big centered", require_all: true do |f| %>
+					<%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+					<%= f.password_field :password, autocomplete: "current-password", show_toggle: true %>
+					<% if devise_mapping.rememberable? %>
+						<%= f.check_box :remember_me %>
+						<% end %>
+					<%= f.submit "Log in" %>
+					<div class="additional">
+						<%= render "devise/shared/links" %>
+					</div>
+				<% end %>
+			</div>
 		</div>
+		
 	</div>
 </div>

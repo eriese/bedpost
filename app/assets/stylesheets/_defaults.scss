@@ -16,6 +16,19 @@ $text-font: 'Open Sans', sans-serif;
 $font-header: 'Baloo', cursive;
 
 ///////////////////////
+// spacing 
+///////////////////////
+$spacing-default: rem($root-font-size);
+$spacing-medium: $spacing-default * 1.5;
+$spacing-double: $spacing-default * 2;
+$spacing-small: $spacing-default / 2;
+
+///////////////////////
+// breakpoints 
+///////////////////////
+$screen-tablet: 31.25 * $root-font-size + 1px; // 501px
+
+///////////////////////
 // colors
 ///////////////////////
 $hue-purple: 316;
@@ -146,11 +159,3 @@ $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-
 // sizing
 ///////////////////////
 $nav-width: rem(250px);
-
-///////////////////////
-// spacing 
-///////////////////////
-$spacing-default: rem($root-font-size);
-$spacing-medium: $spacing-default * 1.5;
-$spacing-double: $spacing-default * 2;
-$spacing-small: $spacing-default / 2;
