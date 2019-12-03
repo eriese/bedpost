@@ -5,7 +5,6 @@ cache:
     - node_modules
   yarn: true
   bundler: true
-bundler_args: --without production --jobs=3 --retry=3
 before_install:
   - gem install bundler
 install:
@@ -14,7 +13,7 @@ install:
   - npm i -g yarn
   - npm i -g codecov
   - yarn
-  - bundle install
+  - bundle install --deployment --without production --jobs=3 --retry=3
 before_script:
   - gem install brakeman
   - gem install bundler-audit
