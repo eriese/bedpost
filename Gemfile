@@ -93,7 +93,6 @@ group :test do
 	gem 'factory_bot_rails'
 	# Adds support for Capybara system testing and selenium driver
 	gem 'capybara', '>= 2.15'
-	gem 'selenium-webdriver'
 	# Easy installation and use of chromedriver to run system tests with Chrome
 	gem 'simplecov', require: false
 	gem 'codecov', require: false
