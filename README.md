@@ -17,35 +17,34 @@ A user should be able to sign up for an account, add their partners, and add the
 - ~~Account CRUD~~
 - ~~Account recovery~~
 - ~~Session Management~~
-  - ~~Log in/Log out~~
-  - ~~Session timeout~~
+	- ~~Log in/Log out~~
+	- ~~Session timeout~~
 - ~~Partnership CRUD~~
 - ~~Encounter CRUD~~
-  - ~~Risk Evaluation on Encounter Review~~
-  - ~~Testing Advice on Encounter Review~~
+	- ~~Risk Evaluation on Encounter Review~~
+	- ~~Testing Advice on Encounter Review~~
 - ~~Guided first-time flow~~
 
 #### Still needed
 - Back buttons everywhere
-- Views:
-  - Review Partnership
-  - Email templates
+- Email templates
 - FAQ page
 - Landing page
+- TOU
 - STI factsheets on all STIs mentioned
 - Localization/copy
 - Copy for page tours
+- Glossary of terms
 - Testing
 - Data entry about diagnoses/risks
 - Accessibility Audit
 - Security Audit
-- TOU
 - Tracking?
 
 ### Future
 - input test results
-  - eventually integrate with apps that receive results directly
-  - eventually take existing diagnoses into account for risk calculation
+	- eventually integrate with apps that receive results directly
+	- eventually take existing diagnoses into account for risk calculation
 - invite partner to BedPost using profile you already set up for them
 - calculate risk to partner taking user's full risk profile into account
 - current risk overview page
@@ -56,16 +55,16 @@ A user should be able to sign up for an account, add their partners, and add the
 - advice about talking to partners about positive test results
 - guest access for quick risk assessment without signup
 - more advanced caching
-  - granular low-level caching
-  - views caching/request caching?
+	- granular low-level caching
+	- views caching/request caching?
 
 ### Far Future
 - expanded user-inputed dictionary for more customized, less medical feel
 - user settings to allow certain info to be shared with partners
-  * share encounter so only one user needs to put it in
-  * share test results for partner's risk calculations
+	* share encounter so only one user needs to put it in
+	* share test results for partner's risk calculations
 - bookmark frequent activities to easily input into encounters
-  * do this by prediction?
+	* do this by prediction?
 - hide/unhide activities you never participate in
 - multiple partners in single encounter
 - multiple pronouns
