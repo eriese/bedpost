@@ -6,6 +6,9 @@ cache:
   yarn: true
   bundler: true
 install:
+  - nvm install latest
+  - nvm use node
+  - node -v
   - npm i -g yarn
   - npm i -g codecov
   - yarn
