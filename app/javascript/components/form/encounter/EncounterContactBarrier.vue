@@ -33,6 +33,8 @@ function checkConditions(conditions, foundVal, notFoundVal, checkFunc) {
 	return notFoundVal;
 }
 
+const matcher = '(su|o)bject';
+
 export default {
 	name: 'encounter_contact_barrier_input',
 	props: ['barrier', 'modelValue', 'contact', 'encounterData'],
@@ -48,10 +50,10 @@ export default {
 		labelText: function() {
 			let transArgs = {scope: 'contact.barrier'},
 				key = this.barrier.key,
-				matches = key.match(/(sub|ob)ject/);
+				matches = key.match(new RegExp(matcher));
 			if (matches) {
 				let person = matches[0];
-				key = key.replace(/_(sub|ob)ject/, '');
+				key = key.replace(new RegExp('_' + matcher), '');
 				transArgs.instrument = this.encounterData[`${person}InstrumentName`];
 				transArgs.name = this.getPersonName(this.contact[person]);
 				transArgs.count = transArgs.instrument.match(/[^s]s$/) ? 1 : 0;
