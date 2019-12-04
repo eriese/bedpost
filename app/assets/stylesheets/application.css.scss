@@ -11,6 +11,15 @@
  * It is generally better to create a new file per style scope.
  *
  *= require normalize-rails
- *= require main
  *= require_self
  */
+@import 'vendor/*';
+
+@import 'layout/defaults';
+@import 'layout/*';
+@import 'layout/layout';
+@import 'layout/mobile';
+
+@import 'forms/*';
+
+@import 'components/**/*';

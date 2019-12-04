@@ -1,4 +1,4 @@
-import sassDefaults from '@stylesheets/_defaults.scss';
+import sassDefaults from '@stylesheets/layout/_defaults.scss';
 
 /**
  * Convert a hex color to an rgba value
