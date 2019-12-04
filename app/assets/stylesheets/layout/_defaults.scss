@@ -1,17 +1,37 @@
-$root-font-size: 16px;
-
-// fonts
+///////////////////////
+// initial setup
+///////////////////////
 $root-font-size: 16px;
 
 @function rem($numPx) {
 	@return ($numPx / $root-font-size) * 1rem;
 }
-$script-font: 'Lily Script One', cursive;
-$outline-font: 'Londrina Shadow', sans-serif;
-$text-font: 'Open Sans', sans-serif;
-$header-font: 'Baloo', cursive;
 
+///////////////////////
+// fonts
+///////////////////////
+$font-script: 'Lily Script One', cursive;
+$font-outline: 'Londrina Shadow', sans-serif;
+$text-font: 'Open Sans', sans-serif;
+$font-header: 'Baloo', cursive;
+
+///////////////////////
+// spacing 
+///////////////////////
+$spacing-default: rem($root-font-size); 
+$spacing-medium:  $spacing-default * 1.5;
+$spacing-double:  $spacing-default * 2;
+$spacing-small:   $spacing-default / 2;
+$spacing-tiny:    $spacing-default / 4;
+
+///////////////////////
+// breakpoints 
+///////////////////////
+$screen-tablet: 501px;
+
+///////////////////////
 // colors
+///////////////////////
 $hue-purple: 316;
 $color-purple-dark: hsl($hue-purple,70,19);
 $color-purple-light: hsl($hue-purple,70,39);
@@ -60,7 +80,6 @@ $color-dark-gray: hsl($hue-green,3,20);
 ///////////////////////
 // new colors
 ///////////////////////
-
 $color-black: #333;
 $color-off-white: #EEE;
 $color-white: #FFF;
@@ -85,7 +104,9 @@ $stn-border-radius: 0.95rem;
 $stn-box-shadow: 0px 0px 2px 1px rgba($color-black,0.5);
 $stn-box-shadow-secondary: 0px 0px 2px 1px rgba($color-white,0.5);
 
+///////////////////////
 // widget colors
+///////////////////////
 $background-color: $color-white;
 $button-color: $colors1-button-primary;
 $button-text-color: $color-white;
@@ -115,7 +136,9 @@ $box-shadows: $stn-box-shadow, $stn-box-shadow-secondary;
 $colors-h1: $colors1-h1 $colors2-h1;
 $colors-h2: $colors1-h2 $colors2-h2;
 
+///////////////////////
 // input defaults
+///////////////////////
 $input-background-color: $color-white;
 $input-border-color: $colors1-button-primary;
 $input-border-color-focus: $colors1-button-secondary;
@@ -132,52 +155,8 @@ $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-
 	backgroundColorsSecondary: $background-colors-secondary;
 	buttonColors: $button-colors;
 }
+
+///////////////////////
 // sizing
+///////////////////////
 $nav-width: rem(250px);
-
-.clear-fix{
-	&:after {
-		content: "";
-		display: block;
-		clear: both;
-	}
-}
-
-@mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
-	#{$prop}: nth($vals, 1);
-
-	@if $on-body {
-		@if $and-card {
-			&.with-cards .card {
-				#{$prop}: nth($vals, 1);
-			}
-		}
-
-		&.secondary {
-			#{$prop}: nth($vals, 2);
-
-			@if $and-card {
-				&.with-cards .card {
-					#{$prop}: nth($vals, 2);
-				}
-			}
-		}
-	} @else {
-		@if $and-card {
-			body.with-cards .card & {
-				#{$prop}: nth($vals, 2);
-			}
-		}
-
-		body.secondary & {
-			#{$prop}: nth($vals, 2);
-		}
-
-		@if $and-card {
-			body.secondary.with-cards .card & {
-				#{$prop}: nth($vals, 2);
-			}
-		}
-	}
-}
-

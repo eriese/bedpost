@@ -1,4 +1,6 @@
-@import "_defaults";
+* {
+	box-sizing: border-box;
+}
 
 html, body {
 	height: 100%;
@@ -18,46 +20,11 @@ body {
 }
 
 h1 {
-	font-family: $header-font;
-	font-size: rem(40px);
-	margin: 0.5rem 0;
-	text-align: center;
-	line-height: 1.15;
-
-	&.header {
-		margin-top: 0;
-	}
-
-	@include color-and-secondary(color, $colors-h1);
-
-	body.with-cards & {
-		color: $color-white;
-	}
-
-	body.with-cards .card & {
-		color: $colors1-h1;
-	}
-	body.secondary.with-cards .card & {
-		color: $colors2-h1;
-	}
+	@include heading1;
 }
 
 h2 {
-	@include color-and-secondary(color, $colors-h2);
-	font-weight: 700;
-	font-size: rem(24px);
-	text-align: center;
-
-	body.with-cards & {
-		color: $color-white;
-	}
-
-	body.with-cards .card & {
-		color: $colors1-h2;
-	}
-	body.secondary.with-cards .card & {
-		color: $colors2-h2;
-	}
+	@include heading2;
 }
 
 header {
@@ -80,10 +47,6 @@ ul {
 	}
 }
 
-h2.with-desc {
-	margin-bottom: 0.25em;
-}
-
 p.description {
 	margin-top: 0;
 }
@@ -92,10 +55,7 @@ p.description {
 	border-radius: $stn-border-radius;
 	border: rem(2px) solid;
 	@include color-and-secondary(border-color, $colors-h1);
-}
-
-.centered-text {
-	text-align: center;
+	padding: $spacing-medium;
 }
 
 .with-js noscript {
@@ -176,7 +136,7 @@ p.description {
 }
 
 #logo {
-	font-family: $header-font;
+	font-family: $font-header;
 	font-size: rem(55px);
 	text-decoration: none;
 
@@ -225,6 +185,10 @@ p.description {
 	text-align: center;
 }
 
+.centered-text {
+	text-align: center;
+}
+	
 .desc {
 	h1 + &, h2 + & {
 		line-height: 1rem;
@@ -366,12 +330,16 @@ span.confirmation {
 	}
 }
 
-.columns {
-	display: flex;
-}
-
 .vertical-center {
 	display: flex;
 	align-items: center;
 	align-content: center;
+}
+
+.clear-fix{
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
 }

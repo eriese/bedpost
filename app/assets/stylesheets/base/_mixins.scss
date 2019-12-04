@@ -1,0 +1,96 @@
+///////////////////////
+// theming
+///////////////////////
+@mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
+	#{$prop}: nth($vals, 1);
+
+	@if $on-body {
+		@if $and-card {
+			&.with-cards .card {
+				#{$prop}: nth($vals, 1);
+			}
+		}
+
+		&.secondary {
+			#{$prop}: nth($vals, 2);
+
+			@if $and-card {
+				&.with-cards .card {
+					#{$prop}: nth($vals, 2);
+				}
+			}
+		}
+	} @else {
+		@if $and-card {
+			body.with-cards .card & {
+				#{$prop}: nth($vals, 2);
+			}
+		}
+
+		body.secondary & {
+			#{$prop}: nth($vals, 2);
+		}
+
+		@if $and-card {
+			body.secondary.with-cards .card & {
+				#{$prop}: nth($vals, 2);
+			}
+		}
+	}
+}
+
+///////////////////////
+// text styles
+///////////////////////
+@mixin heading1 {
+	font-family: $font-header;
+	font-size: rem(40px);
+	margin: 0.5rem 0;
+	text-align: center;
+	line-height: 1.15;
+
+	&.header {
+		margin-top: 0;
+	}
+
+	@include color-and-secondary(color, $colors-h1);
+
+	body.with-cards & {
+		color: $color-white;
+	}
+
+	body.with-cards .card & {
+		color: $colors1-h1;
+	}
+	body.secondary.with-cards .card & {
+		color: $colors2-h1;
+	}
+}
+
+@mixin heading2 {
+	@include color-and-secondary(color, $colors-h2);
+	font-weight: 700;
+	font-size: rem(24px);
+	text-align: center;
+
+	body.with-cards & {
+		color: $color-white;
+	}
+
+	body.with-cards .card & {
+		color: $colors1-h2;
+	}
+
+	body.secondary.with-cards .card & {
+		color: $colors2-h2;
+	}
+
+	&.with-desc {
+		margin-bottom: 0.25em;
+	}
+}
+
+@mixin base-text {
+	font-size: rem(13px);
+	line-height: rem(18px);
+}

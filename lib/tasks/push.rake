@@ -22,22 +22,6 @@ if Rails.env.development?
 				end
 			end
 
-			bundle_ruby = Bundler::Definition.build('Gemfile', nil, {}).ruby_version.versions[0]
-			travis_ruby = YAML.load_file('.travis.yml')['rvm'][0]
-			installed_ruby = `ruby -v`
-			ruby_v = File.open('.ruby-version').readlines[0].chomp
-
-			if ruby_v == travis_ruby && ruby_v == bundle_ruby && installed_ruby.include?(ruby_v)
-				puts 'consistent ruby versions'.green
-			else
-				puts 'inconsistent ruby versions'
-				puts "ruby -v: #{installed_ruby}"
-				puts "Gemfile: #{bundle_ruby}"
-				puts ".ruby-version: #{ruby_v}"
-				puts ".travis.yml: #{travis_ruby}"
-				errors << { 'ruby install' => 'inconsistent ruby versions' }
-			end
-
 			if errors.empty?
 				puts 'All checks passed. You are ready to push!'.blue.bold
 			else
