@@ -118,11 +118,12 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def radio_group(attribute, buttons: [[:true], [:false]], options: {})
-		radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: "fec", parent_scope: "fe"}
+		group_scope = 'fe'
+		radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: 'fec', parent_scope: group_scope}
 		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
 		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
 
-		group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup})
+		group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup, slot_scope: group_scope})
 		joiner = options.delete(:joiner)
 		builder = field_builder(attribute.to_s + "_group", group_opts)
 
@@ -151,10 +152,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def range_field(attribute, **options)
+		options = convert_options(options)
 		desc_id = "#{attribute}-desc"
-		options[:"aria-describedby"] = desc_id
-		options[:min] ||= 1
-		options[:max] ||= 10
+		options["aria-describedby"] = desc_id
+		options[:min] ||= options[:in].min
+		options[:max] ||= options[:in].max
 		field_builder(attribute, options).field do
 			@template.render "forms/range_field", options: options, attribute: attribute, object_name: @object_name, desc_id: desc_id, t_key: "helpers.sliders.#{@object_name}.#{attribute}" do
 				super
@@ -163,6 +165,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def password_field(attribute, args={})
+		options = convert_options(options)
 		args[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
 		after_method = args[:show_toggle] ? :password_toggle : nil
 		field_builder(attribute, args).field(after_method) do
@@ -171,10 +174,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def date_field(attribute, **options)
+		options = convert_options(options)
 		options[:is_date] = true
 		field_builder(attribute, options).field do
-			mdl = options.delete(:"v-model")
-			@template.content_tag(:"v-date-picker", "", {:"v-model" => mdl, :":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
+			mdl = options.delete "v-model"
+			@template.content_tag(:"v-date-picker", "", {"v-model" => mdl, ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
 				options[:"slot-scope"] = 'dp'
 				options[:"v-bind"] = 'dp.inputProps'
 				options[:"v-on"] = 'dp.inputEvents'
@@ -210,7 +214,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			opts = html_options
 			add_to_class(opts, "show-always")
 		else
-			opts = html_options.merge({role: "tooltip", :"v-show" => "#{VuelidateFieldBuilder::SLOT_SCOPE}.focused"})
+			opts = html_options.merge({role: "tooltip", :"v-show" => "#{html_options.delete(:slot_scope) || VuelidateFieldBuilder::SLOT_SCOPE}.focused"})
 		end
 		opts[:id] = "#{attribute}-tooltip-content"
 		add_to_class(opts, "tooltip")

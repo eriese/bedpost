@@ -8,8 +8,8 @@ en:
     edit:
       account_settings: Account Settings
       personal_prefs:
-        title: Personal Preferences
-        desc: Customize how BedPost talks about you and your body
+        title: Body Language
+        desc: Tell us how to talk about you and your body. We're using medical language here so we don't use it where it counts; we'd rather describe your sex the way you would.
       security_settings:
         title: Security
         desc: Enter your password to change any of the following settings
@@ -33,11 +33,11 @@ en:
   helpers:
     label:
       user_profile:
-        show_internal_group: Do you also have internal genitals?
-        anus_name: What's a sexy word you call your anus?
-        external_name: What's a sexy word you call your external genitals?
-        internal_name: What's a sexy word you call your internal genitals?
-        pronoun: What pronouns do you use?
+        show_internal_group: Do you also have a vagina?
+        anus_name: What's a fun word you call your anus?
+        external_name: What's a fun word you call your external genitals?
+        internal_name: What's a fun word you call your vagina?
+        pronoun_id: What pronouns do you use?
         can_penetrate_group: Can your external genitals be used for penetration?
         old_password: Current password
         new_password: New password
@@ -51,3 +51,5 @@ en:
         name: We really only care about your first name, but it's up to you.
         uid: Use this ID like a username to invite partners to connect to your profile.
         opt_in_group: We will never sell your data to advertisers, but it can help public health researchers learn more about about STI transmission factors, and we think that's exciting.
+        anus_name: If you use it during sex, we want to talk about it in a way that feels good to you.
+        pronoun_id: Which of these options do you prefer to be called?
