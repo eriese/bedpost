@@ -16,10 +16,12 @@
 @import 'vendor/*';
 
 @import 'layout/defaults';
-@import 'layout/*';
+@import 'base/*';
+@import 'layout/scaffolds';
 @import 'layout/layout';
-@import 'layout/mobile';
-
 @import 'forms/*';
+
+@import 'layout/mobile';
+@import 'layout/vc_reset';
 
 @import 'components/**/*';
