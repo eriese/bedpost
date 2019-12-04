@@ -3,22 +3,23 @@ en:
     edit:
       title: Edit partner profile
       personal_prefs: &PREFS_TITLES
-        title: Partner Preferences
-        desc: Customize how BedPost talks about this person and their body
+        title: Body Language
+        desc: Tell us how to talk about this person and their body. We're using medical language here so we don't use it where it counts; we'd rather describe your sex the way you would.
     new:
-      title: Make a profile for your partner
-      <<: *PREFS_TITLES
+      title: New Partner
+      personal_prefs:
+        <<: *PREFS_TITLES
   helpers:
     label:
       profile:
-        show_internal_group: Do they also have internal genitals?
+        show_internal_group: Do they also have a vagina?
         show_internal:
           'true': 'Yes'
           'false': 'No'
-        anus_name: What's a sexy word they call their anus?
-        external_name: What a sexy word they call their external genitals?
-        internal_name: What a sexy word they call their internal genitals?
-        pronoun: What pronouns do they use?
+        anus_name: What's a fun word they call their anus?
+        external_name: What's a fun word they call their external genitals?
+        internal_name: What's a fun word they call their vagina?
+        pronoun_id: What pronouns do they use?
         password_confirmation: Re-type your password
         uid: Partnering ID
         can_penetrate:
@@ -28,12 +29,16 @@ en:
     tooltip:
       profile:
         name: We really only care about their first name, but it's up to you.
-        internal_name: Internal genitals are usually medically referred to using words like "vagina"
-        external_name: External genitals are usually medically referred to using words like "penis", "vulva", and "clitoris"
+        external_name: External genitals are usually medically referred to using words like "penis" and "clitoris"
+        pronoun_id: Which of these options does the person prefer to be called?
+        anus_name: If they use it during sex, we want to talk about it in a way that would feel good to them.
   mongoid:
     errors:
       models:
         profile:
+          blank: Oops, this one's blank!
           attributes:
-            external_name:
-              blank: Please tell us what they call their external genitals.
+            # external_name:
+            #   blank: Please tell us what they call their external genitals
+            # anus_name:
+            #   blank: Please tell us what they call their anus

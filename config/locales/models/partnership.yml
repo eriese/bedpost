@@ -54,7 +54,7 @@ en:
       new_profile:
         title: No worries. Let's set up a profile for them.
         desc: You can always connect this partnership with their profile later or invite them to use the one you make.
-      go: Go
+      go: ok
       go_new_profile: Create a profile for your new partner
   helpers:
     label:
