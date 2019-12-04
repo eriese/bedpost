@@ -14,7 +14,7 @@
     eval "$(rbenv init -)"
 ```
 
-- Install **ruby** 2.5.1: `rbenv install 2.5.1`. This could take awhile.
+- Install **ruby** 2.5.7: `rbenv install 2.5.7`. This could take awhile.
 
 - Update **rbenv**'s shims: `rbenv rehash`
 

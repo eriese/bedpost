@@ -135,6 +135,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			key = tooltip_opt
 			html_opts = {}
 		end
+
+		html_opts[:slot_scope] = @slot_scope
 		#generate the html
 		@formBuilder.tooltip(@attribute, key, html_opts) if key
 	end
