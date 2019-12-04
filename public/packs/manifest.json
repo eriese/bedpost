@@ -1,6 +1,6 @@
 {
-  "application.js": "/packs/js/application-334912c714c7a840604b.chunk.js",
-  "application.js.map": "/packs/js/application-334912c714c7a840604b.chunk.js.map",
+  "application.js": "/packs/js/application-95c0bfc128c9779c463b.chunk.js",
+  "application.js.map": "/packs/js/application-95c0bfc128c9779c463b.chunk.js.map",
   "components.arrow-button.js": "/packs/js/components.arrow-button-b34bdd026a38835e21e3.chunk.js",
   "components.arrow-button.js.map": "/packs/js/components.arrow-button-b34bdd026a38835e21e3.chunk.js.map",
   "components.basic-stepper.js": "/packs/js/components.basic-stepper-3418b3057aaacb97a005.chunk.js",
@@ -23,26 +23,26 @@
   "components.form.js.map": "/packs/js/components.form-75ae2de951168e0b87e2.chunk.js.map",
   "components.prog-bar.js": "/packs/js/components.prog-bar-8ed5edb00bb5f980da36.chunk.js",
   "components.prog-bar.js.map": "/packs/js/components.prog-bar-8ed5edb00bb5f980da36.chunk.js.map",
-  "components.radar-chart.css": "/packs/css/components.radar-chart-2eab16ef.chunk.css",
-  "components.radar-chart.css.map": "/packs/css/components.radar-chart-2eab16ef.chunk.css.map",
-  "components.radar-chart.js": "/packs/js/components.radar-chart-7d627b258d4e9d574874.chunk.js",
-  "components.radar-chart.js.map": "/packs/js/components.radar-chart-7d627b258d4e9d574874.chunk.js.map",
+  "components.radar-chart.css": "/packs/css/components.radar-chart-c3421448.chunk.css",
+  "components.radar-chart.css.map": "/packs/css/components.radar-chart-c3421448.chunk.css.map",
+  "components.radar-chart.js": "/packs/js/components.radar-chart-c4a95dd29fcdfe899482.chunk.js",
+  "components.radar-chart.js.map": "/packs/js/components.radar-chart-c07a65b6e969efd66eb9.hot-update.js.map",
   "components.toggle.js": "/packs/js/components.toggle-162383faf380348dfb80.chunk.js",
   "components.toggle.js.map": "/packs/js/components.toggle-162383faf380348dfb80.chunk.js.map",
   "entrypoints": {
     "application": {
       "js": [
-        "/packs/runtime-e7f9cbf35d550850c12e.js",
-        "/packs/js/application-334912c714c7a840604b.chunk.js"
+        "/packs/runtime-f9c1aa998045894942bd.js",
+        "/packs/js/application-95c0bfc128c9779c463b.chunk.js"
       ],
       "js.map": [
-        "/packs/runtime-e7f9cbf35d550850c12e.js.map",
-        "/packs/js/application-334912c714c7a840604b.chunk.js.map"
+        "/packs/runtime-f9c1aa998045894942bd.js.map",
+        "/packs/js/application-95c0bfc128c9779c463b.chunk.js.map"
       ]
     }
   },
   "locales.en.js": "/packs/js/locales.en-8108921f8d9b621b35bb.chunk.js",
-  "locales.en.js.map": "/packs/js/locales.en-8108921f8d9b621b35bb.chunk.js.map",
+  "locales.en.js.map": "/packs/js/locales.en-c07a65b6e969efd66eb9.hot-update.js.map",
   "npm.chart.js.js": "/packs/js/npm.chart.js-ba2f912f457ab7c2462a.chunk.js",
   "npm.chart.js.js.map": "/packs/js/npm.chart.js-ba2f912f457ab7c2462a.chunk.js.map",
   "npm.core-js.js": "/packs/js/npm.core-js-bc58934a3d2c9944a25b.chunk.js",
@@ -53,14 +53,14 @@
   "npm.moment.js.map": "/packs/js/npm.moment-88df4057a75ab5c8722e.chunk.js.map",
   "npm.popper.js.js": "/packs/js/npm.popper.js-e9f373e33278d33bcd87.chunk.js",
   "npm.popper.js.js.map": "/packs/js/npm.popper.js-e9f373e33278d33bcd87.chunk.js.map",
-  "npm.vue-tour.css": "/packs/css/npm.vue-tour-ec4ecd4e.chunk.css",
-  "npm.vue-tour.css.map": "/packs/css/npm.vue-tour-ec4ecd4e.chunk.css.map",
-  "npm.vue-tour.js": "/packs/js/npm.vue-tour-98130708425c03a0df59.chunk.js",
-  "npm.vue-tour.js.map": "/packs/js/npm.vue-tour-98130708425c03a0df59.chunk.js.map",
+  "npm.vue-tour.css": "/packs/css/npm.vue-tour-6ccc63ec.chunk.css",
+  "npm.vue-tour.css.map": "/packs/css/npm.vue-tour-6ccc63ec.chunk.css.map",
+  "npm.vue-tour.js": "/packs/js/npm.vue-tour-b4b47a4ef1c59baebb71.chunk.js",
+  "npm.vue-tour.js.map": "/packs/js/npm.vue-tour-c07a65b6e969efd66eb9.hot-update.js.map",
   "npm.vuelidate.js": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js",
   "npm.vuelidate.js.map": "/packs/js/npm.vuelidate-d841c6a6b933d6fa3245.chunk.js.map",
-  "runtime.js": "/packs/runtime-e7f9cbf35d550850c12e.js",
-  "runtime.js.map": "/packs/runtime-e7f9cbf35d550850c12e.js.map",
+  "runtime.js": "/packs/runtime-f9c1aa998045894942bd.js",
+  "runtime.js.map": "/packs/runtime-f9c1aa998045894942bd.js.map",
   "v-tour0.js": "/packs/js/v-tour0-ee0b4a8cdf4a8f9b0b4f.chunk.js",
   "v-tour0.js.map": "/packs/js/v-tour0-ee0b4a8cdf4a8f9b0b4f.chunk.js.map",
   "vendors~components.form-stepper.js": "/packs/js/vendors~components.form-stepper-433868c51d2b8a9a0f10.chunk.js",
