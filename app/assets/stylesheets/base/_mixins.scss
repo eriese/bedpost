@@ -4,22 +4,21 @@
 @mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
 	#{$prop}: nth($vals, 1);
 
-		@if $and-card {
-			body.with-cards .card & {
-				#{$prop}: nth($vals, 2);
-			}
-		}
-
-		body.secondary & {
+	@if $and-card {
+		body.with-cards .card & {
 			#{$prop}: nth($vals, 2);
 		}
+	}
 
-		@if $and-card {
-			body.secondary.with-cards .card & {
-				#{$prop}: nth($vals, 2);
-			}
+	body.secondary & {
+		#{$prop}: nth($vals, 2);
+	}
+
+	@if $and-card {
+		body.secondary.with-cards .card & {
+			#{$prop}: nth($vals, 2);
 		}
-
+	}
 }
 
 ///////////////////////
@@ -78,10 +77,13 @@
 	line-height: rem(18px);
 }
 
+///////////////////////
+// ctas
+///////////////////////
 @mixin cta-base {
 	cursor: pointer;
-	padding: rem(10px);
-	transition: 0.1s linear all;
+	padding: rem(10px) $spacing-default;
+	transition: 0.1s linear color, background-color, box-shadow;
 	cursor: pointer;
 	border-style: none;
 	font-weight: 800;
@@ -89,6 +91,7 @@
 	border-radius: 3rem;
 	min-width: 8rem;
 	display: inline-block;
+	text-decoration: none;
 }
 
 @mixin cta($theme: $colors-light, $suffix: "") {
@@ -101,6 +104,3 @@
 		background-color: map-get($theme, "cta-text");
 	}
 }
-
-
-
