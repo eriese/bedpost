@@ -11,29 +11,29 @@ import _root from "@components/Root";
 import nav from '@components/NavComponent'
 
 const formStepper = () => import (
-	/* webpackChunkName: "components.form-stepper", webpackMode: "lazy", webpackPreload: true */ "@components/stepper/FormStepperComponent.vue");
+	/* webpackChunkName: "components/form-stepper", webpackMode: "lazy", webpackPreload: true */ "@components/stepper/FormStepperComponent.vue");
 const formStep = () => import (
-	/* webpackChunkName: "components.form-stepper", webpackMode: "lazy", webpackPreload: true */ "@components/stepper/FormStepComponent.vue");
-const basicStepper = () => import(/* webpackChunkName: "components.basic-stepper", webpackPreload: true */ '@components/stepper/BasicStepperComponent');
+	/* webpackChunkName: "components/form-stepper", webpackMode: "lazy", webpackPreload: true */ "@components/stepper/FormStepComponent.vue");
+const basicStepper = () => import(/* webpackChunkName: "components/basic-stepper", webpackPreload: true */ '@components/stepper/BasicStepperComponent');
 
-const vuelidateForm = () => import (/* webpackChunkName: "components.form", webpackPreload: true */ '@components/form/VuelidateFormComponent');
-const fieldErrors = () => import (/* webpackChunkName: "components.form", webpackPreload: true */ "@components/form/FieldErrorsComponent.vue");
-const formErrors = () => import (/* webpackChunkName: "components.form", webpackPreload: true */ "@components/form/FormErrorsComponent.vue");
-const toggle = () => import (/* webpackChunkName: "components.toggle", webpackPreload: true */ "@components/form/ToggleComponent.vue");
-const dynamicFieldList = () => import (/* webpackChunkName: "components.dynamic-field-list", webpackPreload: true */ "@components/form/DynamicFieldList.vue");
+const vuelidateForm = () => import (/* webpackChunkName: "components/form", webpackPreload: true */ '@components/form/VuelidateFormComponent');
+const fieldErrors = () => import (/* webpackChunkName: "components/form", webpackPreload: true */ "@components/form/FieldErrorsComponent.vue");
+const formErrors = () => import (/* webpackChunkName: "components/form", webpackPreload: true */ "@components/form/FormErrorsComponent.vue");
+const toggle = () => import (/* webpackChunkName: "components/toggle", webpackPreload: true */ "@components/form/ToggleComponent.vue");
+const dynamicFieldList = () => import (/* webpackChunkName: "components/dynamic-field-list", webpackPreload: true */ "@components/form/DynamicFieldList.vue");
 
-const encounterContactField = () => import (/* webpackChunkName: "components.encounter-contact-field", webpackPreload: true */ "@components/form/encounter/EncounterContactField.vue");
+const encounterContactField = () => import (/* webpackChunkName: "components/encounter-contact-field", webpackPreload: true */ "@components/form/encounter/EncounterContactField.vue");
 
-const dropDown = () => import (/* webpackChunkName: "components.dropdown", webpackPreload: true */ "@components/display/DropDown.vue");
-const progBar = () => import (/* webpackChunkName: "components.prog-bar", webpackPreload: true */ "@components/display/ProgBar.vue");
-const bubble = () => import (/* webpackChunkName: "components.bubble", webpackPreload: true */ "@components/display/Bubble.vue")
-const contentRequester = () => import (/* webpackChunkName: "components.content-requester", webpackPreload: true */ "@components/display/ContentRequester.vue")
+const dropDown = () => import (/* webpackChunkName: "components/dropdown", webpackPreload: true */ "@components/display/DropDown.vue");
+const progBar = () => import (/* webpackChunkName: "components/prog-bar", webpackPreload: true */ "@components/display/ProgBar.vue");
+const bubble = () => import (/* webpackChunkName: "components/bubble", webpackPreload: true */ "@components/display/Bubble.vue")
+const contentRequester = () => import (/* webpackChunkName: "components/content-requester", webpackPreload: true */ "@components/display/ContentRequester.vue")
 
-const arrowButton = () => import (/* webpackChunkName: "components.arrow-button", webpackPreload: true */ "@components/functional/ArrowButton");
+const arrowButton = () => import (/* webpackChunkName: "components/arrow-button", webpackPreload: true */ "@components/functional/ArrowButton");
 
 
-const partnershipChart = () => import(/* webpackChunkName: "components.radar-chart", webpackPreload: true */ "@components/widgets/PartnershipChart.js");
-const encounterCalendar = () => import (/* webpackChunkName: "components.encounter-calendar", webpackPreload: true */ '@components/widgets/EncounterCalendar.vue');
+const partnershipChart = () => import(/* webpackChunkName: "components/radar-chart", webpackPreload: true */ "@components/widgets/PartnershipChart.js");
+const encounterCalendar = () => import (/* webpackChunkName: "components/encounter-calendar", webpackPreload: true */ '@components/widgets/EncounterCalendar.vue');
 
 
 /**
