@@ -1,7 +1,3 @@
-const importTourComponent = (compName) => {
-	return () => import(/* webpackChunkName: "v-tour", webpackPrefetch: true */ `vue-tour/src/components/${compName}.vue`)
-}
-
 /**
  * A plugin that installs vue-tour and its components
  * Basically copied from {@link https://pulsar.gitbooks.io/vue-tour/ vue-tour}'s plugin, but using dynamic imports
@@ -14,6 +10,6 @@ export default {
 
 		// Dynamically load v-step
 		// v-tour is loaded dynamically in TourHolder
-		Vue.component('v-step', importTourComponent('VStep'));
+		Vue.component('v-step', () => import(/* webpackChunkName: 'vendors/v-tour.step', webpackPrefetch: true */ 'vue-tour/src/components/VStep.vue'));
 	}
 }
