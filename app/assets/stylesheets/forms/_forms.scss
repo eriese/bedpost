@@ -1,11 +1,10 @@
 label {
 	padding-left: 0.75rem;
-	font-weight: bold;
 
 	+ input,
 	+ select,
 	+ textarea {
-		margin-top: $spacing-tiny;
+		margin-top: $spacing-small;
 	}
 }
 

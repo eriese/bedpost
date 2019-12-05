@@ -16,16 +16,16 @@ $text-font: 'Open Sans', sans-serif;
 $font-header: 'Baloo', cursive;
 
 ///////////////////////
-// spacing 
+// spacing
 ///////////////////////
-$spacing-default: rem($root-font-size); 
+$spacing-default: $root-font-size;
 $spacing-medium:  $spacing-default * 1.5;
 $spacing-double:  $spacing-default * 2;
 $spacing-small:   $spacing-default / 2;
 $spacing-tiny:    $spacing-default / 4;
 
 ///////////////////////
-// breakpoints 
+// breakpoints
 ///////////////////////
 $screen-tablet: 501px;
 
@@ -84,6 +84,23 @@ $color-black: #333;
 $color-off-white: #EEE;
 $color-white: #FFF;
 
+$dark-background: #2E2143;
+$dark-background-secondary: #FC9890;
+
+$colors-light: (
+	"cta-text": $color-white,
+	"cta-bg": #7A405E,
+	"cta-bg-light": #AF6A64,
+	"shadow": $color-black
+);
+
+$colors-dark: (
+	"cta-text": $dark-background,
+	"cta-bg": #C78DAB,
+	"cta-bg-light": #FC9890,
+	"shadow": $color-white
+);
+
 $colors1-button-primary: #7A405E;
 $colors1-button-secondary: #AF6A64;
 $colors1-h1: #433060;
@@ -92,17 +109,19 @@ $colors1-text: $color-black;
 $colors1-background: $color-white;
 $colors1-background-secondary: #AF5C87;
 
+$colors2-background: #2E2143;
+$colors2-background-secondary: #FC9890;
 $colors2-button-primary: #C78DAB;
 $colors2-button-secondary: #FC9890;
 $colors2-h1: #FFD6CC;
 $colors2-h2: #EEE;
 $colors2-text: $color-white;
-$colors2-background: #2E2143;
-$colors2-background-secondary: #FC9890;
+
 
 $stn-border-radius: 0.95rem;
-$stn-box-shadow: 0px 0px 2px 1px rgba($color-black,0.5);
-$stn-box-shadow-secondary: 0px 0px 2px 1px rgba($color-white,0.5);
+$box-shadow: 0px 0px 2px 1px;
+$stn-box-shadow: $box-shadow rgba($color-black,0.5);
+$stn-box-shadow-secondary: $box-shadow rgba($color-white,0.5);
 
 ///////////////////////
 // widget colors

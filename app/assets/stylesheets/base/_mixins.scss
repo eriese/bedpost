@@ -4,23 +4,6 @@
 @mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
 	#{$prop}: nth($vals, 1);
 
-	@if $on-body {
-		@if $and-card {
-			&.with-cards .card {
-				#{$prop}: nth($vals, 1);
-			}
-		}
-
-		&.secondary {
-			#{$prop}: nth($vals, 2);
-
-			@if $and-card {
-				&.with-cards .card {
-					#{$prop}: nth($vals, 2);
-				}
-			}
-		}
-	} @else {
 		@if $and-card {
 			body.with-cards .card & {
 				#{$prop}: nth($vals, 2);
@@ -36,7 +19,7 @@
 				#{$prop}: nth($vals, 2);
 			}
 		}
-	}
+
 }
 
 ///////////////////////
@@ -94,3 +77,30 @@
 	font-size: rem(13px);
 	line-height: rem(18px);
 }
+
+@mixin cta-base {
+	cursor: pointer;
+	padding: rem(10px);
+	transition: 0.1s linear all;
+	cursor: pointer;
+	border-style: none;
+	font-weight: 800;
+	text-transform: uppercase;
+	border-radius: 3rem;
+	min-width: 8rem;
+	display: inline-block;
+}
+
+@mixin cta($theme: $colors-light, $suffix: "") {
+	@include cta-base;
+	color: map-get($theme, "cta-text");
+	background-color: map-get($theme, "cta-bg#{$suffix}");
+	box-shadow: $box-shadow rgba(map-get($theme, "shadow"), 0.5);
+	&:hover, &:focus {
+		color: map-get($theme, "cta-bg#{$suffix}");
+		background-color: map-get($theme, "cta-text");
+	}
+}
+
+
+

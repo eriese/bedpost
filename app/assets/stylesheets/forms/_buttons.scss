@@ -40,24 +40,10 @@ button.as-link {
 }
 
 button, input[type=submit], a.as-button {
-	@include color-and-secondary(color, $button-text-colors);
-	@include color-and-secondary(background-color, $button-colors);
-	@include color-and-secondary(border-color, $button-colors);
-	@include color-and-secondary(box-shadow, $box-shadows);
-	padding: rem(10px);
-	transition: 0.1s linear all;
-	cursor: pointer;
-	border-style: none;
-	font-weight: 800;
-	text-transform: uppercase;
-	border-radius: 3rem;
-	min-width: 8rem;
-	display: inline-block;
+	@include cta;
 
-	&:hover, &:focus {
-		@include color-and-secondary(color, $button-hover-text-colors);
-		@include color-and-secondary(background-color, $button-hover-colors);
-		@include color-and-secondary(border-color, $button-hover-colors);
+	body.secondary & {
+		@include cta($colors-dark);
 	}
 
 	form.centered & {
@@ -65,13 +51,28 @@ button, input[type=submit], a.as-button {
 	}
 
 	&.secondary-button {
-		@include color-and-secondary(background-color, $button-colors-secondary);
+		@include cta($suffix: "-light");
+	}
 
-		&:hover, &:focus {
-			@include color-and-secondary(color, $button-colors-secondary);
-			@include color-and-secondary(background-color, $button-hover-colors);
-			@include color-and-secondary(border-color, $button-hover-colors);
-		}
+	form.big &, form.centered & {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+.cta {
+	@include cta;
+
+	body.secondary & {
+		@include cta($colors-dark);
+	}
+
+	form.centered & {
+		margin-top: rem(10px);
+	}
+
+	&--is-secondary {
+		@include cta($suffix: "-light");
 	}
 
 	form.big &, form.centered & {

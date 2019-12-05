@@ -10,7 +10,7 @@ input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
 	border-width: rem(1px);
 	box-sizing: border-box;
 	color: $color-black;
-	padding: 0.15rem 1rem;
+	padding: 0.2rem 1rem;
 	line-height: 1;
 	box-shadow: none;
 
@@ -97,8 +97,6 @@ input[type=radio] {
 		display: inline !important;
 		border: none !important;
 
-
-
 		&:focus, &:hover, &:checked {
 			+ label {
 				color: $label-hover-color;
@@ -143,27 +141,32 @@ input[type=radio] {
 
 		.toggler & {
 			+ label {
-				height: 2rem;
-				width: 2rem;
-				line-height: 2rem;
+				$size: 2.15rem;
+				height: $size;
+				width: $size;
+				line-height: $size - 0.1rem;
 				display: inline-block;
 				vertical-align: middle;
 				border-radius: 50%;
-				@include color-and-secondary(background-color, $background-colors);
 				@include color-and-secondary(color, $button-colors);
-				border: rem(2px) solid;
-				@include color-and-secondary(border-color, $button-colors);
+				border: rem(2px) solid transparent;
 				text-align: center;
 				font-size: 1rem;
 				margin-right: 0.5rem;
 				padding: 0;
 			}
 
-			&:focus, &:hover, &:checked {
+			&:checked {
 				+ label {
 					@include color-and-secondary(background-color, $button-colors);
 					@include color-and-secondary(color, $background-colors);
 					font-weight: normal;
+				}
+			}
+
+			&:focus, &:hover {
+				+ label {
+					@include color-and-secondary(border-color, $button-colors);
 				}
 			}
 		}
