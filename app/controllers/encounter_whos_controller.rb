@@ -7,6 +7,7 @@ class EncounterWhosController < ApplicationController
 	def new
 		@from_dash = from_dash?
 		@partnerships = current_user_profile.partnerships
+		@encounter = Encounter.new
 		@dummy_id = DUMMY_ID
 	end
 

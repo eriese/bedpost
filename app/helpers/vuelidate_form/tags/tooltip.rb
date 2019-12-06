@@ -31,6 +31,7 @@ module VuelidateForm
 					options['trigger'] = 'manual'
 					options[':hide-on-click'] = false
 					options[':visible'] = "#{slot_scope}.focused || #{slot_scope}.hovered"
+					options[':a11y'] = false
 				end
 
 				content_tag(:tooltip, content, options)

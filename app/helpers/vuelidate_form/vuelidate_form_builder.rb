@@ -214,21 +214,6 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def tooltip(attribute, key=true, html_options={})
-		# show_always = html_options.delete :show_always
-		# if show_always
-		# 	opts = html_options
-		# 	add_to_class(opts, "show-always")
-		# else
-		# 	opts = html_options.merge({role: "tooltip", :"v-show" => "#{html_options.delete(:slot_scope) || VuelidateFieldBuilder::SLOT_SCOPE}.focused"})
-		# end
-		# opts[:id] = "#{attribute}-tooltip-content"
-		# opts[:to] =
-		# add_to_class(opts, "tooltip")
-
-		# @template.content_tag(:tooltip, opts) do
-		# 	t_key = key == true ? attribute : key;
-		# 	ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
-		# end
 		html_options[:key] = key
 		Tags::Tooltip.new(@object_name, attribute, @template, html_options).render
 	end
@@ -280,11 +265,8 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	# add a field value to the form
 	def add_value(attribute, attr_value = nil)
-		if attr_value
-			value[attribute] = attr_value
-		elsif @object.respond_to?(attribute)
-			value[attribute] = @object.send(attribute)
-		end
+		attr_value ||= @object.respond_to?(attribute) ? @object.send(attribute) : ''
+		value[attribute] = attr_value
 	end
 
 	# add a toggle field and its starting value to the form

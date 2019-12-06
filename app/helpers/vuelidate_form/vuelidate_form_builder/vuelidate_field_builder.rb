@@ -269,11 +269,11 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 		if @validate
 			# get the validators formatted for use by the form if the object has them
-			mapped_validators = if @object.present? && validators.any?
-				VuelidateFormUtils.map_validators_for_form(validators, @object)
+			mapped_validators = VuelidateFormUtils.map_validators_for_form(validators, @object)
+
 			# otherwise just send a presence validator if it's required
-			elsif @required
-				[[:presence]]
+			if @required && mapped_validators.none? { |v| v[0] == :presence }
+				mapped_validators << [:presence]
 			end
 			# tell the form about the validation
 			@formBuilder.add_validation(@attribute, mapped_validators) if mapped_validators

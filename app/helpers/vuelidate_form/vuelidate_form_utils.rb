@@ -3,6 +3,8 @@ module VuelidateForm; module VuelidateFormUtils
 	# @param validators [Array] an array of validators
 	# @param object [Object] the object that the validators will validate
 	def self.map_validators_for_form(validators, object)
+		return [] unless object.present? && validators.any?
+
 		is_new = false
 		validators.each_with_object([]) do |v, ary|
 			# foreign keys can't be checked by the front end
