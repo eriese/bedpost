@@ -6,7 +6,7 @@
 		<%= f.wizard "{stepClass: 'step card'}" do %>
 			<%= render "fields", f: f %>
 			<% content_for :last_button do %>
-				<%= f.submit nil, :":class"=>'["not-button"]'%>
+				<%= f.submit nil, :":class"=>'["link"]'%>
 			<% end %>
 		<% end %>
 	<% end %>

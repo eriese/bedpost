@@ -75,7 +75,7 @@ module EncountersHelper
 		end
 
 		content_tag(:template, {:"v-slot:button" => "sc"}) do
-			content_tag(:button, "{{sc.isOpen ? #{t(".display_risks_drop_down_html")}}}", {type: "button", class: "not-button"}) unless obj.is_a?(Encounter)
+			content_tag(:button, "{{sc.isOpen ? #{t(".display_risks_drop_down_html")}}}", {type: "button", class: "link"}) unless obj.is_a?(Encounter)
 		end +
 		content_tag(:ul, safe_join(risks), {class: "risks-show"})
 	end

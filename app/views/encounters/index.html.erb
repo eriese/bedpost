@@ -6,9 +6,9 @@
 	<encounter-calendar :partnerships="<%= @partnerships.to_json %>">
 		<h3><%= t(".no_encounters.#{trans_key}", partner_name: first_partner["partner_name"]) %></h3>
 	</encounter-calendar>
-	<div><%= link_to t(".new"), @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path %></div>
+	<div><%= link_to t(".new"), @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, class: "link"%></div>
 <% else %>
 	<h1 class="with-desc"><%= t('.no_partners.title') %></h1>
 	<h2 class="desc"><%= t('.no_partners.desc') %></h2>
-	<%= link_to t('.make_partner'), who_path %>
+	<%= link_to t('.make_partner'), who_path, class: "link"%>
 <% end %>

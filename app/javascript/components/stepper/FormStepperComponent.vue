@@ -7,10 +7,10 @@
 			<div class="step-nav">
 				<ul class="prog-buttons clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
 					<li class="next" v-if="curIndex == numSteps - 1">
-						<slot name="last-button"><button class="not-button last" type="button"@click="next">{{lastButton || "Send"}}</button></slot>
+						<slot name="last-button"><button class="link last" type="button"@click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
 					<li v-for="btn in buttons" v-if="btn.if" :class="btn.clazz">
-						<arrow-button class="not-button" v-bind="btn"  @click="btn.click"></arrow-button>
+						<arrow-button class="link" v-bind="btn"  @click="btn.click"></arrow-button>
 					</li>
 				</ul>
 

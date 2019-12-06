@@ -1,5 +1,5 @@
 <template>
-	<button :class="['toggle', {'not-button': !asButton}]" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
+	<button :class="['toggle', {'link': !asButton}]" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
 </template>
 
 <script>

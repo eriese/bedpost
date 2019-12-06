@@ -104,3 +104,22 @@
 		background-color: map-get($theme, "cta-text");
 	}
 }
+
+///////////////////////
+// link
+///////////////////////
+@mixin link($theme: $colors-light, $suffix: "") {
+	cursor: pointer;
+	-webkit-appearance: none;
+	border: none;
+	padding: 0;
+	transition: 0.1s linear color;
+	color: map-get($theme, "cta-bg");
+
+	&:hover, &:focus {
+		color: map-get($theme, "cta-bg-light#{$suffix}");
+	}
+}
+
+
+
