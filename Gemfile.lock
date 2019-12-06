@@ -157,7 +157,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.3.1)
+    loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.13)
@@ -176,7 +176,7 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.13.0)
     mongo (2.10.2)
       bson (>= 4.4.2, < 5.0.0)
     mongoid (7.0.5)
@@ -190,7 +190,7 @@ GEM
     nenv (0.3.0)
     netrc (0.11.0)
     nio4r (2.5.2)
-    nokogiri (1.10.5)
+    nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
     normalize-rails (4.1.1)
     notiffany (0.1.3)
@@ -213,7 +213,7 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     public_suffix (4.0.1)
-    puma (3.12.1)
+    puma (3.12.2)
     rack (2.0.7)
     rack-livereload (0.3.17)
       rack
@@ -357,7 +357,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webpacker (4.0.7)
+    webpacker (4.2.0)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -404,7 +404,7 @@ DEPENDENCIES
   pry-byebug
   pry-remote
   pry-stack_explorer
-  puma (~> 3.11)
+  puma (~> 3.12)
   rack-livereload
   rack-mini-profiler
   rails (~> 5.2.3)

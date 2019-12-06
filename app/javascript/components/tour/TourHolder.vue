@@ -17,7 +17,7 @@
 		}
 	}
 
-	const VTour = () => import(/* webpackChunkName: "v-tour", webpackPrefetch: true */"vue-tour/src/components/VTour.vue")
+	const VTour = () => import(/* webpackChunkName: 'vendors/v-tour.tour', webpackPrefetch: true */"vue-tour/src/components/VTour.vue")
 
 	/**
 	 * A component to load {@link https://pulsar.gitbooks.io/vue-tour/ vue-tour} and run the tour.
