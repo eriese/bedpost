@@ -161,7 +161,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			# static aria attributes for progressive enhancement
 			aria: {
 				required: @required,
-				describedby: "#{@attribute}-error #{@attribute}-tooltip-content #{desc}".strip,
+				describedby: "#{@attribute}-error #{@object_name}_#{@attribute}-tooltip-content #{desc}".strip,
 				invalid: @sub_error.present?
 			},
 			#dynamic aria attributes
