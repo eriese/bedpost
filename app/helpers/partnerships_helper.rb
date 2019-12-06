@@ -40,7 +40,7 @@ module PartnershipsHelper
 		toggle_key = form_obj.options[:wizard] ? exp_type : "#{exp_type}_#{attribute}"
 		clear_key = form_obj.options[:wizard] ? clear_type : "#{clear_type}_#{attribute}"
 		content_tag(:p) do
-			form_obj.toggle_tag(toggle_key, symbols: t("helpers.toggles.partnership.#{exp_type}"), js_backup: true, :":expandable" => true, clear: "toggles.#{clear_key}")
+			form_obj.toggle_tag(toggle_key, symbols: t("helpers.toggles.partnership.#{exp_type}"), js_backup: true, class: 'link link--no-line', :":expandable" => true, clear: "toggles.#{clear_key}")
 		end +
 		content_tag(:p, t("partnerships.new.#{exp_type}.#{attribute}"), :"v-show" => "vf.toggles.#{toggle_key}", class: "explanation")
 	end

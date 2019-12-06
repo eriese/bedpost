@@ -1,5 +1,5 @@
 <template>
-	<button :class="['toggle', {'link': !asButton}]" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
+	<button :class="['toggle']" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
 </template>
 
 <script>
@@ -15,7 +15,6 @@
  * @vue-prop {String} field the field that is being toggled
  * @vue-prop {Array} [clearOn] an array of values that should clear the field supplied by clear. If this property is not supplied, all toggles will clear the clear field
  * @vue-prop {Boolean} [expandable=false] does this toggle expand a menu?
- * @vue-prop {Boolean} [asButton=false] should the toggle be styled as a button?
  * @vue-computed {String} toggleState the label taken from symbols to describe the toggle's current state
  * @vue-computed {Number} index the index the current value has in the vals array
  * @vue-computed {Boolean} expanded is the menu this toggle expands exapnded?
@@ -57,10 +56,6 @@ export default {
 			type: Boolean,
 			required: false
 		},
-		asButton: {
-			type: Boolean,
-			default: false
-		}
 	},
 	computed: {
 		toggleState: function() {

@@ -7,9 +7,12 @@ input[type="submit"].not-button {
 	}
 
 	body.secondary & {
-		@include link($colors-dark);
-	}	
+		@include link-colors($colors-dark);
+	}
 
+	&.link--no-line {
+		text-decoration: none;
+	}
 
 	// body.with-cards & {
 	// 	@include color-and-secondary(color, $colors-h2);

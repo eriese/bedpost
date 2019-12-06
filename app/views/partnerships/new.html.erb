@@ -10,5 +10,5 @@
 			<% end %>
 		<% end %>
 	<% end %>
-	<%= link_to t(".back"), who_path, "data-animation-type" => "slideRight" if @partnership.partner.is_a?(UserProfile), class: "link" %>
+	<%= link_to t(".back"), who_path, class: "link", "data-animation-type" => ("slideRight" if @partnership.partner.is_a?(UserProfile)) %>
 </div>

@@ -94,8 +94,7 @@
 	text-decoration: none;
 }
 
-@mixin cta($theme: $colors-light, $suffix: "") {
-	@include cta-base;
+@mixin cta-colors($theme: $colors-light, $suffix: "") {
 	color: map-get($theme, "cta-text");
 	background-color: map-get($theme, "cta-bg#{$suffix}");
 	box-shadow: $box-shadow rgba(map-get($theme, "shadow"), 0.5);
@@ -105,20 +104,28 @@
 	}
 }
 
+@mixin cta($theme: $colors-light, $suffix: "") {
+	@include cta-base;
+	@include cta-colors($theme, $suffix);
+}
+
 ///////////////////////
 // link
 ///////////////////////
+@mixin link-colors($theme: $colors-light, $suffix: "") {
+	color: map-get($theme, "link");
+	&:hover, &:focus {
+		color: map-get($theme, "link-light#{$suffix}");
+	}
+}
+
 @mixin link($theme: $colors-light, $suffix: "") {
 	cursor: pointer;
 	-webkit-appearance: none;
 	border: none;
 	padding: 0;
 	transition: 0.1s linear color;
-	color: map-get($theme, "link");
 	text-decoration: underline;
 	background-color: transparent;
-
-	&:hover, &:focus {
-		color: map-get($theme, "link-light#{$suffix}");
-	}
+	@include link-colors($theme, $suffix);
 }

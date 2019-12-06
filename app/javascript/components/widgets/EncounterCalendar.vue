@@ -9,7 +9,7 @@
 					</template>
 				</v-select>
 			</div>
-			<toggle :symbols="['list_view', 'calendar_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" :as-button="true" @toggle-event="onToggle"></toggle>
+			<toggle :symbols="['list_view', 'calendar_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle>
 			<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
 				<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 					<div class="popover-day-title">

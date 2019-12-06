@@ -2,11 +2,11 @@
 	@include cta;
 
 	&--is-secondary {
-		@include cta($suffix: "-light");
+		@include cta-colors($suffix: "-light");
 	}
 
 	body.secondary & {
-		@include cta($colors-dark);
+		@include cta-colors($colors-dark);
 	}
 
 	form.centered & {
