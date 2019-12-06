@@ -73,6 +73,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
+	# TODO this has full_v_name, which doesn't exist anymore
 	def get_toggle_options(attribute, options, value)
 		toggle_opt = options.delete :toggle
 		if toggle_opt
@@ -123,7 +124,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
 		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
 
-		group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup, slot_scope: group_scope})
+		group_opts = (options.delete(:group_options) || {}).reverse_merge(
+			field_role: :radiogroup,
+			slot_scope: group_scope,
+			field_id: "#{@object_name}_#{attribute}_group"
+		)
 		joiner = options.delete(:joiner)
 		builder = field_builder(attribute.to_s + "_group", group_opts)
 
@@ -209,22 +214,26 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def tooltip(attribute, key=true, html_options={})
-		show_always = html_options.delete :show_always
-		if show_always
-			opts = html_options
-			add_to_class(opts, "show-always")
-		else
-			opts = html_options.merge({role: "tooltip", :"v-show" => "#{html_options.delete(:slot_scope) || VuelidateFieldBuilder::SLOT_SCOPE}.focused"})
-		end
-		opts[:id] = "#{attribute}-tooltip-content"
-		add_to_class(opts, "tooltip")
+		# show_always = html_options.delete :show_always
+		# if show_always
+		# 	opts = html_options
+		# 	add_to_class(opts, "show-always")
+		# else
+		# 	opts = html_options.merge({role: "tooltip", :"v-show" => "#{html_options.delete(:slot_scope) || VuelidateFieldBuilder::SLOT_SCOPE}.focused"})
+		# end
+		# opts[:id] = "#{attribute}-tooltip-content"
+		# opts[:to] =
+		# add_to_class(opts, "tooltip")
 
-		@template.content_tag(:aside, opts) do
-			t_key = key == true ? attribute : key;
-			ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
-		end
+		# @template.content_tag(:tooltip, opts) do
+		# 	t_key = key == true ? attribute : key;
+		# 	ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
+		# end
+		html_options[:key] = key
+		Tags::Tooltip.new(@object_name, attribute, @template, html_options).render
 	end
 
+	# TODO this has full_v_name, which doesn't exist anymore
 	def toggle_tag(attribute, **toggle_options)
 		clear_opt = toggle_options.delete :":clear"
 		if clear_opt
