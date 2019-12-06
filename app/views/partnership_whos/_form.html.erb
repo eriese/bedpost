@@ -1,4 +1,4 @@
 <%= vuelidate_form_with model: @partnership, url: who_path, html: {class: "centered single", "data-animation-type" => "slideLeft"} do |f| %>
 	<%= f.text_field :uid, required: true%>
-	<%= f.submit %>
+	<%= f.submit "Next", :class=> "cta" %>
 <% end %>

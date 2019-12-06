@@ -20,7 +20,7 @@
 		<div v-if="step == 1">
 			<h2><%= t(".form_title") %></h2>
 			<%= render "form" %>
-			<button type="button" @click="setStep(0, {animationType: 'slideRight'})" class="as-link">Back</button>
+			<button type="button" @click="setStep(0, {animationType: 'slideRight'})" class="link">Back</button>
 		</div>
 
 		<div v-if="step == 2">
@@ -29,7 +29,7 @@
 			<div class="options">
 				<%= link_to t(".go"), new_dummy_profile_path, "data-animation-type" => "slideLeft", title: t(".go_new_profile"), class: "cta" %>
 			</div>
-			<button type="button" @click="setStep(0, {animationType: 'slideRight'})" class="as-link">Back</button>
+			<button type="button" class="link" @click="setStep(0, {animationType: 'slideRight'})">Back</button>
 		</div>
 	</div>
 </basic-stepper>

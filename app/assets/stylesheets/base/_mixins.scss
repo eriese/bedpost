@@ -115,6 +115,7 @@
 	padding: 0;
 	transition: 0.1s linear color;
 	color: map-get($theme, "cta-bg");
+	text-decoration: underline;
 
 	&:hover, &:focus {
 		color: map-get($theme, "cta-bg-light#{$suffix}");
