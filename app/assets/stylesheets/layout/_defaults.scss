@@ -91,6 +91,8 @@ $colors-light: (
 	"cta-text": $color-white,
 	"cta-bg": #7A405E,
 	"cta-bg-light": #AF6A64,
+	"link": #7A405E,
+	"link-light": #AF6A64,
 	"shadow": $color-black
 );
 
@@ -98,6 +100,8 @@ $colors-dark: (
 	"cta-text": $dark-background,
 	"cta-bg": #C78DAB,
 	"cta-bg-light": #FC9890,
+	"link": #FC9890,
+	"link-light": #C78DAB,
 	"shadow": $color-white
 );
 

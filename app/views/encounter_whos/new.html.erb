@@ -8,6 +8,6 @@
 			<optgroup><%= options_from_collection_for_select(@partnerships, :id, :display)%></optgroup>
 			<optgroup label="_____________________"><option value="<%= @dummy_id %>"><%= t(".new_partner") %></option></optgroup>
 		<% end %>
-		<%= f.submit t(".submit") %>
+		<%= f.submit t(".submit"), :class => "cta" %>
 	<% end %>
 </div>

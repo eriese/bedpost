@@ -114,11 +114,12 @@
 	border: none;
 	padding: 0;
 	transition: 0.1s linear color;
-	color: map-get($theme, "cta-bg");
+	color: map-get($theme, "link");
 	text-decoration: underline;
+	background-color: transparent;
 
 	&:hover, &:focus {
-		color: map-get($theme, "cta-bg-light#{$suffix}");
+		color: map-get($theme, "link-light#{$suffix}");
 	}
 }
 
