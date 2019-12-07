@@ -120,6 +120,21 @@ RSpec.describe StaticResource, type: :module do
 			end
 		end
 
+		describe '#newest' do
+			it 'calls last' do
+				make_models(2)
+				allow(StaticResourceTestModel).to receive(:last)
+				StaticResourceTestModel.newest
+				expect(StaticResourceTestModel).to have_received(:last)
+			end
+
+			it 'caches' do
+				make_models(1)
+				StaticResourceTestModel.newest
+				expect(in_cache? 'newest').to be true
+			end
+		end
+
 		describe '#grouped_by' do
 			it 'caches by column and instantiation arguments' do
 				make_models(2, f_1: "first")

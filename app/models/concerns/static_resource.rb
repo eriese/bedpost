@@ -19,6 +19,10 @@ module StaticResource
 			Rails.cache.fetch('as_map', namespace: name) {HashWithIndifferentAccess[all.map { |i| [i.id, i] }] }
 		end
 
+		def newest
+			Rails.cache.fetch('newest', namespace: name) { last }
+		end
+
 		def grouped_by(column, instantiate=true)
 			Rails.cache.fetch("#{column}_#{instantiate}", namespace: name) do
 				query = collection.aggregate([{

@@ -18,29 +18,33 @@ require "rails/test_unit/railtie"
 Bundler.require(*Rails.groups)
 
 module Bedpost
-  class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+	class Application < Rails::Application
+		# Initialize configuration defaults for originally generated Rails version.
+		config.load_defaults 5.2
 
-    config.middleware.use Mongoid::QueryCache::Middleware
-    Mongoid::QueryCache.enabled = true
+		config.middleware.use Mongoid::QueryCache::Middleware
+		Mongoid::QueryCache.enabled = true
 
-    config.generators.javascript_engine = :js
-    config.action_mailer.delivery_method = :mailjet_api
+		config.generators do |g|
+			g.stylesheets	false
+			g.javascripts	false
+		end
 
-    config.active_job.queue_adapter = :delayed_job
+		config.action_mailer.delivery_method = :mailjet_api
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
-    config.i18n.default_locale = :en
-    config.i18n.fallbacks = [I18n.default_locale]
-    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
-    config.i18n.available_locales = %w(en)
-    config.middleware.use I18n::JS::Middleware
+		config.active_job.queue_adapter = :delayed_job
 
-    # Suppress logger output for asset requests.
-    config.assets.quiet = true
-  end
+		# Settings in config/environments/* take precedence over those specified here.
+		# Application configuration can go into files in config/initializers
+		# -- all .rb files in that directory are automatically loaded after loading
+		# the framework and any gems in your application.
+		config.i18n.default_locale = :en
+		config.i18n.fallbacks = [I18n.default_locale]
+		config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+		config.i18n.available_locales = %w(en)
+		config.middleware.use I18n::JS::Middleware
+
+		# Suppress logger output for asset requests.
+		config.assets.quiet = true
+	end
 end
