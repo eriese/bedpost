@@ -35,7 +35,7 @@ const arrowButton = () => import (/* webpackChunkName: "components/arrow-button"
 const partnershipChart = () => import(/* webpackChunkName: "components/radar-chart", webpackPreload: true */ "@components/widgets/PartnershipChart.js");
 const encounterCalendar = () => import (/* webpackChunkName: "components/encounter-calendar", webpackPreload: true */ '@components/widgets/EncounterCalendar.vue');
 
-const TippyComponent = () => import("vue-tippy").then((t) => t.TippyComponent);
+const Tooltip = () => import(/* webpackChunkName: "components/tooltip", webpackPreload: true */ '@components/form/Tooltip.vue');
 
 
 /**
@@ -72,7 +72,7 @@ export default function addVue() {
 
 	Vue.component('encounter-calendar', encounterCalendar);
 	Vue.component('partnership-chart', partnershipChart);
-	Vue.component('tooltip', TippyComponent);
+	Vue.component('tooltip', Tooltip);
 
 	return new Vue(_root);
 }

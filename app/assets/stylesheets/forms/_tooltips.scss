@@ -43,3 +43,9 @@ aside.tippy-popper {
 		right: calc(50% - #{2 * $tooltip-arrow-size});
 	}
 }
+
+.no-js tooltip {
+	@include tooltip;
+	display: block;
+	padding: $spacing-small;
+}

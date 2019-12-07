@@ -120,21 +120,34 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	def radio_group(attribute, buttons: [[:true], [:false]], options: {})
 		group_scope = 'fe'
-		radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: 'fec', parent_scope: group_scope}
-		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
-		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
-
 		group_opts = (options.delete(:group_options) || {}).reverse_merge(
 			field_role: :radiogroup,
 			slot_scope: group_scope,
-			field_id: "#{@object_name}_#{attribute}_group"
+			field_id: "#{@object_name}_#{attribute}_group",
 		)
+
+		radio_opts = {
+			inline: true,
+			validate: false,
+			class: options.delete(:radio_class),
+			slot_scope: 'fec',
+			parent_scope: group_scope,
+			'aria-describedby' => group_opts[:field_id]
+		}
+
+		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
+		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
+
 		joiner = options.delete(:joiner)
-		builder = field_builder(attribute.to_s + "_group", group_opts)
+		builder = field_builder("#{attribute}_group", group_opts)
 
 		btns = buttons.map do |btn|
 			val = btn[0]
-			opts = radio_opts.merge ({label: {value: val.to_s}, checked: checked_val == val, :":value" => val}).merge(btn[1] || {})
+			opts = radio_opts.merge(
+				label: { value: val.to_s },
+				checked: checked_val == val,
+				':value' => val
+			).merge(btn[1] || {})
 			radio_button(attribute, val, opts)
 		end
 
