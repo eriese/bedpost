@@ -51,12 +51,12 @@ RSpec.describe UserProfiles::RegistrationsController, type: :controller do
 				expect(controller.current_user_profile).to eq @prof
 			end
 
-			it "redirects the user to the edit profile page to submit more information" do
+			it "redirects the user to the root path (lets the first time filter decide where they go next)" do
 				valid_params = get_valid_params
 				post :create, params: valid_params
 				@prof = get_new_prof(valid_params)
 
-				expect(response).to redirect_to edit_user_profile_registration_path
+				expect(response).to redirect_to root_path
 			end
 		end
 	end

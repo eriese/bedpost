@@ -1,0 +1,11 @@
+<div id="terms-of-use">
+	<div class="container--bounded">
+		<%= @terms.terms %>
+	</div>
+	<%# unless @is_accepted %>
+		<%= vuelidate_form_with scope: :tou  do |f| %>
+			<%= f.check_box :acceptance, required: true %>
+			<%= f.submit %>
+		<% end %>
+	<%# end %>
+</div>

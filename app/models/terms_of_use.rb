@@ -3,5 +3,5 @@ class TermsOfUse
 	include Mongoid::Timestamps::Short
 	include StaticResource
 
-	field :terms
+	field :terms, type: String
 end

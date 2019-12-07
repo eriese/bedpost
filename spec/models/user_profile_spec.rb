@@ -267,6 +267,12 @@ RSpec.describe UserProfile, type: :model do
 				user = build_stubbed(:user_profile, tou: tou.updated_at + 1.day)
 				expect(user).to be_tou_accepted
 			end
+
+			it 'returns true if the user accepted on the same day the terms were created' do
+				tou = TermsOfUse.create(terms: 'some terms');
+				user = build_stubbed(:user_profile, tou: tou.updated_at)
+				expect(user).to be_tou_accepted
+			end
 		end
 
 		describe '#partners_with_encounters' do

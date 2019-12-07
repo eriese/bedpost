@@ -209,8 +209,8 @@ RSpec.describe EncountersController, type: :controller do
 				actual = response.body
 				expected_enc = Encounter.new(encounter_params)
 				expected_enc.valid?
-				expected = expected_enc.errors.messages.to_json
-				expect(actual).to eq expected.to_s
+				expected = {errors: expected_enc.errors.messages}
+				expect(actual).to eq expected.to_json
 			end
 		end
 	end
@@ -230,10 +230,10 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				encounter = ship.encounters.first
 
-	  		@genitals = create(:contact_instrument, name: :genitals)
-        @possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
+				@genitals = create(:contact_instrument, name: :genitals)
+				@possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
 
-        encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
+				encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
 
 				new_notes = "Something else"
 				post :update, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes, contacts_attributes: [{_id: encounter.contacts.first.id, object: :partner}]}}

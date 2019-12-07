@@ -103,7 +103,7 @@ class UserProfile < Profile
 
 	# Did this user accept the tou after the most recent tou update?
 	def tou_accepted?
-		tou.present? && tou > TermsOfUse.newest.updated_at
+		tou.present? && tou >= TermsOfUse.newest.updated_at.to_date
 	end
 
 	# An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter
