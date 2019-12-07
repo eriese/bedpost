@@ -1,5 +1,5 @@
 desc 'shortcut to run foreman start -p 3000'
-task :foreman, [:port] do
+task :foreman, [:port] do |t, args|
 	port = args[:port] || 3000
 	sh "foreman start -p #{port}"
 end
