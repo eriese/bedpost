@@ -54,11 +54,7 @@ feature "User creates account", :slow do
 		def fill_in_profile(user_params = nil, is_user: true)
 			user_params ||= @user_params
 			model = is_user ? 'user_profile' : 'profile'
-			if is_user
-				choose("#{model}_opt_in_true")
-			else
-				fill_in "#{model}_name", with: user_params[:name]
-			end
+			fill_in "#{model}_name", with: user_params[:name] unless is_user
 			select(Pronoun.find(user_params[:pronoun_id]).display, from: "#{model}_pronoun_id")
 			fill_in "#{model}_anus_name", with: user_params[:anus_name]
 			fill_in "#{model}_external_name", with: user_params[:external_name]
@@ -80,7 +76,7 @@ feature "User creates account", :slow do
 		end
 
 		def accept_terms
-			find_by_id('terms_acceptance').set(true)
+			find_by_id('terms_acceptance_true').set(true)
 			find('input[name="commit"]').click
 		end
 
@@ -88,6 +84,7 @@ feature "User creates account", :slow do
 			scenario 'the user is redirected first to the tou terms acceptance page' do
 				register_user
 				expect(page).to have_current_path(term_path(:tou))
+				expect(page).to have_no_css '#terms_opt_in_true'
 				accept_terms
 				expect(page).to have_current_path(term_path(:privacy))
 			end
@@ -95,6 +92,7 @@ feature "User creates account", :slow do
 				register_user
 				accept_terms
 				expect(page).to have_current_path(term_path(:privacy))
+				expect(page).to have_css '#terms_opt_in_true'
 				accept_terms
 				expect(page).to have_current_path(edit_user_profile_registration_path)
 			end
@@ -112,6 +110,7 @@ feature "User creates account", :slow do
 			end
 
 			scenario 'The edit user profile page has limited fields' do
+				expect(page).to have_no_field 'user_profile_opt_in_true'
 				expect(page).to have_no_field('user_profile_name')
 				expect(page).to have_no_field('user_profile_uid')
 				expect(page).to have_no_content(I18n.t('application.edit.security_settings.title'))

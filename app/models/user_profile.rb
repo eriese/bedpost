@@ -105,14 +105,15 @@ class UserProfile < Profile
 	def terms_accepted?(terms_type)
 		newest_terms = Terms.newest_of_type(terms_type)
 		terms_accepted = terms && terms[terms_type]
-		terms_accepted.present? && terms_accepted >= newest_terms.updated_at.to_date
+		terms_accepted.present? && terms_accepted >= newest_terms.updated_at
 	end
 
 	# Accept the given terms type
-	def accept_terms(terms_type)
-		new_terms = terms || {}
-		new_terms[terms_type] = Date.today
-		update_attribute(:terms, new_terms)
+	def accept_terms(terms_type, opt_in_val = nil)
+		self.terms ||= {}
+		self.terms[terms_type] = DateTime.now
+		self.opt_in = opt_in_val unless opt_in_val.nil?
+		save(validate: false)
 	end
 
 	# An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter

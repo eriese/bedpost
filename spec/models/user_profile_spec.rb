@@ -275,6 +275,21 @@ RSpec.describe UserProfile, type: :model do
 			end
 		end
 
+		describe '#accept_terms' do
+			after do
+				cleanup @user
+			end
+			it 'marks the given terms as accepted on the current datetime' do
+				now = 'foo'
+				allow(DateTime).to receive(:now) {now}
+				@user = create(:user_profile)
+
+				@user.accept_terms :tou
+				@user.reload
+				expect(@user.terms[:tou]).to eq now
+			end
+		end
+
 		describe '#partners_with_encounters' do
 			before :all do
 				@hand = create(:contact_instrument, name: :hand)

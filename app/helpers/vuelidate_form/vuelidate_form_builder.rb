@@ -119,11 +119,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	def radio_group(attribute, buttons: [[:true], [:false]], options: {})
 		group_scope = 'fe'
-		radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: 'fec', parent_scope: group_scope}
+		radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: 'fec', parent_scope: group_scope, skip_value: true}
 		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
 		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
 
-		group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup, slot_scope: group_scope})
+		group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup, slot_scope: group_scope, skip_value: true})
 		joiner = options.delete(:joiner)
 		builder = field_builder(attribute.to_s + "_group", group_opts)
 
@@ -133,6 +133,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			radio_button(attribute, val, opts)
 		end
 
+		add_value(attribute, checked_val)
 		builder.custom_field do
 			@template.content_tag(:div) do
 				builder.field_label <<
@@ -221,7 +222,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 		@template.content_tag(:aside, opts) do
 			t_key = key == true ? attribute : key;
-			ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
+			ActionView::Helpers::Tags::Translator.new(@object, @object_name.to_s, t_key, scope: "helpers.tooltip").translate
 		end
 	end
 
@@ -271,7 +272,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	# add a field value to the form
 	def add_value(attribute, attr_value = nil)
-		if attr_value
+		if !attr_value.nil?
 			value[attribute] = attr_value
 		elsif @object.respond_to?(attribute)
 			value[attribute] = @object.send(attribute)

@@ -8,8 +8,9 @@ class TermsController < ApplicationController
 
 	def update
 		term_type = params[:id]
-		if params.require(:terms).permit(:acceptance)[:acceptance] == '1'
-			if current_user_profile.accept_terms(term_type)
+		term_params = params.require(:terms).permit(:acceptance, :opt_in)
+		if term_params[:acceptance] == 'true'
+			if current_user_profile.accept_terms(term_type, term_params[:opt_in])
 				redirect_to root_path
 				return
 			end
