@@ -4,7 +4,7 @@
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
 		<%= f.hidden_field :partner_id %>
 		<%= f.wizard "{stepClass: 'step card'}" do %>
-			<%= render "fields", f: f %>
+			<%= render "fields", f: f, is_edit: false %>
 			<% content_for :last_button do %>
 				<%= f.submit nil, :":class"=>'["not-button"]'%>
 			<% end %>
