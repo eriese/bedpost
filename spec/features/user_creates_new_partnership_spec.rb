@@ -3,14 +3,14 @@ require 'rails_helper'
 feature "User creates new partnership", :slow do
 
 	before :each do
-		TermsOfUse.create(terms: 'terms')
+		Terms.create(terms: 'terms', type: :tou)
 		login_new_user
 		@user.update_attributes({first_time: false, tou: Date.today})
 	end
 
 	after :each do
 		cleanup(@user, @partner)
-		TermsOfUse.destroy_all
+		Terms.destroy_all
 	end
 
 	context 'from the dashboard' do

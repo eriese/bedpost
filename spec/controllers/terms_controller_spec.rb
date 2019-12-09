@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe TermsController, type: :controller do
 	describe 'POST #create' do
 		before do
-			@terms = TermsOfUse.create(terms: 'terms')
+			@terms = Terms.create(terms: 'terms', type: :tou)
 			@user = create(:user_profile)
 			sign_in @user
 		end

@@ -29,7 +29,8 @@ feature "User creates account", :slow do
 		end
 
 		before :all do
-			TermsOfUse.create(terms: 'some terms')
+			Terms.create(terms: 'some terms', type: :tou)
+			Terms.create(terms: 'some privacy terms', type: :privacy)
 		end
 
 		after :each do
@@ -37,7 +38,7 @@ feature "User creates account", :slow do
 		end
 
 		after :all do
-			TermsOfUse.destroy_all
+			Terms.destroy_all
 		end
 
 		def register_user

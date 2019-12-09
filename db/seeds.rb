@@ -24,7 +24,8 @@ if Rails.env.development?
 end
 
 # temporary terms of use
-TermsOfUse.create(terms: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi, inventore delectus, laborum excepturi repudiandae, ex quae eveniet, modi culpa sequi distinctio perspiciatis voluptate sint molestiae! Iure suscipit, vitae eaque ut.")
+Terms.create(terms: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi, inventore delectus, laborum excepturi repudiandae, ex quae eveniet, modi culpa sequi distinctio perspiciatis voluptate sint molestiae! Iure suscipit, vitae eaque ut.", type: :tou)
+Terms.create(terms: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus eius omnis expedita, eveniet id ut molestiae deserunt, libero modi magni adipisci sed ea non ipsam repellendus voluptas quia nihil labore!", type: :privacy)
 
 ############################
 # Contact Instruments

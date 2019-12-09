@@ -1,7 +1,7 @@
 class TermsController < ApplicationController
 	skip_before_action :check_first_time
 	def new
-		@terms = TermsOfUse.newest
+		@terms = Terms.newest_of_type(:tou)
 		@is_accepted = current_user_profile.tou_accepted?
 	end
 

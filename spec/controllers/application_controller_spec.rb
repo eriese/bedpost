@@ -22,11 +22,11 @@ RSpec.describe ApplicationController do
 	context 'before actions' do
 		describe '#check_first_time' do
 			before :all do
-				TermsOfUse.create(terms: "some terms")
+				Terms.create(terms: "some terms", type: :tou)
 			end
 
 			after :all do
-				TermsOfUse.destroy_all
+				Terms.destroy_all
 			end
 
 			it 'redirects to the terms_path if the user has not accepted the terms of use' do
@@ -40,7 +40,7 @@ RSpec.describe ApplicationController do
 			end
 
 			it 'redirects to the edit_user_profile_registration_path if the user has accepted terms of use but is not fully set up' do
-				user = UserProfile.new(tou: TermsOfUse.newest.updated_at + 1.day)
+				user = UserProfile.new(tou: Terms.newest_of_type(:tou).updated_at + 1.day)
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}
 				expect(user).to be_tou_accepted
@@ -50,7 +50,7 @@ RSpec.describe ApplicationController do
 			end
 
 			it 'redirects to first_time_index_path if the user has accepted tou and is fully set up but has not completed the tour' do
-				user = build_stubbed(:user_profile, tou: TermsOfUse.newest.updated_at + 1.day)
+				user = build_stubbed(:user_profile, tou: Terms.newest_of_type(:tou).updated_at + 1.day)
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}
 				expect(user).to be_tou_accepted
@@ -60,7 +60,7 @@ RSpec.describe ApplicationController do
 			end
 
 			it 'does not redirect if the user has accepted the tou, is fully set up, and has completed the tour' do
-				user = build_stubbed(:user_profile, first_time: false, tou: TermsOfUse.newest.updated_at + 1.day)
+				user = build_stubbed(:user_profile, first_time: false, tou: Terms.newest_of_type(:tou).updated_at + 1.day)
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}
 				expect(response).to have_http_status(200)
