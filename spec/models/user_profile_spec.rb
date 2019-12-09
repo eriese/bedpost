@@ -246,32 +246,32 @@ RSpec.describe UserProfile, type: :model do
 			end
 		end
 
-		describe '#tou_accepted?' do
+		describe '#terms_accepted?' do
 			after :each do
 				Terms.destroy_all
 			end
 
-			it 'returns false if the user has not accepted the tou yet' do
+			it 'returns false if the user has not accepted the given terms type yet' do
 				user = build_stubbed(:user_profile)
-				expect(user).not_to be_tou_accepted
+				expect(user).not_to be_terms_accepted(:tou)
 			end
 
 			it 'returns false if the latest terms of use were created after the user accepted terms of use' do
 				tou = Terms.create(terms: 'some terms', type: :tou);
-				user = build_stubbed(:user_profile, tou: tou.updated_at - 1.day)
-				expect(user).not_to be_tou_accepted
+				user = build_stubbed(:user_profile, terms: { tou: tou.updated_at - 1.day })
+				expect(user).not_to be_terms_accepted(:tou)
 			end
 
 			it 'returns true if the latest terms of use were created before the user accepted terms of use' do
 				tou = Terms.create(terms: 'some terms', type: :tou);
-				user = build_stubbed(:user_profile, tou: tou.updated_at + 1.day)
-				expect(user).to be_tou_accepted
+				user = build_stubbed(:user_profile, terms: { tou: tou.updated_at + 1.day })
+				expect(user).to be_terms_accepted(:tou)
 			end
 
 			it 'returns true if the user accepted on the same day the terms were created' do
 				tou = Terms.create(terms: 'some terms', type: :tou);
-				user = build_stubbed(:user_profile, tou: tou.updated_at)
-				expect(user).to be_tou_accepted
+				user = build_stubbed(:user_profile, terms: { tou: tou.updated_at })
+				expect(user).to be_terms_accepted(:tou)
 			end
 		end
 

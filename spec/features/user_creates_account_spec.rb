@@ -80,17 +80,22 @@ feature "User creates account", :slow do
 		end
 
 		def accept_terms
-			find_by_id('tou_acceptance').set(true)
+			find_by_id('terms_acceptance').set(true)
 			find('input[name="commit"]').click
 		end
 
 		context 'the terms acceptance page' do
-			scenario 'the user is redirected first to the terms acceptance page' do
+			scenario 'the user is redirected first to the tou terms acceptance page' do
 				register_user
-				expect(page).to have_current_path(terms_path)
-				find_by_id('tou_acceptance').set(true)
-				expect(page).to have_checked_field('Acceptance')
-				find('input[name="commit"]').click
+				expect(page).to have_current_path(term_path(:tou))
+				accept_terms
+				expect(page).to have_current_path(term_path(:privacy))
+			end
+			scenario 'the user is next redirected to the privacy terms acceptance page' do
+				register_user
+				accept_terms
+				expect(page).to have_current_path(term_path(:privacy))
+				accept_terms
 				expect(page).to have_current_path(edit_user_profile_registration_path)
 			end
 		end
@@ -98,6 +103,7 @@ feature "User creates account", :slow do
 		context 'the edit_user_profile_registration page' do
 			before :each do
 				register_user
+				accept_terms
 				accept_terms
 			end
 
@@ -117,6 +123,7 @@ feature "User creates account", :slow do
 			scenario 'the user is marked as set up and taken to the first time page' do
 				register_user
 				accept_terms
+				accept_terms
 				fill_in_profile
 				expect(user).to be_set_up
 				expect(page).to have_current_path(first_time_path)
@@ -126,6 +133,7 @@ feature "User creates account", :slow do
 		context 'the first time page' do
 			before :each do
 				register_user
+				accept_terms
 				accept_terms
 				fill_in_profile
 			end
@@ -142,6 +150,7 @@ feature "User creates account", :slow do
 		context 'adding the first partner' do
 			scenario 'filling in the partnership form brings the user back to the first_time page' do
 				register_user
+				accept_terms
 				accept_terms
 				fill_in_profile
 				find("a[href='#{new_partnership_path}']").click
@@ -168,6 +177,7 @@ feature "User creates account", :slow do
 
 			scenario 'the show encounter page has a button back to the first time page' do
 				register_user
+				accept_terms
 				accept_terms
 				fill_in_profile
 				find("a[href='#{new_partnership_path}']").click

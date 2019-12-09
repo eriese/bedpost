@@ -37,9 +37,7 @@ Rails.application.routes.draw do
 	get 'first_time', to: 'tours#index'
 	post 'first_time', to: 'tours#create'
 	resources :tours, only: [:show, :update]
-
-	get 'terms', to: 'terms#new'
-	post 'terms', to: 'terms#create'
+	resources :terms, only: [:show, :update]
 
 	#TODO this is temporary
 	root to: 'devise/sessions#new'

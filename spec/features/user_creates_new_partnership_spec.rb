@@ -3,9 +3,11 @@ require 'rails_helper'
 feature "User creates new partnership", :slow do
 
 	before :each do
-		Terms.create(terms: 'terms', type: :tou)
+		Terms.create(terms: 'some terms', type: :tou)
+		Terms.create(terms: 'some other terms', type: :privacy)
 		login_new_user
-		@user.update_attributes({first_time: false, tou: Date.today})
+		accept_date = Date.today + 1
+		@user.update_attributes({first_time: false, terms: {tou: accept_date, privacy: accept_date}})
 	end
 
 	after :each do

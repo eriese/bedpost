@@ -3,7 +3,7 @@
 		<%= @terms.terms %>
 	</div>
 	<%# unless @is_accepted %>
-		<%= vuelidate_form_with scope: :tou  do |f| %>
+		<%= vuelidate_form_with scope: :terms, method: :put  do |f| %>
 			<%= f.check_box :acceptance, required: true %>
 			<%= f.submit %>
 		<% end %>
