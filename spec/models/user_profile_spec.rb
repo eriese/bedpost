@@ -417,7 +417,7 @@ RSpec.describe UserProfile, type: :model do
 					expect(@user).to have_received(:destroy)
 				end
 
-				it 'creates a placeholder user with the same preferences as the user if the user is partnered to any other user profiles' do
+				it 'creates a placeholder user with the same preferences as the user if the user is partnered to any other user profiles', :run_job_immediately do
 					@partner = create(:user_profile)
 					@partner.partnerships << build(:partnership, partner_id: @user.id)
 					@user.reload
