@@ -58,6 +58,8 @@ RSpec.configure do |config|
 	include UserProfileHelpers
 	include CleanupHelpers
 
+	Capybara.run_server = false
+
 	config.before :suite do
 		FakeRedis.enable
 	end
