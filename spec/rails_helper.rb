@@ -88,6 +88,7 @@ RSpec.configure do |config|
 	end
 
 	config.after :each do
-		Delayed::Worker.new.work_off
+		clean_devise_jobs
+		work_jobs
 	end
 end

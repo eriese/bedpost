@@ -417,18 +417,35 @@ RSpec.describe UserProfile, type: :model do
 					expect(@user).to have_received(:destroy)
 				end
 
-				it 'creates a placeholder user with the same preferences as the user if the user is partnered to any other user profiles', :run_job_immediately do
+				it 'creates a placeholder user with the same preferences as the user if the user is partnered to any other user profiles' do
 					@partner = create(:user_profile)
 					@partner.partnerships << build(:partnership, partner_id: @user.id)
 					@user.reload
 
-					expect(@user.partnered_to_ids).to_not be_empty
+					partnered_to_ids = described_class.where_partnered_to(@user.id).pluck(:_id)
+					expect(partnered_to_ids).to_not be_empty
 
 					expect(@user.soft_destroy).to be true
 					@dummy = Profile.last unless Profile.last.id == @partner.id
 					expect(@dummy.name).to eq @user.name
-					expect(@dummy.partnered_to_ids).to eq @user.partnered_to_ids
+					dummy_partnered_to_ids = described_class.where_partnered_to(@dummy.id).pluck(:_id)
+					expect(dummy_partnered_to_ids).to eq partnered_to_ids
 				end
+			end
+		end
+
+		describe '#self.where_partnered_to' do
+			after do
+				cleanup(@user, @partner)
+			end
+
+			it 'returns a query for UserProfiles that have a partnership with the given profile_id' do
+				@user = create(:user_profile)
+				@partner = create(:profile)
+
+				@user.partnerships.create(partner: @partner)
+				result = described_class.where_partnered_to(@partner.id)
+				expect(result.first).to eq @user
 			end
 		end
 	end
@@ -444,11 +461,11 @@ RSpec.describe UserProfile, type: :model do
 			it 'destroys dummy partners when it is destroyed' do
 				@user = create(:user_profile)
 				@partner = create(:profile)
+				clean_devise_jobs
 
 				@user.partnerships.create(partner: @partner)
-
-				expect{@user.destroy}.to change(Profile, :count).by(-2)
-				expect(@user.persisted?).to be false
+				expect { @user.destroy; work_jobs }.to change(Profile, :count).by(-2)
+				expect(@user).to be_destroyed
 				expect(Profile.where(id: @partner.id).count).to eq 0
 			end
 		end

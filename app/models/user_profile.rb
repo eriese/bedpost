@@ -218,6 +218,10 @@ class UserProfile < Profile
 		queued.send(notification, self, *args)
 	end
 
+	def self.where_partnered_to(profile_id)
+		where('partnerships.partner_id' => profile_id)
+	end
+
 	private
 
 	def generate_uid
@@ -225,7 +229,8 @@ class UserProfile < Profile
 	end
 
 	def replace_with_dummy
-		return unless partnered_to_ids.any?
+		partners = UserProfile.where_partnered_to(id)
+		return unless partners.any?
 
 		dummy = Profile.create(
 			name: name,
@@ -236,9 +241,9 @@ class UserProfile < Profile
 			pronoun_id: pronoun_id
 		)
 		# TODO: this can probably be optimized
-		UserProfile.find(partnered_to_ids).each do |u|
-			found_partners = u.partnerships.find_by({ partner_id: id })
-			found_partners.update({ partner_id: dummy.id })
+		partners.each do |u|
+			found_partner = u.partnerships.find_by({ partner_id: id })
+			found_partner.update({ partner_id: dummy.id })
 		end
 	end
 

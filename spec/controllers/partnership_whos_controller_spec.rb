@@ -66,7 +66,7 @@ RSpec.describe PartnershipWhosController, type: :controller do
 				expect(ship.partner_id).to eq dummy_user.id
 			end
 
-			it 'deletes the orphaned dummy partner' do
+			it 'deletes the orphaned dummy partner', :run_job_immediately do
 				@user = create(:user_profile)
 				sign_in @user
 				@old_partner = create(:profile)
