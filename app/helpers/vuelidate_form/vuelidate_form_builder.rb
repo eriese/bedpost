@@ -189,6 +189,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
+	def fields_for(record_name, record_object = nil, options = {}, &block)
+		options[:parent_builder] = self
+		super
+	end
+
 	def password_toggle
 		@template.content_tag(:div, {class: "additional", slot: "additional"}) do
 			@template.content_tag(:p) do
@@ -252,7 +257,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def objectify_options(options)
-		super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :label_last, :is_step)
+		super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :label_last, :is_step, :parent_builder)
 	end
 
 	# get the validations that will be run on data from this form
@@ -263,6 +268,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	#add validations for the given attribute
 	def add_validation(attribute, attr_validators)
 		validations[attribute].concat(attr_validators)
+		@options[:parent_builder].add_nested(validations, @object_name, :validations) if @options[:parent_builder]
 	end
 
 	# get the values of fields in this form
@@ -272,11 +278,22 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	# add a field value to the form
 	def add_value(attribute, attr_value = nil)
-		if !attr_value.nil?
-			value[attribute] = attr_value
-		elsif @object.respond_to?(attribute)
-			value[attribute] = @object.send(attribute)
-		end
+		attr_value ||= @object.respond_to?(attribute) ? @object.send(attribute) : nil
+		value[attribute] = attr_value
+
+		@options[:parent_builder].add_nested(value, @object_name, :value) if @options[:parent_builder]
+	end
+
+	# add nested values to the hash with the given name
+	def add_nested(nested_values = {}, nested_name, hash_name)
+		# get the correct hash
+		hsh = send(hash_name)
+		# make the key by stripping all but the last part of the object name
+		nested_key = nested_name.gsub(/(.*\[)|(\])/, '')
+		# the key should map to a hash regardless of which hash it's in
+		hsh[nested_key] = {} unless hsh.has_key?(nested_key) && hsh[nested_key].is_a?(Hash)
+		# merge in the values
+		hsh[nested_key].merge!(nested_values)
 	end
 
 	# add a toggle field and its starting value to the form

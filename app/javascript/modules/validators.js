@@ -43,27 +43,73 @@ export const submitted = (path) => {
 	});
 };
 
+/**
+ * make a validator that makes a get request to the given url to check the validity of the given parameter path
+ *
+ * @param  {string|string[]} path the path inside the form object to the parameter to check
+ * @param  {string} url  the url to make the get request to
+ * @return {Function}      a validation function for use by Vuelidate
+ */
 export const validateWithServer = (path, url) => {
-	let responseMessage = {};
-	let params = {};
+	let responseMessage = {}, params = {}, debounce;
 
-	return helpers.withParams({type: 'serverValidated', url: url, requestParams: params, responseMessage}, function (value) {
-		responseMessage.message = '';
+	/**
+	 * Delay the request by 1 minute
+	 *
+	 * @param  {Function} resolve the resolve function from the promise that is setting up the debouncing
+	 * @param  {string} value   the value of the input being validated
+	 */
+	const setDebounce = (resolve, value) => {
+		debounce = setTimeout(async () => {
+			await validate(resolve, value);
+		}, 1000);
+	};
 
-		if (value == '' || value === null) return true;
+	/**
+	 * Send the request to validate the value
+	 *
+	 * @param  {Function} resolve the resolve function of the promise making this request
+	 * @param  {string} value   the value being validated
+	 * @return {Promise}         the axios request promise
+	 */
+	const validate = (resolve, value)=> {
+		// set the value in the params
 		Object.setAtPath(params, path, value);
 
-		return new Promise((resolve) => {
+		// make the get request
+		return axios.get(url, {params}).then((response) => {
+			// the response is true if the field is valid
+			if (response.data === true) resolve(true);
 
-			axios.get(url, {params}).then((response) => {
-				if (response.data === true) resolve(true);
-				responseMessage.message = Object.getAtPath(response.data, path);
-				console.log("response", responseMessage.message, Object.getAtPath(response.data, path));
-				resolve(false);
-			}).catch((error) => {
-				responseMessage.message = error.detail;
-				resolve(error.detail);
-			});
+			// set the message based on the response data
+			responseMessage.message = Object.getAtPath(response.data, path);
+			// the field is invalid
+			resolve(false);
+		}).catch(() => { resolve(false); });	// any errors count as invalid
+	};
+
+	// make the validator
+	return helpers.withParams({
+		type: 'serverValidated',
+		url: url,
+		requestParams: params,
+		responseMessage
+	}, function (value) {
+		// debounce
+		if (debounce) {
+			clearTimeout(debounce);
+			debounce = null;
+		}
+
+		// clear the response message
+		responseMessage.message = '';
+
+		// return true if the value is blank (allow this case to be handled by a different validator)
+		if (value == '' || value === null) return true;
+
+		// return a promise that resolves when the request completes
+		return new Promise((resolve) => {
+			setDebounce(resolve, value);
 		});
 	});
 };
