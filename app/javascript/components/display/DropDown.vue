@@ -16,7 +16,7 @@ import { gsap } from 'gsap';
 export default {
 	data: function() {
 		return {
-			isOpen: false
+			isOpen: false,
 		};
 	},
 	props: {
@@ -34,11 +34,9 @@ export default {
 
 			if (this.isOpen) {
 				gsap.to(this.$refs.content, 0.3, {height: '0px', overflow: 'hidden', clearProps: 'height,overflow', onComplete: ()=> { this.isOpen = false; }});
-				gsap.to(this.$el, 0.3, {className: '-=open'});
 			} else {
 				this.isOpen = true;
 				gsap.from(this.$refs.content, 0.3, {height: '0px', overflow: 'hidden', clearProps: 'height,overflow'});
-				gsap.to(this.$el, 0.3, {className: '+=open'});
 			}
 		}
 	},

@@ -77,7 +77,8 @@
 			"^@mixins/(.*)$": "<rootDir>/app/javascript/mixins/$1",
 			"^@modules/(.*)$": "<rootDir>/app/javascript/modules/$1",
 			"^@plugins/(.*)$": "<rootDir>/app/javascript/plugins/$1",
-			"^@stylesheets/(.*)$": "<rootDir>/app/assets/stylesheets/$1"
+			"^@stylesheets/(.*)$": "<rootDir>/app/assets/stylesheets/$1",
+			"^@locales/(.*)$": "<rootDir>/app/javascript/locales/$1"
 		},
 		"transform": {
 			".*\\.(vue)$": "vue-jest",
