@@ -1,5 +1,5 @@
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators';
-import {submitted} from '@modules/validators';
+import {submitted, validateWithServer} from '@modules/validators';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
 
@@ -150,8 +150,9 @@ function objectFactory() {
  * Process the fields on the form to apply the correct validations to each. Uses recursion to process each level of nested validations
  *
  * @param  {object} validatorVals an object mapping arrays of validator arguments to their fields
- * @param  {string[]} path          the path to this level in recursive searching
- * @param  {object} fields 			the fields available in the form
+ * @param  {string[]} path        the path to this level in recursive searching
+ * @param  {object} fields 				the fields available in the form
+ * @param  {Vue} vm 							the vue component instance
  * @return {object}               the validator config for this level
  */
 function formatValidators(validatorVals, path, fields) {
@@ -217,6 +218,8 @@ function formatValidators(validatorVals, path, fields) {
 				validators[conf_field] = validators[conf_field] || {};
 				validators[conf_field].confirmation = sameAs(field);
 				break;
+			case 'uniqueness':
+				validators[field].taken = validateWithServer(this_path.join('.'), 'uniqueness');
 			}
 		}
 	}

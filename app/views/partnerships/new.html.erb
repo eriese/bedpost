@@ -1,10 +1,22 @@
 <div class="centered-container">
-	<h1><%= t('.title_html', {name: @partnership.partner.name}) %></h1>
+	<h1><%= t('.title_html') %></h1>
 	<h2><%= t('.desc_html') %></h2>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
-		<%= f.hidden_field :partner_id %>
 		<%= f.wizard "{stepClass: 'step card'}" do %>
-			<%= render "fields", f: f, is_edit: false %>
+			<%= f.step do %>
+				<%= f.fields_for :partner do |pf| %>
+					<%= pf.text_field :name, tooltip: true %>
+				<% end %>
+				<h4>OR</h4>
+				<%= f.text_field :uid, tooltip: true, is_step: false, lazy: true %>
+			<% end %>
+			<%= render "fields", f: f, partnership: @partnership %>
+			<%= f.text_field(:nickname, tooltip: {show_always: true}) %>
+			<%= f.step true, :"v-if" => '!vf.formData.uid || vf.$v.formData.uid.$invalid' do %>
+				<%= f.fields_for :partner do |pf| %>
+					<%= render 'profiles/fields', f: pf, profile: @partnership.partner, show_name: false %>
+				<% end %>
+			<% end %>
 			<% content_for :last_button do %>
 				<%= f.submit nil, :":class"=>'["not-button"]'%>
 			<% end %>

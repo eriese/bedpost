@@ -10,13 +10,7 @@ class PartnershipsController < ApplicationController
 	end
 
 	def new
-		@partnership = current_user_profile.partnerships.new(partner_id: params[:p_id])
-
-		unless @partnership.partner_id.present? && @partnership.valid?
-			flash[:submission_error] = {"form_error" => @partnership.errors.messages[:partner]}
-			flash[:who_attempt] = {partner_id: params[:p_id]}
-			redirect_to who_path
-		end
+		@partnership = current_user_profile.partnerships.new(partner: Profile.new)
 	end
 
 	def create

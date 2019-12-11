@@ -19,6 +19,7 @@ class Partnership
 		foreign_key: {key_class: UserProfile},
 		not_self: {method: :uid},
 		exclusion: {in: ->(ship) {Profile.find(ship.user_profile.partnerships.map { |s| s.partner_id unless s == ship}.compact).pluck(:uid).compact}, message: :taken},
+		uniqueness: true,
 		allow_nil: true
 
 	after_save :add_to_partner

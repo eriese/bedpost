@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 		resource :profile, only: [:new, :create], as: :dummy_profile
 		get 'who', to: 'partnership_whos#new'
 		post 'who', to: 'partnership_whos#create'
+		get 'uniqueness', to: 'partnership_whos#check'
 	end
 
 	resources :partners, controller: "partnerships", as: "partnerships" do

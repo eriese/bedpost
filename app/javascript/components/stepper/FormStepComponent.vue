@@ -9,6 +9,7 @@
 	import {lazyChild} from "@mixins/lazyCoupled";
 	/**
 	 * A component for a form step. Works with parent component [FormStepperComponent]{@link module:components/stepper/FormStepperComponent}
+	 *
 	 * @module
 	 * @vue-data {Number} index=0 the index this step has in the list of steps
 	 * @vue-data {Boolean[]} [completes=[]] an array containing the completeness values for each field in the step
@@ -113,8 +114,13 @@
 				// get the inital validity of each field for its completeness
 				this.completes = this.fields.map((f) => f.isValid())
 			}
-		}
-	}
+
+			this.$parent.$emit('step-added');
+		},
+		destroyed() {
+			this.$parent.$emit('step-removed');
+		},
+	};
 
 	/**
 	 * An event to update the parent component on whether or not this step is complete

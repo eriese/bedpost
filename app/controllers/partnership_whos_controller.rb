@@ -1,7 +1,7 @@
 class PartnershipWhosController < ApplicationController
 	include WhosController
 	skip_before_action :check_first_time, only: [:new, :create]
-	after_action :clear_unsaved, only: [:new, :create]
+	after_action :clear_unsaved, only: [:new, :create, :check]
 
 	def new
 		p_id = params[:partnership_id]
@@ -32,6 +32,15 @@ class PartnershipWhosController < ApplicationController
 		end
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to partnerships_path
+	end
+
+	def check
+		ship = current_user_profile.partnerships.new(uid: params.require(:uid))
+		if ship.valid?
+			render json: true
+		else
+			render json: ship.errors.messages
+		end
 	end
 
 	private

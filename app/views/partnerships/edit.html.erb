@@ -3,7 +3,8 @@
 	<%= link_to t(".edit_partner_profile"), edit_partnership_profile_path(@partnership) if @partnership.partner.is_base? %>
 	<%= link_to t(".edit_partner_uid"), partnership_who_path(@partnership) %>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
-		<%= render "fields", f: f, is_edit: true %>
+		<%= f.text_field(:nickname, tooltip: {show_always: true}) %>
+		<%= render "fields", f: f %>
 		<%= f.submit%>
 	<% end %>
 	<%= link_to t(".back"), @partnership %>

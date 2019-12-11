@@ -92,6 +92,11 @@ export default {
 			for (var validator in vParams) {
 				// the first invalid one
 				if (!this.vField[validator]) {
+
+					if(vParams[validator].responseMessage) {
+						let messages = vParams[validator].responseMessage.message;
+						return messages.join ? messages.join(this.$_t('join_delimeter')) : messages;
+					}
 					// make translation interpolation arguments based on the validation type
 					let params = {attribute: this.field};
 					switch(validator) {

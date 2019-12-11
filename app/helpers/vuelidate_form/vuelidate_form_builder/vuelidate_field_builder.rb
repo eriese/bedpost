@@ -8,7 +8,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	# options used by the field that will be passed from the input call but shouldn't be passed back
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
 		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role, :is_date,
-		:slot_scope, :parent_scope, :model_value, :skip_value
+		:slot_scope, :parent_scope, :model_value, :skip_value, :lazy
 	]
 
 	# the name of the model that the input element is attached to. should always end up as "sc.value" to get the value from the error field
@@ -173,6 +173,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			:"@child-focus" => "#{@parent_scope}.onFocus",
 			:"@child-blur" => "#{@parent_scope}.onBlur"
 		}) if @parent_scope.present?
+
+		defaults['v-model.lazy'] = defaults.delete('v-model') if @options[:lazy]
 		defaults
 	end
 
