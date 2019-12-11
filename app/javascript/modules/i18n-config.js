@@ -7,7 +7,7 @@ mod.defaultLocale = defaultLocale;
 mod.setup = async () => {
 	mod.translations = await import(
 		/* webpackPreload: true */
-		`@locales/${locale || defaultLocale}.json`);
+		'@locales/' + (locale || defaultLocale) +'.json');
 }
 
 // add a pluralization rule that checks english pluralization for any number up to 10 and defaults to other

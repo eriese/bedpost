@@ -27,6 +27,7 @@ export default {
 	data: function() {
 		return {
 			stepper: null,
+			adlValidations: {},
 			// need these because vue doesn't like it when you mutate props
 			submissionError: this.error,
 			formData: this.value,
@@ -52,7 +53,9 @@ export default {
 		},
 	},
 	validations: function() {
-		return {formData: formatValidators(this.validate, [], this.formData)};
+		return {
+			formData: formatValidators(this.validate, [], this.formData, this.adlValidations),
+		};
 	},
 	computed: {
 		slotScope: function() {
@@ -64,8 +67,11 @@ export default {
 				toggles: this.toggles,
 				submissionError: this.submissionError,
 				formData: this.formData,
+				addValidation: (key, validations) => {
+					this.$set(this.adlValidations, key, validations);
+				},
 				addStepper: (newStepper) => {
-					this.stepper = newStepper;
+					this.$set(this, 'stepper', newStepper);
 				}
 			};
 		},
@@ -138,7 +144,7 @@ export default {
 				let toClear = clear === true ? toggleField : clear;
 				Object.setAtPath(this, `formData.${toClear}`, null);
 			}
-		}
+		},
 	},
 };
 
@@ -150,14 +156,15 @@ function objectFactory() {
  * Process the fields on the form to apply the correct validations to each. Uses recursion to process each level of nested validations
  *
  * @param  {object} validatorVals an object mapping arrays of validator arguments to their fields
+<<<<<<< HEAD
  * @param  {string[]} path        the path to this level in recursive searching
  * @param  {object} fields 				the fields available in the form
- * @param  {Vue} vm 							the vue component instance
+ * @param {object} adlValidations additional already-processed validations to use
  * @return {object}               the validator config for this level
  */
-function formatValidators(validatorVals, path, fields) {
+function formatValidators(validatorVals, path, fields, adlValidations) {
 	// make an empty object to hold validation config
-	let validators = {};
+	let validators = Object.assign({}, adlValidations);
 	// each field in this level
 	for (let field in fields) {
 		// get the validator configs for it

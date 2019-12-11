@@ -1,4 +1,10 @@
 .contact-field-container {
+
+	&.incomplete {
+		// TODO style these
+		.contact-error {}
+	}
+
 	.contact-field {
 		display: flex;
 		align-items: baseline;

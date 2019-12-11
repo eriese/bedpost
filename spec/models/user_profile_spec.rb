@@ -131,7 +131,7 @@ RSpec.describe UserProfile, type: :model do
 
 		describe '#first_time?' do
 			it 'defaults to true' do
-				user = build_stubbed(:user_profile)
+				user = UserProfile.new
 				expect(user).to be_first_time
 			end
 		end
@@ -421,13 +421,13 @@ RSpec.describe UserProfile, type: :model do
 					@partner = create(:user_profile)
 					@partner.partnerships << build(:partnership, partner_id: @user.id)
 					@user.reload
-
 					partnered_to_ids = described_class.where_partnered_to(@user.id).pluck(:_id)
 					expect(partnered_to_ids).to_not be_empty
 
 					expect(@user.soft_destroy).to be true
 					@dummy = Profile.last unless Profile.last.id == @partner.id
 					expect(@dummy.name).to eq @user.name
+
 					dummy_partnered_to_ids = described_class.where_partnered_to(@dummy.id).pluck(:_id)
 					expect(dummy_partnered_to_ids).to eq partnered_to_ids
 				end

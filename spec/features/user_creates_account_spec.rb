@@ -129,8 +129,8 @@ feature "User creates account", :slow do
 			end
 		end
 
-		context 'the first time page' do
-			before :each do
+		context 'when visiting the first time page' do
+			before do
 				register_user
 				accept_terms
 				accept_terms
@@ -146,7 +146,7 @@ feature "User creates account", :slow do
 			end
 		end
 
-		context 'adding the first partner' do
+		context 'when adding the first partner' do
 			scenario 'filling in the partnership form brings the user back to the first_time page' do
 				register_user
 				accept_terms
@@ -164,7 +164,7 @@ feature "User creates account", :slow do
 			end
 		end
 
-		context 'adding the first encounter' do
+		context 'when adding the first encounter' do
 			before :each do
 				@hand = create(:contact_instrument, name: :hand)
 				@p1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
@@ -188,7 +188,8 @@ feature "User creates account", :slow do
 
 				ship = user.partnerships.first
 				new_enc_path = new_partnership_encounter_path(ship)
-				find("a[href='#{new_enc_path}']").click
+				click_on(I18n.t('tours.index.add_encounter'))
+				# find("a[href='#{new_enc_path}']").click
 
 				# skip filling out that form
 				expect(page).to have_current_path(new_enc_path)
@@ -198,6 +199,30 @@ feature "User creates account", :slow do
 				# go to the view page
 				visit partnership_encounter_path(ship, ship.encounters.first)
 				expect(page).to have_link({href: first_time_path})
+			end
+		end
+
+		context 'when adding an encounter after adding a second partner' do
+			after do
+				cleanup user, @partner1, @partner2
+			end
+
+			scenario 'it goes to the encounter who page' do
+				register_user
+				fill_in_profile
+
+				@partner1 = create(:profile)
+				@partner2 = create(:profile)
+				user.partnerships += [
+					build(:partnership, partner: @partner1),
+					build(:partnership, partner: @partner2)
+				]
+				user.save
+
+				visit page.current_path
+
+				click_on(I18n.t('tours.index.add_encounter'))
+				expect(page).to have_current_path(encounters_who_path)
 			end
 		end
 	end

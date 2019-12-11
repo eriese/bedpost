@@ -64,7 +64,7 @@ RSpec.describe ApplicationController do
 			end
 
 			it 'redirects to first_time_index_path if the user has accepted tou and is fully set up but has not completed the tour' do
-				user = build_stubbed(:user_profile)
+				user = build_stubbed(:user_profile, first_time: true)
 				allow(user).to receive(:terms_accepted?) {true}
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}

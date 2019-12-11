@@ -140,6 +140,11 @@ RSpec.describe EncountersController, type: :controller do
 			expect(response).to redirect_to encounters_who_path
 		end
 
+		it 'redirects to the encounter who page if there is no partnership param is invalid' do
+			get :new, params: {partnership_id: "whatever"}
+			expect(response).to redirect_to encounters_who_path
+		end
+
 		it 'makes a new encounter and includes the correct partner' do
 			ship = @user.partnerships.first
 			get :new, params: {partnership_id: ship.to_param}

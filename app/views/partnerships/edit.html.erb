@@ -1,6 +1,6 @@
 <div class="centered-container">
 	<h2><%= t(".partner_html", {name: @partnership.partner.name}) %></h2>
-	<%= link_to t(".edit_partner_profile"), edit_partnership_profile_path(@partnership) if @partnership.partner.is_base? %>
+	<%= link_to t(".edit_partner_profile", name: @partnership.partner.name), edit_partnership_profile_path(@partnership) if @partnership.partner.is_base? %>
 	<%= link_to t(".edit_partner_uid"), partnership_who_path(@partnership) %>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
 		<%= f.text_field(:nickname, tooltip: {show_always: true}) %>

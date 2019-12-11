@@ -48,6 +48,8 @@ en:
     edit:
       partner_html: Edit partnership with <b>%{name}</b>
       <<: *whys
+      edit_partner_profile: Edit %{name}'s profile
+      edit_partner_uid: Connect to a different profile
   partnership_whos:
     new:
       step_0:
