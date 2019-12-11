@@ -31,7 +31,7 @@ RSpec.describe ApplicationController do
 			end
 
 			it 'redirects to first_time_index_path if the user is fully set up but has taken no actions' do
-				user = build_stubbed(:user_profile)
+				user = build_stubbed(:user_profile, first_time: true)
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}
 				expect(user).to be_set_up

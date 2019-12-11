@@ -203,7 +203,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	# get the options for the field-errors slot wrapper
 	def error_inner_options
 		# get v-show
-		defaults = @options.slice[:"v-show"] || {}.merge({
+		defaults = (@options.slice(:"v-show") || {}).merge({
 			# add the slot scope name
 			'slot-scope' => @slot_scope,
 		})

@@ -140,6 +140,11 @@ RSpec.describe EncountersController, type: :controller do
 			expect(response).to redirect_to encounters_who_path
 		end
 
+		it 'redirects to the encounter who page if there is no partnership param is invalid' do
+			get :new, params: {partnership_id: "whatever"}
+			expect(response).to redirect_to encounters_who_path
+		end
+
 		it 'makes a new encounter and includes the correct partner' do
 			ship = @user.partnerships.first
 			get :new, params: {partnership_id: ship.to_param}
@@ -230,10 +235,10 @@ RSpec.describe EncountersController, type: :controller do
 				ship = @user.partnerships.first
 				encounter = ship.encounters.first
 
-	  		@genitals = create(:contact_instrument, name: :genitals)
-        @possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
+				@genitals = create(:contact_instrument, name: :genitals)
+				@possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
 
-        encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
+				encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
 
 				new_notes = "Something else"
 				post :update, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes, contacts_attributes: [{_id: encounter.contacts.first.id, object: :partner}]}}

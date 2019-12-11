@@ -3,6 +3,12 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "_defaults";
 .contact-field-container {
+
+	&.incomplete {
+		// TODO style these
+		.contact-error {}
+	}
+
 	.contact-field {
 		display: flex;
 		align-items: baseline;
