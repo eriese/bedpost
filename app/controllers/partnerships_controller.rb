@@ -14,9 +14,13 @@ class PartnershipsController < ApplicationController
 	end
 
 	def create
-		ship_params = params.require(:partnership).permit(Partnership::LEVEL_FIELDS + [:nickname, :partner_id, :uid])
+		ship_params_uid = params.require(:partnership).permit(Partnership::LEVEL_FIELDS + [:nickname, :uid])
+		ship_params_partner = params.require(:partnership).permit(partner_attributes: [:anus_name, :can_penetrate, :external_name, :internal_name, :name, :pronoun_id])
 
-		partnership = current_user_profile.partnerships.new(ship_params)
+		partnership = current_user_profile.partnerships.new(ship_params_uid)
+
+		partnership.assign_attributes(ship_params_partner) unless partnership.valid?
+
 		if partnership.save
 			# if they were making a new encounter, send them to do that
 			redirect_to session.delete(:new_encounter) ? new_partnership_encounter_path(partnership) : partnership_path(partnership)

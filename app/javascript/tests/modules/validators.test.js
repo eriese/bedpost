@@ -1,4 +1,4 @@
-import { validateWithServer } from '@modules/validators';
+import { validateWithServer, resetValidatorCache } from '@modules/validators';
 import axios from 'axios';
 import { helpers } from 'vuelidate/lib/validators';
 jest.mock('axios');
@@ -20,6 +20,7 @@ describe('custom validators', () => {
 
 		afterEach(() => {
 			axios.get.mockClear();
+			resetValidatorCache();
 		});
 
 		const detail = 'error details';
@@ -78,6 +79,19 @@ describe('custom validators', () => {
 
 			jest.runAllTimers();
 			return promise;
+		});
+
+		it('returns true without a new request if a new validator with the same arguments is made and validates the same value', async() => {
+			const {validator} = validateWithServer('field1', 'some/url');
+			axios.get.mockImplementationOnce(getTrue);
+			validator('some value');
+			jest.runAllTimers();
+			await Promise.resolve();
+
+			const secondTry = validateWithServer('field1', 'some/url');
+			const newValidator = secondTry.validator;
+			const response = newValidator('some value');
+			expect(response).toBe(true);
 		});
 
 		it('resets the message before running again', async () => {

@@ -43,6 +43,16 @@ export const submitted = (path) => {
 	});
 };
 
+/** A cache for the last found valid values of asynchronous validators */
+let lastValidVals = {};
+
+/**
+ * Reset the validator cache
+ */
+export const resetValidatorCache = () => {
+	lastValidVals = {};
+};
+
 /**
  * make a validator that makes a get request to the given url to check the validity of the given parameter path
  *
@@ -65,6 +75,8 @@ export const validateWithServer = (path, url) => {
 		}, 1000);
 	};
 
+	const getCacheKey = () => `validateWithServer-${path}-${url}`;
+
 	/**
 	 * Send the request to validate the value
 	 *
@@ -79,7 +91,10 @@ export const validateWithServer = (path, url) => {
 		// make the get request
 		return axios.get(url, {params}).then((response) => {
 			// the response is true if the field is valid
-			if (response.data === true) resolve(true);
+			if (response.data === true) {
+				lastValidVals[getCacheKey()] = value;
+				resolve(true);
+			}
 
 			// set the message based on the response data
 			responseMessage.message = Object.getAtPath(response.data, path);
@@ -105,7 +120,7 @@ export const validateWithServer = (path, url) => {
 		responseMessage.message = '';
 
 		// return true if the value is blank (allow this case to be handled by a different validator)
-		if (value == '' || value === null) return true;
+		if (value == '' || value === null || value == lastValidVals[getCacheKey()]) return true;
 
 		// return a promise that resolves when the request completes
 		return new Promise((resolve) => {

@@ -15,6 +15,7 @@ import renderless from '@mixins/renderless';
  * @vue-prop {String} validate an object containing information on what types of validation, if any, each field in the form needs
  * @vue-prop {Object} startToggles the starting state of toggles on the form
  * @vue-prop {Object} value the starting state of the value of the object modified by the form
+ * @vue-prop {boolean} dynamicValidation should the form validate dynamically based on what fields are available?
  * @vue-prop {Object} error the starting state of the errors from the last submission attempt
  * @vue-computed {Object} slotScope the scope to bind to the slot
  * @vue-computed {Object} $v the vuelidate object
@@ -32,6 +33,7 @@ export default {
 			submissionError: this.error,
 			formData: this.value,
 			toggles: this.startToggles,
+			setup: false
 		};
 	},
 	props: {
@@ -51,10 +53,14 @@ export default {
 			type: Object,
 			default: objectFactory
 		},
+		dynamicValidation: Boolean,
 	},
 	validations: function() {
+		let $refs = this.dynamicValidation && this.$root && this.$root.$refs;
+		let formatted = formatValidators(this.validate, [], this.formData, $refs, this.adlValidations);
+
 		return {
-			formData: formatValidators(this.validate, [], this.formData, this.adlValidations),
+			formData: formatted,
 		};
 	},
 	computed: {
@@ -158,12 +164,14 @@ function objectFactory() {
  * @param  {object} validatorVals an object mapping arrays of validator arguments to their fields
  * @param  {string[]} path        the path to this level in recursive searching
  * @param  {object} fields 				the fields available in the form
+ * @param {object} $refs 					the $refs from the root, which will have pointers to all inputs present on the page
  * @param {object} adlValidations additional already-processed validations to use
  * @return {object}               the validator config for this level
  */
-function formatValidators(validatorVals, path, fields, adlValidations) {
+function formatValidators(validatorVals, path, fields, $refs, adlValidations) {
 	// make an empty object to hold validation config
 	let validators = Object.assign({}, adlValidations);
+
 	// each field in this level
 	for (let field in fields) {
 		// get the validator configs for it
@@ -174,7 +182,11 @@ function formatValidators(validatorVals, path, fields, adlValidations) {
 		// if the validator configs is another object, run the formatter on it as a new level
 		if (f_vals && f_vals.length === undefined) {
 			// send this object and this path
-			validators[field] = formatValidators(f_vals, this_path, fields[field]);
+			validators[field] = formatValidators(f_vals, this_path, fields[field], $refs);
+			continue;
+		}
+
+		if($refs && $refs[field] === undefined) {
 			continue;
 		}
 

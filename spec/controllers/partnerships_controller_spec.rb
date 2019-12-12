@@ -80,32 +80,45 @@ RSpec.describe PartnershipsController, type: :controller do
 		end
 
 		context 'with a valid partnership' do
-			it 'saves the partnership to the user if the partnership has a partner_id' do
-				@partner = create(:profile)
-				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({partner_id: @partner.id})}
-
-				expect(@user.reload.partnerships.length).to eq 1
-			end
-
 			it 'saves the partnership to the user if the partnership has a uid' do
 				@partner = create(:user_profile)
-				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({uid: @partner.uid})}
+				post :create, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
 
 				expect(controller.current_user_profile).to eq @user
 				expect(controller.current_user_profile.partnerships.length).to eq 1
 			end
 
+			it 'saves the partnership to the user if the partnership has no uid, but has params for a partner profile' do
+				ship_attributes = attributes_for(:partnership, partner_attributes: attributes_for(:profile))
+				post :create, params: {partnership: ship_attributes}
+				@partner = Profile.last
+				@user.reload
+
+				expect(@user.partnerships.length).to eq 1
+				expect(@user.partnerships.last.partner).to eq @partner
+			end
+
+			it 'chooses a valid uid over creating a new user' do
+				@partner = create(:user_profile)
+				ship_attributes = attributes_for(:partnership, partner_attributes: attributes_for(:profile), uid: @partner.uid)
+				expect { post :create, params: {partnership: ship_attributes} }.not_to change(Profile, :count)
+
+				@user.reload
+				expect(@user.partnerships.length).to eq 1
+				expect(@user.partnerships.last.partner).to eq @partner
+			end
+
 			describe 'redirects' do
 				it 'redirects to the show partnership page for the new partnership if it is not part of an encounter flow' do
 					@partner = create(:user_profile)
-					post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership).merge({uid: @partner.uid})}
+					post :create, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
 
 					expect(response).to redirect_to @user.reload.partnerships.last
 				end
 
 				it 'redirects to the new encounter form for the partnerhip if it is part of an encounter flow' do
-					@partner = create(:profile)
-					post :create, session: {new_encounter: true}, params: {partnership: attributes_for(:partnership, partner_id: @partner.id)}
+					@partner = create(:user_profile)
+					post :create, session: {new_encounter: true}, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
 
 					ship = @user.reload.partnerships.last
 					expect(response).to redirect_to new_partnership_encounter_path(ship)

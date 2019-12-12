@@ -40,7 +40,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			options[:":num-steps"] = "stepper.numSteps"
 			options[:"aria-role"] = "region"
 			@template.content_tag(:"form-step", options) do
-				if options.delete(:include_slot)
+				unless options.delete(:exclude_slot)
 					@template.content_tag(:div, 'slot-scope' => 'stepSlot') do
 						yield
 					end
@@ -197,6 +197,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	def fields_for(record_name, record_object = nil, options = {}, &block)
 		options[:parent_builder] = self
+		options[:in_wizard] = @options[:wizard] if @options.has_key? :wizard
 		super
 	end
 

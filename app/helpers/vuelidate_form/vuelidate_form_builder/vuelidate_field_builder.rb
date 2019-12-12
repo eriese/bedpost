@@ -61,6 +61,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		@after_method = after_method if after_method.present?
 		# get stepper options
 		step_options = @options.delete(:step_options) || {}
+		step_options[:exclude_slot] = true
 		# build the wizard step first (it won't wrap if this isn't a step)
 		@form_builder.step(@is_step, step_options.symbolize_keys) do
 			# wrap the field-errors component in the step
@@ -181,13 +182,16 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	# get the options for the field-errors component
 	def error_wrapper_options
 		v_model = @attribute
-		submission_error = @attribute
+		submission_error = @attribute.to_s
 
 		# get the nested name for the object in case it's in a form field
 		nested_name = @object_name.respond_to?(:gsub) ? @object_name.gsub(']', '').split('[') : [@object_name]
-		unless nested_name.length == 1
+		if nested_name.length == 1
+			submission_error = '.' + submission_error
+		else
 			nested_name.shift
-			v_model = "#{nested_name.join('.')}.#{@attribute}"
+			nested_name << @attribute.to_s
+			v_model = nested_name.join('.')
 
 			submission_error = ''
 			prev_join = ''
@@ -209,9 +213,16 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		}
 		# if it's a step, slot it into the step
 		defaults[:"slot-scope"] = "stepSlot" if @is_step
-		defaults[:"@input-blur"] = "stepSlot.fieldBlur" if @is_step || @options.delete(:in_step)
+		# combine input blurs or just add the default
+		if @is_step || @in_step
+			input_blur = "stepSlot.fieldBlur(...arguments)"
+			input_blur += "; #{@options.delete('@input-blur')}" if @options.has_key?('@input-blur')
+			input_blur += '()' unless input_blur.ends_with?(')')
+			defaults[:"@input-blur"] = input_blur
+		end
+
 		# the generated validations for the attribute
-		defaults[':v-field'] = "vf.$v.formData.#{v_model}"
+		defaults[':v-field'] = "vf.$v.formData#{submission_error.gsub('submissionError', '$v.formData')}"
 		#whether this attribute is a date
 		defaults[':is-date'] = true if @options[:is_date]
 		defaults
@@ -306,6 +317,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 		# this is a step if it says it is or the form is a wizard
 		@is_step = @options.has_key?(:is_step) ? @options[:is_step] : @form_builder.options[:wizard]
+		@in_step = @options.has_key?(:in_step) ? @options[:in_step] : @form_builder.options[:in_wizard]
 
 		# get the after method information
 		@after_method = @options.delete(:after_method) || @options.delete(:after_content)
