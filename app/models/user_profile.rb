@@ -102,6 +102,8 @@ class UserProfile < Profile
 	# Did this user accept the given terms after the most recent update of those terms?
 	def terms_accepted?(terms_type)
 		newest_terms = Terms.newest_of_type(terms_type)
+		return true unless newest_terms.present?
+
 		terms_accepted = terms && terms[terms_type]
 		terms_accepted.present? && terms_accepted >= newest_terms.updated_at
 	end

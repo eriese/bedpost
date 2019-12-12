@@ -41,45 +41,6 @@ feature "User creates account", :slow do
 			Terms.destroy_all
 		end
 
-		def register_user
-			visit new_user_profile_registration_path
-			@user_params = attributes_for(:user_profile)
-			fill_in 'First name*', with: @user_params[:name]
-			fill_in 'Email*', with: @user_params[:email]
-			fill_in 'Password*', with: @user_params[:password]
-			fill_in 'Re-type your password*', with: @user_params[:password]
-			click_button "signup-submit"
-		end
-
-		def fill_in_profile(user_params = nil, is_user: true)
-			user_params ||= @user_params
-			model = is_user ? 'user_profile' : 'profile'
-			fill_in "#{model}_name", with: user_params[:name] unless is_user
-			select(Pronoun.find(user_params[:pronoun_id]).display, from: "#{model}_pronoun_id")
-			fill_in "#{model}_anus_name", with: user_params[:anus_name]
-			fill_in "#{model}_external_name", with: user_params[:external_name]
-			choose("#{model}_can_penetrate_#{user_params[:can_penetrate]}")
-			fill_in "#{model}_internal_name", with: user_params[:internal_name]
-			click_button 'Save'
-		end
-
-		def fill_in_partnership
-			fill_in "partnership_nickname", with: "nickname"
-			# fill in form and submit
-			fields = Partnership::LEVEL_FIELDS
-			lvls = Array.new(fields.length) {rand(1..10).to_s}
-			indexes = (0...fields.length)
-			indexes.each do |i|
-				fill_in "partnership_#{fields[i]}", with: lvls[i]
-			end
-			find('input[name="commit"]').click
-		end
-
-		def accept_terms
-			find_by_id('terms_acceptance_true').set(true)
-			find('input[name="commit"]').click
-		end
-
 		context 'the terms acceptance page' do
 			scenario 'the user is redirected first to the tou terms acceptance page' do
 				register_user
@@ -154,10 +115,6 @@ feature "User creates account", :slow do
 				fill_in_profile
 				find("a[href='#{new_partnership_path}']").click
 
-				click_on("No")
-				find("a[href='#{new_dummy_profile_path}']").click
-
-				fill_in_profile attributes_for(:profile), is_user: false
 				fill_in_partnership
 
 				expect(page).to have_current_path(first_time_path)
@@ -180,10 +137,7 @@ feature "User creates account", :slow do
 				accept_terms
 				fill_in_profile
 				find("a[href='#{new_partnership_path}']").click
-				click_on("No")
-				find("a[href='#{new_dummy_profile_path}']").click
 
-				fill_in_profile attributes_for(:profile), is_user: false
 				fill_in_partnership
 
 				ship = user.partnerships.first
@@ -209,6 +163,8 @@ feature "User creates account", :slow do
 
 			scenario 'it goes to the encounter who page' do
 				register_user
+				accept_terms
+				accept_terms
 				fill_in_profile
 
 				@partner1 = create(:profile)

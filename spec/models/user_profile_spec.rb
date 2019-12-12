@@ -252,7 +252,8 @@ RSpec.describe UserProfile, type: :model do
 			end
 
 			it 'returns false if the user has not accepted the given terms type yet' do
-				user = build_stubbed(:user_profile)
+				Terms.create(terms: 'some terms', type: :tou);
+				user = build_stubbed(:user_profile_new)
 				expect(user).not_to be_terms_accepted(:tou)
 			end
 

@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe EncounterWhosController, type: :controller do
 	describe 'POST #create' do
 		before :each do
-			allow(controller).to receive(:check_first_time)
 			@user = create(:user_profile)
 			sign_in(@user)
 		end
@@ -27,10 +26,10 @@ RSpec.describe EncounterWhosController, type: :controller do
 			end
 		end
 
-		context 'with a nil (string) partnership' do
-			it 'redirects to new_dummy_profile_path' do
+		context 'with the dummy id as partner id' do
+			it 'redirects to new_partnership_path' do
 				post :create, params: {who: {partnership_id: EncounterWhosController::DUMMY_ID}}
-				expect(response).to redirect_to new_dummy_profile_path
+				expect(response).to redirect_to new_partnership_path
 			end
 
 			it 'saves :new_encounter on the session' do

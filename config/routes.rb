@@ -17,14 +17,12 @@ Rails.application.routes.draw do
 
 	scope "partners" do
 		resource :profile, only: [:new, :create], as: :dummy_profile
-		get 'who', to: 'partnership_whos#new'
-		post 'who', to: 'partnership_whos#create'
 		get 'uniqueness', to: 'partnership_whos#check'
 	end
 
 	resources :partners, controller: "partnerships", as: "partnerships" do
 		resource :profile, except: [:index, :new, :create]
-		get 'who', to: 'partnership_whos#new'
+		get 'who', to: 'partnership_whos#edit'
 		put 'who', to: 'partnership_whos#update'
 		patch 'who', to: 'partnership_whos#update'
 		resources :encounters

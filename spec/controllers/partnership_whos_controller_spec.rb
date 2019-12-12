@@ -5,28 +5,7 @@ RSpec.describe PartnershipWhosController, type: :controller do
 		cleanup @user, @partner, @old_partner
 	end
 
-	describe 'POST #create' do
-		it 'does not leave an unsaved partnership on the user' do
-			@user = create(:user_profile)
-			sign_in @user
-			post :create, params: {partnership: {uid: "nonsense"}}
-
-			expect(controller.current_user_profile.partnerships.length).to eq 0
-		end
-
-		context 'with a valid uid' do
-			it 'forwards to the create partnership page with the partner id of the given user' do
-				@user = create(:user_profile)
-				sign_in @user
-				@partner = create(:user_profile)
-				post :create, params: {partnership: {uid: @partner.uid}}
-
-				expect(response).to redirect_to new_partnership_path(p_id: @partner.id)
-			end
-		end
-	end
-
-	describe 'GET #new with a partnership' do
+	describe 'GET #edit with a partnership' do
 		context 'with a valid partnership' do
 			it 'puts the partnership on the page to be edited' do
 				@user = create(:user_profile)
@@ -34,14 +13,14 @@ RSpec.describe PartnershipWhosController, type: :controller do
 				@old_partner = create(:profile)
 				ship = @user.partnerships.create(partner: @old_partner)
 
-				get :new, params: {partnership_id: ship.to_param}
+				get :edit, params: {partnership_id: ship.to_param}
 				expect(assigns[:partnership]).to eq ship
 			end
 		end
 
 		context 'with invalid partnership' do
 			it 'redirects to the partnerships index page' do
-				get :new, session: dummy_user_session, params: {partnership_id: "random"}
+				get :edit, session: dummy_user_session, params: {partnership_id: "random"}
 				expect(response).to redirect_to partnerships_path
 			end
 		end

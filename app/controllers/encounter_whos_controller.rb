@@ -17,7 +17,7 @@ class EncounterWhosController < ApplicationController
 		if partner_id == DUMMY_ID
 			# keep in the session that they're making a new encounter so that we can send them into that flow after dummy creation
 			session[:new_encounter] = true
-			redirect_to new_dummy_profile_path
+			redirect_to new_partnership_path
 		else
 			# otherwise send them to make an encounter with the partner
 			partner = current_user_profile.partnerships.find(partner_id)

@@ -1,30 +1,26 @@
 require "rails_helper"
 
 RSpec.describe PartnershipWhosController, type: :routing do
-  describe "routing" do
-  	context "scoped under '/partners'" do
-  		 it "routes to #new" do
-        expect(:get => "partners/who").to route_to("partnership_whos#new")
-      end
+	describe "routing" do
+		context "scoped under '/partners'" do
+			 it 'routes to #check via GET at /uniqueness' do
+				expect(:get => 'partners/uniqueness?uid=12345').to route_to('partnership_whos#check', uid: '12345')
+			 end
+		end
 
-      it "routes to #create" do
-        expect(:post => "partners/who").to route_to("partnership_whos#create")
-      end
-  	end
+		context "nested under partners resource" do
+			 it "routes to #edit" do
+				expect(:get => "partners/1/who").to route_to("partnership_whos#edit", :partnership_id => "1")
+			end
 
-  	context "nested under partners resource" do
-  		 it "routes to #new" do
-        expect(:get => "partners/1/who").to route_to("partnership_whos#new", :partnership_id => "1")
-      end
+			it "routes to #update via PATCH" do
+				expect(:patch => "partners/1/who").to route_to("partnership_whos#update", :partnership_id => "1")
+			end
 
-      it "routes to #update via PATCH" do
-        expect(:patch => "partners/1/who").to route_to("partnership_whos#update", :partnership_id => "1")
-      end
+			it "routes to #update via PATCH" do
+				expect(:put => "partners/1/who").to route_to("partnership_whos#update", :partnership_id => "1")
+			end
 
-      it "routes to #update via PATCH" do
-        expect(:put => "partners/1/who").to route_to("partnership_whos#update", :partnership_id => "1")
-      end
-
-  	end
-  end
+		end
+	end
 end
