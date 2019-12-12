@@ -8,7 +8,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	# options used by the field that will be passed from the input call but shouldn't be passed back
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
 		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role, :is_date,
-		:slot_scope, :parent_scope, :model_value, :skip_value, :lazy
+		:slot_scope, :parent_scope, :model_value, :skip_value, :lazy, :validators, :in_step
 	]
 
 	# the name of the model that the input element is attached to. should always end up as "sc.value" to get the value from the error field
@@ -208,10 +208,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			:class => "#{@options[:field_class]} field".strip,
 		}
 		# if it's a step, slot it into the step
-		defaults.merge!({
-			:"@input-blur"=> "stepSlot.fieldBlur",
-			:"slot-scope"=> "stepSlot"
-		}) if @is_step
+		defaults[:"slot-scope"] = "stepSlot" if @is_step
+		defaults[:"@input-blur"] = "stepSlot.fieldBlur" if @is_step || @options.delete(:in_step)
 		# the generated validations for the attribute
 		defaults[':v-field'] = "vf.$v.formData.#{v_model}"
 		#whether this attribute is a date
@@ -262,12 +260,12 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 	# process validation for the field
 	def get_validation
-		validators = []
+		validators = @options.delete(:validators) || []
 
 		# if the object being modified exists
 		if @object.present?
 			# get the class's validations on the attribute
-			validators = get_validators
+			validators += get_validators
 
 			# if there aren't any but this is a confirmation field, see what there is for the field it confirms
 			if validators.empty? && @attribute.to_s.include?("_confirmation")
@@ -284,14 +282,14 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 		if @validate
 			# get the validators formatted for use by the form if the object has them
-			mapped_validators = if @object.present? && validators.any?
-				VuelidateFormUtils.map_validators_for_form(validators, @object)
+			mapped_validators = @object.present? && validators.any? ?
+				VuelidateFormUtils.map_validators_for_form(validators, @object, @required) : []
 			# otherwise just send a presence validator if it's required
-			elsif @required
-				[[:presence]]
+			if @required && mapped_validators.none? {|v| v[0] == :presence }
+				mapped_validators << [:presence]
 			end
 			# tell the form about the validation
-			@form_builder.add_validation(@attribute, mapped_validators) if mapped_validators
+			@form_builder.add_validation(@attribute, mapped_validators) if mapped_validators.any?
 		end
 
 		# lastly, get flash errors

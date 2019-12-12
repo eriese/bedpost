@@ -113,3 +113,12 @@ export const validateWithServer = (path, url) => {
 		});
 	});
 };
+
+export const requireUnlessValid = (locator) => {
+	return helpers.withParams({
+		locator
+	}, function (value) {
+		const otherVal =  Object.getAtPath(this.formData, locator);
+		return value || otherVal || false;
+	});
+};

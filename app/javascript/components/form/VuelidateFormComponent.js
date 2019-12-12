@@ -1,5 +1,5 @@
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators';
-import {submitted, validateWithServer} from '@modules/validators';
+import {submitted, validateWithServer, requireUnlessValid} from '@modules/validators';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
 
@@ -156,7 +156,6 @@ function objectFactory() {
  * Process the fields on the form to apply the correct validations to each. Uses recursion to process each level of nested validations
  *
  * @param  {object} validatorVals an object mapping arrays of validator arguments to their fields
-<<<<<<< HEAD
  * @param  {string[]} path        the path to this level in recursive searching
  * @param  {object} fields 				the fields available in the form
  * @param {object} adlValidations additional already-processed validations to use
@@ -227,6 +226,9 @@ function formatValidators(validatorVals, path, fields, adlValidations) {
 				break;
 			case 'uniqueness':
 				validators[field].taken = validateWithServer(this_path.join('.'), 'uniqueness');
+				break;
+			case 'require_unless_valid':
+				validators[field].oneOf = requireUnlessValid(opts.path);
 			}
 		}
 	}

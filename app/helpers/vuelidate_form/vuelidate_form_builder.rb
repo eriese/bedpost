@@ -40,7 +40,13 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			options[:":num-steps"] = "stepper.numSteps"
 			options[:"aria-role"] = "region"
 			@template.content_tag(:"form-step", options) do
-				yield
+				if options.delete(:include_slot)
+					@template.content_tag(:div, 'slot-scope' => 'stepSlot') do
+						yield
+					end
+				else
+					yield
+				end
 			end
 		else
 			yield
