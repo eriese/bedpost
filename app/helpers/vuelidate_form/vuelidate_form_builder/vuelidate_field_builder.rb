@@ -8,7 +8,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	# options used by the field that will be passed from the input call but shouldn't be passed back
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
 		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role, :is_date,
-		:slot_scope, :parent_scope, :model_value, :skip_value, :lazy, :validators, :in_step
+		:slot_scope, :parent_scope, :model_value, :skip_value, :field_id, :lazy, :validators, :in_step
 	]
 
 	# the name of the model that the input element is attached to. should always end up as "sc.value" to get the value from the error field
@@ -137,7 +137,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			html_opts = {}
 		end
 
-		html_opts[:slot_scope] = @slot_scope
+		html_opts[:slot_scope] ||= @slot_scope unless html_opts.delete :no_scope
+
 		#generate the html
 		@form_builder.tooltip(@attribute, key, html_opts) if key
 	end
@@ -161,7 +162,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			# static aria attributes for progressive enhancement
 			aria: {
 				required: @required,
-				describedby: "#{@attribute}-error #{@attribute}-tooltip-content #{desc}".strip,
+				describedby: "#{@attribute}-error #{@object_name}_#{@attribute}-tooltip-content #{desc}".strip,
 				invalid: @sub_error.present?
 			},
 			#dynamic aria attributes
@@ -234,11 +235,14 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		defaults = (@options.slice(:"v-show") || {}).merge({
 			# add the slot scope name
 			'slot-scope' => @slot_scope,
+			'@focusout' => "#{@slot_scope}.onBlur",
+			'@focusin' => "#{@slot_scope}.onFocus"
 		})
 		# generate v-show from other options if need be
 		defaults[:"v-show"] ||= "model.#{options[:show_if]}" if @options[:show_if]
 		# add an aria role if given
 		defaults[:role] = @options[:field_role] if @options.has_key? :field_role
+		defaults[:id] ||= @options[:field_id]
 		defaults
 	end
 
@@ -293,8 +297,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 
 		if @validate
 			# get the validators formatted for use by the form if the object has them
-			mapped_validators = @object.present? && validators.any? ?
-				VuelidateFormUtils.map_validators_for_form(validators, @object, @required) : []
+			mapped_validators = VuelidateFormUtils.map_validators_for_form(validators, @object, @required)
 			# otherwise just send a presence validator if it's required
 			if @required && mapped_validators.none? {|v| v[0] == :presence }
 				mapped_validators << [:presence]

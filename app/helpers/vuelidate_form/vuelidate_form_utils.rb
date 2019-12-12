@@ -2,7 +2,10 @@ module VuelidateForm; module VuelidateFormUtils
 	# Map the validators to a format that can be used by the form
 	# @param validators [Array] an array of validators
 	# @param object [Object] the object that the validators will validate
+	# @param is_required [Boolean] does the field have an explicit required value of true?
 	def self.map_validators_for_form(validators, object, is_required)
+		return [] unless object.present? && validators.any?
+
 		is_new = false
 		validators.each_with_object([]) do |v, ary|
 			kind = v.respond_to?(:kind) ? v.kind : v[:kind]

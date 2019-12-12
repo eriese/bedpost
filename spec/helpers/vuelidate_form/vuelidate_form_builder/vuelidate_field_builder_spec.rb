@@ -346,8 +346,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			builder = stub_builder options: {tooltip: true}
 			result = builder.send(:field_inner)
 
-			expected_tooltip = @f_builder.tooltip(@attr)
-			expect(result).to include(expected_tooltip)
+			expect(result).to include("<tooltip ")
 		end
 
 		it 'adds the given block at the end' do

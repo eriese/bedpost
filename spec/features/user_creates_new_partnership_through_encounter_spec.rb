@@ -20,7 +20,7 @@ feature "User creates new partnership through encounter", :slow do
 			visit root_path
 			# go to the new partner page
 			find_link(href: encounters_who_path).click
-			select(I18n.t('encounter_whos.new.new_partner'), from: 'who_partnership_id')
+			select(I18n.t('encounter_whos.new.new_partner'), from: 'encounter_partnership_id')
 			find('input[name="commit"]').click
 
 			@partner = create(:user_profile)
@@ -44,7 +44,7 @@ feature "User creates new partnership through encounter", :slow do
 			visit root_path
 			# go to the new partner page
 			find_link(href: encounters_who_path).click
-			select(I18n.t('encounter_whos.new.new_partner'), from: 'who_partnership_id')
+			select(I18n.t('encounter_whos.new.new_partner'), from: 'encounter_partnership_id')
 			find('input[name="commit"]').click
 
 			# get redirected to who

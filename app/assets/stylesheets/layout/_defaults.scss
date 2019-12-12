@@ -91,14 +91,18 @@ $colors-light: (
 	"cta-text": $color-white,
 	"cta-bg": #7A405E,
 	"cta-bg-light": #AF6A64,
-	"shadow": $color-black
+	"shadow": rgba($color-black, 0.5),
+	"h1": #433060,
+	"background": $color-white
 );
 
 $colors-dark: (
 	"cta-text": $dark-background,
 	"cta-bg": #C78DAB,
 	"cta-bg-light": #FC9890,
-	"shadow": $color-white
+	"shadow": rgba($color-white, 0.5),
+	"h1": #FFD6CC,
+	"background": $dark-background
 );
 
 $colors1-button-primary: #7A405E;
@@ -119,9 +123,9 @@ $colors2-text: $color-white;
 
 
 $stn-border-radius: 0.95rem;
-$box-shadow: 0px 0px 2px 1px;
-$stn-box-shadow: $box-shadow rgba($color-black,0.5);
-$stn-box-shadow-secondary: $box-shadow rgba($color-white,0.5);
+$box-shadow-val: 0px 0px 2px 1px;
+$stn-box-shadow: $box-shadow-val rgba($color-black,0.5);
+$stn-box-shadow-secondary: $box-shadow-val rgba($color-white,0.5);
 
 ///////////////////////
 // widget colors
