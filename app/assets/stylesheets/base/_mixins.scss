@@ -95,7 +95,7 @@
 	@include cta-base;
 	color: map-get($theme, "cta-text");
 	background-color: map-get($theme, "cta-bg#{$suffix}");
-	box-shadow: $box-shadow rgba(map-get($theme, "shadow"), 0.5);
+	box-shadow: $box-shadow-val map-get($theme, "shadow");
 	&:hover, &:focus {
 		color: map-get($theme, "cta-bg#{$suffix}");
 		background-color: map-get($theme, "cta-text");
