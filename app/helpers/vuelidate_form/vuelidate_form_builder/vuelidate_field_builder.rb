@@ -8,7 +8,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	# options used by the field that will be passed from the input call but shouldn't be passed back
 	FIELD_OPTIONS = [:label, :tooltip, :label_last, :validate, :required, :show_if, :"v-show",
 		:field_class, :is_step, :step_options, :after_content, :after_method, :after_method_args, :field_options, :field_role, :is_date,
-		:slot_scope, :parent_scope, :model_value, :skip_value, :field_id, :lazy, :validators, :in_step
+		:slot_scope, :parent_scope, :model_value, :skip_value, :field_id, :lazy, :validators, :in_step, :skip_validations
 	]
 
 	# the name of the model that the input element is attached to. should always end up as "sc.value" to get the value from the error field
@@ -295,9 +295,12 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		# it should validate if it's marked to validate or if it's required or if it has any validations
 		@validate = @options.has_key?(:validate) ? @options[:validate] : (@required || validators.any?)
 
+
 		if @validate
+			skip_validations = @options.delete(:skip_validations) || []
+			skip_validations << :presence unless @required
 			# get the validators formatted for use by the form if the object has them
-			mapped_validators = VuelidateFormUtils.map_validators_for_form(validators, @object, @required)
+			mapped_validators = VuelidateFormUtils.map_validators_for_form(validators, @object, skip_validations)
 			# otherwise just send a presence validator if it's required
 			if @required && mapped_validators.none? {|v| v[0] == :presence }
 				mapped_validators << [:presence]
