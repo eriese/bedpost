@@ -177,6 +177,7 @@ body.vertical-center {
 		&--small {
 			flex-grow: 0;
 			position: absolute;
+			z-index: 900;
 			top: 0;
 			left: $nav-button-width + $spacing-medium;
 		}

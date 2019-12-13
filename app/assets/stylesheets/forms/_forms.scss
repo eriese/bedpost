@@ -195,7 +195,7 @@ form {
 		position: relative;
 	}
 
-	.form-step {
+	&__step {
 		width: 100%;
 		box-sizing: border-box;
 
@@ -203,82 +203,82 @@ form {
 			visibility: hidden;
 		}
 	}
+}
 
-	&__nav {
-		text-align: center;
+.stepper__nav {
+	text-align: center;
+	width: 100%;
+	z-index: 1;
+
+	$dot-size: 0.5rem;
+	&__dots {
+		height: $dot-size;
+		line-height: 0;
 		width: 100%;
-		z-index: 1;
+	}
 
-		$dot-size: 0.5rem;
-		&__dots {
-			height: $dot-size;
-			line-height: 0;
-			width: 100%;
+	&__dot {
+		display: inline-block;
+		margin: 0rem $dot-size;
+		width: $dot-size;
+		height: $dot-size;
+		border-radius: 50%;
+		@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
 
-			&__dot {
-				display: inline-block;
-				margin: 0rem $dot-size;
-				width: $dot-size;
-				height: $dot-size;
-				border-radius: 50%;
-				@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
+		&.current {
+			@include color-and-secondary(background-color, $button-colors);
+		}
+	}
 
-				&.current {
-					@include color-and-secondary(background-color, $button-colors);
-				}
-			}
+	&__button-list {
+		list-style: none;
+		padding-inline-start: 0;
+		margin: 0rem;
+	}
+
+	&__button-item {
+		display: inline-block;
+
+		&--next {
+			float: right;
 		}
 
-		&__buttons {
-			list-style: none;
-			padding-inline-start: 0;
-			margin: 0rem;
+		&--prev {
+			float: left;
+		}
 
-			&__button {
-				display: inline-block;
+		&--last, input[type=submit] {
+			float: right;
+			line-height: rem(32px);
+			vertical-align: middle;
+			font-weight: bold;
+			display: inline;
+			width: auto;
+			font-size: 1.75rem;
+		}
 
-				&--next {
-					float: right;
-				}
+		button {
+			border: 2px solid transparent;
+		}
 
-				&--prev {
-					float: left;
-				}
+		@media (min-width: $constrained-form-width + 3rem) {
+			position: absolute;
 
-				&--last, input[type=submit] {
-					float: right;
-					line-height: rem(32px);
-					vertical-align: middle;
-					font-weight: bold;
-					display: inline;
-					width: auto;
-					font-size: 1.75rem;
-				}
+			$button-offset: -20%;
 
-				button {
-					border: 2px solid transparent;
-				}
+			&--next {
+				right: $button-offset;
+				top: 10rem;
+			}
 
-				@media (min-width: $constrained-form-width + 3rem) {
-					position: absolute;
+			&--prev {
+				left: $button-offset;
+				top: 10rem;
+			}
 
-					$button-offset: -20%;
-
-					&--next {
-						right: $button-offset;
-						top: 10rem;
-					}
-
-					&--prev {
-						left: $button-offset;
-						top: 10rem;
-					}
-
-					&--last, input[type=submit] {
-						right: $button-offset;
-						bottom: 0rem;
-					}
-				}
+			&--last, input[type=submit] {
+				right: $button-offset;
+				bottom: 0rem;
 			}
 		}
 	}

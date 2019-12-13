@@ -51,6 +51,7 @@ en:
         opt_in:
           'true': 'Yes'
           'false': 'No'
+        name: First name
     tooltip:
       user_profile:
         name: We really only care about your first name, but it's up to you.

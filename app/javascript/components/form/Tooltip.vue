@@ -34,6 +34,7 @@ export default {
 	data() {
 		return {
 			shouldShow: false,
+			showTimeout: null,
 			defaultProps: {
 				animation: 'shift-away',
 				appendTo: () => this.$el,
@@ -50,8 +51,16 @@ export default {
 	watch: {
 		fieldFocused(newVal) {
 			let delay = newVal ? 500 : 100;
-			setTimeout(() => {
+
+			if(this.showTimeout) {
+				clearTimeout(this.showTimeout);
+				this.showTimeout = null;
+				return;
+			}
+
+			this.showTimeout = setTimeout(() => {
 				this.shouldShow = !!newVal;
+				this.showTimeout = null;
 			}, delay);
 		}
 	},

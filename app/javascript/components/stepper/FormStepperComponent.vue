@@ -1,21 +1,21 @@
 <template>
 	<div class="stepper container--full-height" >
 		<div :class="['stepper__outer container--centering-child container--full-height--constrained', stepClass]">
-			<div class="stepper__outer__inner container--centering-child__centered-child" ref="inner" role="form" aria-labeledby="stepper-aria-label">
+			<div class="stepper__inner container--centering-child__centered-child" ref="inner" role="form" aria-labeledby="stepper-aria-label">
 				<slot :step-ready="setStepComplete" :num-steps="numSteps"></slot>
 			</div>
 			<div class="stepper__nav">
-				<ul class="stepper__nav__buttons clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
-					<li class="stepper__nav__buttons__button stepper__nav__buttons__button--last" v-if="curIndex == numSteps - 1">
+				<ul class="stepper__nav__button-list clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
+					<li class="stepper__nav__button stepper__nav__button-item--last" v-if="curIndex == numSteps - 1">
 						<slot name="last-button"><button class="not-button last" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
-					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__buttons__button']">
+					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__button-item']">
 						<arrow-button class="not-button" v-bind="btn"  @click="btn.click"></arrow-button>
 					</li>
 				</ul>
 
 				<div class="stepper__nav__dots" role="progressBar" aria-valuemin="1" :aria-valuemax="numSteps" :aria-valuenow="curIndex + 1" tabindex="0">
-					<div v-for="i in numSteps" class="stepper__nav__dots__dot" :class="{current: i - 1 == curIndex}" :key="i"></div>
+					<div v-for="i in numSteps" class="stepper__nav__dot" :class="{current: i - 1 == curIndex}" :key="i"></div>
 				</div>
 			</div>
 		</div>
@@ -58,7 +58,7 @@ export default {
 				pageDots: false, // we're going to do our own page dots
 				wrapAround: false, // don't wrap around
 				freeScroll: false, // lock on steps
-				cellSelector: '.form-step',
+				cellSelector: '.stepper__step',
 				draggable: false, // we're going to manipulate draggable in the code
 				setGallerySize: false,
 			},
@@ -84,7 +84,7 @@ export default {
 		defaultButtons() {
 			return [{
 				tKey: 'next',
-				clazz: 'stepper__nav__buttons__button--next',
+				clazz: 'stepper__nav__button-item--next',
 				if: this.curIndex < this.numSteps - 1,
 				bind: {
 					disabled: this.curStepPending
@@ -93,7 +93,7 @@ export default {
 				direction: 'right'
 			}, {
 				tKey: 'previous',
-				clazz: 'stepper__nav__buttons__button--prev',
+				clazz: 'stepper__nav__button-item--prev',
 				if: this.numSteps > 1 && this.curIndex > 0,
 				click: this.back
 			}];
