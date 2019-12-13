@@ -214,8 +214,8 @@ RSpec.describe EncountersController, type: :controller do
 				actual = response.body
 				expected_enc = Encounter.new(encounter_params)
 				expected_enc.valid?
-				expected = expected_enc.errors.messages.to_json
-				expect(actual).to eq expected.to_s
+				expected = {errors: expected_enc.errors.messages}
+				expect(actual).to eq expected.to_json
 			end
 		end
 	end

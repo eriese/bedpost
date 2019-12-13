@@ -246,6 +246,51 @@ RSpec.describe UserProfile, type: :model do
 			end
 		end
 
+		describe '#terms_accepted?' do
+			after :each do
+				Terms.destroy_all
+			end
+
+			it 'returns false if the user has not accepted the given terms type yet' do
+				Terms.create(terms: 'some terms', type: :tou);
+				user = build_stubbed(:user_profile_new)
+				expect(user).not_to be_terms_accepted(:tou)
+			end
+
+			it 'returns false if the latest terms of use were created after the user accepted terms of use' do
+				tou = Terms.create(terms: 'some terms', type: :tou);
+				user = build_stubbed(:user_profile, terms: { tou: tou.updated_at - 1.day })
+				expect(user).not_to be_terms_accepted(:tou)
+			end
+
+			it 'returns true if the latest terms of use were created before the user accepted terms of use' do
+				tou = Terms.create(terms: 'some terms', type: :tou);
+				user = build_stubbed(:user_profile, terms: { tou: tou.updated_at + 1.day })
+				expect(user).to be_terms_accepted(:tou)
+			end
+
+			it 'returns true if the user accepted on the same day the terms were created' do
+				tou = Terms.create(terms: 'some terms', type: :tou);
+				user = build_stubbed(:user_profile, terms: { tou: tou.updated_at })
+				expect(user).to be_terms_accepted(:tou)
+			end
+		end
+
+		describe '#accept_terms' do
+			after do
+				cleanup @user
+			end
+			it 'marks the given terms as accepted on the current datetime' do
+				now = 'foo'
+				allow(DateTime).to receive(:now) {now}
+				@user = create(:user_profile)
+
+				@user.accept_terms :tou
+				@user.reload
+				expect(@user.terms[:tou]).to eq now
+			end
+		end
+
 		describe '#partners_with_encounters' do
 			before :all do
 				@hand = create(:contact_instrument, name: :hand)
@@ -377,14 +422,31 @@ RSpec.describe UserProfile, type: :model do
 					@partner = create(:user_profile)
 					@partner.partnerships << build(:partnership, partner_id: @user.id)
 					@user.reload
-
-					expect(@user.partnered_to_ids).to_not be_empty
+					partnered_to_ids = described_class.where_partnered_to(@user.id).pluck(:_id)
+					expect(partnered_to_ids).to_not be_empty
 
 					expect(@user.soft_destroy).to be true
 					@dummy = Profile.last unless Profile.last.id == @partner.id
 					expect(@dummy.name).to eq @user.name
-					expect(@dummy.partnered_to_ids).to eq @user.partnered_to_ids
+
+					dummy_partnered_to_ids = described_class.where_partnered_to(@dummy.id).pluck(:_id)
+					expect(dummy_partnered_to_ids).to eq partnered_to_ids
 				end
+			end
+		end
+
+		describe '#self.where_partnered_to' do
+			after do
+				cleanup(@user, @partner)
+			end
+
+			it 'returns a query for UserProfiles that have a partnership with the given profile_id' do
+				@user = create(:user_profile)
+				@partner = create(:profile)
+
+				@user.partnerships.create(partner: @partner)
+				result = described_class.where_partnered_to(@partner.id)
+				expect(result.first).to eq @user
 			end
 		end
 	end
@@ -400,11 +462,11 @@ RSpec.describe UserProfile, type: :model do
 			it 'destroys dummy partners when it is destroyed' do
 				@user = create(:user_profile)
 				@partner = create(:profile)
+				clean_devise_jobs
 
 				@user.partnerships.create(partner: @partner)
-
-				expect{@user.destroy}.to change(Profile, :count).by(-2)
-				expect(@user.persisted?).to be false
+				expect { @user.destroy; work_jobs }.to change(Profile, :count).by(-2)
+				expect(@user).to be_destroyed
 				expect(Profile.where(id: @partner.id).count).to eq 0
 			end
 		end

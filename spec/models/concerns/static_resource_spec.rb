@@ -23,6 +23,7 @@ RSpec.describe StaticResource, type: :module do
 
 	after do
 		Rails.cache.clear
+		allow(StaticResourceTestModel).to receive(:where).and_call_original
 		StaticResourceTestModel.destroy_all
 	end
 
@@ -117,6 +118,46 @@ RSpec.describe StaticResource, type: :module do
 				StaticResourceTestModel.as_map
 				expect(in_cache?("as_map")).to be true
 				StaticResourceTestModel.as_map
+			end
+		end
+
+		describe '#newest' do
+			context 'without arguments' do
+				it 'calls order and then last' do
+					make_models(2)
+					order_query = double('OrderQuery', {last: nil})
+					allow(StaticResourceTestModel).to receive(:order) {order_query}
+					StaticResourceTestModel.newest
+					expect(StaticResourceTestModel).to have_received(:order).with(updated_at: :desc)
+					expect(order_query).to have_received(:last)
+				end
+
+				it 'caches' do
+					make_models(1)
+					StaticResourceTestModel.newest
+					expect(in_cache? 'newest').to be true
+				end
+			end
+
+			context 'with arguments' do
+				it 'calls where, then order, then last' do
+					make_models(2)
+					order_query = double('OrderQuery', last: nil)
+					where_query = double('WhereQuery', order: order_query)
+
+					allow(StaticResourceTestModel).to receive(:where) {where_query}
+					StaticResourceTestModel.newest(f_1: nil)
+					expect(StaticResourceTestModel).to have_received(:where).with(f_1: nil)
+					expect(where_query).to have_received(:order).with(updated_at: :desc)
+					expect(order_query).to have_received(:last)
+				end
+
+				it 'caches' do
+					make_models(1)
+					args = {f_1: nil}
+					StaticResourceTestModel.newest(**args)
+					expect(in_cache? "newest#{args.to_json}").to be true
+				end
 			end
 		end
 

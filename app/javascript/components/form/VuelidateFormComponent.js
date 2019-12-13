@@ -1,5 +1,5 @@
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators';
-import {submitted} from '@modules/validators';
+import {submitted, validateWithServer, requireUnlessValid, resetValidatorCache} from '@modules/validators';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
 
@@ -15,6 +15,7 @@ import renderless from '@mixins/renderless';
  * @vue-prop {String} validate an object containing information on what types of validation, if any, each field in the form needs
  * @vue-prop {Object} startToggles the starting state of toggles on the form
  * @vue-prop {Object} value the starting state of the value of the object modified by the form
+ * @vue-prop {boolean} dynamicValidation should the form validate dynamically based on what fields are available?
  * @vue-prop {Object} error the starting state of the errors from the last submission attempt
  * @vue-computed {Object} slotScope the scope to bind to the slot
  * @vue-computed {Object} $v the vuelidate object
@@ -51,10 +52,14 @@ export default {
 			type: Object,
 			default: objectFactory
 		},
+		dynamicValidation: Boolean,
 	},
 	validations: function() {
+		let $refs = this.dynamicValidation && this.$root && this.$root.$refs;
+		let formatted = formatValidators(this.validate, [], this.formData, $refs, this.adlValidations);
+
 		return {
-			formData: formatValidators(this.validate, [], this.formData, this.adlValidations),
+			formData: formatted,
 		};
 	},
 	computed: {
@@ -146,6 +151,9 @@ export default {
 			}
 		},
 	},
+	mounted() {
+		resetValidatorCache();
+	},
 };
 
 function objectFactory() {
@@ -156,14 +164,16 @@ function objectFactory() {
  * Process the fields on the form to apply the correct validations to each. Uses recursion to process each level of nested validations
  *
  * @param  {object} validatorVals an object mapping arrays of validator arguments to their fields
- * @param  {string[]} path          the path to this level in recursive searching
- * @param  {object} fields 			the fields available in the form
+ * @param  {string[]} path        the path to this level in recursive searching
+ * @param  {object} fields 				the fields available in the form
+ * @param {object} $refs 					the $refs from the root, which will have pointers to all inputs present on the page
  * @param {object} adlValidations additional already-processed validations to use
  * @return {object}               the validator config for this level
  */
-function formatValidators(validatorVals, path, fields, adlValidations) {
+function formatValidators(validatorVals, path, fields, $refs, adlValidations) {
 	// make an empty object to hold validation config
 	let validators = Object.assign({}, adlValidations);
+
 	// each field in this level
 	for (let field in fields) {
 		// get the validator configs for it
@@ -174,7 +184,12 @@ function formatValidators(validatorVals, path, fields, adlValidations) {
 		// if the validator configs is another object, run the formatter on it as a new level
 		if (f_vals && f_vals.length === undefined) {
 			// send this object and this path
-			validators[field] = formatValidators(f_vals, this_path, fields[field]);
+			validators[field] = formatValidators(f_vals, this_path, fields[field], $refs);
+			continue;
+		}
+
+		// if it's only supposed to validate fields that exist, skip the field if it doesn't
+		if($refs && $refs[field] === undefined) {
 			continue;
 		}
 
@@ -224,6 +239,13 @@ function formatValidators(validatorVals, path, fields, adlValidations) {
 				validators[conf_field] = validators[conf_field] || {};
 				validators[conf_field].confirmation = sameAs(field);
 				break;
+			case 'uniqueness':
+				// validate it on the server
+				validators[field].taken = validateWithServer(this_path.join('.'), 'uniqueness');
+				break;
+			case 'require_unless_valid':
+				// validate that this or the other field exist
+				validators[field].oneOf = requireUnlessValid(opts.path);
 			}
 		}
 	}

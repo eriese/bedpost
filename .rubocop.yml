@@ -17,6 +17,10 @@ Layout/Tab:
   Enabled: false
 Layout/IndentationWidth:
   Width: 1
+Layout/MultilineOperationIndentation:
+  IndentationWidth: 1
+Metrics/MethodLength:
+  Max: 15
 Style/FrozenStringLiteralComment:
   Enabled: false
 Metrics/BlockLength:
