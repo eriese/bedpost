@@ -11,6 +11,7 @@
 
 <script>
 import inputSlot from '@mixins/inputSlot';
+import {lazyChild} from '@mixins/lazyCoupled';
 /**
  * A component that wraps a form control and uses its validations to display error messages. Works best with parent [VuelidateFormComponent]{@link module:components/form/VuelidateFormComponent}
  *
@@ -32,7 +33,7 @@ import inputSlot from '@mixins/inputSlot';
  */
 export default {
 	name: 'field_errors',
-	mixins: [inputSlot],
+	mixins: [inputSlot, lazyChild],
 	data: function() {
 		return {
 			focused: false,

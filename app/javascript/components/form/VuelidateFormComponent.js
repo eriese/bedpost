@@ -1,5 +1,5 @@
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators';
-import {submitted, validateWithServer, requireUnlessValid} from '@modules/validators';
+import {submitted, validateWithServer, requireUnlessValid, resetValidatorCache} from '@modules/validators';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
 
@@ -33,7 +33,6 @@ export default {
 			submissionError: this.error,
 			formData: this.value,
 			toggles: this.startToggles,
-			setup: false
 		};
 	},
 	props: {
@@ -152,6 +151,9 @@ export default {
 			}
 		},
 	},
+	mounted() {
+		resetValidatorCache();
+	},
 };
 
 function objectFactory() {
@@ -186,6 +188,7 @@ function formatValidators(validatorVals, path, fields, $refs, adlValidations) {
 			continue;
 		}
 
+		// if it's only supposed to validate fields that exist, skip the field if it doesn't
 		if($refs && $refs[field] === undefined) {
 			continue;
 		}
@@ -237,9 +240,11 @@ function formatValidators(validatorVals, path, fields, $refs, adlValidations) {
 				validators[conf_field].confirmation = sameAs(field);
 				break;
 			case 'uniqueness':
+				// validate it on the server
 				validators[field].taken = validateWithServer(this_path.join('.'), 'uniqueness');
 				break;
 			case 'require_unless_valid':
+				// validate that this or the other field exist
 				validators[field].oneOf = requireUnlessValid(opts.path);
 			}
 		}

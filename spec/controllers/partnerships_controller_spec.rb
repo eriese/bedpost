@@ -36,27 +36,6 @@ RSpec.describe PartnershipsController, type: :controller do
 			cleanup(@profile)
 		end
 
-		# it 'adds the given partner profile if there is a p_id query parameter' do
-		# 	@profile = create(:profile)
-
-		# 	get :new, params: {p_id: @profile.id}, session: dummy_user_session
-		# 	expect(assigns(:partnership).partner_id).to eq @profile.id
-		# end
-
-		# it 'redirects to the who page if no partner id is given' do
-		# 	get :new, session: dummy_user_session
-		# 	expect(response).to redirect_to who_path
-		# end
-
-		# it 'puts partner errors on the who page if the partner id connects to nothing' do
-		# 	get :new, params: {p_id: "nonsense"}, session: dummy_user_session
-		# 	expect(assigns(:partnership).partner_id).to eq "nonsense"
-		# 	expect(assigns(:partnership).uid).to be nil
-
-		# 	msg = I18n.t("mongoid.errors.models.partnership.attributes.partner.blank", attribute: "Partner", default: [:"mongoid.errors.messages.blank", :"errors.messages.blank"])
-		# 	expect(flash[:submission_error]["form_error"]).to include msg
-		# end
-
 		it 'does not leave an un-saved partnership on the user', no_skip: false do
 			@profile = create(:user_profile)
 			sign_in(@profile)

@@ -66,43 +66,6 @@ RSpec.describe ProfilesController, type: :controller do
 		end
 	end
 
-	describe "POST #create" do
-		context "with valid params" do
-			# before :each do
-			#   @prof = nil
-			# end
-
-			def get_valid_params
-				{profile: attributes_for(:profile)}
-			end
-
-			def get_new_prof(params)
-				Profile.last
-			end
-
-			it "creates a new Profile" do
-				session = dummy_user_session
-				expect {
-					post :create, params: get_valid_params, session: session
-				}.to change(Profile, :count).by(1)
-				@prof = Profile.last
-			end
-
-			it "redirects to the new partnership page with the new profile as the partner" do
-				post :create, params: get_valid_params, session: dummy_user_session
-				@prof = Profile.last
-				expect(response).to redirect_to new_partnership_path(p_id: @prof.id)
-			end
-		end
-
-		context "with invalid params" do
-			it "redirects to the new partner profile page to try again" do
-				post :create, params: {profile: {name: "name"}}, session: dummy_user_session
-				expect(response).to redirect_to new_dummy_profile_path
-			end
-		end
-	end
-
 	describe "PUT #update" do
 		before :each do
 			@prof = create(:profile)
@@ -129,19 +92,4 @@ RSpec.describe ProfilesController, type: :controller do
 			end
 		end
 	end
-
-	# describe "DELETE #destroy" do
-	#   it "destroys the requested profile" do
-	#     profile = Profile.create! valid_attributes
-	#     expect {
-	#       delete :destroy, params: {id: profile.to_param}, session: dummy_user_session
-	#     }.to change(Profile, :count).by(-1)
-	#   end
-
-	#   it "redirects to the profiles list" do
-	#     profile = Profile.create! valid_attributes
-	#     delete :destroy, params: {id: profile.to_param}, session: dummy_user_session
-	#     expect(response).to redirect_to(profiles_url)
-	#   end
-	# end
 end

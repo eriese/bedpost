@@ -15,10 +15,7 @@ Rails.application.routes.draw do
 			unlock: 'unlock',
 	}
 
-	scope "partners" do
-		resource :profile, only: [:new, :create], as: :dummy_profile
-		get 'uniqueness', to: 'partnership_whos#check'
-	end
+	get 'partners/uniqueness', to: 'partnership_whos#check'
 
 	resources :partners, controller: "partnerships", as: "partnerships" do
 		resource :profile, except: [:index, :new, :create]

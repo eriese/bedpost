@@ -6,7 +6,7 @@
 </template>
 
 <script>
-	import {lazyChild} from "@mixins/lazyCoupled";
+	import {lazyChild, lazyParent} from "@mixins/lazyCoupled";
 	/**
 	 * A component for a form step. Works with parent component [FormStepperComponent]{@link module:components/stepper/FormStepperComponent}
 	 *
@@ -29,7 +29,7 @@
 	 */
 	export default {
 		name: "form_step",
-		mixins: [lazyChild],
+		mixins: [lazyChild, lazyParent],
 		data: function() {
 			return {
 				index: 0, // the index this step has in the list of steps
@@ -106,15 +106,16 @@
 
 				// emit the validity of this step
 				this.$emit("step-ready", sendValid);
+			},
+			onChildMounted() {
+				// only do the work if it's not an optional step
+				if (!this.optional) {
+					// get the inital validity of each field for its completeness
+					this.completes = this.fields.map((f) => f.vField === undefined || !f.vField.$invalid);
+				}
 			}
 		},
 		mounted: function() {
-			// only do the work if it's not an optional step
-			if (!this.optional) {
-				// get the inital validity of each field for its completeness
-				this.completes = this.fields.map((f) => f.vField === undefined || !f.vField.$invalid);
-			}
-
 			this.$parent.$emit('step-added');
 		},
 		destroyed() {
