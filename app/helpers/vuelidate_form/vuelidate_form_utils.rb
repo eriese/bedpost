@@ -3,14 +3,14 @@ module VuelidateForm; module VuelidateFormUtils
 	# @param validators [Array] an array of validators
 	# @param object [Object] the object that the validators will validate
 	# @param is_required [Boolean] does the field have an explicit required value of true?
-	def self.map_validators_for_form(validators, object, is_required)
+	def self.map_validators_for_form(validators, object, validators_to_skip)
 		return [] unless object.present? && validators.any?
 
 		is_new = false
 		validators.each_with_object([]) do |v, ary|
 			kind = v.respond_to?(:kind) ? v.kind : v[:kind]
 			# foreign keys can't be checked by the front end
-			next if kind == :foreign_key || (kind == :presence && !is_required)
+			next if kind == :foreign_key || validators_to_skip.include?(kind)
 
 			options = v.respond_to?(:options) ? v.options : v[:options]
 			# if there's an on condition for the validator
