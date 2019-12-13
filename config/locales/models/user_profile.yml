@@ -5,6 +5,9 @@ en:
       new_encounter: I had sex
       title: Hi %{name}, what's new?
   application:
+    new:
+      title: Now more about this person...
+      desc: Tell us how to talk about this person and their body so we can describe your sex the way you would.
     edit:
       account_settings: Account Settings
       personal_prefs:

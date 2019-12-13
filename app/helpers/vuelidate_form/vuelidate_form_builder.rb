@@ -243,6 +243,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	def tooltip(attribute, key=true, html_options={})
 		html_options[:key] = key
+		html_options[:object] = @object
 		Tags::Tooltip.new(@object_name, attribute, @template, html_options).render
 	end
 

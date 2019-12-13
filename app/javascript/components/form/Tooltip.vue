@@ -33,28 +33,39 @@ export default {
 	},
 	data() {
 		return {
+			shouldShow: false,
 			defaultProps: {
 				animation: 'shift-away',
 				appendTo: () => this.$el,
 				arrow: true,
 				boundary: 'viewport',
-				delay: [200, 0],
 				flip: true,
-				placement: 'bottom',
+				placement: 'top',
 				aria: null,
 				toSelector: this.toSelector,
 				theme: this.theme,
 			}
 		};
 	},
+	watch: {
+		fieldFocused(newVal) {
+			let delay = newVal ? 500 : 100;
+			setTimeout(() => {
+				this.shouldShow = !!newVal;
+			}, delay);
+		}
+	},
 	computed: {
+		fieldFocused() {
+			return this.useScope ? this.useScope.focused || this.useScope.hovered : false;
+		},
 		tippyProps() {
 			if (!this.useScope) { return this.defaultProps; }
 			return {
 				...this.defaultProps,
 				trigger: 'manual',
 				hideOnClick: false,
-				visible: this.useScope.focused || this.useScope.hovered,
+				visible: this.shouldShow,
 				a11y: false,
 			};
 		},

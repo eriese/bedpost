@@ -10,7 +10,7 @@ nav {
 		border: rem(2px) solid;
 		@include color-and-secondary(border-color, $button-colors);
 		margin: rem(10px);
-		width: rem(35px);
+		width: $nav-button-width;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;

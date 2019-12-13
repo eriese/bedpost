@@ -18,7 +18,7 @@ $font-header: 'Baloo', cursive;
 ///////////////////////
 // spacing
 ///////////////////////
-$spacing-default: $root-font-size;
+$spacing-default: 1rem;
 $spacing-medium:  $spacing-default * 1.5;
 $spacing-double:  $spacing-default * 2;
 $spacing-small:   $spacing-default / 2;
@@ -183,3 +183,4 @@ $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-
 // sizing
 ///////////////////////
 $nav-width: rem(250px);
+$nav-button-width: rem(35px);

@@ -8,8 +8,10 @@ label {
 	}
 }
 
+$constrained-form-width: 26rem;
 form.centered {
-	max-width: rem(400px);
+	max-width: $constrained-form-width;
+	width: 100%;
 	padding: 0rem rem(15px);
 	margin: 0rem auto;
 
@@ -106,12 +108,6 @@ form {
 		margin: rem(3px) auto;
 	}
 
-	.step {
-		border-radius: $stn-border-radius;
-		margin-bottom: rem(25px);
-	}
-
-
 	.slide-bar-desc {
 		font-size: rem(14px);
 		clear: both;
@@ -174,40 +170,33 @@ form {
 }
 
 .flickity-enabled {
-	&:focus ~ .step-nav>.prog-buttons>li>button {
+	&:focus ~ .stepper__nav>.stepper__nav__buttons>.stepper__nav__buttons__button>* {
 		border: rem(2px) solid;
 		@include color-and-secondary(border-color, $button-colors);
 	}
 
 	.field {
 		margin-bottom: 0rem;
-
-		.additional {
-			height: rem(80px);
-
-			.explanation {
-				max-height: rem(40px);
-				overflow-y: auto;
-			}
-		}
 	}
 }
 
 .stepper {
 	position: relative;
 
-	.step-inner {
-		padding: rem(15px);
-		border-radius: inherit;
+	.flickity-viewport {
+		overflow: hidden auto;
 	}
 
-	.flickity-viewport {
-		padding-bottom: rem(60px);
+	&__h2 {
+		margin-top: 0
+	}
+
+	&__outer {
+		position: relative;
 	}
 
 	.form-step {
 		width: 100%;
-		padding: rem(5px);
 		box-sizing: border-box;
 
 		&:not(.is-selected) {
@@ -215,69 +204,81 @@ form {
 		}
 	}
 
-	.step-nav {
-		// margin-top: 25px;
-		// margin-bottom: 10px;
+	&__nav {
 		text-align: center;
-		position: relative;
-		// bottom: 5px;
-		left: 0rem;
 		width: 100%;
 		z-index: 1;
-		height: 0rem;
 
-		$dot-size: rem(8px);
-		.prog-dots {
+		$dot-size: 0.5rem;
+		&__dots {
 			height: $dot-size;
 			line-height: 0;
-			position: absolute;
 			width: 100%;
-			bottom: rem(15px);
-		}
 
-		.prog-dot {
-			display: inline-block;
-			margin: 0rem $dot-size;
-			width: $dot-size;
-			height: $dot-size;
-			border-radius: 50%;
-			@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
+			&__dot {
+				display: inline-block;
+				margin: 0rem $dot-size;
+				width: $dot-size;
+				height: $dot-size;
+				border-radius: 50%;
+				@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
 
-			&.current {
-				@include color-and-secondary(background-color, $button-colors);
+				&.current {
+					@include color-and-secondary(background-color, $button-colors);
+				}
 			}
 		}
 
-		.prog-buttons {
+		&__buttons {
 			list-style: none;
 			padding-inline-start: 0;
 			margin: 0rem;
 
-			li {
+			&__button {
 				display: inline-block;
-				position: absolute;
-				bottom: rem(35px);
 
-				&.next {
-					right: rem(20px);
+				&--next {
+					float: right;
 				}
 
-				&.prev {
-					left: rem(20px);
+				&--prev {
+					float: left;
+				}
+
+				&--last, input[type=submit] {
+					float: right;
+					line-height: rem(32px);
+					vertical-align: middle;
+					font-weight: bold;
+					display: inline;
+					width: auto;
+					font-size: 1.75rem;
 				}
 
 				button {
 					border: 2px solid transparent;
 				}
-			}
 
-			input[type=submit], button.last {
-				line-height: rem(32px);
-				vertical-align: middle;
-				font-weight: bold;
-				display: inline;
-				width: auto;
-				font-size: 1.75rem;
+				@media (min-width: $constrained-form-width + 3rem) {
+					position: absolute;
+
+					$button-offset: -20%;
+
+					&--next {
+						right: $button-offset;
+						top: 10rem;
+					}
+
+					&--prev {
+						left: $button-offset;
+						top: 10rem;
+					}
+
+					&--last, input[type=submit] {
+						right: $button-offset;
+						bottom: 0rem;
+					}
+				}
 			}
 		}
 	}

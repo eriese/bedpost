@@ -1,10 +1,12 @@
-<div class="centered-container">
+<% content_for :body_class, 'vertical-center' %>
+<% content_for :inner_class, 'container--full-height' %>
+<div class="container--centered-text container--full-height container--centering-child">
 	<h1><%= t('.title_html') %></h1>
-	<h2><%= t('.desc_html') %></h2>
-	<%= vuelidate_form_with model: @partnership, html: {class: "centered"}, vue: {':dynamic-validation' => "additional.uid"} do |f| %>
-		<%= f.wizard "{stepClass: 'step card'}" do %>
+	<%= vuelidate_form_with model: @partnership, html: {class: "centered container--centering-child__centered-child"}, vue: {':dynamic-validation' => "additional.uid"} do |f| %>
+		<%= f.wizard do %>
 			<%= f.step true do %>
-				<%= f.fields_for :partner do |pf1| %>
+				<h2 class="stepper__h2"><%= t_action('.desc_html') %></h2>
+				<%= f.fields_for :partner, @partnership.partner do |pf1| %>
 					<%= pf1.text_field :name,
 						tooltip: true,
 						required: false,
@@ -28,7 +30,7 @@
 			<%= f.text_field(:nickname, tooltip: {show_always: true}) %>
 
 			<%= f.step true, :"v-if" => '!vf.formData.uid || vf.$v.formData.uid.$invalid', ref: 'partner_attributes' do %>
-				<%= f.fields_for :partner do |pf2| %>
+				<%= f.fields_for :partner, @partnership.partner do |pf2| %>
 					<%= render 'profiles/fields', f: pf2, profile: @partnership.partner, show_name: false %>
 				<% end %>
 			<% end %>

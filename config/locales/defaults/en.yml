@@ -36,7 +36,7 @@ en:
   errors:
     messages:
       email: Please enter a valid email address.
-      blank: "%{attribute} can't be blank."
+      blank: Oops, this one's blank!
   reset:
     errors:
       email:

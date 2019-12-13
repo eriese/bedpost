@@ -1,21 +1,21 @@
 <template>
-	<div class="stepper" >
-		<div :class="stepClass">
-			<div class="step-inner" ref="inner" role="form" aria-labeledby="stepper-aria-label">
+	<div class="stepper container--full-height" >
+		<div :class="['stepper__outer container--centering-child container--full-height--constrained', stepClass]">
+			<div class="stepper__outer__inner container--centering-child__centered-child" ref="inner" role="form" aria-labeledby="stepper-aria-label">
 				<slot :step-ready="setStepComplete" :num-steps="numSteps"></slot>
 			</div>
-			<div class="step-nav">
-				<ul class="prog-buttons clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
-					<li class="next" v-if="curIndex == numSteps - 1">
-						<slot name="last-button"><button class="not-button last" type="button"@click="next">{{lastButton || "Send"}}</button></slot>
+			<div class="stepper__nav">
+				<ul class="stepper__nav__buttons clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
+					<li class="stepper__nav__buttons__button stepper__nav__buttons__button--last" v-if="curIndex == numSteps - 1">
+						<slot name="last-button"><button class="not-button last" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
-					<li v-for="btn in buttons" v-if="btn.if" :class="btn.clazz">
+					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__buttons__button']">
 						<arrow-button class="not-button" v-bind="btn"  @click="btn.click"></arrow-button>
 					</li>
 				</ul>
 
-				<div class="prog-dots" role="progressBar" aria-valuemin="1" :aria-valuemax="numSteps" :aria-valuenow="curIndex + 1" tabindex="0">
-					<div v-for="i in numSteps" class="prog-dot" :class="{current: i - 1 == curIndex}"></div>
+				<div class="stepper__nav__dots" role="progressBar" aria-valuemin="1" :aria-valuemax="numSteps" :aria-valuenow="curIndex + 1" tabindex="0">
+					<div v-for="i in numSteps" class="stepper__nav__dots__dot" :class="{current: i - 1 == curIndex}" :key="i"></div>
 				</div>
 			</div>
 		</div>
@@ -28,6 +28,7 @@ import {lazyParent} from '@mixins/lazyCoupled';
 
 /**
  * A component to make multi-step forms. Uses [Flickity]{@link https://github.com/metafizzy/flickity} to handle form step navigations
+ *
  * @module
  * @vue-data {Number} curIndex=0 the current step index
  * @vue-data {Number} internalInd=0 the index of the current step in the $children array
@@ -39,7 +40,7 @@ import {lazyParent} from '@mixins/lazyCoupled';
  * @listens module:components/stepper/FormStepComponent~step-ready
  */
 export default {
-	name: "form_stepper",
+	name: 'form_stepper',
 	mixins: [lazyParent],
 	data: function () {
 		return {
@@ -57,10 +58,11 @@ export default {
 				pageDots: false, // we're going to do our own page dots
 				wrapAround: false, // don't wrap around
 				freeScroll: false, // lock on steps
-				cellSelector: ".form-step",
-				draggable: false // we're going to manipulate draggable in the code
-			}
-		}
+				cellSelector: '.form-step',
+				draggable: false, // we're going to manipulate draggable in the code
+				setGallerySize: false,
+			},
+		};
 	},
 	props: {
 		uniform: { // should the heights of all the steps be uniform
@@ -72,31 +74,33 @@ export default {
 	},
 	watch: {
 		$children: function(newVal, oldVal) {
-			this.processChildren(newVal, oldVal)
+			this.processChildren(newVal, oldVal);
 		},
 		curIndex: function(newInd, oldInd) {
-			this.processIndex(newInd, oldInd)
+			this.processIndex(newInd, oldInd);
 		}
 	},
 	computed: {
-		buttons: function() {
+		defaultButtons() {
 			return [{
-				tKey: "next",
-				clazz: "next",
+				tKey: 'next',
+				clazz: 'stepper__nav__buttons__button--next',
 				if: this.curIndex < this.numSteps - 1,
 				bind: {
 					disabled: this.curStepPending
 				},
 				click: this.next,
-				// transform: "translate(100, 100) rotate(180)"
-				direction: "right"
+				direction: 'right'
 			}, {
-				tKey: "previous",
-				clazz: "prev",
+				tKey: 'previous',
+				clazz: 'stepper__nav__buttons__button--prev',
 				if: this.numSteps > 1 && this.curIndex > 0,
 				click: this.back
-			}]
-		}
+			}];
+		},
+		buttons() {
+			return this.defaultButtons.filter((b) => b.if === true);
+		},
 	},
 	methods: {
 		/** get the current step component */
@@ -105,7 +109,7 @@ export default {
 			return this.$children[this.internalInd];
 		},
 		/** process a change to the index */
-		processIndex: function(newInd, oldInd) {
+		processIndex: function(newInd) {
 			// set the internal index
 			this.internalInd = this.indexes[newInd];
 			// get the completeness of the new step
@@ -115,7 +119,7 @@ export default {
 		next: function() {
 			// don't move forward if the step is not ready
 			if (!this.getCurStep().checkComplete()) {
-				return
+				return;
 			}
 
 			// move forward using the flikity instance
@@ -127,7 +131,7 @@ export default {
 		back: function() {
 			// only if we're not already on the first one
 			if (this.curIndex > 0) {
-				this.flik.previous()
+				this.flik.previous();
 			}
 		},
 		/** find the next step that isn't ready */
@@ -136,12 +140,12 @@ export default {
 			let nextInd = this.completes.indexOf(false, this.curIndex);
 			// otherwise look in the whole array
 			if (nextInd == -1 && this.curIndex > 0) {
-				nextInd = this.completes.indexOf(false)
+				nextInd = this.completes.indexOf(false);
 			}
 
 			// select that cell
 			if(nextInd > -1) {
-				this.flik.selectCell(nextInd)
+				this.flik.selectCell(nextInd);
 			}
 		},
 		/** set the index (called from FLickity onChange) */
@@ -152,7 +156,7 @@ export default {
 		* (called from a lot of places including the blur event on the step's inputs) */
 		setStepComplete: function(isComplete) {
 			// if an isComplete isn't provided, get one from the current step
-			if (typeof isComplete != "boolean") {
+			if (typeof isComplete != 'boolean') {
 				isComplete = this.getCurStep().checkComplete();
 			}
 
@@ -160,7 +164,7 @@ export default {
 			this.completes[this.curIndex] = isComplete;
 			this.curStepPending = !isComplete;
 
-			if (this.isTouchDevice) {
+			if (this.isTouchDevice && this.flik) {
 				// allow dragging on the flickity instance if the step is ready
 				this.flik.options.draggable = isComplete;
 				this.flik.updateDraggable();
@@ -171,7 +175,7 @@ export default {
 			return this.completes.indexOf(false) == -1;
 		},
 		/** process the children to get information about the steps */
-		processChildren: function(newChildren, oldChildren) {
+		processChildren: function(newChildren) {
 			// make new arrays for the data
 			let newCompletes = [];
 			let newIndexes = [];
@@ -180,7 +184,7 @@ export default {
 			for (let i = 0; i < newChildren.length; i++) {
 				let child = newChildren[i];
 				// if it's a form step
-				if (child.$options.name == "form_step") {
+				if (child.$options.name == 'form_step') {
 					// get the child's previous index if it had one
 					let oldIndex = child.index;
 					// set its new index
@@ -191,7 +195,7 @@ export default {
 
 					// if the child hasn't changed indexes, keep its old isComplete value, otherwise set it to false
 					// all steps default to not ready because the user must at least visit them for them to be considered complete
-					newCompletes.push(oldIndex == child.index ? this.completes[oldIndex] : false)
+					newCompletes.push(oldIndex == child.index ? this.completes[oldIndex] : false);
 				}
 			}
 
@@ -207,12 +211,12 @@ export default {
 		},
 		onChildMounted: function() {
 			// make a flikity instance
-			this.flickityOptions.on = {change: this.setIndex}
+			this.flickityOptions.on = {change: this.setIndex};
 			this.flik = new Flickity(this.$refs.inner, this.flickityOptions);
 
 			// process the children
 			this.processChildren(this.$children);
-			this.$emit("stepper-mounted", this);
+			this.$emit('stepper-mounted', this);
 		}
 	},
 	mounted: function() {
@@ -227,5 +231,5 @@ export default {
 	beforeDestroy: function() {
 		this.flik.destroy();
 	}
-}
+};
 </script>

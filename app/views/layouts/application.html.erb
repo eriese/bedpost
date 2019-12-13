@@ -44,7 +44,7 @@
 			<%= yield :nav%>
 			<%= yield :header %>
 			<main id="page-container" ref="container">
-				<div id="page-container-inner">
+				<div id="page-container-inner" class="<%= content_for :inner_class %>">
 					<%= render "flash" %>
 					<%= yield :main %>
 				</div>

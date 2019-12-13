@@ -146,39 +146,81 @@ p.description {
 		@include color-and-secondary(color, $colors-h1, true);
 	}
 
-	header.small & {
+	header.header--small & {
 		text-align: left;
-		font-size: rem(39px);
+		font-size: rem(45px);
+		line-height: 1.35;
 		float: left;
 		padding-top: rem(10px);
 	}
 }
 
-#vue-container {
-	body.vertical-center & {
+
+body.vertical-center {
+	#vue-container {
 		display: flex;
 		flex-direction: column;
 		align-items:  stretch;
 		justify-content: space-around;
 		height: 100%;
 		width: 100%;
+	}
 
-		header {
+	header.header {
+		&--big {
 			flex-grow: 1;
 			display: flex;
 			align-self: center;
 			align-items: center;
 		}
 
-		main {
-			flex-grow: 2;
+		&--small {
+			flex-grow: 0;
+			position: absolute;
+			top: 0;
+			left: $nav-button-width + $spacing-medium;
 		}
+	}
+
+	main {
+		flex-grow: 2;
 	}
 }
 
 #page-container-inner {
 	max-width: rem(1000px);
 	margin: 0 auto;
+}
+
+.container {
+	&--centered-text {
+		text-align: center;
+	}
+
+	&--full-height {
+		height: 100%;
+
+		&--constrained {
+			height: 100%;
+			max-height: 30rem;
+		}
+	}
+
+	&--vertical-center {
+		display: flex;
+		align-items: center;
+		align-content: center;
+	}
+
+	&--centering-child {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+
+		&__centered-child {
+			flex-grow: 1;
+		}
+	}
 }
 
 .centered-container {
@@ -188,7 +230,7 @@ p.description {
 .centered-text {
 	text-align: center;
 }
-	
+
 .desc {
 	h1 + &, h2 + & {
 		line-height: 1rem;
