@@ -5,7 +5,7 @@
 				<slot :step-ready="setStepComplete" :num-steps="numSteps"></slot>
 			</div>
 			<div class="stepper__nav">
-				<ul class="stepper__nav__button-list" :aria-label="$root.t('helpers.form_stepper.button_container')">
+				<ul class="stepper__nav__button-list" :aria-label="$_t('helpers.form_stepper.button_container')">
 					<li class="stepper__nav__button-item stepper__nav__button-item--last" v-if="curIndex == numSteps - 1">
 						<slot name="last-button"><button class="link link--no-line" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
@@ -65,10 +65,6 @@ export default {
 		};
 	},
 	props: {
-		uniform: { // should the heights of all the steps be uniform
-			type: Boolean,
-			default: true
-		},
 		stepClass: String, // a class to add to steps
 		lastButton: String // text of the last button if nothing is provided for the slot
 	},
