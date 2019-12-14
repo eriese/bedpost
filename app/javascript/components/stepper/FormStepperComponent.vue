@@ -216,7 +216,13 @@ export default {
 		}
 	},
 	mounted: function() {
+		this.$on('step-added', () => {
+			this.processChildren(this.$children);
+		});
 
+		this.$on('step-removed', () => {
+			this.processChildren(this.$children);
+		});
 	},
 	beforeDestroy: function() {
 		this.flik.destroy();

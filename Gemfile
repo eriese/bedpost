@@ -49,6 +49,8 @@ gem 'delayed_job_mongoid'
 #handle env vars
 
 group :development, :test do
+	gem 'rspec-rails', '~> 3.8'
+	gem "rails-controller-testing"
 	# Call 'byebug' anywhere in the code to stop execution and get a debugger console
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 	gem 'pry'
@@ -88,11 +90,11 @@ group :development do
 end
 
 group :test do
-	gem 'rspec-rails', '~> 3.8'
-	gem "rails-controller-testing"
 	gem 'factory_bot_rails'
 	# Adds support for Capybara system testing and selenium driver
 	gem 'capybara', '>= 2.15'
+	gem 'launchy'
+	# gem 'selenium-webdriver'
 	# Easy installation and use of chromedriver to run system tests with Chrome
 	gem 'simplecov', require: false
 	gem 'codecov', require: false

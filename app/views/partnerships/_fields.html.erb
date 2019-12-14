@@ -1,5 +1,3 @@
-<%= f.text_field :nickname, tooltip: {show_always: true}%>
 <% Partnership::LEVEL_FIELDS.each do |field| %>
 	<%= f.range_field field, in: 1..10, step_options: {:":opts" => "{showAdditional: true}"}, after_method: :level_field_why_how, after_method_args: [f, field]%>
 <% end %>
-

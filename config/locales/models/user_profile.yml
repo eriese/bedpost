@@ -30,6 +30,8 @@ en:
               blank: Please tell us what you call your external genitals.
             uid:
               taken: That partnering ID is unavailable. Please try a different one.
+            tou:
+              acceptance: Please accept these terms in order to continue
   helpers:
     label:
       user_profile:

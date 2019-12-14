@@ -346,8 +346,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			builder = stub_builder options: {tooltip: true}
 			result = builder.send(:field_inner)
 
-			expected_tooltip = @f_builder.tooltip(@attr)
-			expect(result).to include(expected_tooltip)
+			expect(result).to include("<tooltip ")
 		end
 
 		it 'adds the given block at the end' do
@@ -386,7 +385,9 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 	describe '#field' do
 		it 'adds its attribute to the validation list on the form builder if has validations' do
-			stub_form_builder(validators:[double("PresenceValidator", {kind: :presence, options: {}})])
+			presence_validator = double("PresenceValidator", kind: :presence, options: {})
+			allow(presence_validator).to receive(:kind_of?) {|v| v == Mongoid::Validatable::PresenceValidator}
+			stub_form_builder(validators: [presence_validator])
 			@attr = :name
 			@f_builder.text_field(@attr)
 			expect(@f_builder.validations).to have_key @attr

@@ -1,0 +1,12 @@
+<div id="terms-of-use">
+	<div class="container--bounded">
+		<%= @terms.terms %>
+	</div>
+	<% unless @is_accepted %>
+		<%= vuelidate_form_with scope: :terms, method: :put  do |f| %>
+			<%= f.radio_group :acceptance, options: {checked_val: false, radio_class: "hidden-radio", group_options: {field_class: "toggler"}} %>
+			<%= f.radio_group :opt_in, options: {checked_val: false, radio_class: "hidden-radio", group_options: {field_class: "toggler", tooltip: true}} if @terms.type == :privacy%>
+			<%= f.submit %>
+		<% end %>
+	<% end %>
+</div>

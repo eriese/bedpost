@@ -48,7 +48,7 @@ module EncountersHelper
 		t_key = ".contact"
 		if contact.barriers.any?
 			t_key += "_with_barriers"
-			barrier_args = keys.slice(:object_instrument, :subject_instrument).merge({scope: "contact.barrier"})
+			barrier_args = keys.merge(scope: 'contact.barrier')
 			keys[:barriers] = contact.barriers.map { |b| t(b, barrier_args) }.join(t("and_delimeter"))
 		end
 
@@ -57,27 +57,24 @@ module EncountersHelper
 		content_tag(:li, {class: "contact-show"}) do
 			content_tag(:"drop-down") do
 				content_tag(:span, t(t_key, keys), {slot: "title"}) +
-				display_risks(contact)
+					content_tag(:template, "v-slot:button": 'sc') do
+						button_text = "{{sc.isOpen ? #{t('.display_risks_drop_down_html')}}}"
+						content_tag(:button, button_text, type: 'button', class: 'not-button')
+					end +
+					display_risks(contact)
 			end
 		end
 	end
 
 	def display_risks(obj)
-		@diagnoses ||= Diagnosis.as_map
-		grouped = obj.risks.each_with_object({}) do |(k,v), o|
-			next if v == Diagnosis::TransmissionRisk::NO_RISK
-			o[v] ||= []
-			o[v] << t(k, scope: "diagnosis.name_casual")
-		end
-		risks = grouped.each_with_object([]) do |(r, lst), a|
-			trans = t(".risk_line_html", {diagnosis: lst.join(t("join_delimeter")), level: t("diagnosis.transmission_risk.risk_level", {count: r})})
-			a << content_tag(:li, trans, {class: "risk-#{r}"})
-		end
+		is_encounter = obj.is_a? Encounter
+		grouped = group_risks_by_diagnosis(obj)
+		risk_items = risk_inner_html(grouped, is_encounter)
 
 		content_tag(:template, {:"v-slot:button" => "sc"}) do
 			content_tag(:button, "{{sc.isOpen ? #{t(".display_risks_drop_down_html")}}}", {type: "button", class: "link"}) unless obj.is_a?(Encounter)
 		end +
-		content_tag(:ul, safe_join(risks), {class: "risks-show"})
+		content_tag(:ul, safe_join(risk_items), {class: "risks-show"})
 	end
 
 	# write the html to display the recommended testing schedule based on the risks in this encounter
@@ -86,7 +83,7 @@ module EncountersHelper
 		was_forced = false
 
 		# sort the schedule dates, then loop
-		sched = encounter.schedule.keys.sort do |a,b|
+		sorted_keys = encounter.schedule.keys.sort do |a,b|
 			if a.is_a?(Symbol)
 				1
 			elsif b.is_a? Symbol
@@ -94,7 +91,8 @@ module EncountersHelper
 			else
 				a <=> b
 			end
-		end.each_with_object([]) do |dt, ary|
+		end
+		sched = sorted_keys.each_with_object([]) do |dt, ary|
 			#add a list item to the array
 			ary << content_tag(:li, {class: 'schedule-el'}) do
 				# if the date is :routing
@@ -131,15 +129,23 @@ module EncountersHelper
 			end
 		end
 
-		# make a ul to hold the generated list
-		ul = content_tag(:ul, safe_join(sched), options.merge({class: 'schedule-show'}))
-		# if it was forced, add a key
-		ul += content_tag(:div, t('encounters.show.advice.key_html'), {class: 'schedule-key'}) if was_forced
+		div = content_tag(:div, options) do
+			inner = if was_forced || sorted_keys[0] != :routine
+				content_tag(:p, t('encounters.show.advice.desc'))
+			else
+				ActiveSupport::SafeBuffer.new
+			end
 
-		ul
+			inner += content_tag(:ul, safe_join(sched), class: 'schedule-show')
+			if was_forced
+				inner += content_tag(:div, t('encounters.show.advice.key_html'), {class: 'schedule-key'})
+			end
+			inner
+		end
 	end
 
 	private
+
 	def get_possible(contact)
 		@possibles ||= PossibleContact.as_map
 		@possibles[contact.possible_contact_id]
@@ -157,4 +163,33 @@ module EncountersHelper
 		person == :user ? current_user_profile : @partner
 	end
 
+	def display_risk(risk_level, risk_list)
+		trans = t(
+			'.risk_line_html',
+			diagnosis: risk_list.join(t('join_delimeter')),
+			level: t('diagnosis.transmission_risk.risk_level', count: risk_level)
+		)
+		content_tag(:li, trans, class: "risk-#{risk_level}")
+	end
+
+	def risk_inner_html(risk_groups, is_encounter)
+		if risk_groups.empty?
+			[content_tag(:li, class: 'risk-0') do
+				content_tag(:span) do
+					t('.risks.no_risks' + (is_encounter ? '' : '_contact'))
+				end
+			end]
+		else
+			risk_groups.each_with_object([]) { |(r, lst), a| a << display_risk(r, lst) }
+		end
+	end
+
+	def group_risks_by_diagnosis(obj)
+		obj.risks.each_with_object({}) do |(k, v), o|
+			next if v == Diagnosis::TransmissionRisk::NO_RISK
+
+			o[v] ||= []
+			o[v] << t(k, scope: 'diagnosis.name_casual')
+		end
+	end
 end

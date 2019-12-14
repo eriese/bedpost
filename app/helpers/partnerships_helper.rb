@@ -1,8 +1,7 @@
 module PartnershipsHelper
 	def level_field_why_how(form_obj, attribute)
 		content_tag(:aside, class: "additional", slot: "additional") do
-			attr_explainer(form_obj, attribute, :why, :how) +
-			attr_explainer(form_obj, attribute, :how, :why)
+			attr_explainer(form_obj, attribute, :why, :how)
 		end
 	end
 

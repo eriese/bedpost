@@ -11,6 +11,8 @@ en:
           attributes:
             partnership_id:
               blank: Please choose a partner
+        contact:
+          incomplete: Oops, you left something blank here
   contact:
     contact_type:
       penetrated: penetrated
@@ -26,10 +28,13 @@ en:
       tongue: tongue
     barrier:
       none: no barrier
-      fresh: a new barrier
-      old: the same barrier
-      clean_object: a clean %{object_instrument}
-      clean_subject: a clean %{subject_instrument}
+      fresh: with a new barrier
+      old: with the same barrier
+      clean:
+        zero: "%{name} %{instrument} was clean"
+        one: "%{name} %{instrument} were clean"
+      clean_subject: "%{subject_possessive} clean %{subject_instrument}"
+      clean_object: "%{object_possessive} clean %{object_instrument"
   encounters:
     show:
       title_html: Encounter with %{partner}
@@ -49,11 +54,13 @@ en:
         fluid_exchange: Additional fluid exchange
       risks:
         title: The Overall Risks
+        no_risks: None! Nothing you did carried any risk
+        no_risks_contact: This activity carries no risk
       advice:
         title: Our Advice
         desc: "Based on the risks in this encounter, we think this is a good testing schedule:"
-        routine: "These ones probably don't call for getting tested ASAP; you can just get checked on your regular schedule"
-        show_anyway: Show me anyway
+        routine: "You probably don't need to get tested ASAP, but we think you should get checked for these on your regular schedule:"
+        show_anyway: Show me when my earliest test opportunities are anyway
         hide_lower_risk: Hide test dates for lower risk infections
         no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
         key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such a low risk"
