@@ -25,7 +25,7 @@
 					validators: [{kind: :require_unless_valid, options: {path: 'partner_attributes.name'}}]
 				%>
 			<% end %>
-
+			<% f.add_toggle(:tip, true) %>
 			<%= render "fields", f: f, partnership: @partnership %>
 			<%= f.text_field(:nickname, tooltip: {show_always: true}) %>
 

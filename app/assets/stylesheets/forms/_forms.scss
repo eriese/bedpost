@@ -170,7 +170,7 @@ form {
 }
 
 .flickity-enabled {
-	&:focus ~ .stepper__nav>.stepper__nav__buttons>.stepper__nav__buttons__button>* {
+	&:focus ~ .stepper__nav .stepper__nav__button-item>* {
 		border: rem(2px) solid;
 		@include color-and-secondary(border-color, $button-colors);
 	}
@@ -201,6 +201,7 @@ form {
 
 		&:not(.is-selected) {
 			visibility: hidden;
+			max-height: 100%;
 		}
 	}
 }
@@ -225,7 +226,7 @@ form {
 		border-radius: 50%;
 		@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
 
-		&.current {
+		&--current {
 			@include color-and-secondary(background-color, $button-colors);
 		}
 	}

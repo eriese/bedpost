@@ -39,7 +39,7 @@ export default {
 				animation: 'shift-away',
 				appendTo: () => this.$el,
 				arrow: true,
-				boundary: 'viewport',
+				boundary: 'scrollParent',
 				flip: true,
 				placement: 'top',
 				aria: null,

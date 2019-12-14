@@ -6,8 +6,8 @@
 			</div>
 			<div class="stepper__nav">
 				<ul class="stepper__nav__button-list clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
-					<li class="stepper__nav__button stepper__nav__button-item--last" v-if="curIndex == numSteps - 1">
-						<slot name="last-button"><button class="not-button last" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
+					<li class="stepper__nav__button-item stepper__nav__button-item--last" v-if="curIndex == numSteps - 1">
+						<slot name="last-button"><button class="not-button" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
 					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__button-item']">
 						<arrow-button class="not-button" v-bind="btn"  @click="btn.click"></arrow-button>
@@ -15,7 +15,7 @@
 				</ul>
 
 				<div class="stepper__nav__dots" role="progressBar" aria-valuemin="1" :aria-valuemax="numSteps" :aria-valuenow="curIndex + 1" tabindex="0">
-					<div v-for="i in numSteps" class="stepper__nav__dot" :class="{current: i - 1 == curIndex}" :key="i"></div>
+					<div v-for="i in numSteps" class="stepper__nav__dot" :class="{'stepper__nav__dot--current': i - 1 == curIndex}" :key="i"></div>
 				</div>
 			</div>
 		</div>
