@@ -4,5 +4,5 @@
 	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
 	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.contacts" base-name="<%= f.object_name %>[contacts_attributes]" @should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"></dynamic-field-list>
 	<%= f.check_box :fluids %>
-	<%= f.submit %>
+	<%= f.submit :class => "cta" %>
 <% end %>

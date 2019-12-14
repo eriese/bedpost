@@ -17,7 +17,7 @@
 		<%= f.password_field :password, validate: true, required: false %>
 		<%= f.password_field :password_confirmation, show_toggle: true, validate: true, required: false %>
 	<% end %>
-	<%= f.submit %>
+	<%= f.submit :class => "cta" %>
 <% end %>
 
 <% if resource.set_up? %>
@@ -25,8 +25,8 @@
 		<h2 class="with-desc"><%= t_action(".delete_profile.title") %></h2>
 		<p class="description"><%= t_action(".delete_profile.desc") %></p>
 		<%= f.password_field :current_password, required: true, show_toggle: true %>
-		<%= f.submit t_action(".delete_profile.submit") %>
+		<%= f.submit t_action(".delete_profile.submit"), :class => "cta" %>
 	<% end %>
 
-	<%= link_to "Back", :back %>
+	<%= link_to "Back", :back, :class => "link" %>
 <% end %>

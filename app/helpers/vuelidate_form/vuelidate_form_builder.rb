@@ -224,7 +224,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	def password_toggle
 		@template.content_tag(:div, {class: "additional", slot: "additional"}) do
 			@template.content_tag(:p) do
-				toggle_tag(:password, {class: "no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
+				toggle_tag(:password, {class: "link link--no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
 			end
 		end
 	end

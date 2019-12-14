@@ -3,7 +3,7 @@
 	<%= vuelidate_form_for(resource, as: resource_name, url: unlock_path(resource_name), require_all: true, html: { method: :post, class: "big centered"}) do |f| %>
 	  <%= render "devise/shared/error_messages", resource: resource %>
 	  <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-	  <%= f.submit "Resend unlock instructions" %>
+	  <%= f.submit "Resend unlock instructions", :class => "cta" %>
 	  <div class="additional"><%= render "devise/shared/links" %></div>
 	<% end %>
 </div>

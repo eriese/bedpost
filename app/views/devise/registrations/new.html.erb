@@ -6,7 +6,7 @@
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
     <%= f.password_field :password, autocomplete: "new-password" %>
     <%= f.password_field :password_confirmation, autocomplete: "new-password", show_toggle: true%>
-    <%= f.submit "Sign up", id: "signup-submit"%>
+    <%= f.submit "Sign up", id: "signup-submit", :class => "cta"%>
     <div class="additional">
       <%= render "devise/shared/links" %>
     </div>

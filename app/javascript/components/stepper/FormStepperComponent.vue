@@ -5,12 +5,12 @@
 				<slot :step-ready="setStepComplete" :num-steps="numSteps"></slot>
 			</div>
 			<div class="stepper__nav">
-				<ul class="stepper__nav__button-list clear-fix" :aria-label="$root.t('helpers.form_stepper.button_container')">
+				<ul class="stepper__nav__button-list" :aria-label="$root.t('helpers.form_stepper.button_container')">
 					<li class="stepper__nav__button-item stepper__nav__button-item--last" v-if="curIndex == numSteps - 1">
-						<slot name="last-button"><button class="not-button" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
+						<slot name="last-button"><button class="link link--no-line" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
 					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__button-item']">
-						<arrow-button class="not-button" v-bind="btn"  @click="btn.click"></arrow-button>
+						<arrow-button class="link" v-bind="btn"  @click="btn.click"></arrow-button>
 					</li>
 				</ul>
 

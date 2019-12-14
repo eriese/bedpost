@@ -1,0 +1,20 @@
+.link,
+input[type="submit"].not-button {
+	@include link;
+
+	&--is-secondary {
+		@include link($suffix: "-light");
+	}
+
+	body.secondary & {
+		@include link-colors($colors-dark);
+	}
+
+	&--no-line {
+		text-decoration: none;
+	}
+
+	// body.with-cards & {
+	// 	@include color-and-secondary(color, $colors-h2);
+	// }
+}

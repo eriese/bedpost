@@ -1,78 +1,16 @@
-a, button.not-button, input[type=submit].not-button, button.as-link {
-	cursor: pointer;
-	-webkit-appearance: none;
-	border: none;
-	@include color-and-secondary(box-shadow, none none, $and-card: true);
-	@include color-and-secondary(background-color, transparent transparent, $and-card: true);
-	@include color-and-secondary(color, $link-colors, $and-card: true);
-
-	&:hover, &:focus {
-		@include color-and-secondary(color, $link-hover-colors, $and-card: true);
-	}
-
-	body.with-cards & {
-		@include color-and-secondary(color, $colors-h2);
-	}
-}
-
-button.not-button, button.as-link, input[type=submit].not-button {
-	background: none;
-	border: none;
-	-webkit-appearance: none;
-	-moz-appearance:    none;
-	appearance:         none;
-	padding: 0rem;
-	background-color: transparent;
-	font-weight: 400;
-	text-transform: none;
-	border-radius: 0rem;
-	min-width: unset;
-	box-shadow: none;
-
-	&:hover, &:focus {
-		background-color: transparent;
-		border: none;
-	}
-}
-
-button.as-link {
-	text-decoration: underline;
-}
-
-button, input[type=submit], a.as-button {
-	@include cta;
-
-	body.secondary & {
-		@include cta($colors-dark);
-	}
-
-	form.centered & {
-		margin-top: rem(10px);
-	}
-
-	&.secondary-button {
-		@include cta($suffix: "-light");
-	}
-
-	form.big &, form.centered & {
-		margin-left: auto;
-		margin-right: auto;
-	}
-}
-
 .cta {
 	@include cta;
 
+	&--is-secondary {
+		@include cta-colors($suffix: "-light");
+	}
+
 	body.secondary & {
-		@include cta($colors-dark);
+		@include cta-colors($colors-dark);
 	}
 
 	form.centered & {
 		margin-top: rem(10px);
-	}
-
-	&--is-secondary {
-		@include cta($suffix: "-light");
 	}
 
 	form.big &, form.centered & {
@@ -81,20 +19,14 @@ button, input[type=submit], a.as-button {
 	}
 }
 
-button.inverse, button.transparent {
-	@include color-and-secondary(color, $button-colors);
+.dropdown.title-as-button > .dropdown-title {
+	cursor: pointer;
 }
 
-button.inverse {
-	@include color-and-secondary(background-color, $button-text-colors);
-}
-
-button.transparent {
-	background-color: transparent;
-	border: none;
-
+button.vs__deselect{
 	&:hover, &:focus {
 		background-color: transparent;
+		fill: $button-hover-color;
 	}
 }
 
@@ -152,28 +84,5 @@ button.arrow-button {
 	&.primary {
 		background-color: transparent;
 		border-color: transparent;
-	}
-}
-
-a.as-button {
-	text-decoration: none;
-	display: inline-flex;
-	align-items: center;
-	align-content: center;
-	box-sizing: border-box;
-	border-style: solid;
-	border-width: 1px;
-	text-align: center;
-	justify-content: center
-}
-
-.dropdown.title-as-button > .dropdown-title {
-	cursor: pointer;
-}
-
-button.vs__deselect{
-	&:hover, &:focus {
-		background-color: transparent;
-		fill: $button-hover-color;
 	}
 }
