@@ -1,6 +1,7 @@
 .link,
 input[type="submit"].not-button {
 	@include link;
+	@include link_colors($colors-light, $property: stroke);
 
 	&--is-secondary {
 		@include link($suffix: "-light");
@@ -14,6 +15,13 @@ input[type="submit"].not-button {
 		text-decoration: none;
 	}
 
+	svg {
+		stroke: inherit;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+	}
 	// body.with-cards & {
 	// 	@include color-and-secondary(color, $colors-h2);
 	// }

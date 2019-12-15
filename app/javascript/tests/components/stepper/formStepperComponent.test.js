@@ -134,4 +134,76 @@ describe('Form Stepper Component', () => {
 			expect(processIndex).toHaveBeenCalled();
 		});
 	});
+
+	describe('findNext', () => {
+		function setupWrapper(completes) {
+			const localVue = createLocalVue();
+
+			const FormStep = {
+				name: 'form_step',
+				render: (h) => h('div'),
+				methods: {
+					checkComplete: (index) => completes[index]
+				}
+			};
+
+			localVue.component('form-step', FormStep);
+			const slotContent = '<div>' + '<form-step/>'.repeat(completes.length) + '</div>';
+			return mount(FormStepperComponent, {
+				data() {
+					return {
+						completes
+					};
+				},
+				methods: {
+					$_t: jest.fn()
+				},
+				scopedSlots: {
+					default: slotContent
+				},
+				stubs: ['arrow-button'],
+				localVue,
+			});
+		}
+
+		describe('finds the next step that is incomplete', () => {
+			it('starts at the current index', () => {
+				const completes = [false, true, true, false];
+				const wrapper = setupWrapper(completes);
+				const flik = {
+					selectCell: jest.fn()
+				};
+
+				wrapper.vm.processChildren(wrapper.vm.$children);
+
+				wrapper.setData({
+					flik,
+					completes,
+					curIndex: 1,
+				});
+
+				wrapper.vm.findNext();
+				expect(flik.selectCell).toHaveBeenCalledWith(3);
+			});
+
+			it('loops around to the beginning if there are none following the current index', () => {
+				const completes = [false, false, true, true];
+				const wrapper = setupWrapper(completes);
+				const flik = {
+					selectCell: jest.fn()
+				};
+
+				wrapper.vm.processChildren(wrapper.vm.$children);
+
+				wrapper.setData({
+					flik,
+					completes,
+					curIndex: 2,
+				});
+
+				wrapper.vm.findNext();
+				expect(flik.selectCell).toHaveBeenCalledWith(0);
+			});
+		});
+	});
 });

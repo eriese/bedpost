@@ -94,14 +94,28 @@
 	text-decoration: none;
 }
 
-@mixin cta-colors($theme: $colors-light, $suffix: "") {
-	color: map-get($theme, "cta-text");
-	background-color: map-get($theme, "cta-bg#{$suffix}");
-	box-shadow: $box-shadow-val map-get($theme, "shadow");
+@mixin cta-text-colors($theme: $colors-light, $suffix: "", $property: color) {
+	#{$property}: map-get($theme, "cta-text");
 	&:hover, &:focus {
-		color: map-get($theme, "cta-bg#{$suffix}");
-		background-color: map-get($theme, "cta-text");
+		&:not(:disabled) {
+			#{$property}: map-get($theme, "cta-bg#{$suffix}");
+		}
 	}
+}
+
+@mixin cta-background-colors($theme: $colors-light, $suffix: "", $property: color) {
+	#{$property}: map-get($theme, "cta-bg#{$suffix}");
+	&:hover, &:focus {
+		&:not(:disabled) {
+			#{$property}: map-get($theme, "cta-text");
+		}
+	}
+}
+
+@mixin cta-colors($theme: $colors-light, $suffix: "") {
+	@include cta-text-colors($theme, $suffix, color);
+	@include cta-background-colors($theme, $suffix, background-color);
+	box-shadow: $box-shadow-val map-get($theme, "shadow");
 }
 
 @mixin cta($theme: $colors-light, $suffix: "") {
@@ -112,10 +126,12 @@
 ///////////////////////
 // link
 ///////////////////////
-@mixin link-colors($theme: $colors-light, $suffix: "") {
-	color: map-get($theme, "link");
+@mixin link-colors($theme: $colors-light, $suffix: "", $property: color) {
+	#{$property}: map-get($theme, "link");
 	&:hover, &:focus {
-		color: map-get($theme, "link-light#{$suffix}");
+		&:not(:disabled) {
+			#{$property}: map-get($theme, "link-light#{$suffix}");
+		}
 	}
 }
 

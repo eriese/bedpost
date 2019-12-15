@@ -1,8 +1,13 @@
 .cta {
 	@include cta;
+	@include cta-text-colors($colors-light, $property: stroke);
 
 	&--is-secondary {
 		@include cta-colors($suffix: "-light");
+	}
+
+	svg {
+		stroke: inherit;
 	}
 
 	body.secondary & {
@@ -40,10 +45,6 @@ button.arrow-button {
 	height: rem(40px);
 	width: rem(40px);
 
-	&:not(.not-button):not(.as-link) {
-		padding: 0rem;
-	}
-
 	&:disabled {
 		opacity: 0.5;
 		cursor: initial;
@@ -53,22 +54,7 @@ button.arrow-button {
 		height: 75%;
 		vertical-align: middle;
 		fill: transparent;
-		stroke: $button-text-color;
 		stroke-width: 15;
-	}
-
-	&:not(:disabled):hover svg {
-		stroke: $button-hover-color;
-	}
-
-	&.not-button {
-		svg {
-			stroke: $link-color;
-		}
-
-		&:not(:disabled):hover svg {
-			stroke: $link-hover-color;
-		}
 	}
 
 	&.inverse, &.transparent {

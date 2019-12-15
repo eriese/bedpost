@@ -10,7 +10,7 @@
 						<slot name="last-button"><button class="link link--no-line" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
 					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__button-item']">
-						<arrow-button class="link" v-bind="btn"  @click="btn.click"></arrow-button>
+						<arrow-button class="link" v-bind="btn.bind"  @click="btn.click"></arrow-button>
 					</li>
 				</ul>
 
@@ -83,10 +83,10 @@ export default {
 				clazz: 'stepper__nav__button-item--next',
 				if: this.curIndex < this.numSteps - 1,
 				bind: {
-					disabled: this.curStepPending
+					disabled: this.curStepPending,
+					direction: 'right',
 				},
 				click: this.next,
-				direction: 'right'
 			}, {
 				tKey: 'previous',
 				clazz: 'stepper__nav__button-item--prev',
