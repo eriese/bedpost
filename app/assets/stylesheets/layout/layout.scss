@@ -9,9 +9,17 @@ html, body {
 
 body {
 	font-family: $text-font;
+	color: theme-light("text");
+	background-color: theme-light("background");
 	@include color-and-secondary(color, $color-black $color-white, true, true);
 	@include color-and-secondary(background-color, $background-colors, true, true);
 	font-size: rem(15px);
+
+	&.dark {
+		font-family: $text-font;
+		color: theme-dark("text");
+		background-color: theme-dark("background");
+	}
 
 	&.with-cards {
 		@include color-and-secondary(background-color, $background-colors-secondary, $on-body: true);

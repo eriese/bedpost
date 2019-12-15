@@ -19,19 +19,17 @@ function hex2rgba(hex, opacity){
 
 const sassColors = {
 	asRgba(key, opacity) {
-		let whichColor = document.body.classList.contains('secondary') ? 1 : 0;
-		return hex2rgba(this[key][whichColor], opacity);
+		opacity = opacity === undefined ? 1 : opacity;
+		let whichColor = document.body.classList.contains('dark') ? 'darkTheme' : 'lightTheme';
+		return hex2rgba(this[whichColor][key], opacity);
 	}
 };
 
 for (let k in sassDefaults) {
-	let val = sassDefaults[k];
-
-	if(k.includes('Colors') && val.includes(' ')) {
-		val = val.split(' ');
-	}
-
-	sassColors[k.replace('Colors', 'Color')] = val;
+	let keySplit = k.split('-');
+	let key = keySplit.shift();
+	sassColors[key] = sassColors[key] || {};
+	sassColors[key][keySplit.join('-')] = sassDefaults[k];
 }
 
 export default sassColors;

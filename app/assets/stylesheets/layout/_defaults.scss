@@ -95,7 +95,8 @@ $colors-light: (
 	"link-light": #AF6A64,
 	"shadow": rgba($color-black, 0.5),
 	"h1": #433060,
-	"background": $color-white
+	"background": $color-white,
+	"text": $color-black
 );
 
 $colors-dark: (
@@ -106,8 +107,16 @@ $colors-dark: (
 	"link-light": #C78DAB,
 	"shadow": rgba($color-white, 0.5),
 	"h1": #FFD6CC,
-	"background": $dark-background
+	"background": $dark-background,
+	"text": $color-white
 );
+
+:export {
+	@each $key, $value in $colors-dark {
+		darkTheme-#{unquote($key)}: $value;
+		lightTheme-#{unquote($key)}: map-get($colors-light, $key);
+	}
+}
 
 $colors1-button-primary: #7A405E;
 $colors1-button-secondary: #AF6A64;
@@ -176,12 +185,6 @@ $input-border-color-focus-secondary: $colors2-button-secondary;
 
 $input-border-colors: $input-border-color $input-border-color-secondary;
 $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-secondary;
-
-:export {
-	backgroundColors: $background-colors;
-	backgroundColorsSecondary: $background-colors-secondary;
-	buttonColors: $button-colors;
-}
 
 ///////////////////////
 // sizing

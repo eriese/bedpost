@@ -67,7 +67,7 @@ form {
 		font-size: rem(12px);
 		line-height: 1;
 
-		body.secondary &, body.secondary.with-cards .card & {
+		body.dark &, body.dark.with-cards .card & {
 			color: $colors2-h1;
 		}
 	}

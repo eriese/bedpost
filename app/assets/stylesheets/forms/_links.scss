@@ -7,7 +7,7 @@ input[type="submit"].not-button {
 		@include link($suffix: "-light");
 	}
 
-	body.secondary & {
+	body.dark & {
 		@include link-colors($colors-dark);
 	}
 

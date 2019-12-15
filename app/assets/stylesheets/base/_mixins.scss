@@ -35,22 +35,22 @@
 		margin-top: 0;
 	}
 
-	@include color-and-secondary(color, $colors-h1);
+	color: theme-light("h1");
 
 	body.with-cards & {
 		color: $color-white;
 	}
 
 	body.with-cards .card & {
-		color: $colors1-h1;
+		color: theme-light("h1");
 	}
-	body.secondary.with-cards .card & {
-		color: $colors2-h1;
+	body.dark &, body.dark.with-cards .card & {
+		color: theme-dark("h1");
 	}
 }
 
 @mixin heading2 {
-	@include color-and-secondary(color, $colors-h2);
+	color: theme-light("h2");;
 	font-weight: 700;
 	font-size: rem(24px);
 	text-align: center;
@@ -60,11 +60,11 @@
 	}
 
 	body.with-cards .card & {
-		color: $colors1-h2;
+		color: theme-light("h2");
 	}
 
-	body.secondary.with-cards .card & {
-		color: $colors2-h2;
+	body.dark &, body.dark.with-cards .card & {
+		color: theme-dark("h2");
 	}
 
 	&.with-desc {

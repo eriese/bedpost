@@ -15,7 +15,7 @@
 		stroke: inherit;
 	}
 
-	body.secondary & {
+	body.dark & {
 		@include cta-colors($colors-dark);
 
 		&--is-secondary {
