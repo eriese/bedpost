@@ -116,13 +116,6 @@
 		position: absolute;
 		right: rem(8px);
 		top: rem(8px);
-
-		button.arrow-button {
-			$size: 30px;
-			height: rem($size);
-			width: rem($size);
-			line-height: rem($size * 0.8);
-		}
 	}
 
 	>.dropdown-content {

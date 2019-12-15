@@ -262,37 +262,17 @@ span.confirmation {
 	@extend .rounded-container;
 	background-color: $color-purple-dark;
 	color: $color-off-white;
-
-	button.arrow-button.primary svg {
-		&:hover, &:focus {
-			stroke: $color-purple-light;
-		}
-	}
 }
 
 .light-container {
 	@extend .rounded-container;
 	background-color: $color-purple-light;
 	color: $color-off-white;
-
-	button.arrow-button.primary svg {
-		&:hover, &:focus {
-			stroke: $color-purple-dark;
-		}
-	}
 }
 
 .gray-container {
 	@extend .rounded-container;
 	background-color: $color-light-gray;
-
-	button.arrow-button.primary svg {
-		stroke: $color-purple-light;
-
-		&:hover, &:focus {
-			stroke: $color-purple-dark;
-		}
-	}
 }
 
 .dark-gray-container {
