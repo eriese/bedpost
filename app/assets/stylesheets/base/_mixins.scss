@@ -21,6 +21,23 @@
 	}
 }
 
+@mixin themed($prop: background-color, $map-key: "background") {
+	#{$prop}: theme-light($map-key);
+
+	body.dark & {
+		#{$prop}: theme-dark($map-key);
+	}
+}
+
+@mixin themed-with-cards($prop: background-color, $map-key: "background") {
+	body.with-cards & {
+		#{$prop}: theme-light($map-key);
+	}
+
+	body.dark.with-cards & {
+		#{$prop}: theme-dark($map-key);
+	}
+}
 ///////////////////////
 // text styles
 ///////////////////////
@@ -30,20 +47,20 @@
 	margin: 0.5rem 0;
 	text-align: center;
 	line-height: 1.15;
+	color: theme-light("h1");
 
 	&.header {
 		margin-top: 0;
 	}
 
-	color: theme-light("h1");
-
 	body.with-cards & {
 		color: $color-white;
 	}
 
-	body.with-cards .card & {
+	body.with-cards .card &, body.dark.with-cards & {
 		color: theme-light("h1");
 	}
+
 	body.dark &, body.dark.with-cards .card & {
 		color: theme-dark("h1");
 	}
@@ -83,7 +100,7 @@
 @mixin cta-base {
 	cursor: pointer;
 	padding: rem(10px) $spacing-default;
-	transition: 0.1s linear color, background-color, box-shadow;
+	transition: 0.3s linear color, background-color, box-shadow, stroke;
 	cursor: pointer;
 	border-style: none;
 	font-weight: 800;

@@ -35,7 +35,7 @@
 		<% end %>
 	</head>
 
-	<body class="<%= content_for :body_class %>">
+	<body class="<%= content_for :body_class || 'light' %>">
 		<%= javascript_tag nonce: true do%>
 			<%= include_gon(need_tag: false)%>
 		<% end %>

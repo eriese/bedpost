@@ -1,14 +1,14 @@
-nav {
+.main-nav {
 	position: relative;
 	left: 0rem;
 	top: 0rem;
 	z-index: 100;
 	float: left;
 
-	.burger {
+	&__burger {
+		cursor: pointer;
 		min-width: unset;
-		border: rem(2px) solid;
-		@include color-and-secondary(border-color, $button-colors);
+		background-color: transparent;
 		margin: rem(10px);
 		width: $nav-button-width;
 		border-radius: rem(5px);
@@ -16,29 +16,30 @@ nav {
 		z-index: 2;
 		padding: 0rem;
 		box-sizing: content-box;
-		@include color-and-secondary(box-shadow, none none);
+		box-shadow: none;
+		border: 2px solid;
+		@include themed(border-color, "background-contrast");
+		@include themed-with-cards(border-color, "background");
 
-		.burger-line {
-			@include color-and-secondary(background-color, $button-colors);
-			height: rem(3px);
+		&:hover, &:focus, &--open {
+			@include themed(border-color, "background");
+			@include themed(background-color, "background-contrast");
+			@include themed-with-cards(border-color, "background-contrast");
+			@include themed-with-cards(background-color, "background");
+		}
+
+		&__line {
+			border: rem(1.5px) solid;
+			border-color: inherit;
 			margin: rem(6.5px) rem(5px);
 		}
 
 		.no-js & {
 			display: none;
 		}
-
-		&.open, &:hover, &:focus {
-			@include color-and-secondary(background-color, $button-colors);
-			@include color-and-secondary(border-color, $button-colors);
-
-			.burger-line {
-				@include color-and-secondary(background-color, $background-colors);
-			}
-		}
 	}
 
-	.menu {
+	&__menu {
 		overflow: hidden;
 		position: absolute;
 		padding-top: rem(57px);
@@ -56,54 +57,81 @@ nav {
 		}
 	}
 
-	ul {
+	&__list {
 		padding-inline-start: 0rem;
 		margin: 0rem;
 		width: $nav-width;
-		@include color-and-secondary(background-color, $button-colors);
 		border-right: 1px solid;
-		@include color-and-secondary(border-color, $background-colors);
 		height: 100%;
 		box-sizing: border-box;
+		@include themed(background-color, "background-contrast");
+		@include themed(color, "background");
+		@include themed-with-cards(background-color, "background");
+		@include themed-with-cards(color, "background-contrast");
 	}
 
-	li {
+	&__list-item {
 		list-style: none;
 		font-size: rem(26px);
 		line-height: rem(26px);
 		overflow: hidden;
 		white-space: nowrap;
 
-		&.no-link {
+		&--user-name {
 			color: $color-off-white;
 			font-weight: bold;
 			padding: rem(15px) rem(10px) rem(10px);
 		}
 
-		form>input[type=submit].not-button {
-			background-color: transparent;
-			width: 100%;
-			text-align: inherit;
-		}
-
-		a, span, form>input[type=submit].not-button {
+		&__link {
 			text-decoration: none;
-			@include color-and-secondary(color, $background-colors);
 			display: block;
 			height: 100%;
 			padding: rem(15px) rem(5px) rem(15px) rem(15px);
-		}
+			width: 100%;
+			text-align: left;
+			@include themed(color, "background");
+			@include themed-with-cards(color, "cta-bg");
 
-		a, form>input[type=submit].not-button {
-			box-shadow: none;
-			&:hover, &:focus {
-				@include color-and-secondary(background-color, rgba($colors2-button-primary, 0.5) rgba($colors1-button-primary, 0.5));
-				@include color-and-secondary(color, $background-colors);
+			&--selected {
+				background-color: theme-dark("cta-bg");
+				color: theme-dark("cta-text");
+			}
+
+			&--not-selected:not(:disabled) {
+				&:hover, &:focus {
+					color: theme-dark("cta-text");
+					background-color: rgba(theme-dark("cta-bg"), 0.5);
+				}
 			}
 		}
+	}
 
-		span {
-			@include color-and-secondary(background-color, $colors2-button-secondary $colors1-button-primary);
+	body.dark & {
+		&__burger {
+			box-shadow: none;
+		}
+
+		&__list-item__link {
+			&--selected {
+				background-color: theme-light("cta-bg");
+				color: theme-light("cta-text");
+			}
+
+			&--not-selected:not(:disabled) {
+				&:hover, &:focus {
+					color: theme-light("cta-text");
+					background-color: rgba(theme-light("cta-bg"), 0.5);
+				}
+			}
+		}
+	}
+
+	body.light.with-cards & {
+		&__list-item {
+			&--user-name {
+				color: theme-light('h1');
+			}
 		}
 	}
 }

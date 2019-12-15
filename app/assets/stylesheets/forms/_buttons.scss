@@ -6,6 +6,11 @@
 		@include cta-colors($suffix: "-light");
 	}
 
+	&--inverse {
+		@include cta-text-colors($colors-light, $property: background-color);
+		@include cta-background-colors($colors-light, $property: color);
+	}
+
 	&:disabled {
 		opacity: 0.5;
 		cursor: initial;
@@ -19,7 +24,12 @@
 		@include cta-colors($colors-dark);
 
 		&--is-secondary {
-			@include cta-colors($suffix: "-light");
+			@include cta-colors($colors-dark, $suffix: "-light");
+		}
+
+		&--inverse {
+			@include cta-text-colors($colors-dark, $property: background-color);
+			@include cta-background-colors($colors-dark, $property: color);
 		}
 	}
 
