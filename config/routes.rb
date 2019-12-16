@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 	devise_scope :user_profile do
-		root to: 'user_profiles#show'
 		get 'signup', to: 'user_profiles/registrations#new', as: :new_user_profile_registration
 		post 'profile', to: 'user_profiles/registrations#create'
 		get 'signup/cancel', to: 'user_profiles/registrations#cancel', as: :cancel_user_profile_registration
@@ -14,6 +13,9 @@ Rails.application.routes.draw do
 			password: 'recover', confirmation: 'confirm',
 			unlock: 'unlock',
 	}
+	authenticated :user_profile do
+		root to: 'user_profiles#show'
+	end
 
 	get 'partners/uniqueness', to: 'partnership_whos#check'
 
@@ -36,6 +38,6 @@ Rails.application.routes.draw do
 	resources :terms, only: [:show, :update]
 
 	#TODO this is temporary
-	root to: 'devise/sessions#new'
+	root to: redirect('/signup')
 	# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
