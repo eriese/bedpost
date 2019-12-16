@@ -19,7 +19,6 @@ function hex2rgba(hex, opacity){
 
 const sassColors = {
 	asRgba(key, opacity) {
-		opacity = opacity === undefined ? 1 : opacity;
 		let whichColor = document.body.classList.contains('dark') ? 'darkTheme' : 'lightTheme';
 		return hex2rgba(this[whichColor][key], opacity);
 	}
