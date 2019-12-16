@@ -1,6 +1,5 @@
 namespace :eb do
-	desc 'set the master key environment variable and then deploy'
-	task :deploy, [:environment_name] do |t, args|
+	def deploy_to_environment(args)
 		environment_name = args[:environment_name]
 		sh "eb use #{environment_name}" if environment_name.present?
 
@@ -30,6 +29,17 @@ namespace :eb do
 
 		build_name = "#{environment_name}:#{branch_name}#{branch_name.empty? ? '' : '.'}#{commit_name}"
 		puts "Deploying build #{build_name} to #{environment_name}"
+		build_name
+	end
+
+	desc 'set the master key environment variable and then deploy'
+	task :deploy, [:environment_name] do |t, args|
+		build_name = deploy_to_environment args
 		sh "eb deploy -l #{build_name}"
+	end
+
+	task :deploy_staged, [:environment_name] do |t, args|
+		build_name = deploy_to_environment args
+		sh "eb deploy -l #{build_name}-staged --staged"
 	end
 end
