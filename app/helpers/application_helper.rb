@@ -31,7 +31,13 @@ module ApplicationHelper
 		t(new_key, options)
 	end
 
-	def body_class(clss)
+	def body_class(clss = nil)
+		if clss.nil?
+			content = content_for :body_class
+			body_class('light') unless content.match(/(^|\s)(dark|light)(\s|$)/)
+			return content_for :body_class
+		end
+
 		content_for(:body_class, ' ') if content_for? :body_class
 		content_for :body_class, clss
 	end

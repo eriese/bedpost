@@ -11,6 +11,22 @@
 		@include cta-background-colors($colors-light, $property: color);
 	}
 
+	&--compact {
+		padding: $spacing-tiny $spacing-small;
+		min-width: unset;
+	}
+
+	&--square {
+		padding: 50% 0%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 0;
+		line-height: 1;
+		text-align: center;
+		border-radius: $default-border-radius;
+	}
+
 	&:disabled {
 		opacity: 0.5;
 		cursor: initial;

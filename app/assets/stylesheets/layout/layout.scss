@@ -43,6 +43,7 @@ header {
 main {
 	clear: both;
 	padding: rem(10px);
+	padding-bottom: $spacing-default;
 	opacity: 0;
 
 	.no-js & {
@@ -98,12 +99,12 @@ p.description {
 	text-align: center;
 	font-weight: bold;
 	clear: both;
-	margin-bottom: $spacing-default;
 
 	> div {
 		padding: 0.25rem;
 		border: rem(3px) solid transparent;
 		border-radius: $default-border-radius;
+		margin-bottom: $spacing-default;
 	}
 
 	.flash-notice {

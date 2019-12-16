@@ -62,11 +62,12 @@
 			&--big {
 				display: block;
 				text-align: center;
+				flex-grow: 0;
 			}
 		}
 
-		&.body--without-auth #vue-container {
-			display: block;
+		&.body--with-columns #vue-container {
+			justify-content: flex-start;
 		}
 	}
 }

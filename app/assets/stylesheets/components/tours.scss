@@ -1,0 +1,46 @@
+.cta--tourguide {
+	float: right;
+	width: 0;
+	min-width: unset;
+	width: 2rem;
+	height: 2rem;
+	line-height: 2rem;
+	padding: 0;
+	margin: $spacing-default;
+}
+
+.v-tour {
+	.v-step {
+		@include themed-inverse($map-key: "background");
+		@include themed-inverse(color, "text");
+
+		&__arrow {
+			@include themed-inverse(border-color, "background");
+		}
+
+		&__cta {
+			margin: 0 $spacing-small;
+		}
+	}
+}
+
+.first-time {
+	max-width: 26rem;
+	margin: 0px auto;
+	&__button-list {
+		display: flex;
+		justify-content: space-around;
+		margin-inline-start: 0;
+		padding-inline-start: 0;
+		margin-block-start: 0;
+	}
+
+	&__button-item {
+		flex-basis: 45%;
+		flex-grow: 0;
+		flex-shrink: 0;
+		padding: $spacing-default;
+		font-size: 1.15rem;
+		width: 0;
+	}
+}

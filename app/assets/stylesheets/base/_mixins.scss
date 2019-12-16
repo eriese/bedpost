@@ -22,15 +22,27 @@
 }
 
 @mixin themed($prop: background-color, $map-key: "background") {
-	#{$prop}: theme-light($map-key);
+	body.light & {
+		#{$prop}: theme-light($map-key);
+	}
 
 	body.dark & {
 		#{$prop}: theme-dark($map-key);
 	}
 }
 
+@mixin themed-inverse($prop: background-color, $map-key: "background") {
+	body.light & {
+		#{$prop}: theme-dark($map-key);
+	}
+
+	body.dark & {
+		#{$prop}: theme-light($map-key);
+	}
+}
+
 @mixin themed-with-cards($prop: background-color, $map-key: "background") {
-	body.with-cards & {
+	body.light.with-cards & {
 		#{$prop}: theme-light($map-key);
 	}
 

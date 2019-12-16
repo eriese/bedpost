@@ -1,5 +1,31 @@
 <template>
-	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks" ref="tour-el"/>
+	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks" ref="tour-el">
+		<template slot-scope="tour">
+			<transition name="fade">
+				<v-step
+					v-if="tour.currentStep === index"
+					v-for="(step, index) of tour.steps"
+					:key="index"
+					:step="step"
+					:previous-step="tour.previousStep"
+					:next-step="tour.nextStep"
+					:stop="tour.stop"
+					:is-first="tour.isFirst"
+					:is-last="tour.isLast"
+					:labels="tour.labels"
+				>
+					<div slot="actions">
+						<div class="v-step__buttons">
+							<button @click.prevent="tour.stop" v-if="!tour.isLast" class="cta cta--inverse cta--compact v-step__cta">{{ tour.labels.buttonSkip }}</button>
+							<button @click.prevent="tour.previousStep" v-if="!tour.isFirst" class="cta cta--inverse cta--compact v-step__cta">{{ tour.labels.buttonPrevious }}</button>
+							<button @click.prevent="tour.nextStep" v-if="!tour.isLast" class="cta cta--inverse cta--compact v-step__cta">{{ tour.labels.buttonNext }}</button>
+							<button @click.prevent="tour.stop" v-if="tour.isLast" class="cta cta--inverse cta--compact v-step__cta">{{ tour.labels.buttonStop }}</button>
+						</div>
+					</div>
+				</v-step>
+			</transition>
+		</template>
+	</component>
 </template>
 
 <script>

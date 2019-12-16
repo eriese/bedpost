@@ -202,6 +202,7 @@ form {
 		&:not(.is-selected) {
 			visibility: hidden;
 			max-height: 100%;
+			overflow: hidden;
 		}
 	}
 }

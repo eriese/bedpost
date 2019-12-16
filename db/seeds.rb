@@ -124,3 +124,36 @@ PossibleContact.find_by(contact_type: :fisted, subject_instrument_id: :hand, obj
 PossibleContact.find_by(contact_type: :touched, subject_instrument_id: :hand, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: NEGLIGIBLE}) }
 PossibleContact.find_by(contact_type: :penetrated, subject_instrument_id: :hand, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map {|t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: LOW})}
 PossibleContact.find_by(contact_type: :fisted, subject_instrument_id: :hand, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: LOW, risk_to_object: LOW}) } + [Diagnosis::TransmissionRisk.new({diagnosis_id: :hep_c, risk_to_subject: HIGH, risk_to_object: HIGH})]
+
+#############################
+# TOURS
+#############################
+def insert_tours(tour_configs)
+	orig_locale = I18n.locale
+	tour_configs.each do |page_name, tour_nodes|
+		tour = Tour.find_or_create_by(page_name: page_name)
+		tour.tour_nodes = tour_nodes.map do |node|
+			tour_node = TourNode.new(target: node[:target], position: node[:position])
+			node[:content].each do |locale, txt|
+				I18n.locale = locale
+				tour_node.content = txt
+			end
+			tour_node
+		end
+
+		tour.save
+	end
+	I18n.locale = orig_locale
+end
+
+tour_configs = {
+	'-profile' => [{
+		target: '.description',
+		position: 0,
+		content: {
+			en: 'We created your account! Before we get into the fun stuff, tell us about you so we can talk about you in ways that feel good and fun.'
+		}
+	}]
+}
+
+insert_tours(tour_configs)
