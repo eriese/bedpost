@@ -1,37 +1,14 @@
-<% content_for :body_class, 'with-cards vertical-center secondary' %>
-<div class="vertical-center">
-	<div class="columns">
-		<div class="landing-text column">
-			<h1 class="header">Let's talk about risk</h1>
-
-			<p>It's a fact: the only risk-free sex is no sex. But there are a limitless reasons to have sex, and limitless ways, and we think that's worthwhile. </p>
-
-			<h2>Is risk limitless too?</h2>
-
-			<p>The good news is, it's not. There are a lot of scare tactics and myths out there that can leave us confused about how much risk our sex lives really involve: Can we get or give an STI from that? When should we get tested? What will happen if a test comes back positive?</p>
-
-			<h2>BedPost wants you to have the answers</h2>
-			<p>Tailored to your body and the sex you have with it, BedPost helps you go confidently into the risky world of sex and handle what comes.</p>
-
-			<p> And if you want to figure out how to reduce your risk? We've got tips for that too, but we're not pushy about it.</p>
-
+<div class="login column">
+	<h1>Log in</h1>
+	<%= vuelidate_form_with model: resource, as: resource_name, url: session_path(resource_name), class: "big centered", require_all: true do |f| %>
+		<%= f.email_field :email, autofocus: true, autocomplete: "email", skip_validations: [:uniqueness] %>
+		<%= f.password_field :password, autocomplete: "current-password", show_toggle: true %>
+		<% if devise_mapping.rememberable? %>
+			<%= f.check_box :remember_me %>
+			<% end %>
+		<%= f.submit "Log in", :class => "cta" %>
+		<div class="additional">
+			<%= render "devise/shared/links" %>
 		</div>
-		<div class="login column">
-			<div class="card">
-				<h1>Log in</h1>
-				<%= vuelidate_form_with model: resource, as: resource_name, url: session_path(resource_name), class: "big centered", require_all: true do |f| %>
-					<%= f.email_field :email, autofocus: true, autocomplete: "email", skip_validations: [:uniqueness] %>
-					<%= f.password_field :password, autocomplete: "current-password", show_toggle: true %>
-					<% if devise_mapping.rememberable? %>
-						<%= f.check_box :remember_me %>
-						<% end %>
-					<%= f.submit "Log in", :class => "cta" %>
-					<div class="additional">
-						<%= render "devise/shared/links" %>
-					</div>
-				<% end %>
-			</div>
-		</div>
-
-	</div>
+	<% end %>
 </div>

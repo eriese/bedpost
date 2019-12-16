@@ -1,9 +1,10 @@
 <div class="login">
-	<h1>Forgot your password?</h1>
+	<h1><%= t('.title') %></h1>
+	<h2><%= t('.desc') %></h2>
 	<%= vuelidate_form_for(resource, as: resource_name, url: password_path(resource_name), required_all: true, html: { method: :post, class: "big centered" }) do |f| %>
-	  <%= render "devise/shared/error_messages", resource: resource %>
-	  <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-	  <%= f.submit "Send me reset password instructions", :class => "cta" %>
-	  <div class="additional"><%= render "devise/shared/links" %></div>
+		<%= render "devise/shared/error_messages", resource: resource %>
+		<%= f.email_field :email, autofocus: true, autocomplete: "email", skip_validations: [:uniqueness] %>
+		<%= f.submit :class => "cta" %>
+		<div class="additional"><%= render "devise/shared/links" %></div>
 	<% end %>
 </div>
