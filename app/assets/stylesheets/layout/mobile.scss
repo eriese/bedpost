@@ -59,14 +59,14 @@
 	body.vertical-center{
 
 		header.header {
-			&--big {
+			&--is-big {
 				display: block;
 				text-align: center;
 				flex-grow: 0;
 			}
 		}
 
-		&.body--with-columns #vue-container {
+		&.body--has-columns #vue-container {
 			justify-content: flex-start;
 		}
 	}

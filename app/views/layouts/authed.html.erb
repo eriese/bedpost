@@ -1,9 +1,10 @@
+<% body_class 'body--has-auth' %>
 <% content_for :nav do %>
 	<%= render "nav" %>
 <% end %>
 
 <% content_for :header  do%>
-	<header class="header--small">
+	<header class="header--is-small">
 		<%= link_to 'BedPost', root_path, id: "logo"%>
 		<button type="button" @click="loadTour" v-if="hasTour" class="cta cta--tourguide cta--is-secondary" title="<%= t("guide_button") %>">?</button>
 	</header>

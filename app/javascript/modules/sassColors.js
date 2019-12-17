@@ -19,7 +19,7 @@ function hex2rgba(hex, opacity){
 
 const sassColors = {
 	asRgba(key, opacity) {
-		let whichColor = document.body.classList.contains('dark') ? 'darkTheme' : 'lightTheme';
+		let whichColor = document.body.classList.contains('is-dark') ? 'darkTheme' : 'lightTheme';
 		return hex2rgba(this[whichColor][key], opacity);
 	}
 };

@@ -34,7 +34,7 @@ module ApplicationHelper
 	def body_class(clss = nil)
 		if clss.nil?
 			content = content_for :body_class
-			body_class('light') unless content.match(/(^|\s)(dark|light)(\s|$)/)
+			body_class('is-light') unless content.match(/(^|\s)is-(dark|light)(\s|$)/)
 			return content_for :body_class
 		end
 
