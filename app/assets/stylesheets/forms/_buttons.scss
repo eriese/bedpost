@@ -6,12 +6,31 @@
 		@include cta-colors($suffix: "-light");
 	}
 
+	&--inverse {
+		@include cta-text-colors($colors-light, $property: background-color);
+		@include cta-background-colors($colors-light, $property: color);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: initial;
+	}
+
 	svg {
 		stroke: inherit;
 	}
 
-	body.secondary & {
+	body.dark & {
 		@include cta-colors($colors-dark);
+
+		&--is-secondary {
+			@include cta-colors($colors-dark, $suffix: "-light");
+		}
+
+		&--inverse {
+			@include cta-text-colors($colors-dark, $property: background-color);
+			@include cta-background-colors($colors-dark, $property: color);
+		}
 	}
 
 	form.centered & {
@@ -21,6 +40,32 @@
 	form.big &, form.centered & {
 		margin-left: auto;
 		margin-right: auto;
+	}
+
+	&--arrow {
+		text-decoration: none;
+		font-weight: bold;
+		vertical-align: middle;
+		border-radius: 50%;
+		height: rem(40px);
+		width: rem(40px);
+
+		&--small {
+			height: 1.75rem;
+			width: 1.75rem;
+		}
+
+		&--medium {
+			height: 2rem;
+			width: 2rem;
+		}
+
+		svg {
+			height: 75%;
+			vertical-align: middle;
+			fill: transparent;
+			stroke-width: 15;
+		}
 	}
 }
 
@@ -32,43 +77,5 @@ button.vs__deselect{
 	&:hover, &:focus {
 		background-color: transparent;
 		fill: $button-hover-color;
-	}
-}
-
-button.arrow-button {
-	text-decoration: none;
-	font-size: rem(32px);
-	font-weight: bold;
-	line-height: rem(32px);
-	vertical-align: middle;
-	border-radius: 50%;
-	height: rem(40px);
-	width: rem(40px);
-
-	&:disabled {
-		opacity: 0.5;
-		cursor: initial;
-	}
-
-	svg {
-		height: 75%;
-		vertical-align: middle;
-		fill: transparent;
-		stroke-width: 15;
-	}
-
-	&.inverse, &.transparent {
-		svg {
-			stroke: $button-color;
-		}
-
-		&:not(:disabled):hover svg {
-			stroke: $button-text-color;
-		}
-	}
-
-	&.primary {
-		background-color: transparent;
-		border-color: transparent;
 	}
 }

@@ -5,17 +5,26 @@
 html, body {
 	height: 100%;
 	font-size: $root-font-size;
+	font-family: $text-font;
 }
 
-body {
-	font-family: $text-font;
-	@include color-and-secondary(color, $color-black $color-white, true, true);
-	@include color-and-secondary(background-color, $background-colors, true, true);
-	font-size: rem(15px);
+body, body.with-cards .card {
+	color: theme-light("text");
+	background-color: theme-light("background");
+}
 
-	&.with-cards {
-		@include color-and-secondary(background-color, $background-colors-secondary, $on-body: true);
-		@include color-and-secondary(color, $color-white $color-black, $on-body: true);
+body.dark, body.dark.with-cards .card {
+	color: theme-dark("text");
+	background-color: theme-dark("background");
+}
+
+body.with-cards {
+	color: $color-black;
+	background-color: theme-light("background-contrast");
+
+	&.dark {
+		color: $color-white;
+		background-color: theme-dark("background-contrast");
 	}
 }
 
@@ -52,9 +61,7 @@ p.description {
 }
 
 .card {
-	border-radius: $stn-border-radius;
-	border: rem(2px) solid;
-	@include color-and-secondary(border-color, $colors-h1);
+	border-radius: $default-border-radius;
 	padding: $spacing-medium;
 }
 
@@ -91,11 +98,12 @@ p.description {
 	text-align: center;
 	font-weight: bold;
 	clear: both;
+	margin-bottom: $spacing-default;
 
 	> div {
 		padding: 0.25rem;
 		border: rem(3px) solid transparent;
-		border-radius: $stn-border-radius;
+		border-radius: $default-border-radius;
 	}
 
 	.flash-notice {
@@ -139,11 +147,14 @@ p.description {
 	font-family: $font-header;
 	font-size: rem(55px);
 	text-decoration: none;
-
-	@include color-and-secondary(color, $colors1-button-primary $colors2-button-secondary);
+	@include themed(color, "background-contrast");
 
 	body.with-cards & {
-		@include color-and-secondary(color, $colors-h1, true);
+		color: theme-dark("h1");
+	}
+
+	body.dark.with-cards & {
+		color: theme-light("h1");
 	}
 
 	header.header--small & {
@@ -262,37 +273,17 @@ span.confirmation {
 	@extend .rounded-container;
 	background-color: $color-purple-dark;
 	color: $color-off-white;
-
-	button.arrow-button.primary svg {
-		&:hover, &:focus {
-			stroke: $color-purple-light;
-		}
-	}
 }
 
 .light-container {
 	@extend .rounded-container;
 	background-color: $color-purple-light;
 	color: $color-off-white;
-
-	button.arrow-button.primary svg {
-		&:hover, &:focus {
-			stroke: $color-purple-dark;
-		}
-	}
 }
 
 .gray-container {
 	@extend .rounded-container;
 	background-color: $color-light-gray;
-
-	button.arrow-button.primary svg {
-		stroke: $color-purple-light;
-
-		&:hover, &:focus {
-			stroke: $color-purple-dark;
-		}
-	}
 }
 
 .dark-gray-container {

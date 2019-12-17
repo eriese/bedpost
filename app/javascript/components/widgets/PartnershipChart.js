@@ -38,7 +38,7 @@ const defaultOptions = {
  * @param  {number|string} opacity the opacity of the color
  * @return {string}         the full rgba color declaration
  */
-const dataColor = (opacity) => sassColors.asRgba('backgroundColorSecondary', opacity);
+const dataColor = (opacity) => sassColors.asRgba('cta-bg-light', opacity);
 /** {object} default properties for the dataset */
 const datasetDefaults = {
 	backgroundColor: dataColor(0.5),

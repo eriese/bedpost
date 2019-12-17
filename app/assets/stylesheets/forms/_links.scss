@@ -7,7 +7,7 @@ input[type="submit"].not-button {
 		@include link($suffix: "-light");
 	}
 
-	body.secondary & {
+	body.dark & {
 		@include link-colors($colors-dark);
 	}
 
@@ -21,8 +21,6 @@ input[type="submit"].not-button {
 
 	&:disabled {
 		opacity: 0.5;
+		cursor: initial;
 	}
-	// body.with-cards & {
-	// 	@include color-and-secondary(color, $colors-h2);
-	// }
 }
