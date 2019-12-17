@@ -15,19 +15,19 @@
 <h3 class="centered-container"><%= t('.breakdown') %></h3>
 
 
-<drop-down class="gray-container encounter-show-container" arrow-class="link cta--arrow--medium" :title-button="true">
+<drop-down class="gray-container encounter-show-container" arrow-class="link cta--is-arrow--is-medium" :title-button="true">
 	<h4 class="rounded-container-title light-purple-text" slot="title"><%= t('.sex.title') %></h4>
 	<div>
 		<%= display_contacts @encounter %>
 		<p><b><%= t('.sex.fluid_exchange') %></b> <span class="bool-indicator <%= @encounter.fluids %>" aria-label="<%= @encounter.fluids %>"></span></p>
 	</div>
 </drop-down>
-<drop-down arrow-class="link cta--arrow--medium" :title-button="true" class="dark-gray-container encounter-show-container">
+<drop-down arrow-class="link cta--is-arrow--is-medium" :title-button="true" class="dark-gray-container encounter-show-container">
 	<h4 class="rounded-container-title" slot="title"><%= t('.risks.title') %></h4>
 	<%= display_risks @encounter %>
 </drop-down>
 
-<drop-down class="dark-container encounter-show-container" arrow-class="link cta--arrow--medium" :title-button="true" :start-open="true">
+<drop-down class="dark-container encounter-show-container" arrow-class="link cta--is-arrow--is-medium" :title-button="true" :start-open="true">
 	<h4 class="rounded-container-title" slot="title"><%= t('.advice.title') %></h4>
 	<% if @encounter.schedule.any? %>
 		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>">

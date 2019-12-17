@@ -25,7 +25,7 @@ describe('sassColors module', () => {
 	describe('asRgba', () => {
 		describe('it returns the requested color as RGBA with the requested opacity', () => {
 			afterEach(() => {
-				document.body.classList.remove('dark');
+				document.body.classList.remove('is-dark');
 			});
 
 			it('fetches from the light theme if the theme is light', () => {
@@ -34,7 +34,7 @@ describe('sassColors module', () => {
 			});
 
 			it('fetches from the dark theme if the theme is dark', () => {
-				document.body.classList.add('dark');
+				document.body.classList.add('is-dark');
 
 				let result = sassColors.asRgba('background', 0.5);
 				expect(result).toEqual('rgba(175,92,135,0.5)');

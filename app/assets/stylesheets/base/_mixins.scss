@@ -5,36 +5,45 @@
 	#{$prop}: nth($vals, 1);
 
 	@if $and-card {
-		body.with-cards .card & {
+		body.has-cards .card & {
 			#{$prop}: nth($vals, 2);
 		}
 	}
 
-	body.secondary & {
+	body.is-dark & {
 		#{$prop}: nth($vals, 2);
 	}
 
 	@if $and-card {
-		body.secondary.with-cards .card & {
+		body.is-dark.has-cards .card & {
 			#{$prop}: nth($vals, 2);
 		}
 	}
 }
 
+@function theme-light($color-key) {
+	@return map-get($colors-light, $color-key);
+}
+
+@function theme-dark($color-key) {
+	@return map-get($colors-dark, $color-key);
+}
+
+
 @mixin themed($prop: background-color, $map-key: "background") {
 	#{$prop}: theme-light($map-key);
 
-	body.dark & {
+	body.is-dark & {
 		#{$prop}: theme-dark($map-key);
 	}
 }
 
 @mixin themed-with-cards($prop: background-color, $map-key: "background") {
-	body.with-cards & {
+	body.has-cards & {
 		#{$prop}: theme-light($map-key);
 	}
 
-	body.dark.with-cards & {
+	body.is-dark.has-cards & {
 		#{$prop}: theme-dark($map-key);
 	}
 }
@@ -53,15 +62,15 @@
 		margin-top: 0;
 	}
 
-	body.with-cards & {
+	body.has-cards & {
 		color: $color-white;
 	}
 
-	body.with-cards .card &, body.dark.with-cards & {
+	body.has-cards .card &, body.is-dark.has-cards & {
 		color: theme-light("h1");
 	}
 
-	body.dark &, body.dark.with-cards .card & {
+	body.is-dark &, body.is-dark.has-cards .card & {
 		color: theme-dark("h1");
 	}
 }
@@ -72,19 +81,19 @@
 	font-size: rem(24px);
 	text-align: center;
 
-	body.with-cards & {
+	body.has-cards & {
 		color: $color-white;
 	}
 
-	body.with-cards .card & {
+	body.has-cards .card & {
 		color: theme-light("h2");
 	}
 
-	body.dark &, body.dark.with-cards .card & {
+	body.is-dark &, body.is-dark.has-cards .card & {
 		color: theme-dark("h2");
 	}
 
-	&.with-desc {
+	&.has-desc {
 		margin-bottom: 0.25em;
 	}
 }
@@ -101,7 +110,6 @@
 	cursor: pointer;
 	padding: rem(10px) $spacing-default;
 	transition: 0.3s linear color, background-color, box-shadow, stroke;
-	cursor: pointer;
 	border-style: none;
 	font-weight: 800;
 	text-transform: uppercase;
@@ -138,6 +146,11 @@
 @mixin cta($theme: $colors-light, $suffix: "") {
 	@include cta-base;
 	@include cta-colors($theme, $suffix);
+}
+
+@mixin disabled {
+	opacity: 0.5;
+	cursor: default;
 }
 
 ///////////////////////

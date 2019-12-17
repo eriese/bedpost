@@ -6,28 +6,27 @@
 		@include cta-colors($suffix: "-light");
 	}
 
-	&--inverse {
+	&--is-inverted {
 		@include cta-text-colors($colors-light, $property: background-color);
 		@include cta-background-colors($colors-light, $property: color);
 	}
 
 	&:disabled {
-		opacity: 0.5;
-		cursor: initial;
+		@include disabled;
 	}
 
 	svg {
 		stroke: inherit;
 	}
 
-	body.dark & {
+	body.is-dark & {
 		@include cta-colors($colors-dark);
 
 		&--is-secondary {
 			@include cta-colors($colors-dark, $suffix: "-light");
 		}
 
-		&--inverse {
+		&--is-inverted {
 			@include cta-text-colors($colors-dark, $property: background-color);
 			@include cta-background-colors($colors-dark, $property: color);
 		}
@@ -42,7 +41,7 @@
 		margin-right: auto;
 	}
 
-	&--arrow {
+	&--is-arrow {
 		text-decoration: none;
 		font-weight: bold;
 		vertical-align: middle;
@@ -50,12 +49,12 @@
 		height: rem(40px);
 		width: rem(40px);
 
-		&--small {
+		&--is-small {
 			height: 1.75rem;
 			width: 1.75rem;
 		}
 
-		&--medium {
+		&--is-medium {
 			height: 2rem;
 			width: 2rem;
 		}

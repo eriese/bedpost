@@ -58,7 +58,7 @@ export default {
 		data.attrs.type = data.attrs.type || "button";
 		data.attrs.title = parent.$_t(props.tKey)
 		data.props = props.bind
-		data.staticClass = (data.staticClass || "") + " cta--arrow";
+		data.staticClass = (data.staticClass || "") + " cta--is-arrow";
 
 		return createElement("button", data, [
 			createElement("svg", {

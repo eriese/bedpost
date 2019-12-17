@@ -1,7 +1,7 @@
 <template>
-	<div class="stepper container--full-height" >
-		<div :class="['stepper__outer container--centering-child container--full-height--constrained', stepClass]">
-			<div class="stepper__inner container--centering-child__centered-child" ref="inner" role="form" aria-labeledby="stepper-aria-label">
+	<div class="stepper container--is-full-height" >
+		<div :class="['stepper__outer container--has-centered-child container--is-full-height-with-constraint', stepClass]">
+			<div class="stepper__inner container--has-centered-child__centered-child" ref="inner" role="form" aria-labeledby="stepper-aria-label">
 				<slot :step-ready="setStepComplete" :num-steps="numSteps"></slot>
 			</div>
 			<div class="stepper__nav">

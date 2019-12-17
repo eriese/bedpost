@@ -107,27 +107,29 @@
 		}
 	}
 
-	body.dark & {
+	body.is-dark & {
 		&__burger {
 			box-shadow: none;
 		}
 
-		&__list-item__link {
-			&--selected {
-				background-color: theme-light("cta-bg");
-				color: theme-light("cta-text");
-			}
-
-			&--not-selected:not(:disabled) {
-				&:hover, &:focus {
+		&__list-item {
+			&__link {
+				&--selected {
+					background-color: theme-light("cta-bg");
 					color: theme-light("cta-text");
-					background-color: rgba(theme-light("cta-bg"), 0.5);
+				}
+
+				&--not-selected:not(:disabled) {
+					&:hover, &:focus {
+						color: theme-light("cta-text");
+						background-color: rgba(theme-light("cta-bg"), 0.5);
+					}
 				}
 			}
 		}
 	}
 
-	body.light.with-cards & {
+	body.is-light.has-cards & {
 		&__list-item {
 			&--user-name {
 				color: theme-light('h1');
