@@ -37,6 +37,7 @@ en:
     messages:
       email: Please enter a valid email address.
       blank: Oops, this one's blank!
+      acceptance: Uh oh! You have to accept before you can continue
   reset:
     errors:
       email:
@@ -65,13 +66,19 @@ en:
         acceptance:
           'true': 'Yes'
           'false': 'No'
-        opt_in_group: Allow us to use your data (minus name and email) for research purposes?
+        opt_in_group: I give permission for my data to be used anonymously for research
         opt_in:
           'true': 'Yes'
           'false': 'No'
     tooltip:
       terms:
         opt_in_group: We will never sell your data to advertisers, but it can help public health researchers learn more about about STI transmission factors, and we think that's exciting.
+  terms:
+    show:
+      title:
+        tou: Our terms of use
+        privacy: Our privacy policy
+      new: These terms have changed since you last accepted them. Please review the new terms and accept.
   show_password: show password
   hide_password: hide password
   join_delimeter: ', '

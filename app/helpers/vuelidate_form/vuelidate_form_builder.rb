@@ -124,7 +124,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def radio_group(attribute, buttons: [[:true], [:false]], options: {})
+	def radio_group(attribute, buttons: [[true], [false]], options: {})
 		group_scope = 'fe'
 		group_opts = (options.delete(:group_options) || {}).reverse_merge(
 			field_role: :radiogroup,
@@ -144,7 +144,8 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		}
 
 		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
-		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
+		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object.present? ? @object[attribute] : nil
+		checked_val ||= false
 
 		joiner = options.delete(:joiner)
 		builder = field_builder("#{attribute}_group", group_opts)
@@ -295,7 +296,9 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	# add a field value to the form
 	def add_value(attribute, attr_value = nil)
-		attr_value ||= @object.respond_to?(attribute) ? @object.send(attribute) : nil
+		if attr_value.nil?
+			attr_value = @object.respond_to?(attribute) ? @object.send(attribute) : nil
+		end
 		value[attribute] = attr_value
 
 		@options[:parent_builder].add_nested(value, @object_name, :value) if @options[:parent_builder]

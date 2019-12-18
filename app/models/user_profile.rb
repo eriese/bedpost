@@ -87,6 +87,7 @@ class UserProfile < Profile
 	# @return [true] if the user has toured the page
 	def has_toured?(page)
 		tours.present? && tours.include?(page)
+		# false
 	end
 
 	# Mark the user as having toured the given page

@@ -1,6 +1,6 @@
-<% body_class 'dark vertical-center' %>
-<% content_for :inner_class, 'container--full-height container--centering-child' %>
-<div class="container--centering-child__centered-child first-time">
+<% body_class 'is-dark vertical-center' %>
+<% content_for :inner_class, 'container--is-full-height container--has-centered-child' %>
+<div class="container--has-centered-child__centered-child first-time">
 	<h1 class="heading--no-margin-top"><%= t(@has_partnerships ? ".header2" : ".header", name: current_user_profile.name) %></h1>
 	<% if @has_partnerships %>
 		<p class="container--centered-text"><%= t(".desc2", {count: @num_partnerships, partner_name: @num_partnerships > 1 ? nil : @first_partner.partner.name}) %></p>

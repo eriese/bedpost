@@ -4,6 +4,7 @@ class TermsController < ApplicationController
 		term_type = params[:id].intern
 		@terms = Terms.newest_of_type(params[:id])
 		@is_accepted = current_user_profile.terms_accepted?(term_type)
+		@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile[term_type]
 	end
 
 	def update

@@ -19,12 +19,17 @@ body.is-dark, body.is-dark.has-cards .card {
 }
 
 body.has-cards {
-	color: $color-black;
+	font-weight: bold;
+	color: theme-dark("background");
 	background-color: theme-light("background-contrast");
 
 	&.is-dark {
-		color: $color-white;
+		color: theme-dark("background");
 		background-color: theme-dark("background-contrast");
+	}
+
+	.card {
+		font-weight: normal;
 	}
 }
 
@@ -34,6 +39,12 @@ h1 {
 
 h2 {
 	@include heading2;
+}
+
+.heading {
+	&--has-no-top-margin {
+		margin-top: 0;
+	}
 }
 
 header {
@@ -178,9 +189,14 @@ body.vertical-center {
 		width: 100%;
 	}
 
-	header.header {
-		&--is-big {
+	&.body--has-columns {
+		.header--is-big {
 			flex-grow: 1;
+		}
+	}
+	.header {
+		&--is-big {
+			flex-grow: 0;
 			display: flex;
 			align-self: center;
 			align-items: center;
@@ -206,7 +222,7 @@ body.vertical-center {
 }
 
 .container {
-	&--is-centered-text {
+	&--has-centered-text {
 		text-align: center;
 	}
 
@@ -217,6 +233,10 @@ body.vertical-center {
 			height: 100%;
 			max-height: 30rem;
 		}
+	}
+
+	&--is-scrollable {
+		overflow: auto;
 	}
 
 	&--vertical-center {
@@ -231,6 +251,7 @@ body.vertical-center {
 		align-items: stretch;
 
 		&__centered-child {
+			height: 0px;
 			flex-grow: 1;
 		}
 	}

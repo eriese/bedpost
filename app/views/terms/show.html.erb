@@ -1,12 +1,18 @@
-<div id="terms-of-use">
-	<div class="container--bounded">
+<% body_class 'has-cards vertical-center' %>
+<% content_for :inner_class, 'container--is-full-height container--has-centered-child' %>
+<div id="terms-of-use" class="container--is-full-height container--has-centered-child container--has-centered-child__centered-child">
+	<h2 class="heading--has-no-top-margin"><%= t @terms.type, scope: 'terms.show.title' %></h2>
+	<% if @new_terms %>
+		<p class="container--has-centered-text desc"><%= t('.new') %></p>
+	<% end %>
+	<div class="card container--has-centered-child__centered-child container--is-scrollable">
 		<%= @terms.terms %>
 	</div>
 	<% unless @is_accepted %>
-		<%= vuelidate_form_with scope: :terms, method: :put  do |f| %>
-			<%= f.radio_group :acceptance, options: {checked_val: false, radio_class: "hidden-radio", group_options: {field_class: "toggler"}} %>
-			<%= f.radio_group :opt_in, options: {checked_val: false, radio_class: "hidden-radio", group_options: {field_class: "toggler", tooltip: true}} if @terms.type == :privacy%>
-			<%= f.submit %>
+		<%= vuelidate_form_with scope: :terms, method: :put, class: 'centered'  do |f| %>
+			<%= f.radio_group :acceptance, options: {radio_class: "hidden-radio", group_options: {field_class: "toggler", validators: [{kind: :acceptance}]}} %>
+			<%= f.radio_group :opt_in, options: {radio_class: "hidden-radio", group_options: {field_class: "toggler", tooltip: true}} if @terms.type == :privacy%>
+			<%= f.submit class: 'cta' %>
 		<% end %>
 	<% end %>
 </div>

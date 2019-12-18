@@ -1,6 +1,6 @@
 <% content_for :body_class, 'vertical-center' %>
 <% content_for :inner_class, 'container--is-full-height' %>
-<div class="container--is-centered-text container--is-full-height container--has-centered-child">
+<div class="container--has-centered-text container--is-full-height container--has-centered-child">
 	<h1><%= t('.title_html') %></h1>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered container--has-centered-child__centered-child"}, vue: {':dynamic-validation' => "additional.uid"} do |f| %>
 		<%= f.wizard do %>
