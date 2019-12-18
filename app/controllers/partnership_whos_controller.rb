@@ -21,13 +21,9 @@ class PartnershipWhosController < ApplicationController
 		redirect_to partnerships_path
 	end
 
-	def check
+	def unique
 		ship = current_user_profile.partnerships.new(uid: params.require(:uid))
-		if ship.valid?
-			render json: true
-		else
-			render json: ship.errors.messages
-		end
+		respond_with(ship, responder: UniquenessResponder)
 	end
 
 	private

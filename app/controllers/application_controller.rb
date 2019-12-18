@@ -54,4 +54,14 @@ class ApplicationController < ActionController::Base
 	def choose_layout
 		user_profile_signed_in? && !current_user_profile.first_time? ? "authed" : "no_auth"
 	end
+
+	def self.responder
+		lambda do |controller, resources, options|
+			if (controller.action_name == 'unique')
+				UniquenessResponder.call(controller, resources, options)
+			else
+				super.call(controller,resources,options)
+			end
+		end
+	end
 end

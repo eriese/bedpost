@@ -99,7 +99,7 @@ export const validateWithServer = (path, url) => {
 			// set the message based on the response data
 			responseMessage.message = Object.getAtPath(response.data, path);
 			// the field is invalid
-			resolve(false);
+			resolve(responseMessage.message === undefined);
 		}).catch(() => { resolve(false); });	// any errors count as invalid
 	};
 

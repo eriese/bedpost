@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 		patch 'profile', to: 'user_profiles/registrations#update', as: :user_profile_registration
 		put 'profile', to: 'user_profiles/registrations#update'
 		delete 'profile', to: 'user_profiles/registrations#destroy', as: :destroy_user_profile_registration
+		get 'uniqueness', to: 'user_profiles/registrations#unique'
 	end
 	devise_for :user_profiles, skip: [:registrations], path: "", singular: :user_profile, path_names: {
 			sign_in: 'login', sign_out: 'logout',
@@ -17,7 +18,7 @@ Rails.application.routes.draw do
 		root to: 'user_profiles#show'
 	end
 
-	get 'partners/uniqueness', to: 'partnership_whos#check'
+	get 'partners/uniqueness', to: 'partnership_whos#unique'
 
 	resources :partners, controller: "partnerships", as: "partnerships" do
 		resource :profile, except: [:index, :new, :create]

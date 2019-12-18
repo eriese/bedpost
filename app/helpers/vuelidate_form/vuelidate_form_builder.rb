@@ -130,7 +130,6 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			field_role: :radiogroup,
 			slot_scope: group_scope,
 			field_id: "#{@object_name}_#{attribute}_group",
-			skip_value: true
 		)
 
 		radio_opts = {

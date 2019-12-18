@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe PartnershipWhosController, type: :routing do
 	describe "routing" do
 		context "scoped under '/partners'" do
-			 it 'routes to #check via GET at /uniqueness' do
-				expect(:get => 'partners/uniqueness?uid=12345').to route_to('partnership_whos#check', uid: '12345')
+			 it 'routes to #unique via GET at /uniqueness' do
+				expect(:get => 'partners/uniqueness?uid=12345').to route_to('partnership_whos#unique', uid: '12345')
 			 end
 		end
 
