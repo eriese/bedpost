@@ -56,12 +56,6 @@ class ApplicationController < ActionController::Base
 	end
 
 	def self.responder
-		lambda do |controller, resources, options|
-			if (controller.action_name == 'unique')
-				UniquenessResponder.call(controller, resources, options)
-			else
-				super.call(controller,resources,options)
-			end
-		end
+		UniquenessResponder
 	end
 end

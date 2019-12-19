@@ -1,19 +1,19 @@
 @import 'tippy.js';
 
 $tooltip-arrow-size: 0.5rem;
-@mixin tooltip-arrow($arrow-color: map-get($colors-light, 'h1'), $arrow-size: $tooltip-arrow-size) {
-	& .tippy-arrow {
-		border-width: $arrow-size;
-	}
+
+.tippy-arrow {
+	border-width: $tooltip-arrow-size;
 
 	@each $position in ('top' 'bottom') {
-		.tippy-popper[x-placement^=#{$position}] & .tippy-arrow {
-			border-#{$position}-color: $arrow-color;
+		.tippy-popper[x-placement^=#{$position}] & {
+			border-#{$position}-color: inherit;
 		}
 	}
+
 	@each $position in ('start' 'end') {
-		.tippy-popper[y-placement^=#{$position}] & .tippy-arrow {
-			border-#{$position}-color: $arrow-color;
+		.tippy-popper[y-placement^=#{$position}] & {
+			border-#{$position}-color: inherit;
 		}
 	}
 }
@@ -25,7 +25,10 @@ $tooltip-arrow-size: 0.5rem;
 	font-weight: bold;
 	color: map-get($theme, "background#{$suffix}");
 	box-shadow: $box-shadow-val map-get($theme, "shadow");
-	@include tooltip-arrow($background-color);
+	border-top-color: $background-color;
+	border-bottom-color: $background-color;
+	border-left-color:  $background-color;
+	border-right-color:  $background-color;
 }
 
 .tippy-tooltip.light-theme {
@@ -37,8 +40,7 @@ $tooltip-arrow-size: 0.5rem;
 }
 
 aside.tippy-popper {
-	margin-top: $spacing-small;
-	max-width: 100%;
+	margin: $spacing-small $spacing-tiny;
 
 	&[x-placement] .tippy-arrow {
 		right: calc(50% - #{2 * $tooltip-arrow-size});

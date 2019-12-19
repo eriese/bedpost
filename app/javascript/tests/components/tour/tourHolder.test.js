@@ -3,6 +3,12 @@ import TourHolder from "@components/tour/TourHolder.vue"
 import VTour from "vue-tour/src/components/VTour.vue"
 
 describe("TourHolder component", () => {
+	let localVue
+	beforeEach(() => {
+		localVue = createLocalVue()
+		localVue.prototype.$tours = {};
+		localVue.prototype.$_t = jest.fn();
+	})
 	describe("when there is no tour", () => {
 		test("it mounts an empty div", () => {
 			const wrapper = mount(TourHolder)
@@ -14,9 +20,6 @@ describe("TourHolder component", () => {
 
 	describe("when a tour is loaded", () => {
 		test("it changes to a v-tour component", done => {
-			const localVue = createLocalVue()
-			localVue.prototype.$tours = {}
-
 			const wrapper = mount(TourHolder, {
 				propsData: {
 					steps: null
@@ -45,8 +48,6 @@ describe("TourHolder component", () => {
 			});
 
 			test('it immediately emits tour-started', () => {
-				const localVue = createLocalVue();
-				localVue.prototype.$tours = {};
 
 				const wrapper = mount(TourHolder, {
 					propsData: {
@@ -66,8 +67,6 @@ describe("TourHolder component", () => {
 			});
 
 			test('it runs the tour immediately if the tour has run before on this page load', () => {
-				const localVue = createLocalVue();
-				localVue.prototype.$tours = {};
 				const startMock = jest.fn();
 
 				const wrapper = mount(TourHolder, {
@@ -90,8 +89,6 @@ describe("TourHolder component", () => {
 			});
 
 			test('it runs the tour after a delay if it is the first run on page load', () => {
-				const localVue = createLocalVue();
-				localVue.prototype.$tours = {};
 
 				const startMock = jest.fn();
 
@@ -115,8 +112,6 @@ describe("TourHolder component", () => {
 			});
 
 			test('it sets up an IntersectionObserver if the first step requires waiting for the target to be in view', () => {
-				const localVue = createLocalVue();
-				localVue.prototype.$tours = {};
 
 				const startMock = jest.fn();
 
@@ -155,8 +150,6 @@ describe("TourHolder component", () => {
 
 	describe("when a tour is stopped", () => {
 		test("it emits a tour-stopped event", done => {
-			const localVue = createLocalVue()
-			localVue.prototype.$tours = {}
 
 			const wrapper = mount(TourHolder, {
 				propsData: {

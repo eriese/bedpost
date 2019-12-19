@@ -84,7 +84,10 @@
 
 				return {
 					labels: {
-						buttonStop: this.steps.length == 1 ? 'Got it' : 'Finish'
+						buttonStop: this.$_t('button_stop', {scope: 'tours.show', count: this.steps.length}),
+						buttonSkip: this.$_t('button_skip', {scope: 'tours.show'}),
+						buttonNext: this.$_t('button_next', {scope: 'tours.show'}),
+						buttonPrevious: this.$_t('button_previous', {scope: 'tours.show'}),
 					}
 				}
 			},
@@ -95,15 +98,18 @@
 			 */
 			checkTour() {
 				if (this.tour && !this.running) {
+					// tell the parent that a tour has started
 					this.$emit('tour-started');
-
+					// if it hasn't run before on this page, wait 2 seconds to run
 					let timeoutNum = this.tourRuns > 0 ? 0 : 2000
 					this.timeout = setTimeout(() => {
+						// if we have to wait for the step target to come into view, make an intersection observer
 						if (this.steps[0].await_in_view) {
 							this.observer = new IntersectionObserver(this.startTour, {threshold: [1]});
 							this.firstStepTarget = document.querySelector(this.steps[0].target)
 							this.observer.observe(this.firstStepTarget)
 						} else {
+							// otherwise just start
 							this.startTour();
 						}
 					}, timeoutNum);
@@ -113,6 +119,7 @@
 			 * starts the tour if there is one
 			 */
 			startTour(entries) {
+				// start if the first step is visible
 				let firstVisibility = this.firstStepTarget && getComputedStyle(this.firstStepTarget).visibility;
 				if (!entries || firstVisibility == 'visible') {
 					this.tour && this.tour.start()

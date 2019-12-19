@@ -23,7 +23,7 @@ class PartnershipWhosController < ApplicationController
 
 	def unique
 		ship = current_user_profile.partnerships.new(uid: params.require(:uid))
-		respond_with(ship, responder: UniquenessResponder)
+		respond_with(ship)
 	end
 
 	private

@@ -12,3 +12,10 @@ en:
       add_partnership:
         zero: Add a partner
         other: Add another partner
+    show:
+      button_skip: Skip tour
+      button_previous: Previous
+      button_next: Next
+      button_stop:
+        one: Got it
+        other: Finish
