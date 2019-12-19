@@ -54,10 +54,11 @@ export default {
 			}
 		}
 
-		data.attrs.type = data.attrs.type || "button"
+		data.attrs = data.attrs || {};
+		data.attrs.type = data.attrs.type || "button";
 		data.attrs.title = parent.$_t(props.tKey)
 		data.props = props.bind
-		data.staticClass = (data.staticClass || "") + " arrow-button"
+		data.staticClass = (data.staticClass || "") + " cta--is-arrow";
 
 		return createElement("button", data, [
 			createElement("svg", {

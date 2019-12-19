@@ -5,17 +5,26 @@
 html, body {
 	height: 100%;
 	font-size: $root-font-size;
+	font-family: $text-font;
 }
 
-body {
-	font-family: $text-font;
-	@include color-and-secondary(color, $color-black $color-white, true, true);
-	@include color-and-secondary(background-color, $background-colors, true, true);
-	font-size: rem(15px);
+body, body.has-cards .card {
+	color: theme-light("text");
+	background-color: theme-light("background");
+}
 
-	&.with-cards {
-		@include color-and-secondary(background-color, $background-colors-secondary, $on-body: true);
-		@include color-and-secondary(color, $color-white $color-black, $on-body: true);
+body.is-dark, body.is-dark.has-cards .card {
+	color: theme-dark("text");
+	background-color: theme-dark("background");
+}
+
+body.has-cards {
+	color: $color-black;
+	background-color: theme-light("background-contrast");
+
+	&.is-dark {
+		color: $color-white;
+		background-color: theme-dark("background-contrast");
 	}
 }
 
@@ -52,9 +61,7 @@ p.description {
 }
 
 .card {
-	border-radius: $stn-border-radius;
-	border: rem(2px) solid;
-	@include color-and-secondary(border-color, $colors-h1);
+	border-radius: $default-border-radius;
 	padding: $spacing-medium;
 }
 
@@ -63,12 +70,12 @@ p.description {
 }
 
 .no-js {
-	header.small {
+	header.--is-small {
 		position: absolute;
 		margin-left: rem(10px);
 	}
 
-	header.small + main {
+	header.--is-small + main {
 		float: right;
 		clear: none;
 		width: calc(100% - #{$nav-width});
@@ -91,29 +98,30 @@ p.description {
 	text-align: center;
 	font-weight: bold;
 	clear: both;
+	margin-bottom: $spacing-default;
 
 	> div {
 		padding: 0.25rem;
 		border: rem(3px) solid transparent;
-		border-radius: $stn-border-radius;
+		border-radius: $default-border-radius;
 	}
 
 	.flash-notice {
 		@include color-and-secondary(border-color, $background-colors-secondary);
-		body.with-cards & {
+		body.has-cards & {
 			border-color: nth($colors-h1, 1);
 		}
-		body.with-cards.secondary & {
+		body.has-cards.is-dark & {
 			border-color: nth($colors-h1, 2);
 		}
 	}
 
 	.flash-alert {
 		@include color-and-secondary(border-color, $background-colors-secondary);
-		body.with-cards & {
+		body.has-cards & {
 			border-color: nth($colors-h1, 1);
 		}
-		body.with-cards.secondary & {
+		body.has-cards.is-dark & {
 			border-color: nth($colors-h1, 2);
 		}
 	}
@@ -139,14 +147,17 @@ p.description {
 	font-family: $font-header;
 	font-size: rem(55px);
 	text-decoration: none;
+	@include themed(color, "background-contrast");
 
-	@include color-and-secondary(color, $colors1-button-primary $colors2-button-secondary);
-
-	body.with-cards & {
-		@include color-and-secondary(color, $colors-h1, true);
+	body.has-cards & {
+		color: theme-dark("h1");
 	}
 
-	header.header--small & {
+	body.is-dark.has-cards & {
+		color: theme-light("h1");
+	}
+
+	header.header--is-small & {
 		text-align: left;
 		font-size: rem(45px);
 		line-height: 1.35;
@@ -174,7 +185,7 @@ body.vertical-center {
 			align-items: center;
 		}
 
-		&--small {
+		&--is-small {
 			flex-grow: 0;
 			position: absolute;
 			z-index: 900;
@@ -194,14 +205,14 @@ body.vertical-center {
 }
 
 .container {
-	&--centered-text {
+	&--is-centered-text {
 		text-align: center;
 	}
 
-	&--full-height {
+	&--is-full-height {
 		height: 100%;
 
-		&--constrained {
+		&-with-constraint {
 			height: 100%;
 			max-height: 30rem;
 		}
@@ -213,7 +224,7 @@ body.vertical-center {
 		align-content: center;
 	}
 
-	&--centering-child {
+	&--has-centered-child {
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
@@ -262,37 +273,17 @@ span.confirmation {
 	@extend .rounded-container;
 	background-color: $color-purple-dark;
 	color: $color-off-white;
-
-	button.arrow-button.primary svg {
-		&:hover, &:focus {
-			stroke: $color-purple-light;
-		}
-	}
 }
 
 .light-container {
 	@extend .rounded-container;
 	background-color: $color-purple-light;
 	color: $color-off-white;
-
-	button.arrow-button.primary svg {
-		&:hover, &:focus {
-			stroke: $color-purple-dark;
-		}
-	}
 }
 
 .gray-container {
 	@extend .rounded-container;
 	background-color: $color-light-gray;
-
-	button.arrow-button.primary svg {
-		stroke: $color-purple-light;
-
-		&:hover, &:focus {
-			stroke: $color-purple-dark;
-		}
-	}
 }
 
 .dark-gray-container {

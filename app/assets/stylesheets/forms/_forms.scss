@@ -67,7 +67,7 @@ form {
 		font-size: rem(12px);
 		line-height: 1;
 
-		body.secondary &, body.secondary.with-cards .card & {
+		body.is-dark &, body.is-dark.has-cards .card & {
 			color: $colors2-h1;
 		}
 	}
@@ -294,20 +294,6 @@ form {
 
 		+ div {
 			clear: both;
-		}
-
-		button.arrow-button {
-			$button-size: rem(30px);
-			margin: 0;
-			height: $button-size;
-			width: $button-size;
-			line-height: $button-size;
-
-			svg {
-				$svg-size: $button-size - rem(10px);
-				height: $svg-size;
-				width: $svg-size;
-			}
 		}
 	}
 }

@@ -11,7 +11,7 @@ module FeatureHelpers
 		visit new_user_profile_session_path
 		fill_in 'Email*', with: @user.email
 		fill_in 'Password*', with: user_params[:password]
-		click_button "Log in"
+		click_button 'Submit'
 	end
 
 	def register_user
