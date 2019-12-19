@@ -1,11 +1,11 @@
-<% content_for :body_class, 'secondary' %>
+<% content_for :body_class, 'is-dark' %>
 <h1><%= t ".title", {name: current_user_profile.name}%></h1>
 
 <ul class="dash-buttons">
-	<li class=""><%= link_to new_partnership_path, class: 'card as-button' do %>
+	<li class=""><%= link_to new_partnership_path, class: 'card cta' do %>
 		<h2><%= t(".new_partnership") %></h2>
 	<% end%></li>
-	<li class=""><%= link_to encounters_who_path, class: 'card as-button' do %>
+	<li class=""><%= link_to encounters_who_path, class: 'card cta' do %>
 		<h2><%= t(".new_encounter") %></h2>
 	<% end%></li>
 </ul>

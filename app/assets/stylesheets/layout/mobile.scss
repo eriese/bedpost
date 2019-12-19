@@ -58,13 +58,15 @@
 
 	body.vertical-center{
 
-		#vue-container {
-			display: block;
-
-			header {
+		header.header {
+			&--big {
 				display: block;
 				text-align: center;
 			}
+		}
+
+		&.body--without-auth #vue-container {
+			display: block;
 		}
 	}
 }

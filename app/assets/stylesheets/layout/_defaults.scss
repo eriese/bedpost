@@ -18,7 +18,7 @@ $font-header: 'Baloo', cursive;
 ///////////////////////
 // spacing
 ///////////////////////
-$spacing-default: rem($root-font-size);
+$spacing-default: 1rem;
 $spacing-medium:  $spacing-default * 1.5;
 $spacing-double:  $spacing-default * 2;
 $spacing-small:   $spacing-default / 2;
@@ -95,7 +95,9 @@ $colors-light: (
 	"link-light": #AF6A64,
 	"shadow": rgba($color-black, 0.5),
 	"h1": #433060,
-	"background": $color-white
+	"background": $color-white,
+	"background-contrast": #AF5C87,
+	"text": $color-black
 );
 
 $colors-dark: (
@@ -106,8 +108,17 @@ $colors-dark: (
 	"link-light": #C78DAB,
 	"shadow": rgba($color-white, 0.5),
 	"h1": #FFD6CC,
-	"background": $dark-background
+	"background": $dark-background,
+	"background-contrast": #FC9890,
+	"text": $color-white
 );
+
+:export {
+	@each $key, $value in $colors-dark {
+		darkTheme-#{unquote($key)}: $value;
+		lightTheme-#{unquote($key)}: map-get($colors-light, $key);
+	}
+}
 
 $colors1-button-primary: #7A405E;
 $colors1-button-secondary: #AF6A64;
@@ -126,7 +137,7 @@ $colors2-h2: #EEE;
 $colors2-text: $color-white;
 
 
-$stn-border-radius: 0.95rem;
+$default-border-radius: 0.95rem;
 $box-shadow-val: 0px 0px 2px 1px;
 $stn-box-shadow: $box-shadow-val rgba($color-black,0.5);
 $stn-box-shadow-secondary: $box-shadow-val rgba($color-white,0.5);
@@ -177,13 +188,8 @@ $input-border-color-focus-secondary: $colors2-button-secondary;
 $input-border-colors: $input-border-color $input-border-color-secondary;
 $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-secondary;
 
-:export {
-	backgroundColors: $background-colors;
-	backgroundColorsSecondary: $background-colors-secondary;
-	buttonColors: $button-colors;
-}
-
 ///////////////////////
 // sizing
 ///////////////////////
 $nav-width: rem(250px);
+$nav-button-width: rem(35px);

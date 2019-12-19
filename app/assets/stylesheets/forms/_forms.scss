@@ -8,8 +8,10 @@ label {
 	}
 }
 
+$constrained-form-width: 26rem;
 form.centered {
-	max-width: rem(400px);
+	max-width: $constrained-form-width;
+	width: 100%;
 	padding: 0rem rem(15px);
 	margin: 0rem auto;
 
@@ -65,7 +67,7 @@ form {
 		font-size: rem(12px);
 		line-height: 1;
 
-		body.secondary &, body.secondary.with-cards .card & {
+		body.is-dark &, body.is-dark.has-cards .card & {
 			color: $colors2-h1;
 		}
 	}
@@ -105,12 +107,6 @@ form {
 		line-height: 1.25;
 		margin: rem(3px) auto;
 	}
-
-	.step {
-		border-radius: $stn-border-radius;
-		margin-bottom: rem(25px);
-	}
-
 
 	.slide-bar-desc {
 		font-size: rem(14px);
@@ -174,110 +170,116 @@ form {
 }
 
 .flickity-enabled {
-	&:focus ~ .step-nav>.prog-buttons>li>button {
+	&:focus ~ .stepper__nav .stepper__nav__button-item>* {
 		border: rem(2px) solid;
 		@include color-and-secondary(border-color, $button-colors);
 	}
 
 	.field {
 		margin-bottom: 0rem;
-
-		.additional {
-			height: rem(80px);
-
-			.explanation {
-				max-height: rem(40px);
-				overflow-y: auto;
-			}
-		}
 	}
 }
 
 .stepper {
 	position: relative;
 
-	.step-inner {
-		padding: rem(15px);
-		border-radius: inherit;
-	}
-
 	.flickity-viewport {
-		padding-bottom: rem(60px);
+		overflow: hidden auto;
 	}
 
-	.form-step {
+	&__h2 {
+		margin-top: 0
+	}
+
+	&__outer {
+		position: relative;
+	}
+
+	&__step {
 		width: 100%;
-		padding: rem(5px);
 		box-sizing: border-box;
 
 		&:not(.is-selected) {
 			visibility: hidden;
+			max-height: 100%;
+		}
+	}
+}
+
+.stepper__nav {
+	text-align: center;
+	width: 100%;
+	z-index: 1;
+
+	$dot-size: 0.5rem;
+	&__dots {
+		height: $dot-size;
+		line-height: 0;
+		width: 100%;
+	}
+
+	&__dot {
+		display: inline-block;
+		margin: 0rem $dot-size;
+		width: $dot-size;
+		height: $dot-size;
+		border-radius: 50%;
+		@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
+
+		&--current {
+			@include color-and-secondary(background-color, $button-colors);
 		}
 	}
 
-	.step-nav {
-		// margin-top: 25px;
-		// margin-bottom: 10px;
-		text-align: center;
-		position: relative;
-		// bottom: 5px;
-		left: 0rem;
-		width: 100%;
-		z-index: 1;
-		height: 0rem;
+	&__button-list {
+		list-style: none;
+		padding-inline-start: 0;
+		margin: 0rem;
+	}
 
-		$dot-size: rem(8px);
-		.prog-dots {
-			height: $dot-size;
-			line-height: 0;
+	&__button-item {
+		display: inline-block;
+
+		&--next {
+			float: right;
+		}
+
+		&--prev {
+			float: left;
+		}
+
+		&--last, input[type=submit] {
+			float: right;
+			line-height: rem(32px);
+			vertical-align: middle;
+			font-weight: bold;
+			display: inline;
+			width: auto;
+			font-size: 1.75rem;
+		}
+
+		button {
+			border: 2px solid transparent;
+		}
+
+		@media (min-width: $constrained-form-width + 3rem) {
 			position: absolute;
-			width: 100%;
-			bottom: rem(15px);
-		}
 
-		.prog-dot {
-			display: inline-block;
-			margin: 0rem $dot-size;
-			width: $dot-size;
-			height: $dot-size;
-			border-radius: 50%;
-			@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
+			$button-offset: -20%;
 
-			&.current {
-				@include color-and-secondary(background-color, $button-colors);
-			}
-		}
-
-		.prog-buttons {
-			list-style: none;
-			padding-inline-start: 0;
-			margin: 0rem;
-
-			li {
-				display: inline-block;
-				position: absolute;
-				bottom: rem(35px);
-
-				&.next {
-					right: rem(20px);
-				}
-
-				&.prev {
-					left: rem(20px);
-				}
-
-				button {
-					border: 2px solid transparent;
-				}
+			&--next {
+				right: $button-offset;
+				top: 10rem;
 			}
 
-			input[type=submit], button.last {
-				line-height: rem(32px);
-				vertical-align: middle;
-				font-weight: bold;
-				display: inline;
-				width: auto;
-				font-size: 1.75rem;
+			&--prev {
+				left: $button-offset;
+				top: 10rem;
+			}
+
+			&--last, input[type=submit] {
+				right: $button-offset;
+				bottom: 0rem;
 			}
 		}
 	}
@@ -292,20 +294,6 @@ form {
 
 		+ div {
 			clear: both;
-		}
-
-		button.arrow-button {
-			$button-size: rem(30px);
-			margin: 0;
-			height: $button-size;
-			width: $button-size;
-			line-height: $button-size;
-
-			svg {
-				$svg-size: $button-size - rem(10px);
-				height: $svg-size;
-				width: $svg-size;
-			}
 		}
 	}
 }

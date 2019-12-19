@@ -26,7 +26,7 @@ en:
           'true': 'Yes'
           'false': 'No'
         can_penetrate_group: Can their external genitals be used for penetration?
-        name: First name
+        name: What's their name?
     tooltip:
       profile:
         name: We really only care about their first name, but it's up to you.

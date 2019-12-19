@@ -220,6 +220,7 @@ function getDefaults (validator, field, modelName) {
 
 	// if there's a modelName given, add model and field keys at the beginning
 	if (modelName) {
+		modelName = modelName.replace('[', '.').replace(']', '');
 		defaults.unshift({scope: `mongoid.errors.models.${modelName}.${validator}`});
 		defaults.unshift({scope: `mongoid.errors.models.${modelName}.attributes.${field}.${validator}`});
 	}

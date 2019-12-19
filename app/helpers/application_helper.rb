@@ -30,4 +30,9 @@ module ApplicationHelper
 		options[:default] = new_default
 		t(new_key, options)
 	end
+
+	def body_class(clss)
+		content_for(:body_class, ' ') if content_for? :body_class
+		content_for :body_class, clss
+	end
 end

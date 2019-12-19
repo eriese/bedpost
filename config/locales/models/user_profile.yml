@@ -5,6 +5,9 @@ en:
       new_encounter: I had sex
       title: Hi %{name}, what's new?
   application:
+    new:
+      title: Now more about this person...
+      desc: Tell us how to talk about this person and their body so we can describe your sex the way you would.
     edit:
       account_settings: Account Settings
       personal_prefs:
@@ -48,6 +51,7 @@ en:
         opt_in:
           'true': 'Yes'
           'false': 'No'
+        name: First name
     tooltip:
       user_profile:
         name: We really only care about your first name, but it's up to you.

@@ -35,7 +35,7 @@
 		<% end %>
 	</head>
 
-	<body class="<%= content_for :body_class %>">
+	<body class="<%= content_for :body_class || 'light' %>">
 		<%= javascript_tag nonce: true do%>
 			<%= include_gon(need_tag: false)%>
 		<% end %>
@@ -44,7 +44,7 @@
 			<%= yield :nav%>
 			<%= yield :header %>
 			<main id="page-container" ref="container">
-				<div id="page-container-inner">
+				<div id="page-container-inner" class="<%= content_for :inner_class %>">
 					<%= render "flash" %>
 					<%= yield :main %>
 				</div>

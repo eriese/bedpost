@@ -8,9 +8,14 @@ en:
               bad_key: That UID doesn't seem to connect to anyone...
               self_key: You can't have yourself as a partner
               taken: You already have a partnership with this person
+              one_of: Please either fill in a name or a user id
             partner:
               self_key: You can't have yourself as a partner
               taken: You already have a partnership with this person
+          partner_attributes:
+            attributes:
+              name:
+                one_of: Please either fill in a name or a user id
   partnerships:
     new:
       title_html: New Relationship
@@ -21,6 +26,12 @@ en:
         trust: This one is a pretty broad concept, but this data helps us know how to weight your answers when it comes to exclusivity and prior discussion.
         communication: Communication is everything! Without details in this category, we couldn't weight your answers to any of our other questions accurately.
         prior_discussion: There is no perfect sexual practice that can 100% eliminate risk. We use this, as well as communication and trust, in our calculations to help you understand the risk specific to this partnership.
+      tip: &tips
+        familiarity: Pick the option that best reflects your relationship with the person. Go with your gut. The higher the score, the better you know them.
+        exclusivity: We only care how exclusive this person is with you. Information about how many partners this person has will help us understand how risky they are as a partner to you. Don't worry, that's not the only factor we take into account.
+        trust: Do you believe that what they tell you is true? This will help us decide how much weight to put on some of your other answers, so when in doubt, round down.
+        communication: All forms of communication are valid! We don't care if you text, they slide into your DMs, or you wake up in the same room every day. Pick the one that feels like the best fit.
+        prior_discussion: Risk management includes but isn't limited to - testing schedule, STI status, barrier practices, and fluid bonding and exchange philosophies. We'll ask you about barrier use some here too to help us assess risk.
     show:
       partner_html: Partnership with <b>%{name}</b>
       level_field_html: "%{field}: %{level}"
@@ -48,6 +59,7 @@ en:
     edit:
       partner_html: Edit partnership with <b>%{name}</b>
       <<: *whys
+      <<: *tips
       edit_partner_profile: Edit %{name}'s profile
       edit_partner_uid: Connect to a different profile
   partnership_whos:
@@ -71,28 +83,24 @@ en:
         trust: How much do you trust this person?
         communication: How much do you and this person communicate?
         prior_discussion: How much have you and this person discussed risk management?
-        uid: What's their user id?
+        uid: Did they give you their user id?
     tooltip:
       partnership:
-        familiarity: Pick the option that best reflects your relationship with the person. Go with your gut. The higher the score, the better you know them.
+        uid: It's fine if they're not using BedPost or didn't tell you their user ID. Just leave this blank and we'll ask you some more questions about them for now. You can always connect this partnership with their profile later.
         nickname: This might be something like their last name, or where you met them, something to help you identify them. You can leave it blank
-        exclusivity: We only care how exclusive this person is with you. Information about how many partners this person has will help us understand how risky they are as a partner to you. Don't worry, that's not the only factor we take into account.
-        trust: Do you believe that what they tell you is true? This will help us decide how much weight to put on some of your other answers, so when in doubt, round down.
-        communication: All forms of communication are valid! We don't care if you text, they slide into your DMs, or you wake up in the same room every day. Pick the one that feels like the best fit.
-        prior_discussion: Risk management includes but isn't limited to - testing schedule, STI status, barrier practices, and fluid bonding and exchange philosophies. We'll ask you about barrier use some here too to help us assess risk.
     sliders:
       partnership:
         familiarity:
-          one: They're an anonymous hookup, we met on an app or IRL
-          two: I've seen them around, this is the first time we've hooked up
-          three: We hook up sometimes, share community, but don't have a close relationship
-          four: They date my date or my friend (or used to), and are trusted by people I know, but we aren't close
-          five: We've been hooking up regularly < 3 months but don't know each other socially
-          six: We've been hooking up regularly 3+ months but don't know each other socially
-          seven: We've known each other socially for years but this is our first hookup
-          eight: We met as dates and have been dating for < 3 months
-          nine: We met as dates and have been dating for 3+ months
-          ten: We know each other personally and have an ongoing relationship
+          one: "%{count} They're an anonymous hookup, we met on an app or IRL"
+          two: "%{count} I've seen them around, this is the first time we've hooked up"
+          three: "%{count} We hook up sometimes, share community, but don't have a close relationship"
+          four: "%{count} They date my date or my friend (or used to), and are trusted by people I know, but we aren't close"
+          five: "%{count} We've been hooking up regularly < 3 months but don't know each other socially"
+          six: "%{count} We've been hooking up regularly 3+ months but don't know each other socially"
+          seven: "%{count} We've known each other socially for years but this is our first hookup"
+          eight: "%{count} We met as dates and have been dating for < 3 months"
+          nine: "%{count} We met as dates and have been dating for 3+ months"
+          ten: "%{count} We know each other personally and have an ongoing relationship"
         exclusivity:
           one: "%{count}: I know they have barrier-free sex with other people"
           two: "%{count}: I don't know. We don't use gloves or dental dams in our sex, and I assume they do not with others"
@@ -140,7 +148,7 @@ en:
     toggles:
       partnership:
         why: Why is this important?
-        how: How does BedPost use this information?
+        tip: How do I decide?
     submit:
       partnership:
         create: Next

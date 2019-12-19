@@ -245,7 +245,7 @@ function formatValidators(validatorVals, path, fields, $refs, adlValidations) {
 				break;
 			case 'require_unless_valid':
 				// validate that this or the other field exist
-				validators[field].oneOf = requireUnlessValid(opts.path);
+				validators[field].one_of = requireUnlessValid(opts.path);
 			}
 		}
 	}
