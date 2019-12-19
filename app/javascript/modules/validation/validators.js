@@ -1,4 +1,4 @@
-import {helpers,required, email, minLength, maxLength, sameAs} from 'vuelidate/lib/validators';
+import {helpers} from 'vuelidate/lib/validators';
 import axios from 'axios';
 /**
  * Custom [Vuelidate]{@link https://monterail.github.io/vuelidate/} validators
@@ -23,7 +23,7 @@ export const submitted = (path) => {
 		let fieldError = undefined;
 
 		// look for the field in the submission error
-		fieldError = this.submissionError[path[path.length - 1]];
+		fieldError = this.submissionError && this.submissionError[path[path.length - 1]];
 
 		// if there isn't one, it's valid
 		if (!fieldError) {
@@ -141,100 +141,3 @@ export const requireUnlessValid = (locator) => {
 export const acceptance = (field) => {
 	return helpers.withParams({field}, (value, parentVm) => helpers.ref(field, this, parentVm) == 'true');
 };
-
-/**
- * Process the fields on the form to apply the correct validations to each. Uses recursion to process each level of nested validations
- *
- * @param  {object} validatorVals an object mapping arrays of validator arguments to their fields
- * @param  {string[]} path        the path to this level in recursive searching
- * @param  {object} fields 				the fields available in the form
- * @param {object} $refs 					the $refs from the root, which will have pointers to all inputs present on the page
- * @param {object} adlValidations additional already-processed validations to use
- * @return {object}               the validator config for this level
- */
-export default function formatValidators(validatorVals, path, fields, $refs, adlValidations) {
-	// make an empty object to hold validation config
-	let validators = Object.assign({}, adlValidations);
-
-	// each field in this level
-	for (let field in fields) {
-		// get the validator configs for it
-		let f_vals = validatorVals[field];
-		// add the field to the path
-		let this_path = path.concat(field);
-
-		// if the validator configs is another object, run the formatter on it as a new level
-		if (f_vals && f_vals.length === undefined) {
-			// send this object and this path
-			validators[field] = formatValidators(f_vals, this_path, fields[field], $refs);
-			continue;
-		}
-
-		// if it's only supposed to validate fields that exist, skip the field if it doesn't
-		if($refs && $refs[field] === undefined) {
-			continue;
-		}
-
-		// always add a submission error validator
-		validators[field] = validators[field] || {};
-		validators[field].submitted = submitted(this_path);
-
-		// if it's an email field, add an email validator
-		if (field.match(/email/i)) {
-			validators[field].email = email;
-		}
-
-		// if there are no specific validators, move on
-		if(f_vals === undefined) {
-			continue;
-		}
-
-		// go through the configs
-		for (var f = 0; f < f_vals.length; f++) {
-			// destructure the array
-			let [type, opts] = f_vals[f];
-
-			// the types we currently handle
-			switch(type) {
-			case 'presence':
-				// presence validators are called 'blank' for translation purposes
-				validators[field].blank = required;
-				break;
-			case 'length':
-				// length validators based on max and min
-				if (opts.maximum) {
-					validators[field].too_long = maxLength(opts.maximum);
-				}
-				if (opts.minimum) {
-					validators[field].too_short = minLength(opts.minimum);
-				}
-				break;
-			case 'confirmation':
-				// a confirmation validator will look for a match on a field with '_confirmation' appended to it
-				var conf_field = field + '_confirmation';
-
-				// only add this validator if the confirmation field is also on the form
-				if(fields[conf_field] === undefined) {
-					break;
-				}
-
-				validators[conf_field] = validators[conf_field] || {};
-				validators[conf_field].confirmation = sameAs(field);
-				break;
-			case 'uniqueness':
-				// validate it on the server
-				validators[field].taken = validateWithServer(this_path.join('.'), 'uniqueness');
-				break;
-			case 'require_unless_valid':
-				// validate that this or the other field exist
-				validators[field].one_of = requireUnlessValid(opts.path);
-				break;
-			case 'acceptance':
-				var acceptedField = field.replace('_group', '');
-				validators[field].acceptance = acceptance(acceptedField);
-				break;
-			}
-		}
-	}
-	return validators;
-}

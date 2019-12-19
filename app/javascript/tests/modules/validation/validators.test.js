@@ -1,4 +1,4 @@
-import { validateWithServer, resetValidatorCache } from '@modules/validators';
+import { validateWithServer, resetValidatorCache } from '@modules/validation/validators';
 import axios from 'axios';
 import { helpers } from 'vuelidate/lib/validators';
 jest.mock('axios');
@@ -45,12 +45,28 @@ describe('custom validators', () => {
 			return promise;
 		});
 
-		it('returns false if json data is returned', () => {
+		it('returns false if json data with a message about the field is returned', () => {
 			axios.get.mockImplementationOnce(getMessage);
 
 			const {validator} = validateWithServer('field1', 'some/url');
 			const promise = validator('some value').then((response) => {
 				expect(response).toBe(false);
+			});
+
+			jest.runAllTimers();
+			return promise;
+		});
+
+		it('returns true if json data is returned but contains no message about the field', () => {
+			axios.get.mockImplementationOnce(() => new Promise((resolve) => {
+				resolve({
+					data: {field2: 'something wrong with it'}
+				});
+			}));
+
+			const {validator} = validateWithServer('field1', 'some/url');
+			const promise = validator('some value').then((response) => {
+				expect(response).toBe(true);
 			});
 
 			jest.runAllTimers();

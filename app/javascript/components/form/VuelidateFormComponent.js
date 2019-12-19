@@ -1,4 +1,5 @@
-import formatValidators, { resetValidatorCache} from '@modules/validators';
+import {resetValidatorCache} from '@modules/validation/validators';
+import ValidationProcessor from '@modules/validation/ValidationProcessor';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
 
@@ -55,7 +56,7 @@ export default {
 	},
 	validations: function() {
 		let $refs = this.dynamicValidation && this.$root && this.$root.$refs;
-		let formatted = formatValidators(this.validate, [], this.formData, $refs, this.adlValidations);
+		let formatted = new ValidationProcessor(this.validate, [], this.formData, $refs, this.adlValidations).process();
 
 		return {
 			formData: formatted,
