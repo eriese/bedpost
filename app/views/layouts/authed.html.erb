@@ -10,10 +10,4 @@
 	</header>
 <% end %>
 
-<% content_for :main do %>
-				<%= yield %>
-
-		<tour-holder :steps="tourSteps" @tour-stopped="onTourStop"></tour-holder>
-<% end %>
-
 <%= render template: "layouts/application" %>

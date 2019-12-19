@@ -17,7 +17,7 @@ class ToursController < ApplicationController
 	def show
 		page = params[:id]
 		# if there's a tour for this page
-		tour = if tour = Tour.by_page!(page)
+		tour = if tour = Tour.by_page!(page, current_user_profile.first_time)
 			# if the user's already seen it and isn't requesting it again just send true
 			if current_user_profile.has_toured?(page) && !params[:force]
 				{has_tour: true}

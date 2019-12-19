@@ -204,24 +204,20 @@ RSpec.describe StaticResource, type: :module do
 			end
 		end
 
-		describe '#find_cached' do
-			it 'finds an entry by its id' do
-				model = StaticResourceTestModel.create
-				found = StaticResourceTestModel.find_cached(model.id)
-				expect(found).to eq model
-			end
-
-			it 'caches the found entry' do
+		describe '#cached' do
+			it 'caches the result' do
 				model = StaticResourceTestModel.create
 				expect(StaticResourceTestModel).to receive(:find).with(model.id).once
-				StaticResourceTestModel.find_cached(model.id)
-				StaticResourceTestModel.find_cached(model.id)
-				expect(in_cache?("_id:#{model.id}")).to be true
+				StaticResourceTestModel.cached(model.id) {StaticResourceTestModel.find(model.id)}
+				StaticResourceTestModel.cached(model.id) {StaticResourceTestModel.find(model.id)}
+				expect(in_cache?(model.id)).to be true
 			end
 
-			it 'accepts an optional argument to look for a field other than id' do
-				model = StaticResourceTestModel.create(f_1: "other")
-				found = StaticResourceTestModel.find_cached(model.f_1, field: :f_1)
+			it 'accepts a block that runs a query' do
+				model = StaticResourceTestModel.create(f_1: 'other', f_2: 'something')
+				found = StaticResourceTestModel.cached("#{model.f_1}-#{model.f_2}") do
+					StaticResourceTestModel.find_by(f_1: model.f_1, f_2: model.f_2)
+				end
 				expect(found).to eq model
 			end
 		end

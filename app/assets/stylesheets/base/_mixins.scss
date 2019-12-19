@@ -31,7 +31,7 @@
 
 
 @mixin themed($prop: background-color, $map-key: "background") {
-	body.light & {
+	body.is-light & {
 		#{$prop}: theme-light($map-key);
 	}
 
@@ -41,11 +41,11 @@
 }
 
 @mixin themed-inverse($prop: background-color, $map-key: "background") {
-	body.light & {
+	body.is-light & {
 		#{$prop}: theme-dark($map-key);
 	}
 
-	body.dark & {
+	body.is-dark & {
 		#{$prop}: theme-light($map-key);
 	}
 }

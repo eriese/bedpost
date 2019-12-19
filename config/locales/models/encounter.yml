@@ -89,5 +89,21 @@ en:
       prompt: Choose a partner
   helpers:
     label:
-      who:
+      encounter:
         partnership_id: Who did you have sex with?
+        fluids_group: Was there any other fluid exchange we didn't cover?
+        fluids:
+          'true': 'Yes'
+          'false': 'No'
+        self_risk: How risky do you think this encounter was?
+    tooltip:
+      encounter:
+        fluids_group: Did you get ejaculate in your eye?
+    sliders:
+      encounter:
+        self_risk:
+          zero: Not at all
+          one: Basically none
+          two: A little
+          three: A medium amount
+          four: A lot

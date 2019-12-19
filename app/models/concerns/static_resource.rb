@@ -44,13 +44,9 @@ module StaticResource
 			end
 		end
 
-		def find_cached(id, field: nil)
-			Rails.cache.fetch("#{field || '_id'}:#{id}", namespace: name) do
-				if field.nil?
-					find(id)
-				else
-					find_by(field => id)
-				end
+		def cached(key)
+			Rails.cache.fetch(key, namespace: name) do
+				yield
 			end
 		end
 	end

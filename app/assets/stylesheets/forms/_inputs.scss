@@ -32,8 +32,8 @@ input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
 
 
 select {
-	-webkit-appearance: listbox;
-	appearance: listbox;
+	-webkit-appearance: none;
+	appearance: none;
 	@include background-svg(up-down-carets($input-border-color));
 	background-repeat: no-repeat;
 	background-size: 1.5EM 1EM;
