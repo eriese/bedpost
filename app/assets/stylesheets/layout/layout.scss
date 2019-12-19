@@ -33,6 +33,36 @@ body.has-cards {
 	}
 }
 
+body.vertical-center {
+	#vue-container {
+		display: flex;
+		flex-direction: column;
+		align-items:  stretch;
+		justify-content: space-around;
+		height: 100%;
+		width: 100%;
+	}
+
+	&.body--has-columns {
+		.header--is-big {
+			flex-grow: 1;
+		}
+	}
+	.header {
+		&--is-small {
+			position: absolute;
+			z-index: 900;
+			top: 0;
+			left: $nav-button-width + $spacing-medium;
+			width: calc(100% - #{$nav-button-width + $spacing-medium});
+		}
+	}
+
+	main {
+		flex-grow: 2;
+	}
+}
+
 h1 {
 	@include heading1;
 }
@@ -49,6 +79,30 @@ h2 {
 
 header {
 	text-align: center;
+	font-family: $font-header;
+	font-size: rem(55px);
+	@include themed(color, "background-contrast");
+
+	body.has-cards & {
+		color: theme-dark("h1");
+	}
+
+	body.is-dark.has-cards & {
+		color: theme-light("h1");
+	}
+
+	&.header {
+		&--is-small {
+			font-size: rem(45px);
+			line-height: 1.35;
+			padding-top: rem(10px);
+			text-align: left;
+		}
+
+		&--has-no-nav {
+			font-size: rem(32px);
+		}
+	}
 }
 
 main {
@@ -70,6 +124,10 @@ ul {
 
 p.description {
 	margin-top: 0;
+}
+
+#logo {
+	text-decoration: none;
 }
 
 .card {
@@ -153,67 +211,6 @@ p.description {
 
 .clear {
 	clear: both;
-}
-
-#logo {
-	font-family: $font-header;
-	font-size: rem(55px);
-	text-decoration: none;
-	@include themed(color, "background-contrast");
-
-	body.has-cards & {
-		color: theme-dark("h1");
-	}
-
-	body.is-dark.has-cards & {
-		color: theme-light("h1");
-	}
-
-	header.header--is-small & {
-		text-align: left;
-		font-size: rem(45px);
-		line-height: 1.35;
-		float: left;
-		padding-top: rem(10px);
-	}
-}
-
-
-body.vertical-center {
-	#vue-container {
-		display: flex;
-		flex-direction: column;
-		align-items:  stretch;
-		justify-content: space-around;
-		height: 100%;
-		width: 100%;
-	}
-
-	&.body--has-columns {
-		.header--is-big {
-			flex-grow: 1;
-		}
-	}
-	.header {
-		&--is-big {
-			flex-grow: 0;
-			display: flex;
-			align-self: center;
-			align-items: center;
-		}
-
-		&--is-small {
-			flex-grow: 0;
-			position: absolute;
-			z-index: 900;
-			top: 0;
-			left: $nav-button-width + $spacing-medium;
-		}
-	}
-
-	main {
-		flex-grow: 2;
-	}
 }
 
 #page-container-inner {

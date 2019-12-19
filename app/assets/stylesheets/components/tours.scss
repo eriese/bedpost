@@ -4,9 +4,10 @@
 	min-width: unset;
 	width: 2rem;
 	height: 2rem;
-	line-height: 2rem;
+	line-height: 1.15 * 2rem;
 	padding: 0;
-	margin: $spacing-default;
+	margin: $spacing-small $spacing-default;
+	font-size: 1.5rem;
 }
 
 .v-tour {

@@ -85,17 +85,16 @@ class UserProfile < Profile
 	# Has the user been given a tour of the given page?
 	# @param [String] page the page url
 	# @return [true] if the user has toured the page
-	def has_toured?(page)
-		tours.present? && tours.include?(page)
-		# false
+	def has_toured?(page, fte_only)
+		tours.present? && tours.include?("#{page}-#{fte_only}")
 	end
 
 	# Mark the user as having toured the given page
 	# @param [String] page the page url
 	# @return [true] if the user was saved properly
-	def tour(page)
+	def tour(page, fte_only)
 		tmp = self.tours
-		tmp << page
+		tmp << "#{page}-#{fte_only}"
 		self.tours = tmp
 		changed? ? save : true
 	end

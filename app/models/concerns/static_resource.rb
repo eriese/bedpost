@@ -7,8 +7,11 @@ module StaticResource
 	end
 
 	def clear_all_caches
-		return if Rails.env.development?
-		Rails.cache.delete_matched('*', namespace: self.class.name)
+		if Rails.env.development?
+			Rails.cache.delete_matched(self.class.name)
+		else
+			Rails.cache.delete_matched('*', namespace: self.class.name)
+		end
 	end
 
 	class_methods do

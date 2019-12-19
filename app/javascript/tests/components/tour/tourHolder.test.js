@@ -35,30 +35,123 @@ describe("TourHolder component", () => {
 			})
 		})
 
-		test("it runs the tour", done => {
-			const localVue = createLocalVue()
-			localVue.prototype.$tours = {}
+		describe('running the tour', () => {
+			beforeAll(() => {
+				jest.useFakeTimers();
+			});
 
-			const startMock = jest.fn()
+			afterAll(() => {
+				jest.useRealTimers();
+			});
 
-			const wrapper = mount(TourHolder, {
-				propsData: {
-					steps: null
-				},
-				methods: {
-					startTour: startMock
-				},
-				localVue
-			})
+			test('it immediately emits tour-started', () => {
+				const localVue = createLocalVue();
+				localVue.prototype.$tours = {};
 
-			wrapper.setProps({steps: [{target: "#t-1", content: "some text"}]})
+				const wrapper = mount(TourHolder, {
+					propsData: {
+						steps: null
+					},
+					methods: {
+						startTour: jest.fn(),
+					},
+					localVue
+				});
 
-			setTimeout(() => {
+				wrapper.setProps({
+					steps: [{target: '#t-1', content: 'some text'}]
+				});
+
+				expect(wrapper.emitted('tour-started')).toHaveLength(1);
+			});
+
+			test('it runs the tour immediately if the tour has run before on this page load', () => {
+				const localVue = createLocalVue();
+				localVue.prototype.$tours = {};
+				const startMock = jest.fn();
+
+				const wrapper = mount(TourHolder, {
+					propsData: {
+						steps: null,
+						tourRuns: 1,
+					},
+					methods: {
+						startTour: startMock,
+					},
+					localVue
+				});
+
+				wrapper.setProps({
+					steps: [{target: '#t-1', content: 'some text'}]
+				});
+
+				jest.advanceTimersByTime(0);
 				expect(startMock).toHaveBeenCalledTimes(1);
-				done()
-			})
-		})
-	})
+			});
+
+			test('it runs the tour after a delay if it is the first run on page load', () => {
+				const localVue = createLocalVue();
+				localVue.prototype.$tours = {};
+
+				const startMock = jest.fn();
+
+				const wrapper = mount(TourHolder, {
+					propsData: {
+						steps: null
+					},
+					methods: {
+						startTour: startMock
+					},
+					localVue
+				});
+
+				wrapper.setProps({
+					steps: [{target: '#t-1', content: 'some text'}]
+				});
+
+				expect(startMock).not.toHaveBeenCalled();
+				jest.advanceTimersByTime(2000);
+				expect(startMock).toHaveBeenCalledTimes(1);
+			});
+
+			test('it sets up an IntersectionObserver if the first step requires waiting for the target to be in view', () => {
+				const localVue = createLocalVue();
+				localVue.prototype.$tours = {};
+
+				const startMock = jest.fn();
+
+				const wrapper = mount(TourHolder, {
+					propsData: {
+						steps: null,
+						tourRuns: 1
+					},
+					methods: {
+						startTour: startMock
+					},
+					localVue
+				});
+
+				let intersectionCallback;
+				global.IntersectionObserver = class IntersectionObserver {
+					constructor(callback) {
+						intersectionCallback = callback;
+					}
+					observe() {}
+				};
+
+				wrapper.setProps({
+					steps: [{target: '#t-1', content: 'some text', await_in_view: true}]
+				});
+
+				jest.advanceTimersByTime(0);
+				expect(intersectionCallback).not.toBeUndefined();
+				expect(startMock).not.toHaveBeenCalled();
+
+				intersectionCallback([]);
+				expect(startMock).toHaveBeenCalledTimes(1);
+			});
+		});
+	});
 
 	describe("when a tour is stopped", () => {
 		test("it emits a tour-stopped event", done => {

@@ -139,13 +139,13 @@ RSpec.describe UserProfile, type: :model do
 		describe '#has_toured?' do
 			it 'returns true if the user has toured the given page' do
 				user = build_stubbed(:user_profile)
-				user.tours = ["page"]
-				expect(user).to have_toured("page")
+				user.tours = ["page-false"]
+				expect(user).to have_toured("page", false)
 			end
 
 			it 'returns false if the user has not toured the given page' do
 				user = build_stubbed(:user_profile)
-				expect(user).to_not have_toured("page")
+				expect(user).to_not have_toured("page", false)
 			end
 		end
 
@@ -156,15 +156,15 @@ RSpec.describe UserProfile, type: :model do
 
 			it 'adds a page to a the tour set and saves' do
 				@user = create(:user_profile)
-				expect(@user.tour("page")).to be true
+				expect(@user.tour("page", false)).to be true
 				@user.reload
 				expect(@user.tours).to be_a Set
-				expect(@user.tours).to include("page")
+				expect(@user.tours).to include("page-false")
 			end
 
 			it 'returns true if the user has already toured the page, but does not add a duplicate' do
-				@user = create(:user_profile, tours: ["page"])
-				expect(@user.tour("page")).to be true
+				@user = create(:user_profile, tours: ["page-false"])
+				expect(@user.tour("page", false)).to be true
 			end
 		end
 

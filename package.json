@@ -10,6 +10,7 @@
 		"flickity": "^2.2.0",
 		"gsap": "^3.0.0",
 		"i18n-js": "^3.3.0",
+		"popper.js": "^1.16.0",
 		"rails-erb-loader": "^5.5.2",
 		"v-calendar": "1.0.0-beta.16",
 		"vue": "^2.6.10",

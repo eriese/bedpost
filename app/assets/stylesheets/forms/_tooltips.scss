@@ -38,6 +38,7 @@ $tooltip-arrow-size: 0.5rem;
 
 aside.tippy-popper {
 	margin-top: $spacing-small;
+	max-width: 100%;
 
 	&[x-placement] .tippy-arrow {
 		right: calc(50% - #{2 * $tooltip-arrow-size});

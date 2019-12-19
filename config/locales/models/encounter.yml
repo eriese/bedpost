@@ -49,6 +49,7 @@ en:
       notes:
         title: Your Notes
       breakdown: "Let's break it down:"
+      continue_first_time: Continue
       sex:
         title: The Sex
         fluid_exchange: Additional fluid exchange

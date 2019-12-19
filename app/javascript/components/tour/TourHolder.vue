@@ -1,12 +1,12 @@
 <template>
-	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks" ref="tour-el">
+	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks" :options="tourOptions" ref="tour-el">
 		<template slot-scope="tour">
 			<transition name="fade">
 				<v-step
 					v-if="tour.currentStep === index"
 					v-for="(step, index) of tour.steps"
 					:key="index"
-					:step="step"
+					:step="{...step, params: stepOptions}"
 					:previous-step="tour.previousStep"
 					:next-step="tour.nextStep"
 					:stop="tour.stop"
@@ -54,12 +54,20 @@
 		data: function() {
 			return {
 				callbacks: {
-					onStop: this.onStop
+					onStop: this.onStop,
+				},
+				stepOptions: {
+					modifiers: {
+						preventOverflow: {
+							boundariesElement: 'viewport'
+						}
+					}
 				}
 			}
 		},
 		props: {
-			steps: Array
+			steps: Array,
+			tourRuns: Number
 		},
 		computed: {
 			componentType: function() {
@@ -70,22 +78,45 @@
 			},
 			running() {
 				return this.tour && this.tour.isRunning
-			}
+			},
+			tourOptions() {
+				if (!this.steps) {return {};}
+
+				return {
+					labels: {
+						buttonStop: this.steps.length == 1 ? 'Got it' : 'Finish'
+					}
+				}
+			},
 		},
 		methods: {
 			/**
 			 * checks to see if a tour should run when a new component mounts
 			 */
 			checkTour() {
-				if (this.steps && !this.running) {
-					this.startTour();
+				if (this.tour && !this.running) {
+					this.$emit('tour-started');
+
+					let timeoutNum = this.tourRuns > 0 ? 0 : 2000
+					this.timeout = setTimeout(() => {
+						if (this.steps[0].await_in_view) {
+							this.observer = new IntersectionObserver(this.startTour, {threshold: [1]});
+							this.firstStepTarget = document.querySelector(this.steps[0].target)
+							this.observer.observe(this.firstStepTarget)
+						} else {
+							this.startTour();
+						}
+					}, timeoutNum);
 				}
 			},
 			/**
 			 * starts the tour if there is one
 			 */
-			startTour() {
-				this.tour && this.tour.start()
+			startTour(entries) {
+				let firstVisibility = this.firstStepTarget && getComputedStyle(this.firstStepTarget).visibility;
+				if (!entries || firstVisibility == 'visible') {
+					this.tour && this.tour.start()
+				}
 			},
 			/**
 			 * emit that the tour has stopped
@@ -93,7 +124,11 @@
 			 */
 			onStop() {
 				this.$emit('tour-stopped');
-			}
+			},
+		},
+		beforeDestroy() {
+			this.observer && this.observer.disconnect();
+			clearTimeout(this.timeout);
 		}
 	}
 </script>

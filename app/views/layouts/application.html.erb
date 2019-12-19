@@ -47,9 +47,9 @@
 				<div id="page-container-inner" class="<%= content_for :inner_class %>">
 					<%= render "flash" %>
 					<%= yield %>
-					<tour-holder :steps="tourSteps" @tour-stopped="onTourStop"></tour-holder>
 				</div>
 			</main>
+			<tour-holder :steps="tourSteps" @tour-stopped="onTourStop" @tour-started="onTourStart" :tour-runs="tourRuns"></tour-holder>
 		</div>
 	</body>
 </html>

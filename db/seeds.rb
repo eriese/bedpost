@@ -151,7 +151,15 @@ tour_configs = {
 		target: '.description',
 		position: 0,
 		content: {
-			en: 'We created your account! Before we get into the fun stuff, tell us about you so we can talk about you in ways that feel good and fun.'
+			en: 'We created your account! Before we get into the fun stuff, tell us about yourself so we can talk about you in ways that feel good and fun.'
+		}
+	}],
+	'-partners-new' => [{
+		target: '.stepper__step:nth-child(2) .field .slide-bar-desc',
+		await_in_view: true,
+		position: 0,
+		content: {
+			en: "Here's why we want to know: we use this data to calculate risk mitigation, if you're not sure, you should round down because a partnership can never increase your risk, it can only decrease it."
 		}
 	}]
 }

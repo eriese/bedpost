@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
 
 	# set the layout based on whether there is a user who should be able to access all authorize features
 	def choose_layout
-		user_profile_signed_in? && !current_user_profile.first_time? ? "authed" : "no_auth"
+		user_profile_signed_in? ? (current_user_profile.first_time? ? 'first_time' : 'authed') : 'no_auth'
 	end
 
 	def self.responder
