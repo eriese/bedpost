@@ -1,15 +1,14 @@
 @import "vue-select/src/scss/vue-select.scss";
 
 $input-border-radius: 2rem;
-
 input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
+	@include themed(border-color, $input-border-key);
 	background-color: $input-background-color;
-	border-color: $input-border-color;
+	color: $color-black;
 	border-style: solid;
 	border-radius: $input-border-radius;
 	border-width: rem(1px);
 	box-sizing: border-box;
-	color: $color-black;
 	padding: 0.2rem 1rem;
 	height: 2rem;
 	line-height: 1;
@@ -26,7 +25,7 @@ input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
 	}
 
 	&:focus {
-		border-color: $input-border-color-focus;
+		@include themed(border-color, $input-border-focus-key);
 	}
 
 }
@@ -39,7 +38,7 @@ textarea {
 select {
 	-webkit-appearance: none;
 	appearance: none;
-	@include background-svg(up-down-carets($input-border-color));
+	@include background-svg(up-down-carets(theme-light($input-border-key)));
 	background-repeat: no-repeat;
 	background-size: 1.5EM 1EM;
 	background-position: right center;
@@ -48,11 +47,11 @@ select {
 	-webkit-background-clip: border-box;
 
 	&:focus, &:hover {
-		@include background-svg(up-down-carets($input-border-color-focus));
+		@include background-svg(up-down-carets(theme-light($input-border-focus-key)));
 	}
 }
 
-$check-box-size: rem(18px);
+$check-box-size: 1.25rem;
 
 input[type=checkbox], input[type=radio] {
 	display: inline-block;
@@ -64,10 +63,11 @@ input[type=checkbox], input[type=radio] {
 	height: $check-box-size;
 	width: $check-box-size;
 	cursor: pointer;
-	color: $input-border-color;
+	color: theme-light($input-border-key);
 	position: relative;
 	padding: 0;
 	margin-right: rem(10px);
+	border-width: rem(1.5px);
 
 	form.centered & {
 		display: inline-block;
@@ -78,7 +78,7 @@ input[type=checkbox], input[type=radio] {
 input[type=radio] {
 	border-radius: 50%;
 	&:checked{
-		background-color: $input-border-color;
+		background-color: theme-light($input-border-key);
 		&::after {
 			content: "";
 			display: inline-block;
@@ -94,9 +94,6 @@ input[type=radio] {
 	}
 
 	&.hidden-radio {
-		$label-color: $input-border-color-focus;
-		$label-hover-color: $input-border-color;
-
 		margin: 0rem;
 		width: 0rem !important;
 		display: inline !important;
@@ -104,7 +101,7 @@ input[type=radio] {
 
 		&:focus, &:hover, &:checked {
 			+ label {
-				color: $label-hover-color;
+				@include themed(color, $input-border-key);
 			}
 		}
 
@@ -136,11 +133,11 @@ input[type=radio] {
 		}
 
 		+ label {
+			@include themed(color, $input-border-focus-key);
 			cursor: pointer;
-			color: $label-color;
 
 			&:hover {
-				color: $label-hover-color;
+				@include themed(color, $input-border-key);
 			}
 		}
 
@@ -153,25 +150,27 @@ input[type=radio] {
 				display: inline-block;
 				vertical-align: middle;
 				border-radius: 50%;
-				@include color-and-secondary(color, $button-colors);
-				border: rem(2px) solid transparent;
+				border: rem(2px) solid;
+				border-color: transparent;
 				text-align: center;
 				font-size: 1rem;
 				margin-right: 0.5rem;
 				padding: 0;
+				@include themed(color, "cta-bg");
+				@include cta-transition;
 			}
 
 			&:checked {
 				+ label {
-					@include color-and-secondary(background-color, $button-colors);
-					@include color-and-secondary(color, $background-colors);
+					@include themed(background, "cta-bg");
+					@include themed(color, "background");
 					font-weight: normal;
 				}
 			}
 
 			&:focus, &:hover {
 				+ label {
-					@include color-and-secondary(border-color, $button-colors);
+					@include themed(border-color, "cta-bg");
 				}
 			}
 		}
@@ -179,17 +178,24 @@ input[type=radio] {
 }
 
 input[type=checkbox] {
-	&:checked::after {
+	&::after {
 		content: "";
 		display: inline-block;
-		border-left: rem(2px) solid;
-		border-bottom: rem(2px) solid;
+		border-left: rem(4px) solid;
+		border-bottom: rem(4px) solid;
 		transform: rotate(-45deg);
 		position: absolute;
-		height: rem(5px);
-		top: rem(2px);
-		width: rem(11px);
+		height: $check-box-size/2.5;
+		top: rem(-2px);
+		width: $check-box-size/1.25;
 		left: rem(1px);
+		border-color: transparent;
+		transition: border-color 0.3s ease-in-out;
+		border-radius: 1px;
+	}
+
+	&:checked::after {
+		@include themed(border-color, $input-border-focus-key);
 	}
 }
 
@@ -209,12 +215,12 @@ input[type=range] {
 			width: 100%;
 			background: transparent;
 			border-radius: $input-border-radius;
-			@include color-and-secondary(background-color, $input-border-colors);
 			height: rem(10px);
 			cursor: pointer;
 			transition: all .2s ease;
 			border: none;
 			box-shadow: none;
+			@include themed(background-color, $input-border-key);
 		}
 	}
 
@@ -223,11 +229,11 @@ input[type=range] {
 		&::#{$kit} {
 			height: rem(30px);
 			width: rem(15px);
-			@include color-and-secondary(background-color, $input-border-colors-focus);
 			box-shadow: none;
 			border-radius: $default-border-radius;
 			cursor: pointer;
 			border: none;
+			@include themed(background-color, $input-border-focus-key);
 		}
 	}
 
@@ -244,8 +250,8 @@ input[type=range] {
 	$ms-fills: -ms-fill-lower -ms-fill-upper;
 	@each $fill in $ms-fills {
 		&::#{$fill} {
+			@include themed(background, $input-border-key);
 			border: none;
-			background: $input-border-color;
 			box-shadow: none;
 			border-radius: rem(10px);
 		}
@@ -254,19 +260,19 @@ input[type=range] {
 	&:focus {
 		@each $kit in $kit-tracks {
 			&::#{$kit} {
-				background-color: $input-border-color-focus;
+				@include themed(background-color, $input-border-focus-key);
 			}
 		}
 
 		@each $thumb in $kit-thumbs {
 			&::#{$thumb} {
-				background-color: $input-border-color;
+				@include themed(background-color, $input-border-key);
 			}
 		}
 
 		@each $fill in $ms-fills {
 			&::#{$fill} {
-				background-color: $input-border-color-focus;
+				@include themed(background-color, $input-border-focus-key);
 			}
 		}
 	}
@@ -317,7 +323,7 @@ input[disabled=disabled] {
 .bool-indicator {
 	height: $check-box-size;
 	width: $check-box-size;
-	color: $input-border-color;
+	@include themed(color, $input-border-key);
 	position: relative;
 	margin-left: rem(5px);
 

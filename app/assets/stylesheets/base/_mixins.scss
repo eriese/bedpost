@@ -1,26 +1,6 @@
 ///////////////////////
 // theming
 ///////////////////////
-@mixin color-and-secondary($prop, $vals, $on-body: false, $and-card: false) {
-	#{$prop}: nth($vals, 1);
-
-	@if $and-card {
-		body.has-cards .card & {
-			#{$prop}: nth($vals, 2);
-		}
-	}
-
-	body.is-dark & {
-		#{$prop}: nth($vals, 2);
-	}
-
-	@if $and-card {
-		body.is-dark.has-cards .card & {
-			#{$prop}: nth($vals, 2);
-		}
-	}
-}
-
 @function theme-light($color-key) {
 	@return map-get($colors-light, $color-key);
 }
@@ -28,7 +8,6 @@
 @function theme-dark($color-key) {
 	@return map-get($colors-dark, $color-key);
 }
-
 
 @mixin themed($prop: background-color, $map-key: "background") {
 	body.is-light & {
@@ -118,10 +97,10 @@
 ///////////////////////
 // ctas
 ///////////////////////
+
 @mixin cta-base {
 	cursor: pointer;
 	padding: rem(10px) $spacing-default;
-	transition: 0.3s linear color, background-color, box-shadow, stroke;
 	border-style: none;
 	font-weight: 800;
 	text-transform: uppercase;
@@ -129,6 +108,12 @@
 	min-width: 8rem;
 	display: inline-block;
 	text-decoration: none;
+}
+
+@mixin cta-transition {
+	transition-duration: 0.3s;
+	transition-property: color, background-color, box-shadow, stroke, opacity, border-color;
+	transition-timing-function: ease-in-out;
 }
 
 @mixin cta-text-colors($theme: $colors-light, $suffix: "", $property: color) {
@@ -158,6 +143,7 @@
 @mixin cta($theme: $colors-light, $suffix: "") {
 	@include cta-base;
 	@include cta-colors($theme, $suffix);
+	@include cta-transition;
 }
 
 @mixin disabled {

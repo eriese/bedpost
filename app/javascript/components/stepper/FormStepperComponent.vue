@@ -10,7 +10,7 @@
 						<slot name="last-button"><button class="link link--no-line" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
 					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__button-item']">
-						<arrow-button class="link" v-bind="btn.bind"  @click="btn.click"></arrow-button>
+						<arrow-button class="cta--is-inverted" v-bind="btn.bind"  @click="btn.click"></arrow-button>
 					</li>
 				</ul>
 

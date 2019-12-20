@@ -161,7 +161,8 @@ p.description {
 	text-align: center;
 	font-weight: bold;
 	border: rem(1px) solid;
-	@include color-and-secondary(border-color, $background-colors-secondary);
+	@include themed(border-color, "background-contrast");
+	@include themed-with-cards(border-color, "h1");
 }
 
 #flash {
@@ -177,31 +178,23 @@ p.description {
 	}
 
 	.flash-notice {
-		@include color-and-secondary(border-color, $background-colors-secondary);
-		body.has-cards & {
-			border-color: nth($colors-h1, 1);
-		}
-		body.has-cards.is-dark & {
-			border-color: nth($colors-h1, 2);
-		}
+		@include themed(border-color, "background-contrast");
+		@include themed-with-cards(border-color, "h1");
 	}
 
 	.flash-alert {
-		@include color-and-secondary(border-color, $background-colors-secondary);
-		body.has-cards & {
-			border-color: nth($colors-h1, 1);
-		}
-		body.has-cards.is-dark & {
-			border-color: nth($colors-h1, 2);
-		}
+		@include themed(border-color, "background-contrast");
+		@include themed-with-cards(border-color, "h1");
 	}
 
 	.flash-error {
-		@include color-and-secondary(border-color, $button-colors);
+		@include themed(border-color, "cta-bg");
+		@include themed-with-cards(border-color, "background");
 	}
 
 	.flash-message {
-		@include color-and-secondary(border-color, $button-hover-colors);
+		@include themed(border-color, "h1");
+		@include themed-with-cards(border-color, "cta-bg");
 	}
 }
 

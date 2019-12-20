@@ -104,8 +104,8 @@ $colors-dark: (
 	"cta-text": $dark-background,
 	"cta-bg": #C78DAB,
 	"cta-bg-light": #FC9890,
-	"link": #FC9890,
-	"link-light": #C78DAB,
+	"link": #C78DAB,
+	"link-light": #FC9890,
 	"shadow": rgba($color-white, 0.5),
 	"h1": #FFD6CC,
 	"background": $dark-background,
@@ -177,7 +177,6 @@ $colors-h2: $colors1-h2 $colors2-h2;
 ///////////////////////
 // input defaults
 ///////////////////////
-$input-background-color: $color-white;
 $input-border-color: $colors1-button-primary;
 $input-border-color-focus: $colors1-button-secondary;
 
@@ -187,6 +186,10 @@ $input-border-color-focus-secondary: $colors2-button-secondary;
 
 $input-border-colors: $input-border-color $input-border-color-secondary;
 $input-border-colors-focus: $input-border-color-focus $input-border-color-focus-secondary;
+
+$input-background-color: $color-white;
+$input-border-key: "cta-bg";
+$input-border-focus-key: "cta-bg-light";
 
 ///////////////////////
 // sizing
