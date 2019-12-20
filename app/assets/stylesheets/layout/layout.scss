@@ -81,14 +81,17 @@ header {
 	text-align: center;
 	font-family: $font-header;
 	font-size: rem(55px);
-	@include themed(color, "background-contrast");
 
-	body.has-cards & {
-		color: theme-dark("h1");
-	}
+	> span, > a {
+		@include themed(color, "background-contrast");
 
-	body.is-dark.has-cards & {
-		color: theme-light("h1");
+		body.has-cards & {
+			color: theme-dark("h1");
+		}
+
+		body.is-dark.has-cards & {
+			color: theme-light("h1");
+		}
 	}
 
 	&.header {
