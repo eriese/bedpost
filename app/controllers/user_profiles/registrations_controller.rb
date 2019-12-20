@@ -54,7 +54,9 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	# end
 	#
 	def unique
-		profile = UserProfile.new(email: params.require(:email))
+		unique_params = params.permit(:email, :uid)
+		profile = user_profile_signed_in? ? current_user_profile : UserProfile.new
+		profile.assign_attributes(unique_params)
 		respond_with(profile)
 	end
 
