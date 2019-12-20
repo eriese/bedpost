@@ -8,7 +8,7 @@
 	}
 
 	.vc-popover-content-wrapper .vc-popover-content {
-		@include themed(border-color $input-border-focus-key);
+		@include themed(border-color, $input-border-focus-key);
 	}
 
 	.vc-bg-white {
