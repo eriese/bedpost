@@ -62,18 +62,18 @@ form.single {
 form {
 	div.field-errors {
 		text-align: right;
-		color: $colors1-h1;
+		color: theme-light("h1");
 		font-weight: bold;
 		font-size: rem(12px);
 		line-height: 1;
 
 		body.is-dark &, body.is-dark.has-cards .card & {
-			color: $colors2-h1;
+			color: theme-dark("h1");
 		}
 	}
 
 	div.errors {
-		color: $colors1-h1;
+		color: theme-light("h1");
 	}
 
 	div.range-indicator {
@@ -99,13 +99,6 @@ form {
 				text-align: left;
 			}
 		}
-	}
-
-	.tooltip {
-		color: $colors1-button-primary;
-		font-size: rem(14px);
-		line-height: 1.25;
-		margin: rem(3px) auto;
 	}
 
 	.slide-bar-desc {

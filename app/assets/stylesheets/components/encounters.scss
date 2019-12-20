@@ -230,7 +230,7 @@
 			box-sizing: border-box;
 			display: flex;
 			flex-direction: column;
-			background-color: $background-color;
+			background-color: $color-white;
 			flex-shrink: 0;
 
 			.month-year {
@@ -307,7 +307,12 @@
 		cursor: initial;
 	}
 
-	.vs__search, .vs__search:focus {
-		border-left: 1px solid $input-border-color-focus;
+	.vs__search {
+		border-left: 1px solid;
+		@include themed(border-left-color, $input-border-key);
+
+		&:focus {
+			@include themed(border-left-color, $input-border-focus-key);
+		}
 	}
 }
