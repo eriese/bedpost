@@ -22,14 +22,16 @@
 
 			.input label {
 				line-height: 1.25;
+				padding-left: 0px;
 			}
 		}
 	}
 
 	&.blurred {
 		.contact-field {
+			@include themed(color, $input-border-key);
+
 			flex-wrap: wrap;
-			color: $color-purple-dark;
 			justify-content: flex-start;
 
 			p {
@@ -39,14 +41,19 @@
 		}
 
 		input[type=radio], input[type=checkbox] {
-			&:checked + label {
-				font-size: 1rem;
-				font-weight: normal;
-			}
-
 			&:not(:checked) + label {
 				display: none;
 			}
+		}
+
+		input[type=radio]:checked + label {
+			font-size: 1rem;
+			padding-left: 0;
+		}
+
+		input[type=checkbox]:checked + label {
+			font-size: 0.85rem;
+			padding: $spacing-tiny;
 		}
 
 		.contact-barriers > div {

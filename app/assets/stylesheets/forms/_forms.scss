@@ -286,7 +286,7 @@ form {
 }
 
 .dynamic-field {
-	padding: rem(5px);
+	padding: $spacing-tiny 0;
 
 	.dynamic-field-buttons {
 		float: right;

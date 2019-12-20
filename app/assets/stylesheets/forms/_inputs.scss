@@ -178,16 +178,19 @@ input[type=radio] {
 }
 
 input[type=checkbox] {
+	border-radius: 0.25rem;
+	@include themed(border-color, $input-border-focus-key);
+
 	&::after {
 		content: "";
 		display: inline-block;
-		border-left: rem(4px) solid;
-		border-bottom: rem(4px) solid;
+		border-left: rem(3px) solid;
+		border-bottom: rem(3px) solid;
 		transform: rotate(-45deg);
 		position: absolute;
-		height: $check-box-size/2.5;
-		top: rem(-2px);
-		width: $check-box-size/1.25;
+		height: $check-box-size/1.75;
+		top: $check-box-size/-3.5;
+		width: $check-box-size;
 		left: rem(1px);
 		border-color: transparent;
 		transition: border-color 0.3s ease-in-out;
@@ -195,7 +198,7 @@ input[type=checkbox] {
 	}
 
 	&:checked::after {
-		@include themed(border-color, $input-border-focus-key);
+		@include themed(border-color, $input-border-key);
 	}
 }
 
