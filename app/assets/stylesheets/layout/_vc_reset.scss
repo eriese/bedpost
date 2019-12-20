@@ -8,11 +8,11 @@
 	}
 
 	.vc-popover-content-wrapper .vc-popover-content {
-		border-color: $input-border-color-focus;
+		@include themed(border-color, $input-border-focus-key);
 	}
 
 	.vc-bg-white {
-		background-color: $input-background-color;
+		@include themed;
 	}
 
 	.vc-text-gray-900 {
@@ -32,11 +32,11 @@
 	}
 
 	.vc-text-white {
-		color: $background-color;
+		@include themed(color, "background");
 	}
 
 	.vc-bg-blue-600 {
-		background-color: $input-border-color-focus;
+		@include themed(background-color, $input-border-focus-key);
 	}
 
 	.vc-bg-gray-800, .vc-bg-gray-900 {
@@ -48,7 +48,7 @@
 		border: rem(2px) solid $bg-color;
 
 		&[aria-pressed=false] {
-			background-color: $background-color;
+			background-color: $color-white;
 			color: $color-black;
 
 			@if $is-dark {
@@ -57,7 +57,7 @@
 		}
 
 		@if $is-dark {
-			color: $background-color;
+			color: $color-white;
 		}
 		@else {
 			color: $color-black;

@@ -10,8 +10,6 @@ $root-font-size: 16px;
 ///////////////////////
 // fonts
 ///////////////////////
-$font-script: 'Lily Script One', cursive;
-$font-outline: 'Londrina Shadow', sans-serif;
 $text-font: 'Open Sans', sans-serif;
 $font-header: 'Baloo', cursive;
 
@@ -30,62 +28,11 @@ $spacing-tiny:    $spacing-default / 4;
 $screen-tablet: 501px;
 
 ///////////////////////
-// colors
-///////////////////////
-$hue-purple: 316;
-$color-purple-dark: hsl($hue-purple,70,19);
-$color-purple-light: hsl($hue-purple,70,39);
-$color-purple-very-dark: hsl($hue-purple,70,9);
-
-$gradient-purple-0: hsl($hue-purple, 25, 80);
-$gradient-purple-1: hsl($hue-purple, 25, 65);
-$gradient-purple-2: hsl($hue-purple, 25, 50);
-$gradient-purple-3: hsl($hue-purple, 25, 35);
-$gradient-purple-4: hsl($hue-purple, 25, 20);
-
-$gradient-purples: $gradient-purple-0 $gradient-purple-1 $gradient-purple-2 $gradient-purple-3 $gradient-purple-4;
-
-$gradient-purples-saturated:
-	scale-color($color-purple-dark, $lightness: 65%, $saturation: -65%),
-	scale-color($color-purple-dark, $lightness: 50%, $saturation: -50%),
-	scale-color($color-purple-dark, $lightness: 35%, $saturation: -35%),
-	scale-color($color-purple-dark, $lightness: 20%, $saturation: -20%),
-	$color-purple-dark;
-
-$hue-green: 180;
-$color-green-dark: hsl($hue-green,90,18);
-$color-green-light: hsl($hue-green,95,25);
-$color-green-very-dark: hsl($hue-green,89,9);
-
-$gradient-green-0: hsl($hue-green, 25, 80);
-$gradient-green-1: hsl($hue-green, 25, 65);
-$gradient-green-2: hsl($hue-green, 25, 50);
-$gradient-green-3: hsl($hue-green, 25, 35);
-$gradient-green-4: hsl($hue-green, 25, 20);
-
-$gradient-greens: $gradient-green-0 $gradient-green-1 $gradient-green-2 $gradient-green-3 $gradient-green-4;
-
-$gradient-greens-saturated:
-	scale-color($color-green-dark, $lightness: 65%, $saturation: -65%),
-	scale-color($color-green-dark, $lightness: 50%, $saturation: -50%),
-	scale-color($color-green-dark, $lightness: 35%, $saturation: -35%),
-	scale-color($color-green-dark, $lightness: 20%, $saturation: -20%),
-	$color-green-dark;
-
-$color-black: rgb(55,50,50);
-$color-off-white: #F3F3F3;
-$color-light-gray: hsl($hue-purple,5,85);
-$color-dark-gray: hsl($hue-green,3,20);
-
-///////////////////////
-// new colors
+// Themes
 ///////////////////////
 $color-black: #333;
 $color-off-white: #EEE;
 $color-white: #FFF;
-
-$dark-background: #2E2143;
-$dark-background-secondary: #FC9890;
 
 $colors-light: (
 	"cta-text": $color-white,
@@ -101,14 +48,14 @@ $colors-light: (
 );
 
 $colors-dark: (
-	"cta-text": $dark-background,
+	"cta-text": #2E2143,
 	"cta-bg": #C78DAB,
 	"cta-bg-light": #FC9890,
-	"link": #FC9890,
-	"link-light": #C78DAB,
+	"link": #C78DAB,
+	"link-light": #FC9890,
 	"shadow": rgba($color-white, 0.5),
 	"h1": #FFD6CC,
-	"background": $dark-background,
+	"background": #2E2143,
 	"background-contrast": #FC9890,
 	"text": $color-white
 );
@@ -120,76 +67,17 @@ $colors-dark: (
 	}
 }
 
-$colors1-button-primary: #7A405E;
-$colors1-button-secondary: #AF6A64;
-$colors1-h1: #433060;
-$colors1-h2: $color-black;
-$colors1-text: $color-black;
-$colors1-background: $color-white;
-$colors1-background-secondary: #AF5C87;
-
-$colors2-background: #2E2143;
-$colors2-background-secondary: #FC9890;
-$colors2-button-primary: #C78DAB;
-$colors2-button-secondary: #FC9890;
-$colors2-h1: #FFD6CC;
-$colors2-h2: #EEE;
-$colors2-text: $color-white;
-
-
-$default-border-radius: 0.95rem;
-$box-shadow-val: 0px 0px 2px 1px;
-$stn-box-shadow: $box-shadow-val rgba($color-black,0.5);
-$stn-box-shadow-secondary: $box-shadow-val rgba($color-white,0.5);
-
-///////////////////////
-// widget colors
-///////////////////////
-$background-color: $color-white;
-$button-color: $colors1-button-primary;
-$button-text-color: $color-white;
-$button-hover-color: $color-white;
-$button-hover-text-color: $colors1-button-primary;
-$link-color: $colors1-button-primary;
-$link-hover-color: $colors1-button-secondary;
-
-$background-color-secondary: $colors2-background;
-$button-color-secondary: $colors2-button-primary;
-$button-text-color-secondary: $colors2-background;
-$button-hover-color-secondary: $colors2-background;
-$button-hover-text-color-secondary: $colors2-button-primary;
-$link-color-secondary: $colors2-button-secondary;
-$link-hover-color-secondary: $colors2-button-primary;
-
-$background-colors: $background-color $background-color-secondary;
-$background-colors-secondary: $colors1-background-secondary $colors2-background-secondary;
-$button-colors: $button-color $button-color-secondary;
-$button-colors-secondary: $colors1-button-secondary $colors1-button-secondary;
-$button-hover-colors: $button-hover-color $button-hover-color-secondary;
-$button-text-colors: $button-text-color $button-text-color-secondary;
-$button-hover-text-colors: $button-hover-text-color $button-hover-text-color-secondary;
-$link-colors: $link-color $link-color-secondary;
-$link-hover-colors: $link-hover-color $link-hover-color-secondary;
-$box-shadows: $stn-box-shadow, $stn-box-shadow-secondary;
-$colors-h1: $colors1-h1 $colors2-h1;
-$colors-h2: $colors1-h2 $colors2-h2;
-
 ///////////////////////
 // input defaults
 ///////////////////////
 $input-background-color: $color-white;
-$input-border-color: $colors1-button-primary;
-$input-border-color-focus: $colors1-button-secondary;
-
-$input-background-color-secondary: $color-white;
-$input-border-color-secondary: $colors2-button-primary;
-$input-border-color-focus-secondary: $colors2-button-secondary;
-
-$input-border-colors: $input-border-color $input-border-color-secondary;
-$input-border-colors-focus: $input-border-color-focus $input-border-color-focus-secondary;
+$input-border-key: "cta-bg";
+$input-border-focus-key: "cta-bg-light";
 
 ///////////////////////
 // sizing
 ///////////////////////
 $nav-width: rem(250px);
 $nav-button-width: rem(35px);
+$default-border-radius: 0.95rem;
+$box-shadow-val: 0px 0px 2px 1px;

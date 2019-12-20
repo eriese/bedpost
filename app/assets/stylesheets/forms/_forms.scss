@@ -62,18 +62,18 @@ form.single {
 form {
 	div.field-errors {
 		text-align: right;
-		color: $colors1-h1;
+		color: theme-light("h1");
 		font-weight: bold;
 		font-size: rem(12px);
 		line-height: 1;
 
 		body.is-dark &, body.is-dark.has-cards .card & {
-			color: $colors2-h1;
+			color: theme-dark("h1");
 		}
 	}
 
 	div.errors {
-		color: $colors1-h1;
+		color: theme-light("h1");
 	}
 
 	div.range-indicator {
@@ -99,13 +99,6 @@ form {
 				text-align: left;
 			}
 		}
-	}
-
-	.tooltip {
-		color: $colors1-button-primary;
-		font-size: rem(14px);
-		line-height: 1.25;
-		margin: rem(3px) auto;
 	}
 
 	.slide-bar-desc {
@@ -172,7 +165,7 @@ form {
 .flickity-enabled {
 	&:focus ~ .stepper__nav .stepper__nav__button-item>* {
 		border: rem(2px) solid;
-		@include color-and-secondary(border-color, $button-colors);
+		@include themed(border-color, "cta-bg");
 	}
 
 	.field {
@@ -225,10 +218,12 @@ form {
 		width: $dot-size;
 		height: $dot-size;
 		border-radius: 50%;
-		@include color-and-secondary(background-color, rgba($colors1-button-secondary, 0.5) rgba($colors2-button-secondary, 0.5));
+		opacity: 0.5;
+		@include themed($map-key: "cta-bg-light");
 
 		&--current {
-			@include color-and-secondary(background-color, $button-colors);
+			opacity: 1;
+			@include themed($map-key: "cta-bg");
 		}
 	}
 
@@ -261,6 +256,10 @@ form {
 
 		button {
 			border: 2px solid transparent;
+			@include cta-transition;
+			&:disabled {
+				@include disabled;
+			}
 		}
 
 		@media (min-width: $constrained-form-width + 3rem) {

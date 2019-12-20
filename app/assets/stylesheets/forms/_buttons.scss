@@ -9,6 +9,7 @@
 	&--is-inverted {
 		@include cta-text-colors($colors-light, $property: background-color);
 		@include cta-background-colors($colors-light, $property: color);
+		@include cta-background-colors($colors-light, $property: stroke);
 	}
 
 	&--compact {
@@ -91,6 +92,6 @@
 button.vs__deselect{
 	&:hover, &:focus {
 		background-color: transparent;
-		fill: $button-hover-color;
+		@include themed(fill, "cta-bg-light");
 	}
 }
