@@ -1,5 +1,5 @@
 .main-nav {
-	position: relative;
+	position: absolute;
 	left: 0rem;
 	top: 0rem;
 	z-index: 100;
@@ -9,15 +9,14 @@
 		cursor: pointer;
 		min-width: unset;
 		background-color: transparent;
-		margin: rem(10px);
-		width: $nav-button-width;
+		margin: rem(10px) 1rem;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
 		padding: 0rem;
 		box-sizing: content-box;
 		box-shadow: none;
-		border: 2px solid;
+		border: none;
 		@include themed(border-color, "background-contrast");
 		@include themed-with-cards(border-color, "background");
 
@@ -29,9 +28,11 @@
 		}
 
 		&__line {
-			border: rem(1.5px) solid;
+			border: rem(2.75px) solid;
 			border-color: inherit;
-			margin: rem(6.5px) rem(5px);
+			width: $nav-button-width;
+			margin: rem(4.2px) $spacing-tiny;
+			border-radius: $default-border-radius;
 		}
 
 		.no-js & {

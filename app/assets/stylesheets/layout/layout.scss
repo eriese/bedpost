@@ -81,6 +81,7 @@ header {
 	text-align: center;
 	font-family: $font-header;
 	font-size: rem(55px);
+	position: relative;
 
 	> span, > a {
 		@include themed(color, "background-contrast");
@@ -99,11 +100,15 @@ header {
 			font-size: rem(45px);
 			line-height: 1.35;
 			padding-top: rem(10px);
-			text-align: left;
+			// text-align: left;
 		}
 
 		&--has-no-nav {
 			font-size: rem(32px);
+		}
+
+		&--has-shadow {
+			box-shadow: 0 2px 10px 0 rgba(0,0,0,0.5);
 		}
 	}
 }
