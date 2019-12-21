@@ -171,6 +171,7 @@ form {
 		div[role=radiogroup] > div {
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 
 			.group-radios {
 				flex-shrink: 0;
