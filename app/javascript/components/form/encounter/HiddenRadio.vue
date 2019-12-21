@@ -1,6 +1,6 @@
 <template>
 	<div class="input">
-		<input ref="input" type="radio" class="hidden-radio" :value="inputValue" v-on="cListeners" :name="inputName" :id="inputId">
+		<input ref="input" type="radio" class="hidden-radio" :value="inputValue" v-on="cListeners" :name="inputName" :id="inputId" :class="$attrs.class">
 		<label :for="inputId">{{labelText}}</label>
 	</div>
 </template>

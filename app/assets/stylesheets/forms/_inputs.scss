@@ -4,7 +4,7 @@ $input-border-radius: 2rem;
 input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
 	@include themed(border-color, $input-border-key);
 	background-color: $input-background-color;
-	color: $color-black;
+	@include themed(color, $input-color-key);
 	border-style: solid;
 	border-radius: $input-border-radius;
 	border-width: rem(1px);
@@ -13,6 +13,7 @@ input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
 	height: 2rem;
 	line-height: 1;
 	box-shadow: none;
+	font-size: 0.75rem;
 
 	form.big &, form.single & {
 		padding: rem(5px) rem(10px);
@@ -99,22 +100,9 @@ input[type=radio] {
 		display: inline !important;
 		border: none !important;
 
-		&:focus, &:hover, &:checked {
-			+ label {
-				@include themed(color, $input-border-key);
-			}
-		}
-
 		&:checked {
 			&::after {
 				display: none;
-			}
-
-			+ label {
-				@media (min-width: rem(500px)) {
-					font-size: 1.2rem;
-				}
-				font-weight: bold;
 			}
 		}
 
@@ -141,9 +129,24 @@ input[type=radio] {
 			}
 		}
 
-		.toggler & {
+		&--link {
+			&:focus, &:hover, &:checked {
+				+ label {
+					@include themed(color, $input-border-key);
+				}
+			}
+
+			&checked + label {
+				@media (min-width: rem(500px)) {
+					font-size: 1.2rem;
+				}
+				font-weight: bold;
+			}
+		}
+
+		&--cta {
 			+ label {
-				$size: 2.15rem;
+				$size: rem(40px);
 				height: $size;
 				width: $size;
 				line-height: $size - 0.1rem;
@@ -153,24 +156,24 @@ input[type=radio] {
 				border: rem(2px) solid;
 				border-color: transparent;
 				text-align: center;
-				font-size: 1rem;
 				margin-right: 0.5rem;
 				padding: 0;
-				@include themed(color, "cta-bg");
+				font-weight: bolder;
+				text-transform: uppercase;
+				@include themed(color, "form-background");
 				@include cta-transition;
 			}
 
 			&:checked {
 				+ label {
-					@include themed(background, "cta-bg");
+					@include themed(background, "form-background");
 					@include themed(color, "background");
-					font-weight: normal;
 				}
 			}
 
 			&:focus, &:hover {
 				+ label {
-					@include themed(border-color, "cta-bg");
+					@include themed(border-color, "form-background");
 				}
 			}
 		}

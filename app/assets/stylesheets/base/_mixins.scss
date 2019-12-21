@@ -100,7 +100,7 @@
 
 @mixin cta-base {
 	cursor: pointer;
-	padding: rem(10px) $spacing-default;
+	padding: rem(10px) rem(30px);
 	border-style: none;
 	font-weight: 800;
 	text-transform: uppercase;
@@ -125,7 +125,7 @@
 	}
 }
 
-@mixin cta-background-colors($theme: $colors-light, $suffix: "", $property: color) {
+@mixin cta-background-colors($theme: $colors-light, $suffix: "", $property: background-color) {
 	#{$property}: map-get($theme, "cta-bg#{$suffix}");
 	&:hover, &:focus {
 		&:not(:disabled) {

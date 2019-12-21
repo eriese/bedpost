@@ -12,7 +12,8 @@
 				:base-name="baseName"
 				v-model="_value.subject"
 				model="subject"
-				@change="updateContactType">
+				@change="updateContactType"
+				class="hidden-radio--link">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow" role="radiogroup">
@@ -22,7 +23,8 @@
 					inputValue: c.key,
 					baseName}"
 				v-model="contact_type"
-				@change="resetInsts">
+				@change="resetInsts"
+				class="hidden-radio--link">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow" role="radiogroup">
@@ -32,7 +34,8 @@
 				:base-name="baseName"
 				v-model="_value.object"
 				model="object"
-				@change="updateContactType">
+				@change="updateContactType"
+				class="hidden-radio--link">
 			</hidden-radio>
 		</div>
 		<div class="field-section" role="radiogroup">
@@ -44,7 +47,8 @@
 					baseName
 				}"
 				v-model="object_instrument_id"
-				@change="resetInsts(true)">
+				@change="resetInsts(true)"
+				class="hidden-radio--link">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
@@ -60,7 +64,8 @@
 					baseName
 				}"
 				v-model="subject_instrument_id"
-				@change="setContact">
+				@change="setContact"
+				class="hidden-radio--link">
 			</hidden-radio>
 		</div>
 	</div>

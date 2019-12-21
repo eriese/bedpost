@@ -1,16 +1,55 @@
+.h1--is-form-title {
+	font-size: rem(30px);
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-weight: normal;
+}
+
+.h2--is-form-heading {
+	font-size: rem(18px);
+}
+
+.container--has-form {
+	@include themed(background-color, "form-background");
+	padding: 1.5rem;
+
+	&__form {
+		@include themed;
+		border-radius: $default-border-radius-small;
+		box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+		padding-bottom: 60px;
+		padding-top: 1.5rem;
+		max-width: $constrained-width;
+		margin: 0 auto;
+	}
+}
+
+.cta--is-form-submit {
+	@include cta-background-colors($suffix: "-form");
+	font-size: 0.75rem;
+}
+
+.description {
+	&--is-form-description {
+		font-size: 0.75rem;
+	}
+}
+
 label {
-	padding-left: 0.75rem;
+	padding-left: 1rem;
+	font-weight: bold;
+	font-size: 0.75rem;
+	line-height: 1rem;
 
 	+ input,
 	+ select,
 	+ textarea {
-		margin-top: $spacing-small;
+		margin-top: $spacing-tiny;
 	}
 }
 
-$constrained-form-width: 26rem;
 form.centered {
-	max-width: $constrained-form-width;
+	max-width: $constrained-width;
 	width: 100%;
 	padding: 0rem rem(15px);
 	margin: 0rem auto;
@@ -29,7 +68,6 @@ form.centered {
 
 	label {
 		display: block;
-		line-height: 1;
 	}
 
 	.additional {
@@ -160,6 +198,12 @@ form {
 			}
 		}
 	}
+
+	.additional {
+		.toggle {
+			font-size: rem(11px);
+		}
+	}
 }
 
 .flickity-enabled {
@@ -262,7 +306,7 @@ form {
 			}
 		}
 
-		@media (min-width: $constrained-form-width + 3rem) {
+		@media (min-width: $constrained-width + 3rem) {
 			position: absolute;
 
 			$button-offset: -20%;

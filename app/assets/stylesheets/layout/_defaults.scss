@@ -38,26 +38,34 @@ $colors-light: (
 	"cta-text": $color-white,
 	"cta-bg": #7A405E,
 	"cta-bg-light": #AF6A64,
+	"cta-bg-form": #AF5D87,
 	"link": #7A405E,
 	"link-light": #AF6A64,
 	"shadow": rgba($color-black, 0.5),
 	"h1": #433060,
 	"background": $color-white,
 	"background-contrast": #AF5C87,
-	"text": $color-black
+	"text": $color-black,
+	"input-border": #7B405E,
+	"input-border-focus": #AF6A64,
+	"form-background": #AF5D87,
 );
 
 $colors-dark: (
 	"cta-text": #2E2143,
 	"cta-bg": #C78DAB,
 	"cta-bg-light": #FC9890,
+	"cta-bg-form": #AF5D87,
 	"link": #C78DAB,
 	"link-light": #FC9890,
 	"shadow": rgba($color-white, 0.5),
 	"h1": #FFD6CC,
 	"background": #2E2143,
 	"background-contrast": #FC9890,
-	"text": $color-white
+	"text": $color-white,
+	"input-border": #7B405E,
+	"input-border-focus": #FC9890,
+	"form-background": #AF5D87,
 );
 
 :export {
@@ -71,8 +79,9 @@ $colors-dark: (
 // input defaults
 ///////////////////////
 $input-background-color: $color-white;
-$input-border-key: "cta-bg";
-$input-border-focus-key: "cta-bg-light";
+$input-border-key: "input-border";
+$input-color-key: "input-border";
+$input-border-focus-key: "input-border-focus";
 
 ///////////////////////
 // sizing
@@ -80,4 +89,6 @@ $input-border-focus-key: "cta-bg-light";
 $nav-width: rem(250px);
 $nav-button-width: rem(35px);
 $default-border-radius: 0.95rem;
+$default-border-radius-small: rem(5px);
 $box-shadow-val: 0px 0px 2px 1px;
+$constrained-width: 26rem;
