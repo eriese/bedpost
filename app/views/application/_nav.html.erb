@@ -1,5 +1,5 @@
 <nav-component v-slot="{isOpen, toggleMenu}">
-<nav id="nav" role="navigation" class="main-nav">
+<nav id="nav" role="navigation" class="main-nav <%= content_for :nav_class %>">
 	<button class="main-nav__burger" :class="{'main-nav__burger--open': isOpen, 'main-nav__burger--closed': !isOpen}" @click.stop="toggleMenu" type="button" :aria-expanded="isOpen ? 'true' : 'false'" aria-controls="nav-list">
 		<div class="aria-only"><%= t("helpers.navigation_menu") %></div>
 		<div class="main-nav__burger__line"></div>

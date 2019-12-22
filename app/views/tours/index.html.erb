@@ -8,13 +8,13 @@
 		<h2><%= t(".desc") %></h2>
 	<% end %>
 	<ul class="first-time__button-list no-dots">
-		<li class="first-time__button-item"><%= link_to new_partnership_path, {class: "cta cta--square", data: {animation_type: 'slideLeft'}} do %>
+		<li class="first-time__button-item"><%= link_to new_partnership_path, {class: "cta cta--is-square", data: {animation_type: 'slideLeft'}} do %>
 				<span><%= t(".add_partnership", {count: @num_partnerships}) %></span>
 			<% end%>
 		</li>
 		<% if @has_partnerships %>
 			<li class="first-time__button-item">
-				<%= link_to (@num_partnerships == 1 ? new_partnership_encounter_path(@first_partner) : encounters_who_path) , {class: "cta cta--square", data: {animation_type: 'slideLeft'}} do %>
+				<%= link_to (@num_partnerships == 1 ? new_partnership_encounter_path(@first_partner) : encounters_who_path) , {class: "cta cta--is-square", data: {animation_type: 'slideLeft'}} do %>
 					<span><%= t(".add_encounter") %></span>
 				<% end %>
 			</li>

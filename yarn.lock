@@ -4562,6 +4562,11 @@ in-publish@^2.0.0:
   resolved "https://registry.yarnpkg.com/in-publish/-/in-publish-2.0.0.tgz#e20ff5e3a2afc2690320b6dc552682a9c7fadf51"
   integrity sha1-4g/146KvwmkDILbcVSaCqcf631E=
 
+include-media-or@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/include-media-or/-/include-media-or-1.0.3.tgz#f38385eae405a73240548767bd7fc37385c5f39c"
+  integrity sha512-zNvQpJ4NBj9PzDN2YvstGofFO2Gh8I29i+9/KANezJU8QmclBjUaQg9NN350tfz50RQuixORxtz7huySwAiE0A==
+
 indent-string@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/indent-string/-/indent-string-2.1.0.tgz#8e2d48348742121b4a8218b7a137e9a52049dc80"

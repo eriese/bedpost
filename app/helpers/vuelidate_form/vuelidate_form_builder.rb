@@ -204,9 +204,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	def date_field(attribute, **options)
 		options = convert_options(options)
 		options[:is_date] = true
-		field_builder(attribute, options).field do
+		options[:id] = "#{attribute}_visible"
+		date_field_builder = field_builder(attribute, options)
+		date_field_builder.field do
 			mdl = options.delete "v-model"
-			@template.content_tag(:"v-date-picker", "", {"v-model" => mdl, ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
+			@template.content_tag(:"v-date-picker", "", {":value" => mdl, "v-on" => "#{date_field_builder.slot_scope}.$listeners", ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
 				options[:"slot-scope"] = 'dp'
 				options[:"v-bind"] = 'dp.inputProps'
 				options[:"v-on"] = 'dp.inputEvents'

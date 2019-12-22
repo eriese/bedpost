@@ -3,6 +3,8 @@ class PartnershipWhosController < ApplicationController
 	skip_before_action :check_first_time, only: [:check]
 	after_action :clear_unsaved, only: [:check]
 
+	respond_to :json
+
 	def edit
 		@partnership = current_user_profile.partnerships.find(params.require(:partnership_id))
 		@partnership.uid = flash[:who_attempt][:uid] if flash[:who_attempt].present?
@@ -22,7 +24,9 @@ class PartnershipWhosController < ApplicationController
 	end
 
 	def unique
-		ship = current_user_profile.partnerships.new(uid: params.require(:uid))
+		ship_id = params[:id]
+		ship = ship_id.present? ? current_user_profile.partnerships.find(ship_id) : current_user_profile.partnerships.new
+		ship.assign_attributes(uid: params.require(:uid))
 		respond_with(ship)
 	end
 

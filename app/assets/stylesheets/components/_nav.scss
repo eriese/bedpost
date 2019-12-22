@@ -1,23 +1,20 @@
 .main-nav {
-	position: relative;
+	position: absolute;
 	left: 0rem;
 	top: 0rem;
 	z-index: 100;
-	float: left;
 
 	&__burger {
 		cursor: pointer;
 		min-width: unset;
 		background-color: transparent;
-		margin: rem(10px);
-		width: $nav-button-width;
+		bottom: $spacing-small;
+		left: $spacing-default;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
 		padding: 0rem;
-		box-sizing: content-box;
-		box-shadow: none;
-		border: 2px solid;
+		border: none;
 		@include themed(border-color, "background-contrast");
 		@include themed-with-cards(border-color, "background");
 
@@ -29,9 +26,11 @@
 		}
 
 		&__line {
-			border: rem(1.5px) solid;
+			border: rem(2.75px) solid;
 			border-color: inherit;
-			margin: rem(6.5px) rem(5px);
+			width: $nav-button-width;
+			margin: $spacing-tiny $spacing-tiny;
+			border-radius: $default-border-radius;
 		}
 
 		.no-js & {
@@ -42,8 +41,8 @@
 	&__menu {
 		overflow: hidden;
 		position: absolute;
-		padding-top: rem(57px);
-		top: 0rem;
+		// padding-top: rem(57px);
+		// top: 0rem;
 
 		margin: 0rem;
 		z-index: 1;

@@ -1,6 +1,6 @@
 <template>
 	<div class="input">
-		<input ref="input" type="radio" class="hidden-radio" :value="inputValue" v-on="cListeners" :name="inputName" :id="inputId">
+		<input ref="input" type="radio" class="hidden-radio" :value="inputValue" v-on="cListeners" :name="inputName" :id="inputId" :class="['hidden-radio', `hidden-radio--${$attrs.type}`]">
 		<label :for="inputId">{{labelText}}</label>
 	</div>
 </template>
@@ -12,6 +12,7 @@ export default {
 	name: 'hidden_radio',
 	props: ['checked', 'inputValue'],
 	mixins: [customInput],
+	inheritAttrs: false,
 	model: {
 		prop: 'checked',
 		event: 'change'

@@ -1,5 +1,5 @@
 <h2 style="text-align: center;"><%= t(".title_html", {partner: @partner.name}) %></h2>
-<div class="desc" style="text-align: center;"><%= t(".took_place", {took_place: l(@encounter.took_place, format: :long)}) %></div>
+<div class="desc" style="text-align: center;"><%= t(".took_place", {took_place: l(@encounter.took_place, format: :long_date)}) %></div>
 <div>
 	<bubble target="progbar-benchmark" position="centerX" add-class="bubble-above"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
 	<prog-bar :benchmark="<%= @encounter.self_risk %>" :max="<%= Diagnosis::TransmissionRisk::HIGH %>" :progress="<%= @encounter.overall_risk %>"></prog-bar>

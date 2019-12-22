@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 		get 'who', to: 'partnership_whos#edit'
 		put 'who', to: 'partnership_whos#update'
 		patch 'who', to: 'partnership_whos#update'
+		get 'uniqueness', to: 'partnership_whos#unique'
 		resources :encounters
 	end
 

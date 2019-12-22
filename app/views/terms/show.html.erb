@@ -10,8 +10,8 @@
 	</div>
 	<% unless @is_accepted %>
 		<%= vuelidate_form_with scope: :terms, method: :put, class: 'centered'  do |f| %>
-			<%= f.radio_group :acceptance, options: {radio_class: "hidden-radio", group_options: {field_class: "toggler", validators: [{kind: :acceptance}]}} %>
-			<%= f.radio_group :opt_in, options: {radio_class: "hidden-radio", group_options: {field_class: "toggler", tooltip: true}} if @terms.type == :privacy%>
+			<%= f.radio_group :acceptance, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", validators: [{kind: :acceptance}]}} %>
+			<%= f.radio_group :opt_in, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", tooltip: true}} if @terms.type == :privacy%>
 			<%= f.submit class: 'cta' %>
 		<% end %>
 	<% end %>

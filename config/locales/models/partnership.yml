@@ -91,16 +91,16 @@ en:
     sliders:
       partnership:
         familiarity:
-          one: "%{count} They're an anonymous hookup, we met on an app or IRL"
-          two: "%{count} I've seen them around, this is the first time we've hooked up"
-          three: "%{count} We hook up sometimes, share community, but don't have a close relationship"
-          four: "%{count} They date my date or my friend (or used to), and are trusted by people I know, but we aren't close"
-          five: "%{count} We've been hooking up regularly < 3 months but don't know each other socially"
-          six: "%{count} We've been hooking up regularly 3+ months but don't know each other socially"
-          seven: "%{count} We've known each other socially for years but this is our first hookup"
-          eight: "%{count} We met as dates and have been dating for < 3 months"
-          nine: "%{count} We met as dates and have been dating for 3+ months"
-          ten: "%{count} We know each other personally and have an ongoing relationship"
+          one: "%{count}: They're an anonymous hookup, we met on an app or IRL"
+          two: "%{count}: I've seen them around, this is the first time we've hooked up"
+          three: "%{count}: We hook up sometimes, share community, but don't have a close relationship"
+          four: "%{count}: They date my date or my friend (or used to), and are trusted by people I know, but we aren't close"
+          five: "%{count}: We've been hooking up regularly < 3 months but don't know each other socially"
+          six: "%{count}: We've been hooking up regularly 3+ months but don't know each other socially"
+          seven: "%{count}: We've known each other socially for years but this is our first hookup"
+          eight: "%{count}: We met as dates and have been dating for < 3 months"
+          nine: "%{count}: We met as dates and have been dating for 3+ months"
+          ten: "%{count}: We know each other personally and have an ongoing relationship"
         exclusivity:
           one: "%{count}: I know they have barrier-free sex with other people"
           two: "%{count}: I don't know. We don't use gloves or dental dams in our sex, and I assume they do not with others"

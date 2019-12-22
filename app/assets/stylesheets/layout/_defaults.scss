@@ -1,3 +1,4 @@
+@import 'include-media-or/dist/_include-media-or';
 ///////////////////////
 // initial setup
 ///////////////////////
@@ -23,10 +24,25 @@ $spacing-small:   $spacing-default / 2;
 $spacing-tiny:    $spacing-default / 4;
 
 ///////////////////////
+// sizing
+///////////////////////
+$nav-width: rem(250px);
+$nav-button-width: rem(36px);
+$default-border-radius: 0.95rem;
+$default-border-radius-small: rem(5px);
+$box-shadow-val: 0px 0px 2px 1px;
+$constrained-width: 30rem;
+
+///////////////////////
 // breakpoints
 ///////////////////////
 $screen-tablet: 501px;
-
+$custom-media-expressions: (
+	"!retina": "(-webkit-max-device-pixel-ratio: 1), (max--moz-device-pixel-ratio: 1), (-o-max-device-pixel-ratio: 1), (max-device-pixel-ratio: 1)",
+	"retina": "(min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx)"
+);
+$media-expressions: map-merge($media-expressions, $custom-media-expressions);
+$breakpoints: map-merge($breakpoints, ("tablet": $screen-tablet));
 ///////////////////////
 // Themes
 ///////////////////////
@@ -38,26 +54,36 @@ $colors-light: (
 	"cta-text": $color-white,
 	"cta-bg": #7A405E,
 	"cta-bg-light": #AF6A64,
+	"cta-bg-form": #AF5D87,
 	"link": #7A405E,
 	"link-light": #AF6A64,
 	"shadow": rgba($color-black, 0.5),
 	"h1": #433060,
+	"h2": $color-black,
 	"background": $color-white,
 	"background-contrast": #AF5C87,
-	"text": $color-black
+	"text": $color-black,
+	"input-border": #7B405E,
+	"input-border-focus": #AF6A64,
+	"form-background": #AF5D87,
 );
 
 $colors-dark: (
 	"cta-text": #2E2143,
 	"cta-bg": #C78DAB,
 	"cta-bg-light": #FC9890,
+	"cta-bg-form": #AF5D87,
 	"link": #C78DAB,
 	"link-light": #FC9890,
 	"shadow": rgba($color-white, 0.5),
 	"h1": #FFD6CC,
+	"h2": $color-off-white,
 	"background": #2E2143,
 	"background-contrast": #FC9890,
-	"text": $color-white
+	"text": $color-white,
+	"input-border": #7B405E,
+	"input-border-focus": #FC9890,
+	"form-background": #AF5D87,
 );
 
 :export {
@@ -71,13 +97,6 @@ $colors-dark: (
 // input defaults
 ///////////////////////
 $input-background-color: $color-white;
-$input-border-key: "cta-bg";
-$input-border-focus-key: "cta-bg-light";
-
-///////////////////////
-// sizing
-///////////////////////
-$nav-width: rem(250px);
-$nav-button-width: rem(35px);
-$default-border-radius: 0.95rem;
-$box-shadow-val: 0px 0px 2px 1px;
+$input-border-key: "input-border";
+$input-color-key: "input-border";
+$input-border-focus-key: "input-border-focus";

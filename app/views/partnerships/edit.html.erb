@@ -1,11 +1,12 @@
-<div class="centered-container">
-	<h2><%= t(".partner_html", {name: @partnership.partner.name}) %></h2>
-	<%= link_to t(".edit_partner_profile", name: @partnership.partner.name), edit_partnership_profile_path(@partnership) if @partnership.partner.is_base? %>
-	<%= link_to t(".edit_partner_uid"), partnership_who_path(@partnership) %>
+<%= render 'forms/basic_form', back_path: @partnership, header_text: t(".partner_html", {name: @partnership.partner.name}) do %>
+	<ul class="--is-unstyled container--has-centered-text">
+		<li><%= link_to t_action(".edit_partner_profile", name: @partnership.partner.name), edit_partnership_profile_path(@partnership), class: "link" if @partnership.partner.is_base? %></li>
+		<li><%= link_to t_action(".edit_partner_uid"), partnership_who_path(@partnership), class: "link" %></li>
+
+	</ul>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
 		<%= f.text_field :nickname, tooltip: true %>
 		<%= render "fields", f: f %>
-		<%= f.submit%>
+		<%= f.submit class: "cta cta--is-form-submit" %>
 	<% end %>
-	<%= link_to t(".back"), @partnership, class: "link" %>
-</div>
+<% end %>
