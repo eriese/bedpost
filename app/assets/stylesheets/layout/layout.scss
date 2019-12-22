@@ -33,6 +33,10 @@ body.has-cards {
 	}
 }
 
+body.has-form {
+	background-color: theme-light("form-background");
+}
+
 body.vertical-center {
 	#vue-container {
 		display: flex;
@@ -87,7 +91,7 @@ header {
 		@include themed(color, "background-contrast");
 
 		body.has-cards & {
-			color: theme-dark("h1");
+			color: theme-light("background");
 		}
 
 		body.is-dark.has-cards & {
@@ -108,7 +112,7 @@ header {
 		}
 
 		&--has-shadow {
-			box-shadow: 0 2px 10px 0 rgba(0,0,0,0.5);
+			box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2)
 		}
 	}
 }
@@ -141,6 +145,10 @@ p.description {
 .card {
 	border-radius: $default-border-radius;
 	padding: $spacing-medium;
+
+	&--has-no-padding {
+		padding: 0;
+	}
 }
 
 .with-js noscript {

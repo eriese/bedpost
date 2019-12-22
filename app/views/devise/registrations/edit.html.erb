@@ -1,6 +1,7 @@
-<% content_for :main_class, "container--has-form" %>
+<% content_for :body_class, "has-cards" %>
 <% content_for :header_class, "header--has-shadow" %>
-<div class="container--has-form__form">
+<% content_for :main_class, "container--has-form" %>
+<div class="container--has-form__form card card--has-no-padding">
 	<%= vuelidate_form_with model: resource, html: {class: "centered", method: :put}, vue: {name: resource_name}, url: registration_path(resource_name) do |f| %>
 		<%= content_tag(:h1, t_action(".account_settings"), class: 'h1--is-form-title') if resource.set_up?%>
 		<%= render  "profiles/fields", f: f, profile: resource, show_name: resource.set_up? do |p| %>
