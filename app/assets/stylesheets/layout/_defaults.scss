@@ -1,3 +1,4 @@
+@import 'include-media-or/dist/_include-media-or';
 ///////////////////////
 // initial setup
 ///////////////////////
@@ -23,10 +24,24 @@ $spacing-small:   $spacing-default / 2;
 $spacing-tiny:    $spacing-default / 4;
 
 ///////////////////////
+// sizing
+///////////////////////
+$nav-width: rem(250px);
+$nav-button-width: rem(34px);
+$default-border-radius: 0.95rem;
+$default-border-radius-small: rem(5px);
+$box-shadow-val: 0px 0px 2px 1px;
+$constrained-width: 30rem;
+
+///////////////////////
 // breakpoints
 ///////////////////////
 $screen-tablet: 501px;
-
+$custom-media-expressions: (
+	"!retina": "(-webkit-max-device-pixel-ratio: 1), (max--moz-device-pixel-ratio: 1), (-o-max-device-pixel-ratio: 1), (max-device-pixel-ratio: 1)",
+);
+$media-expressions: map-merge($media-expressions, $custom-media-expressions);
+$breakpoints: map-merge($breakpoints, ("tablet": $screen-tablet));
 ///////////////////////
 // Themes
 ///////////////////////
@@ -84,13 +99,3 @@ $input-background-color: $color-white;
 $input-border-key: "input-border";
 $input-color-key: "input-border";
 $input-border-focus-key: "input-border-focus";
-
-///////////////////////
-// sizing
-///////////////////////
-$nav-width: rem(250px);
-$nav-button-width: rem(34px);
-$default-border-radius: 0.95rem;
-$default-border-radius-small: rem(5px);
-$box-shadow-val: 0px 0px 2px 1px;
-$constrained-width: 26rem;

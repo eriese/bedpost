@@ -1,4 +1,4 @@
-@media (max-width: rem(500px)) {
+@include media ("<tablet", "retina2x", "retina3x") {
 	.no-js {
 		display: flex;
 		flex-wrap: wrap;
@@ -57,17 +57,42 @@
 	}
 
 	body.vertical-center{
-
-		header.header {
-			&--is-big {
+		&.body--has-columns {
+			header.header--is-big {
 				display: block;
 				text-align: center;
 				flex-grow: 0;
 			}
-		}
-
-		&.body--has-columns #vue-container {
-			justify-content: flex-start;
+			#vue-container {
+				justify-content: flex-start;
+			}
 		}
 	}
+}
+
+/** disable automatic zoom on iphones */
+@include media("retina2x", "retina3x") {
+		select, textarea, input[type="text"], input[type="password"],
+		input[type="datetime"], input[type="datetime-local"],
+		input[type="date"], input[type="month"], input[type="time"],
+		input[type="week"], input[type="number"], input[type="email"],
+		input[type="url"] {
+		 /* enlarge by 16/12 = 133.33% */
+			font-size: 1.1rem;
+			line-height: 1.3333;
+			padding: 0.2rem * 1.3333 1rem * 1.3333;
+
+
+			/* scale down by 12/16 = 75% */
+			transform: scale(0.75);
+			transform-origin: left top;
+
+			/* remove extra white space */
+			margin-bottom: -10px;
+			margin-right: -33.333333333%;
+
+			form.centered & {
+				width: 133.333333333%;
+			}
+		}
 }

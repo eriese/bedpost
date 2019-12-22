@@ -307,7 +307,7 @@ form {
 			}
 		}
 
-		@media (min-width: $constrained-width + 3rem) {
+		@include media(">#{$constrained-width + 3rem}" "!retina") {
 			position: absolute;
 
 			$button-offset: -20%;

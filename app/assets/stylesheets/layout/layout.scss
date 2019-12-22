@@ -53,7 +53,6 @@ body.vertical-center {
 	}
 	.header {
 		&--is-small {
-			position: absolute;
 			z-index: 900;
 			top: 0;
 			left: $nav-button-width + $spacing-medium;
@@ -63,7 +62,7 @@ body.vertical-center {
 
 	main {
 		flex-grow: 2;
-		height: 0px;
+		flex-basis: 100%;
 	}
 }
 
@@ -101,10 +100,9 @@ header {
 
 	&.header {
 		&--is-small {
-			font-size: rem(45px);
-			line-height: 1.35;
+			font-size: rem(36px);
+			line-height: 1.5;
 			padding-top: rem(10px);
-			// text-align: left;
 		}
 
 		&--has-no-nav {
@@ -237,7 +235,10 @@ p.description {
 
 		&-with-constraint {
 			height: 100%;
-			max-height: 30rem;
+
+			@include media(">tablet") {
+				max-height: 30rem;
+			}
 		}
 	}
 
@@ -257,7 +258,7 @@ p.description {
 		align-items: stretch;
 
 		&__centered-child {
-			height: 0px;
+			flex-basis: 100%;
 			flex-grow: 1;
 		}
 	}
