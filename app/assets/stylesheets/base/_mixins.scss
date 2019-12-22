@@ -106,9 +106,11 @@
 	text-transform: uppercase;
 	border-radius: 3rem;
 	min-width: 8rem;
-	display: inline-block;
 	text-decoration: none;
 	text-align: center;
+	align-items: center;
+	justify-content: center;
+	display: flex;
 }
 
 @mixin cta-transition {
