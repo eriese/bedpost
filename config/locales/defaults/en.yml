@@ -33,6 +33,7 @@ en:
   time:
     formats:
       most_recent: '%d %b, %Y'
+      long_date: '%B %d, %Y'
   errors:
     messages:
       email: Please enter a valid email address.

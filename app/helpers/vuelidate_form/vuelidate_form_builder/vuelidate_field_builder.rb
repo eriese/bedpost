@@ -2,6 +2,8 @@
 module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	include VuelidateFormUtils
 
+	attr_reader :slot_scope
+
 	# the name of the slot scope for prefixing values
 	SLOT_SCOPE = 'sc'
 
