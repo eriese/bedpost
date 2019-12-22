@@ -3,19 +3,17 @@
 	left: 0rem;
 	top: 0rem;
 	z-index: 100;
-	float: left;
 
 	&__burger {
 		cursor: pointer;
 		min-width: unset;
 		background-color: transparent;
-		margin: rem(10px) 1rem;
+		bottom: $spacing-small;
+		left: $spacing-default;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
 		padding: 0rem;
-		box-sizing: content-box;
-		box-shadow: none;
 		border: none;
 		@include themed(border-color, "background-contrast");
 		@include themed-with-cards(border-color, "background");
@@ -31,7 +29,7 @@
 			border: rem(2.75px) solid;
 			border-color: inherit;
 			width: $nav-button-width;
-			margin: rem(4.2px) $spacing-tiny;
+			margin: $spacing-tiny $spacing-tiny;
 			border-radius: $default-border-radius;
 		}
 
@@ -43,8 +41,8 @@
 	&__menu {
 		overflow: hidden;
 		position: absolute;
-		padding-top: rem(57px);
-		top: 0rem;
+		// padding-top: rem(57px);
+		// top: 0rem;
 
 		margin: 0rem;
 		z-index: 1;

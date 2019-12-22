@@ -12,12 +12,12 @@
 		@include cta-background-colors($colors-light, $property: stroke);
 	}
 
-	&--compact {
+	&--is-compact {
 		padding: $spacing-tiny $spacing-small;
 		min-width: unset;
 	}
 
-	&--square {
+	&--is-square {
 		padding: 50% 0%;
 		display: flex;
 		align-items: center;
@@ -26,6 +26,20 @@
 		line-height: 1;
 		text-align: center;
 		border-radius: $default-border-radius;
+	}
+
+	&--is-back-btn {
+		float: left;
+		margin-left: $spacing-default;
+		font-size: 0.75rem;
+		min-width: unset;
+		border-radius: 50%;
+		padding: 0;
+		display: flex;
+		height: 2.75rem;
+		width: 2.75rem;
+		align-items: center;
+		justify-content: center;
 	}
 
 	&:disabled {

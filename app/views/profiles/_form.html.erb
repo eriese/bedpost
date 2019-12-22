@@ -1,4 +1,4 @@
 <%= vuelidate_form_with model: profile, url: url, html: {class: "centered"} do |f| %>
-  <%= render  "fields", f: f, profile: profile, show_name: true %>
-  <%= f.submit :class => "cta" %>
+	<%= render  "fields", f: f, profile: profile, show_name: true %>
+	<%= f.submit :class => "cta cta--is-form-submit" %>
 <% end %>
