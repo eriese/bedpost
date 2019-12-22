@@ -61,6 +61,7 @@ export default {
 				cellSelector: '.stepper__step',
 				draggable: false, // we're going to manipulate draggable in the code
 				setGallerySize: false,
+				dragThreshold: 100, // number of pixels moved to start a drag
 			},
 		};
 	},

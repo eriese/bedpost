@@ -208,9 +208,11 @@ form {
 }
 
 .flickity-enabled {
-	&:focus ~ .stepper__nav .stepper__nav__button-item>* {
-		border: rem(2px) solid;
-		@include themed(border-color, "cta-bg");
+	@include media(">phone", "!retina") {
+		&:focus ~ .stepper__nav .stepper__nav__button-item>* {
+			border: rem(2px) solid;
+			@include themed(border-color, "cta-bg");
+		}
 	}
 
 	.field {
