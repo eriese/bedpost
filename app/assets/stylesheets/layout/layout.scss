@@ -41,7 +41,6 @@ body.vertical-center {
 	#vue-container {
 		display: flex;
 		flex-direction: column;
-		align-items:  stretch;
 		justify-content: space-around;
 		height: 100%;
 		width: 100%;
@@ -64,6 +63,7 @@ body.vertical-center {
 
 	main {
 		flex-grow: 2;
+		height: 0px;
 	}
 }
 
