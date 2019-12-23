@@ -94,6 +94,15 @@
 	line-height: rem(18px);
 }
 
+@mixin base-input($multiplier: 1) {
+	border-radius: $input-border-radius * $multiplier;
+	border-width: rem(1px) * $multiplier;
+	padding: 0.2rem * $multiplier 1rem * $multiplier;
+	height: 2rem * $multiplier;
+	line-height: 1 * $multiplier;
+	font-size: 0.75rem * $multiplier;
+}
+
 ///////////////////////
 // ctas
 ///////////////////////
