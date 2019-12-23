@@ -3,7 +3,7 @@
 		<%= yield %>
 	<% end %>
 	<% if content_for? :last_button %>
-		<%= content_tag :span, slot: "last-button"  do %>
+		<%= content_tag :span, slot: "last-button", "slot-scope" => "{onClick}" do %>
 			<%= yield :last_button %>
 		<% end %>
 	<% end %>

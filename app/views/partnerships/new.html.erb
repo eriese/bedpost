@@ -35,7 +35,7 @@
 				<% end %>
 			<% end %>
 			<% content_for :last_button do %>
-				<%= f.submit nil, :class=>"link link--no-line"%>
+				<%= f.submit nil, :class=>"link link--no-line", "@click" => "onClick" %>
 			<% end %>
 		<% end %>
 	<% end %>
