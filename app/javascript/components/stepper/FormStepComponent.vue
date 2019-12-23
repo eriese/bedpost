@@ -63,7 +63,10 @@
 				// if there is one
 				if (falseInd > -1) {
 					// focus that field and return false
-					this.fields[falseInd].setFocus();
+					if (focusSomething !== false) {
+						this.fields[falseInd].setFocus();
+					}
+
 					return false;
 				}
 
