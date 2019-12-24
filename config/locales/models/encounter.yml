@@ -26,6 +26,7 @@ en:
       toy: toy
       hand: hand
       tongue: tongue
+      fingers: fingers
     barrier:
       none: no barrier
       fresh: with a new barrier

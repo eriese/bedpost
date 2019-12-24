@@ -30,17 +30,26 @@ Terms.create(terms: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. D
 ############################
 # Contact Instruments
 ############################
-hand = Contact::Instrument.create(name: :hand)
-external_genitals = Contact::Instrument.create(name: :external_genitals, user_override: :external_name, conditions: {
+hand = Contact::Instrument.new(name: :hand, has_fluids: false)
+hand.upsert
+external_genitals = Contact::Instrument.new(name: :external_genitals, user_override: :external_name, conditions: {
 	can_be_penetrated_by: [:can_penetrate], can_penetrate: [:can_penetrate], can_be_sucked_by_self: [:can_penetrate]
 })
-internal_genitals = Contact::Instrument.create(name: :internal_genitals, user_override: :internal_name, conditions: {
+external_genitals.upsert
+internal_genitals = Contact::Instrument.new(name: :internal_genitals, user_override: :internal_name, conditions: {
 	all: [:internal_name]
 })
-anus = Contact::Instrument.create(name: :anus, user_override: :anus_name)
-mouth = Contact::Instrument.create(name: :mouth)
-toy = Contact::Instrument.create(name: :toy)
-tongue = Contact::Instrument.create(name: :tongue)
+internal_genitals.upsert
+anus = Contact::Instrument.new(name: :anus, user_override: :anus_name)
+anus.upsert
+mouth = Contact::Instrument.new(name: :mouth)
+mouth.upsert
+toy = Contact::Instrument.new(name: :toy, has_fluids: false)
+toy.upsert
+tongue = Contact::Instrument.new(name: :tongue, alias_of: mouth)
+tonuge.upsert
+fingers = Contact::Instrument.new(name: :fingers, has_fluids: false, alias_of: hand)
+fingers.upsert
 
 ############################
 # Possible Contacts
@@ -85,6 +94,9 @@ tongue = Contact::Instrument.create(name: :tongue)
 	end
 end
 
+PossibleContact.where(subject_instrument_id: :hand, contact_type: :penetrated).update_all(subject_instrument_id: :fingers)
+PossibleContact.where(object_instrument_id: :hand, contact_type: :sucked).update_all(object_instrument_id: :fingers)
+
 ############################
 # Diagnoses
 ############################
@@ -118,7 +130,7 @@ HIGH = Diagnosis::TransmissionRisk::HIGH
 
 PossibleContact.find_by(contact_type: :touched, subject_instrument_id: :hand, object_instrument_id: :external_genitals).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: NEGLIGIBLE}) } +
 [Diagnosis::TransmissionRisk.new({diagnosis_id: :bv, risk_to_subject: NO_RISK, risk_to_object: LOW, risk_to_self: LOW})]
-PossibleContact.find_by(contact_type: :penetrated, subject_instrument_id: :hand, object_instrument_id: :internal_genitals).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map {|t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: LOW})} + [Diagnosis::TransmissionRisk.new({diagnosis_id: :bv, risk_to_subject: NO_RISK, risk_to_object: LOW, risk_to_self: LOW})]
+PossibleContact.find_by(contact_type: :penetrated, subject_instrument_id: :fingers, object_instrument_id: :internal_genitals).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map {|t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: LOW})} + [Diagnosis::TransmissionRisk.new({diagnosis_id: :bv, risk_to_subject: NO_RISK, risk_to_object: LOW, risk_to_self: LOW})]
 PossibleContact.find_by(contact_type: :fisted, subject_instrument_id: :hand, object_instrument_id: :internal_genitals).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: LOW, risk_to_object: LOW}) } + [Diagnosis::TransmissionRisk.new({diagnosis_id: :bv, risk_to_subject: LOW, risk_to_object: LOW, risk_to_self: LOW})]
 
 PossibleContact.find_by(contact_type: :touched, subject_instrument_id: :hand, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: NEGLIGIBLE}) }
