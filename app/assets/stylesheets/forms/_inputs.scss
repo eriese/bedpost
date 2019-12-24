@@ -47,7 +47,7 @@ select {
 	}
 }
 
-$check-box-size: 1.25rem;
+$check-box-size: 1.1rem;
 
 input[type=checkbox], input[type=radio] {
 	display: inline-block;
@@ -64,6 +64,7 @@ input[type=checkbox], input[type=radio] {
 	padding: 0;
 	margin-right: rem(10px);
 	border-width: rem(1.5px);
+	box-sizing: content-box;
 
 	form.centered & {
 		display: inline-block;
@@ -177,26 +178,34 @@ input[type=radio] {
 
 input[type=checkbox] {
 	border-radius: 0.25rem;
-	@include themed(border-color, $input-border-focus-key);
+	@include themed(border-color, $input-border-key);
+
+	&:not(:disabled) {
+		&:hover, &:focus, &:checked {
+			@include themed(border-color, $input-border-focus-key);
+		}
+	}
 
 	&::after {
 		content: "";
-		display: inline-block;
-		border-left: rem(3px) solid;
-		border-bottom: rem(3px) solid;
-		transform: rotate(-45deg);
-		position: absolute;
-		height: $check-box-size/1.75;
-		top: $check-box-size/-3.5;
-		width: $check-box-size;
-		left: rem(1px);
-		border-color: transparent;
-		transition: border-color 0.3s ease-in-out;
-		border-radius: 1px;
+		display: block;
+		height: 100%;
+		width: 100%;
+		@include background-svg(check-box-check(theme-light($input-border-key)));
+		border-radius: inherit;
+		opacity: 0;
+		transition: 0.3s ease-in-out;
+		transition-property: opacity, border-color;
 	}
 
 	&:checked::after {
-		@include themed(border-color, $input-border-key);
+		opacity: 1;
+		background-repeat: no-repeat;
+		background-size: 100%;
+		background-position: center center;
+		background-clip: content-box;
+		-moz-background-clip: content-box;
+		-webkit-background-clip: content-box;
 	}
 }
 
