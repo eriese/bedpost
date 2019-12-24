@@ -283,7 +283,7 @@ RSpec.describe UserProfile, type: :model do
 			it 'marks the given terms as accepted on the current datetime' do
 				now = 'foo'
 				allow(DateTime).to receive(:now) {now}
-				@user = create(:user_profile)
+				@user = create(:user_profile_new)
 
 				@user.accept_terms :tou
 				@user.reload

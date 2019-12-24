@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 			sign_in: 'login', sign_out: 'logout',
 			password: 'recover', confirmation: 'confirm',
 			unlock: 'unlock',
+	}, controllers: {
+		sessions: 'user_profiles/sessions'
 	}
 	authenticated :user_profile do
 		root to: 'user_profiles#show'
