@@ -48,7 +48,7 @@ module EncountersHelper
 		t_key = ".contact"
 		if contact.barriers.any?
 			t_key += "_with_barriers"
-			barrier_args = keys.merge(scope: 'contact.barrier')
+			barrier_args = keys.merge(scope: 'contact.barrier.show')
 			keys[:barriers] = contact.barriers.map { |b| t(b, barrier_args) }.join(t("and_delimeter"))
 		end
 
