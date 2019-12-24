@@ -1,6 +1,6 @@
 <template>
 	<div class="stepper__step">
-		<div id="stepper-aria-label" class="aria-only" aria-live="polite">{{$root.t("helpers.form_stepper.prog_label", {index: index + 1, numSteps}) }}</div>
+		<div id="stepper-aria-label" class="aria-only" aria-live="polite">{{$_t("helpers.form_stepper.prog_label", {index: index + 1, numSteps}) }}</div>
 		<slot :field-blur="fieldBlur"></slot>
 	</div>
 </template>
