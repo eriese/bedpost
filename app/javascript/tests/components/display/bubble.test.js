@@ -33,6 +33,9 @@ describe('Bubble component', () => {
 			}
 		});
 
-		expect(wrapper.vm.heightVal).toEqual('30px');
+		return Promise.resolve(() => {
+			expect(wrapper.vm.heightVal).toEqual('30px');
+		});
+
 	});
 });
