@@ -68,16 +68,16 @@ export default function arrow(data, options) {
 			reference[side] + arrowElementSize - popper[opSide];
 	}
 
-	// compute center of the popper
+	// compute the arrow position on the popper
 	let center;
 	if (placements.length == 1) {
 		center = reference[side] + reference[len] / 2 - arrowElementSize / 2;
 	} else if (placements[1] == 'end') {
 		center = reference[opSide] - arrowElementSize / 2;
-		data.offsets.popper[side] += arrowElementSize / 1.25;
+		data.offsets.popper[side] += arrowElementSize;
 	} else {
 		center = reference[side] - arrowElementSize / 2;
-		data.offsets.popper[side] -= arrowElementSize / 1.25;
+		data.offsets.popper[side] -= arrowElementSize;
 	}
 
 	data.offsets.popper = getClientRect(data.offsets.popper);
@@ -85,8 +85,8 @@ export default function arrow(data, options) {
 	// Compute the sideValue using the updated popper offsets
 	// take popper margin in account because we don't have this info available
 	const css = getStyleComputedProperty(data.instance.popper);
-	const popperMarginSide = parseFloat(css[`margin${sideCapitalized}`]);
-	const popperBorderSide = parseFloat(css[`border${sideCapitalized}Width`]);
+	const popperMarginSide = parseFloat(css[`margin${sideCapitalized}`] || 0);
+	const popperBorderSide = parseFloat(css[`border${sideCapitalized}Width`] || 0);
 	let sideValue =
 		center - (data.offsets.popper[side] + popperMarginSide + popperBorderSide);
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="bubble" :style="{height: heightVal}">
-		<tippy v-bind="tippyProps" ref="tippy">
+		<tippy v-bind="tippyProps" ref="tippy" v-if="mounted">
 			<slot></slot>
 		</tippy>
 	</div>
@@ -23,7 +23,8 @@ export default {
 	},
 	data() {
 		return {
-			heightVal: undefined
+			heightVal: undefined,
+			mounted: false,
 		};
 	},
 	props: {
@@ -66,6 +67,11 @@ export default {
 		setHeight() {
 			this.heightVal = `${this.$refs.tippy.tip.popper.offsetHeight}px`;
 		}
+	},
+	mounted() {
+		requestAnimationFrame(() => {
+			this.mounted = true;
+		});
 	}
 };
 </script>
