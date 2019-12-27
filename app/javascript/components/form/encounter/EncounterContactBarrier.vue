@@ -89,7 +89,7 @@ export default {
 			if (!this.barrier.encounter_conditions && !this.barrier.contact_conditions) { return this.canClean; }
 
 			// if it has encounter conditions but all are false, don't show
-			if (this.barrier.encounter_conditions && this.encounterData && this.barrier.encounter_conditions.every((c) => !this.encounterData[c](this.contactData))) { return false; }
+			if (this.barrier.encounter_conditions && this.encounterData && this.barrier.encounter_conditions.every((c) => !this.encounterData[c](this.contact))) { return false; }
 
 			// if it has contact_conditions but some are false, don't show
 			if (this.barrier.contact_conditions && this.barrier.contact_conditions.some((c) => !this.contactData[c])) { return false; }
