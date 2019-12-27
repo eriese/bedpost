@@ -175,12 +175,8 @@ export default {
 			this.setContact();
 		},
 		setContact() {
-			if (this.contact_type && this.object_instrument_id && this.subject_instrument_id) {
-				let contact = this.findContact(this.subject_instrument_id, this.object_instrument_id);
-				this._value.possible_contact_id = contact && contact._id;
-			} else {
-				this._value.possible_contact_id = null;
-			}
+			let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
+			this._value.possible_contact_id = contact && contact._id;
 			this.onInput();
 			this.updateBarriers();
 		},
