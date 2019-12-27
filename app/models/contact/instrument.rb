@@ -1,41 +1,48 @@
 class Contact::Instrument
-  include Mongoid::Document
-  include StaticResource
+	include Mongoid::Document
+	include StaticResource
 
-  field :name, type: Symbol
-  field :_id, type: Symbol, default: ->{ name }
-  field :user_override, type: Symbol
-  field :can_clean, type: Boolean, default: true
-  field :has_fluids, type: Boolean, default: true
-  field :conditions, type: Hash
-  index({name: 1}, {unique: true})
+	field :name, type: Symbol
+	field :_id, type: Symbol, default: ->{ name }
+	field :user_override, type: Symbol
+	field :can_clean, type: Boolean, default: true
+	field :has_fluids, type: Boolean, default: true
+	field :conditions, type: Hash
+	index({name: 1}, {unique: true})
 
-  has_many :as_subject, class_name: 'PossibleContact', inverse_of: :subject_instrument, dependent: :restrict_with_error
-  has_many :as_object, class_name: 'PossibleContact', inverse_of: :object_instrument, dependent: :restrict_with_error
+	has_many :as_subject, class_name: 'PossibleContact', inverse_of: :subject_instrument, dependent: :restrict_with_error
+	has_many :as_object, class_name: 'PossibleContact', inverse_of: :object_instrument, dependent: :restrict_with_error
 
-  def get_user_name_for(profile, &t_block)
-  	if user_override
-  		profile.send(user_override)
-  	elsif !block_given?
-  		I18n.t(name, scope: 'contact.instrument')
-  	else
-  		t_block.call(name, scope: 'contact.instrument')
-  	end
-  end
+	has_many :aliases, class_name: 'Contact::Instrument', inverse_of: :alias_of, dependent: :restrict_with_error
+	belongs_to :alias_of, class_name: 'Contact::Instrument', inverse_of: :aliases, optional: true
 
-  def self.hashed_for_partnership(user, partner)
-    Rails.cache.fetch("partnership_#{user.id}-#{user.updated_at}_#{partner.id}-#{partner.updated_at}", namespace: name, expires_in: 3.hours) do
-      Hash[as_map.values.map do |i|
-        hsh = i.serializable_hash
-        # (methods: Contact::ContactType.inst_methods)
-        hsh[:user_name] = i.get_user_name_for(user)
-        hsh[:partner_name] = i.get_user_name_for(partner)
-        [i.id, hsh]
-      end]
-    end
-  end
+	def get_user_name_for(profile, &t_block)
+		if user_override
+			profile.send(user_override)
+		elsif !block_given?
+			I18n.t(name, scope: 'contact.instrument')
+		else
+			t_block.call(name, scope: 'contact.instrument')
+		end
+	end
 
-  def self.display_fields
-    [:name]
-  end
+	def alias_name
+		alias_of_id || name
+	end
+
+	def self.hashed_for_partnership(user, partner)
+		Rails.cache.fetch("partnership_#{user.id}-#{user.updated_at}_#{partner.id}-#{partner.updated_at}", namespace: name, expires_in: 3.hours) do
+			Hash[as_map.values.map do |i|
+				hsh = i.serializable_hash
+				# (methods: Contact::ContactType.inst_methods)
+				hsh[:user_name] = i.get_user_name_for(user)
+				hsh[:partner_name] = i.get_user_name_for(partner)
+				[i.id, hsh]
+			end]
+		end
+	end
+
+	def self.display_fields
+		[:name]
+	end
 end
