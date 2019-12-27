@@ -180,9 +180,6 @@ export default {
 			this.onInput();
 			this.updateBarriers();
 		},
-		findContact(subject_instrument_id, object_instrument_id) {
-			this.possibles[this.contact_type].find((i) => i.subject_instrument_id == subject_instrument_id && i.object_instrument_id == object_instrument_id);
-		},
 		objectInstsGet() {
 			return this.instsGet(false);
 		},
