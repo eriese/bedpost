@@ -3,9 +3,9 @@ class Contact::BarrierType
 
 	def initialize(hsh)
 		@key = hsh[:key]
-		@conditions = hsh[:conditions]
 		@exclude = hsh[:exclude]
 		@encounter_conditions = hsh[:encounter_conditions]
+		@contact_conditions = hsh[:contact_conditions]
 	end
 
 	def mongoize
@@ -18,14 +18,14 @@ class Contact::BarrierType
 	},{
 		key: :old,
 		exclude: [:fresh, :clean_subject, :clean_object],
-		encounter_conditions: [:has_barrier, :index]
+		encounter_conditions: [:has_barrier]
 	},{
 		key: :clean_subject,
-		encounter_conditions: [:subject_instrument_id],
+		contact_conditions: [:subject_instrument_id],
 		exclude: [:old, :fresh]
 	},{
 		key: :clean_object,
-		encounter_conditions: [:object_instrument_id],
+		contact_conditions: [:object_instrument_id],
 		exclude: [:old, :fresh]
 	}].map {|r| res = Contact::BarrierType.new(r); [res.key, res]}]
 
