@@ -71,17 +71,15 @@
 }
 
 /** disable automatic zoom on iphones */
-@include media("retina" "retina2x" "retina3x") {
+@supports (-webkit-overflow-scrolling: touch) {
+	/* CSS specific to iOS devices */
 		select, textarea, input[type="text"], input[type="password"],
 		input[type="datetime"], input[type="datetime-local"],
 		input[type="date"], input[type="month"], input[type="time"],
 		input[type="week"], input[type="number"], input[type="email"],
 		input[type="url"] {
 		 /* enlarge by 16/12 = 133.33% */
-			font-size: 1.2rem;
-			line-height: 1.3333;
-			padding: 0.2rem * 1.3333 1rem * 1.3333;
-
+			@include base-input(1.33333);
 
 			/* scale down by 12/16 = 75% */
 			transform: scale(0.75);

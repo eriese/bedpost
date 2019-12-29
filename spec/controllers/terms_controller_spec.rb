@@ -4,7 +4,7 @@ RSpec.describe TermsController, type: :controller do
 	describe 'PUT #update' do
 		before do
 			@terms = Terms.create(terms: 'terms', type: :tou)
-			@user = create(:user_profile)
+			@user = create(:user_profile_new)
 			sign_in @user
 		end
 

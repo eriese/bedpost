@@ -34,8 +34,11 @@ en:
       clean:
         zero: "%{name} %{instrument} was clean"
         one: "%{name} %{instrument} were clean"
-      clean_subject: "%{subject_possessive} clean %{subject_instrument}"
-      clean_object: "%{object_possessive} clean %{object_instrument"
+      show:
+        clean_subject: "%{subject_possessive} clean %{subject_instrument}"
+        clean_object: "%{object_possessive} clean %{object_instrument}"
+        fresh: a new barrier
+        old: the same barrier
   encounters:
     show:
       title_html: Encounter with %{partner}

@@ -1,3 +1,7 @@
 @function up-down-carets($fill-color) {
 	@return "<svg viewBox='0 0 200 100'><path fill='#{$fill-color}' d='M 70,90 L 30,50 L 70,10' transform='translate(100,-35) rotate(90)'></path><path fill='#{$fill-color}' d='M 70,90 L 30,50 L 70,10' transform='translate(0,130) rotate(270)'></path></svg>";
 }
+
+@function check-box-check($fill-color: theme-light($input-border-key), $stroke-width: 0.75, $box-size: 4) {
+	@return "<svg viewBox='0 0 #{$box-size} #{$box-size}'><path stroke-linecap='round' stroke-width='#{$stroke-width}' stroke='#{$fill-color}' d='M 1,1 L #{$box-size - 0.75},#{$box-size - 0.75} M #{$box-size - 0.75},1 L 1,#{$box-size - 0.75}'></path></svg>";
+}

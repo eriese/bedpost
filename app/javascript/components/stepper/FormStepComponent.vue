@@ -1,6 +1,6 @@
 <template>
 	<div class="stepper__step">
-		<div id="stepper-aria-label" class="aria-only" aria-live="polite">{{$root.t("helpers.form_stepper.prog_label", {index: index + 1, numSteps}) }}</div>
+		<div id="stepper-aria-label" class="aria-only" aria-live="polite">{{$_t("helpers.form_stepper.prog_label", {index: index + 1, numSteps}) }}</div>
 		<slot :field-blur="fieldBlur"></slot>
 	</div>
 </template>
@@ -63,7 +63,10 @@
 				// if there is one
 				if (falseInd > -1) {
 					// focus that field and return false
-					this.fields[falseInd].setFocus();
+					if (focusSomething !== false) {
+						this.fields[falseInd].setFocus();
+					}
+
 					return false;
 				}
 

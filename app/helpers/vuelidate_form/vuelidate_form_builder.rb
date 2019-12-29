@@ -19,6 +19,9 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
+	alias_method :parent_hidden_field, :hidden_field
+	alias_method :parent_submit, :submit
+
 	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field]).each do |selector|
 		class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
 			alias_method :parent_#{selector}, :#{selector}
@@ -63,7 +66,6 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		return stepper
 	end
 
-	alias_method :parent_hidden_field, :hidden_field
 	def hidden_field(attribute, options={})
 		options = options.merge({label: false, validate: false, field_class: "hidden-field"})
 		field_builder(attribute, options).field do
@@ -320,6 +322,10 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	# add a toggle field and its starting value to the form
 	def add_toggle(attribute, start_val)
+		if @options[:parent_builder]
+			@options[:parent_builder].add_toggle(attribute, start_val)
+			return
+		end
 		toggles[attribute] = start_val || false unless toggles.has_key? attribute
 	end
 

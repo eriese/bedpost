@@ -174,12 +174,8 @@ export default {
 			this.setContact();
 		},
 		setContact() {
-			if (this.contact_type && this.object_instrument_id && this.subject_instrument_id) {
-				let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
-				this._value.possible_contact_id = contact && contact._id;
-			} else {
-				this._value.possible_contact_id = null;
-			}
+			let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
+			this._value.possible_contact_id = contact && contact._id;
 			this.onInput();
 		},
 		objectInstsGet() {
@@ -207,7 +203,9 @@ export default {
 			for (var i = 0; i < possibles.length; i++) {
 				let pos = possibles[i];
 				let instID = pos[checkKey];
-				if (shown[instID] || (forSubj && pos.object_instrument_id != this.object_instrument_id)) {
+				if (shown[instID] ||
+					(forSubj && pos.object_instrument_id != this.object_instrument_id) ||
+					(this.isSelf && !pos.self_possible)) {
 					continue;
 				}
 

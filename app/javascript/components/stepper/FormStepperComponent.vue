@@ -7,7 +7,7 @@
 			<div class="stepper__nav">
 				<ul class="stepper__nav__button-list" :aria-label="$_t('helpers.form_stepper.button_container')">
 					<li class="stepper__nav__button-item stepper__nav__button-item--last" v-if="curIndex == numSteps - 1">
-						<slot name="last-button"><button class="link link--no-line" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
+						<slot name="last-button" :on-click="next"><button class="link link--no-line" type="button" @click="next">{{lastButton || "Send"}}</button></slot>
 					</li>
 					<li v-for="btn in buttons" :key="btn.tKey" :class="[btn.clazz, 'stepper__nav__button-item']">
 						<arrow-button class="cta--is-inverted" v-bind="btn.bind"  @click="btn.click"></arrow-button>
@@ -80,6 +80,11 @@ export default {
 	computed: {
 		defaultButtons() {
 			return [{
+				tKey: 'previous',
+				clazz: 'stepper__nav__button-item--prev',
+				if: this.numSteps > 1 && this.curIndex > 0,
+				click: this.back
+			}, {
 				tKey: 'next',
 				clazz: 'stepper__nav__button-item--next',
 				if: this.curIndex < this.numSteps - 1,
@@ -88,11 +93,6 @@ export default {
 					direction: 'right',
 				},
 				click: this.next,
-			}, {
-				tKey: 'previous',
-				clazz: 'stepper__nav__button-item--prev',
-				if: this.numSteps > 1 && this.curIndex > 0,
-				click: this.back
 			}];
 		},
 		buttons() {
@@ -154,7 +154,7 @@ export default {
 		setStepComplete: function(isComplete) {
 			// if an isComplete isn't provided, get one from the current step
 			if (typeof isComplete != 'boolean') {
-				isComplete = this.getCurStep().checkComplete();
+				isComplete = this.getCurStep().checkComplete(false);
 			}
 
 			// set readiness in the completes array and update whether this step is pending
