@@ -46,6 +46,8 @@
 		height: 100vh;
 		box-sizing: border-box;
 		display: none;
+		top: 0;
+		padding-top: calc(100% + #{$spacing-tiny});
 
 		.no-js & {
 			position: static;
