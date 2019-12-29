@@ -3,6 +3,8 @@ class ToursController < ApplicationController
 	skip_before_action :check_first_time
 	skip_before_action :authenticate_user_profile!, only: [:show]
 
+	layout 'first_time'
+
 	def index
 		@num_partnerships = current_user_profile.partnerships.count
 		@has_partnerships = @num_partnerships > 0

@@ -55,9 +55,7 @@
 		}
 	}
 
-	&__list {
-		padding-inline-start: 0rem;
-		margin: 0rem;
+	&__menu-inner {
 		width: $nav-width;
 		border-right: 1px solid;
 		height: 100%;
@@ -66,26 +64,34 @@
 		@include themed(color, "background");
 		@include themed-with-cards(background-color, "background");
 		@include themed-with-cards(color, "background-contrast");
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__list {
+		padding-inline-start: 0rem;
+		margin: 0rem;
+		flex-grow: 1;
 	}
 
 	&__list-item {
 		list-style: none;
-		font-size: rem(26px);
-		line-height: rem(26px);
+		font-size: rem(22px);
+		line-height: rem(22px);
 		overflow: hidden;
 		white-space: nowrap;
 
 		&--user-name {
 			color: $color-off-white;
 			font-weight: bold;
-			padding: rem(15px) rem(10px) rem(10px);
+			padding: $spacing-default $spacing-tiny $spacing-default $spacing-default;
 		}
 
 		&__link {
 			text-decoration: none;
 			display: block;
 			height: 100%;
-			padding: rem(15px) rem(5px) rem(15px) rem(15px);
+			padding: 0.75rem $spacing-tiny 0.75rem $spacing-medium;
 			width: 100%;
 			text-align: left;
 			@include themed(color, "background");

@@ -50,6 +50,9 @@
 				</div>
 			</main>
 			<tour-holder :steps="tourSteps" @tour-stopped="onTourStop" @tour-started="onTourStart" :tour-runs="tourRuns"></tour-holder>
+			<footer>
+				<%= yield :footer %>
+			</footer>
 		</div>
 	</body>
 </html>

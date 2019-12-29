@@ -37,7 +37,7 @@ body.has-form {
 	background-color: theme-light("form-background");
 }
 
-body.vertical-center {
+body.vertical-center, .body--has-footer {
 	#vue-container {
 		display: flex;
 		flex-direction: column;
@@ -94,6 +94,9 @@ header {
 		&--is-small {
 			font-size: rem(32px);
 			line-height: 1.5;
+		}
+
+		&--has-nav {
 			box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
 		}
 	}
