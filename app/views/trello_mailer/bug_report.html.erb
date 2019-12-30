@@ -1,0 +1,10 @@
+<h2>Reproduced:</h2>
+<p><%= @report[:reproduced_times] %>/5</p>
+<h2>Expected Behavior:</h2>
+<p><%= @report[:expected_behavior] %></p>
+<h2>Actual Behavior:</h2>
+<p><%= @report[:actual_behavior] %></p>
+<h2>Steps to reproduce:</h2>
+<p><%= @report[:steps] %></p>
+<h2>Notes:</h2>
+<p><%= @report[:notes].empty? ? "None" : @report[:notes] %></p>

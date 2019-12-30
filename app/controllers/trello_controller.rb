@@ -5,10 +5,16 @@ class TrelloController < ApplicationController
 
 	FEEDBACK_TYPES = %w{bug feature}
 	def new
-
 	end
 
 	def create
+		case @feedback_type
+		when :bug
+			report = params.require(:bug).permit(:title, :reproduced_times, :expected_behavior, :actual_behavior, :steps, :notes)
+			TrelloMailer.delay.bug_report(report)
+			flash[:notice] = "Successfully submitted bug report"
+		end
+		redirect_to feedback_path(feedback_type: @feedback_type)
 	end
 
 	def whitelist_types

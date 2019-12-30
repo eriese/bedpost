@@ -41,7 +41,7 @@ Rails.application.routes.draw do
 	resources :tours, only: [:show, :update]
 	resources :terms, only: [:show, :update]
 
-	get 'feedback/*feedback_type', to: 'trello#new'
+	get 'feedback/*feedback_type', to: 'trello#new', as: :feedback
 	post 'feedback/*feedback_type', to: 'trello#create'
 
 	root to: redirect('/signup')
