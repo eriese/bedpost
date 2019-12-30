@@ -13,6 +13,11 @@ class TrelloController < ApplicationController
 			report = params.require(:bug).permit(:title, :reproduced_times, :expected_behavior, :actual_behavior, :steps, :notes)
 			TrelloMailer.delay.bug_report(report)
 			flash[:notice] = "Successfully submitted bug report"
+		when :feature
+			report = params.require(:feature).permit(:title, :what, :why)
+			binding.pry
+			TrelloMailer.delay.feature_request(report)
+			flash[:notice] = "Successfully submitted feature request"
 		end
 		redirect_to feedback_path(feedback_type: @feedback_type)
 	end

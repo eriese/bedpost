@@ -1,10 +1,10 @@
 <ul class="footer <%= content_for :footer_class %>">
 	<li class="footer__item">
-		<a class="footer__link" href="">Request a feature</a>
+		<%= link_to 'Request a Feature', feedback_path(feedback_type: :feature), class: 'footer__link' %>
 	</li>
 	<span class="footer__divider">|</span>
 	<li class="footer__item">
-		<%= link_to 'Report A Bug', feedback_path(feedback_type: :bug), class: 'footer__link' %>
+		<%= link_to 'Report a Bug', feedback_path(feedback_type: :bug), class: 'footer__link' %>
 	</li>
 	<br>
 	<li class="footer__item">

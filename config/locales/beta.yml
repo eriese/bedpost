@@ -3,6 +3,7 @@ en:
     new:
       title:
         bug: Report a bug
+        feature: Request a feature
   helpers:
     label:
       bug:
@@ -12,6 +13,10 @@ en:
         actual_behavior: What actually happened?
         steps: Please describe the steps we can take to reproduce this bug
         notes: Notes? Comments?
+      feature:
+        title: Description
+        what: What will this feature do?
+        why: Why is this feature an important addition to BedPost?
     tooltip:
       bug:
         title: Describe the bug in a few words
