@@ -1,0 +1,17 @@
+en:
+  trello:
+    new:
+      title:
+        bug: Report a bug
+  helpers:
+    label:
+      bug:
+        title: Description
+        reproduced_times: How many times out of 5 were you able to reproduce this bug?
+        expected_behavior: What did you expect to happen?
+        actual_behavior: What actually happened?
+        steps: Please describe the steps we can take to reproduce this bug
+        notes: Notes? Comments?
+    tooltip:
+      bug:
+        title: Describe the bug in a few words
