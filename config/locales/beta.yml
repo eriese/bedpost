@@ -18,6 +18,17 @@ en:
         title: Description
         what: What will this feature do?
         why: Why is this feature an important addition to BedPost?
+        original_group: Did you check the feature request board to make sure that this feature hasn't already been requested?
+        original:
+          'true': 'yes'
+          'false': 'no'
     tooltip:
       bug:
         title: Describe the bug in a few words
+  mongoid:
+    errors:
+      models:
+        feature:
+          attributes:
+            original_group:
+              acceptance: Please check the features board before submitting this request

@@ -255,7 +255,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		return if label_opt == false
 
 		# tell it if it's required so it can add an aterisk
-		defaults = {required: @required}
+		defaults = {'required' => @required}
 		# get the label key
 		@label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
 			# the option is the key

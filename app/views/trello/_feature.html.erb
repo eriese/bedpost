@@ -1,3 +1,7 @@
+<p>
+	Please check the <a href="https://trello.com/b/ixhsd0vL" target="blank" class="link">feature request board</a> to see if someone has already requested the feature you had in mind. If you see your feature on the board, you can upvote it so we know it's popular.
+</p>
 <%= f.text_field :title %>
 <%= f.text_area :what %>
 <%= f.text_area :why %>
+<%= f.radio_group :original, options: {radio_class: 'hidden-radio hidden-radio--cta', group_options: {required: false, label: {required: true}, validators: [{kind: :acceptance}], field_class: 'toggler'}} %>

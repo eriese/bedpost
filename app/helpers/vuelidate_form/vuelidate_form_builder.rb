@@ -138,6 +138,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		radio_opts = {
 			inline: true,
 			validate: false,
+			required: false,
 			class: options.delete(:radio_class),
 			slot_scope: 'fec',
 			parent_scope: group_scope,
