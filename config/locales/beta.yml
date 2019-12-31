@@ -13,6 +13,7 @@ en:
         actual_behavior: What actually happened?
         steps: Please describe the steps we can take to reproduce this bug
         notes: Notes? Comments?
+        screenshots: Screenshots, videos, files, etc.
       feature:
         title: Description
         what: What will this feature do?

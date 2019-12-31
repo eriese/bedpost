@@ -288,6 +288,27 @@ input[type=range] {
 	}
 }
 
+input[type=file] {
+	padding: 0;
+	border-left-width: 1rem;
+	&:focus {
+		&::-webkit-file-upload-button {
+			@include themed(background-color, $input-border-focus-key)
+		}
+	}
+	&::-webkit-file-upload-button {
+		@include cta-base;
+		@include cta-colors;
+		@include themed(background-color, $input-border-key);
+		height: 100%;
+		margin-left: -1rem;
+		padding-top: 0;
+		padding-bottom: 0;
+		border-top-left-radius: 0rem;
+		border-bottom-left-radius: 0rem;
+	}
+}
+
 input[type=hidden] {
 	display: none !important;
 }

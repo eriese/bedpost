@@ -11,11 +11,12 @@ class TrelloController < ApplicationController
 		case @feedback_type
 		when :bug
 			report = params.require(:bug).permit(:title, :reproduced_times, :expected_behavior, :actual_behavior, :steps, :notes)
-			TrelloMailer.delay.bug_report(report)
+			screenshots = params.require(:bug).permit(screenshots: [])[:screenshots]
+			attachments = Hash[screenshots.map { |s| [s.original_filename, s.tempfile.read] }]
+			TrelloMailer.delay.bug_report(report, attachments)
 			flash[:notice] = "Successfully submitted bug report"
 		when :feature
 			report = params.require(:feature).permit(:title, :what, :why)
-			binding.pry
 			TrelloMailer.delay.feature_request(report)
 			flash[:notice] = "Successfully submitted feature request"
 		end

@@ -5,8 +5,9 @@ class TrelloMailer < ApplicationMailer
 	BUG_EMAIL = 'support@bedpost.me'
 	FEATURE_EMAIL = 'support@bedpost.me'
 
-	def bug_report(report)
+	def bug_report(report, screenshots=nil)
 		@report = report
+		screenshots.each {|k,v| attachments[k] = v}
 		mail(to: BUG_EMAIL, subject: @report[:title])
 	end
 
