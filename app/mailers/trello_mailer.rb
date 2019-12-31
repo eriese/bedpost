@@ -1,9 +1,7 @@
 class TrelloMailer < ApplicationMailer
 	self.delivery_method = :ses
-	# FEATURE_EMAIL = Rails.credentials.dig(:trello, :features) || 'support@bedpost.me'
-	# BUG_EMAIL = Rails.credentials.dig(:trello, :bugs) || 'support@bedpost.me'
-	BUG_EMAIL = 'support@bedpost.me'
-	FEATURE_EMAIL = 'support@bedpost.me'
+	FEATURE_EMAIL = Rails.credentials.dig(:trello, :features) || 'support@bedpost.me'
+	BUG_EMAIL = Rails.credentials.dig(:trello, :bugs) || 'support@bedpost.me'
 
 	def bug_report(report, screenshots=nil)
 		@report = report
