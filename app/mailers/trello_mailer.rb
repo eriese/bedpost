@@ -5,7 +5,7 @@ class TrelloMailer < ApplicationMailer
 
 	def bug_report(report, screenshots=nil)
 		@report = report
-		screenshots.each {|k,v| attachments[k] = v}
+		screenshots.each {|k,v| attachments[k] = v} unless screenshots.nil?
 		mail(to: BUG_EMAIL, subject: @report[:title])
 	end
 
