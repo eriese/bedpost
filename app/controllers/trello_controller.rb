@@ -12,7 +12,7 @@ class TrelloController < ApplicationController
 		when :bug
 			report = params.require(:bug).permit(:title, :reproduced_times, :expected_behavior, :actual_behavior, :steps, :notes)
 			screenshots = params.require(:bug).permit(screenshots: [])[:screenshots]
-			attachments = Hash[screenshots.map { |s| [s.original_filename, s.tempfile.read] }]
+			attachments = screenshots.nil? ? {} : Hash[screenshots.map { |s| [s.original_filename, s.tempfile.read] }]
 			TrelloMailer.delay.bug_report(report, attachments)
 			flash[:notice] = "Successfully submitted bug report"
 		when :feature
