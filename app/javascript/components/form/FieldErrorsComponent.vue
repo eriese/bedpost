@@ -11,7 +11,7 @@
 
 <script>
 import inputSlot from '@mixins/inputSlot';
-import {lazyChild} from '@mixins/lazyCoupled';
+import {lazyChild, lazyParent} from '@mixins/lazyCoupled';
 /**
  * A component that wraps a form control and uses its validations to display error messages. Works best with parent [VuelidateFormComponent]{@link module:components/form/VuelidateFormComponent}
  *
@@ -33,7 +33,7 @@ import {lazyChild} from '@mixins/lazyCoupled';
  */
 export default {
 	name: 'field_errors',
-	mixins: [inputSlot, lazyChild],
+	mixins: [inputSlot, lazyChild, lazyParent],
 	data: function() {
 		return {
 			focused: false,
@@ -186,10 +186,16 @@ export default {
 		},
 		/**
 		 * Callback for mousein and mouseout events
+		 *
 		 * @param  {boolean} isHovered is the mouse in?
 		 */
 		onHover(isHovered) {
 			this.hovered = isHovered;
+		},
+		onChildMounted() {
+			if (!this.input) {
+				this.input = this.$el.querySelector('input, select');
+			}
 		}
 	},
 	mounted() {

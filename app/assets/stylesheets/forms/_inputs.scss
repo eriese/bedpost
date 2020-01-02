@@ -290,20 +290,33 @@ input[type=range] {
 
 input[type=file] {
 	padding: 0;
-	border-left-width: 1rem;
-	&:focus {
-		&::-webkit-file-upload-button {
-			@include themed(background-color, $input-border-focus-key)
-		}
-	}
+
 	&::-webkit-file-upload-button {
 		@include cta-base;
 		@include cta-colors;
 		@include themed(background-color, $input-border-key);
-		height: 100%;
-		margin-left: -1rem;
+		height: 101%;
+		box-shadow: none;
 		padding-top: 0;
 		padding-bottom: 0;
+		margin-left: -1px;
+	}
+
+	&:focus, &:hover {
+		&:not(:disabled) {
+			&::-webkit-file-upload-button {
+				@include themed(background-color, $input-border-focus-key);
+				@include cta-transition;
+			}
+		}
+	}
+
+	&[disabled=disabled] {
+		opacity: 1;
+
+		&::-webkit-file-upload-button {
+			@include disabled;
+		}
 	}
 }
 
@@ -312,12 +325,32 @@ input[type=hidden] {
 }
 
 input[disabled=disabled] {
-	opacity: 0.5;
-	cursor: initial;
+	@include disabled;
 
 	+ label {
-		opacity: 0.5;
-		cursor: initial;
+		@include disabled;
+	}
+}
+
+.input {
+	&--has-close-button {
+		position: relative;
+
+		&__button-container {
+			position: absolute;
+			right: $spacing-small;
+			top: 0;
+			height: 100%;
+			display: flex;
+			align-items: center;
+		}
+
+		&__close-button {
+			height: 75%;
+			background-color: transparent;
+			box-shadow: none;
+			border-style: none;
+		}
 	}
 }
 

@@ -223,10 +223,10 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	def file_field(attribute, **options)
 		options = convert_options(options)
+		options[:model_value] = :none
 		field_builder(attribute, options).field do
-			v_model_name = options.delete 'v-model'
-			options['@change'] = "#{v_model_name} = $event.target.files"
-			super
+			input = super
+			input.sub('<input', '<file-input').html_safe
 		end
 	end
 

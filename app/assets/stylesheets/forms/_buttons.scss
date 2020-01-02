@@ -4,12 +4,20 @@
 
 	&--is-secondary {
 		@include cta-colors($suffix: "-light");
+		@include cta-transition;
 	}
 
 	&--is-inverted {
 		@include cta-text-colors($colors-light, $property: background-color);
 		@include cta-background-colors($colors-light, $property: color);
 		@include cta-background-colors($colors-light, $property: stroke);
+		@include cta-transition;
+	}
+
+	&--is-transparent {
+		background-color: transparent;
+		box-shadow: none;
+		border-style: none;
 	}
 
 	&--is-compact {
@@ -72,24 +80,28 @@
 		vertical-align: middle;
 		border-radius: 50%;
 		height: rem(40px);
-		width: rem(40px);
+		width: auto;
+		padding: 0rem;
+		display: inline-flex;
+		justify-content: center;
+		align-content: center;
 
 		&--is-small {
 			height: 1.75rem;
-			width: 1.75rem;
 		}
 
 		&--is-medium {
 			height: 2rem;
-			width: 2rem;
 		}
 
 		svg {
-			height: 75%;
+			height: 100%;
 			vertical-align: middle;
 			fill: transparent;
 			stroke-width: 15;
 			stroke-linecap: round;
+			transform-origin: center;
+			transition: transform 0.5s ease-in-out;
 		}
 	}
 }

@@ -1,9 +1,21 @@
-const _caret = "M 70,90 L 30,50 L 70,10"
-const _x_shape = "M 20,20 L 80,80 M 80,20 L 20,80"
-const _arrow = "M 65,90 L 20,50 L 65,10 M85,50 L30,50"
+const _caret = 'M 60,80 L 35,50 L 60,20';
+const _x_shape = 'M 30,30 L 70,70 M 70,30 L 30,70';
+const _arrow = 'M 50,75 L 25,50 L 50,25 M75,50 L30,50';
+
+const _shapes = {
+	x: _x_shape,
+	arrow: _arrow,
+	caret: _caret,
+};
+
+const _rotations = {
+	up: 'rotate(90)',
+	down: 'rotate(270)',
+	right: 'rotaate(180)',
+};
 
 export default {
-	name: "arrow-button",
+	name: 'arrow-button',
 	functional: true,
 	props: {
 		transform: String,
@@ -20,59 +32,32 @@ export default {
 		path: String,
 		shape: {
 			type: String,
-			default: "caret"
+			default: 'caret'
 		}
 	},
 	render: function(createElement, {props, data, parent}) {
-		let transform = props.transform
-		let path = props.path;
-		if (!path) {
-			switch(props.shape) {
-				case "x" :
-					path = _x_shape;
-					break;
-				case "arrow" :
-					path = _arrow;
-					break;
-				case "caret":
-				default:
-					path = _caret;
-			}
-		}
-
-		if (!transform) {
-			switch(props.direction) {
-				case "up":
-				transform = "translate(100,0) rotate(90)"
-				break;
-				case "down":
-				transform = "translate(0,95) rotate(270)"
-				break;
-				case "right":
-				transform = "translate(100, 100) rotate(180)"
-				break;
-			}
-		}
+		let transform = props.transform || _rotations[props.direction];
+		let path = props.path || _shapes[props.shape];
 
 		data.attrs = data.attrs || {};
-		data.attrs.type = data.attrs.type || "button";
-		data.attrs.title = parent.$_t(props.tKey)
-		data.props = props.bind
-		data.staticClass = (data.staticClass || "") + " cta--is-arrow";
+		data.attrs.type = data.attrs.type || 'button';
+		data.attrs.title = parent.$_t(props.tKey);
+		data.props = props.bind;
+		data.staticClass = (data.staticClass || '') + ' cta--is-arrow';
 
-		return createElement("button", data, [
-			createElement("svg", {
+		return createElement('button', data, [
+			createElement('svg', {
 				attrs: {
 					viewBox: `0 0 ${props.boxSize} ${props.boxSize}`,
-					focusable: false
+					focusable: false,
+					transform: transform,
 				}
-			}, [createElement("path", {
+			}, [createElement('path', {
 				attrs: {
 					d: path,
-					transform: transform
 				},
-				class: ["arrow"]
+				class: ['arrow']
 			})])
-		])
+		]);
 	}
-}
+};

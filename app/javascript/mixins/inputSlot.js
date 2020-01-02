@@ -4,9 +4,7 @@
  * @see [FieldErrorsComponent]{@link module:components/form/FieldErrorsComponent} for an implementation example
  */
 export default {
-	props: {
-		value: [Object, String, Number, Boolean, Date],
-	},
+	props: ['value'],
 	computed: {
 		model: {
 			get() {return this.value},
