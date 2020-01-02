@@ -3,7 +3,7 @@
 		display: flex;
 		flex-wrap: wrap;
 
-		header.small {
+		header {
 			order: 1;
 			width: 100%;
 			position: static;
@@ -13,7 +13,7 @@
 			}
 		}
 
-		header.small + main {
+		header.header--is-small + main {
 			width: 100%;
 		}
 
@@ -23,6 +23,8 @@
 
 			nav {
 				float: none;
+				display: block;
+				position: static;
 			}
 
 			.burger {
@@ -54,9 +56,17 @@
 			order: 3;
 			width: 100%;
 		}
+
+		footer {
+			order: 4;
+			width: 100%;
+		}
 	}
 
-	body.vertical-center{
+	body.vertical-center, .body--has-footer {
+		#vue-container.no-js {
+			flex-direction: row;
+		}
 		&.body--has-columns {
 			header.header--is-big {
 				display: block;

@@ -48,11 +48,6 @@
 		display: none;
 		top: 0;
 		padding-top: calc(100% + #{$spacing-tiny});
-
-		.no-js & {
-			position: static;
-			display: block;
-		}
 	}
 
 	&__menu-inner {
@@ -137,6 +132,25 @@
 		&__list-item {
 			&--user-name {
 				color: theme-light('h1');
+			}
+		}
+	}
+
+	.no-js & {
+		@include media(('>tablet')) {
+			position: fixed;
+		}
+
+		@include media(('<=tablet')) {
+			&__menu {
+				display: block;
+				padding-top: 0rem;
+				position: static;
+				height: auto;
+
+				&-inner {
+					width: 100%;
+				}
 			}
 		}
 	}

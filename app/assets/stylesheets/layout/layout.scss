@@ -145,16 +145,8 @@ p.description {
 }
 
 .no-js {
-	header.--is-small {
-		position: absolute;
-		margin-left: rem(10px);
-	}
-
-	header.--is-small + main {
-		float: right;
-		clear: none;
-		width: calc(100% - #{$nav-width});
-		box-sizing: border-box;
+	@include media(('>phone', '!retina')) {
+		padding-left: $nav-width;
 	}
 
 	.js-only {
