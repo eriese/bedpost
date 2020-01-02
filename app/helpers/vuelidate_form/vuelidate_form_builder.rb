@@ -21,6 +21,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	alias_method :parent_hidden_field, :hidden_field
 	alias_method :parent_submit, :submit
+	alias_method :parent_file_field, :file_field
 
 	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field, :file_field]).each do |selector|
 		class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
@@ -222,11 +223,15 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def file_field(attribute, **options)
+		no_js_field = @template.content_tag(:noscript) do
+			super
+		end
 		options = convert_options(options)
 		options[:model_value] = :none
 		field_builder(attribute, options).field do
 			input = super
-			input.sub('<input', '<file-input').html_safe
+			input.sub('<input', '<file-input').html_safe +
+			no_js_field
 		end
 	end
 
