@@ -1,9 +1,11 @@
 class TrelloController < ApplicationController
+	prepend_before_action :skip_timeout, only: [:new]
 	skip_before_action :authenticate_user_profile!
 	skip_before_action :check_first_time
 	before_action :whitelist_types
 
 	FEEDBACK_TYPES = %w{bug feature}
+
 	def new
 	end
 
