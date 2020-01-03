@@ -7,7 +7,8 @@ export default {
 			let vm = this;
 			let newListeners = {};
 			newListeners[this.inputEvent] = function(e) {
-				vm.$emit(vm.inputEvent, e.target.value);
+				let val = e && e.target && e.target[vm.inputProperty];
+				vm.$emit(vm.inputEvent, val);
 			};
 			return Object.assign({}, this.$listeners, newListeners);
 		},
@@ -31,6 +32,9 @@ export default {
 		},
 		inputEvent: function() {
 			return this.$options.model && this.$options.model.event || 'input';
+		},
+		inputProperty: function() {
+			return this.$options.model && this.$options.model.prop || 'value';
 		}
 	},
 	created: function() {

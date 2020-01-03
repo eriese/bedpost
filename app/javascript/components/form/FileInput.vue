@@ -1,6 +1,6 @@
 <template>
 	<div class="input--has-close-button">
-		<input :type="type" v-bind="boundAttrs" v-on="fileInputListeners" ref="input">
+		<input type="file" v-bind="boundAttrs" v-on="cListeners" ref="input">
 		<div class="input--has-close-button__button-container">
 			<arrow-button shape="x" class="cta--is-inverted input--has-close-button__close-button cta--is-arrow--is-small" v-show="boundAttrs.disabled" @click="clearFiles"></arrow-button>
 		</div>
@@ -9,46 +9,38 @@
 
 <script>
 import customInput from '@mixins/customInput';
+
+/**
+ * A component to add more intuitive functionality to a file input. Provides a transparent wrapper around the file input
+ *
+ * @module
+ * @mixes customInput
+ * @vue-computed boundAttrs						inherited attributes to bind to the input
+ */
 export default {
 	name: 'file-input',
 	mixins: [customInput],
 	inheritAttrs: false,
 	model: {
-		event: 'change',
 		prop: 'files'
 	},
-	data() {
-		return {
-			files: [],
-			type: 'file'
-		};
-	},
 	computed: {
-		fileInputListeners() {
-			let listeners = {...this.cListeners};
-			let vm = this;
-			listeners[this.inputEvent] = function(e) {
-				vm.files = e.target.files;
-				vm.$emit('input', vm.files);
-			};
-
-			return listeners;
-		},
 		boundAttrs() {
 			let attrs = {...this.$attrs};
 			delete attrs.value;
-			attrs.disabled = this.files.length > 0;
+			attrs.disabled = this.$refs.input && this.$refs.input.files.length > 0;
 			return attrs;
 		}
 	},
 	methods: {
 		clearFiles() {
-			this.type = 'text';
+			// change to text input so we can clear the value
+			this.$refs.input.type = 'text';
 			this.$refs.input.value = '';
-			this.files = [];
-			this.$nextTick(() => {
-				this.type = 'file';
-			});
+			// change back to file
+			this.$refs.input.type = 'file';
+			// emit an input event
+			this.cListeners[this.inputEvent]();
 		}
 	}
 };
