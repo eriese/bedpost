@@ -205,6 +205,11 @@ export default {
 		if (this.isDate) {
 			this.model = this.model ? new Date(this.model) : new Date();
 		}
+
+		// if there's an input, we're not waiting on a lazy-loaded child
+		if (this.input) {
+			this.$parent.$emit('lazy-child-present');
+		}
 	},
 };
 
