@@ -1,4 +1,6 @@
-<h2><%= t(".partner_html", {name: @partnership.display}) %></h2>
+<% body_class 'is-dark' %>
+<h1><%= t('.title') %></h1>
+<h2 class="desc"><%= t(".partner_html", {name: @partnership.display}) %></h2>
 <toggle :symbols="['chart_view', 'list_view']" translate="partnerships.show.chart" field="showList" :val="additional.showList" @toggle-event="additionalField" @toggle-mounted="additionalField('showList', false)" id="view-toggle"></toggle>
 <div v-show="!additional.showList" class="partnership-chart-container">
 	<partnership-chart :partnership="<%= @partnership.to_json({only: Partnership::LEVEL_FIELDS}) %>"></partnership-chart>
@@ -21,13 +23,13 @@
 		</p>
 	<% end %>
 	<p>
-		<%= link_to t(".new_encounter"), new_partnership_encounter_path(@partnership), class: "link" %>
-	</p>
-	<p>
-		<%= link_to t(".back"), partnerships_path, class: "link" %>
+		<%= link_to t(".new_encounter", {name: @partnership.partner.name}), new_partnership_encounter_path(@partnership), class: "link" %>
 	</p>
 	<p><%= link_to t(".edit"), edit_partnership_path(@partnership), class: "link" %></p>
 	<p>
 		<%= confirm_link_to t(".destroy.text"), partnership_path(@partnership), method: :delete, alert_class: "confirmation", data: {confirm: t(".destroy.confirm")}, class: "link" %>
+	</p>
+	<p>
+		<%= link_to t(".back"), partnerships_path, class: "link" %>
 	</p>
 </div>

@@ -23,6 +23,27 @@
 		line-height: 1;
 		text-align: center;
 		border-radius: $default-border-radius;
+
+		&__heading {
+			display: block;
+			font-size: 2rem;
+			text-transform: capitalize;
+			padding: 0 0.35rem;
+
+			@include media ("<tablet") {
+				font-size: 1.5rem;
+			}
+		}
+
+		&__main {
+			font-size: 1.15rem;
+			padding: 0 $spacing-small;
+			font-weight: 700;
+
+			@include media ("<tablet") {
+				font-size: 1rem;
+			}
+		}
 	}
 
 	&--is-back-btn {
@@ -34,6 +55,12 @@
 		padding: 0;
 		height: 2.75rem;
 		width: 2.75rem;
+	}
+
+	&__text {
+		body.is-light &, body.is-dark &{
+			color: inherit;
+		}
 	}
 
 	&:disabled {
@@ -102,5 +129,28 @@ button.vs__deselect{
 	&:hover, &:focus {
 		background-color: transparent;
 		@include themed(fill, "cta-bg-light");
+	}
+}
+
+.button-list {
+	max-width: $constrained-width;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	align-content: stretch;
+	justify-content: space-around;
+	margin-inline-start: 0;
+	margin-block-start: 0;
+	padding-inline-start: 0;
+	list-style-type: none;
+	@include centered;
+
+	&__item {
+		flex-grow: 0;
+		flex-basis: 50%;
+		flex-shrink: 0;
+		padding: $spacing-default;
+		text-align: center;
+		width: 0;
 	}
 }
