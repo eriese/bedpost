@@ -218,24 +218,6 @@ describe('Encounter Contact Field Component', () => {
 		expect(partnerObjectRadio).not.toBeNull();
 	});
 
-	describe('updateBarriers', () => {
-		it('never emits a number lower than 0', () => {
-			const wrapper = setup({}, {tracked: {
-				has_barrier: undefined
-			}});
-
-			expect(wrapper.emitted().track[0]).toEqual([['has_barrier']]);
-
-			wrapper.setProps({
-				tracked: {has_barrier: 0},
-				value: Object.assign({}, global.gon.dummy, {barriers: ['fresh']}),
-			});
-
-			wrapper.vm.updateBarriers([]);
-			expect(wrapper.emitted().track[1]).toEqual(['has_barrier', 0]);
-		});
-	});
-
 	describe('validation', () => {
 		it('has internal validation', () => {
 			const wrapper = setup();

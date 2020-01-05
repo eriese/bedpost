@@ -1,3 +1,13 @@
+/**
+ * A mixin for a custom input component
+ *
+ * @mixin customInput
+ * @vue-computed {object} cListeners 	the listeners to apply to the input
+ * @vue-computed {string} modelName		the string to add to the baseName to get the inputName for this input
+ * @vue-computed {string} inputName 	the value for the name attribute of the input
+ * @vue-computed {string} inputId 		the value for the id attribute of the input
+ * @vue-computed {string} labelText 	the text for this input's label
+ */
 export default {
 	props: ['baseName', 'label', 'labelKey', 'model'],
 	computed: {

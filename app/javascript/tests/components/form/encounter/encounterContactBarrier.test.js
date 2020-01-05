@@ -15,14 +15,17 @@ describe ('Encounter contact barrier component', () => {
 	};
 
 	function makeWrapper(contact, barrier, has_barrier) {
-		const encounterData = {
-			has_barrier,
+		const contactData = {
 			index: contact.position,
 			object_instrument_id: 'hand',
 			subject_instrument_id: 'hand',
 			partnerName: 'Alice',
 			objectInstrumentName: 'hand',
 			subjectInstrumentName: 'hand',
+		};
+
+		const tracker = {
+			has_barrier: () => has_barrier
 		};
 
 		const localVue = createLocalVue();
@@ -33,8 +36,9 @@ describe ('Encounter contact barrier component', () => {
 				barrierProps: {
 					barrier,
 					contact,
-					encounterData,
+					encounterData: tracker,
 					baseName,
+					contactData,
 				},
 			},
 			localVue
@@ -47,7 +51,7 @@ describe ('Encounter contact barrier component', () => {
 			key: 'old',
 			conditions: null,
 			exclude: ['fresh', 'clean_subject', 'clean_object'],
-			encounter_conditions: ['has_barrier', 'index'],
+			encounter_conditions: ['has_barrier'],
 		};
 
 		it('Does not show if the contact is first', () => {
@@ -60,7 +64,7 @@ describe ('Encounter contact barrier component', () => {
 				newRecord: true,
 			};
 
-			const wrapper = makeWrapper(contact, oldBarrier, 0);
+			const wrapper = makeWrapper(contact, oldBarrier, false);
 
 			expect(wrapper.vm.shouldShow).toBe(false);
 		});
@@ -75,7 +79,7 @@ describe ('Encounter contact barrier component', () => {
 				newRecord: true,
 			};
 
-			const wrapper = makeWrapper(contact, oldBarrier, 0);
+			const wrapper = makeWrapper(contact, oldBarrier, false);
 
 			expect(wrapper.vm.shouldShow).toBe(false);
 		});
@@ -90,7 +94,7 @@ describe ('Encounter contact barrier component', () => {
 				newRecord: true,
 			};
 
-			const wrapper = makeWrapper(contact, oldBarrier, 1);
+			const wrapper = makeWrapper(contact, oldBarrier, true);
 			expect(wrapper.vm.shouldShow).toBe(true);
 		});
 	});
@@ -99,7 +103,7 @@ describe ('Encounter contact barrier component', () => {
 		describe('clean_subject', () => {
 			const cleanSubject = {
 				conditions: null,
-				encounter_conditions: ['subject_instrument_id'],
+				contact_conditions: ['subject_instrument_id'],
 				exclude: ['old', 'fresh'],
 				key: 'clean_subject'
 			};
@@ -116,10 +120,10 @@ describe ('Encounter contact barrier component', () => {
 			it('includes the name the subject uses for the instrument', async () => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, 0);
+				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'random';
 				wrapper.setProps({
-					encounterData: Object.assign({},wrapper.vm.encounterData, {subjectInstrumentName})
+					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
 				});
 
 				expect(wrapper.text()).toContain(subjectInstrumentName);
@@ -127,20 +131,20 @@ describe ('Encounter contact barrier component', () => {
 
 			it('includes the name of the partner if the subject is partner', async () => {
 				await I18nConfig.setup();
-				const wrapper = makeWrapper(contact, cleanSubject, 0);
-				expect(wrapper.text()).toContain(wrapper.vm.encounterData.partnerName);
+				const wrapper = makeWrapper(contact, cleanSubject, false);
+				expect(wrapper.text()).toContain(wrapper.vm.contactData.partnerName);
 			});
 
 			it('pluralizes if the name of the instrument ends in an s', async() => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, 0);
+				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'hands';
 				wrapper.setProps({
-					encounterData: Object.assign({},wrapper.vm.encounterData, {subjectInstrumentName})
+					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
 				});
 
-				const namePossessive = wrapper.vm.getPersonName('partner');
+				const namePossessive = wrapper.vm.personName;
 				const expected = I18nConfig.t('contact.barrier.clean', {count: 1, instrument: subjectInstrumentName, name: namePossessive});
 				expect(wrapper.text()).toEqual(expected);
 			});
@@ -148,13 +152,13 @@ describe ('Encounter contact barrier component', () => {
 			it('does not pluralize if the name of the instrument ends in ss (e.g. ass)', async () => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, 0);
+				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'ass';
 				wrapper.setProps({
-					encounterData: Object.assign({},wrapper.vm.encounterData, {subjectInstrumentName})
+					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
 				});
 
-				const namePossessive = wrapper.vm.getPersonName('partner');
+				const namePossessive = wrapper.vm.personName;
 				const expected = I18nConfig.t('contact.barrier.clean', {count: 0, instrument: subjectInstrumentName, name: namePossessive});
 				expect(wrapper.text()).toEqual(expected);
 			});
@@ -162,13 +166,13 @@ describe ('Encounter contact barrier component', () => {
 			it('does not pluralize if the name of the instrument is singular', async () => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, 0);
+				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'hand';
 				wrapper.setProps({
-					encounterData: Object.assign({},wrapper.vm.encounterData, {subjectInstrumentName})
+					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
 				});
 
-				const namePossessive = wrapper.vm.getPersonName('partner');
+				const namePossessive = wrapper.vm.personName;
 				const expected = I18nConfig.t('contact.barrier.clean', {count: 0, instrument: subjectInstrumentName, name: namePossessive});
 				expect(wrapper.text()).toEqual(expected);
 			});
@@ -180,7 +184,6 @@ describe ('Encounter contact barrier component', () => {
 			key: 'fresh',
 			conditions: null,
 			exclude: ['old', 'clean_subject', 'clean_object'],
-			encounter_conditions: ['has_barrier', 'index'],
 		};
 
 		describe('when it is in the list', () => {
@@ -194,13 +197,13 @@ describe ('Encounter contact barrier component', () => {
 			};
 
 			it('removes itself from the list if it is being unchecked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, 1);
+				const wrapper = makeWrapper(contact, newBarrier, true);
 				wrapper.vm.toggleChecked(false);
 				expect(wrapper.emitted('change')[0][0]).not.toContain(newBarrier.key);
 			});
 
 			it('does not remove itself from the list if it is being checked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, 1);
+				const wrapper = makeWrapper(contact, newBarrier, true);
 				wrapper.vm.toggleChecked(true);
 				expect(wrapper.emitted('change')[0][0]).toContain(newBarrier.key);
 			});
@@ -217,13 +220,13 @@ describe ('Encounter contact barrier component', () => {
 			};
 
 			it('adds itself to the list if it is being checked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, 1);
+				const wrapper = makeWrapper(contact, newBarrier, true);
 				wrapper.vm.toggleChecked(true);
 				expect(wrapper.emitted('change')[0][0]).toContain(newBarrier.key);
 			});
 
 			it('does not add itself to the list if it is being unchecked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, 1);
+				const wrapper = makeWrapper(contact, newBarrier, true);
 				wrapper.vm.toggleChecked(false);
 				expect(wrapper.emitted('change')[0][0]).not.toContain(newBarrier.key);
 			});
