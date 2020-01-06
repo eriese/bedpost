@@ -1,6 +1,8 @@
+<%= body_class 'vertical-center' %>
+<%= content_for :inner_class, 'container--is-full-height container--has-centered-child' %>
 <h1>Partnerships</h1>
 <% if current_user_profile.partnerships.empty? %>
 	<h2><%= t('.no_partnerships') %></h2>
 <% end %>
 <%= display_partners %>
-<%= link_to t(".new_partnership"), new_partnership_path, :class => "link" %>
+<%= link_to '', new_partnership_path, title: t(".new_partnership"), :class => "cta cta--is-add-btn" %>

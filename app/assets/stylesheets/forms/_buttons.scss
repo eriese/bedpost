@@ -75,6 +75,44 @@
 		}
 	}
 
+	&--is-add-btn {
+		float: right;
+		margin-right: $spacing-default;
+		min-width: unset;
+		border-radius: 50%;
+		padding: 0;
+		height: 2.75rem;
+		width: 2.75rem;
+		background-repeat: no-repeat;
+		background-size: 75%;
+		background-position: center center;
+		background-clip: border-box;
+		-moz-background-clip: border-box;
+		-webkit-background-clip: border-box;
+		flex-shrink: 0;
+		align-self: flex-end;
+
+		body.is-light & {
+			@include background-svg(check-box-check($fill-color: theme-light('cta-text'), $stroke-width: 0.6, $rotation: 45));
+		}
+
+		body.is-dark & {
+			@include background-svg(check-box-check($fill-color: theme-dark('cta-text'), $stroke-width: 0.6, $rotation: 45));
+		}
+
+		&:hover, &:focus {
+			&:not(:disabled) {
+				body.is-light & {
+					@include background-svg(check-box-check($fill-color: theme-light('cta-bg'), $stroke-width: 0.6, $rotation: 45));
+				}
+
+				body.is-dark & {
+					@include background-svg(check-box-check($fill-color: theme-dark('cta-bg'), $stroke-width: 0.6, $rotation: 45));
+				}
+			}
+		}
+	}
+
 	&__text {
 		body.is-light &, body.is-dark &{
 			color: inherit;
@@ -139,11 +177,12 @@ button.vs__deselect{
 }
 
 .button-list {
+	width: 100%;
 	max-width: $constrained-width;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: stretch;
-	align-content: stretch;
+	align-content: start;
 	justify-content: space-around;
 	margin-inline-start: 0;
 	margin-block-start: 0;

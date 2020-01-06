@@ -20,7 +20,7 @@ module PartnershipsHelper
 			end
 		end
 		# join and nest
-		content_tag(:ul, safe_join(agg), {class: "button-list"})
+		content_tag(:ul, safe_join(agg), {class: "button-list container--has-centered-child__centered-child"})
 	end
 
 	# display a partner and their most recent encounter

@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 }
 
-html, body {
+html, body, #vue-container {
 	height: 100%;
 	font-size: $root-font-size;
 	font-family: $text-font;
