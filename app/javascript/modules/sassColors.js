@@ -10,6 +10,7 @@ import sassDefaults from '@stylesheets/layout/_defaults.scss';
 function hex2rgba(hex, opacity){
 	if (opacity === undefined) opacity = 1;
 	hex = hex.replace('#','');
+	if (hex.length == 3) { hex = `${hex}${hex}`; }
 	let r = parseInt(hex.substring(0, hex.length/3), 16);
 	let g = parseInt(hex.substring(hex.length/3, 2*hex.length/3), 16);
 	let b = parseInt(hex.substring(2*hex.length/3, 3*hex.length/3), 16);
@@ -18,9 +19,9 @@ function hex2rgba(hex, opacity){
 }
 
 const sassColors = {
-	asRgba(key, opacity) {
-		let whichColor = document.body.classList.contains('is-dark') ? 'darkTheme' : 'lightTheme';
-		return hex2rgba(this[whichColor][key], opacity);
+	asRgba(key, opacity, theme) {
+		theme = theme || (document.body.classList.contains('is-dark') ? 'darkTheme' : 'lightTheme');
+		return hex2rgba(this[theme][key], opacity);
 	}
 };
 

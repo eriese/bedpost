@@ -211,7 +211,8 @@ p.description {
 
 #page-container-inner {
 	max-width: rem(1000px);
-	margin: 0 auto;
+	@include centered;
+	@include self-clearing;
 }
 
 .container {

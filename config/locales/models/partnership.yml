@@ -33,10 +33,12 @@ en:
         communication: All forms of communication are valid! We don't care if you text, they slide into your DMs, or you wake up in the same room every day. Pick the one that feels like the best fit.
         prior_discussion: Risk management includes but isn't limited to - testing schedule, STI status, barrier practices, and fluid bonding and exchange philosophies. We'll ask you about barrier use some here too to help us assess risk.
     show:
-      partner_html: Partnership with <b>%{name}</b>
+      title: Partnership
+      partner_html: with <b>%{name}</b>
       level_field_html: "%{field}: %{level}"
       encounters: Encounters with %{name}
       edit: Edit this partnership
+      new_encounter: Add a new encounter with %{name}
       destroy:
         text: Delete this partnership
         confirm: Are you sure? You won't be able to undo this, and you will lose all encounter data connected to this partnership. If you really mean it, click again to confirm.

@@ -26,8 +26,9 @@
 	max-width: 100%;
 	margin: 0rem auto;
 	text-align: center;
+	padding: 0 $spacing-small;
 
 	#radar-chart {
-		margin: -5rem 0rem -3rem 0rem;
+		margin: -3rem 0rem -3.5rem 0rem;
 	}
 }
