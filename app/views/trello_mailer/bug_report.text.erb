@@ -1,0 +1,14 @@
+**Reproduced:**
+<%= @report[:reproduced_times] %>/5
+
+**Expected Behavior:**
+<%= @report[:expected_behavior] %>
+
+**Actual Behavior:**
+<%= @report[:actual_behavior] %>
+
+**Steps to reproduce:**
+<%= @report[:steps] %>
+
+**Notes:**
+<%= @report[:notes].empty? ? "None" : @report[:notes] %>

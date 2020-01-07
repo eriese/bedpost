@@ -20,6 +20,7 @@ const vuelidateForm = () => import (/* webpackChunkName: "components/form", webp
 const fieldErrors = () => import (/* webpackChunkName: "components/form", webpackPreload: true */ "@components/form/FieldErrorsComponent.vue");
 const formErrors = () => import (/* webpackChunkName: "components/form", webpackPreload: true */ "@components/form/FormErrorsComponent.vue");
 const toggle = () => import (/* webpackChunkName: "components/toggle", webpackPreload: true */ "@components/form/ToggleComponent.vue");
+const fileInput = () => import (/* webpackChunkName: "components/file-input", webpackPreload: true */ '@components/form/FileInput.vue');
 const dynamicFieldList = () => import (/* webpackChunkName: "components/dynamic-field-list", webpackPreload: true */ "@components/form/DynamicFieldList.vue");
 
 const encounterContactField = () => import (/* webpackChunkName: "components/encounter-contact-field", webpackPreload: true */ "@components/form/encounter/EncounterContactField.vue");
@@ -58,6 +59,7 @@ export default function addVue() {
 	Vue.component('field-errors', fieldErrors);
 	Vue.component('form-errors', formErrors);
 	Vue.component('toggle', toggle);
+	Vue.component('file-input', fileInput);
 	Vue.component('form-stepper', formStepper);
 	Vue.component('form-step', formStep);
 	Vue.component('encounter-contact-field', encounterContactField);

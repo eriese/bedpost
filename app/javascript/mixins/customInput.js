@@ -1,3 +1,4 @@
+import {lazyChild} from '@mixins/lazyCoupled';
 /**
  * A mixin for a custom input component
  *
@@ -7,16 +8,18 @@
  * @vue-computed {string} inputName 	the value for the name attribute of the input
  * @vue-computed {string} inputId 		the value for the id attribute of the input
  * @vue-computed {string} labelText 	the text for this input's label
+ * @mixes lazyChild
  */
 export default {
+	mixins: [lazyChild],
 	props: ['baseName', 'label', 'labelKey', 'model'],
 	computed: {
 		cListeners: function() {
 			let vm = this;
-			let inputEvent = this.$options.model && this.$options.model.event || 'input';
 			let newListeners = {};
-			newListeners[inputEvent] = function(e) {
-				vm.$emit(inputEvent, e.target.value);
+			newListeners[this.inputEvent] = function(e) {
+				let val = e && e.target && e.target[vm.inputProperty];
+				vm.$emit(vm.inputEvent, val);
 			};
 			return Object.assign({}, this.$listeners, newListeners);
 		},
@@ -37,6 +40,12 @@ export default {
 		},
 		labelText: function() {
 			return this.label || this.$_t(this.labelKey);
+		},
+		inputEvent: function() {
+			return this.$options.model && this.$options.model.event || 'input';
+		},
+		inputProperty: function() {
+			return this.$options.model && this.$options.model.prop || 'value';
 		}
 	},
 	created: function() {

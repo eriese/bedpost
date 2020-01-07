@@ -1,8 +1,15 @@
-<% body_class 'body--has-no-auth' %>
+<% body_class 'body--has-no-auth body--has-footer' %>
 <% content_for :header do %>
 	<header class="header--is-big">
 		<span id="logo">BedPost</span>
 	</header>
+<% end %>
+
+<% content_for :footer do %>
+	<nav>
+		<% content_for :footer_class, 'footer--is-at-bottom' %>
+		<%= render partial: 'footer' %>
+	</nav>
 <% end %>
 
 <%= render template: "layouts/application" %>

@@ -1,0 +1,27 @@
+.footer {
+	padding-inline-start: 0rem;
+	padding: $spacing-small;
+	list-style-type: none;
+	text-align: center;
+
+	&__item {
+		display: inline-block;
+	}
+
+	&__link {
+		font-weight: bold;
+
+		.footer--is-at-bottom  & {
+			@include themed(color, "h1");
+			@include themed-with-cards(color, "background");
+		}
+
+		.footer--is-in-nav & {
+			@include themed-inverse(color, "h1");
+		}
+	}
+
+	&__divider {
+		margin: 0rem $spacing-small;
+	}
+}
