@@ -99,8 +99,10 @@
 }
 
 button.vs__deselect{
+	fill: theme-light("cta-bg");
+
 	&:hover, &:focus {
 		background-color: transparent;
-		@include themed(fill, "cta-bg-light");
+		fill: theme-light("cta-bg-light");
 	}
 }

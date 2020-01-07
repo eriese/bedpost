@@ -271,7 +271,7 @@
 #page-container #page-container-inner #encounter-calendar {
 	.popover-day-title {
 		text-align: center;
-		font-size: 1.15rem;
+		font-size: 1rem;
 	}
 
 	.encounter-partner-name {
@@ -289,11 +289,12 @@
 
 	.partner-indicator {
 		display: inline-block;
-		height: 1.15rem;
-		width: 2rem;
+		height: 1.5rem;
+		width: 1.5rem;
 		vertical-align: middle;
 		margin-right: rem(8px);
-		margin-bottom: 0.175rem;
+		border-radius: 50%;
+		box-shadow: $box-shadow-val-small theme-light('shadow');
 	}
 
 	.encounter-list-item {
@@ -307,19 +308,44 @@
 	}
 
 	input[readonly=readonly] {
-		display: none;
+		@include disabled();
 	}
 
-	.vs--unsearchable .vs__dropdown-toggle {
-		cursor: initial;
-	}
+	.vs {
+		&--unsearchable .vs__dropdown-toggle {
+			cursor: auto;
+		}
 
-	.vs__search {
-		border-left: 1px solid;
-		@include themed(border-left-color, $input-border-key);
+		&__dropdown-toggle {
+			border: none;
+		}
 
-		&:focus {
-			@include themed(border-left-color, $input-border-focus-key);
+		&__open-indicator {
+			position: absolute;
+			right: 1.25rem;
+			bottom: 0.85rem;
+			@include link-colors($colors-light, '', fill);
+		}
+
+		&__selected {
+			color: theme-light('text');
+			border-radius: $default-border-radius;
+			background-color: $color-off-white;
+			border: none;
+			padding: $spacing-tiny $spacing-small;
+		}
+
+
+		&__search {
+			border-left: 1px solid;
+			background-color: $input-background-color;
+			@include themed(border-color, $input-border-key);
+			flex-basis: 100%;
+
+
+			&:focus {
+				@include themed(border-color, $input-border-focus-key);
+			}
 		}
 	}
 }

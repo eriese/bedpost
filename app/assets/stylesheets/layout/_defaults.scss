@@ -31,6 +31,7 @@ $nav-button-width: rem(36px);
 $default-border-radius: 0.95rem;
 $default-border-radius-small: rem(5px);
 $box-shadow-val: 0px 0px 2px 1px;
+$box-shadow-val-small: 0px 0px 1px 1px;
 $constrained-width: 30rem;
 
 ///////////////////////
@@ -57,7 +58,7 @@ $colors-light: (
 	"cta-bg-form": #AF5D87,
 	"link": #7A405E,
 	"link-light": #AF6A64,
-	"shadow": rgba($color-black, 0.5),
+	"shadow": rgba($color-black, 0.3),
 	"h1": #433060,
 	"h2": $color-black,
 	"background": $color-white,
@@ -75,14 +76,14 @@ $colors-dark: (
 	"cta-bg-form": #AF5D87,
 	"link": #C78DAB,
 	"link-light": #FC9890,
-	"shadow": rgba($color-white, 0.5),
+	"shadow": rgba($color-white, 0.3),
 	"h1": #FFD6CC,
 	"h2": $color-off-white,
 	"background": #2E2143,
 	"background-contrast": #FC9890,
 	"text": $color-white,
 	"input-border": #7B405E,
-	"input-border-focus": #FC9890,
+	"input-border-focus": #FFD6CC,
 	"form-background": #AF5D87,
 );
 

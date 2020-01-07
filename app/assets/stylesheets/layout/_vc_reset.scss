@@ -2,6 +2,10 @@
 // V-Calendar
 ////////////////////////////////////////
 #page-container #page-container-inner {
+	.vc-reset, .vc-reset * {
+		border-color: transparent;
+	}
+
 	.vc-container {
 		--dot-diameter: 0.5rem;
 		--bar-height: rem(6px);

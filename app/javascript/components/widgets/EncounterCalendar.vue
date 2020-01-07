@@ -5,7 +5,7 @@
 			<div v-if="partnerships.length > 1">
 				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
 					<template v-slot:selected-option="opt">
-						<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
+						<span class="vs__selected-inner"><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
 					</template>
 				</v-select>
 			</div>
