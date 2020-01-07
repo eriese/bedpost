@@ -3,8 +3,22 @@
 ////////////////////////////////////////
 #page-container #page-container-inner {
 	.vc-container {
-		--dot-diameter: rem(7px);
+		--dot-diameter: 0.5rem;
 		--bar-height: rem(6px);
+	}
+
+	.vc-rounded-lg {
+		border-radius: $default-border-radius;
+	}
+
+	.vc-shadow {
+		body.is-light & {
+			box-shadow: $box-shadow-val theme-light('shadow');
+		}
+
+		body.is-dark & {
+			box-shadow: $box-shadow-val theme-dark('shadow');
+		}
 	}
 
 	.vc-popover-content-wrapper .vc-popover-content {
@@ -16,19 +30,26 @@
 	}
 
 	.vc-text-gray-900 {
-		color: $color-black;
+		@include themed(color, 'text');
+	}
+
+	.vc-text-gray-800 {
+		@include themed(color, 'h2');
 	}
 
 	.vc-text-gray-600 {
-		color: $color-green-light;
-		&.hover\:vc-opacity-50:hover {
+		@include themed(color, 'cta-bg');
+
+		&.hover\:vc-opacity-50:hover, &.focus\:vc-bg-gray-200:focus {
 			opacity: 1;
-			color: $color-green-dark;
+			@include themed(color, 'background');
+			@include themed(background-color, 'cta-bg');
+			border-radius: 50%
 		}
 	}
 
 	.vc-text-gray-500 {
-		color: $color-green-dark;
+		@include themed(color, "h1");
 	}
 
 	.vc-text-white {
@@ -40,12 +61,24 @@
 	}
 
 	.vc-bg-gray-800, .vc-bg-gray-900 {
-		background-color: $color-dark-gray;
+		@include themed(background-color, 'background');
+		@include themed(color, 'text');
 	}
 
-	@mixin toggle-button($bg-color, $is-dark: true) {
-		background-color: $bg-color;
-		border: rem(2px) solid $bg-color;
+	@mixin toggle-button($bg-key, $is-dark: true) {
+
+		@include themed(background-color, $bg-key);
+		@include themed(border-color, $bg-key);
+		border: rem(2px) solid;
+
+		body.is-light & {
+			box-shadow: $box-shadow-val theme-light('shadow');
+		}
+
+		body.is-dark & {
+			box-shadow: $box-shadow-val theme-dark('shadow');
+		}
+
 
 		&[aria-pressed=false] {
 			background-color: $color-white;
@@ -64,24 +97,25 @@
 		}
 	}
 
+	$partner-color-keys: "input-border" "input-border-focus" "h1" "form-background" "h2" "cta-bg";
+	@for $i from 0 through 5 {
+		// $partner-ind: $i * 2;
+		// $color-ind: length($gradient-purples-saturated) - $i;
+		// $color-ind: $i + 1;
 
-	@for $i from 0 through 4 {
-		$partner-ind: $i * 2;
-		$color-ind: length($gradient-purples-saturated) - $i;
-		$color-ind: $i + 1;
+		// $is-dark: $color-ind > 2;
+		$color-key: nth($partner-color-keys, $i + 1);
 
-		$is-dark: $color-ind > 2;
-
-		.vc-bg-partnership-#{$partner-ind}-600,
-		.vc-bg-partnership-#{$partner-ind}-500,
-		.partnership-#{$partner-ind} {
-			@include toggle-button(nth($gradient-greens-saturated, $color-ind), $is-dark);
+		.vc-bg-partnership-#{$i}-600,
+		.vc-bg-partnership-#{$i}-500,
+		.partnership-#{$i} {
+			@include toggle-button($color-key);
 		}
 
-		.vc-bg-partnership-#{$partner-ind + 1}-600,
-		.vc-bg-partnership-#{$partner-ind + 1}-500,
-		.partnership-#{$partner-ind + 1} {
-			@include toggle-button(nth($gradient-purples-saturated, $color-ind), $is-dark);
-		}
+		// .vc-bg-partnership-#{$partner-ind + 1}-600,
+		// .vc-bg-partnership-#{$partner-ind + 1}-500,
+		// .partnership-#{$partner-ind + 1} {
+		// 	@include toggle-button(nth($gradient-purples-saturated, $color-ind), $is-dark);
+		// }
 	}
 }

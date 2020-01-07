@@ -1,3 +1,4 @@
+<%= body_class 'is-dark has-cards' %>
 <% if @has_partners %>
 	<% trans_key = @is_partner ? '.with_partner' : '.all' %>
 	<% first_partner = @partnerships[0] || {} %>
@@ -6,7 +7,7 @@
 	<encounter-calendar :partnerships="<%= @partnerships.to_json %>">
 		<h3><%= t(".no_encounters.#{trans_key}", partner_name: first_partner["partner_name"]) %></h3>
 	</encounter-calendar>
-	<div><%= link_to t(".new"), @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, class: "link"%></div>
+	<div><%= link_to '', @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, title: t(".new"), class: "cta cta--is-add-button"%></div>
 <% else %>
 	<h1 class="with-desc"><%= t('.no_partners.title') %></h1>
 	<h2 class="desc"><%= t('.no_partners.desc') %></h2>

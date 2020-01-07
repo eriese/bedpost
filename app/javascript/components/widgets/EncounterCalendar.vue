@@ -9,7 +9,7 @@
 					</template>
 				</v-select>
 			</div>
-			<toggle :symbols="['list_view', 'calendar_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle>
+			<toggle :symbols="['list_view', 'calendar_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle" class="cta cta--is-compact"></toggle>
 			<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
 				<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 					<div class="popover-day-title">
@@ -20,7 +20,7 @@
 							:key="attr.key"
 							:attribute="attr">
 							<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-							<a :href="attr.customData.href">{{ attr.customData.notes }}</a>
+							<a class="link" :href="attr.customData.href">{{ attr.customData.notes }}</a>
 					</v-popover-row>
 				</div>
 			</v-calendar>
@@ -67,7 +67,7 @@
 				return {
 					maxDate: new Date(),
 					isExpanded: true,
-					// isDark: true,
+					// isDark: document.body.classList.contains('is-dark'),
 					columns: this.$screens({md: 2, lg: 3}, 1),
 					attributes: this.selectedEncounters,
 					toPage: this.mostRecent,
