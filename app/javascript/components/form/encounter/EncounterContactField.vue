@@ -77,8 +77,8 @@
 					barrier: bType,
 					contact: value,
 					baseName,
-					encounterData: {
-						has_barrier: tracked.has_barrier,
+					encounterData: tracked,
+					contactData: {
 						index: watchKey,
 						instruments,
 						object_instrument_id,
@@ -101,6 +101,7 @@ import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
 import hiddenRadio from './HiddenRadio.vue';
 import encounterContactBarrier from './EncounterContactBarrier.vue';
 import { required, minLength } from 'vuelidate/lib/validators';
+import EncounterBarrierTracker from '@modules/encounterBarrierTracker';
 
 export default {
 	data: function() {
@@ -177,6 +178,7 @@ export default {
 			let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
 			this._value.possible_contact_id = contact && contact._id;
 			this.onInput();
+			this.updateBarriers();
 		},
 		objectInstsGet() {
 			return this.instsGet(false);
@@ -242,16 +244,11 @@ export default {
 			this.resetInsts();
 			return;
 		},
-		updateBarriers(newBarriers, isInit) {
-			let hadBarriers = this.value.barriers.indexOf('fresh') >=0;
-			let hasBarriers = newBarriers.indexOf('fresh') >= 0;
-			if (isInit || hadBarriers != hasBarriers) {
-				let oldBarriers = this.tracked.has_barrier || 0;
-				let change = hasBarriers ? 1 : -1;
-				let newBarrierCount = Math.max(oldBarriers + change, 0);
-				this.$emit('track', 'has_barrier', newBarrierCount);
-			}
+		updateBarriers() {
 			this.onInput();
+			this.$nextTick(() => {
+				this.$emit('track');
+			});
 		},
 		onInput() {
 			this.$emit('input', this._value);
@@ -299,7 +296,10 @@ export default {
 			}
 		});
 
+		this.$emit('start-tracking', (list) => new EncounterBarrierTracker(list, this.possibles));
+
 		this.updateContactType();
+		this.updateBarriers();
 	},
 };
 </script>
