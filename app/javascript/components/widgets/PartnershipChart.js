@@ -2,28 +2,39 @@ import Chart from 'chart.js';
 import {Radar} from 'vue-chartjs';
 import sassColors from '@modules/sassColors';
 
+/**
+ * Original _drawLabels function from the radialLinear axis
+ *
+ * @type {function}
+ */
 const radialLinearDrawLabels = Chart.scaleService.constructors.radialLinear.prototype._drawLabels;
+
+// override the _drawLabels function
 Chart.scaleService.constructors.radialLinear.prototype._drawLabels = function() {
 	var me = this;
+	// get the startAngle
 	var originalAngle = me.chart.options.startAngle;
+	// set it to 0 for drawing labels
 	me.chart.options.startAngle = 0;
+	// call the original function
 	radialLinearDrawLabels.call(me);
+	// set it back to the startAngle
 	me.chart.options.startAngle = originalAngle;
 };
 
-Chart.pluginService.register({
-	beforeDraw: function (chartInstance) {
-		if (chartInstance.config.options.chartArea && chartInstance.config.options.chartArea.backgroundColor) {
-			var ctx = chartInstance.chart.ctx;
-			var chartArea = chartInstance.scale;
+// Chart.pluginService.register({
+// 	beforeDraw: function (chartInstance) {
+// 		if (chartInstance.config.options.chartArea && chartInstance.config.options.chartArea.backgroundColor) {
+// 			var ctx = chartInstance.chart.ctx;
+// 			var chartArea = chartInstance.scale;
 
-			ctx.fillStyle = chartInstance.config.options.chartArea.backgroundColor;
-			ctx.beginPath();
-			ctx.ellipse(chartArea.xCenter, chartArea.yCenter, chartArea.drawingArea, chartArea.drawingArea, Math.PI / 4, 0, 2 * Math.PI);
-			ctx.fill();
-		}
-	}
-});
+// 			ctx.fillStyle = chartInstance.config.options.chartArea.backgroundColor;
+// 			ctx.beginPath();
+// 			ctx.ellipse(chartArea.xCenter, chartArea.yCenter, chartArea.drawingArea, chartArea.drawingArea, Math.PI / 4, 0, 2 * Math.PI);
+// 			ctx.fill();
+// 		}
+// 	}
+// });
 
 /** the color for grid and angle lines on the chart */
 const lineColor = () => sassColors.asRgba('text', 1);
