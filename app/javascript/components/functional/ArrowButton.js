@@ -19,9 +19,9 @@ const _shapes = {
  * @type {object}
  */
 const _rotations = {
-	up: 'rotate(90)',
-	down: 'rotate(270)',
-	right: 'rotate(180)',
+	up: 'rotate(90deg)',
+	down: 'rotate(270deg)',
+	right: 'rotate(180deg)',
 };
 
 /**
@@ -77,7 +77,7 @@ export default {
 				attrs: {
 					viewBox: `0 0 ${props.boxSize} ${props.boxSize}`,
 					focusable: false,
-					transform: transform,
+					style: `transform: ${transform};`,
 				}
 			}, [createElement('path', {
 				attrs: {
