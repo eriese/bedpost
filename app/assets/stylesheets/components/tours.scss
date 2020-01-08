@@ -34,22 +34,6 @@
 
 
 .first-time {
-	max-width: 26rem;
+	max-width: $constrained-width;
 	margin: 0px auto;
-	&__button-list {
-		display: flex;
-		justify-content: space-around;
-		margin-inline-start: 0;
-		padding-inline-start: 0;
-		margin-block-start: 0;
-	}
-
-	&__button-item {
-		flex-basis: 45%;
-		flex-grow: 0;
-		flex-shrink: 0;
-		padding: $spacing-default;
-		font-size: 1.15rem;
-		width: 0;
-	}
 }

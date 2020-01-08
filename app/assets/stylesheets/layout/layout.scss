@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 }
 
-html, body {
+html, body, #vue-container {
 	height: 100%;
 	font-size: $root-font-size;
 	font-family: $text-font;
@@ -205,7 +205,8 @@ p.description {
 
 #page-container-inner {
 	max-width: rem(1000px);
-	margin: 0 auto;
+	@include centered;
+	@include self-clearing;
 }
 
 .container {
@@ -263,7 +264,7 @@ p.description {
 .desc {
 	h1 + &, h2 + & {
 		line-height: 1rem;
-		margin-top: -1rem;
+		margin-top: 0rem;
 		margin-bottom: 1rem;
 	}
 }

@@ -12,25 +12,25 @@ module PartnershipsHelper
 		p_sorted = current_user_profile.partners_with_most_recent
 		agg = p_sorted.map do |ship|
 			# make a list item
-			content_tag(:li, {class: "partnership-link"}) do
+			content_tag(:li, {class: "button-list__item"}) do
 				# link to that partnership's show page
-				link_to(partnership_path(ship["_id"]), class: 'as-button') do
+				link_to(partnership_path(ship["_id"]), class: 'cta cta--is-square partnership-link') do
 					display_partner(ship)
 				end
 			end
 		end
 		# join and nest
-		content_tag(:ul, safe_join(agg), {class: "partnership-links"})
+		content_tag(:ul, safe_join(agg), {class: "button-list container--has-centered-child__centered-child"})
 	end
 
 	# display a partner and their most recent encounter
 	def display_partner(ship)
 		ship_name = Partnership.make_display(ship["partner_name"], ship["nickname"])
-		content = content_tag(:span, ship_name, {class: "partner-name"})
+		content = content_tag(:span, ship_name, {class: "partnership-link__name cta--is-square__heading"})
 
 		#add the most recent if there is one
 		most_recent = ship["most_recent"]
-		content << content_tag(:span, t(".latest_html", {class: "last-encounter", took_place: l(most_recent, format: :most_recent)})) if most_recent
+		content << content_tag(:span, t(".latest_html", {took_place: l(most_recent, format: :most_recent)}), class: "partnership-link__last-encounter cta--is-square__main") if most_recent
 
 		content
 	end
