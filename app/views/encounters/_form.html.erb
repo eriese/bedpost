@@ -2,7 +2,7 @@
 	<%= f.date_field :took_place %>
 	<%= f.text_area :notes %>
 	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
-	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.contacts" base-name="<%= f.object_name %>[contacts_attributes]" @should-validate="<%= f.class::SLOT_SCOPE %>.addValidation">
+	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.contacts" base-name="<%= f.object_name %>[contacts_attributes]" @should-validate="<%= f.class::SLOT_SCOPE %>.addValidation" class="contact-field-list" :$v="vf.$v.formData.contacts">
 		<h2 class="h2--is-form-heading"><%= t('.contacts_title', partner_name: @partnership.partner.name) %></h2>
 		<p class="description description--is-form-description"><%= t('.contacts_desc') %></p>
 	</dynamic-field-list>

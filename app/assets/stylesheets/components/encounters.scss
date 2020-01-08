@@ -1,10 +1,25 @@
-.contact-field-container {
+.contact-field-list {
+	.dynamic-field {
+		border-radius: $default-border-radius;
+		padding: $spacing-tiny $spacing-tiny $spacing-small $spacing-tiny;
+		border: 2px solid theme-dark('h1');
+		margin-bottom: $spacing-small;
 
-	&.incomplete {
-		// TODO style these
-		.contact-error {}
+		&-buttons {
+			margin-top: -$spacing-tiny;
+		}
 	}
+	.incomplete {
+		background-color: theme-dark('h1');
+		.contact-error {
+			font-size: 0.75rem;
+			color: theme-dark('background');
+			font-weight: bold;
+		}
+	}
+}
 
+.contact-field-container {
 	.contact-field {
 		display: flex;
 		align-items: baseline;

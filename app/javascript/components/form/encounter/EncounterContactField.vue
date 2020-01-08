@@ -100,7 +100,8 @@
 import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
 import hiddenRadio from './HiddenRadio.vue';
 import encounterContactBarrier from './EncounterContactBarrier.vue';
-import { required, minLength } from 'vuelidate/lib/validators';
+import { minLength } from 'vuelidate/lib/validators';
+import { deletedOrRequired } from '@modules/validation/validators';
 import EncounterBarrierTracker from '@modules/encounterBarrierTracker';
 
 export default {
@@ -120,17 +121,6 @@ export default {
 	components: {
 		'hidden-radio': hiddenRadio,
 		'barrier-input': encounterContactBarrier
-	},
-	validations() {
-		return {
-			value: {
-				subject: {blank: required},
-				object: {blank: required},
-			},
-			contact_type: {blank: required},
-			subject_instrument_id: {blank: required},
-			object_instrument_id: {blank: required},
-		};
 	},
 	computed: {
 		cType: function() {
@@ -154,7 +144,7 @@ export default {
 			return this.$_t('contact.with', {pronoun: this.value.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
 		},
 		incomplete() {
-			return this.$v.$invalid && this.$v.$anyDirty;
+			return this.$v && this.$v.$invalid && this.$v.$anyDirty;
 		}
 	},
 	methods: {
@@ -287,11 +277,11 @@ export default {
 		this.$parent.$emit('should-validate', 'contacts', {
 			tooShort: minLength(1),
 			$each: {
-				subject: {blank: required},
-				object: {blank: required},
-				position: {blank: required},
+				subject: {blank: deletedOrRequired},
+				object: {blank: deletedOrRequired},
+				position: {blank: deletedOrRequired},
 				possible_contact_id: {
-					blank: (v) => v !== null,
+					blank: deletedOrRequired,
 				},
 			}
 		});

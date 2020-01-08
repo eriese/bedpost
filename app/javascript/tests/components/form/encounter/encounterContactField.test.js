@@ -219,11 +219,6 @@ describe('Encounter Contact Field Component', () => {
 	});
 
 	describe('validation', () => {
-		it('has internal validation', () => {
-			const wrapper = setup();
-			expect(wrapper.vm.$v).not.toBeUndefined();
-		});
-
 		it('emits a validation configuration from its parent', () => {
 			const localVue = setupLocalVue();
 

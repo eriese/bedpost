@@ -141,3 +141,7 @@ export const requireUnlessValid = (locator) => {
 export const acceptance = (field) => {
 	return helpers.withParams({field}, (value, parentVm) => helpers.ref(field, this, parentVm) == 'true');
 };
+
+export const deletedOrRequired = (value, parentVm) => {
+	return helpers.ref('_destroy', this, parentVm) === true || helpers.req(value);
+};

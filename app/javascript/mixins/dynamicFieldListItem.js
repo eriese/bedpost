@@ -9,6 +9,7 @@ export default {
 			type: Object,
 			default: function() { return {}; },
 		},
+		$v: Object,
 	},
 	mixins: [lazyChild],
 	watch: {
