@@ -45,8 +45,8 @@ en:
       chart:
         aria_label: A radar chart showing the levels you desribed this partnership with. This data is available as an accessible table if you click the 'List View' button.
         desc: The more the chart is covered, the more this partnership reduces risk.
-        list_view: List View
-        chart_view: Chart View
+        list_view: List
+        chart_view: Chart
       fields:
         short:
           familiarity: Familiarity

@@ -13,7 +13,9 @@
 	</tr>
 	<% end %>
 </table>
-<toggle :symbols="['chart_view', 'list_view']" translate="partnerships.show.chart" field="showList" :val="additional.showList" @toggle-event="additionalField" @toggle-mounted="additionalField('showList', false)" id="view-toggle" class="cta cta--is-compact"></toggle>
+<div class="container--has-centered-text">
+	<toggle-switch :symbols="['chart_view', 'list_view']" :vals="[false, true]" translate="partnerships.show.chart" field="showList" :val="additional.showList" @toggle-event="additionalField" @toggle-mounted="additionalField('showList', false)" id="view-toggle"></toggle-switch>
+</div>
 
 <div class="additional">
 	<% if @partnership.encounters.size > 0 %>
