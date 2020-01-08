@@ -3,6 +3,8 @@ class ToursController < ApplicationController
 	skip_before_action :check_first_time
 	skip_before_action :authenticate_user_profile!, only: [:show]
 
+	layout 'first_time'
+
 	def index
 		@num_partnerships = current_user_profile.partnerships.count
 		@has_partnerships = @num_partnerships > 0
@@ -20,7 +22,7 @@ class ToursController < ApplicationController
 		# if there's a tour for this page
 		tour = if tour = Tour.by_page!(page, first_time)
 			# if the user's already seen it and isn't requesting it again just send true
-			if current_user_profile.has_toured?(page, tour.fte_only) && params[:force] != 'true'
+			if user_profile_signed_in? && current_user_profile.has_toured?(page, tour.fte_only) && params[:force] != 'true'
 				{has_tour: true}
 			# if they haven't or they are requesting it again, send the tour
 			else

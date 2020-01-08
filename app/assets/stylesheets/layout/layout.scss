@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 }
 
-html, body {
+html, body, #vue-container {
 	height: 100%;
 	font-size: $root-font-size;
 	font-family: $text-font;
@@ -37,11 +37,10 @@ body.has-form {
 	background-color: theme-light("form-background");
 }
 
-body.vertical-center {
+body.vertical-center, .body--has-footer {
 	#vue-container {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-around;
 		height: 100%;
 		width: 100%;
 	}
@@ -94,6 +93,9 @@ header {
 		&--is-small {
 			font-size: rem(32px);
 			line-height: 1.5;
+		}
+
+		&--has-nav {
 			box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
 		}
 	}
@@ -143,16 +145,8 @@ p.description {
 }
 
 .no-js {
-	header.--is-small {
-		position: absolute;
-		margin-left: rem(10px);
-	}
-
-	header.--is-small + main {
-		float: right;
-		clear: none;
-		width: calc(100% - #{$nav-width});
-		box-sizing: border-box;
+	@include media(('>phone', '!retina')) {
+		padding-left: $nav-width;
 	}
 
 	.js-only {
@@ -211,7 +205,8 @@ p.description {
 
 #page-container-inner {
 	max-width: rem(1000px);
-	margin: 0 auto;
+	@include centered;
+	@include self-clearing;
 }
 
 .container {
@@ -269,7 +264,7 @@ p.description {
 .desc {
 	h1 + &, h2 + & {
 		line-height: 1rem;
-		margin-top: -1rem;
+		margin-top: 0rem;
 		margin-bottom: 1rem;
 	}
 }

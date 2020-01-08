@@ -1,0 +1,34 @@
+en:
+  trello:
+    new:
+      title:
+        bug: Report a bug
+        feature: Request a feature
+  helpers:
+    label:
+      bug:
+        title: Description
+        reproduced_times: How many times out of 5 were you able to reproduce this bug?
+        expected_behavior: What did you expect to happen?
+        actual_behavior: What actually happened?
+        steps: Please describe the steps we can take to reproduce this bug
+        notes: Notes? Comments?
+        screenshots: Screenshots, videos, files, etc.
+      feature:
+        title: Description
+        what: What will this feature do?
+        why: Why is this feature an important addition to BedPost?
+        original_group: Did you check the feature request board to make sure that this feature hasn't already been requested?
+        original:
+          'true': 'yes'
+          'false': 'no'
+    tooltip:
+      bug:
+        title: Describe the bug in a few words
+  mongoid:
+    errors:
+      models:
+        feature:
+          attributes:
+            original_group:
+              acceptance: Please check the features board before submitting this request

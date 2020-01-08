@@ -41,7 +41,9 @@ Rails.application.routes.draw do
 	resources :tours, only: [:show, :update]
 	resources :terms, only: [:show, :update]
 
-	#TODO this is temporary
+	get 'feedback/*feedback_type', to: 'trello#new', as: :feedback
+	post 'feedback/*feedback_type', to: 'trello#create'
+
 	root to: redirect('/signup')
 	# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

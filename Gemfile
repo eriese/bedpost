@@ -41,6 +41,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'devise'
 gem 'mailjet'
+gem "aws-ses", "~> 0.6.0", :require => 'aws/ses'
 
 gem 'daemons'
 gem 'delayed_job'

@@ -21,8 +21,9 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	alias_method :parent_hidden_field, :hidden_field
 	alias_method :parent_submit, :submit
+	alias_method :parent_file_field, :file_field
 
-	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field]).each do |selector|
+	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field, :file_field]).each do |selector|
 		class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
 			alias_method :parent_#{selector}, :#{selector}
 			def #{selector}(method, options = {})  # def text_field(method, options = {})
@@ -138,6 +139,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		radio_opts = {
 			inline: true,
 			validate: false,
+			required: false,
 			class: options.delete(:radio_class),
 			slot_scope: 'fec',
 			parent_scope: group_scope,
@@ -219,6 +221,20 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			parent_hidden_field(attribute, {:"v-model"=> mdl})
 		end
 	end
+
+	def file_field(attribute, **options)
+		no_js_field = @template.content_tag(:noscript) do
+			super
+		end
+		options = convert_options(options)
+		options[:model_value] = :none
+		field_builder(attribute, options).field do
+			input = super
+			input.sub('<input', '<file-input').html_safe +
+			no_js_field
+		end
+	end
+
 
 	def fields_for(record_name, record_object = nil, options = {}, &block)
 		options[:parent_builder] = self

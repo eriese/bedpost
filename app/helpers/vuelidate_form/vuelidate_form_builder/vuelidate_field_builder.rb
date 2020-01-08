@@ -151,6 +151,8 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		# make the descriptions
 		desc = @input_options['aria-describedby']
 		desc = desc.to_s + '-tooltip-content' if desc.present?
+		on_input = "#{@slot_scope}.$listeners.input"
+		on_input += "($event.target.#{@options[:model_value] || DEFAULT_MODEL_VALUE})" unless @options[:model_value] == :none
 		defaults = {
 			# v-model is always sc.model inside the field-errors scope
 			'v-model' => "#{@slot_scope}.model",
@@ -160,7 +162,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 			'@blur' => "#{@slot_scope}.onBlur",
 			'@focus' => "#{@slot_scope}.onFocus",
 			# for input, emit the target value, unless another attribute (like checked) is specified
-			'@input' => "#{@slot_scope}.$listeners.input($event.target.#{@options[:model_value] || DEFAULT_MODEL_VALUE})",
+			'@input' => on_input,
 			# static aria attributes for progressive enhancement
 			aria: {
 				required: @required,
@@ -255,7 +257,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		return if label_opt == false
 
 		# tell it if it's required so it can add an aterisk
-		defaults = {required: @required}
+		defaults = {'required' => @required}
 		# get the label key
 		@label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
 			# the option is the key

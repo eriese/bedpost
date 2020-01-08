@@ -7,7 +7,7 @@
 					<arrow-button class="link cta--is-arrow--is-small" v-if="index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
 					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
 				</div>
-				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="trackInList" class="clear" @track="track"></component>
+				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="tracker" class="clear" @track="track" @start-tracking="startTracking"></component>
 			</div>
 			<deleted-child v-else :base-name="`${baseName}[${index}]`" :item="list[index]" :id-key="idKey"></deleted-child>
 		</div>
@@ -29,8 +29,7 @@ export default {
 	data: function() {
 		return {
 			focusIndex: 100,
-			// an object for tracking list properties, to be defined by the list items
-			trackInList: {},
+			tracker: null,
 			numSubmitting: 0,
 			toDelete: [],
 		};
@@ -48,7 +47,7 @@ export default {
 		},
 		firstIndex: function() {
 			return this.list.findIndex((d) => !d._destroy);
-		}
+		},
 	},
 	methods: {
 		addToList() {
@@ -120,14 +119,8 @@ export default {
 				}
 			}
 		},
-		track(key, val) {
-			if (key instanceof Array) {
-				for (var i = 0; i < key.length; i++) {
-					this.$set(this.trackInList, key[i], this.trackInList[key[i]]);
-				}
-			} else {
-				this.$set(this.trackInList, key, val);
-			}
+		track() {
+			this.tracker && this.tracker.update(this.list);
 		},
 		updateIndices(startVal, startInd) {
 			for (var i = startVal; i < this.list.length; i++) {
@@ -138,6 +131,11 @@ export default {
 		},
 		onChildMounted() {
 			this.setFocus(this.lastIndex);
+		},
+		startTracking(trackerFactory) {
+			if (this.tracker === null) {
+				this.tracker = trackerFactory(this.list);
+			}
 		}
 	},
 	created() {

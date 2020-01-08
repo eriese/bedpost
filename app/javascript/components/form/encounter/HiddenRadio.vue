@@ -17,6 +17,9 @@ export default {
 		prop: 'checked',
 		event: 'change'
 	},
+	computed: {
+		inputProperty: () => 'value',
+	},
 	methods: {
 		setChecked() {
 			// have to do this manually instead of on the dom because for some reason, it doesn't stick when you change the order of the contact fields

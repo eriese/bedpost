@@ -50,6 +50,10 @@ class ApplicationController < ActionController::Base
 		redirect_to redirect_path unless redirect_path.nil?
 	end
 
+	def skip_timeout
+		request.env["devise.skip_timeout"] = true
+	end
+
 	# set the layout based on whether there is a user who should be able to access all authorize features
 	def choose_layout
 		user_profile_signed_in? ? (current_user_profile.first_time? ? 'first_time' : 'authed') : 'no_auth'

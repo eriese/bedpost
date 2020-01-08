@@ -8,36 +8,31 @@
 <script>
 import customInput from '@mixins/customInput';
 
-/**
- * Check a list of conditions against an enumerator function
- *
- * @param  {Array} conditions  the conditions to check
- * @param  {boolean} foundVal    the value to return if the enumerator returns true
- * @param  {boolean} notFoundVal the value to return if the enumerator returns false
- * @param  {Function} checkFunc   the enumerator function
- * @return {boolean}             whether the conditions were found
- */
-function checkConditions(conditions, foundVal, notFoundVal, checkFunc) {
-	// if there aren't any conditions, return not found
-	if (!conditions) {return notFoundVal;}
-
-	// go through the conditions
-	for (var i = 0; i < conditions.length; i++) {
-		// if the condition applies, we found it
-		if (checkFunc(conditions[i])) {
-			return foundVal;
-		}
-	}
-
-	// we didn't find any
-	return notFoundVal;
-}
-
 const matcher = '(su|o)bject';
 
+/**
+ * a custom input for barriers in an encounter
+ *
+ * @vue-prop {object} barrier													the barrier that is this input's value
+ * @vue-prop {Array} modelValue												the barriers list that this input adds its value to
+ * @vue-prop {object} contact													the contact this input supplies barriers for
+ * @vue-prop {EncounterBarrierTracker} encounterData	the tracker to check encounter_conditions against
+ * @vue-prop {object} contactData											additional data about the contact
+ * @vue-computed {string} modelName										the string to add to the baseName to get the inputName for this input
+ * @vue-computed {string} labelText 									the text for the label
+ * @vue-computed {string} inputValue									the value of this checkbox
+ * @vue-computed {number} valInd 											the index of this checkbox's value in the modelValue
+ * @vue-computed {object} cListeners 									the listeners to apply to the input
+ * @vue-computed {string} actor												who (subject or object) this instrument belongs to if this is a clean_instrument barrier
+ * @vue-computed {boolean} canClean										can the instrument referred to by this barrier be cleaned? returns true if this is not a clean_instrument barrier
+ * @vue-computed {boolean} shouldShow									should this checkbox show?
+ * @vue-computed {boolean} shouldDisable							should this checkbox be disabled?
+ * @mixes customInput
+ *
+ */
 export default {
 	name: 'encounter_contact_barrier_input',
-	props: ['barrier', 'modelValue', 'contact', 'encounterData'],
+	props: ['barrier', 'modelValue', 'contact', 'encounterData', 'contactData'],
 	mixins: [customInput],
 	model: {
 		prop: 'modelValue',
@@ -48,14 +43,17 @@ export default {
 			return 'barriers][';
 		},
 		labelText: function() {
+			// get default arguments and key
 			let transArgs = {scope: 'contact.barrier'},
-				key = this.barrier.key,
-				matches = key.match(new RegExp(matcher));
-			if (matches) {
-				let person = matches[0];
+				key = this.barrier.key;
+			// if this barrier has an actor
+			if (this.actor) {
+				// the key has no mention of which actor
 				key = key.replace(new RegExp('_' + matcher), '');
-				transArgs.instrument = this.encounterData[`${person}InstrumentName`];
-				transArgs.name = this.getPersonName(this.contact[person]);
+				// put the instrument and name in the arguments
+				transArgs.instrument = this.contactData[`${this.actor}InstrumentName`];
+				transArgs.name = this.personName;
+				// pluralize as needed
 				transArgs.count = transArgs.instrument.match(/[^s]s$/) ? 1 : 0;
 			}
 			return this.$_t(key, transArgs);
@@ -74,28 +72,39 @@ export default {
 				}
 			});
 		},
-		cleanKey: function() {
-			if (this.barrier.key.indexOf('clean_') < 0) {
-				return null;
-			}
-
-			return this.barrier.key.replace('clean_', '') + '_instrument_id';
+		actor: function() {
+			let matches = this.barrier.key.match(new RegExp(matcher));
+			return matches ? matches[0] : null;
 		},
 		canClean: function() {
-			if (this.cleanKey === null) {return true;}
-			let instID = this.contact[this.cleanKey];
+			if (this.actor == null) {return true;}
+			let instID = this.contactData[this.actor + '_instrument_id'];
 			if (instID) {
-				return this.encounterData.instruments[instID].can_clean;
+				return this.contactData.instruments[instID].can_clean;
 			}
-			return true;
+			return false;
 		},
 		shouldShow: function() {
-			return checkConditions(this.barrier.conditions, false, true, (c) => !this.contact[c])
-				&& checkConditions(this.barrier.encounter_conditions, false, true, (c) => !this.encounterData[c])
-				&& this.canClean;
+			// if it has no conditions, show it if it's cleanable
+			if (!this.barrier.encounter_conditions && !this.barrier.contact_conditions) { return this.canClean; }
+
+			// if it has encounter conditions but all are false, don't show
+			if (this.barrier.encounter_conditions && this.encounterData && this.barrier.encounter_conditions.every((c) => !this.encounterData[c](this.contact))) { return false; }
+
+			// if it has contact_conditions but some are false, don't show
+			if (this.barrier.contact_conditions && this.barrier.contact_conditions.some((c) => !this.contactData[c])) { return false; }
+
+			// show
+			return true;
 		},
 		shouldDisable: function() {
-			return checkConditions(this.barrier.exclude, true, false, (c) => this.modelValue.indexOf(c) >=0);
+			return this.barrier.exclude.some((c) => this.modelValue.indexOf(c) >=0);
+		},
+		personName() {
+			let person = this.contact[this.actor];
+			return person == 'user' ?
+				this.$_t('my') :
+				this.$_t('name_possessive', {name: this.contactData.partnerName});
 		}
 	},
 	methods: {
@@ -109,9 +118,6 @@ export default {
 
 			this.$emit('change', newValue);
 		},
-		getPersonName(person) {
-			return person == 'user' ? this.$_t('my') : this.$_t('name_possessive', {name: this.encounterData.partnerName});
-		}
 	},
 	updated: function() {
 		if (this.shouldShow) {
