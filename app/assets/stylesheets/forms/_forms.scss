@@ -25,7 +25,9 @@
 }
 
 .cta--is-form-submit {
-	@include cta-background-colors($suffix: "-form");
+	body.is-light & {
+		@include cta-background-colors($suffix: "-form");
+	}
 	font-size: 0.75rem;
 }
 

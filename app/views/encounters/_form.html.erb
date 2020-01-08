@@ -2,7 +2,10 @@
 	<%= f.date_field :took_place %>
 	<%= f.text_area :notes %>
 	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
-	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.contacts" base-name="<%= f.object_name %>[contacts_attributes]" @should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"></dynamic-field-list>
+	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.contacts" base-name="<%= f.object_name %>[contacts_attributes]" @should-validate="<%= f.class::SLOT_SCOPE %>.addValidation">
+		<h2 class="h2--is-form-heading"><%= t('.contacts_title', partner_name: @partnership.partner.name) %></h2>
+		<p class="description description--is-form-description"><%= t('.contacts_desc') %></p>
+	</dynamic-field-list>
 	<%= f.radio_group :fluids, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", tooltip: true}} %>
-	<%= f.submit :class => "cta" %>
+	<%= f.submit :class => "cta cta--is-form-submit" %>
 <% end %>

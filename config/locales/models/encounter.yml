@@ -86,6 +86,9 @@ en:
         title: Oops
         desc: You haven't told us about any partnerships yet
       make_partner: Add a partner
+    form:
+      contacts_title: Tell us the details!
+      contacts_desc: It works best if you can tell us about what happened in the order it happened, but we understand sometimes multiple things are happening at once.
   encounter_whos:
     new:
       title: Cool!
