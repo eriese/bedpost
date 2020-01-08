@@ -1,9 +1,9 @@
 .cta {
 	@include cta;
-	@include cta-text-colors($colors-light, $property: stroke);
 
-	body.is-dark & {
+	body.is-dark &, body.is-dark.has-cards .card &, body.is-light.has-cards & {
 		@include cta-colors($colors-dark);
+		@include cta-text-colors($colors-dark, $property: stroke);
 
 		&--is-secondary {
 			@include cta-colors($colors-dark, $suffix: "-light");
@@ -12,18 +12,27 @@
 		&--is-inverted {
 			@include cta-text-colors($colors-dark, $property: background-color);
 			@include cta-background-colors($colors-dark, $property: color);
+			@include cta-background-colors($colors-dark, $property: stroke);
 		}
 	}
 
-	&--is-secondary {
-		@include cta-colors($suffix: "-light");
-		@include cta-transition;
+	body.is-light &, body.is-light.has-cards .card &, body.is-dark.has-cards & {
+		@include cta-colors($colors-light);
+		@include cta-text-colors($colors-light, $property: stroke);
+
+		&--is-secondary {
+			@include cta-colors($suffix: "-light");
+			@include cta-transition;
+		}
+
+		&--is-inverted {
+			@include cta-text-colors($colors-light, $property: background-color);
+			@include cta-background-colors($colors-light, $property: color);
+			@include cta-background-colors($colors-light, $property: stroke);
+		}
 	}
 
 	&--is-inverted {
-		@include cta-text-colors($colors-light, $property: background-color);
-		@include cta-background-colors($colors-light, $property: color);
-		@include cta-background-colors($colors-light, $property: stroke);
 		@include cta-transition;
 	}
 
@@ -76,9 +85,12 @@
 		padding: 0;
 		height: 2.75rem;
 		width: 2.75rem;
-		@include cta-colors($colors-light, $suffix: "-light");
 
-		body.is-dark & {
+		body.is-light &, body.is-light.has-cards .card &, body.is-dark.has-cards & {
+			@include cta-colors($colors-light, $suffix: "-light");
+		}
+
+		body.is-dark &, body.is-dark.has-cards .card &, body.is-light.has-cards & {
 			@include cta-colors($colors-dark, $suffix: "-light");
 		}
 	}
@@ -100,21 +112,21 @@
 		flex-shrink: 0;
 		align-self: flex-end;
 
-		body.is-light & {
+		body.is-light &, body.is-light.has-cards .card &, body.is-dark.has-cards & {
 			@include background-svg(check-box-check($fill-color: theme-light('cta-text'), $stroke-width: 0.6, $rotation: 45));
 		}
 
-		body.is-dark & {
+		body.is-dark &, body.is-dark.has-cards .card &, body.is-light.has-cards & {
 			@include background-svg(check-box-check($fill-color: theme-dark('cta-text'), $stroke-width: 0.6, $rotation: 45));
 		}
 
 		&:hover, &:focus {
 			&:not(:disabled) {
-				body.is-light & {
+				body.is-light &, body.is-light.has-cards .card &, body.is-dark.has-cards & {
 					@include background-svg(check-box-check($fill-color: theme-light('cta-bg'), $stroke-width: 0.6, $rotation: 45));
 				}
 
-				body.is-dark & {
+				body.is-dark &, body.is-dark.has-cards .card &, body.is-light.has-cards & {
 					@include background-svg(check-box-check($fill-color: theme-dark('cta-bg'), $stroke-width: 0.6, $rotation: 45));
 				}
 			}
@@ -179,6 +191,48 @@
 
 .dropdown.title-as-button > .dropdown-title {
 	cursor: pointer;
+}
+
+.toggle-switch {
+	display: inline-flex;
+
+	&__btn {
+		border-radius: 0;
+		border: 3px solid;
+		background-color: transparent;
+
+		body.is-light &, body.is-light.has-cards .card &, body.is-dark.has-cards & {
+			@include cta-background-colors($colors-light, $property: border-color);
+			@include cta-background-colors($colors-light, $property: color);
+
+			&[aria-pressed=true], &:not(:disabled):hover, &:not(:disabled):focus {
+				background-color: theme-light('cta-bg');
+				border-color: theme-light('cta-bg');
+				color: theme-light('cta-text');
+			}
+		}
+
+		body.is-dark &, body.is-dark.has-cards .card &, body.is-light.has-cards & {
+			@include cta-background-colors($colors-dark, $property: border-color);
+			@include cta-background-colors($colors-dark, $property: color);
+
+			&[aria-pressed=true], &:not(:disabled):hover, &:not(:disabled):focus {
+				background-color: theme-dark('cta-bg');
+				border-color: theme-dark('cta-bg');
+				color: theme-dark('cta-text');
+			}
+		}
+
+		&:first-child {
+			border-top-left-radius: $default-border-radius;
+			border-bottom-left-radius: $default-border-radius;
+		}
+
+		&:last-child {
+			border-top-right-radius: $default-border-radius;
+			border-bottom-right-radius: $default-border-radius;
+		}
+	}
 }
 
 button.vs__deselect{

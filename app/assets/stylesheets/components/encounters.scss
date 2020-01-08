@@ -278,6 +278,12 @@
 		margin-right: rem(5px);
 	}
 
+	.vc-container {
+		margin-top: $spacing-small;
+		border: 2px solid;
+		@include themed(border-color, 'background-contrast');
+	}
+
 	.vc-bars {
 		box-shadow: rem(1px) 0rem rem(2px) 0rem rgba(255,255,255,.1), 0rem rem(1px) rem(5px) 0rem rgba(255,255,255,.1);
 	}
@@ -297,13 +303,19 @@
 		box-shadow: $box-shadow-val-small theme-light('shadow');
 	}
 
-	.encounter-list-item {
-		.item-partner {
-			font-weight: bold;
-		}
+	.encounter-list {
+		text-align: left;
 
-		.item-date {
-			font-size: 1rem;
+		&__item {
+			margin-bottom: $spacing-small;
+
+			.item-partner {
+				font-weight: bold;
+			}
+
+			.item-date {
+				font-size: 1rem;
+			}
 		}
 	}
 
@@ -318,6 +330,8 @@
 
 		&__dropdown-toggle {
 			border: none;
+			padding-bottom: $spacing-tiny;
+			margin-bottom: $spacing-tiny;
 		}
 
 		&__open-indicator {
@@ -343,9 +357,13 @@
 			flex-basis: 100%;
 
 
-			&:focus {
+			&:not(:readonly):focus {
 				@include themed(border-color, $input-border-focus-key);
 			}
+		}
+
+		&__actions {
+			padding: 0;
 		}
 	}
 }
