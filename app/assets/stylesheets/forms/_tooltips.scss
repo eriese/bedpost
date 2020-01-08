@@ -18,9 +18,7 @@ $tooltip-arrow-size: 0.5rem;
 	}
 }
 
-@mixin tooltip($theme: $colors-light, $suffix: "") {
-	$background-color: map-get($theme, "h1");
-
+@mixin tooltip($background-color: theme-light("h1"), $theme: $colors-light, $suffix: "") {
 	background-color: $background-color;
 	font-weight: bold;
 	color: map-get($theme, "background#{$suffix}");
@@ -31,12 +29,20 @@ $tooltip-arrow-size: 0.5rem;
 	border-right-color:  $background-color;
 }
 
-.tippy-tooltip.light-theme {
-	@include tooltip;
+.tippy-tooltip {
+	&.light-theme {
+		@include tooltip;
+	}
+	&.dark-theme {
+		@include tooltip(theme-dark("h1"), $colors-dark);
+	}
+	&.bright-theme {
+		@include tooltip(theme-dark("cta-bg-light"), $colors-dark);
+	}
 }
 
-.tippy-tooltip.dark-theme {
-	@include tooltip($colors-dark);
+.tippy-popper {
+	z-index: 3 !important;
 }
 
 aside.tippy-popper {

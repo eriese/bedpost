@@ -1,9 +1,11 @@
-<h2 style="text-align: center;"><%= t(".title_html", {partner: @partner.name}) %></h2>
+<% body_class 'has-cards' %>
+<h1><%= Encounter %></h1>
+<h2 class="desc">with <%= @partner.name %></h2>
 <div class="desc" style="text-align: center;"><%= t(".took_place", {took_place: l(@encounter.took_place, format: :long_date)}) %></div>
 <div>
-	<bubble target="progbar-benchmark" position="top" add-class="bubble-above"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
+	<bubble target="progbar-benchmark" position="top" add-class="bubble-above" theme="bright"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
 	<prog-bar :benchmark="<%= @encounter.self_risk %>" :max="<%= Diagnosis::TransmissionRisk::HIGH %>" :progress="<%= @encounter.overall_risk %>"></prog-bar>
-	<bubble target="progbar-fill" position="bottom-end" add-class="bubble-below"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
+	<bubble target="progbar-fill" position="bottom-end" add-class="bubble-below" theme="bright"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
 </div>
 
 <% if @encounter.notes.present? %>
@@ -14,29 +16,28 @@
 <% end %>
 <h3 class="centered-container"><%= t('.breakdown') %></h3>
 
-
-<drop-down class="gray-container encounter-show-container" arrow-class="link cta--is-arrow--is-medium" :title-button="true">
+<drop-down class="gray-container encounter-show-container" arrow-class="link link--is-secondary cta--is-arrow--is-medium" :title-button="true">
 	<h4 class="rounded-container-title light-purple-text" slot="title"><%= t('.sex.title') %></h4>
 	<div>
 		<%= display_contacts @encounter %>
-		<p><b><%= t('.sex.fluid_exchange') %></b> <span class="bool-indicator <%= @encounter.fluids %>" aria-label="<%= @encounter.fluids %>"></span></p>
+		<p class="contacts-show__fluids"><b class="fluids__title"><%= t('.sex.fluid_exchange') %></b> <span class="fluids__response"><%= t(@encounter.fluids ? 'yes' : 'no') %></span></p>
 	</div>
 </drop-down>
-<drop-down arrow-class="link cta--is-arrow--is-medium" :title-button="true" class="dark-gray-container encounter-show-container">
+<drop-down arrow-class="link link--is-secondary cta--is-arrow--is-medium" :title-button="true" class="dark-gray-container encounter-show-container">
 	<h4 class="rounded-container-title" slot="title"><%= t('.risks.title') %></h4>
 	<%= display_risks @encounter %>
 </drop-down>
 
-<drop-down class="dark-container encounter-show-container" arrow-class="link cta--is-arrow--is-medium" :title-button="true" :start-open="true">
+<drop-down class="dark-container encounter-show-container" arrow-class="link link--is-secondary cta--is-arrow--is-medium" :title-button="true" :start-open="true">
 	<h4 class="rounded-container-title" slot="title"><%= t('.advice.title') %></h4>
 	<% if @encounter.schedule.any? %>
-		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>">
+		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>" toggle-class="link--is-secondary">
 			<%= display_schedule @encounter, :"slot-scope" => "{clickHandler, show}" do %>
-				<br><a href="<%= partnership_encounter_path(@partnership, @encounter, {force: true}) %>" @click="clickHandler"><%= t('.advice.show_anyway') %></a>
+				<br><a class="link link--is-secondary" href="<%= partnership_encounter_path(@partnership, @encounter, {force: true}) %>" @click="clickHandler"><%= t('.advice.show_anyway') %></a>
 			<% end %>
 		</content-requester>
 		<% if @force %>
-			<%= link_to t('.advice.hide_lower_risk'), partnership_encounter_path(@partnership, @encounter) %>
+			<%= link_to t('.advice.hide_lower_risk'), partnership_encounter_path(@partnership, @encounter), class: "link link--is-secondary" %>
 		<% end %>
 	<% else %>
 		<p><%= t('.advice.no_schedule') %></p>
@@ -47,5 +48,5 @@
 <% if current_user_profile.first_time? %>
 	<%= link_to t(".continue_first_time"), first_time_path %>
 <% else %>
-	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button'} %>
+	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button link'} %>
 <% end %>

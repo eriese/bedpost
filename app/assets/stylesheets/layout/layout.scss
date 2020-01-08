@@ -262,7 +262,7 @@ p.description {
 }
 
 .desc {
-	h1 + &, h2 + & {
+	h1 + &, h2 + &, h3 + & {
 		line-height: 1rem;
 		margin-top: 0rem;
 		margin-bottom: 1rem;
@@ -278,36 +278,43 @@ span.confirmation {
 }
 
 .rounded-container {
-	border-radius: rem(10px);
+	border-radius: $default-border-radius;
 	padding: rem(10px);
 	margin-bottom: rem(10px);
+	color: $color-white;
+	transition: border-radius 0.2s ease-in-out;
+
 	.rounded-container-title {
 		text-align: center;
 		margin: 0 0 0.2rem 0;
+	}
+
+	&.dropdown--is-closed {
+		border-radius: 1.5rem;
 	}
 }
 
 .dark-container {
 	@extend .rounded-container;
-	background-color: $color-purple-dark;
-	color: $color-off-white;
+	background-color: theme-dark("background");
+	// color: $color-off-white;
 }
 
 .light-container {
 	@extend .rounded-container;
 	background-color: $color-purple-light;
-	color: $color-off-white;
+	// color: $color-off-white;
 }
 
 .gray-container {
 	@extend .rounded-container;
-	background-color: $color-light-gray;
+	background-color: theme-light("cta-bg");
 }
 
 .dark-gray-container {
 	@extend .rounded-container;
-	background-color: $color-dark-gray;
-	color: $color-off-white;
+	background-color: theme-light("h1");
+	// color: $color-off-white;
 }
 
 .dark-border-container {

@@ -184,7 +184,7 @@
 // link
 ///////////////////////
 @mixin link-colors($theme: $colors-light, $suffix: "", $property: color) {
-	#{$property}: map-get($theme, "link");
+	#{$property}: map-get($theme, "link#{$suffix}");
 	&:hover, &:focus {
 		&:not(:disabled) {
 			#{$property}: map-get($theme, "link-light#{$suffix}");

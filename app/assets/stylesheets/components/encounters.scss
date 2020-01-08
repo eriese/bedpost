@@ -118,6 +118,7 @@
 }
 
 .encounter-show-container {
+	@include self-clearing;
 	position: relative;
 	> span.dropdown-button {
 		position: absolute;
@@ -132,14 +133,19 @@
 
 .contacts-show {
 	padding-inline-start: 0rem;
+	margin-bottom: 0;
 
 	.contact-show {
 		clear: both;
 		margin-bottom: rem(5px);
 
+		&__risks-title {
+			color: theme-dark('h1');
+		}
+
 		>.dropdown {
 			transition: all 0.3s ease-in-out;
-			border-bottom: rem(1px) solid $color-green-dark;
+			border-bottom: rem(1px) solid theme-dark('h1');
 
 			&:after {
 				clear: both;
@@ -160,17 +166,37 @@
 		.dropdown-title {
 			float: left;
 			width: 75%;
+			margin-bottom: $spacing-tiny;
 		}
+
 		.dropdown-button {
 			float: right;
 			width: 20%;
 			text-align: right;
+
+			button {
+				color: theme-dark('link-light');
+			}
 		}
 
 		.dropdown-content {
 			clear: both;
 		}
 	}
+}
+
+.contacts-show__fluids {
+	@include self-clearing;
+	margin-top: 0;
+}
+
+.fluids__title {
+	float: left;
+}
+
+.fluids__response {
+	float: right;
+	margin-right: $spacing-tiny;
 }
 
 .risks-show {
@@ -181,32 +207,31 @@
 	li {
 		@extend .clear-fix;
 		padding: rem(5px) rem(10px);
-		font-size: 1.1rem;
+		font-size: 0.85rem;
 
 		&:first-child {
+			margin-top: $spacing-tiny;
 			border-top-right-radius: rem(5px);
 			border-top-left-radius: rem(5px);
 		}
 
 		&:last-child {
+			margin-bottom: $spacing-small;
 			border-bottom-right-radius: rem(5px);
 			border-bottom-left-radius: rem(5px);
 		}
+
+		$gradient: $color-white theme-dark('h1') theme-dark('background-contrast') theme-light('link-light') theme-dark('cta-bg-light');
 		@for $i from 1 through 5 {
 			&.risk-#{$i - 1} {
-				background-color: nth($gradient-greens, $i);
-				@if $i < 4 {
-					color: black;
-				}
-				@else {
-					color: white;
-				}
+				background-color: nth($gradient, $i);
+				color: black;
 			}
 		}
 
 		.risk-level {
 			font-weight: bold;
-			font-size: 1.15rem;
+			font-size: 1rem;
 			float: left;
 			width: 30%;
 		}
@@ -229,7 +254,7 @@
 		align-items: center;
 
 		.schedule-date {
-			border: rem(2px) solid $color-dark-gray;
+			border: rem(2px) solid theme-light('form-background');
 			margin-bottom: rem(10px);
 			text-align: center;
 			width: 3.5rem;
@@ -241,8 +266,9 @@
 			flex-shrink: 0;
 
 			.month-year {
-				background-color: $color-dark-gray;
+				background-color: theme-light('form-background');
 				font-size: 1.15rem;
+				height: 1.35rem;
 			}
 
 			.day {
@@ -264,6 +290,7 @@
 			flex-grow: 1;
 			margin-left: rem(20px);
 			font-size: 1.5rem;
+			line-height: 1.25;
 		}
 	}
 }

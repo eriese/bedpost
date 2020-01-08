@@ -51,9 +51,10 @@ en:
       self_risk_html: You figured your risk was <b>%{risk_level}</b>
       overall_risk_html: We calculated <b>%{risk_level}</b>
       notes:
-        title: Your Notes
+        title: "Your Notes:"
       breakdown: "Let's break it down:"
       continue_first_time: Continue
+      contact_risks: "Risks from this contact:"
       sex:
         title: The Sex
         fluid_exchange: Additional fluid exchange

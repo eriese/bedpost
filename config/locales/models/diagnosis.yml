@@ -39,7 +39,7 @@ en:
         two: Low
         three: Moderate
         four: High
-  date:
+  time:
     formats:
       best_test_html: "<span class='month-year'>%b</span><span class='day'><span>%d</span></span>"
 

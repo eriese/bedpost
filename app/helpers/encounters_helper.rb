@@ -55,12 +55,9 @@ module EncountersHelper
 		t_key += "_html"
 
 		content_tag(:li, {class: "contact-show"}) do
-			content_tag(:"drop-down") do
+			content_tag(:"drop-down", ':title-button' => true, 'arrow-class' => 'link link--is-secondary cta--is-arrow--is-small') do
 				content_tag(:span, t(t_key, keys), {slot: "title"}) +
-					content_tag(:template, "v-slot:button": 'sc') do
-						button_text = "{{sc.isOpen ? #{t('.display_risks_drop_down_html')}}}"
-						content_tag(:button, button_text, type: 'button', class: 'not-button')
-					end +
+					content_tag(:span, t('encounters.show.contact_risks'), class: 'contact-show__risks-title') +
 					display_risks(contact)
 			end
 		end
@@ -70,10 +67,6 @@ module EncountersHelper
 		is_encounter = obj.is_a? Encounter
 		grouped = group_risks_by_diagnosis(obj)
 		risk_items = risk_inner_html(grouped, is_encounter)
-
-		content_tag(:template, {:"v-slot:button" => "sc"}) do
-			content_tag(:button, "{{sc.isOpen ? #{t(".display_risks_drop_down_html")}}}", {type: "button", class: "link"}) unless obj.is_a?(Encounter)
-		end +
 		content_tag(:ul, safe_join(risk_items), {class: "risks-show"})
 	end
 

@@ -355,11 +355,13 @@ input[disabled=disabled] {
 }
 
 .double-prog-bar {
-	$progbar-height: rem(15px);
+	$progbar-height: 1rem;
+	border-radius: $default-border-radius;
 	position: relative;
-	background-color: $color-light-gray;
+	background-color: $color-off-white;
 	height: $progbar-height;
-	border: rem(1px) solid $color-green-dark;
+	border: rem(1px) solid;
+	@include themed-inverse(border-color, "background");
 	width: 84%;
 	margin: rem(5px) 8%;
 
@@ -370,15 +372,18 @@ input[disabled=disabled] {
 		width: rem(6px);
 		margin-left: rem(-3px);
 		top: rem(-5px);
-		background-color: $color-green-very-dark;
+		@include themed-inverse(background-color, 'background');
 		z-index: 1;
+		border-radius: $default-border-radius;
 	}
 
 	.fill {
 		position: absolute;
 		height: 100%;
 		left: 0;
-		background-color: $color-green-light;
+		@include themed(background-color, "h1");
+		border-top-left-radius: $default-border-radius;
+		border-bottom-left-radius: $default-border-radius;
 	}
 }
 

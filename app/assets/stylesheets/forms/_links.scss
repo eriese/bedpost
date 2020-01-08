@@ -1,14 +1,21 @@
 .link,
 input[type="submit"].not-button {
 	@include link;
-	@include link_colors($colors-light, $property: stroke);
+	@include link-colors($colors-light, $property: stroke);
 
 	&--is-secondary {
 		@include link($suffix: "-light");
+		@include link-colors($suffix: "-light", $property: stroke);
 	}
 
 	body.is-dark & {
 		@include link-colors($colors-dark);
+		@include link-colors($colors-dark, $property: stroke);
+	}
+
+	body.is-light.has-cards & {
+		@include link-colors($colors-dark, $suffix: "-light");
+		@include link-colors($colors-dark, $suffix: "-light", $property: stroke);
 	}
 
 	&--no-line {
