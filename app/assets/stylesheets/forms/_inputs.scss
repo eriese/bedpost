@@ -381,7 +381,7 @@ input[disabled=disabled] {
 		position: absolute;
 		height: 100%;
 		left: 0;
-		@include themed(background-color, "h1");
+		@include themed-inverse(background-color, "cta-bg-light");
 		border-top-left-radius: $default-border-radius;
 		border-bottom-left-radius: $default-border-radius;
 	}

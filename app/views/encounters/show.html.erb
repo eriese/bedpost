@@ -1,11 +1,11 @@
-<% body_class 'has-cards' %>
+<% body_class 'is-dark has-cards' %>
 <h1><%= Encounter %></h1>
 <h2 class="desc">with <%= @partner.name %></h2>
 <div class="desc" style="text-align: center;"><%= t(".took_place", {took_place: l(@encounter.took_place, format: :long_date)}) %></div>
 <div>
-	<bubble target="progbar-benchmark" position="top" add-class="bubble-above" theme="bright"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
+	<bubble target="progbar-benchmark" position="top" add-class="bubble-above" theme="light"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
 	<prog-bar :benchmark="<%= @encounter.self_risk %>" :max="<%= Diagnosis::TransmissionRisk::HIGH %>" :progress="<%= @encounter.overall_risk %>"></prog-bar>
-	<bubble target="progbar-fill" position="bottom-end" add-class="bubble-below" theme="bright"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
+	<bubble target="progbar-fill" position="bottom-end" add-class="bubble-below" theme="light"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
 </div>
 
 <% if @encounter.notes.present? %>
@@ -46,7 +46,7 @@
 
 
 <% if current_user_profile.first_time? %>
-	<%= link_to t(".continue_first_time"), first_time_path %>
+	<%= link_to t(".continue_first_time"), first_time_path, class: 'link link--is-light-theme' %>
 <% else %>
-	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button link'} %>
+	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'edit-button link link--is-light-theme'} %>
 <% end %>
