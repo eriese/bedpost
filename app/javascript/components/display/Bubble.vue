@@ -69,10 +69,8 @@ export default {
 		}
 	},
 	mounted() {
-		let me = this;
-
 		requestAnimationFrame(() => {
-			me.mounted = true;
+			this.mounted = true;
 		});
 	}
 };

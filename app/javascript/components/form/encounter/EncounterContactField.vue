@@ -100,8 +100,7 @@
 import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
 import hiddenRadio from './HiddenRadio.vue';
 import encounterContactBarrier from './EncounterContactBarrier.vue';
-import { minLength } from 'vuelidate/lib/validators';
-import { deletedOrRequired } from '@modules/validation/validators';
+import { minLength, requiredUnless } from 'vuelidate/lib/validators';
 import EncounterBarrierTracker from '@modules/encounterBarrierTracker';
 
 export default {
@@ -277,12 +276,10 @@ export default {
 		this.$parent.$emit('should-validate', 'contacts', {
 			tooShort: minLength(1),
 			$each: {
-				subject: {blank: deletedOrRequired},
-				object: {blank: deletedOrRequired},
-				position: {blank: deletedOrRequired},
-				possible_contact_id: {
-					blank: deletedOrRequired,
-				},
+				subject: {blank: requiredUnless('_destroy')},
+				object: {blank: requiredUnless('_destroy')},
+				position: {blank: requiredUnless('_destroy')},
+				possible_contact_id: {blank: requiredUnless('_destroy')},
 			}
 		});
 

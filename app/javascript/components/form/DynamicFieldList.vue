@@ -35,7 +35,7 @@ export default {
 			toDelete: [],
 		};
 	},
-	props: ['componentType', 'list', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v'],
+	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v'],
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];
@@ -50,7 +50,10 @@ export default {
 			return this.list.findIndex((d) => !d._destroy);
 		},
 		$vEach: function() {
-			return this.$v && this.$v.$each || [];
+			return this.$v && this.$v.$each && this.$v.$each.$iter || [];
+		},
+		list: function() {
+			return this.value.slice();
 		}
 	},
 	methods: {
@@ -59,6 +62,7 @@ export default {
 			newObj[this.idKey] = Date.now();
 			this.list.push(newObj);
 			this.numSubmitting += 1;
+			this.onInput();
 			this.$nextTick(() => {
 				this.setFocus(this.list.length - 1, true);
 			});
@@ -132,6 +136,8 @@ export default {
 					this.$set(this.list[i], 'position', startInd++);
 				}
 			}
+
+			this.onInput();
 		},
 		onChildMounted() {
 			this.setFocus(this.lastIndex);
@@ -140,7 +146,10 @@ export default {
 			if (this.tracker === null) {
 				this.tracker = trackerFactory(this.list);
 			}
-		}
+		},
+		onInput() {
+			this.$emit('input', this.list);
+		},
 	},
 	created() {
 		this.numSubmitting = this.list.length;

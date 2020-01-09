@@ -24,7 +24,7 @@ describe('Dynamic Field List Component', () => {
 	function mountList(list) {
 		return shallowMount(DynamicFieldList, {
 			propsData: {
-				list,
+				value: list,
 				componentType: 'encounter-contact-field',
 				baseName: 'encounter[contacts_attributes]'
 			},
