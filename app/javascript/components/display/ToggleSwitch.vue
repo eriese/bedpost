@@ -1,6 +1,6 @@
 <template>
 	<div class="toggle-switch">
-		<button class="toggle-switch__btn" type="button" v-for="(btn, i) in displayStrings" :aria-pressed="index == i" @click="doToggle(i)" :key="i" :class="buttonClass">{{btn}}</button>
+		<button class="toggle-switch__btn" type="button" v-for="(btn, i) in displayStrings" :aria-pressed="index == i" @click="doToggle(i)" :key="i" :class="$attrs['button-class']">{{btn}}</button>
 	</div>
 </template>
 
@@ -18,9 +18,6 @@ export default {
 					(this.translate == true ? this.$_t(s) : this.$_t(s, {scope: this.translate})) : s;
 			});
 		},
-		buttonClass() {
-			return this.$attrs['button-class'];
-		}
 	},
 	methods: {
 		doToggle(index) {

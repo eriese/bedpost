@@ -36,18 +36,20 @@ export default {
 	},
 	methods: {
 		getPosition: function(value) {
-			if (value == 0) {
-				return 2;
+			let position = 0;
+			if (value <= this.min) {
+				position = 2;
 			}
-
-			if (this.logScale) {
-				let middle = this.middle || this.max/2;
+			else if (this.logScale) {
+				let middle = this.middle || (this.max-this.min)/2;
 				const b = Math.pow(2, 1/(this.max - middle));
 				const a = 100/Math.pow(b, this.max);
-				return Math.floor(a * Math.pow(b, value));
+				position =  Math.ceil(a * Math.pow(b, value));
 			} else {
-				return value * 100 / this.max;
+				position = (value - this.min) * 100 / (this.max - this.min);
 			}
+
+			return Math.min(Math.max(0, position), 100);
 		}
 	}
 };

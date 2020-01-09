@@ -332,63 +332,6 @@ span.confirmation {
 	border: rem(2px) solid $color-light-gray;
 }
 
-.bubble-container {
-	height: 1.9rem;
-	position: relative;
-	$arrow-size: rem(8px);
-
-	.bubble {
-		border-radius: rem(8px);
-		padding: 0rem rem(5px);
-		display: inline-block;
-		border: rem(1px) solid $color-green-dark;
-		color: $color-green-dark;
-		font-size: 0.8rem;
-		position: absolute;
-		max-width: 80vw;
-
-		.arrow {
-			content: "";
-			position: absolute;
-			border: $arrow-size solid transparent;
-		}
-
-		&.bubble-below {
-			margin-top: $arrow-size;
-			.arrow{
-				top: $arrow-size * -2;
-				border-bottom-color: $color-green-dark;
-			}
-		}
-
-		&.bubble-above .arrow {
-			bottom: $arrow-size * -2;
-			border-top-color: $color-green-dark;
-		}
-
-		&.right-justify {
-			margin-left: $arrow-size * 2;
-			.arrow {
-				right: $arrow-size;
-			}
-		}
-
-		&.left-justify {
-			margin-left: $arrow-size * -2;
-			.arrow {
-				left: $arrow-size;
-			}
-		}
-
-		&.center-justify {
-			.arrow {
-				left: 50%;
-				margin-left: -$arrow-size;
-			}
-		}
-	}
-}
-
 .vertical-center {
 	display: flex;
 	align-items: center;
@@ -396,9 +339,5 @@ span.confirmation {
 }
 
 .clear-fix{
-	&:after {
-		content: "";
-		display: block;
-		clear: both;
-	}
+	@include self-clearing;
 }

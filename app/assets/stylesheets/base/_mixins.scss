@@ -38,6 +38,20 @@
 		#{$prop}: theme-dark($map-key);
 	}
 }
+
+@mixin has-light-background {
+	body.is-light &, body.is-light.has-cards .card &, body.is-dark.has-cards & {
+		@content;
+	}
+}
+
+@mixin has-dark-background {
+	body.is-dark &, body.is-dark.has-cards .card &, body.is-light.has-cards & {
+		@content;
+	}
+}
+
+
 ///////////////////////
 // text styles
 ///////////////////////
@@ -123,6 +137,13 @@
 ///////////////////////
 // ctas
 ///////////////////////
+@mixin hover-and-focus {
+	&:hover, &:focus {
+		&:not(:disabled) {
+			@content;
+		}
+	}
+}
 
 @mixin cta-base {
 	cursor: pointer;
@@ -147,19 +168,15 @@
 
 @mixin cta-text-colors($theme: $colors-light, $suffix: "", $property: color) {
 	#{$property}: map-get($theme, "cta-text");
-	&:hover, &:focus {
-		&:not(:disabled) {
-			#{$property}: map-get($theme, "cta-bg#{$suffix}");
-		}
+	@include hover-and-focus {
+		#{$property}: map-get($theme, "cta-bg#{$suffix}");
 	}
 }
 
 @mixin cta-background-colors($theme: $colors-light, $suffix: "", $property: background-color) {
 	#{$property}: map-get($theme, "cta-bg#{$suffix}");
-	&:hover, &:focus {
-		&:not(:disabled) {
-			#{$property}: map-get($theme, "cta-text");
-		}
+	@include hover-and-focus {
+		#{$property}: map-get($theme, "cta-text");
 	}
 }
 
@@ -185,10 +202,8 @@
 ///////////////////////
 @mixin link-colors($theme: $colors-light, $suffix: "", $property: color) {
 	#{$property}: map-get($theme, "link#{$suffix}");
-	&:hover, &:focus {
-		&:not(:disabled) {
-			#{$property}: map-get($theme, "link-light#{$suffix}");
-		}
+	@include hover-and-focus {
+		#{$property}: map-get($theme, "link-light#{$suffix}");
 	}
 }
 

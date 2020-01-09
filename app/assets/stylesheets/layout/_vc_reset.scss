@@ -99,11 +99,6 @@
 
 	$partner-color-keys: "input-border" "input-border-focus" "h1" "form-background" "h2" "cta-bg";
 	@for $i from 0 through 5 {
-		// $partner-ind: $i * 2;
-		// $color-ind: length($gradient-purples-saturated) - $i;
-		// $color-ind: $i + 1;
-
-		// $is-dark: $color-ind > 2;
 		$color-key: nth($partner-color-keys, $i + 1);
 
 		.vc-bg-partnership-#{$i}-600,
@@ -111,11 +106,5 @@
 		.partnership-#{$i} {
 			@include toggle-button($color-key);
 		}
-
-		// .vc-bg-partnership-#{$partner-ind + 1}-600,
-		// .vc-bg-partnership-#{$partner-ind + 1}-500,
-		// .partnership-#{$partner-ind + 1} {
-		// 	@include toggle-button(nth($gradient-purples-saturated, $color-ind), $is-dark);
-		// }
 	}
 }

@@ -1,7 +1,7 @@
 <template>
-	<div>
+	<div class="dynamic-field-list">
 		<slot></slot>
-		<div v-for="(comp, index) in list" :key="comp[idKey]" ref="list_item">
+		<div v-for="(comp, index) in list" :key="comp[idKey]" ref="list_item" class="dynamic-field-list__item">
 			<div v-if="showDeleted || !comp._destroy" @focusin="setFocus(index)" @click="setFocus(index, true)" class="dynamic-field step" :class="{incomplete: $vEach[index] && $vEach[index].$anyDirty && $vEach[index].$invalid, deleted: comp._destroy}">
 				<div class="dynamic-field-buttons clear-fix" @focusin.stop>
 					<arrow-button class="link cta--is-arrow--is-small" v-if="index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(index,-1)"></arrow-button>
@@ -12,7 +12,7 @@
 			</div>
 			<deleted-child v-else :base-name="`${baseName}[${index}]`" :item="list[index]" :id-key="idKey"></deleted-child>
 		</div>
-		<button type="button" class="cta cta--is-form-submit" @click="addToList">Add Another</button>
+		<button type="button" class="cta cta--is-form-submit cta--is-add-btn cta--is-add-btn--is-small" @click="addToList" title="Add Another"></button>
 	</div>
 </template>
 
