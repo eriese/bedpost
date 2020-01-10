@@ -21,6 +21,7 @@ export const gsap = {
 	to: (el, duration, options) => {
 		isDefinedExecute(options.onStart, options.callbackScope || this, options.onStartParams);
 		delete options.onStart;
+		// use a timeout instead of gsaps internals so that we can use jest timer mocks to move through
 		setTimeout(() => {
 			gsapSet(el, options);
 		}, duration);

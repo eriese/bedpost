@@ -1,8 +1,6 @@
-import { validateWithServer, resetValidatorCache, deletedOrRequired } from '@modules/validation/validators';
+import { validateWithServer, resetValidatorCache } from '@modules/validation/validators';
 import axios from 'axios';
 import { helpers } from 'vuelidate/lib/validators';
-import { mount, createLocalVue } from '@vue/test-utils';
-import Vuelidate from 'vuelidate';
 
 jest.mock('axios');
 jest.mock('vuelidate/lib/validators');
