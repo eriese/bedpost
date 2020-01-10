@@ -1,14 +1,19 @@
+<%= body_class 'is-dark vertical-center' %>
+<%= content_for :inner_class, 'container--is-full-height container--has-centered-child' %>
 <% if @has_partners %>
 	<% trans_key = @is_partner ? '.with_partner' : '.all' %>
 	<% first_partner = @partnerships[0] || {} %>
-	<h2 class="centered-text"><%= t(".title.#{trans_key}", partner_name: first_partner["display"]) %></h2>
-	<div class="desc"><%= link_to(t(".all"), encounters_path) if @is_partner %></div>
-	<encounter-calendar :partnerships="<%= @partnerships.to_json %>">
+	<h1><%= t('.title') %></h1>
+	<% if @is_partner %>
+		<h2 class="desc"><%= t(".with_partner", partner_name: first_partner["display"]) %></h2>
+		<div class="desc"><%= link_to(t(".all"), encounters_path) if @is_partner %></div>
+	<% end %>
+	<encounter-calendar :partnerships="<%= @partnerships.to_json %>" class="container--has-centered-child__centered-child container--has-centered-text">
 		<h3><%= t(".no_encounters.#{trans_key}", partner_name: first_partner["partner_name"]) %></h3>
 	</encounter-calendar>
-	<div><%= link_to t(".new"), @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, class: "link"%></div>
+	<div><%= link_to '', @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, title: t(".new"), class: "cta cta--is-add-btn"%></div>
 <% else %>
 	<h1 class="with-desc"><%= t('.no_partners.title') %></h1>
 	<h2 class="desc"><%= t('.no_partners.desc') %></h2>
-	<%= link_to t('.make_partner'), new_partnership_path, :class => "link" %>
+	<div class="container--has-centered-child__centered-child"><%= link_to t('.make_partner'), new_partnership_path, :class => "link" %></div>
 <% end %>

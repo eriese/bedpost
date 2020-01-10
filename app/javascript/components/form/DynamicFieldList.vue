@@ -1,22 +1,23 @@
 <template>
-	<div>
-		<div v-for="(comp, index) in list" :key="comp[idKey]" ref="list_item">
-			<div v-if="showDeleted || !comp._destroy" class="dynamic-field step" @focusin="setFocus(index)" @click="setFocus(index, true)" :class="{deleted: comp._destroy}">
+	<div class="dynamic-field-list">
+		<slot></slot>
+		<div v-for="(comp, index) in list" :key="comp[idKey]" ref="list_item" class="dynamic-field-list__item">
+			<div v-if="showDeleted || !comp._destroy" @focusin="setFocus(index)" @click="setFocus(index, true)" class="dynamic-field step" :class="{incomplete: $vEach[index] && $vEach[index].$anyDirty && $vEach[index].$invalid, deleted: comp._destroy}">
 				<div class="dynamic-field-buttons clear-fix" @focusin.stop>
 					<arrow-button class="link cta--is-arrow--is-small" v-if="index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(index,-1)"></arrow-button>
 					<arrow-button class="link cta--is-arrow--is-small" v-if="index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
 					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
 				</div>
-				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="tracker" class="clear" @track="track" @start-tracking="startTracking"></component>
+				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="tracker" class="clear" @track="track" @start-tracking="startTracking" :$v="$vEach[index]"></component>
 			</div>
 			<deleted-child v-else :base-name="`${baseName}[${index}]`" :item="list[index]" :id-key="idKey"></deleted-child>
 		</div>
-		<button type="button" class="cta" @click="addToList">Add Another</button>
+		<button type="button" class="cta cta--is-form-submit cta--is-add-btn cta--is-add-btn--is-small" @click="addToList" title="Add Another"></button>
 	</div>
 </template>
 
 <script>
-import gsap from 'gsap';
+import {gsap} from 'gsap';
 import deletedChild from '@components/functional/DeletedChild.vue';
 import {lazyParent} from '@mixins/lazyCoupled';
 
@@ -34,7 +35,7 @@ export default {
 			toDelete: [],
 		};
 	},
-	props: ['componentType', 'list', 'baseName', 'dummyKey', 'showDeleted', 'optional'],
+	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v'],
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];
@@ -48,6 +49,12 @@ export default {
 		firstIndex: function() {
 			return this.list.findIndex((d) => !d._destroy);
 		},
+		$vEach: function() {
+			return this.$v && this.$v.$each && this.$v.$each.$iter || [];
+		},
+		list: function() {
+			return this.value.slice();
+		}
 	},
 	methods: {
 		addToList() {
@@ -55,6 +62,7 @@ export default {
 			newObj[this.idKey] = Date.now();
 			this.list.push(newObj);
 			this.numSubmitting += 1;
+			this.onInput();
 			this.$nextTick(() => {
 				this.setFocus(this.list.length - 1, true);
 			});
@@ -128,6 +136,8 @@ export default {
 					this.$set(this.list[i], 'position', startInd++);
 				}
 			}
+
+			this.onInput();
 		},
 		onChildMounted() {
 			this.setFocus(this.lastIndex);
@@ -136,7 +146,10 @@ export default {
 			if (this.tracker === null) {
 				this.tracker = trackerFactory(this.list);
 			}
-		}
+		},
+		onInput() {
+			this.$emit('input', this.list);
+		},
 	},
 	created() {
 		this.numSubmitting = this.list.length;

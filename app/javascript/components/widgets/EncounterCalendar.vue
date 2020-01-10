@@ -5,11 +5,11 @@
 			<div v-if="partnerships.length > 1">
 				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
 					<template v-slot:selected-option="opt">
-						<span><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
+						<span class="vs__selected-inner"><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
 					</template>
 				</v-select>
 			</div>
-			<toggle :symbols="['list_view', 'calendar_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle>
+			<toggle-switch :symbols="['calendar_view', 'list_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle-switch>
 			<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
 				<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 					<div class="popover-day-title">
@@ -20,12 +20,12 @@
 							:key="attr.key"
 							:attribute="attr">
 							<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-							<a :href="attr.customData.href">{{ attr.customData.notes }}</a>
+							<a class="link" :href="attr.customData.href">{{ attr.customData.notes }}</a>
 					</v-popover-row>
 				</div>
 			</v-calendar>
 			<div v-if="viewType=='list'">
-				<ul class="no-dots">
+				<ul class="encounter-list no-dots card">
 					<encounter-list-item v-for="enc in selectedEncounters" :key="enc.customData.encID" :encounter="enc"></encounter-list-item>
 				</ul>
 			</div>
@@ -67,7 +67,7 @@
 				return {
 					maxDate: new Date(),
 					isExpanded: true,
-					// isDark: true,
+					// isDark: document.body.classList.contains('is-dark'),
 					columns: this.$screens({md: 2, lg: 3}, 1),
 					attributes: this.selectedEncounters,
 					toPage: this.mostRecent,

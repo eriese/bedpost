@@ -67,7 +67,7 @@ export default class EncounterBarrierTracker {
 	 */
 	has_barrier(contact) {
 		// if there's no possible contact id, we can't get the instruments, so skip it
-		if (contact.possible_contact_id === undefined) { return false; }
+		if (!contact.possible_contact_id) { return false; }
 		// get the possible contact
 		let possibleContact = this.possibleContacts[contact.possible_contact_id];
 		// get the positions of the barriers

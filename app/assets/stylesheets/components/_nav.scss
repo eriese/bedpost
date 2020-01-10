@@ -83,12 +83,17 @@
 		}
 
 		&__link {
-			text-decoration: none;
-			display: block;
-			height: 100%;
-			padding: 0.75rem $spacing-tiny 0.75rem $spacing-medium;
-			width: 100%;
-			text-align: left;
+			body.is-light &, body.is-dark & {
+				text-decoration: none;
+				display: block;
+				height: 100%;
+				padding: 0.75rem $spacing-tiny 0.75rem $spacing-medium;
+				width: 100%;
+				text-align: left;
+				background-color: transparent;
+				border: none;
+			}
+
 			@include themed(color, "background");
 			@include themed-with-cards(color, "cta-bg");
 

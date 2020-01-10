@@ -43,7 +43,7 @@ export default {
 			return {
 				appendTo: () => this.$el,
 				arrow: true,
-				boundary: 'viewport',
+				boundary: 'scrollParent',
 				flip: false,
 				multiple: true,
 				theme: this.theme,
@@ -57,7 +57,7 @@ export default {
 					modifiers: {
 						arrow: {
 							fn: ArrowModifier
-						}
+						},
 					}
 				}
 			};

@@ -12,12 +12,23 @@
 		font-weight: bold;
 
 		.footer--is-at-bottom  & {
-			@include themed(color, "h1");
+			@include themed(color, "link");
 			@include themed-with-cards(color, "background");
+
+			&:hover, &:focus {
+				@include themed(color, "link-light");
+				@include themed-with-cards(color, "link");
+			}
 		}
 
 		.footer--is-in-nav & {
 			@include themed-inverse(color, "h1");
+			@include themed-with-cards(color, "h1");
+
+			&:hover, &:focus {
+				@include themed-inverse(color, "link");
+				@include themed-with-cards(color, "link");
+			}
 		}
 	}
 

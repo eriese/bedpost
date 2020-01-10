@@ -1,10 +1,25 @@
-.contact-field-container {
+.contact-field-list {
+	.dynamic-field {
+		border-radius: $default-border-radius;
+		padding: $spacing-tiny $spacing-tiny $spacing-small $spacing-tiny;
+		border: 2px solid theme-dark('h1');
+		margin-bottom: $spacing-small;
 
-	&.incomplete {
-		// TODO style these
-		.contact-error {}
+		&-buttons {
+			margin-top: -$spacing-tiny;
+		}
 	}
+	.incomplete {
+		background-color: theme-dark('h1');
+		.contact-error {
+			font-size: 0.75rem;
+			color: theme-dark('background');
+			font-weight: bold;
+		}
+	}
+}
 
+.contact-field-container {
 	.contact-field {
 		display: flex;
 		align-items: baseline;
@@ -17,7 +32,7 @@
 			p {
 				line-height: 1rem;
 				margin: 0.15rem 0 0 0;
-				font-size: inherit;
+				font-size: 0.8rem;
 			}
 
 			.input label {
@@ -118,6 +133,7 @@
 }
 
 .encounter-show-container {
+	@include self-clearing;
 	position: relative;
 	> span.dropdown-button {
 		position: absolute;
@@ -132,14 +148,19 @@
 
 .contacts-show {
 	padding-inline-start: 0rem;
+	margin-bottom: 0;
 
 	.contact-show {
 		clear: both;
 		margin-bottom: rem(5px);
 
+		&__risks-title {
+			color: theme-dark('h1');
+		}
+
 		>.dropdown {
 			transition: all 0.3s ease-in-out;
-			border-bottom: rem(1px) solid $color-green-dark;
+			border-bottom: rem(1px) solid theme-dark('h1');
 
 			&:after {
 				clear: both;
@@ -160,17 +181,37 @@
 		.dropdown-title {
 			float: left;
 			width: 75%;
+			margin-bottom: $spacing-tiny;
 		}
+
 		.dropdown-button {
 			float: right;
 			width: 20%;
 			text-align: right;
+
+			button {
+				color: theme-dark('link-light');
+			}
 		}
 
 		.dropdown-content {
 			clear: both;
 		}
 	}
+}
+
+.contacts-show__fluids {
+	@include self-clearing;
+	margin-top: 0;
+}
+
+.fluids__title {
+	float: left;
+}
+
+.fluids__response {
+	float: right;
+	margin-right: $spacing-tiny;
 }
 
 .risks-show {
@@ -181,32 +222,31 @@
 	li {
 		@extend .clear-fix;
 		padding: rem(5px) rem(10px);
-		font-size: 1.1rem;
+		font-size: 0.85rem;
 
 		&:first-child {
+			margin-top: $spacing-tiny;
 			border-top-right-radius: rem(5px);
 			border-top-left-radius: rem(5px);
 		}
 
 		&:last-child {
+			margin-bottom: $spacing-small;
 			border-bottom-right-radius: rem(5px);
 			border-bottom-left-radius: rem(5px);
 		}
+
+		$gradient: $color-white theme-dark('h1') theme-dark('background-contrast') theme-light('link-light') theme-dark('cta-bg-light');
 		@for $i from 1 through 5 {
 			&.risk-#{$i - 1} {
-				background-color: nth($gradient-greens, $i);
-				@if $i < 4 {
-					color: black;
-				}
-				@else {
-					color: white;
-				}
+				background-color: nth($gradient, $i);
+				color: black;
 			}
 		}
 
 		.risk-level {
 			font-weight: bold;
-			font-size: 1.15rem;
+			font-size: 1rem;
 			float: left;
 			width: 30%;
 		}
@@ -229,7 +269,7 @@
 		align-items: center;
 
 		.schedule-date {
-			border: rem(2px) solid $color-dark-gray;
+			border: rem(2px) solid theme-light('form-background');
 			margin-bottom: rem(10px);
 			text-align: center;
 			width: 3.5rem;
@@ -241,8 +281,9 @@
 			flex-shrink: 0;
 
 			.month-year {
-				background-color: $color-dark-gray;
+				background-color: theme-light('form-background');
 				font-size: 1.15rem;
+				height: 1.35rem;
 			}
 
 			.day {
@@ -264,6 +305,7 @@
 			flex-grow: 1;
 			margin-left: rem(20px);
 			font-size: 1.5rem;
+			line-height: 1.25;
 		}
 	}
 }
@@ -271,11 +313,17 @@
 #page-container #page-container-inner #encounter-calendar {
 	.popover-day-title {
 		text-align: center;
-		font-size: 1.15rem;
+		font-size: 1rem;
 	}
 
 	.encounter-partner-name {
 		margin-right: rem(5px);
+	}
+
+	.vc-container {
+		margin-top: $spacing-small;
+		border: 2px solid;
+		@include themed(border-color, 'background-contrast');
 	}
 
 	.vc-bars {
@@ -289,37 +337,75 @@
 
 	.partner-indicator {
 		display: inline-block;
-		height: 1.15rem;
-		width: 2rem;
+		height: 1.5rem;
+		width: 1.5rem;
 		vertical-align: middle;
 		margin-right: rem(8px);
-		margin-bottom: 0.175rem;
+		border-radius: 50%;
+		box-shadow: $box-shadow-val-small theme-light('shadow');
 	}
 
-	.encounter-list-item {
-		.item-partner {
-			font-weight: bold;
-		}
+	.encounter-list {
+		text-align: left;
 
-		.item-date {
-			font-size: 1rem;
+		&__item {
+			margin-bottom: $spacing-small;
+
+			.item-partner {
+				font-weight: bold;
+			}
+
+			.item-date {
+				font-size: 1rem;
+			}
 		}
 	}
 
 	input[readonly=readonly] {
-		display: none;
+		@include disabled();
 	}
 
-	.vs--unsearchable .vs__dropdown-toggle {
-		cursor: initial;
-	}
+	.vs {
+		&--unsearchable .vs__dropdown-toggle {
+			cursor: auto;
+		}
 
-	.vs__search {
-		border-left: 1px solid;
-		@include themed(border-left-color, $input-border-key);
+		&__dropdown-toggle {
+			border: none;
+			padding-bottom: $spacing-tiny;
+			margin-bottom: $spacing-tiny;
+		}
 
-		&:focus {
-			@include themed(border-left-color, $input-border-focus-key);
+		&__open-indicator {
+			position: absolute;
+			right: 1.25rem;
+			bottom: 0.85rem;
+			@include link-colors($colors-light, '', fill);
+		}
+
+		&__selected {
+			color: theme-light('text');
+			border-radius: $default-border-radius;
+			background-color: $color-off-white;
+			border: none;
+			padding: $spacing-tiny $spacing-small;
+		}
+
+
+		&__search {
+			border-left: 1px solid;
+			background-color: $input-background-color;
+			@include themed(border-color, $input-border-key);
+			flex-basis: 100%;
+
+
+			&:not(:readonly):focus {
+				@include themed(border-color, $input-border-focus-key);
+			}
+		}
+
+		&__actions {
+			padding: 0;
 		}
 	}
 }

@@ -51,9 +51,10 @@ en:
       self_risk_html: You figured your risk was <b>%{risk_level}</b>
       overall_risk_html: We calculated <b>%{risk_level}</b>
       notes:
-        title: Your Notes
+        title: "Your Notes:"
       breakdown: "Let's break it down:"
       continue_first_time: Continue
+      contact_risks: "Risks from this contact:"
       sex:
         title: The Sex
         fluid_exchange: Additional fluid exchange
@@ -70,22 +71,24 @@ en:
         no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
         key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such a low risk"
     index:
-      title:
-        with_partner: Your Encounters with %{partner_name}
-        all: Your Encounters
+      title: Your Encounters
+      with_partner: with %{partner_name}
       no_encounters:
         with_partner: You don't have any encounters with %{partner_name} yet
         all: You don't have any encounters yet
       new: Add an Encounter
       all: Show encounters with all partners
-      list_view: List view
-      calendar_view: Calendar view
-      list_item_html: <span class="item-date">%{date}</span> with <span class="item-partner"> %{partner_name}:</span> <span class="item-notes"><a href="%{href}">%{notes}</a></span>
+      list_view: List
+      calendar_view: Calendar
+      list_item_html: <span class="item-date">%{date}</span> with <span class="item-partner"> %{partner_name}:</span> <span class="item-notes"><a class="link" href="%{href}">%{notes}</a></span>
       no_notes: (No notes)
       no_partners:
         title: Oops
         desc: You haven't told us about any partnerships yet
       make_partner: Add a partner
+    form:
+      contacts_title: Tell us the details!
+      contacts_desc: It works best if you can tell us about what happened in the order it happened, but we understand sometimes multiple things are happening at once.
   encounter_whos:
     new:
       title: Cool!

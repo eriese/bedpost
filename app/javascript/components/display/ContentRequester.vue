@@ -6,7 +6,7 @@
 		<div v-show="fetching">{{$_t("loading")}}</div>
 		<div v-show="requested && fetchedHTML">
 			<div v-html="fetchedHTML"></div>
-			<button type="button" class="link" @click="toggleRequest">{{toggleBack}}</button>
+			<button type="button" :class="['link', $attrs['toggle-class']]" @click="toggleRequest">{{toggleBack}}</button>
 		</div>
 	</div>
 </template>

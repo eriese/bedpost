@@ -95,18 +95,25 @@ export default {
 	methods: {
 		/**
 		 * Toggle to the next value
-		 *
-		 * @emits module:components/form/ToggleComponent~toggle-event
 		 */
 		doToggle() {
-			let new_ind = this.index + 1;
+			let newInd = this.index + 1;
 			// loop around to 0 if need be
-			if (new_ind == this.vals.length) {
-				new_ind = 0;
+			if (newInd == this.vals.length) {
+				newInd = 0;
 			}
 
+			this.onToggle(newInd);
+		},
+		/**
+		 * React to a new index
+		 *
+		 * @param  {number} newInd the new index
+		 * @emits module:components/form/ToggleComponent~toggle-event
+		 */
+		onToggle(newInd) {
 			// get the new value
-			let new_val = this.vals[new_ind];
+			let new_val = this.vals[newInd];
 			// check if this toggle should clear
 			let clear = null;
 			if (this.clear && (this.clearOn === undefined || this.clearOn.indexOf(new_val) >= 0)) {
@@ -114,7 +121,7 @@ export default {
 			}
 			// emit the event
 			this.$emit('toggle-event', this.$attrs.field, new_val,clear);
-		}
+		},
 	},
 	mounted: function() {
 		this.$emit('toggle-mounted');

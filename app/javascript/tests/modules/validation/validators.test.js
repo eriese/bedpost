@@ -1,6 +1,7 @@
 import { validateWithServer, resetValidatorCache } from '@modules/validation/validators';
 import axios from 'axios';
 import { helpers } from 'vuelidate/lib/validators';
+
 jest.mock('axios');
 jest.mock('vuelidate/lib/validators');
 

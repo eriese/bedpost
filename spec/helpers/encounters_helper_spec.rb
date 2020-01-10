@@ -21,8 +21,8 @@ RSpec.describe EncountersHelper, type: :helper do
 					hiv: Diagnosis::TransmissionRisk::MODERATE,
 					hep_c: Diagnosis::TransmissionRisk::NEGLIGIBLE
 				}, schedule: {
-					Date.new(2019, 11, 3) => %i[hiv],
-					Date.new(2019, 10, 31) => %i[hpv hsv],
+					DateTime.new(2019, 11, 3) => %i[hiv],
+					DateTime.new(2019, 10, 31) => %i[hpv hsv],
 					routine: %i[hep_c]
 				})
 
@@ -56,8 +56,8 @@ RSpec.describe EncountersHelper, type: :helper do
 						hiv: Diagnosis::TransmissionRisk::MODERATE,
 						hep_c: Diagnosis::TransmissionRisk::NEGLIGIBLE
 					}, schedule: {
-						Date.new(2019, 11, 3) => %i[hiv hep_c],
-						Date.new(2019, 10, 31) => %i[hpv hsv]
+						DateTime.new(2019, 11, 3) => %i[hiv hep_c],
+						DateTime.new(2019, 10, 31) => %i[hpv hsv]
 					})
 
 				@block_obj = instance_double('Block', call: 'Called')
