@@ -1,11 +1,13 @@
 .link,
 input[type="submit"].not-button {
+	@include link;
+
 	body.is-light &, body.is-dark &.link--is-light-theme {
-		@include link;
+		@include link-colors;
 		@include link-colors($colors-light, $property: stroke);
 
 		&--is-secondary {
-			@include link($suffix: "-light");
+			@include link-colors($suffix: "-light");
 			@include link-colors($suffix: "-light", $property: stroke);
 		}
 	}
@@ -15,7 +17,7 @@ input[type="submit"].not-button {
 		@include link-colors($colors-dark, $property: stroke);
 
 		&--is-secondary {
-			@include link($colors-dark, $suffix: "-light");
+			@include link-colors($colors-dark, $suffix: "-light");
 			@include link-colors($colors-dark, $suffix: "-light", $property: stroke);
 		}
 	}

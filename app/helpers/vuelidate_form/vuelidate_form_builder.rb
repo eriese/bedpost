@@ -268,6 +268,10 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		Tags::Tooltip.new(@object_name, attribute, @template, html_options).render
 	end
 
+	def label(attribute, text=nil, options={}, &block)
+		Tags::Label.new(@object_name, attribute, @template, text, objectify_options(options)).render(&block)
+	end
+
 	# TODO this has full_v_name, which doesn't exist anymore
 	def toggle_tag(attribute, **toggle_options)
 		clear_opt = toggle_options.delete :":clear"
