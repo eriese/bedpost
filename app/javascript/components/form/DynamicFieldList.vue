@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import gsap from 'gsap';
+import {gsap} from 'gsap';
 import deletedChild from '@components/functional/DeletedChild.vue';
 import {lazyParent} from '@mixins/lazyCoupled';
 
