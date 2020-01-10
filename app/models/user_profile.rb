@@ -51,6 +51,7 @@ class UserProfile < Profile
 	validates_uniqueness_of :uid, case_sensitive: false
 	validates_presence_of :email, :encrypted_password, :uid, if: :active_for_authentication?
 	validates_presence_of :pronoun, :anus_name, :external_name, on: :update
+	validates_confirmation_of :password
 
 	BLACKLIST_FOR_SERIALIZATION += %i[partnerships password_digest tours]
 
