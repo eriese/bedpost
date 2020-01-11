@@ -15,9 +15,16 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	# end
 
 	# POST /resource
-	# def create
-	#   super
-	# end
+	def create
+		if ENV['IS_BETA']
+			token_params = params.require(resource_name).permit(:email, :beta_token)
+			token = BetaToken.find_by(token_params)
+		end
+		super
+	rescue Mongoid::Errors::DocumentNotFound
+		err = {beta_token: ["We don't recognize this beta token with your email address"]}
+		respond_with_submission_error(err,  new_registration_path(resource_name))
+	end
 
 	# GET /resource/edit
 	# def edit

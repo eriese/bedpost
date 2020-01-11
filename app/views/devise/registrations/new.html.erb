@@ -24,6 +24,7 @@
 					<%= vuelidate_form_with model: resource, as: resource_name, url: registration_path(resource_name), html: {class: "centered"}, require_all: true do |f| %>
 						<%= f.text_field :name %>
 						<%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+						<%= f.text_field(:beta_token, tooltip: true) if ENV['IS_BETA'] %>
 						<%= f.password_field :password, autocomplete: "new-password" %>
 						<%= f.password_field :password_confirmation, autocomplete: "new-password", show_toggle: true%>
 						<%= f.submit "Sign up", id: "signup-submit", :class => "cta"%>
