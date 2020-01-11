@@ -235,7 +235,7 @@ p.description {
 		overflow: auto;
 	}
 
-	&--vertical-center {
+	&--is-vertically-centered {
 		display: flex;
 		align-items: center;
 		align-content: center;
@@ -251,14 +251,35 @@ p.description {
 			flex-grow: 1;
 		}
 	}
-}
 
-.centered-container {
-	text-align: center;
-}
+	&--is-rounded {
+		border-radius: $default-border-radius;
+		padding: rem(10px);
+		margin-bottom: rem(10px);
+		color: $color-white;
+		transition: border-radius 0.2s ease-in-out;
 
-.centered-text {
-	text-align: center;
+		&__title {
+			text-align: center;
+			margin: 0 0 0.2rem 0;
+		}
+
+		&.dropdown--is-closed {
+			border-radius: 1.5rem;
+		}
+	}
+
+	&--has-gray-background {
+		background-color: theme-light("cta-bg");
+	}
+
+	&--has-dark-gray-background {
+		background-color: theme-light("h1");
+	}
+
+	&--has-dark-background {
+		background-color: theme-dark("background");
+	}
 }
 
 .desc {
@@ -271,73 +292,4 @@ p.description {
 
 span.confirmation {
 	display: block;
-}
-
-.edit-button {
-	float: right;
-}
-
-.rounded-container {
-	border-radius: $default-border-radius;
-	padding: rem(10px);
-	margin-bottom: rem(10px);
-	color: $color-white;
-	transition: border-radius 0.2s ease-in-out;
-
-	.rounded-container-title {
-		text-align: center;
-		margin: 0 0 0.2rem 0;
-	}
-
-	&.dropdown--is-closed {
-		border-radius: 1.5rem;
-	}
-}
-
-.dark-container {
-	@extend .rounded-container;
-	background-color: theme-dark("background");
-	// color: $color-off-white;
-}
-
-.light-container {
-	@extend .rounded-container;
-	background-color: $color-purple-light;
-	// color: $color-off-white;
-}
-
-.gray-container {
-	@extend .rounded-container;
-	background-color: theme-light("cta-bg");
-}
-
-.dark-gray-container {
-	@extend .rounded-container;
-	background-color: theme-light("h1");
-	// color: $color-off-white;
-}
-
-.dark-border-container {
-	@extend .rounded-container;
-	border: rem(2px) solid $color-purple-dark;
-}
-
-.light-border-container {
-	@extend .rounded-container;
-	border: rem(2px) solid $color-purple-light;
-}
-
-.gray-border-container {
-	@extend .rounded-container;
-	border: rem(2px) solid $color-light-gray;
-}
-
-.vertical-center {
-	display: flex;
-	align-items: center;
-	align-content: center;
-}
-
-.clear-fix{
-	@include self-clearing;
 }

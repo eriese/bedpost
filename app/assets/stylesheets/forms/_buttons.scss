@@ -42,6 +42,10 @@
 		border-style: none;
 	}
 
+	&--is-floating-right {
+		float: right;
+	}
+
 	&--is-compact {
 		padding: $spacing-tiny $spacing-small;
 		min-width: unset;

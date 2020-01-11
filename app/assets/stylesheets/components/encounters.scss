@@ -220,7 +220,7 @@
 	list-style-type: none;
 
 	li {
-		@extend .clear-fix;
+		@include self-clearing;
 		padding: rem(5px) rem(10px);
 		font-size: 0.85rem;
 
@@ -264,7 +264,7 @@
 	list-style-type: none;
 
 	li {
-		@extend .clear-fix;
+		@include self-clearing;
 		display: flex;
 		align-items: center;
 
