@@ -2,6 +2,8 @@ class BetaController < ApplicationController
 	skip_before_action :authenticate_user_profile!
 	skip_before_action :check_first_time
 
+	respond_to :json
+
 	def index
 		head :ok
 	end
@@ -13,12 +15,14 @@ class BetaController < ApplicationController
 		hmac = OpenSSL::HMAC.new("#{key}&#{secret}", digest)
 		hmac << request.raw_post
 		expected_signature = Base64.encode64(hmac.digest).strip
-		binding.pry
 		if expected_signature == request.headers["sm-signature"]
-			# get data and make token
+			req_params = JSON.parse(request.raw_post).to_h.with_indifferent_access
+			if req_params[:event_type] == 'response_completed'
+				SendBetaInviteJob.perform_now(req_params[:resources][:survey_id], req_params[:resources][:respondent_id])
+			end
 			head :ok
 		else
-			head 402
+			head :unauthorized
 		end
 	end
 end

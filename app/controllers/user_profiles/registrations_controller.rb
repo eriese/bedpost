@@ -15,16 +15,9 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	# end
 
 	# POST /resource
-	def create
-		if ENV['IS_BETA']
-			token_params = params.require(resource_name).permit(:email, :beta_token)
-			token = BetaToken.find_by(token_params)
-		end
-		super
-	rescue Mongoid::Errors::DocumentNotFound
-		err = {beta_token: ["We don't recognize this beta token with your email address"]}
-		respond_with_submission_error(err,  new_registration_path(resource_name))
-	end
+	# def create
+	# 	super
+	# end
 
 	# GET /resource/edit
 	# def edit
@@ -73,6 +66,14 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	# If you have extra params to permit, append them to the sanitizer.
 	def configure_sign_up_params
 		devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+		if ENV['IS_BETA']
+			token_params = params.require(resource_name).permit(:email, :token)
+			binding.pry
+			unless BetaToken.where(token_params).exists?
+				err = {beta_token: ["We don't recognize this beta token with your email address"]}
+				respond_with_submission_error(err,  new_registration_path(resource_name))
+			end
+		end
 	end
 
 	# If you have extra params to permit, append them to the sanitizer.

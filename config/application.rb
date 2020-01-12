@@ -37,6 +37,7 @@ module Bedpost
 		end
 
 		config.action_mailer.delivery_method = :mailjet_api
+		config.action_mailer.default_url_options = routes.default_url_options
 
 		config.active_job.queue_adapter = :delayed_job
 
