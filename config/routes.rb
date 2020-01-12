@@ -44,6 +44,11 @@ Rails.application.routes.draw do
 	get 'feedback/*feedback_type', to: 'trello#new', as: :feedback
 	post 'feedback/*feedback_type', to: 'trello#create'
 
+	if ENV['IS_BETA']
+		get 'beta', to: 'beta#index'
+		post 'beta', to: 'beta#create'
+	end
+
 	root to: redirect('/signup')
 	# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

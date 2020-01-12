@@ -47,6 +47,7 @@ gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_mongoid'
 
+gem 'rack-cors'
 #handle env vars
 
 group :development, :test do
