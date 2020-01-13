@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options = { host: "#{ENV['CNAME']}.bedpost.me"}
+
 Rails.application.configure do
 	# Verifies that versions and hashed value of the package contents in the project's package.json
 	config.webpacker.check_yarn_integrity = false
@@ -66,7 +68,6 @@ Rails.application.configure do
 	# config.active_job.queue_name_prefix = "bedpost_#{Rails.env}"
 
 	# TODO update to the real url
-	config.action_mailer.default_url_options = { host: "#{ENV['CNAME']}.bedpost.me"}
 	config.action_mailer.perform_caching = false
 
 	# Ignore bad email addresses and do not raise email delivery errors.

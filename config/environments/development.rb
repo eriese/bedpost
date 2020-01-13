@@ -1,3 +1,4 @@
+Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
 Rails.application.configure do
 	config.require_master_key = false
 	# Verifies that versions and hashed value of the package contents in the project's package.json
@@ -30,7 +31,6 @@ Rails.application.configure do
 		config.cache_store = :null_store
 	end
 
-	config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 	# Don't care if the mailer can't send.
 	config.action_mailer.raise_delivery_errors = false
 
