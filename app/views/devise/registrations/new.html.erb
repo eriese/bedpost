@@ -24,12 +24,12 @@
 					<%= vuelidate_form_with model: resource, url: registration_path(resource_name), html: {class: "centered"}, require_all: true do |f| %>
 						<%= f.text_field :name, label: 'registration.name' %>
 						<%= f.email_field :email, autofocus: true, autocomplete: "email", label: 'registration.email' %>
-						<%= f.text_field(:token, tooltip: true) if ENV['IS_BETA'] %>
+						<%= f.text_field(:token, tooltip: {interactive: true}) if ENV['IS_BETA'] %>
 						<%= f.password_field :password, autocomplete: "new-password", label: 'registration.password' %>
-						<%= f.password_field :password_confirmation, autocomplete: "new-password", show_toggle: true, label: 'registration.password_confirmation'%>
-						<%= f.submit "Sign up", id: "signup-submit", :class => "cta"%>
+						<%= f.password_field :password_confirmation, autocomplete: "new-password", show_toggle: 'container--has-contrast-background__link', label: 'registration.password_confirmation'%>
+						<%= f.submit "Sign up", id: "signup-submit", :class => "cta cta--is-form-submit"%>
 						<div class="additional">
-							<%= render "devise/shared/links" %>
+							<%= render "devise/shared/links", link_class: 'container--has-contrast-background__link' %>
 						</div>
 					<% end %>
 				</div>

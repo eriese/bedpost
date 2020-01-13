@@ -6,7 +6,8 @@ module VuelidateForm
 			def content(options = {})
 				key = options.delete('key')
 				t_key = key.blank? || key == true ? @method_name : key
-				ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: 'helpers.tooltip').translate
+				translation = ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: 'helpers.tooltip').translate
+				translation.present? ? translation.html_safe : ''
 			end
 
 			# add the options for a vue tooltip component
@@ -18,6 +19,7 @@ module VuelidateForm
 
 				show_always = options.delete('show_always')
 				options[':show-always'] = show_always if show_always
+				options[':interactive'] = options.delete('interactive')
 			end
 
 			# render the tooltip

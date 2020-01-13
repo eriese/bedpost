@@ -196,11 +196,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def password_field(attribute, args={})
+	def password_field(attribute, options={})
 		options = convert_options(options)
-		args[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
-		after_method = args[:show_toggle] ? :password_toggle : nil
-		field_builder(attribute, args).field(after_method) do
+		options[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
+		after_method = password_toggle(options[:show_toggle]) if options[:show_toggle].present?
+		field_builder(attribute, options).field(after_method) do
 			super
 		end
 	end
@@ -242,10 +242,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		super
 	end
 
-	def password_toggle
+	def password_toggle(toggle_class = nil)
+		add_class = toggle_class.is_a?(String) ? toggle_class : ''
 		@template.content_tag(:div, {class: "additional", slot: "additional"}) do
 			@template.content_tag(:p) do
-				toggle_tag(:password, {class: "link link--no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
+				toggle_tag(:password, {class: "link link--no-line #{add_class}", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
 			end
 		end
 	end

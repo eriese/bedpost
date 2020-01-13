@@ -1,5 +1,4 @@
-.link,
-input[type="submit"].not-button {
+.link {
 	@include link;
 
 	@mixin themed-link($theme-map) {
@@ -13,11 +12,19 @@ input[type="submit"].not-button {
 	}
 
 	@each $theme, $theme-map in $themes {
-		body.is-#{$theme} &, body:not(.is-#{$theme}) &.link--is-#{$theme}-theme {
+		body.is-#{$theme} & {
 			@include themed-link($theme-map);
 		}
+	}
 
-		body.is-#{$theme} .container--has-contrast-background & {
+	@each $theme, $theme-map in $themes {
+		body &.link--is-#{$theme}-theme {
+			@include themed-link($theme-map);
+		}
+	}
+
+	@each $theme, $theme-map in $themes {
+		body.is-#{$theme} &.container--has-contrast-background__link {
 			@include themed-link(map-get($themes-contrast, $theme));
 		}
 	}

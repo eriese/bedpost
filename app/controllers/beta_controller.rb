@@ -18,7 +18,7 @@ class BetaController < ApplicationController
 		if expected_signature == request.headers["sm-signature"]
 			req_params = JSON.parse(request.raw_post).to_h.with_indifferent_access
 			if req_params[:event_type] == 'response_completed'
-				SendBetaInviteJob.perform_now(req_params[:resources][:survey_id], req_params[:resources][:respondent_id])
+				SendBetaInviteJob.perform_later(req_params[:resources][:survey_id], req_params[:resources][:respondent_id])
 			end
 			head :ok
 		else

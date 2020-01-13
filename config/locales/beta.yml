@@ -22,9 +22,13 @@ en:
         original:
           'true': 'yes'
           'false': 'no'
+      user_profile:
+        token: Registration Token
     tooltip:
       bug:
         title: Describe the bug in a few words
+      user_profile:
+        token: You should have received this token in your email after taking our <a href="/login" target="_blank" class="link link--is-dark-theme"> pre-beta survey</a>
   mongoid:
     errors:
       models:
