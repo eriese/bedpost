@@ -5,52 +5,58 @@
 	@return map-get($colors-light, $color-key);
 }
 
+@function theme-light-contrast($color-key) {
+	@return map-get($colors-light-contrast, $color-key);
+}
+
 @function theme-dark($color-key) {
 	@return map-get($colors-dark, $color-key);
 }
 
-@mixin themed($prop: background-color, $map-key: "background") {
-	body.is-light & {
-		#{$prop}: theme-light($map-key);
-	}
+@function theme-dark-contrast($color-key) {
+	@return map-get($colors-dark-contrast, $color-key);
+}
 
-	body.is-dark & {
-		#{$prop}: theme-dark($map-key);
+@mixin themed-styles($theme-map: $themes, $contrast-theme-map: $themes-contrast, $include-contrast: true) {
+	@each $theme, $theme-colors in $theme-map {
+		body.is-#{$theme} & {
+			@content($theme, $theme-colors);
+		}
+
+		@if $include-contrast {
+			body.is-#{$theme} .container--has-contrast-background & {
+				$contrast-colors: map-get($contrast-theme-map, $theme);
+				@content($theme, $contrast-colors);
+			}
+		}
 	}
 }
 
-@mixin themed-inverse($prop: background-color, $map-key: "background") {
-	body.is-light & {
-		#{$prop}: theme-dark($map-key);
-	}
-
-	body.is-dark & {
-		#{$prop}: theme-light($map-key);
+@mixin themed-from-map($prop: background-color, $map-key: "background", $opacity: 1, $theme-map: $themes) {
+	@each $theme, $theme-colors in $theme-map {
+		body.is-#{$theme} & {
+			#{$prop}: rgba(map-get($theme-colors, $map-key), $opacity);
+		}
 	}
 }
 
-@mixin themed-with-cards($prop: background-color, $map-key: "background") {
-	body.is-light.has-cards & {
-		#{$prop}: theme-light($map-key);
-	}
-
-	body.is-dark.has-cards & {
-		#{$prop}: theme-dark($map-key);
-	}
+@mixin themed-inverse($prop: background-color, $map-key: "background", $opacity: 1) {
+	@include themed-from-map($prop, $map-key, $opacity, $themes-inverse);
 }
 
-@mixin has-light-background {
-	body.is-light &, body.is-light.has-cards .card &, body.is-dark.has-cards & {
-		@content;
-	}
+@mixin themed-contrast($prop: background-color, $map-key: "background", $opacity: 1) {
+	@include themed-from-map($prop, $map-key, $opacity, $themes-contrast);
 }
 
-@mixin has-dark-background {
-	body.is-dark &, body.is-dark.has-cards .card &, body.is-light.has-cards & {
-		@content;
+@mixin themed($prop: background-color, $map-key: "background", $opacity: 1, $include-contrast: true) {
+	@include themed-from-map($prop, $map-key, $opacity, $themes);
+
+	@if $include-contrast {
+		.container--has-contrast-background & {
+			@include themed-contrast($prop, $map-key, $opacity);
+		}
 	}
 }
-
 
 ///////////////////////
 // text styles
@@ -62,41 +68,19 @@
 	text-align: center;
 	line-height: 1.15;
 	color: theme-light("h1");
+	@include themed(color, "h1");
 
 	&.header {
 		margin-top: 0;
 	}
-
-	body.has-cards & {
-		color: $color-white;
-	}
-
-	body.has-cards .card &, body.is-dark.has-cards & {
-		color: theme-light("h1");
-	}
-
-	body.is-dark &, body.is-dark.has-cards .card & {
-		color: theme-dark("h1");
-	}
 }
 
 @mixin heading2 {
-	color: theme-light("h2");;
+	color: theme-light("h2");
 	font-weight: 700;
 	font-size: rem(24px);
 	text-align: center;
-
-	body.has-cards & {
-		color: $color-white;
-	}
-
-	body.has-cards .card & {
-		color: theme-light("h2");
-	}
-
-	body.is-dark &, body.is-dark.has-cards .card & {
-		color: theme-dark("h2");
-	}
+	@include themed(color, "h2");
 
 	&.has-desc {
 		margin-bottom: 0.25em;

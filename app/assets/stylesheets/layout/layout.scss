@@ -8,27 +8,19 @@ html, body, #vue-container {
 	font-family: $text-font;
 }
 
-body, body.has-cards .card {
-	color: theme-light("text");
-	background-color: theme-light("background");
-}
-
-body.is-dark, body.is-dark.has-cards .card {
-	color: theme-dark("text");
-	background-color: theme-dark("background");
-}
-
-body.has-cards {
-	font-weight: bold;
-	color: theme-dark("background");
-	background-color: theme-light("background-contrast");
-
-	&.is-dark {
-		color: theme-dark("background");
-		background-color: theme-dark("background-contrast");
+body {
+	@each $theme, $theme-colors in $themes {
+		&.is-#{$theme} {
+			color: map-get($theme-colors, "text");
+			background-color: map-get($theme-colors, "background");
+		}
 	}
+}
 
-	.card {
+body.is-light-contrast, body.is-dark-contrast {
+	font-weight: bold;
+
+	.container--has-contrast-background {
 		font-weight: normal;
 	}
 }
@@ -80,12 +72,8 @@ header {
 	> span, > a {
 		@include themed(color, "background-contrast");
 
-		body.has-cards & {
-			color: theme-light("background");
-		}
-
-		body.is-dark.has-cards & {
-			color: theme-light("h1");
+		body.is-light.has-form & {
+			color: theme-light-contrast("h1");
 		}
 	}
 
@@ -131,15 +119,6 @@ p.description {
 	text-decoration: none;
 }
 
-.card {
-	border-radius: $default-border-radius;
-	padding: $spacing-medium;
-
-	&--has-no-padding {
-		padding: 0;
-	}
-}
-
 .with-js noscript {
 	display: none;
 }
@@ -159,7 +138,6 @@ p.description {
 	font-weight: bold;
 	border: rem(1px) solid;
 	@include themed(border-color, "background-contrast");
-	@include themed-with-cards(border-color, "h1");
 }
 
 #flash {
@@ -176,22 +154,18 @@ p.description {
 
 	.flash-notice {
 		@include themed(border-color, "background-contrast");
-		@include themed-with-cards(border-color, "h1");
 	}
 
 	.flash-alert {
 		@include themed(border-color, "background-contrast");
-		@include themed-with-cards(border-color, "h1");
 	}
 
 	.flash-error {
 		@include themed(border-color, "cta-bg");
-		@include themed-with-cards(border-color, "background");
 	}
 
 	.flash-message {
 		@include themed(border-color, "h1");
-		@include themed-with-cards(border-color, "cta-bg");
 	}
 }
 
@@ -252,11 +226,15 @@ p.description {
 		}
 	}
 
+	&--is-card {
+		border-radius: $default-border-radius;
+		padding: $spacing-medium;
+	}
+
 	&--is-rounded {
 		border-radius: $default-border-radius;
 		padding: rem(10px);
 		margin-bottom: rem(10px);
-		color: $color-white;
 		transition: border-radius 0.2s ease-in-out;
 
 		&__title {
@@ -269,16 +247,33 @@ p.description {
 		}
 	}
 
+	&--has-contrast-background {
+		@include themed-contrast(background-color, "background");
+		@include themed-contrast(color, "text");
+	}
+
+	&--has-contrast-border {
+		border: 2px solid;
+		@include themed(border-color, "background-contrast");
+	}
+
+	&--has-white-background {
+		background-color: $color-white;
+	}
+
 	&--has-gray-background {
 		background-color: theme-light("cta-bg");
+		color: $color-white;
 	}
 
 	&--has-dark-gray-background {
 		background-color: theme-light("h1");
+		color: $color-white;
 	}
 
 	&--has-dark-background {
 		background-color: theme-dark("background");
+		color: $color-white;
 	}
 }
 

@@ -1,34 +1,28 @@
 .cta {
 	@include cta;
 
-	@include has-dark-background {
-		@include cta-colors($colors-dark);
-		@include cta-text-colors($colors-dark, $property: stroke);
+	@mixin themed-cta($theme-colors) {
+		@include cta-colors($theme-colors);
+		@include cta-text-colors($theme-colors, $property: stroke);
 
 		&--is-secondary {
-			@include cta-colors($colors-dark, $suffix: "-light");
+			@include cta-colors($theme-colors, $suffix: "-light");
 		}
 
 		&--is-inverted {
-			@include cta-text-colors($colors-dark, $property: background-color);
-			@include cta-background-colors($colors-dark, $property: color);
-			@include cta-background-colors($colors-dark, $property: stroke);
+			@include cta-text-colors($theme-colors, $property: background-color);
+			@include cta-background-colors($theme-colors, $property: color);
+			@include cta-background-colors($theme-colors, $property: stroke);
 		}
 	}
 
-	@include has-light-background {
-		@include cta-colors($colors-light);
-		@include cta-text-colors($colors-light, $property: stroke);
-
-		&--is-secondary {
-			@include cta-colors($suffix: "-light");
-			@include cta-transition;
+	@each $theme, $theme-colors in $themes {
+		body.is-#{$theme} &, body:not(.is-#{$theme}) &.cta--is-#{$theme}-theme {
+			@include themed-cta($theme-colors);
 		}
 
-		&--is-inverted {
-			@include cta-text-colors($colors-light, $property: background-color);
-			@include cta-background-colors($colors-light, $property: color);
-			@include cta-background-colors($colors-light, $property: stroke);
+		body.is-#{$theme} .container--has-contrast-background & {
+			@include themed-cta(map-get($themes-contrast, $theme));
 		}
 	}
 
@@ -90,12 +84,8 @@
 		height: 2.75rem;
 		width: 2.75rem;
 
-		@include has-light-background {
-			@include cta-colors($colors-light, $suffix: "-light");
-		}
-
-		@include has-dark-background {
-			@include cta-colors($colors-dark, $suffix: "-light");
+		@include themed-styles using($theme, $theme-colors) {
+			@include cta-colors($theme-colors, $suffix: "-light");
 		}
 	}
 
@@ -115,32 +105,25 @@
 		align-self: center;
 		@include centered;
 
+		@include themed-styles using ($theme, $theme-colors) {
+			$fill: map-get($theme-colors, "cta-text");
+			@include background-svg(check-box-check($fill-color: $fill, $stroke-width: 0.6, $rotation: 45));
+
+			@include hover-and-focus {
+				$fill: map-get($theme-colors, "cta-bg");
+				@include background-svg(check-box-check($fill-color: $fill, $stroke-width: 0.6, $rotation: 45));
+			}
+		}
+
 		&--is-small {
 			height: 2rem;
 			width: 2rem;
 		}
 
-		@include has-light-background {
-			@include background-svg(check-box-check($fill-color: theme-light('cta-text'), $stroke-width: 0.6, $rotation: 45));
-		}
-
-		@include has-dark-background {
-			@include background-svg(check-box-check($fill-color: theme-dark('cta-text'), $stroke-width: 0.6, $rotation: 45));
-		}
-
-		@include hover-and-focus {
-			@include has-light-background {
-				@include background-svg(check-box-check($fill-color: theme-light('cta-bg'), $stroke-width: 0.6, $rotation: 45));
-			}
-
-			@include has-dark-background {
-				@include background-svg(check-box-check($fill-color: theme-dark('cta-bg'), $stroke-width: 0.6, $rotation: 45));
-			}
-		}
 	}
 
 	&__text {
-		body.is-light &, body.is-dark &{
+		@include themed-styles using ($theme, $theme-colors) {
 			color: inherit;
 		}
 	}
@@ -207,25 +190,14 @@
 		border: 3px solid;
 		background-color: transparent;
 
-		@include has-light-background {
-			@include cta-background-colors($colors-light, $property: border-color);
-			@include cta-background-colors($colors-light, $property: color);
+		@include themed-styles using ($theme, $theme-colors) {
+			@include cta-background-colors($theme-colors, $property: border-color);
+			@include cta-background-colors($theme-colors, $property: color);
 
 			&[aria-pressed=true], &:not(:disabled):hover, &:not(:disabled):focus {
-				background-color: theme-light('cta-bg');
-				border-color: theme-light('cta-bg');
-				color: theme-light('cta-text');
-			}
-		}
-
-		@include has-dark-background {
-			@include cta-background-colors($colors-dark, $property: border-color);
-			@include cta-background-colors($colors-dark, $property: color);
-
-			&[aria-pressed=true], &:not(:disabled):hover, &:not(:disabled):focus {
-				background-color: theme-dark('cta-bg');
-				border-color: theme-dark('cta-bg');
-				color: theme-dark('cta-text');
+				background-color: map-get($theme-colors, 'cta-bg');
+				border-color: map-get($theme-colors, 'cta-bg');
+				color: map-get($theme-colors, 'cta-text');
 			}
 		}
 

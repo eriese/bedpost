@@ -1,4 +1,4 @@
-<% body_class 'is-dark has-cards' %>
+<% body_class 'is-dark-contrast' %>
 <h1><%= Encounter %></h1>
 <h2 class="desc">with <%= @partner.name %></h2>
 <div class="desc" style="text-align: center;"><%= t(".took_place", {took_place: l(@encounter.took_place, format: :long_date)}) %></div>
@@ -16,28 +16,28 @@
 <% end %>
 <h3 class="container--has-centered-text"><%= t('.breakdown') %></h3>
 
-<drop-down class="container--is-rounded container--has-gray-background encounter-show-container" arrow-class="link link--is-secondary cta--is-arrow--is-medium" :title-button="true">
+<drop-down class="container--is-rounded container--has-gray-background encounter-show-container" arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true">
 	<h4 class="container--is-rounded__title light-purple-text" slot="title"><%= t('.sex.title') %></h4>
 	<div>
 		<%= display_contacts @encounter %>
 		<p class="contacts-show__fluids"><b class="fluids__title"><%= t('.sex.fluid_exchange') %></b> <span class="fluids__response"><%= t(@encounter.fluids ? 'yes' : 'no') %></span></p>
 	</div>
 </drop-down>
-<drop-down arrow-class="link link--is-secondary cta--is-arrow--is-medium" :title-button="true" class="container--is-rounded container--has-dark-gray-background encounter-show-container">
+<drop-down arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true" class="container--is-rounded container--has-dark-gray-background encounter-show-container">
 	<h4 class="container--is-rounded__title" slot="title"><%= t('.risks.title') %></h4>
 	<%= display_risks @encounter %>
 </drop-down>
 
-<drop-down class="container--is-rounded container--has-dark-background encounter-show-container" arrow-class="link link--is-secondary cta--is-arrow--is-medium" :title-button="true" :start-open="true">
+<drop-down class="container--is-rounded container--has-dark-background encounter-show-container" arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true" :start-open="true">
 	<h4 class="container--is-rounded__title" slot="title"><%= t('.advice.title') %></h4>
 	<% if @encounter.schedule.any? %>
-		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>" toggle-class="link--is-secondary">
+		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>" toggle-class="link--is-dark-theme--is-secondary">
 			<%= display_schedule @encounter, :"slot-scope" => "{clickHandler, show}" do %>
-				<br><a class="link link--is-secondary" href="<%= partnership_encounter_path(@partnership, @encounter, {force: true}) %>" @click="clickHandler"><%= t('.advice.show_anyway') %></a>
+				<br><a class="link link--is-dark-theme--is-secondary" href="<%= partnership_encounter_path(@partnership, @encounter, {force: true}) %>" @click="clickHandler"><%= t('.advice.show_anyway') %></a>
 			<% end %>
 		</content-requester>
 		<% if @force %>
-			<%= link_to t('.advice.hide_lower_risk'), partnership_encounter_path(@partnership, @encounter), class: "link link--is-secondary" %>
+			<%= link_to t('.advice.hide_lower_risk'), partnership_encounter_path(@partnership, @encounter), class: "link link--is-dark-theme--is-secondary" %>
 		<% end %>
 	<% else %>
 		<p><%= t('.advice.no_schedule') %></p>
@@ -46,7 +46,7 @@
 
 
 <% if current_user_profile.first_time? %>
-	<%= link_to t(".continue_first_time"), first_time_path, class: 'link link--is-light-theme' %>
+	<%= link_to t(".continue_first_time"), first_time_path, class: 'link' %>
 <% else %>
-	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'cta--is-floating-right link link--is-light-theme'} %>
+	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'cta--is-floating-right link'} %>
 <% end %>

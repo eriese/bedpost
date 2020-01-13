@@ -75,7 +75,7 @@ $colors-dark: (
 	"cta-text": #2E2143,
 	"cta-bg": #C78DAB,
 	"cta-bg-light": #FC9890,
-	"cta-bg-form": #AF5D87,
+	"cta-bg-form": #FC9890,
 	"link": #C78DAB,
 	"link-light": #FC9890,
 	"link-light-light": #AF5D87,
@@ -87,7 +87,66 @@ $colors-dark: (
 	"text": $color-white,
 	"input-border": #7B405E,
 	"input-border-focus": #FFD6CC,
+	"form-background": #FC9890,
+);
+
+$colors-light-contrast: (
+	"cta-text": $color-white,
+	"cta-bg": map-get($colors-light, "cta-bg"),
+	"cta-bg-light": #AF6A64,
+	"cta-bg-form": #AF5D87,
+	"link": map-get($colors-light, "link"),
+	"link-light": #AF6A64,
+	"link-light-light": #C78DAB,
+	"shadow": rgba($color-black, 0.3),
+	"h1": $color-white,
+	"h2": $color-white,
+	"background": map-get($colors-light, "background-contrast"),
+	"background-contrast": $color-white,
+	"text": $color-black,
+	"input-border": #7B405E,
+	"input-border-focus": #AF6A64,
 	"form-background": #AF5D87,
+);
+
+$colors-dark-contrast: (
+	"cta-text": map-get($colors-dark, "background-contrast"),
+	"cta-bg": map-get($colors-light, "cta-bg"),
+	"cta-bg-light": map-get($colors-light, "h1"),
+	"cta-bg-form": map-get($colors-light, "cta-bg"),
+	"link": map-get($colors-light, "cta-bg"),
+	"link-light": map-get($colors-light, "h1"),
+	"link-light-light": #AF5D87,
+	"shadow": rgba($color-white, 0.3),
+	"h1": map-get($colors-light, "h1"),
+	"h2": $color-off-white,
+	"background": map-get($colors-dark, "background-contrast"),
+	"background-contrast": map-get($colors-dark, "background"),
+	"text": map-get($colors-dark, "background"),
+	"input-border": #7B405E,
+	"input-border-focus": #FFD6CC,
+	"form-background": map-get($colors-light, "cta-bg"),
+);
+
+$themes: (
+	"light": $colors-light,
+	"dark": $colors-dark,
+	"light-contrast": $colors-light-contrast,
+	"dark-contrast": $colors-dark-contrast
+);
+
+$themes-inverse: (
+	"light": $colors-dark,
+	"dark": $colors-light,
+	"light-contrast": $colors-dark-contrast,
+	"dark-contrast": $colors-light-contrast
+);
+
+$themes-contrast: (
+	"light": $colors-light-contrast,
+	"dark": $colors-dark-contrast,
+	"light-contrast": $colors-light,
+	"dark-contrast": $colors-dark
 );
 
 :export {

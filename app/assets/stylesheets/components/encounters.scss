@@ -320,10 +320,12 @@
 		margin-right: rem(5px);
 	}
 
+	.encounter-calendar__container {
+		margin-top: $spacing-default;
+	}
+
 	.vc-container {
-		margin-top: $spacing-small;
-		border: 2px solid;
-		@include themed(border-color, 'background-contrast');
+		border: none;
 	}
 
 	.vc-bars {
@@ -372,7 +374,7 @@
 
 		&__dropdown-toggle {
 			border: none;
-			padding-bottom: $spacing-tiny;
+			padding-bottom: $spacing-small;
 			margin-bottom: $spacing-tiny;
 		}
 
