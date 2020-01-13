@@ -45,7 +45,7 @@ class SendBetaInviteJob < ApplicationJob
 		bearer_token = Rails.application.credentials.dig(:survey_monkey, :access_token)
 		# response = HTTP.auth("Bearer #{bearer_token}").get(url)
 		# response_json = response.parse.with_indifferent_access
-		response_json = DUMMY_DATA.with_indifferent_access
+		# response_json = DUMMY_DATA.with_indifferent_access
 		questions = response_json[:pages][0][:questions]
 		email = questions[EMAIL_INDEX][:answers][0][:text]
 		name = questions[NAME_INDEX][:answers][0][:text]
