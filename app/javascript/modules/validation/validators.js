@@ -45,12 +45,14 @@ export const submitted = (path) => {
 
 /** A cache for the last found valid values of asynchronous validators */
 let lastValidVals = {};
+let invalidVals = {};
 
 /**
  * Reset the validator cache
  */
 export const resetValidatorCache = () => {
 	lastValidVals = {};
+	invalidVals = {};
 };
 
 /**
@@ -75,7 +77,10 @@ export const validateWithServer = (path, url) => {
 		}, 1000);
 	};
 
-	const getCacheKey = () => `validateWithServer-${path}-${url}`;
+	// get the cache key
+	const cacheKey = `validateWithServer-${path}-${url}`;
+	// set up the invalid cache without replacing an existing cache
+	invalidVals[cacheKey] = invalidVals[cacheKey] || {};
 
 	/**
 	 * Send the request to validate the value
@@ -90,24 +95,33 @@ export const validateWithServer = (path, url) => {
 
 		// make the get request
 		return axios.get(url, {params}).then((response) => {
-			// the response is true if the field is valid
-			if (response.data === true) {
-				lastValidVals[getCacheKey()] = value;
+			// get the response message for the specified path only
+			let message = Object.getAtPath(response.data, path);
+
+			// if no message was given for that path
+			if (message === undefined) {
+				// cache this as a valid value
+				lastValidVals[cacheKey] = value;
 				resolve(true);
 			}
 
 			// set the message based on the response data
-			responseMessage.message = Object.getAtPath(response.data, path);
+			responseMessage.message = message;
+
+			// cache it as an invalid value
+			invalidVals[cacheKey][value] = responseMessage.message;
+
 			// the field is invalid
-			resolve(responseMessage.message === undefined);
+			resolve(false);
 		}).catch(() => { resolve(false); });	// any errors count as invalid
 	};
 
 	// make the validator
 	return helpers.withParams({
 		type: 'serverValidated',
-		url: url,
+		url,
 		requestParams: params,
+		path,
 		responseMessage
 	}, function (value) {
 		// debounce
@@ -120,7 +134,13 @@ export const validateWithServer = (path, url) => {
 		responseMessage.message = '';
 
 		// return true if the value is blank (allow this case to be handled by a different validator)
-		if (value == '' || value === null || value == lastValidVals[getCacheKey()]) return true;
+		if (value == '' || value === null || value == lastValidVals[cacheKey]) return true;
+
+		// return false if the value is already in the invalid cache
+		if (invalidVals[cacheKey][value]) {
+			responseMessage.message = invalidVals[cacheKey][value];
+			return false;
+		}
 
 		// return a promise that resolves when the request completes
 		return new Promise((resolve) => {
