@@ -41,4 +41,15 @@ module ApplicationHelper
 		content_for(:body_class, ' ') if content_for? :body_class
 		content_for :body_class, clss
 	end
+
+	def analytics_id
+		if Rails.env.development? || Rails.env.test?
+			'G-06DT95LEGH'
+		elsif ENV['IS_STAGING']
+			'G-ZB3SC2NDWS'
+		else
+			'G-2BK3375Z5V'
+		end
+	end
+
 end

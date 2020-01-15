@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
 	<head>
-		<title>Bedpost</title>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<%= analytics_id %>"></script>
+		<%= javascript_tag nonce: true, 'data-turbolinks-track': 'reload' do%>
+			window.I18nConfig = {
+				defaultLocale: "<%= I18n.default_locale %>",
+				locale: "<%= I18n.locale %>"
+			};
+
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			<% if user_profile_signed_in? %>
+				gtag('config', '<%= analytics_id %>', {
+				'user_id': '<%= current_user_profile._id %>'
+			});
+			<% else %>
+				gtag('config', '<%= analytics_id %>');
+			<% end %>
+		<% end %>
 		<%= csrf_meta_tags %>
 		<%= csp_meta_tag %>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, minimum-scale=1">
@@ -10,12 +30,6 @@
 		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
-		<%= javascript_tag nonce: true do%>
-			window.I18nConfig = {
-				defaultLocale: "<%= I18n.default_locale %>",
-				locale: "<%= I18n.locale %>"
-			};
-		<% end %>
 		<%= javascript_include_tag 'application' %>
 		<%= javascript_pack_tag 'runtime' %>
 		<%= javascript_pack_tag 'application' %>
