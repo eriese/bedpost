@@ -2,25 +2,12 @@
 <html lang="<%= I18n.locale %>">
 	<head>
 		<!-- Global site tag (gtag.js) - Google Analytics -->
-
 		<script async src="https://www.googletagmanager.com/gtag/js?id=<%= analytics_id %>"></script>
-		<%= javascript_tag nonce: true, 'data-turbolinks-track': 'reload' do%>
+		<%= javascript_tag nonce: true do%>
 			window.I18nConfig = {
 				defaultLocale: "<%= I18n.default_locale %>",
 				locale: "<%= I18n.locale %>"
 			};
-
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			<% if user_profile_signed_in? %>
-				gtag('config', '<%= analytics_id %>', {
-				'user_id': '<%= current_user_profile._id %>'
-			});
-			<% else %>
-				gtag('config', '<%= analytics_id %>');
-			<% end %>
 		<% end %>
 		<%= csrf_meta_tags %>
 		<%= csp_meta_tag %>
@@ -51,6 +38,17 @@
 
 	<body class="<%= body_class %>">
 		<%= javascript_tag nonce: true do%>
+			// google analytics pageview
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			<% if user_profile_signed_in? %>
+				gtag('set', {'user_id': '<%= current_user_profile._id %>'});
+			<% end %>
+
+			gtag('config', '<%= analytics_id %>');
+
 			<%= include_gon(need_tag: false)%>
 		<% end %>
 

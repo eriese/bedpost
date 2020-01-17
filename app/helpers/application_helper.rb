@@ -44,11 +44,11 @@ module ApplicationHelper
 
 	def analytics_id
 		if Rails.env.development? || Rails.env.test?
-			'G-06DT95LEGH'
+			'UA-156331784-2'
 		elsif ENV['IS_STAGING']
-			'G-ZB3SC2NDWS'
+			'UA-156331784-4'
 		else
-			'G-2BK3375Z5V'
+			'UA-156331784-3'
 		end
 	end
 
