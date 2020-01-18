@@ -53,6 +53,7 @@ export default {
 			default: objectFactory
 		},
 		dynamicValidation: Boolean,
+		analyticsEvent: Array
 	},
 	validations: function() {
 		let $refs = this.dynamicValidation && this.$root && this.$root.$refs;
@@ -67,6 +68,7 @@ export default {
 			return {
 				validateForm: this.validateForm,
 				handleError: this.handleError,
+				handleSuccess: this.handleSuccess,
 				toggle: this.toggle,
 				$v: this.$v,
 				toggles: this.toggles,
@@ -133,6 +135,11 @@ export default {
 			this.submissionError = respJson.errors;
 			// re-run validations
 			this.$v.$touch();
+		},
+		handleSuccess() {
+			if (this.analyticsEvent && this.analyticsEvent.length) {
+				this.sendAnalyticsEvent.apply(this, this.analyticsEvent);
+			}
 		},
 		/**
 		 * Toggle a state

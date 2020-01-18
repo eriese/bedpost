@@ -37,6 +37,7 @@ module VuelidateForm::VuelidateFormHelper
 			"slot-scope" => "#{builder::SLOT_SCOPE}",
 			"@submit" => "#{builder::SLOT_SCOPE}.validateForm",
 			"@ajax:error" => "#{builder::SLOT_SCOPE}.handleError",
+			"@ajax:success" => "#{builder::SLOT_SCOPE}.handleSuccess",
 			"novalidate" => "",
 			"data-type" => "json"
 		})

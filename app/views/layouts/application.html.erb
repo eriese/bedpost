@@ -47,7 +47,18 @@
 				gtag('set', {'user_id': '<%= current_user_profile._id %>'});
 			<% end %>
 
-			gtag('config', '<%= analytics_id %>');
+			var gtagConfig = {
+				'link-attribution': {
+					'levels': 5,
+				},
+				'anonymize_ip': true,
+			}
+
+			if (typeof navigator.sendBeacon == 'function') {
+				gtagConfig['transport_type'] = 'beacon'
+			}
+
+			gtag('config', '<%= analytics_id %>', gtagConfig);
 
 			<%= include_gon(need_tag: false)%>
 		<% end %>
