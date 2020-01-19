@@ -4,6 +4,8 @@
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=<%= analytics_id %>"></script>
 		<%= javascript_tag nonce: true do%>
+			window.timing = Date.now();
+
 			window.I18nConfig = {
 				defaultLocale: "<%= I18n.default_locale %>",
 				locale: "<%= I18n.locale %>"
