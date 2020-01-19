@@ -47,7 +47,7 @@ mouth.upsert
 toy = Contact::Instrument.new(name: :toy, has_fluids: false)
 toy.upsert
 tongue = Contact::Instrument.new(name: :tongue, alias_of: mouth)
-tonuge.upsert
+tongue.upsert
 fingers = Contact::Instrument.new(name: :fingers, has_fluids: false, alias_of: hand)
 fingers.upsert
 
@@ -134,7 +134,7 @@ PossibleContact.find_by(contact_type: :penetrated, subject_instrument_id: :finge
 PossibleContact.find_by(contact_type: :fisted, subject_instrument_id: :hand, object_instrument_id: :internal_genitals).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: LOW, risk_to_object: LOW}) } + [Diagnosis::TransmissionRisk.new({diagnosis_id: :bv, risk_to_subject: LOW, risk_to_object: LOW, risk_to_self: LOW})]
 
 PossibleContact.find_by(contact_type: :touched, subject_instrument_id: :hand, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: NEGLIGIBLE}) }
-PossibleContact.find_by(contact_type: :penetrated, subject_instrument_id: :hand, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map {|t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: LOW})}
+PossibleContact.find_by(contact_type: :penetrated, subject_instrument_id: :fingers, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map {|t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: LOW})}
 PossibleContact.find_by(contact_type: :fisted, subject_instrument_id: :hand, object_instrument_id: :anus).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: LOW, risk_to_object: LOW}) } + [Diagnosis::TransmissionRisk.new({diagnosis_id: :hep_c, risk_to_subject: HIGH, risk_to_object: HIGH})]
 
 #############################
