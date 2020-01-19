@@ -355,6 +355,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		@toggles ||= @options.delete(:toggles) || {}
 	end
 
+	# get the name of the form for tracking purposes
+	def form_name
+		"#{@template.controller.action_name}_#{@object_name}"
+	end
+
 	# convert options into a HashWithIndifferentAccess for easier key access
 	# @note we do this here so that the same object is passed to the field builder for processing as is passed to the parent method for input generating
 	def convert_options(options)

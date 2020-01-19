@@ -10,7 +10,8 @@ module VuelidateForm::VuelidateFormHelper
 
 	private
 	def generate_form_using(method, args, options, block)
-		form_opts = options.delete(:vue) || {}
+		form_opts = (options.delete(:vue) || {}).with_indifferent_access
+		form_opts['name'] = options.delete(:name) if options.has_key? :name
 		set_options(options)
 		form_obj = nil
 		stepper_options = options.delete :stepper
@@ -52,6 +53,7 @@ module VuelidateForm::VuelidateFormHelper
 			":start-toggles" => form_obj.toggles.to_json,
 			":value" => form_obj.value.to_json,
 			":error" => (flash[:submission_error] || {}).to_json,
+			"name" => form_obj.form_name
 		}.merge(form_opts)) do
 			form_text
 		end

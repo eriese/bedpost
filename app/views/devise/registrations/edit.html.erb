@@ -22,7 +22,7 @@
 	<% end %>
 
 	<% if resource.set_up? %>
-		<%= vuelidate_form_with scope: :account_delete, html: {class: "centered", method: :delete}, vue: {name: :account_delete}, url: registration_path(resource_name) do |f| %>
+		<%= vuelidate_form_with scope: :account_delete, html: {class: "centered", method: :delete}, vue: {'ignore-abandons': true}, url: registration_path(resource_name) do |f| %>
 			<h2 class="with-desc h2--is-form-heading"><%= t_action(".delete_profile.title") %></h2>
 			<p class="description"><%= t_action(".delete_profile.desc") %></p>
 			<%= f.password_field :current_password, required: true, show_toggle: true %>

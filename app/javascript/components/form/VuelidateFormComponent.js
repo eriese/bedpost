@@ -2,6 +2,7 @@ import {resetValidatorCache} from '@modules/validation/validators';
 import ValidationProcessor from '@modules/validation/ValidationProcessor';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
+import {addFormAbandonmentTracking} from '@plugins/analytics';
 
 /**
  * A component to wrap a validated form. Uses [Vuelidate]{@link https://monterail.github.io/vuelidate/} for validation
@@ -33,6 +34,7 @@ export default {
 			submissionError: this.error,
 			formData: this.value,
 			toggles: this.startToggles,
+			submitted: false
 		};
 	},
 	props: {
@@ -53,7 +55,8 @@ export default {
 			default: objectFactory
 		},
 		dynamicValidation: Boolean,
-		analyticsEvent: Array
+		analyticsEvent: Array,
+		name: String,
 	},
 	validations: function() {
 		let $refs = this.dynamicValidation && this.$root && this.$root.$refs;
@@ -137,6 +140,7 @@ export default {
 			this.$v.$touch();
 		},
 		handleSuccess() {
+			this.submitted = true;
 			if (this.analyticsEvent && this.analyticsEvent.length) {
 				this.sendAnalyticsEvent.apply(this, this.analyticsEvent);
 			}
@@ -160,6 +164,7 @@ export default {
 	},
 	mounted() {
 		resetValidatorCache();
+		addFormAbandonmentTracking(this);
 	},
 };
 
