@@ -2,13 +2,14 @@ import {resetValidatorCache} from '@modules/validation/validators';
 import ValidationProcessor from '@modules/validation/ValidationProcessor';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
-import {addFormAbandonmentTracking} from '@plugins/analytics';
+import trackedForm from '@mixins/trackedForm';
 
 /**
  * A component to wrap a validated form. Uses [Vuelidate]{@link https://monterail.github.io/vuelidate/} for validation
  *
  * @module
  * @mixes renderless
+ * @mixes trackedForm
  * @vue-data {?module:components/stepper/FormStepComponent} stepper the stepper in this form, if there is one
  * @vue-data {Object} [submissionError={}] a mutatable copy of the errors returned from the last submission attempt
  * @vue-data {Object} formData a mutatable copy of the object being modified by the form
@@ -25,7 +26,7 @@ import {addFormAbandonmentTracking} from '@plugins/analytics';
  * @listens module:components/form/ToggleComponent~toggle-event
  */
 export default {
-	mixins: [renderless],
+	mixins: [renderless, trackedForm],
 	data: function() {
 		return {
 			stepper: null,
@@ -55,8 +56,6 @@ export default {
 			default: objectFactory
 		},
 		dynamicValidation: Boolean,
-		analyticsEvent: Array,
-		name: String,
 	},
 	validations: function() {
 		let $refs = this.dynamicValidation && this.$root && this.$root.$refs;
@@ -71,7 +70,7 @@ export default {
 			return {
 				validateForm: this.validateForm,
 				handleError: this.handleError,
-				handleSuccess: this.handleSuccess,
+				handleSuccess: this.trackSuccess,
 				toggle: this.toggle,
 				$v: this.$v,
 				toggles: this.toggles,
@@ -148,20 +147,6 @@ export default {
 			this.trackError(JSON.stringify(this.submissionError));
 
 		},
-		trackError(errorText) {
-			if (this.$attrs['track-failures']) {
-				this.sendAnalyticsEvent(this.name, {
-					event_category: 'form_failure',
-					event_label: errorText
-				});
-			}
-		},
-		handleSuccess() {
-			this.submitted = true;
-			if (this.analyticsEvent && this.analyticsEvent.length) {
-				this.sendAnalyticsEvent.apply(this, this.analyticsEvent);
-			}
-		},
 		/**
 		 * Toggle a state
 		 *
@@ -181,7 +166,6 @@ export default {
 	},
 	mounted() {
 		resetValidatorCache();
-		addFormAbandonmentTracking(this);
 	},
 };
 
