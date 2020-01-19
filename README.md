@@ -42,6 +42,7 @@ A user should be able to sign up for an account, add their partners, and add the
 - Tracking?
 
 ### Future
+- current recommended testing schedule
 - input test results
 	- eventually integrate with apps that receive results directly
 	- eventually take existing diagnoses into account for risk calculation
