@@ -115,8 +115,13 @@ export default {
 					let child = this.$children[i];
 					if (child.isValid && !child.isValid()) {
 						child.setFocus();
+						this.trackError(child.field);
 						break;
 					}
+				}
+
+				if (i == this.$children.length) {
+					this.trackError();
 				}
 			}
 			// let the form submit
@@ -138,6 +143,18 @@ export default {
 			this.submissionError = respJson.errors;
 			// re-run validations
 			this.$v.$touch();
+
+			// do google tracking
+			this.trackError(JSON.stringify(this.submissionError));
+
+		},
+		trackError(errorText) {
+			if (this.$attrs['track-failures']) {
+				this.sendAnalyticsEvent(this.name, {
+					event_category: 'form_failure',
+					event_label: errorText
+				});
+			}
 		},
 		handleSuccess() {
 			this.submitted = true;

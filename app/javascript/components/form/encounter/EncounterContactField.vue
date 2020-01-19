@@ -12,7 +12,7 @@
 				:base-name="baseName"
 				v-model="_value.subject"
 				model="subject"
-				@change="updateContactType"
+				@change="updateContactType('subject')"
 				type="link">
 			</hidden-radio>
 		</div>
@@ -34,7 +34,7 @@
 				:base-name="baseName"
 				v-model="_value.object"
 				model="object"
-				@change="updateContactType"
+				@change="updateContactType('object')"
 				type="link">
 			</hidden-radio>
 		</div>
@@ -143,7 +143,7 @@ export default {
 			return this.$_t('contact.with', {pronoun: this.value.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
 		},
 		incomplete() {
-			return this.$v && this.$v.$invalid && this.$v.$anyDirty;
+			return this.$v && this.$v.$error;
 		}
 	},
 	methods: {
@@ -161,13 +161,16 @@ export default {
 				}
 				this[lstId] = newList;
 			});
-			this.setContact();
+			this.setContact(e);
 		},
-		setContact() {
+		setContact(sourceEvent) {
 			let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
 			this._value.possible_contact_id = contact && contact._id;
 			this.onInput();
-			this.updateBarriers();
+			this.updateBarriers(true);
+			if (sourceEvent) {
+				this.$v.possible_contact_id.$touch();
+			}
 		},
 		objectInstsGet() {
 			return this.instsGet(false);
@@ -228,13 +231,18 @@ export default {
 				return true;
 			};
 		},
-		updateContactType() {
+		updateContactType(updated) {
 			this.onInput();
 			this.resetInsts();
-			return;
+			if (updated) {
+				this.$v[updated].$touch();
+			}
 		},
-		updateBarriers() {
+		updateBarriers(noTouch) {
 			this.onInput();
+			if (noTouch !== true) {
+				this.$v && this.$v.barriers.$touch();
+			}
 			this.$nextTick(() => {
 				this.$emit('track');
 			});
@@ -280,13 +288,14 @@ export default {
 				object: {blank: requiredUnless('_destroy')},
 				position: {blank: requiredUnless('_destroy')},
 				possible_contact_id: {blank: requiredUnless('_destroy')},
+				barriers: {}
 			}
 		});
 
 		this.$emit('start-tracking', (list) => new EncounterBarrierTracker(list, this.possibles));
 
 		this.updateContactType();
-		this.updateBarriers();
+		this.updateBarriers(true);
 	},
 };
 </script>
