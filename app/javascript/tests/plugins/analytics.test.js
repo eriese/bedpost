@@ -62,7 +62,12 @@ describe('Analytics', () => {
 
 			events['turbolinks:request-start']();
 			events['turbolinks:request-end']();
-			expectEventCall('timing_complete', expect.objectContaining({value: returnValues[1] - returnValues[0], name: 'request-end', category: 'Turbolinks Timing'}));
+			expectEventCall('timing_complete', expect.objectContaining({
+				event_category: 'Tubolinks Timing',
+				event_label: undefined,
+				name: 'request-end',
+				value: returnValues[1] - returnValues[0]
+			}));
 		});
 
 		it('adds a listener to the visit event that sets window.timing', () => {
@@ -70,7 +75,7 @@ describe('Analytics', () => {
 			const events = mockEventListener();
 			addTurbolinksTracking();
 
-			Date.now = jest.fn('now');
+			Date.now = jest.fn().mockReturnValueOnce('now');
 
 			events['turbolinks:visit']();
 			expect(window.timing).toEqual('now');
