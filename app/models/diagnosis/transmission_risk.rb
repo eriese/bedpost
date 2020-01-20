@@ -15,6 +15,9 @@ class Diagnosis::TransmissionRisk
 	field :risk_to_object, type: Integer
 	field :risk_to_self, type: Integer, default: NO_RISK
 	field :barriers_effective, type: Boolean, default: true
+	field :caveats, type: Array
+	field :subject_conditions, type: Array
+	field :object_conditions, type: Array
 	belongs_to :possible_contact, class_name: 'PossibleContact'
 	belongs_to :diagnosis, class_name: 'Diagnosis'
 

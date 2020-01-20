@@ -109,17 +109,16 @@ PossibleContact.where(subject_instrument_id: :tongue, contact_type: :touched).up
 	{name: :syphillis, gestation_min: 1, gestation_max: 12, in_fluids: true, local: true, category: [:curable, :bacterial, :common, :must_treat]},
 	{name: :hiv, gestation_min: 4, gestation_max: 12, in_fluids: true, local: false, category: [:treatable, :viral, :must_treat]},
 	{name: :hep_c, gestation_min: 6, gestation_max: 12, in_fluids: true, local: false, category: [:hep, :must_treat]},
-	{name: :hep_b, gestation_min: 6, gestation_max: 12, in_fluids: true, local: false, category: [:hep, :viral, :must_treat]},
-	{name: :hep_a, gestation_min: 2, gestation_max: 7, in_fluids: true, local: false, category: [:hep, :must_treat]},
 	{name: :hsv, gestation_min: 3, gestation_max: 12, in_fluids: false, local: true, category: [:skin, :viral, :common, :not_standard, :managed]},
 	{name: :hpv, gestation_min: 8, gestation_max: 80, in_fluids: false, local: true, category: [:skin, :viral, :self_clearing]},
-	{name: :trich, gestation_min: 1, gestation_max: 4, in_fluids: true, local: true, category: [:parasitic, :common, :curable]},
-	{name: :cmv, gestation_min: 3, gestation_max: 12, in_fluids: true, category: [:viral, :not_standard]},
-	{name: :molluscum, gestation_min: 2, gestation_max: 24, in_fluids: false, local: true, category: [:not_standard, :skin, :self_clearing]},
 	{name: :bv, gestation_min: 0, gestation_max: 1, in_fluids: true, local: true, only_vaginal: true, category: [:curable, :bacterial, :not_standard]},
-	{name: :pubic_lice, gestation_min: 0, gestation_max: 1, in_fluids: false, local: true, category: [:skin, :curable]},
-	{name: :scabies, gestation_min: 1, gestation_max: 2, in_fluids: false, local: true, category: [:skin, :parasitic, :curable]}
-].each {|d| Diagnosis.find_or_create_by(d)}
+
+	# {name: :trich, gestation_min: 1, gestation_max: 4, in_fluids: true, local: true, category: [:parasitic, :common, :curable]},
+	# {name: :cmv, gestation_min: 3, gestation_max: 12, in_fluids: true, category: [:viral, :not_standard]},
+	# {name: :molluscum, gestation_min: 2, gestation_max: 24, in_fluids: false, local: true, category: [:not_standard, :skin, :self_clearing]},
+	# {name: :pubic_lice, gestation_min: 0, gestation_max: 1, in_fluids: false, local: true, category: [:skin, :curable]},
+	# {name: :scabies, gestation_min: 1, gestation_max: 2, in_fluids: false, local: true, category: [:skin, :parasitic, :curable]}
+].each { |d| Diagnosis.find_or_create_by(d) }
 
 ###########################
 # Risks
