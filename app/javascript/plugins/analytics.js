@@ -15,7 +15,6 @@ export const sendAnalyticsEvent = function (actionName, options) {
 	// if there's no analytics, do nothing
 	if (!hasGTag()) {return;}
 
-	console.log(actionName, options);
 	window.gtag('event', actionName, options);
 };
 
@@ -51,31 +50,36 @@ const turbolinksPrefix = 'turbolinks:';
 
 /**
  * Add turbolinks listeners to track the timing between a start event and its corresponding completion event
+ *
  * @param {string} startEvent the name of the start event without the prefix
  * @param {string} endEvent   the name of the end event without the prefix
  * @param {string} [eventName=endEvent]  the name of the analytics timing event to send
  */
 function addTurbolinksListeners(startEvent, endEvent, eventName) {
 	let eventTiming;
-	document.addEventListener(`${turbolinksPrefix}${startEvent}`, () => eventTiming = Date.now());
+	if (startEvent) {
+		document.addEventListener(`${turbolinksPrefix}${startEvent}`, () => eventTiming = Date.now());
+	}
 
-	document.addEventListener(`${turbolinksPrefix}${endEvent}`, () => {
-		sendAnalyticsTimingEvent(eventName || endEvent, turbolinksEventCategory, undefined, timeSince(eventTiming));
-	});
+	if (endEvent) {
+		document.addEventListener(`${turbolinksPrefix}${endEvent}`, () => {
+			sendAnalyticsTimingEvent(eventName || endEvent, turbolinksEventCategory, undefined, timeSince(eventTiming));
+		});
+	}
 }
 
 /**
  * add timing tracking to turbolinks events
  */
 export const addTurbolinksTracking = function() {
+	if (!hasGTag()) {return;}
 
 	// add an event listener to reset the timing clock whenever a new page visit begins
 	document.addEventListener(`${turbolinksPrefix}visit`,
 		() => window.timing = Date.now());
 
 	// add an event listener to track the load timing
-	document.addEventListener(`${turbolinksPrefix}load`,
-		() => sendAnalyticsTimingEvent('load', turbolinksEventCategory));
+	addTurbolinksListeners(null, 'load');
 
 	// add event listeners to track time between start and finish of request
 	addTurbolinksListeners('request-start', 'request-end');
