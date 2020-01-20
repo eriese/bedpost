@@ -17,8 +17,9 @@ Layout/Tab:
   Enabled: false
 Layout/IndentationWidth:
   Width: 1
-Layout/MultilineOperationIndentation:
-  IndentationWidth: 1
+# Layout/MultilineOperationIndentation:
+#   IndentationWidth: 1
+#   EnforcedStyle: 'indented'
 Metrics/MethodLength:
   Max: 15
 Style/FrozenStringLiteralComment:
