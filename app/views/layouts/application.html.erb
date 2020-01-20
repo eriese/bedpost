@@ -45,8 +45,14 @@
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
 
+			let pageName = document.location.pathname.replace(/[a-f\d]{24}/gi, "*");
+			gtag('set', 'page_path', pageName);
+
 			<% if user_profile_signed_in? %>
 				gtag('set', {'user_id': '<%= current_user_profile._id %>'});
+				gtag('set', 'dimension1', '<%= pronouns.find {|p| p.id == current_user_profile.pronoun_id }.display %>');
+				gtag('set', 'dimension2', '<%= current_user_profile.can_penetrate %>');
+				gtag('set', 'dimension3', '<%= current_user_profile.has_internal? %>')
 			<% end %>
 
 			var gtagConfig = {
