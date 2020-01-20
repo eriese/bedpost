@@ -45,7 +45,7 @@
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
 
-			let pageName = document.location.pathname.replace(/[a-f\d]{24}/gi, "*");
+			var pageName = document.location.pathname.replace(/[a-f\d]{24}/gi, "*");
 			gtag('set', 'page_path', pageName);
 
 			<% if user_profile_signed_in? %>
