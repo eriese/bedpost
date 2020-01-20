@@ -83,13 +83,14 @@ fingers.upsert
 	el: tongue,
 	contacts: {
 		touched: [[tongue,false]],
-		penetrated: [[external_genitals,false], [internal_genitals,false], [anus,false], [mouth,false], [toy,false]]
+		penetrated: [[external_genitals,false], [internal_genitals,false], [anus,false], [mouth,false], [toy,false]],
+		licked: [[anus, false]]
 	}
 }].each do |inst|
 	inst[:contacts].each do |c, i_lst|
 		i_lst.each do |i|
 			PossibleContact.find_or_create_by(contact_type: c, subject_instrument: inst[:el], object_instrument: i[0], self_possible: i[1])
-			PossibleContact.find_or_create_by(contact_type: c, subject_instrument: i[0], object_instrument: inst[:el], self_possible: i[1]).upsert if c == :touched
+			PossibleContact.find_or_create_by(contact_type: c, subject_instrument: i[0], object_instrument: inst[:el], self_possible: i[1]) if c == :touched
 		end
 	end
 end

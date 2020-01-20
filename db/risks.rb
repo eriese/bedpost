@@ -1,4 +1,4 @@
-NO_DATA = Diagnosis.TransmissionRisk::NO_DATA
+NO_DATA = Diagnosis::TransmissionRisk::NO_DATA
 NO_RISK = Diagnosis::TransmissionRisk::NO_RISK
 NEGLIGIBLE = Diagnosis::TransmissionRisk::NEGLIGIBLE
 LOW = Diagnosis::TransmissionRisk::LOW
@@ -25,8 +25,8 @@ all_contacts = [
 			},
 			{
 				diagnoses: %i[hiv],
-				risk_to_subject: NO_DATA,
-				risk_to_object: NO_DATA
+				risk_to_subject: NEGLIGIBLE,
+				risk_to_object: NEGLIGIBLE
 			}
 		]
 	},
@@ -37,7 +37,7 @@ all_contacts = [
 		self_possible: false,
 		transmission_risks: [
 			{
-				diagnoses: %i[herpes],
+				diagnoses: %i[hsv],
 				risk_to_subject: HIGH,
 				risk_to_object: HIGH
 			}
@@ -57,7 +57,7 @@ all_contacts = [
 		self_possible: false,
 		transmission_risks: [
 			{
-				diagnoses: %i[herpes],
+				diagnoses: %i[hsv],
 				risk_to_subject: HIGH,
 				risk_to_object: HIGH
 			}
@@ -88,14 +88,14 @@ all_contacts = [
 				object_conditions: [:has_internal?]
 			},
 			{
-				diagnoses: %i[hpv herpes syphillis],
+				diagnoses: %i[hpv hsv syphillis],
 				risk_to_subject: LOW,
 				risk_to_object: LOW,
 				object_conditions: [:has_internal?]
 			},
 			# these are the risks for kissing a penis
 			{
-				diagnoses: %[gonorrhea hsv chlamydia syphillis hpv],
+				diagnoses: %i[gonorrhea hsv chlamydia syphillis hpv],
 				risk_to_subject: LOW,
 				risk_to_object: LOW,
 				object_conditions: [:can_penetrate]
@@ -115,7 +115,7 @@ all_contacts = [
 				risk_to_object: NEGLIGIBLE
 			},
 			{
-				diagnoses: %i[hpv hsv syphillis],
+				diagnoses: %i[hsv syphillis],
 				risk_to_subject: LOW,
 				risk_to_object: LOW
 			},
@@ -133,7 +133,7 @@ all_contacts = [
 		self_possible: true,
 		transmission_risks: [
 			{
-				diagnoses: %i[hpv chlamydia hsv syphillis],
+				diagnoses: %i[chlamydia hsv syphillis],
 				risk_to_subject: NEGLIGIBLE,
 				risk_to_object: LOW
 			}
@@ -205,14 +205,14 @@ all_contacts = [
 				subject_conditions: [:has_internal?]
 			},
 			{
-				diagnoses: %i[hpv herpes syphillis],
+				diagnoses: %i[hpv hsv syphillis],
 				risk_to_subject: LOW,
 				risk_to_object: LOW,
 				subject_conditions: [:has_internal?]
 			},
 			# these are the risks for touching with a penis
 			{
-				diagnoses: %[gonorrhea hsv chlamydia syphillis hpv],
+				diagnoses: %i[gonorrhea hsv chlamydia syphillis hpv],
 				risk_to_subject: LOW,
 				risk_to_object: LOW,
 				subject_conditions: [:can_penetrate]
@@ -348,7 +348,7 @@ all_contacts = [
 		self_possible: true,
 		transmission_risks: [
 			{
-				diagnoses: %i[herpes],
+				diagnoses: %i[hsv],
 				risk_to_subject: HIGH,
 				risk_to_object: HIGH
 			}
@@ -368,7 +368,7 @@ all_contacts = [
 		self_possible: false,
 		transmission_risks: [
 			{
-				diagnoses: %i[herpes],
+				diagnoses: %i[hsv],
 				risk_to_subject: HIGH,
 				risk_to_object: HIGH
 			}
@@ -381,7 +381,7 @@ all_contacts = [
 		self_possible: false,
 		transmission_risks: [
 			{
-				diagnoses: %i[hpv herpes syphillis],
+				diagnoses: %i[hpv hsv syphillis],
 				risk_to_subject: HIGH,
 				risk_to_object: HIGH
 			},
@@ -684,7 +684,7 @@ all_contacts = [
 		self_possible: false,
 		transmission_risks: [
 			{
-				diagnoses: %i[hpv herpes syphillis],
+				diagnoses: %i[hpv hsv syphillis],
 				risk_to_subject: HIGH,
 				risk_to_object: HIGH
 			},
@@ -792,3 +792,27 @@ all_contacts = [
 		transmission_risks: []
 	}
 ]
+
+all_contacts.each do |c|
+	contact = PossibleContact.find_by(
+		contact_type: c[:contact_type],
+		subject_instrument_id: c[:subject_instrument_id],
+		object_instrument_id: c[:object_instrument_id]
+	)
+
+	contact.transmission_risks = c[:transmission_risks].each_with_object([]) do |r, ary|
+		r[:diagnoses].each do |d|
+			ary << Diagnosis::TransmissionRisk.new(
+				diagnosis_id: d,
+				risk_to_subject: r[:risk_to_subject] || NO_RISK,
+				risk_to_object: r[:risk_to_object] || NO_RISK,
+				risk_to_self: r[:risk_to_self] || NO_RISK,
+				caveats: r[:caveats],
+				subject_conditions: r[:subject_conditions],
+				object_conditions: r[:object_conditions]
+			)
+		end
+	end
+
+	contact.save
+end
