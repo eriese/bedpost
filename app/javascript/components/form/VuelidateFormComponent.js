@@ -35,7 +35,6 @@ export default {
 			submissionError: this.error,
 			formData: this.value,
 			toggles: this.startToggles,
-			submitted: false
 		};
 	},
 	props: {

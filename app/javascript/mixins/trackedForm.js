@@ -71,6 +71,11 @@ const addFormAbandonmentTracking = function(formVm) {
 };
 
 export default {
+	data() {
+		return {
+			submitted: false,
+		};
+	},
 	props: {
 		analyticsEvent: Array,
 		name: String

@@ -43,6 +43,8 @@ module ApplicationHelper
 	end
 
 	def analytics_id
+		return nil if user_profile_signed_in? && !current_user_profile.opt_in
+
 		if Rails.env.development? || Rails.env.test?
 			'UA-156331784-2'
 		elsif ENV['IS_STAGING']
@@ -51,5 +53,4 @@ module ApplicationHelper
 			'UA-156331784-3'
 		end
 	end
-
 end
