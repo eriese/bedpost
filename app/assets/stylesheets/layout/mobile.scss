@@ -1,4 +1,4 @@
-@include media ("<tablet", "retina2x", "retina3x") {
+@include media ("<tablet" ("retina", "retina2x", "retina3x")) {
 	.no-js {
 		display: flex;
 		flex-wrap: wrap;
@@ -75,6 +75,8 @@
 			}
 			#vue-container {
 				justify-content: flex-start;
+				height: auto;
+				min-height: 100%;
 			}
 		}
 	}
