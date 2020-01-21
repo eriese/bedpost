@@ -45,6 +45,7 @@ module ApplicationHelper
 	def analytics_id
 		return nil if user_profile_signed_in? && !current_user_profile.opt_in
 
+		# TODO: use an ENV variable for this
 		if Rails.env.development? || Rails.env.test?
 			'UA-156331784-2'
 		elsif ENV['IS_STAGING']

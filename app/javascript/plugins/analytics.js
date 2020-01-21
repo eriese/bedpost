@@ -24,7 +24,7 @@ export const sendAnalyticsEvent = function (actionName, options) {
  * @param  {number} [startTime=window.timing] the time the event began
  * @return {number}           								the number of milliseconds since the startTime
  */
-const timeSince = (startTime) => Date.now() - (startTime || window.timing);
+const timeSince = (startMark, endMark) => performance.measure(startMark|| 'bedpost:pageload', endMark);
 
 /**
  * Send a timing event to google analytics
@@ -56,14 +56,16 @@ const turbolinksPrefix = 'turbolinks:';
  * @param {string} [eventName=endEvent]  the name of the analytics timing event to send
  */
 function addTurbolinksListeners(startEvent, endEvent, eventName) {
-	let eventTiming;
+	let startEventName = window.pageloadEventName;
 	if (startEvent) {
-		document.addEventListener(`${turbolinksPrefix}${startEvent}`, () => eventTiming = Date.now());
+		startEventName = `${turbolinksPrefix}${startEvent}`;
+		document.addEventListener(startEventName, () => { performance.mark(startEventName); });
 	}
 
 	if (endEvent) {
 		document.addEventListener(`${turbolinksPrefix}${endEvent}`, () => {
-			sendAnalyticsTimingEvent(eventName || endEvent, turbolinksEventCategory, undefined, timeSince(eventTiming));
+			const stamp = performance.measure(startEventName);
+			sendAnalyticsTimingEvent(eventName || endEvent, turbolinksEventCategory, undefined, Math.round(stamp));
 		});
 	}
 }
@@ -75,8 +77,7 @@ export const addTurbolinksTracking = function() {
 	if (!hasGTag()) {return;}
 
 	// add an event listener to reset the timing clock whenever a new page visit begins
-	document.addEventListener(`${turbolinksPrefix}visit`,
-		() => window.timing = Date.now());
+	document.addEventListener(`${turbolinksPrefix}visit`, window.clearTiming);
 
 	// add an event listener to track the load timing
 	addTurbolinksListeners(null, 'load');

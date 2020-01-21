@@ -109,17 +109,12 @@ export default {
 				e.stopPropagation();
 
 				// find the first errored field and focus it
-				for (var i = 0; i < this.$children.length; i++) {
-					let child = this.$children[i];
-					if (child.isValid && !child.isValid()) {
-						child.setFocus();
-						this.trackError(child.field);
-						break;
-					}
-				}
-
-				if (i == this.$children.length) {
-					this.trackError();
+				const firstErrorField = this.$children.find((c) => c.isValid && !c.isValid());
+				if (firstErrorField !== undefined) {
+					firstErrorField.setFocus();
+					this.trackError(firstErrorField.field);
+				} else {
+					this.trackError('unknown form validation error');
 				}
 			}
 			// let the form submit

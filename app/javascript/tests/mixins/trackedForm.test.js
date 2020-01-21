@@ -95,7 +95,18 @@ describe('Tracked form mixin', () => {
 				mount(wrapperComponent, {
 					propsData: {
 						$v: {
-							$anyDirty: false
+							$anyDirty: false,
+							$dirty: false,
+							formData: {
+								$anyDirty: false,
+								params: {
+									p: null
+								},
+								p: {
+									$anyDirty: false,
+									$dirty: false
+								}
+							}
 						},
 						name: 'name'
 					}

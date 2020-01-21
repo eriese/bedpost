@@ -52,7 +52,7 @@ const addFormAbandonmentTracking = function(formVm) {
 		if(formVm.submitted) { return; }
 
 		// get the dirty fields from the form
-		let dirtyFields = formVm.$v.$anyDirty ? getDirtyFromLevel(formVm.$v.formData) : [];
+		let dirtyFields = getDirtyFromLevel(formVm.$v.formData);
 		// make the fields into an event label
 		let label = `Fields touched: ${dirtyFields.length > 0 ? dirtyFields.join(',') : 'none'}`;
 

@@ -3,12 +3,16 @@ import {mount, createLocalVue} from '@vue/test-utils';
 
 describe('Analytics', () => {
 	const origEventListener = document.addEventListener;
-	const origDateNow = Date.now;
 	afterEach(() => {
 		window.gtag = undefined;
 		window.onerror = null;
 		document.addEventListener = origEventListener;
-		Date.now = origDateNow;
+	});
+
+	beforeEach(() => {
+		performance.mark = jest.fn();
+		performance.measure = jest.fn();
+		window.clearTiming = jest.fn();
 	});
 
 	function expectEventCall(actionName, options) {
@@ -33,32 +37,32 @@ describe('Analytics', () => {
 			});
 		});
 
-		it('adds a listener to the start event that resets the timing to Date.now()', () => {
+		it('adds a listener to the start event that adds a mark of the same name to performance', () => {
 			window.gtag = jest.fn();
 			const events = mockEventListener();
 
 			addTurbolinksTracking();
-			Date.now = jest.fn();
+			window.clearTiming.mockImplementationOnce(() => {
+				performance.mark('pageload');
+			});
 
 			events['turbolinks:visit']();
-			expect(Date.now).toHaveBeenCalledTimes(1);
+			expect(performance.mark).toHaveBeenCalledTimes(1);
 
 			events['turbolinks:request-start']();
-			expect(Date.now).toHaveBeenCalledTimes(2);
+			expect(performance.mark).toHaveBeenCalledTimes(2);
 
 			events['turbolinks:before-render']();
-			expect(Date.now).toHaveBeenCalledTimes(3);
+			expect(performance.mark).toHaveBeenCalledTimes(3);
 		});
 
-		it('adds a listener to the end event that sends a timing event with the time between the start and finish', () => {
+		it('adds a listener to the end event that sends a timing event with the measure since the start mark', () => {
 			window.gtag = jest.fn();
 			const events = mockEventListener();
 
 			addTurbolinksTracking();
 
-			Date.now = jest.fn();
-			const returnValues = [1, 16];
-			returnValues.forEach((v) => Date.now.mockReturnValueOnce(v));
+			performance.measure.mockReturnValueOnce(15);
 
 			events['turbolinks:request-start']();
 			events['turbolinks:request-end']();
@@ -66,19 +70,18 @@ describe('Analytics', () => {
 				event_category: 'Tubolinks Timing',
 				event_label: undefined,
 				name: 'request-end',
-				value: returnValues[1] - returnValues[0]
+				value: 15
 			}));
 		});
 
-		it('adds a listener to the visit event that sets window.timing', () => {
+		it('adds a listener to the visit event that calls window.clearTiming', () => {
 			window.gtag = jest.fn();
 			const events = mockEventListener();
 			addTurbolinksTracking();
 
-			Date.now = jest.fn().mockReturnValueOnce('now');
-
+			window.clearTiming.mockClear();
 			events['turbolinks:visit']();
-			expect(window.timing).toEqual('now');
+			expect(window.clearTiming).toHaveBeenCalled();
 		});
 
 		it('puts an onerror listener on the window to send an exception event', () => {
@@ -138,12 +141,11 @@ describe('Analytics', () => {
 				const wrapper = mount(wrapperComponent, {localVue});
 
 				window.gtag = jest.fn();
-				window.timing = 1234;
-				Date.now = jest.fn().mockReturnValueOnce(4567);
+				performance.measure.mockReturnValueOnce(4567);
 				wrapper.vm.sendAnalyticsTimingEvent();
 
 				expect(window.gtag).toHaveBeenCalledWith('event', 'timing_complete', expect.objectContaining({
-					value: 4567 - 1234
+					value: 4567
 				}));
 			});
 		});

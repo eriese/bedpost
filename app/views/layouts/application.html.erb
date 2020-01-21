@@ -5,14 +5,19 @@
 			<!-- Global site tag (gtag.js) - Google Analytics -->
 			<script async src="https://www.googletagmanager.com/gtag/js?id=<%= analytics_id %>"></script>
 		<% end %>
-
 		<%= javascript_tag nonce: true do%>
-			window.timing = Date.now();
-
 			window.I18nConfig = {
 				defaultLocale: "<%= I18n.default_locale %>",
 				locale: "<%= I18n.locale %>"
 			};
+
+			wiindow.pageloadEventName = 'bedpost:pageload';
+
+			window.clearTiming = function() {
+				performance.clearMeasures();
+				performance.clearMarks();
+				performance.mark(window.pageloadEventName);
+			}
 		<% end %>
 		<%= csrf_meta_tags %>
 		<%= csp_meta_tag %>
@@ -44,6 +49,7 @@
 	<body class="<%= body_class %>">
 		<%= javascript_tag nonce: true do%>
 			<%= include_gon(need_tag: false)%>
+				window.clearTiming();
 
 			<% unless analytics_id.nil?  %>
 				// google analytics pageview
