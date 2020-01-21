@@ -37,7 +37,7 @@ $constrained-width: 30rem;
 ///////////////////////
 // breakpoints
 ///////////////////////
-$screen-tablet: 501px;
+$screen-tablet: 580px;
 $screen-phone: 376px;
 $custom-media-expressions: (
 	"!retina": ('(-webkit-max-device-pixel-ratio: 1)', '(max--moz-device-pixel-ratio: 1)', '(-o-max-device-pixel-ratio: 1)', '(max-device-pixel-ratio: 1)'),

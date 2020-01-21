@@ -10,11 +10,10 @@
 
 # seed a dev user who is already confirmed
 if Rails.env.development?
-	user = UserProfile.create(
+	user = UserProfile.find_or_create_by(
 		email: "devuser@bedpost.me",
 		password: "password",
 		password_confirmation: "password",
-		confirmed_at: Time.now,
 		name: "Dev User",
 		anus_name: "anus",
 		external_name: "external genitals",

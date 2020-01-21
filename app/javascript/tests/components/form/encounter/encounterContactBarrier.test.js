@@ -22,6 +22,11 @@ describe ('Encounter contact barrier component', () => {
 			partnerName: 'Alice',
 			objectInstrumentName: 'hand',
 			subjectInstrumentName: 'hand',
+			instruments: {
+				hand: {
+					can_clean: true,
+				}
+			}
 		};
 
 		const tracker = {

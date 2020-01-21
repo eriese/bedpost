@@ -31,11 +31,12 @@
 		}
 
 		&__line {
-			border: rem(2.75px) solid;
+			border: rem(3px) solid;
 			border-color: inherit;
 			width: $nav-button-width;
 			margin: $spacing-tiny $spacing-tiny;
 			border-radius: $default-border-radius;
+			height: 0rem;
 		}
 
 		.no-js & {
