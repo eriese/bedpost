@@ -225,7 +225,9 @@ form {
 	position: relative;
 
 	.flickity-viewport {
-		overflow: hidden auto;
+		overflow: auto;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 
 	&__h2 {
@@ -252,12 +254,14 @@ form {
 	text-align: center;
 	width: 100%;
 	z-index: 1;
+	height: 3rem;
 
 	$dot-size: 0.5rem;
 	&__dots {
 		height: $dot-size;
-		line-height: 0;
+		line-height: 1;
 		width: 100%;
+		margin-top: 1rem;
 	}
 
 	&__dot {
