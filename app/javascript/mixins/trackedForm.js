@@ -21,7 +21,7 @@ const getDirtyFromLevel = function(level) {
 			dirtyFromLevel.push(p);
 		}
 		// otherwise, if the child has a dirty child
-		else if (child.$anyDirty) {
+		else {
 			let dirtyFromChildLevel = getDirtyFromLevel(child);
 			// add only the dirty children from the child
 			dirtyFromLevel.push(`${p}: (${dirtyFromChildLevel.join(',')})`);
@@ -83,7 +83,7 @@ export default {
 	methods: {
 		trackError(errorText) {
 			if (this.$attrs['track-failures']) {
-				this.sendAnalyticsEvent(this.name, {
+				sendAnalyticsEvent(this.name, {
 					event_category: 'form_failure',
 					event_label: errorText
 				});
@@ -92,7 +92,7 @@ export default {
 		trackSuccess() {
 			this.submitted = true;
 			if (this.analyticsEvent && this.analyticsEvent.length) {
-				this.sendAnalyticsEvent.apply(this, this.analyticsEvent);
+				sendAnalyticsEvent.apply(this, this.analyticsEvent);
 			}
 		}
 	},
