@@ -11,13 +11,15 @@
 				locale: "<%= I18n.locale %>"
 			};
 
-			wiindow.pageloadEventName = 'bedpost:pageload';
+			window.pageloadEventName = 'bedpost:pageload';
 
 			window.clearTiming = function() {
 				performance.clearMeasures();
 				performance.clearMarks();
 				performance.mark(window.pageloadEventName);
 			}
+
+			window.clearTiming();
 		<% end %>
 		<%= csrf_meta_tags %>
 		<%= csp_meta_tag %>
@@ -49,7 +51,6 @@
 	<body class="<%= body_class %>">
 		<%= javascript_tag nonce: true do%>
 			<%= include_gon(need_tag: false)%>
-				window.clearTiming();
 
 			<% unless analytics_id.nil?  %>
 				// google analytics pageview
