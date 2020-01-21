@@ -2,12 +2,14 @@ import {resetValidatorCache} from '@modules/validation/validators';
 import ValidationProcessor from '@modules/validation/ValidationProcessor';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
+import trackedForm from '@mixins/trackedForm';
 
 /**
  * A component to wrap a validated form. Uses [Vuelidate]{@link https://monterail.github.io/vuelidate/} for validation
  *
  * @module
  * @mixes renderless
+ * @mixes trackedForm
  * @vue-data {?module:components/stepper/FormStepComponent} stepper the stepper in this form, if there is one
  * @vue-data {Object} [submissionError={}] a mutatable copy of the errors returned from the last submission attempt
  * @vue-data {Object} formData a mutatable copy of the object being modified by the form
@@ -24,7 +26,7 @@ import renderless from '@mixins/renderless';
  * @listens module:components/form/ToggleComponent~toggle-event
  */
 export default {
-	mixins: [renderless],
+	mixins: [renderless, trackedForm],
 	data: function() {
 		return {
 			stepper: null,
@@ -67,6 +69,7 @@ export default {
 			return {
 				validateForm: this.validateForm,
 				handleError: this.handleError,
+				handleSuccess: this.trackSuccess,
 				toggle: this.toggle,
 				$v: this.$v,
 				toggles: this.toggles,
@@ -106,12 +109,12 @@ export default {
 				e.stopPropagation();
 
 				// find the first errored field and focus it
-				for (var i = 0; i < this.$children.length; i++) {
-					let child = this.$children[i];
-					if (child.isValid && !child.isValid()) {
-						child.setFocus();
-						break;
-					}
+				const firstErrorField = this.$children.find((c) => c.isValid && !c.isValid());
+				if (firstErrorField !== undefined) {
+					firstErrorField.setFocus();
+					this.trackError(firstErrorField.field);
+				} else {
+					this.trackError('unknown form validation error');
 				}
 			}
 			// let the form submit
@@ -133,6 +136,10 @@ export default {
 			this.submissionError = respJson.errors;
 			// re-run validations
 			this.$v.$touch();
+
+			// do google tracking
+			this.trackError(JSON.stringify(this.submissionError));
+
 		},
 		/**
 		 * Toggle a state

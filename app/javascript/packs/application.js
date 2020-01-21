@@ -7,12 +7,15 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+import {addTurbolinksTracking} from '@plugins/analytics';
 import {addTransitionEvents} from '@modules/transitions';
 import addTurbolinksFixes from '@modules/turbolinksFixes';
 import addVue from '@modules/vueSetup';
 import Rails from '@rails/ujs';
-import I18nConfig from "@modules/i18n-config";
+import I18nConfig from '@modules/i18n-config';
 import axios from 'axios';
+
+addTurbolinksTracking();
 
 Rails.start();
 
@@ -22,21 +25,21 @@ addTransitionEvents();
 let app = null;
 document.addEventListener('turbolinks:load', async () => {
 	// remove no-js specific styling
-	let classList = document.getElementById("vue-container").classList;
-	classList.remove("no-js");
-	classList.add("with-js");
+	let classList = document.getElementById('vue-container').classList;
+	classList.remove('no-js');
+	classList.add('with-js');
 
 	// add csrf headers to axios
 	axios.defaults.headers.common['X-CSRF-Token'] = document
-    .querySelector('meta[name="csrf-token"]')
-    .getAttribute('content');
-    axios.defaults.headers.common['Accept'] = 'application/json'
+		.querySelector('meta[name="csrf-token"]')
+		.getAttribute('content');
+	axios.defaults.headers.common['Accept'] = 'application/json';
 
-	await I18nConfig.setup()
+	await I18nConfig.setup();
 	// set up vue
 	app = addVue();
 
 	// hook into the vue instance's confirmation method
-	Rails.confirm = app.isConfirmed
+	Rails.confirm = app.isConfirmed;
 
 });

@@ -41,4 +41,17 @@ module ApplicationHelper
 		content_for(:body_class, ' ') if content_for? :body_class
 		content_for :body_class, clss
 	end
+
+	def analytics_id
+		return nil if user_profile_signed_in? && !current_user_profile.opt_in
+
+		# TODO: use an ENV variable for this
+		if Rails.env.development? || Rails.env.test?
+			'UA-156331784-2'
+		elsif ENV['IS_STAGING']
+			'UA-156331784-4'
+		else
+			'UA-156331784-3'
+		end
+	end
 end

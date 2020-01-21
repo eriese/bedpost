@@ -6,6 +6,7 @@ import vSelect from 'vue-select';
 
 import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
 import tourguide from '@plugins/tourguide';
+import analytics from '@plugins/analytics';
 
 import _root from "@components/Root";
 import nav from '@components/NavComponent';
@@ -50,6 +51,7 @@ export default function addVue() {
 	Vue.use(VCalendar);
 	Vue.use(bedpostVueGlobals);
 	Vue.use(tourguide);
+	Vue.use(analytics);
 
 	Vue.component('v-select', vSelect);
 

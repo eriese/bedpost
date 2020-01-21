@@ -2,7 +2,7 @@
 	<% if @from_dash %>
 		<h1 class="with-desc"><%= t(".title") %></h1>
 	<% end %>
-	<%= vuelidate_form_with model: @encounter, url: encounters_who_path, require_all: true, html: {class: "centered single big", "data-animation-type" => "slideLeft"} do |f| %>
+	<%= vuelidate_form_with model: @encounter, url: encounters_who_path, require_all: true, html: {class: "centered single big", "data-animation-type" => "slideLeft"}, name: 'encounter_who' do |f| %>
 		<%= f.select :partnership_id do %>
 			<option value=""><%= t(".prompt") %></option>
 			<optgroup><%= options_from_collection_for_select(@partnerships, :id, :display)%></optgroup>

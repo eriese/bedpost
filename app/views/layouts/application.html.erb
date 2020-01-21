@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
 	<head>
-		<title>Bedpost</title>
+		<% unless analytics_id.nil? %>
+			<!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=<%= analytics_id %>"></script>
+		<% end %>
+		<%= javascript_tag nonce: true do%>
+			window.I18nConfig = {
+				defaultLocale: "<%= I18n.default_locale %>",
+				locale: "<%= I18n.locale %>"
+			};
+
+			window.pageloadEventName = 'bedpost:pageload';
+
+			window.clearTiming = function() {
+				performance.clearMeasures();
+				performance.clearMarks();
+				performance.mark(window.pageloadEventName);
+			}
+
+			window.clearTiming();
+		<% end %>
 		<%= csrf_meta_tags %>
 		<%= csp_meta_tag %>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0, minimum-scale=1">
@@ -10,12 +29,6 @@
 		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
-		<%= javascript_tag nonce: true do%>
-			window.I18nConfig = {
-				defaultLocale: "<%= I18n.default_locale %>",
-				locale: "<%= I18n.locale %>"
-			};
-		<% end %>
 		<%= javascript_include_tag 'application' %>
 		<%= javascript_pack_tag 'runtime' %>
 		<%= javascript_pack_tag 'application' %>
@@ -38,6 +51,36 @@
 	<body class="<%= body_class %>">
 		<%= javascript_tag nonce: true do%>
 			<%= include_gon(need_tag: false)%>
+
+			<% unless analytics_id.nil?  %>
+				// google analytics pageview
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+
+				<% if user_profile_signed_in? %>
+					gtag('set', {'user_id': '<%= current_user_profile._id %>'});
+					gtag('set', 'dimension1', '<%= pronouns.find {|p| p.id == current_user_profile.pronoun_id }.display %>');
+					gtag('set', 'dimension2', '<%= current_user_profile.can_penetrate %>');
+					gtag('set', 'dimension3', '<%= current_user_profile.has_internal? %>')
+				<% end %>
+
+				var pageName = document.location.pathname.replace(/[a-f\d]{24}/gi, "*");
+				gtag('set', 'page_path', pageName);
+
+				var gtagConfig = {
+					'link-attribution': {
+						'levels': 5,
+					},
+					'anonymize_ip': true,
+				}
+
+				if (typeof navigator.sendBeacon == 'function') {
+					gtagConfig['transport_type'] = 'beacon'
+				}
+
+				gtag('config', '<%= analytics_id %>', gtagConfig);
+			<% end %>
 		<% end %>
 
 		<div id="vue-container" class="no-js <%= content_for :body_inner_class %>">

@@ -109,6 +109,8 @@ export const validateWithServer = (path, url) => {
 			responseMessage.message = message;
 
 			// cache it as an invalid value
+			invalidVals[cacheKey] = invalidVals[cacheKey] || {};
+
 			invalidVals[cacheKey][value] = responseMessage.message;
 
 			// the field is invalid
@@ -137,7 +139,7 @@ export const validateWithServer = (path, url) => {
 		if (value == '' || value === null || value == lastValidVals[cacheKey]) return true;
 
 		// return false if the value is already in the invalid cache
-		if (invalidVals[cacheKey][value]) {
+		if (cacheKey in invalidVals && value in invalidVals[cacheKey]) {
 			responseMessage.message = invalidVals[cacheKey][value];
 			return false;
 		}
