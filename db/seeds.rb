@@ -30,26 +30,49 @@ Terms.create(terms: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. D
 ############################
 # Contact Instruments
 ############################
-hand = Contact::Instrument.new(name: :hand, has_fluids: false)
+hand = Contact::Instrument.new(
+	name: :hand,
+	has_fluids: false,
+	can_clean: true
+)
 hand.upsert
-external_genitals = Contact::Instrument.new(name: :external_genitals, user_override: :external_name, conditions: {
-	can_be_penetrated_by: [:can_penetrate], can_penetrate: [:can_penetrate], can_be_sucked_by_self: [:can_penetrate]
-})
+fingers = Contact::Instrument.new(
+	name: :fingers,
+	has_fluids: false,
+	can_clean: false,
+	alias_of: hand
+)
+fingers.upsert
+
+external_genitals = Contact::Instrument.new(
+	name: :external_genitals,
+	user_override: :external_name,
+	conditions: {
+		can_be_penetrated_by: [:can_penetrate],
+		can_penetrate: [:can_penetrate],
+		can_be_sucked_by_self: [:can_penetrate],
+		can_be_licked_by_self: [:can_penetrate]
+	}
+)
 external_genitals.upsert
-internal_genitals = Contact::Instrument.new(name: :internal_genitals, user_override: :internal_name, conditions: {
-	all: [:internal_name]
-})
+
+internal_genitals = Contact::Instrument.new(
+	name: :internal_genitals,
+	user_override: :internal_name,
+	conditions: {
+		all: [:internal_name]
+	}
+)
 internal_genitals.upsert
+
 anus = Contact::Instrument.new(name: :anus, user_override: :anus_name)
 anus.upsert
 mouth = Contact::Instrument.new(name: :mouth)
 mouth.upsert
-toy = Contact::Instrument.new(name: :toy, has_fluids: false)
-toy.upsert
 tongue = Contact::Instrument.new(name: :tongue, alias_of: mouth)
 tongue.upsert
-fingers = Contact::Instrument.new(name: :fingers, has_fluids: false, alias_of: hand)
-fingers.upsert
+toy = Contact::Instrument.new(name: :toy, has_fluids: false, can_clean: true)
+toy.upsert
 
 ############################
 # Possible Contacts
