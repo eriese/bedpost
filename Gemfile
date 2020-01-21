@@ -107,8 +107,8 @@ group :test do
 end
 
 group :production do
-	gem 'redis'
 	gem 'hiredis'
+	gem 'redis'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
