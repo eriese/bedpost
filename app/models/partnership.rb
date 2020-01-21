@@ -34,7 +34,7 @@ class Partnership
 	def uid=(value)
 		return unless value.present?
 		value.downcase!
-		ptnr = UserProfile.where({uid: value}).first
+		ptnr = UserProfile.collation(locale: I18n.default_locale.to_s, strength: 2).where({uid: value}).first
 		self.partner = ptnr if (ptnr && ptnr != user_profile)
 		@uid = value if ptnr || self.partner_id.nil?
 	end

@@ -43,7 +43,7 @@ class UserProfile < Profile
 	field :tours,                  type: Set
 
 	index({ email: 1 }, unique: true, sparse: true)
-	index({ uid: 1 }, unique: true, sparse: true)
+	index({ uid: 1 }, unique: true, sparse: true, collation: { locale: I18n.default_locale.to_s, strength: 2 } )
 
 	embeds_many :partnerships, cascade_callbacks: true
 
