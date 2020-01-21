@@ -156,12 +156,27 @@ module EncountersHelper
 		person == :user ? current_user_profile : @partner
 	end
 
-	def display_risk(risk_level, risk_list)
+	def display_risk(risk_level, risk_hash)
+		risk_list = risk_hash
+		caveats = []
+		if risk_hash.is_a? Hash
+			risk_list = risk_hash[:diagnoses]
+			caveats = risk_hash[:caveats]
+		end
+
+		join_delimeter = t('join_delimeter')
+
 		trans = t(
 			'.risk_line_html',
-			diagnosis: risk_list.join(t('join_delimeter')),
+			diagnosis: safe_join(risk_list, join_delimeter),
 			level: t('diagnosis.transmission_risk.risk_level', count: risk_level)
 		)
+
+		if caveats.any?
+			caveats_joined = safe_join(caveats.uniq, join_delimeter)
+			trans = t('.risk_with_caveats_line_html', line: trans, caveats: caveats_joined)
+		end
+
 		content_tag(:li, trans, class: "risk-#{risk_level}")
 	end
 
@@ -173,16 +188,33 @@ module EncountersHelper
 				end
 			end]
 		else
-			risk_groups.each_with_object([]) { |(r, lst), a| a << display_risk(r, lst) }
+			risk_groups.each_with_object([]) do |(r, hsh), a|
+				a << display_risk(r, hsh)
+			end
 		end
 	end
 
 	def group_risks_by_diagnosis(obj)
 		obj.risks.each_with_object({}) do |(k, v), o|
-			next if v == Diagnosis::TransmissionRisk::NO_RISK
+			lvl, caveats = v
+			next if lvl == Diagnosis::TransmissionRisk::NO_RISK
 
-			o[v] ||= []
-			o[v] << t(k, scope: 'diagnosis.name_casual')
+			caveats_translated = []
+			caveats_keys = []
+			if caveats.present?
+				caveats.each do |c|
+					caveat_t = t(c, scope: 'diagnosis.caveat').html_safe
+					caveats_translated << caveat_t
+					caveats_keys << caveat_t[5]
+				end
+			end
+
+			diagnosis_t = t(k, scope: 'diagnosis.name_casual')
+			diagnosis_t = t('.caveat_marks_html', marks: caveats_keys.join, diagnosis: diagnosis_t) if caveats_keys.any?
+
+			o[lvl] ||= { diagnoses: [], caveats: [] }
+			o[lvl][:diagnoses] << diagnosis_t
+			o[lvl][:caveats] << caveats_translated if caveats_translated.any?
 		end
 	end
 end

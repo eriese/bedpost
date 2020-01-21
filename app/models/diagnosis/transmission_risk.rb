@@ -15,7 +15,11 @@ class Diagnosis::TransmissionRisk
 	field :risk_to_object, type: Integer
 	field :risk_to_self, type: Integer, default: NO_RISK
 	field :barriers_effective, type: Boolean, default: true
+
+	# translation keys to apply when showing this risk
 	field :caveats, type: Array
+
+	# conditions for the risk to apply. if the condition is not met, none of the risks in this instance apply
 	field :subject_conditions, type: Array
 	field :object_conditions, type: Array
 	belongs_to :possible_contact, class_name: 'PossibleContact'
@@ -31,5 +35,15 @@ class Diagnosis::TransmissionRisk
 		# TODO: risk bumping should be more sophisticated
 		lvl += 1 if bump_risk && lvl < HIGH
 		lvl
+	end
+
+	def applies_to_contact?(subject_person, object_person)
+		return false if subject_conditions.present? &&
+			subject_conditions.any? { |c| !subject_person.call(c) }
+
+		return false if object_conditions.present? &&
+			object_conditions.any? { |c| !object_person.call(c) }
+
+		true
 	end
 end

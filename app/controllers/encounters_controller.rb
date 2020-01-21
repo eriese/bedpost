@@ -19,6 +19,7 @@ class EncountersController < ApplicationController
 	end
 
 	def show
+		return unless set_partnership(encounters_path)
 		@force = params[:force]
 		Encounter::RiskCalculator.new(@encounter).track(force: @force)
 		respond_to do |format|
