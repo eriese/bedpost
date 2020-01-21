@@ -8,8 +8,20 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 		allow(Diagnosis::TransmissionRisk).to receive(:grouped_by) {Hash.new { |hsh, key| hsh[key] = [build_stubbed(:diagnosis_transmission_risk, {possible_contact_id: key})] }}
 	end
 
+	def stub_encounter
+		@user = build_stubbed(
+			:user_profile,
+			partnerships: [build_stubbed(:partnership, partner: build_stubbed(:profile), encounters: [build(:encounter)]
+			)]
+		)
+		@user.partnerships.first.encounters.first
+	end
+
+
 	it 'creates a map showing the highest transmission risk of the encounter for each diagnosis' do
-		calc = Encounter::RiskCalculator.new(Encounter.new)
+		encounter = stub_encounter
+
+		calc = Encounter::RiskCalculator.new(encounter)
 		risks = calc.instance_variable_get(:@risks)
 
 		contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1"})
@@ -34,7 +46,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 		describe 'with an effective barrier' do
 			it 'returns negligible risk' do
 				contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1", barriers: ["fresh"]})
-				encounter = build(:encounter)
+				encounter = stub_encounter
 				encounter.contacts = [contact1]
 				calc = Encounter::RiskCalculator.new(encounter)
 
@@ -42,7 +54,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 
 				calc.track_contact(contact1)
 
-				expect(contact1.risks[:hpv]).to eq Diagnosis::TransmissionRisk::NEGLIGIBLE
+				expect(contact1.risks[:hpv][0]).to eq Diagnosis::TransmissionRisk::NEGLIGIBLE
 			end
 		end
 	end
@@ -53,16 +65,14 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 			@contact2 = build_stubbed(:encounter_contact, {possible_contact_id: "contact2"})
 			@contact3 = build_stubbed(:encounter_contact, {possible_contact_id: "contact3", barriers: ["fresh"]})
 
-			@ship = build_stubbed(:partnership)
-			@encounter = build_stubbed(:encounter)
-			@ship.encounters = [@encounter]
+			@encounter = stub_encounter
 			@encounter.contacts = [@contact1, @contact2, @contact3]
 			@calc = Encounter::RiskCalculator.new(@encounter)
 			@calc.instance_variable_get(:@diagnoses)[:hpv]
 		end
 
 		it 'tracks all contacts in an encounter' do
-			allow(@ship).to receive(:risk_mitigator) {0}
+			allow(@encounter.partnership).to receive(:risk_mitigator) {0}
 			@calc.track
 
 			risks = @calc.instance_variable_get(:@risks)
@@ -73,7 +83,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 
 			expected = [risk1.risk_to_subject, risk2.risk_to_subject].max
 			expect(@calc.risk_map[risk1.diagnosis_id]).to eq expected
-			expect(@contact3.risks[:hpv]).to eq Diagnosis::TransmissionRisk::NEGLIGIBLE
+			expect(@contact3.risks[:hpv][0]).to eq Diagnosis::TransmissionRisk::NEGLIGIBLE
 		end
 
 		context 'risk mitigation' do
@@ -86,7 +96,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 					risk1.risk_to_subject = 3
 
 					@calc.track
-					expect(@contact1.risks[risk1.diagnosis_id]).to eq(risk1.risk_to_subject - mitigation)
+					expect(@contact1.risks[risk1.diagnosis_id][0]).to eq(risk1.risk_to_subject - mitigation)
 				end
 
 				it 'does not mitigate below negligible' do
@@ -97,39 +107,39 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 					risk1.risk_to_subject = Diagnosis::TransmissionRisk::NEGLIGIBLE
 
 					@calc.track
-					expect(@contact1.risks[risk1.diagnosis_id]).to eq(Diagnosis::TransmissionRisk::NEGLIGIBLE)
+					expect(@contact1.risks[risk1.diagnosis_id][0]).to eq(Diagnosis::TransmissionRisk::NEGLIGIBLE)
 				end
 			end
 
 			context 'when calculating risk-to-partner' do
 				it 'mitigates risk by the user risk mitgator' do
 					mitigation = 1
-					allow(@encounter.partnership).to receive(:user_profile) {double("UserProfile", risk_mitigator: mitigation)}
+					allow(@user).to receive(:risk_mitigator) {mitigation}
 					risks = @calc.instance_variable_get(:@risks)
 					risk1 = risks[@contact1.possible_contact_id][0]
 					risk1.risk_to_object = 3
 
 					@calc.track(:partner)
-					expect(@contact1.risks[risk1.diagnosis_id]).to eq(risk1.risk_to_object - mitigation)
+					expect(@contact1.risks[risk1.diagnosis_id][0]).to eq(risk1.risk_to_object - mitigation)
 				end
 			end
 
 				it 'does not mitigate below no risk' do
 					mitigation = 2
-					allow(@encounter.partnership).to receive(:user_profile) {double("UserProfile", risk_mitigator: mitigation)}
+					allow(@user).to receive(:risk_mitigator) {mitigation}
 					risks = @calc.instance_variable_get(:@risks)
 					risk1 = risks[@contact1.possible_contact_id][0]
 					risk1.risk_to_object = Diagnosis::TransmissionRisk::NO_RISK + 1
 
 					@calc.track(:partner)
-					expect(@contact1.risks[risk1.diagnosis_id]).to eq(Diagnosis::TransmissionRisk::NO_RISK)
+					expect(@contact1.risks[risk1.diagnosis_id][0]).to eq(Diagnosis::TransmissionRisk::NO_RISK)
 				end
 		end
 	end
 
 	describe '#schedule' do
 		before :each do
-			@encounter = build_stubbed(:encounter)
+			@encounter = stub_encounter
 		end
 
 		it 'returns a hash with best test dates as keys and arrays of diagnoses as values' do
@@ -191,7 +201,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 
 	describe '#contact_keys' do
 		it 'uses the alias name rather than the name of the instruments as the second key' do
-			calc = Encounter::RiskCalculator.new(Encounter.new)
+			calc = Encounter::RiskCalculator.new(stub_encounter)
 			instruments = calc.instance_variable_get(:@instruments)
 			instruments[:fingers].alias_of_id = :hand
 

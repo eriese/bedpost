@@ -53,7 +53,7 @@ class Contact::ContactType
 	},{
 		key: :touched,
 		inst_key: :can_touch,
-		inverse_inst: :can_touch,
+		inverse_inst: :can_touch
 	},{
 		key: :sucked,
 		inst_key: :can_suck,
@@ -63,6 +63,14 @@ class Contact::ContactType
 		key: :fisted,
 		inst_key: :can_fist,
 		inverse_inst: :can_be_fisted_by
+	},{
+		key: :kissed,
+		inst_key: :can_kiss,
+		inverse_inst: :can_be_kissed_by
+	},{
+		key: :licked,
+		inst_key: :can_lick,
+		inverse_inst: :can_be_licked_by
 	}]
 
 	TYPES = Hash[BASES.map {|r| [r[:key], new(r)] }]
