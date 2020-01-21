@@ -18,6 +18,7 @@ Layout/Tab:
 Layout/IndentationWidth:
   Width: 1
 Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
   IndentationWidth: 1
 Metrics/MethodLength:
   Max: 15
