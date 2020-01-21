@@ -110,6 +110,7 @@ export const validateWithServer = (path, url) => {
 
 			// cache it as an invalid value
 			invalidVals[cacheKey] = invalidVals[cacheKey] || {};
+
 			invalidVals[cacheKey][value] = responseMessage.message;
 
 			// the field is invalid
