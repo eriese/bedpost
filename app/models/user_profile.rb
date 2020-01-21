@@ -2,7 +2,7 @@ class UserProfile < Profile
 	# Include default devise modules. Others available are:
 	# :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
 	devise :database_authenticatable, :registerable,
-				 :recoverable, :validatable, :confirmable,
+				 :recoverable, :validatable,
 				 :lockable, :timeoutable, :trackable
 
 	## Database authenticatable
@@ -21,9 +21,9 @@ class UserProfile < Profile
 	field :last_sign_in_ip,        type: String
 
 	## Confirmable
-	field :confirmation_token,     type: String
-	field :confirmed_at,           type: Time
-	field :confirmation_sent_at,   type: Time
+	# field :confirmation_token,     type: String
+	# field :confirmed_at,           type: Time
+	# field :confirmation_sent_at,   type: Time
 	# field :unconfirmed_email,    type: String # Only if using reconfirmable
 
 	## Lockable
