@@ -5,5 +5,5 @@
 		<h1 class="h1--is-form-title"><%= local_assigns.fetch(:header_text) { t_action('.title') } %></h1>
 	<% end %>
 	<%= yield %>
-	<%= link_to(t(".back"), back_path, class: "cta cta--is-back-btn") if local_assigns.has_key? :back_path %>
+	<%= link_to(t(".back"), back_path, class: "cta cta--is-back-btn") if local_assigns[:back_path].present? %>
 </div>

@@ -1,4 +1,4 @@
-<%= render 'forms/basic_form', skip_header: true, back_path: :back do %>
+<%= render 'forms/basic_form', skip_header: true, back_path: resource.set_up? ? :back : nil do %>
 	<%= vuelidate_form_with model: resource, html: {class: "centered", method: :put}, vue: {name: resource_name}, url: registration_path(resource_name) do |f| %>
 		<%= content_tag(:h1, t_action(".account_settings"), class: 'h1--is-form-title') if resource.set_up?%>
 		<%= render  "profiles/fields", f: f, profile: resource, show_name: resource.set_up? do |p| %>
