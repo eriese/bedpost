@@ -127,21 +127,27 @@
 	}
 
 	.no-js & {
+		&__menu {
+			display: block;
+			padding-top: 0rem;
+			position: static;
+			height: auto;
+
+			&-inner {
+				width: 100%;
+			}
+		}
 		@include media(('>tablet')) {
 			position: fixed;
+			height: 100%;
+
+			&__menu, &__menu-inner{
+				height: 100%;
+			}
 		}
 
 		@include media(('<=tablet')) {
-			&__menu {
-				display: block;
-				padding-top: 0rem;
-				position: static;
-				height: auto;
 
-				&-inner {
-					width: 100%;
-				}
-			}
 		}
 	}
 }
