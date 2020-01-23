@@ -229,6 +229,11 @@ class UserProfile < Profile
 		where('partnerships.partner_id' => profile_id)
 	end
 
+	def self.with_uid(uid)
+		collation(locale: I18n.default_locale.to_s, strength: 2).
+			where(uid: uid).first
+	end
+
 	private
 
 	def generate_uid
