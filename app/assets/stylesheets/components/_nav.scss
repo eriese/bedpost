@@ -8,8 +8,9 @@
 		cursor: pointer;
 		min-width: unset;
 		background-color: transparent;
-		bottom: $spacing-small;
-		left: $spacing-default;
+		bottom: 0.35rem;
+		margin-left: 0.75rem;
+		left: $spacing-tiny;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
@@ -53,7 +54,7 @@
 		box-sizing: border-box;
 		display: none;
 		top: 0;
-		padding-top: calc(100% + #{$spacing-tiny});
+		padding-top: 100%;
 	}
 
 	&__menu-inner {

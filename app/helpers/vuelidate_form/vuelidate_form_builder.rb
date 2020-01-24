@@ -102,7 +102,6 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def submit(value = nil, options = {})
-		binding.pry
 		@template.content_tag(:div, super, {class: 'buttons'})
 	end
 

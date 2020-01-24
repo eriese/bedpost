@@ -1,6 +1,8 @@
 module ApplicationHelper
 	include VueHelper
 
+	THEME_REGEX = /(^|\s)is-(dark|light)(-contrast)?(\s|$)/
+
 	private
 	def self.url_helpers
 		Rails.application.routes.url_helpers
@@ -34,12 +36,16 @@ module ApplicationHelper
 	def body_class(clss = nil)
 		if clss.nil?
 			content = content_for :body_class
-			body_class('is-light') unless content.match(/(^|\s)is-(dark|light)(-contrast)?(\s|$)/)
+			body_class('is-light') unless content.match(THEME_REGEX)
 			return content_for :body_class
 		end
 
 		content_for(:body_class, ' ') if content_for? :body_class
 		content_for :body_class, clss
+	end
+
+	def theme
+		body_class.match(THEME_REGEX)[0].strip
 	end
 
 	def analytics_id

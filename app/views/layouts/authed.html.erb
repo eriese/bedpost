@@ -3,9 +3,11 @@
 	<%= render "nav" %>
 <% end %>
 
-<% content_for :header  do%>
+<% content_for :header do %>
 	<header class="header--is-small header--has-nav <%= content_for :header_class %>">
-		<%= link_to 'BedPost', root_path, id: "logo"%>
+		<%= link_to root_path, id: "logo" do %>
+			<%= image_tag "logo/#{theme}.png", alt: "BedPost" %>
+		<% end %>
 		<button type="button" @click="loadTour" v-if="hasTour && tourRuns > 0" :disabled="tourRunning" class="cta cta--tourguide cta--is-secondary js-only" title="<%= t("guide_button") %>">?</button>
 	</header>
 <% end %>

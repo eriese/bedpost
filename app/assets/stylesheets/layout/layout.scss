@@ -121,6 +121,12 @@ p.description {
 
 #logo {
 	text-decoration: none;
+
+	img {
+		vertical-align: middle;
+		margin: $spacing-small;
+		height: 2.5rem;
+	}
 }
 
 .with-js noscript {
