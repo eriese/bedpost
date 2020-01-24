@@ -1,6 +1,6 @@
 .main-nav {
 	position: absolute;
-	left: 0rem;
+	right: 0rem;
 	top: 0rem;
 	z-index: 100;
 
@@ -9,14 +9,19 @@
 		min-width: unset;
 		background-color: transparent;
 		bottom: 0.35rem;
-		margin-left: 0.75rem;
-		left: $spacing-tiny;
+		margin-right: 0.75rem;
+		right: $spacing-tiny;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
 		padding: 0rem;
 		border: none;
 		@include themed(border-color, "background-contrast");
+
+		@include media($mobile) {
+			margin-right: 0.25rem;
+			bottom: 0.6rem;
+		}
 		body.has-form.is-light & {
 			border-color: theme-light-contrast('background-contrast');
 		}
@@ -49,6 +54,7 @@
 		overflow: hidden;
 		position: absolute;
 		margin: 0rem;
+		right: 0;
 		z-index: 1;
 		height: 100vh;
 		box-sizing: border-box;
@@ -59,7 +65,7 @@
 
 	&__menu-inner {
 		width: $nav-width;
-		border-right: 1px solid;
+		border-left: 1px solid;
 		height: 100%;
 		box-sizing: border-box;
 		display: flex;

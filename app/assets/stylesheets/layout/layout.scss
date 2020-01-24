@@ -68,7 +68,7 @@ h2 {
 }
 
 header {
-	text-align: center;
+	text-align: left;
 	font-family: $font-header;
 	font-size: rem(55px);
 	position: relative;
@@ -126,6 +126,10 @@ p.description {
 		vertical-align: middle;
 		margin: $spacing-small;
 		height: 2.5rem;
+
+		@include media($mobile) {
+			height: 2rem;
+		}
 	}
 }
 

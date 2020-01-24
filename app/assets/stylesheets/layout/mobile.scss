@@ -1,4 +1,4 @@
-@include media ("<tablet" ("retina", "retina2x", "retina3x")) {
+@include media($mobile) {
 	.no-js {
 		display: flex;
 		flex-wrap: wrap;
