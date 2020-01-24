@@ -158,8 +158,8 @@ RSpec.describe EncountersHelper, type: :helper do
 				expect(@root).to have_selector('li', count: 3)
 			end
 
-			it 'groups diagnoses of the same risk' do
-				risk_list = %i[hsv hiv].map { |d| t(d, scope: 'diagnosis.name_casual') }
+			it 'groups and sorts diagnoses of the same risk' do
+				risk_list = %i[hsv hiv].sort.map { |d| t(d, scope: 'diagnosis.name_casual') }
 				expected_text = risk_list.join(t 'join_delimeter')
 				expect(@root).to have_selector("li.risk-#{Diagnosis::TransmissionRisk::MODERATE} .diagnoses", text: expected_text)
 			end
