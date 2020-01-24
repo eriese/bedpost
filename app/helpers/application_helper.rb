@@ -45,7 +45,8 @@ module ApplicationHelper
 	end
 
 	def theme
-		body_class.match(THEME_REGEX)[0].strip
+		# TODO: change this to the real regex once we have logos
+		body_class.match(/(^|\s)is-(dark|light)/)[0].strip
 	end
 
 	def analytics_id
