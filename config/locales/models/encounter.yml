@@ -93,6 +93,7 @@ en:
     form:
       contacts_title: We want the details!
       contacts_desc: Our logic works best if you tell us things in the order they happened, but we know sometimes a lot is going on at once.
+      submit: Finish
   encounter_whos:
     new:
       title: Cool!

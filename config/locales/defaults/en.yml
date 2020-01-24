@@ -74,12 +74,19 @@ en:
     tooltip:
       terms:
         opt_in_group: We will never sell your data to advertisers, but it can help public health researchers learn more about about STI transmission factors, and we think that's exciting.
+    arrow_button:
+      caret:
+        left: Go Back
+        right: Continue
   terms:
     show:
       title:
         tou: Our terms of use
         privacy: Our privacy policy
       new: These terms have changed since you last accepted them. Please review the new terms and accept.
+  application:
+    wizard:
+      submit: Finish
   show_password: show password
   hide_password: hide password
   join_delimeter: ', '

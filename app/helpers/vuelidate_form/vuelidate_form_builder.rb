@@ -102,8 +102,10 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def submit(value = nil, options = {})
+		binding.pry
 		@template.content_tag(:div, super, {class: 'buttons'})
 	end
+
 	def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
 		add_to_class(args, "inline", :field_class) unless args[:inline] == false
 		args[:label_last] = true unless args.has_key? :label_last
