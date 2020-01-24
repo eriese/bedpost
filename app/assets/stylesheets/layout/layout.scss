@@ -61,6 +61,10 @@ h2 {
 	&--has-no-top-margin {
 		margin-top: 0;
 	}
+
+	&--has-half-margin {
+		margin: 0.5rem 0;
+	}
 }
 
 header {
@@ -278,7 +282,7 @@ p.description {
 }
 
 .desc {
-	h1 + &, h2 + &, h3 + & {
+	h1 + &, h2 + &, h3 + &, h4 + &, {
 		line-height: 1rem;
 		margin-top: 0rem;
 		margin-bottom: 1rem;

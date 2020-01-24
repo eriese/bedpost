@@ -32,3 +32,14 @@
 		margin: -3rem 0rem -3.5rem 0rem;
 	}
 }
+
+.partnership-show {
+	&__field {
+		font-size: 1rem;
+		@include themed(color, 'cta-bg-light');
+	}
+
+	&__response {
+		padding: 0 1rem;
+	}
+}
