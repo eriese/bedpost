@@ -49,6 +49,8 @@ Rails.application.routes.draw do
 		post 'beta', to: 'beta#create'
 	end
 
+	get '*static', to: 'static#static_or_404'
+
 	root to: redirect('/signup')
 	# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

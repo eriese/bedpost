@@ -251,6 +251,10 @@ p.description {
 			flex-grow: 1;
 		}
 	}
+
+	&--has-static-info {
+		padding: 0 $spacing-medium;
+	}
 }
 
 .centered-container {
