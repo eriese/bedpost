@@ -38,9 +38,7 @@ export default {
 		}
 	},
 	mounted() {
-		if (this.startOpen) {
-			this.isOpen = true;
-		}
+		this.isOpen = !!this.startOpen;
 	},
 	render(createElement) {
 		let vm = this;
