@@ -1,0 +1,22 @@
+.faq {
+	&__nav {
+		&-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+		}
+		&-section {
+			font-size: 1rem;
+			font-weight: bold;
+		}
+
+		&-arrow {
+			height: 1.25rem;
+		}
+
+		.dropdown-content {
+			flex-basis: 100%;
+		}
+	}
+}

@@ -1,15 +1,3 @@
-<template>
-	<div class="dropdown" :class="{'title-as-button': titleButton, 'dropdown--is-open': isOpen, 'dropdown--is-closed': closing || !isOpen}">
-		<span class="dropdown-title" @click="toggle(true)"><slot name="title"></slot></span>
-		<span class="dropdown-button" @click="toggle(false)">
-			<slot name="button" v-bind="{isOpen}"><arrow-button :class="$attrs['arrow-class']" :direction="isOpen ? 'up' : 'down'"></arrow-button></slot>
-		</span>
-		<div v-show="isOpen" ref="content" class="dropdown-content">
-			<slot></slot>
-		</div>
-	</div>
-</template>
-
 <script>
 import { gsap } from 'gsap';
 
@@ -25,7 +13,11 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		startOpen: Boolean
+		startOpen: Boolean,
+		selector: {
+			type: String,
+			default: 'div'
+		}
 	},
 	methods: {
 		toggle(isTitle) {
@@ -46,9 +38,53 @@ export default {
 		}
 	},
 	mounted() {
-		if (this.startOpen) {
-			this.isOpen = true;
-		}
+		this.isOpen = !!this.startOpen;
+	},
+	render(createElement) {
+		let vm = this;
+
+		const buttonDefault = (scope) => createElement('arrow-button',{
+			class: vm.$attrs['arrow-class'],
+			props: {
+				direction: scope.isOpen ? 'up' : 'down'
+			}
+		});
+
+		return createElement(vm.selector, {
+			class: {
+				'title-as-button': vm.titleButton,
+				'dropdown--is-open': vm.isOpen,
+				'dropdown--is-closed': vm.closing || !vm.isOpen,
+				'dropdown': true
+			},
+		}, [
+			createElement('span', {
+				on: {
+					click: () => {
+						vm.toggle(true);
+					}
+				},
+				class: ['dropdown-title'],
+				slot: 'title'
+			}, vm.$slots.title),
+			createElement('span', {
+				class: ['dropdown-button'],
+				on: {
+					click: () => {
+						vm.toggle(false);
+					}
+				},
+			}, [
+				(vm.$scopedSlots.button || buttonDefault)({isOpen: vm.isOpen})
+			]),
+			createElement('div', {
+				style: {
+					display: vm.isOpen ? '' : 'none',
+				},
+				ref: 'content',
+				class: ['dropdown-content'],
+			}, [vm.$slots.default])
+		]);
 	}
 };
 </script>

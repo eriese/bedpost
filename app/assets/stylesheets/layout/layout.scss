@@ -241,6 +241,10 @@ p.description {
 		}
 	}
 
+	&--has-static-info {
+		padding: 0 $spacing-medium;
+	}
+
 	&--is-card {
 		border-radius: $default-border-radius;
 		padding: $spacing-medium;
