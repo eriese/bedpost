@@ -1,5 +1,6 @@
-<%= render 'forms/basic_form', header_text: t('faq.title') do %>
+<%= render 'forms/basic_form', skip_header: true, body_class: 'is-flesh', back_path: :back do %>
 	<div class="faq container--has-static-info">
+		<h1><%= t('faq.title') %></h1>
 		<% t('faq.sections', cascade: {allow_hash: true}).each do |section_key, section|%>
 			<nav class="faq__nav">
 				<ul class="--is-unstyled">
