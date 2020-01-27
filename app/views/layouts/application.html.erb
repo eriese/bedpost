@@ -87,7 +87,7 @@
 			<%= yield :nav%>
 			<header class="<%= content_for :header_class %>">
 				<%= link_to root_path, id: "logo" do %>
-					<%= image_tag "logo/#{theme}.png", alt: "BedPost" %>
+					<%= image_tag "logo/#{logo_path}.png", alt: "BedPost" %>
 				<% end %>
 				<%= yield :header %>
 			</header>

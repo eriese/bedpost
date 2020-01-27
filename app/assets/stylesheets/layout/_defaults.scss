@@ -129,25 +129,69 @@ $colors-dark-contrast: (
 	"form-background": map-get($colors-light, "cta-bg"),
 );
 
+$colors-flesh: (
+	"cta-text": #FFD6CC,
+	"cta-bg": #8365B2,
+	"cta-bg-light": #AF8B82,
+	"cta-bg-form": #7A405E,
+	"link": #8365B2,
+	"link-light": #AF8B82,
+	"link-light-light": #7A405E,
+	"shadow": rgba($color-white, 0.3),
+	"h1": #433060,
+	"h2": #7A405E,
+	"background": #FFD6CC,
+	"background-contrast": $color-white,
+	"text": #7A405E,
+	"input-border": #8365B2,
+	"input-border-focus": #AF8B82,
+	"form-background": #FFD6CC
+);
+
+$colors-flesh-contrast: (
+	"cta-text": $color-white,
+	"cta-bg": #8365B2,
+	"cta-bg-light": #AF8B82,
+	"cta-bg-form": #7A405E,
+	"link": #8365B2,
+	"link-light": #AF8B82,
+	"link-light-light": #7A405E,
+	"shadow": rgba($color-white, 0.3),
+	"h1": #433060,
+	"h2": #7A405E,
+	"background": $color-white,
+	"background-contrast": #FFD6CC,
+	"text": #7A405E,
+	"input-border": #8365B2,
+	"input-border-focus": #AF8B82,
+	"form-background": #FFD6CC
+);
+
 $themes: (
 	"light": $colors-light,
 	"dark": $colors-dark,
 	"light-contrast": $colors-light-contrast,
-	"dark-contrast": $colors-dark-contrast
+	"dark-contrast": $colors-dark-contrast,
+	"flesh": $colors-flesh,
+	"flesh-contrast": $colors-flesh-contrast
 );
 
 $themes-inverse: (
 	"light": $colors-dark,
 	"dark": $colors-light,
 	"light-contrast": $colors-dark-contrast,
-	"dark-contrast": $colors-light-contrast
+	"dark-contrast": $colors-light-contrast,
+	"flesh": $colors-flesh-contrast,
+	"flesh-contrast": $colors-flesh
 );
 
 $themes-contrast: (
 	"light": $colors-light-contrast,
 	"dark": $colors-dark-contrast,
 	"light-contrast": $colors-light,
-	"dark-contrast": $colors-dark
+	"dark-contrast": $colors-dark,
+	"flesh": $colors-flesh-contrast,
+	"flesh-contrast": $colors-flesh
 );
 
 :export {

@@ -8,11 +8,15 @@ html, body, #vue-container {
 	font-family: $text-font;
 }
 
-body {
+body, body.has-form {
 	@each $theme, $theme-colors in $themes {
 		&.is-#{$theme} {
 			color: map-get($theme-colors, "text");
 			background-color: map-get($theme-colors, "background");
+
+			&.has-form {
+				background-color: map-get($theme-colors, "form-background");
+			}
 		}
 	}
 }
@@ -23,10 +27,6 @@ body.is-light-contrast, body.is-dark-contrast {
 	.container--has-contrast-background {
 		font-weight: normal;
 	}
-}
-
-body.has-form {
-	background-color: theme-light("form-background");
 }
 
 body.vertical-center, .body--has-footer {
@@ -276,23 +276,25 @@ p.description {
 		@include themed(border-color, "background-contrast");
 	}
 
-	&--has-white-background {
-		background-color: $color-white;
-	}
+	@include themed-styles using ($theme, $theme-colors) {
+		&--has-white-background {
+			background-color: $color-white;
+		}
 
-	&--has-gray-background {
-		background-color: theme-light("cta-bg");
-		color: $color-white;
-	}
+		&--has-gray-background {
+			background-color: theme-light("cta-bg");
+			color: $color-white;
+		}
 
-	&--has-dark-gray-background {
-		background-color: theme-light("h1");
-		color: $color-white;
-	}
+		&--has-dark-gray-background {
+			background-color: theme-light("h1");
+			color: $color-white;
+		}
 
-	&--has-dark-background {
-		background-color: theme-dark("background");
-		color: $color-white;
+		&--has-dark-background {
+			background-color: theme-dark("background");
+			color: $color-white;
+		}
 	}
 }
 

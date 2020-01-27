@@ -1,7 +1,7 @@
 module ApplicationHelper
 	include VueHelper
 
-	THEME_REGEX = /(^|\s)is-(dark|light)(-contrast)?(\s|$)/
+	THEME_REGEX = /(^|\s)is-(dark|light|flesh)(-contrast)?(\s|$)/
 
 	private
 	def self.url_helpers
@@ -44,9 +44,15 @@ module ApplicationHelper
 		content_for :body_class, clss
 	end
 
-	def theme
+	def logo_path
 		# TODO: change this to the real regex once we have logos
-		body_class.match(THEME_REGEX)[0].strip
+		theme = body_class.match(/(^|\s)is-(dark|light)(\s|$)/)
+		return theme[0].strip if theme.present?
+
+		if body_class.match?(/(^|\s)is-(dark|light)-contrast(\s|$)/)
+			theme = 'contrast'
+		end
+		(theme || 'is-light').strip
 	end
 
 	def analytics_id

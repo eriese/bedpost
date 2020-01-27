@@ -77,6 +77,10 @@
 			background-color: theme-light-contrast('background-contrast');
 			color: theme-light-contrast("background");
 		}
+
+		body.is-flesh & {
+			background-color: map-get($colors-flesh, 'cta-bg-light');
+		}
 	}
 
 	&__list {
