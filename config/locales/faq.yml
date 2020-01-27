@@ -1,0 +1,29 @@
+en:
+  faq:
+    title: FAQ
+    sections:
+      setup:
+        title: Setup
+        questions:
+          starting:
+            question: Where do I start?
+            answer: Lorem Ipsum
+      help:
+        title: Help!
+        questions:
+          reset:
+            question: I forgot my password. How do I reset it?
+            answer: lorem
+      basics:
+        title: BedPost Basics
+        questions:
+          partner_difference:
+            question: My partner and I both use BedPost, why do our encounter reviews say different things?
+            answer: Lorem
+      talk:
+        title: Talk to Us
+        questions:
+          social:
+            question: Where can I find you on the internet?
+            answer: lorem
+

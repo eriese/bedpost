@@ -20,12 +20,12 @@ en:
         external_name: What's a fun word they call their external genitals?
         internal_name: What's a fun word they call their vagina?
         pronoun_id: What pronouns do they use?
-        password_confirmation: Re-type your password
         uid: Partnering ID
         can_penetrate:
           'true': 'Yes'
           'false': 'No'
         can_penetrate_group: Can their external genitals be used for penetration?
+        name: What's their name?
     tooltip:
       profile:
         name: We really only care about their first name, but it's up to you.

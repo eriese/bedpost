@@ -6,7 +6,8 @@ feature 'User adds uid to existing partnership', :slow do
 	end
 
 	scenario 'the user is no longer given the option to edit the partner profile' do
-		@user = create(:user_profile)
+		allow(Terms).to receive(:newest) { double('Terms', updated_at: DateTime.now - 1.day)}
+		@user = create(:user_profile, first_time: false, terms: {tou: DateTime.now, privacy: DateTime.now})
 		@partner1 = create(:profile, name: 'Annie')
 		@partner2 = create(:user_profile, name: 'Doug')
 		ship = build(:partnership, partner: @partner1)

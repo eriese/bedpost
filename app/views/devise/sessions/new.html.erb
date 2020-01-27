@@ -1,14 +1,14 @@
-<div class="login">
-  <h1>Log in</h1>
-  <%= vuelidate_form_with model: resource, as: resource_name, url: session_path(resource_name), class: "big centered", require_all: true do |f| %>
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-    <%= f.password_field :password, autocomplete: "current-password", show_toggle: true %>
-    <% if devise_mapping.rememberable? %>
-      <%= f.check_box :remember_me %>
-    <% end %>
-    <%= f.submit "Log in" %>
-    <div class="additional">
-      <%= render "devise/shared/links" %>
-    </div>
-  <% end %>
+<div class="login column">
+	<h1><%= t('.title') %></h1>
+	<%= vuelidate_form_with model: resource, as: resource_name, url: session_path(resource_name), class: "big centered", require_all: true, name: 'login', vue: {':analytics-event': "['login', {method: 'password'}]"} do |f| %>
+		<%= f.email_field :email, autofocus: true, autocomplete: "email", skip_validations: [:uniqueness] %>
+		<%= f.password_field :password, autocomplete: "current-password", label: 'registration.password', show_toggle: true %>
+		<% if devise_mapping.rememberable? %>
+			<%= f.check_box :remember_me %>
+			<% end %>
+		<%= f.submit t('.submit'), :class => "cta" %>
+		<div class="additional">
+			<%= render "devise/shared/links" %>
+		</div>
+	<% end %>
 </div>

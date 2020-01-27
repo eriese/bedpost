@@ -1,0 +1,39 @@
+@import 'tippy.js';
+
+$tooltip-arrow-size: 0.5rem;
+
+.tippy-arrow {
+	border-width: $tooltip-arrow-size;
+
+	@include tooltip-arrow('.tippy-popper');
+}
+
+.tippy-tooltip {
+	&.light-theme {
+		@include tooltip;
+	}
+	&.dark-theme {
+		@include tooltip(theme-dark("h1"), $colors-dark);
+	}
+	&.bright-theme {
+		@include tooltip(theme-dark("cta-bg-light"), $colors-dark);
+	}
+}
+
+.tippy-popper {
+	z-index: 3 !important;
+}
+
+aside.tippy-popper {
+	margin: $spacing-small $spacing-tiny;
+
+	&[x-placement] .tippy-arrow {
+		right: calc(50% - #{2 * $tooltip-arrow-size});
+	}
+}
+
+.no-js tooltip {
+	@include tooltip;
+	display: block;
+	padding: $spacing-small;
+}

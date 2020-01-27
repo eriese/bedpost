@@ -1,17 +1,14 @@
-@import "_defaults";
 @import "vue-select/src/scss/vue-select.scss";
 
-input, select, textarea, input[type=input], .vc-reset input {
+$input-border-radius: 2rem;
+input:not([type=submit]), select, textarea, input[type=input], .vc-reset input {
+	@include themed(border-color, $input-border-key);
 	background-color: $input-background-color;
-	border-color: $color-purple-dark;
+	@include themed(color, $input-color-key);
 	border-style: solid;
-	border-radius: rem(2px);
-	border-width: rem(1px);
 	box-sizing: border-box;
-	color: inherit;
-	padding: 0rem rem(5px);
-	line-height: 1;
 	box-shadow: none;
+	@include base-input;
 
 	form.big &, form.single & {
 		padding: rem(5px) rem(10px);
@@ -24,12 +21,33 @@ input, select, textarea, input[type=input], .vc-reset input {
 	}
 
 	&:focus {
-		border-color: $color-purple-light;
+		@include themed(border-color, $input-border-focus-key);
 	}
 
 }
 
-$check-box-size: rem(18px);
+textarea {
+	height: 4rem;
+	padding: 0.5rem 1rem;
+}
+
+select {
+	-webkit-appearance: none;
+	appearance: none;
+	@include background-svg(up-down-carets(theme-light($input-border-key)));
+	background-repeat: no-repeat;
+	background-size: 1.5EM 1EM;
+	background-position: right center;
+	background-clip: border-box;
+	-moz-background-clip: border-box;
+	-webkit-background-clip: border-box;
+
+	&:focus, &:hover {
+		@include background-svg(up-down-carets(theme-light($input-border-focus-key)));
+	}
+}
+
+$check-box-size: 1.1rem;
 
 input[type=checkbox], input[type=radio] {
 	display: inline-block;
@@ -41,9 +59,12 @@ input[type=checkbox], input[type=radio] {
 	height: $check-box-size;
 	width: $check-box-size;
 	cursor: pointer;
-	color: $color-purple-dark;
+	color: theme-light($input-border-key);
 	position: relative;
+	padding: 0;
 	margin-right: rem(10px);
+	border-width: rem(1.5px);
+	box-sizing: content-box;
 
 	form.centered & {
 		display: inline-block;
@@ -54,7 +75,7 @@ input[type=checkbox], input[type=radio] {
 input[type=radio] {
 	border-radius: 50%;
 	&:checked{
-		background-color: $color-purple-dark;
+		background-color: theme-light($input-border-key);
 		&::after {
 			content: "";
 			display: inline-block;
@@ -70,32 +91,14 @@ input[type=radio] {
 	}
 
 	&.hidden-radio {
-		$label-color: $color-purple-light;
-		$label-hover-color: $color-purple-dark;
-
 		margin: 0rem;
 		width: 0rem !important;
 		display: inline !important;
 		border: none !important;
 
-
-
-		&:focus, &:hover, &:checked {
-			+ label {
-				color: $label-hover-color;
-			}
-		}
-
 		&:checked {
 			&::after {
 				display: none;
-			}
-
-			+ label {
-				@media (min-width: rem(500px)) {
-					font-size: 1.2rem;
-				}
-				font-weight: bold;
 			}
 		}
 
@@ -114,37 +117,59 @@ input[type=radio] {
 		}
 
 		+ label {
+			@include themed(color, $input-border-focus-key);
 			cursor: pointer;
-			color: $label-color;
-
 
 			&:hover {
-				color: $label-hover-color;
+				@include themed(color, $input-border-key);
 			}
 		}
 
-		.toggler & {
+		&--link {
+			&:focus, &:hover, &:checked {
+				+ label {
+					@include themed(color, $input-border-key);
+				}
+			}
+
+			&:checked + label {
+				@media (min-width: rem(500px)) {
+					font-size: 1.1rem;
+				}
+				font-weight: bolder;
+			}
+		}
+
+		&--cta {
 			+ label {
-				height: 2rem;
-				width: 2rem;
-				line-height: 2rem;
+				$size: rem(40px);
+				height: $size;
+				width: $size;
+				line-height: $size - 0.1rem;
 				display: inline-block;
 				vertical-align: middle;
 				border-radius: 50%;
-				background-color: $background-color;
-				color: $button-color;
-				border: rem(2px) solid $button-color;
+				border: rem(2px) solid;
+				border-color: transparent;
 				text-align: center;
-				font-size: 1rem;
 				margin-right: 0.5rem;
+				padding: 0;
+				font-weight: bolder;
+				text-transform: uppercase;
+				@include themed(color, "form-background");
+				@include cta-transition;
 			}
 
-			&:focus, &:hover, &:checked {
+			&:checked {
 				+ label {
-					background-color: $button-hover-color;
-					color: $button-text-color;
-					font-weight: normal;
-					border-color: $button-hover-color;
+					@include themed(background, "form-background");
+					@include themed(color, "background");
+				}
+			}
+
+			&:focus, &:hover {
+				+ label {
+					@include themed(border-color, "form-background");
 				}
 			}
 		}
@@ -152,18 +177,35 @@ input[type=radio] {
 }
 
 input[type=checkbox] {
-	&:checked::after {
-		content: "";
-		display: inline-block;
-		border-left: rem(2px) solid;
-		border-bottom: rem(2px) solid;
-		transform: rotate(-45deg);
-		position: absolute;
+	border-radius: 0.25rem;
+	@include themed(border-color, $input-border-key);
 
-		height: rem(5px);
-		top: rem(2px);
-		width: rem(11px);
-		left: rem(1px);
+	&:not(:disabled) {
+		&:hover, &:focus, &:checked {
+			@include themed(border-color, $input-border-focus-key);
+		}
+	}
+
+	&::after {
+		content: "";
+		display: block;
+		height: 100%;
+		width: 100%;
+		@include background-svg(check-box-check(theme-light($input-border-key)));
+		border-radius: inherit;
+		opacity: 0;
+		transition: 0.3s ease-in-out;
+		transition-property: opacity, border-color;
+	}
+
+	&:checked::after {
+		opacity: 1;
+		background-repeat: no-repeat;
+		background-size: 100%;
+		background-position: center center;
+		background-clip: content-box;
+		-moz-background-clip: content-box;
+		-webkit-background-clip: content-box;
 	}
 }
 
@@ -182,13 +224,13 @@ input[type=range] {
 		&::#{$kit} {
 			width: 100%;
 			background: transparent;
+			border-radius: $input-border-radius;
 			height: rem(10px);
-			border-radius: rem(6px);
-			background-color: $color-purple-dark;
 			cursor: pointer;
 			transition: all .2s ease;
 			border: none;
 			box-shadow: none;
+			@include themed(background-color, $input-border-key);
 		}
 	}
 
@@ -196,12 +238,12 @@ input[type=range] {
 	@each $kit in $kit-thumbs {
 		&::#{$kit} {
 			height: rem(30px);
-			width: rem(20px);
-			background-color: $color-purple-light;
+			width: rem(15px);
 			box-shadow: none;
-			border-radius: rem(5px);
+			border-radius: $default-border-radius;
 			cursor: pointer;
 			border: none;
+			@include themed(background-color, $input-border-focus-key);
 		}
 	}
 
@@ -218,8 +260,8 @@ input[type=range] {
 	$ms-fills: -ms-fill-lower -ms-fill-upper;
 	@each $fill in $ms-fills {
 		&::#{$fill} {
+			@include themed(background, $input-border-key);
 			border: none;
-			background: $color-purple-dark;
 			box-shadow: none;
 			border-radius: rem(10px);
 		}
@@ -228,20 +270,52 @@ input[type=range] {
 	&:focus {
 		@each $kit in $kit-tracks {
 			&::#{$kit} {
-				background-color: $color-purple-light;
+				@include themed(background-color, $input-border-focus-key);
 			}
 		}
 
 		@each $thumb in $kit-thumbs {
 			&::#{$thumb} {
-				background-color: $color-purple-dark;
+				@include themed(background-color, $input-border-key);
 			}
 		}
 
 		@each $fill in $ms-fills {
 			&::#{$fill} {
-				background-color: $color-purple-light;
+				@include themed(background-color, $input-border-focus-key);
 			}
+		}
+	}
+}
+
+input[type=file] {
+	padding: 0;
+
+	&::-webkit-file-upload-button {
+		@include cta-base;
+		@include cta-colors;
+		@include themed(background-color, $input-border-key);
+		height: 101%;
+		box-shadow: none;
+		padding-top: 0;
+		padding-bottom: 0;
+		margin-left: -1px;
+	}
+
+	&:focus, &:hover {
+		&:not(:disabled) {
+			&::-webkit-file-upload-button {
+				@include themed(background-color, $input-border-focus-key);
+				@include cta-transition;
+			}
+		}
+	}
+
+	&[disabled=disabled] {
+		opacity: 1;
+
+		&::-webkit-file-upload-button {
+			@include disabled;
 		}
 	}
 }
@@ -251,47 +325,73 @@ input[type=hidden] {
 }
 
 input[disabled=disabled] {
-	opacity: 0.5;
-	cursor: initial;
+	@include disabled;
 
 	+ label {
-		opacity: 0.5;
-		cursor: initial;
+		@include disabled;
+	}
+}
+
+.input {
+	&--has-close-button {
+		position: relative;
+
+		&__button-container {
+			position: absolute;
+			right: $spacing-small;
+			top: 0;
+			height: 100%;
+			display: flex;
+			align-items: center;
+		}
+
+		&__close-button {
+			height: 75%;
+			background-color: transparent;
+			box-shadow: none;
+			border-style: none;
+		}
 	}
 }
 
 .double-prog-bar {
-	$progbar-height: rem(15px);
+	$progbar-height: 1.25rem;
+	$progbar-border: rem(2px);
+	border-radius: $default-border-radius;
 	position: relative;
-	background-color: $color-light-gray;
+	background-color: $color-off-white;
 	height: $progbar-height;
-	border: rem(1px) solid $color-green-dark;
+	border: $progbar-border solid;
+	@include themed-inverse(border-color, "cta-bg");
 	width: 84%;
 	margin: rem(5px) 8%;
 
 
 	.benchmark {
 		position: absolute;
-		height: $progbar-height + rem(10px);
+		height: $progbar-height * 1.5;
 		width: rem(6px);
 		margin-left: rem(-3px);
-		top: rem(-5px);
-		background-color: $color-green-very-dark;
+		top: $progbar-height * -0.25 - $progbar-border;
+		@include themed-inverse(background-color, 'cta-bg');
 		z-index: 1;
+		border-radius: $default-border-radius;
 	}
 
 	.fill {
 		position: absolute;
 		height: 100%;
 		left: 0;
-		background-color: $color-green-light;
+		@include themed-inverse(background-color, "background");
+		border-top-left-radius: $default-border-radius;
+		border-bottom-left-radius: $default-border-radius;
 	}
 }
 
 .bool-indicator {
 	height: $check-box-size;
 	width: $check-box-size;
-	color: $color-purple-dark;
+	@include themed(color, $input-border-key);
 	position: relative;
 	margin-left: rem(5px);
 
@@ -317,7 +417,6 @@ input[disabled=disabled] {
 		border-bottom: rem(3px) solid;
 		transform: rotate(-40deg);
 		position: absolute;
-
 		height: rem(6px);
 		top: rem(3px);
 		width: rem(12px);

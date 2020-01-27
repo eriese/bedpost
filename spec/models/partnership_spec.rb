@@ -26,61 +26,70 @@ RSpec.describe Partnership, type: :model do
 	end
 
 	describe '#partner' do
-	  it 'can accept a profile as a partner' do
-	  	create_ship(:profile)
+		it 'can accept a profile as a partner' do
+			create_ship(:profile)
 
-	  	expect(@ship).to_not be_nil
-	  	expect(@user.partnerships.length).to eq 1
-	  	expect(@ship.partner_id).to eq @partner.id
-	  	expect(@ship.partner).to eq @partner
-	  end
+			expect(@ship).to_not be_nil
+			expect(@user.partnerships.length).to eq 1
+			expect(@ship.partner_id).to eq @partner.id
+			expect(@ship.partner).to eq @partner
+		end
 
-	  it 'can accept a user_profile as a partner' do
-	  	create_ship(:user_profile)
+		it 'can accept a user_profile as a partner' do
+			create_ship(:user_profile)
 
-	  	expect(@ship).to_not be_nil
-	  	expect(@user.partnerships.length).to eq 1
-	  	expect(@ship.partner_id).to eq @partner.id
-	  	expect(@ship.partner).to eq @partner
-	  end
+			expect(@ship).to_not be_nil
+			expect(@user.partnerships.length).to eq 1
+			expect(@ship.partner_id).to eq @partner.id
+			expect(@ship.partner).to eq @partner
+		end
 
-	  it 'works with saving and everything' do
-	  	create_ship(:user_profile)
-	  	@user.save
+		it 'works with saving and everything' do
+			create_ship(:user_profile)
+			@user.save
 
-	  	#get everything fresh
-	  	saved_user = UserProfile.find(@user.id)
-	  	expect(saved_user.partnerships.length).to eq 1
-	  	saved_ship = saved_user.partnerships[0]
-	  	expect(saved_ship.partner_id).to eq @partner.id
-	  	expect(saved_ship.partner).to eq @partner
-	  end
+			#get everything fresh
+			saved_user = UserProfile.find(@user.id)
+			expect(saved_user.partnerships.length).to eq 1
+			saved_ship = saved_user.partnerships[0]
+			expect(saved_ship.partner_id).to eq @partner.id
+			expect(saved_ship.partner).to eq @partner
+		end
 
-	  it 'validates the uniqueness of the partner' do
-	  	create_ship(:user_profile)
-	  	@user.save
+		it 'validates the uniqueness of the partner' do
+			create_ship(:user_profile)
+			@user.save
 
-	  	expect(@user).to be_valid
-	  	ship2 = @user.partnerships.new(partner_id: @partner.id)
-	  	expect(ship2).to_not be_valid
-	  end
+			expect(@user).to be_valid
+			ship2 = @user.partnerships.new(partner_id: @partner.id)
+			expect(ship2).to_not be_valid
+		end
 
-	  it 'only validates uniqueness of partner within the scope of the user' do
-	  	create_ship(:user_profile)
-	  	@user.save
+		it 'only validates uniqueness of partner within the scope of the user' do
+			create_ship(:user_profile)
+			@user.save
 
-	  	@user2 = create(:user_profile)
-	  	expect(@user2).to be_valid
-	  	@user2.partnerships.new(partner: @partner)
-	  	expect(@user2).to be_valid
-	  end
+			@user2 = create(:user_profile)
+			expect(@user2).to be_valid
+			@user2.partnerships.new(partner: @partner)
+			expect(@user2).to be_valid
+		end
 
-	  it 'does not allow a user to partner with themself' do
-	  	@user = create(:user_profile)
-	  	expect(@user).to be_valid
-	  	@user.partnerships.new(partner: @user)
-	  	expect(@user).to_not be_valid
-	  end
+		it 'does not allow a user to partner with themself' do
+			@user = create(:user_profile)
+			expect(@user).to be_valid
+			@user.partnerships.new(partner: @user)
+			expect(@user).to_not be_valid
+		end
+
+		it 'accepts nested attributes for the partner' do
+			@user = create(:user_profile)
+			partnership_attrs = attributes_for(:partnership, partner_attributes: attributes_for(:profile))
+			ship = @user.partnerships.create(partnership_attrs)
+			expect(@user).to be_valid
+			expect(ship.partner).to be_a Profile
+			expect(ship.partner).to be_persisted
+		end
 	end
 
 	describe '#uid' do
@@ -306,18 +315,7 @@ RSpec.describe Partnership, type: :model do
 	end
 
 	describe '#add_to_partner' do
-		it 'adds the user to the partner as a foreign key in partnered_to' do
-			@user = create(:user_profile)
-			@partner = create(:profile)
-
-			ship = @user.partnerships.new(partner: @partner)
-			ship.send :add_to_partner
-
-			@partner.reload
-			expect(@partner.partnered_to).to include(@user)
-		end
-
-		it 'does not call #remove_from_partner to remove itself from the previous partner if it is new' do
+		it 'calls #remove_from_partner with nil if it is new' do
 			@user = create(:user_profile)
 			@partner = create(:profile)
 
@@ -325,7 +323,7 @@ RSpec.describe Partnership, type: :model do
 			allow(ship).to receive(:remove_from_partner)
 			ship.send :add_to_partner
 
-			expect(ship).to_not have_received(:remove_from_partner)
+			expect(ship).to have_received(:remove_from_partner).with(nil)
 		end
 
 		it 'calls #remove_from_partner to remove itself from the previous partner' do
@@ -343,37 +341,34 @@ RSpec.describe Partnership, type: :model do
 	end
 
 	describe '#remove_from_partner' do
-		it 'removes the user from the given partner as a foreign key in partnered_to' do
-			allow_any_instance_of(Profile).to receive(:delete_if_empty)
+		it 'deletes the given profile if it is in no other partnerships', :run_job_immediately do
 			@user = create(:user_profile)
 			@partner = create(:profile)
 
 			ship = @user.partnerships.new(partner: @partner)
-			@partner.add_partnered_to(@user)
-			expect(@partner.partnered_to).to include(@user)
-
 			ship.send :remove_from_partner
-			@partner.reload
-			expect(@partner.partnered_to).to_not include(@user)
+			expect { @partner.reload }.to raise_error(Mongoid::Errors::DocumentNotFound)
+		end
+
+		it 'does not delete the given profile if it is a UserProfile', :run_job_immediately do
+			@user = create(:user_profile)
+			@partner = create(:user_profile)
+
+			ship = @user.partnerships.new(partner: @partner)
+			ship.send :remove_from_partner
+			expect { @partner.reload }.not_to raise_error
+		end
+
+		it 'does not schedule a RemoveOrphanedProfileJob if the partner_id is nil' do
+			ship = build(:partnership)
+			allow(RemoveOrphanedProfileJob).to receive(:perform_later)
+			ship.send(:remove_from_partner, nil)
+			expect(RemoveOrphanedProfileJob).not_to have_received(:perform_later)
 		end
 	end
 
 	describe 'after_save' do
-		it 'adds its user to the partner as a foreign key in #partnered_to' do
-			@user = create(:user_profile)
-			@partner = create(:profile)
-
-			ship = @user.partnerships.new(partner: @partner)
-			allow(ship).to receive(:add_to_partner).and_call_original
-			ship.save
-
-			expect(ship).to have_received(:add_to_partner)
-			@partner.reload
-			expect(@partner.partnered_to).to include(@user)
-		end
-
-		it 'removes its user from the previous partner' do
-			allow_any_instance_of(Profile).to receive(:delete_if_empty)
+		it 'deletes the orphaned previous partner', :run_job_immediately do
 			@user = create(:user_profile)
 			@partner = create(:profile)
 			@user2 = create(:profile)
@@ -384,77 +379,23 @@ RSpec.describe Partnership, type: :model do
 
 			expect(ship).to have_received(:remove_from_partner).with(@partner.id)
 
-			@partner.reload
-			expect(@partner.partnered_to).to_not include(@user)
-		end
-
-		it 'works every time' do
-			allow_any_instance_of(Profile).to receive(:delete_if_empty)
-			@user = create(:user_profile)
-			@partner = create(:profile)
-			@user2 = create(:profile)
-
-			ship = @user.partnerships.create(partner: @user2)
-
-			#test switching partners 4 times
-			partners = [@partner, @user2]
-			4.times do
-				ship.partner = partners[0]
-				ship.save
-
-				partners.each{ |p| p.reload}
-				expect(partners[0].partnered_to.find(@user)).to eq @user
-				expect(partners[1].partnered_to).to_not include(@user)
-
-				partners.reverse!
-			end
-		end
-
-		it 'causes a cascading call to delete an empty partner' do
-			@user = create(:user_profile)
-			@partner = create(:profile)
-			@user2 = create(:profile)
-
-			ship = @user.partnerships.create(partner: @partner)
-			allow(@partner).to receive(:delete_if_empty).and_call_original
-			# don't let the partnership get a fresh reference to partner or it'll break the spy
-			allow(Profile).to receive(:find).and_return(@partner)
-			ship.partner = @user2
-			ship.save
-
-			expect(@partner).to have_received(:delete_if_empty)
-			expect {@partner.reload}.to raise_error(Mongoid::Errors::DocumentNotFound)
+			expect { @partner.reload }.to raise_error(Mongoid::Errors::DocumentNotFound)
 		end
 	end
 
-	describe 'before_destroy' do
-		it 'removes its user from its partner' do
-			allow_any_instance_of(Profile).to receive(:delete_if_empty)
+	describe 'before_destroy', :run_job_immediately do
+		it 'deletes the orphaned previous partner', :run_job_immediately do
 			@user = create(:user_profile)
 			@partner = create(:profile)
+			@user2 = create(:profile)
 
 			ship = @user.partnerships.create(partner: @partner)
+			allow(ship).to receive(:remove_from_partner).and_call_original
+			ship.update(partner: @user2)
 
-			@partner.reload
-			expect(@partner.partnered_to).to include(@user)
+			expect(ship).to have_received(:remove_from_partner).with(@partner.id)
 
-			ship.destroy
-			@partner.reload
-			expect(@partner.partnered_to).to_not include(@user)
-		end
-
-		it 'causes a cascading call to delete an empty partner' do
-			@user = create(:user_profile)
-			@partner = create(:profile)
-
-			ship = @user.partnerships.create(partner: @partner)
-			allow(@partner).to receive(:delete_if_empty).and_call_original
-			# don't let the partnership get a fresh reference to partner or it'll break the spy
-			allow(Profile).to receive(:find).and_return(@partner)
-			ship.destroy
-
-			expect(@partner).to have_received(:delete_if_empty)
-			expect {@partner.reload}.to raise_error(Mongoid::Errors::DocumentNotFound)
+			expect { @partner.reload }.to raise_error(Mongoid::Errors::DocumentNotFound)
 		end
 	end
 end

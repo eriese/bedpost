@@ -1,13 +1,15 @@
-import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators';
-import {submitted} from '@modules/validators';
+import {resetValidatorCache} from '@modules/validation/validators';
+import ValidationProcessor from '@modules/validation/ValidationProcessor';
 import {onTransitionTriggered} from '@modules/transitions';
 import renderless from '@mixins/renderless';
+import trackedForm from '@mixins/trackedForm';
 
 /**
  * A component to wrap a validated form. Uses [Vuelidate]{@link https://monterail.github.io/vuelidate/} for validation
  *
  * @module
  * @mixes renderless
+ * @mixes trackedForm
  * @vue-data {?module:components/stepper/FormStepComponent} stepper the stepper in this form, if there is one
  * @vue-data {Object} [submissionError={}] a mutatable copy of the errors returned from the last submission attempt
  * @vue-data {Object} formData a mutatable copy of the object being modified by the form
@@ -15,6 +17,7 @@ import renderless from '@mixins/renderless';
  * @vue-prop {String} validate an object containing information on what types of validation, if any, each field in the form needs
  * @vue-prop {Object} startToggles the starting state of toggles on the form
  * @vue-prop {Object} value the starting state of the value of the object modified by the form
+ * @vue-prop {boolean} dynamicValidation should the form validate dynamically based on what fields are available?
  * @vue-prop {Object} error the starting state of the errors from the last submission attempt
  * @vue-computed {Object} slotScope the scope to bind to the slot
  * @vue-computed {Object} $v the vuelidate object
@@ -23,7 +26,7 @@ import renderless from '@mixins/renderless';
  * @listens module:components/form/ToggleComponent~toggle-event
  */
 export default {
-	mixins: [renderless],
+	mixins: [renderless, trackedForm],
 	data: function() {
 		return {
 			stepper: null,
@@ -51,10 +54,14 @@ export default {
 			type: Object,
 			default: objectFactory
 		},
+		dynamicValidation: Boolean,
 	},
 	validations: function() {
+		let $refs = this.dynamicValidation && this.$root && this.$root.$refs;
+		let formatted = new ValidationProcessor(this.validate, [], this.formData, $refs, this.adlValidations).process();
+
 		return {
-			formData: formatValidators(this.validate, [], this.formData, this.adlValidations),
+			formData: formatted,
 		};
 	},
 	computed: {
@@ -62,6 +69,7 @@ export default {
 			return {
 				validateForm: this.validateForm,
 				handleError: this.handleError,
+				handleSuccess: this.trackSuccess,
 				toggle: this.toggle,
 				$v: this.$v,
 				toggles: this.toggles,
@@ -101,12 +109,12 @@ export default {
 				e.stopPropagation();
 
 				// find the first errored field and focus it
-				for (var i = 0; i < this.$children.length; i++) {
-					let child = this.$children[i];
-					if (child.isValid && !child.isValid()) {
-						child.setFocus();
-						break;
-					}
+				const firstErrorField = this.$children.find((c) => c.isValid && !c.isValid());
+				if (firstErrorField !== undefined) {
+					firstErrorField.setFocus();
+					this.trackError(firstErrorField.field);
+				} else {
+					this.trackError('unknown form validation error');
 				}
 			}
 			// let the form submit
@@ -128,6 +136,10 @@ export default {
 			this.submissionError = respJson.errors;
 			// re-run validations
 			this.$v.$touch();
+
+			// do google tracking
+			this.trackError(JSON.stringify(this.submissionError));
+
 		},
 		/**
 		 * Toggle a state
@@ -146,86 +158,11 @@ export default {
 			}
 		},
 	},
+	mounted() {
+		resetValidatorCache();
+	},
 };
 
 function objectFactory() {
 	return {};
-}
-
-/**
- * Process the fields on the form to apply the correct validations to each. Uses recursion to process each level of nested validations
- *
- * @param  {object} validatorVals an object mapping arrays of validator arguments to their fields
- * @param  {string[]} path          the path to this level in recursive searching
- * @param  {object} fields 			the fields available in the form
- * @param {object} adlValidations additional already-processed validations to use
- * @return {object}               the validator config for this level
- */
-function formatValidators(validatorVals, path, fields, adlValidations) {
-	// make an empty object to hold validation config
-	let validators = Object.assign({}, adlValidations);
-	// each field in this level
-	for (let field in fields) {
-		// get the validator configs for it
-		let f_vals = validatorVals[field];
-		// add the field to the path
-		let this_path = path.concat(field);
-
-		// if the validator configs is another object, run the formatter on it as a new level
-		if (f_vals && f_vals.length === undefined) {
-			// send this object and this path
-			validators[field] = formatValidators(f_vals, this_path, fields[field]);
-			continue;
-		}
-
-		// always add a submission error validator
-		validators[field] = validators[field] || {};
-		validators[field].submitted = submitted(this_path);
-
-		// if it's an email field, add an email validator
-		if (field.match(/email/i)) {
-			validators[field].email = email;
-		}
-
-		// if there are no specific validators, move on
-		if(f_vals === undefined) {
-			continue;
-		}
-
-		// go through the configs
-		for (var f = 0; f < f_vals.length; f++) {
-			// destructure the array
-			let [type, opts] = f_vals[f];
-
-			// the types we currently handle
-			switch(type) {
-			case 'presence':
-				// presence validators are called 'blank' for translation purposes
-				validators[field].blank = required;
-				break;
-			case 'length':
-				// length validators based on max and min
-				if (opts.maximum) {
-					validators[field].too_long = maxLength(opts.maximum);
-				}
-				if (opts.minimum) {
-					validators[field].too_short = minLength(opts.minimum);
-				}
-				break;
-			case 'confirmation':
-				// a confirmation validator will look for a match on a field with '_confirmation' appended to it
-				var conf_field = field + '_confirmation';
-
-				// only add this validator if the confirmation field is also on the form
-				if(fields[conf_field] === undefined) {
-					break;
-				}
-
-				validators[conf_field] = validators[conf_field] || {};
-				validators[conf_field].confirmation = sameAs(field);
-				break;
-			}
-		}
-	}
-	return validators;
 }

@@ -46,7 +46,7 @@ const mountOptions = {
 	stubs: {
 		'v-select': true,
 		'v-calendar': true,
-		'toggle': true
+		'toggle-switch': true
 	}
 }
 

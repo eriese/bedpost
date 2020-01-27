@@ -1,0 +1,7 @@
+<% body_class 'body--is-first-time body--has-footer' %>
+<% content_for :header_class, 'header--has-no-nav header--is-small' %>
+<% content_for :nav do %>
+	<%= render "nav", first_time: true %>
+<% end %>
+
+<%= render template: "layouts/application" %>

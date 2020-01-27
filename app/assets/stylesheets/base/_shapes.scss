@@ -1,0 +1,12 @@
+@function up-down-carets($fill-color) {
+	@return "<svg viewBox='0 0 200 100'><path fill='#{$fill-color}' d='M 70,90 L 30,50 L 70,10' transform='translate(100,-35) rotate(90)'></path><path fill='#{$fill-color}' d='M 70,90 L 30,50 L 70,10' transform='translate(0,130) rotate(270)'></path></svg>";
+}
+
+@function check-box-check($fill-color: theme-light($input-border-key), $stroke-width: 0.75, $box-size: 4, $rotation: 0) {
+	$end: $box-size - 1;
+	@return "<svg viewBox='0 0 #{$box-size} #{$box-size}' transform-origin='center center' transform='rotate(#{$rotation})'><path stroke-linecap='round' stroke-width='#{$stroke-width}' stroke='#{$fill-color}' d='M 1,1 L #{$end},#{$end} M #{$end},1 L 1,#{$end}'></path></svg>";
+}
+
+// @function plus-sign {
+// 	@return ""
+// }

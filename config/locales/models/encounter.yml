@@ -19,6 +19,8 @@ en:
       touched: touched
       sucked: sucked
       fisted: fisted
+      licked: licked
+      kissed: kissed
     with: with %{pronoun}
     using: using
     instrument:
@@ -26,6 +28,7 @@ en:
       toy: toy
       hand: hand
       tongue: tongue
+      fingers: fingers
     barrier:
       none: no barrier
       fresh: with a new barrier
@@ -33,22 +36,29 @@ en:
       clean:
         zero: "%{name} %{instrument} was clean"
         one: "%{name} %{instrument} were clean"
-      clean_subject: "%{subject_possessive} clean %{subject_instrument}"
-      clean_object: "%{object_possessive} clean %{object_instrument"
+      show:
+        clean_subject: "%{subject_possessive} clean %{subject_instrument}"
+        clean_object: "%{object_possessive} clean %{object_instrument}"
+        fresh: a new barrier
+        old: the same barrier
   encounters:
     show:
-      title_html: Encounter with %{partner}
-      took_place: "on %{took_place}"
+      took_place: "%{took_place}"
+      title: with %{partner}
       contact_html: "<b>%{subject_pronoun}</b> %{contact_type} <b>%{object_possessive} %{object_instrument}</b> with <b>%{subject_possessive} %{subject_instrument}</b>"
       contact_with_barriers_html: "<b>%{subject_pronoun}</b> %{contact_type} <b>%{object_possessive} %{object_instrument}</b> with <b>%{subject_possessive} %{subject_instrument}</b> <em>using %{barriers}</em>"
       risk_line_html: "<span class='risk-level'>%{level}:</span> <span class='diagnoses'>%{diagnosis}</span>"
+      risk_with_caveats_line_html: "%{line}<br><span class='risk-caveats'>%{caveats}</span>"
+      caveat_marks_html: "%{diagnosis}<sup>%{marks}</sup>"
       display_risks_drop_down_html: '"Hide Risks" : "Show Risks"'
       display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
-      self_risk_html: You figured your risk was <b>%{risk_level}</b>
-      overall_risk_html: We calculated <b>%{risk_level}</b>
+      self_risk_html: Your concern was <b>%{risk_level}</b>
+      overall_risk_html: We had <b>%{risk_level}</b>
       notes:
-        title: Your Notes
+        title: "Your Notes:"
       breakdown: "Let's break it down:"
+      continue_first_time: Continue
+      contact_risks: "How likely are the following?"
       sex:
         title: The Sex
         fluid_exchange: Additional fluid exchange
@@ -58,29 +68,32 @@ en:
         no_risks_contact: This activity carries no risk
       advice:
         title: Our Advice
-        desc: "Based on the risks in this encounter, we think this is a good testing schedule:"
-        routine: "You probably don't need to get tested ASAP, but we think you should get checked for these on your regular schedule:"
+        desc: "We think this is a good testing schedule:"
+        routine: "We think you should get checked for these on your regular schedule:"
         show_anyway: Show me when my earliest test opportunities are anyway
         hide_lower_risk: Hide test dates for lower risk infections
-        no_schedule: Nothing you did carried any risk, so we have nothing to tell you about this encounter!
-        key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such a low risk"
+        no_schedule: Based on our data, we have no testing callouts for this encounter.
+        key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such low likelihood"
     index:
-      title:
-        with_partner: Your Encounters with %{partner_name}
-        all: Your Encounters
+      title: Your Encounters
+      with_partner: with %{partner_name}
       no_encounters:
         with_partner: You don't have any encounters with %{partner_name} yet
         all: You don't have any encounters yet
       new: Add an Encounter
       all: Show encounters with all partners
-      list_view: List view
-      calendar_view: Calendar view
-      list_item_html: <span class="item-date">%{date}</span> with <span class="item-partner"> %{partner_name}:</span> <span class="item-notes"><a href="%{href}">%{notes}</a></span>
+      list_view: List
+      calendar_view: Calendar
+      list_item_html: <span class="item-date">%{date}</span> with <span class="item-partner"> %{partner_name}:</span> <span class="item-notes"><a class="link" href="%{href}">%{notes}</a></span>
       no_notes: (No notes)
       no_partners:
         title: Oops
         desc: You haven't told us about any partnerships yet
       make_partner: Add a partner
+    form:
+      contacts_title: We want the details!
+      contacts_desc: Our logic works best if you tell us things in the order they happened, but we know sometimes a lot is going on at once.
+      submit: Finish
   encounter_whos:
     new:
       title: Cool!
@@ -89,5 +102,21 @@ en:
       prompt: Choose a partner
   helpers:
     label:
-      who:
+      encounter:
         partnership_id: Who did you have sex with?
+        fluids_group: Was there any other fluid exchange we didn't cover?
+        fluids:
+          'true': 'Yes'
+          'false': 'No'
+        self_risk: How concerned are you about the possibility of STIs from this encounter?
+    tooltip:
+      encounter:
+        fluids_group: Did you get ejaculate in your eye?
+    sliders:
+      encounter:
+        self_risk:
+          zero: Not at all
+          one: Basically none
+          two: A little
+          three: A medium amount
+          four: A lot

@@ -1,0 +1,108 @@
+@include media($mobile) {
+	.no-js {
+		display: flex;
+		flex-wrap: wrap;
+
+		header {
+			order: 1;
+			width: 100%;
+			position: static;
+
+			#logo {
+				float: none;
+			}
+		}
+
+		header.header--is-small + main {
+			width: 100%;
+		}
+
+		nav-component {
+			order: 2;
+			width: 100%;
+
+			nav {
+				float: none;
+				display: block;
+				position: static;
+			}
+
+			.burger {
+				display: none;
+			}
+
+			.menu {
+				width: 100%;
+				height: auto;
+				padding-top: 0rem;
+
+				ul {
+					width: 100%;
+					text-align: center;
+
+					li {
+						font-size: rem(20px);
+						line-height: 1;
+
+						a, &.no-link, span {
+							padding: rem(5px);
+						}
+					}
+				}
+			}
+		}
+
+		main {
+			order: 3;
+			width: 100%;
+		}
+
+		footer {
+			order: 4;
+			width: 100%;
+		}
+	}
+
+	body.vertical-center, .body--has-footer {
+		#vue-container.no-js {
+			flex-direction: row;
+		}
+		&.body--has-columns {
+			header.header--is-big {
+				display: block;
+				text-align: center;
+				flex-grow: 0;
+			}
+			#vue-container {
+				justify-content: flex-start;
+				height: auto;
+				min-height: 100%;
+			}
+		}
+	}
+}
+
+/** disable automatic zoom on iphones */
+@supports (-webkit-overflow-scrolling: touch) {
+	/* CSS specific to iOS devices */
+		select, textarea, input[type="text"], input[type="password"],
+		input[type="datetime"], input[type="datetime-local"],
+		input[type="date"], input[type="month"], input[type="time"],
+		input[type="week"], input[type="number"], input[type="email"],
+		input[type="url"] {
+		 /* enlarge by 16/12 = 133.33% */
+			@include base-input(1.33333);
+
+			/* scale down by 12/16 = 75% */
+			transform: scale(0.75);
+			transform-origin: left top;
+
+			/* remove extra white space */
+			margin-bottom: -10px;
+			margin-right: -33.333333333%;
+
+			form.centered & {
+				width: 133.333333333%;
+			}
+		}
+}

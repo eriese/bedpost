@@ -1,6 +1,7 @@
 const { environment } = require('@rails/webpacker');
 const { VueLoaderPlugin } = require('vue-loader');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 const vue = require('./loaders/vue');
 const cssFix = require('./loaders/css');
 // const erb =  require('./loaders/erb')
@@ -13,7 +14,6 @@ environment.plugins.append('VueLoaderPlugin', new VueLoaderPlugin({
 }));
 environment.plugins.append('CleanWebpackPlugin', new CleanWebpackPlugin());
 
-
 environment.config.merge({
 	resolve: {
 		alias: {
@@ -21,7 +21,8 @@ environment.config.merge({
 			'@mixins': path.resolve(__dirname, '..', '..', 'app/javascript/mixins'),
 			'@modules': path.resolve(__dirname, '..', '..', 'app/javascript/modules'),
 			'@plugins': path.resolve(__dirname, '..', '..', 'app/javascript/plugins'),
-			'@locales': path.resolve(__dirname, '..', '..', 'app/javascript/locales')
+			'@locales': path.resolve(__dirname, '..', '..', 'app/javascript/locales'),
+			'@stylesheets': path.resolve(__dirname, '..', '..', 'app/assets/stylesheets'),
 		}
 	},
 	output: {

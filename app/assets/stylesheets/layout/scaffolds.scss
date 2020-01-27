@@ -1,0 +1,83 @@
+body {
+	// background-color: #fff;
+	// color: #333;
+	// margin: 33px;
+	// font-family: verdana, arial, helvetica, sans-serif;
+	// font-size: 13px;
+	// line-height: 18px;
+}
+
+p, ol, ul, td {
+	// font-family: verdana, arial, helvetica, sans-serif;
+	@include base-text;
+}
+
+pre {
+	background-color: #eee;
+	padding: rem(10px);
+	font-size: rem(11px);
+}
+
+// a {
+//   color: #000;
+
+//   &:visited {
+//     color: #666;
+//   }
+
+//   &:hover {
+//     color: #fff;
+//     background-color: #000;
+//   }
+// }
+
+th {
+	padding-bottom: rem(5px);
+}
+
+td {
+	padding: 0 rem(5px) rem(7px);
+}
+
+// div {
+//   &.field, &.actions {
+//     margin-bottom: 10px;
+//   }
+// }
+
+#notice {
+	color: green;
+}
+
+// .field_with_errors {
+//   padding: 2px;
+//   background-color: red;
+//   display: table;
+// }
+
+#error_explanation {
+	width: rem(450px);
+	border: rem(2px) solid red;
+	padding: rem(7px) rem(7px) 0;
+	margin-bottom: rem(20px);
+	background-color: #f0f0f0;
+
+	h2 {
+		text-align: left;
+		font-weight: bold;
+		padding: rem(5px) rem(5px) rem(5px) 1rem;
+		font-size: rem(12px);
+		margin: rem(-7px) rem(-7px) 0;
+		background-color: #c00;
+		color: #fff;
+	}
+
+	ul li {
+		font-size: rem(12px);
+		list-style: square;
+	}
+}
+
+label {
+	display: block;
+}

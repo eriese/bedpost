@@ -1,11 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type: :helper do
+	class FormObj
+		include Mongoid::Document
+		field :name
+	end
 
 	def stub_form_builder(validators: [], submission_error: {}, form_options: {})
 		@obj_name = "object_name"
-		@obj_class = class_double("FormObjectClass", validators_on: validators)
-		@f_obj = double("FormObject", class: @obj_class, name: "My Name", new_record?: false, respond_to: true)
+		@f_obj = FormObj.new
+		@obj_class = @f_obj.class
+		allow(@obj_class).to receive(:validators_on) {validators}
 
 		submission_error.stringify_keys! if submission_error.respond_to? :stringify_keys
 		helper.flash[:submission_error] = submission_error
@@ -252,16 +257,16 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 			result = builder.send(:field_label)
 
-			expect(result).to eq "<label id=\"#{@attr}-label\" for=\"#{@obj_name}_#{@attr}\">#{@attr.to_s.humanize}</label>"
+			expect(result).to eq "<label id=\"#{@obj_name}_#{@attr}-label\" for=\"#{@obj_name}_#{@attr}\">#{@attr.to_s.humanize}</label>"
 		end
 
-		it 'uses a symbol passed to the label option as the label attribute' do
+		it 'uses a symbol passed to the label option as the label translation key' do
 			label_opt = :other_key
 			builder = stub_builder options: {label: label_opt}
 
 			result = builder.send(:field_label)
 
-			expect(result).to eq "<label id=\"#{label_opt}-label\" for=\"#{@obj_name}_#{label_opt}\">#{label_opt.to_s.humanize}</label>"
+			expect(result).to eq "<label id=\"#{@obj_name}_#{@attr}-label\" for=\"#{@obj_name}_#{@attr}\">#{label_opt.to_s.humanize}</label>"
 		end
 
 		it 'uses the options passed to the label option for the label creation' do
@@ -281,8 +286,8 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 			result = builder.send(:field_label)
 
-			expected_opts = label_opt.except(:key).merge({id: "#{label_key}-label"})
-			expected = @f_builder.label(label_key, expected_opts)
+			# binding.pry
+			expected = @f_builder.label(@attr, label_opt)
 			expect(result).to eq expected
 		end
 
@@ -346,8 +351,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			builder = stub_builder options: {tooltip: true}
 			result = builder.send(:field_inner)
 
-			expected_tooltip = @f_builder.tooltip(@attr)
-			expect(result).to include(expected_tooltip)
+			expect(result).to include("<tooltip ")
 		end
 
 		it 'adds the given block at the end' do
@@ -386,7 +390,9 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 
 	describe '#field' do
 		it 'adds its attribute to the validation list on the form builder if has validations' do
-			stub_form_builder(validators:[double("PresenceValidator", {kind: :presence, options: {}})])
+			presence_validator = double("PresenceValidator", kind: :presence, options: {})
+			allow(presence_validator).to receive(:kind_of?) {|v| v == Mongoid::Validatable::PresenceValidator}
+			stub_form_builder(validators: [presence_validator])
 			@attr = :name
 			@f_builder.text_field(@attr)
 			expect(@f_builder.validations).to have_key @attr

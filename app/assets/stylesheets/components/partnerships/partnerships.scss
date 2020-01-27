@@ -1,0 +1,45 @@
+.partnership-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	text-decoration: none;
+	text-transform: none;
+
+	&__name {
+		font-size: 1.75rem;
+		margin-bottom: 0.15rem;
+		line-height: 1.15;
+
+		@include media("<tablet") {
+			font-size: 1.5rem;
+		}
+	}
+}
+
+#view-toggle {
+	z-index: 1;
+	position: relative;
+}
+.partnership-chart-container {
+	max-width: 30rem;
+	width: 100%;
+	margin: 0rem auto;
+	text-align: center;
+	padding: 0 $spacing-small;
+
+	#radar-chart {
+		margin: -3rem 0rem -3.5rem 0rem;
+	}
+}
+
+.partnership-show {
+	&__field {
+		font-size: 1rem;
+		@include themed(color, 'cta-bg-light');
+	}
+
+	&__response {
+		padding: 0 1rem;
+	}
+}

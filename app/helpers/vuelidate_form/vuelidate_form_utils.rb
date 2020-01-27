@@ -2,28 +2,35 @@ module VuelidateForm; module VuelidateFormUtils
 	# Map the validators to a format that can be used by the form
 	# @param validators [Array] an array of validators
 	# @param object [Object] the object that the validators will validate
-	def self.map_validators_for_form(validators, object)
+	# @param is_required [Boolean] does the field have an explicit required value of true?
+	def self.map_validators_for_form(validators, object, validators_to_skip)
+		return [] unless validators.any?
+
 		is_new = false
 		validators.each_with_object([]) do |v, ary|
+			kind = v.respond_to?(:kind) ? v.kind : v[:kind]
 			# foreign keys can't be checked by the front end
-			next if v.kind == :foreign_key
+			next if kind == :foreign_key || validators_to_skip.include?(kind)
 
-			# if there's an on condition for the validator
-			if on_cond = v.options[:on]
-				# get whether it's new
-				is_new ||= object.respond_to?(:new_record?) && object.new_record?
-				# don't add it if the condition is false
-				next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
-			end
+			if object.present?
+				options = v.respond_to?(:options) ? v.options : v[:options] || {}
+				# if there's an on condition for the validator
+				if on_cond = options[:on]
+					# get whether it's new
+					is_new ||= object.respond_to?(:new_record?) && object.new_record?
+					# don't add it if the condition is false
+					next unless (is_new && on_cond == :create) || (!is_new && on_cond == :update)
+				end
 
-			# if there's an if condition on the validator
-			if if_cond = v.options[:if]
-				# don't add if it's false
-				next unless object.send(if_cond)
+				# if there's an if condition on the validator
+				if if_cond = options[:if]
+					# don't add if it's false
+					next unless object.send(if_cond)
+				end
 			end
 
 			# add it to the array
-			ary << [v.kind, v.options]
+			ary << [kind, options]
 		end
 	end
 

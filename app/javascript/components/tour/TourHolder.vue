@@ -1,5 +1,31 @@
 <template>
-	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks" ref="tour-el"/>
+	<component :is="componentType" @hook:mounted="checkTour" name="tour" :steps="steps" :callbacks="callbacks" :options="tourOptions" ref="tour-el">
+		<template slot-scope="tour">
+			<transition name="fade">
+				<v-step
+					v-if="tour.currentStep === index"
+					v-for="(step, index) of tour.steps"
+					:key="index"
+					:step="{...step, params: stepOptions}"
+					:previous-step="tour.previousStep"
+					:next-step="tour.nextStep"
+					:stop="tour.stop"
+					:is-first="tour.isFirst"
+					:is-last="tour.isLast"
+					:labels="tour.labels"
+				>
+					<div slot="actions">
+						<div class="v-step__buttons">
+							<button @click.prevent="tour.stop" v-if="!tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonSkip }}</button>
+							<button @click.prevent="tour.previousStep" v-if="!tour.isFirst" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonPrevious }}</button>
+							<button @click.prevent="tour.nextStep" v-if="!tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonNext }}</button>
+							<button @click.prevent="tour.stop" v-if="tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonStop }}</button>
+						</div>
+					</div>
+				</v-step>
+			</transition>
+		</template>
+	</component>
 </template>
 
 <script>
@@ -28,12 +54,20 @@
 		data: function() {
 			return {
 				callbacks: {
-					onStop: this.onStop
+					onStop: this.onStop,
+				},
+				stepOptions: {
+					modifiers: {
+						preventOverflow: {
+							boundariesElement: 'viewport'
+						}
+					}
 				}
 			}
 		},
 		props: {
-			steps: Array
+			steps: Array,
+			tourRuns: Number
 		},
 		computed: {
 			componentType: function() {
@@ -44,22 +78,52 @@
 			},
 			running() {
 				return this.tour && this.tour.isRunning
-			}
+			},
+			tourOptions() {
+				if (!this.steps) {return {};}
+
+				return {
+					labels: {
+						buttonStop: this.$_t('button_stop', {scope: 'tours.show', count: this.steps.length}),
+						buttonSkip: this.$_t('button_skip', {scope: 'tours.show'}),
+						buttonNext: this.$_t('button_next', {scope: 'tours.show'}),
+						buttonPrevious: this.$_t('button_previous', {scope: 'tours.show'}),
+					}
+				}
+			},
 		},
 		methods: {
 			/**
 			 * checks to see if a tour should run when a new component mounts
 			 */
 			checkTour() {
-				if (this.steps && !this.running) {
-					this.startTour();
+				if (this.tour && !this.running) {
+					// tell the parent that a tour has started
+					this.$emit('tour-started');
+					// if it hasn't run before on this page, wait 2 seconds to run
+					let timeoutNum = this.tourRuns > 0 ? 0 : 2000
+					this.timeout = setTimeout(() => {
+						// if we have to wait for the step target to come into view, make an intersection observer
+						if (this.steps[0].await_in_view) {
+							this.observer = new IntersectionObserver(this.startTour, {threshold: [1]});
+							this.firstStepTarget = document.querySelector(this.steps[0].target)
+							this.observer.observe(this.firstStepTarget)
+						} else {
+							// otherwise just start
+							this.startTour();
+						}
+					}, timeoutNum);
 				}
 			},
 			/**
 			 * starts the tour if there is one
 			 */
-			startTour() {
-				this.tour && this.tour.start()
+			startTour(entries) {
+				// start if the first step is visible
+				let firstVisibility = this.firstStepTarget && getComputedStyle(this.firstStepTarget).visibility;
+				if (!entries || firstVisibility == 'visible') {
+					this.tour && this.tour.start()
+				}
 			},
 			/**
 			 * emit that the tour has stopped
@@ -67,7 +131,11 @@
 			 */
 			onStop() {
 				this.$emit('tour-stopped');
-			}
+			},
+		},
+		beforeDestroy() {
+			this.observer && this.observer.disconnect();
+			clearTimeout(this.timeout);
 		}
 	}
 </script>

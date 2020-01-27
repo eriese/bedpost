@@ -41,20 +41,26 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'devise'
 gem 'mailjet'
+gem "aws-ses", "~> 0.6.0", :require => 'aws/ses'
 
 gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_mongoid'
 
+gem 'rack-cors'
+gem 'http'
 #handle env vars
 
+gem 'pry'
+gem 'pry-remote'
+gem 'pry-byebug'
+gem 'pry-stack_explorer'
+
 group :development, :test do
+	gem 'rspec-rails', '~> 3.8'
+	gem "rails-controller-testing"
 	# Call 'byebug' anywhere in the code to stop execution and get a debugger console
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-	gem 'pry'
-	gem 'pry-remote'
-	gem 'pry-byebug'
-	gem 'pry-stack_explorer'
 end
 
 group :development do
@@ -88,8 +94,6 @@ group :development do
 end
 
 group :test do
-	gem 'rspec-rails', '~> 3.8'
-	gem "rails-controller-testing"
 	gem 'factory_bot_rails'
 	# Adds support for Capybara system testing and selenium driver
 	gem 'capybara', '>= 2.15'
@@ -103,8 +107,8 @@ group :test do
 end
 
 group :production do
-	gem 'redis'
 	gem 'hiredis'
+	gem 'redis'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

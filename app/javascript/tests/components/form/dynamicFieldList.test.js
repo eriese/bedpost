@@ -1,13 +1,5 @@
 import {shallowMount} from '@vue/test-utils';
 import DynamicFieldList from '@components/form/DynamicFieldList.vue';
-import gsap from 'gsap';
-
-jest.mock('gsap');
-gsap.to.mockImplementation((el, duration, options) => {
-	if(options.onComplete) {
-		options.onComplete.apply(undefined, options.onCompleteParams);
-	}
-});
 
 describe('Dynamic Field List Component', () => {
 	global.gon = {
@@ -24,7 +16,7 @@ describe('Dynamic Field List Component', () => {
 	function mountList(list) {
 		return shallowMount(DynamicFieldList, {
 			propsData: {
-				list,
+				value: list,
 				componentType: 'encounter-contact-field',
 				baseName: 'encounter[contacts_attributes]'
 			},
@@ -40,10 +32,20 @@ describe('Dynamic Field List Component', () => {
 	});
 
 	describe('removeFromList', () => {
+		beforeAll(() => {
+			jest.useFakeTimers();
+		});
+
+		afterAll(() => {
+			jest.clearAllTimers();
+			jest.useRealTimers();
+		});
+
 		it('reduces the number of list items being submitted', () => {
 			const dfl = mountList([{name: 'one'}, {name: 'two'}]);
 
 			dfl.vm.removeFromList(0);
+			jest.runAllTimers();
 			expect(dfl.vm.numSubmitting).toBe(1);
 		});
 
@@ -53,6 +55,7 @@ describe('Dynamic Field List Component', () => {
 
 			const deleted = list[0];
 			dfl.vm.removeFromList(0);
+			jest.runAllTimers();
 			expect(deleted._destroy).toBe(true);
 		});
 
@@ -62,6 +65,7 @@ describe('Dynamic Field List Component', () => {
 			const secondPos = list[1].position;
 
 			dfl.vm.removeFromList(1);
+			jest.runAllTimers();
 			expect(list[2].position).toBe(secondPos);
 		});
 	});

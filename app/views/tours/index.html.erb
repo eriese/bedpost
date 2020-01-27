@@ -1,25 +1,26 @@
-<basic-stepper :default-props="{animLength: 0.2}" id="who_form">
-	<div class="centered-container" slot-scope="{step,setStep}">
-		<div v-if="step==0">
-			<h1 class="with-desc"><%= t(@has_partnerships ? ".header2" : ".header", name: current_user_profile.name) %></h1>
-			<% if @has_partnerships %>
-				<p class="desc"><%= t(".desc2", {count: @num_partnerships, partner_name: @num_partnerships > 1 ? nil : @first_partner.partner.name}) %></p>
-			<% else %>
-				<h2 class="desc"><%= t(".desc") %></h2>
-			<% end %>
-			<ul class="button-list">
-				<li><%= link_to new_partnership_path, {class: "as-button", data: {animation_type: 'slideLeft'}} do %>
-					<span><%= t(".add_partnership", {count: @num_partnerships}) %></span>
-				<% end%></li>
-				<% if @has_partnerships %>
-					<li>
-						<%= link_to (@num_partnerships == 1 ? new_partnership_encounter_path(@first_partner) : encounters_who_path) , {class: "as-button", data: {animation_type: 'slideLeft'}} do %>
-							<span><%= t(".add_encounter") %></span>
-						<% end %>
-					</li>
+<% body_class 'is-dark vertical-center' %>
+<% content_for :inner_class, 'container--is-full-height container--has-centered-child' %>
+<div class="container--has-centered-child__centered-child first-time">
+	<h1><%= t(@has_partnerships ? ".header2" : ".header", name: current_user_profile.name) %></h1>
+	<% if @has_partnerships %>
+		<p class="container--has-centered-text"><%= t(".desc2", {count: @num_partnerships, partner_name: @num_partnerships > 1 ? nil : @first_partner.partner.name}) %></p>
+	<% else %>
+		<h2><%= t(".desc") %></h2>
+	<% end %>
+	<ul class="button-list">
+		<li class="button-list__item"><%= link_to new_partnership_path, {class: "cta cta--is-square", data: {animation_type: 'slideLeft'}} do %>
+				<span class="cta--is-square__heading"><%= t(".add_partnership", {count: @num_partnerships}) %></span>
+			<% end%>
+		</li>
+		<% if @has_partnerships %>
+			<li class="button-list__item">
+				<%= link_to (@num_partnerships == 1 ? new_partnership_encounter_path(@first_partner) : encounters_who_path) , {class: "cta cta--is-square", data: {animation_type: 'slideLeft'}} do %>
+					<span class="cta--is-square__heading"><%= t(".add_encounter") %></span>
 				<% end %>
-			</ul>
-		</div>
-	</div>
-</basic-stepper>
-<div class="centered-container"><%= button_to t(".exit"), first_time_path, {method: :post} %></div>
+			</li>
+		<% end %>
+	</ul>
+</div>
+<div class="container--has-centered-text" id="exit-tour-button">
+	<%= button_to t(".exit"), first_time_path, {method: :post, class: 'cta cta--is-secondary container--is-centered'} %>
+</div>

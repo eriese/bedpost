@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options = { host: "#{ENV['CNAME']}.bedpost.me"}
+
 Rails.application.configure do
 	# Verifies that versions and hashed value of the package contents in the project's package.json
 	config.webpacker.check_yarn_integrity = false
@@ -59,14 +61,19 @@ Rails.application.configure do
 	config.log_tags = [ :request_id ]
 
 	# Use a different cache store in production.
-	config.cache_store = :redis_cache_store, {driver: :hiredis, url: ENV["REDIS_URL"]}
+	config.cache_store = :redis_cache_store, {
+		driver:						:hiredis,
+		url:							ENV['REDIS_URL'],
+		connect_timeout:	0.2,
+		read_timeout:			0.2,
+		write_timeout:		1.0
+	}
 
 	# Use a real queuing backend for Active Job (and separate queues per environment)
 	# config.active_job.queue_adapter     = :resque
 	# config.active_job.queue_name_prefix = "bedpost_#{Rails.env}"
 
 	# TODO update to the real url
-	config.action_mailer.default_url_options = { host: "#{ENV['CNAME']}.bedpost.me"}
 	config.action_mailer.perform_caching = false
 
 	# Ignore bad email addresses and do not raise email delivery errors.

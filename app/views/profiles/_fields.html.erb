@@ -1,11 +1,11 @@
-<%= f.text_field :name, tooltip: true if show_name%>
+<%= f.text_field(:name, tooltip: true) if show_name%>
 <%= yield %>
 
-<h2 class="with-desc"><%= t_action(".personal_prefs.title") %></h2>
-<p class="description"><%= t_action(".personal_prefs.desc") %></p>
-<%= f.select :pronoun_id, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true}%>
+<h2 class="with-desc h2--is-form-heading<%= f.options[:wizard] || f.options[:in_wizard] ? ' stepper__h2' : '' %>"><%= t_action(".personal_prefs.title") %></h2>
+<p class="description description--is-form-description"><%= t_action(".personal_prefs.desc") %></p>
+<%= f.select :pronoun_id, options_from_collection_for_select(pronouns, :id, :display), {}, {tooltip: true, required: true}%>
 <%= f.text_field :anus_name %>
 <%= f.text_field :external_name, tooltip: true %>
-<%= f.radio_group :can_penetrate, options: {radio_class: "hidden-radio", group_options: {field_class: "toggler"}} %>
-<%= f.radio_group :show_internal, buttons: [[true, {toggle: :internal_name}], [false, {toggle: :internal_name}]], options: {:checked_val => profile.has_internal?, radio_class: "hidden-radio", group_options: {validate: false, field_class: "toggler"}} %>
+<%= f.radio_group :can_penetrate, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler"} } %>
+<%= f.radio_group :show_internal, buttons: [[true, {toggle: :internal_name}], [false, {toggle: :internal_name}]], options: {:checked_val => profile.has_internal?, radio_class: "hidden-radio hidden-radio--cta", group_options: {validate: false, field_class: "toggler"}} %>
 <%= f.text_field :internal_name, :"v-show" => "vf.toggles['internal_name']", validate: false %>

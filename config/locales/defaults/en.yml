@@ -33,10 +33,12 @@ en:
   time:
     formats:
       most_recent: '%d %b, %Y'
+      long_date: '%B %d, %Y'
   errors:
     messages:
       email: Please enter a valid email address.
-      blank: "%{attribute} can't be blank."
+      blank: Oops, this one's blank!
+      acceptance: Uh oh! You have to accept before you can continue
   reset:
     errors:
       email:
@@ -59,6 +61,32 @@ en:
       zero: "%{count}"
       one: "%{count}"
       other: "%{count}"
+    label:
+      terms:
+        acceptance_group: I have read these terms and I accept them
+        acceptance:
+          'true': 'Yes'
+          'false': 'No'
+        opt_in_group: I give permission for my data to be used anonymously for research
+        opt_in:
+          'true': 'Yes'
+          'false': 'No'
+    tooltip:
+      terms:
+        opt_in_group: We will never sell your data to advertisers, but it can help public health researchers learn more about about STI transmission factors, and we think that's exciting.
+    arrow_button:
+      caret:
+        left: Go Back
+        right: Continue
+  terms:
+    show:
+      title:
+        tou: Our terms of use
+        privacy: Our privacy policy
+      new: These terms have changed since you last accepted them. Please review the new terms and accept.
+  application:
+    wizard:
+      submit: Finish
   show_password: show password
   hide_password: hide password
   join_delimeter: ', '

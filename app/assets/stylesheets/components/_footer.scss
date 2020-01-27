@@ -1,0 +1,40 @@
+.footer {
+	padding-inline-start: 0rem;
+	padding: $spacing-small;
+	list-style-type: none;
+	text-align: center;
+
+	&__item {
+		display: inline-block;
+	}
+
+	&__link {
+		font-weight: bold;
+
+		.footer--is-at-bottom  & {
+			@include themed(color, "link");
+
+			&:hover, &:focus {
+				@include themed(color, "link-light");
+			}
+		}
+
+		.footer--is-in-nav & {
+			@include themed-inverse(color, "h1");
+			body.has-form.is-light & {
+				color: theme-light-contrast("link-light");
+			}
+
+			&:hover, &:focus {
+				@include themed-inverse(color, "link");
+				body.has-form.is-light & {
+					color: theme-dark-contrast("link");
+				}
+			}
+		}
+	}
+
+	&__divider {
+		margin: 0rem $spacing-small;
+	}
+}

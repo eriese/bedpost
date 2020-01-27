@@ -10,7 +10,8 @@ module VuelidateForm::VuelidateFormHelper
 
 	private
 	def generate_form_using(method, args, options, block)
-		form_opts = options.delete(:vue) || {}
+		form_opts = (options.delete(:vue) || {}).with_indifferent_access
+		form_opts['name'] = options.delete(:name) if options.has_key? :name
 		set_options(options)
 		form_obj = nil
 		stepper_options = options.delete :stepper
@@ -37,6 +38,7 @@ module VuelidateForm::VuelidateFormHelper
 			"slot-scope" => "#{builder::SLOT_SCOPE}",
 			"@submit" => "#{builder::SLOT_SCOPE}.validateForm",
 			"@ajax:error" => "#{builder::SLOT_SCOPE}.handleError",
+			"@ajax:success" => "#{builder::SLOT_SCOPE}.handleSuccess",
 			"novalidate" => "",
 			"data-type" => "json"
 		})
@@ -50,7 +52,8 @@ module VuelidateForm::VuelidateFormHelper
 			":validate" => form_obj.validations.to_json,
 			":start-toggles" => form_obj.toggles.to_json,
 			":value" => form_obj.value.to_json,
-			":error" => flash[:submission_error],
+			":error" => (flash[:submission_error] || {}).to_json,
+			"name" => form_obj.form_name
 		}.merge(form_opts)) do
 			form_text
 		end

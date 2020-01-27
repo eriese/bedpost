@@ -1,0 +1,232 @@
+///////////////////////
+// theming
+///////////////////////
+@function theme-light($color-key) {
+	@return map-get($colors-light, $color-key);
+}
+
+@function theme-light-contrast($color-key) {
+	@return map-get($colors-light-contrast, $color-key);
+}
+
+@function theme-dark($color-key) {
+	@return map-get($colors-dark, $color-key);
+}
+
+@function theme-dark-contrast($color-key) {
+	@return map-get($colors-dark-contrast, $color-key);
+}
+
+@mixin themed-styles($theme-map: $themes, $contrast-theme-map: $themes-contrast, $include-contrast: true) {
+	@each $theme, $theme-colors in $theme-map {
+		body.is-#{$theme} & {
+			@content($theme, $theme-colors);
+		}
+
+		@if $include-contrast {
+			body.is-#{$theme} .container--has-contrast-background & {
+				$contrast-colors: map-get($contrast-theme-map, $theme);
+				@content($theme, $contrast-colors);
+			}
+		}
+	}
+}
+
+@mixin themed-from-map($prop: background-color, $map-key: "background", $opacity: 1, $theme-map: $themes) {
+	@each $theme, $theme-colors in $theme-map {
+		body.is-#{$theme} & {
+			#{$prop}: rgba(map-get($theme-colors, $map-key), $opacity);
+		}
+	}
+}
+
+@mixin themed-inverse($prop: background-color, $map-key: "background", $opacity: 1) {
+	@include themed-from-map($prop, $map-key, $opacity, $themes-inverse);
+}
+
+@mixin themed-contrast($prop: background-color, $map-key: "background", $opacity: 1) {
+	@include themed-from-map($prop, $map-key, $opacity, $themes-contrast);
+}
+
+@mixin themed($prop: background-color, $map-key: "background", $opacity: 1, $include-contrast: true) {
+	@include themed-from-map($prop, $map-key, $opacity, $themes);
+
+	@if $include-contrast {
+		.container--has-contrast-background & {
+			@include themed-contrast($prop, $map-key, $opacity);
+		}
+	}
+}
+
+///////////////////////
+// text styles
+///////////////////////
+@mixin heading1 {
+	font-family: $font-header;
+	font-size: rem(40px);
+	margin: 0.5rem 0;
+	text-align: center;
+	line-height: 1.15;
+	color: theme-light("h1");
+	@include themed(color, "h1");
+
+	&.header {
+		margin-top: 0;
+	}
+}
+
+@mixin heading2 {
+	color: theme-light("h2");
+	font-weight: 700;
+	font-size: rem(24px);
+	text-align: center;
+	@include themed(color, "h2");
+
+	&.has-desc {
+		margin-bottom: 0.25em;
+	}
+}
+
+@mixin base-text {
+	font-size: rem(13px);
+	line-height: rem(18px);
+}
+
+@mixin base-input($multiplier: 1) {
+	border-radius: $input-border-radius * $multiplier;
+	border-width: rem(1px) * $multiplier;
+	padding: 0.2rem * $multiplier 1rem * $multiplier;
+	height: $input-height * $multiplier;
+	line-height: 1 * $multiplier;
+	font-size: 0.75rem * $multiplier;
+}
+
+////////////////////////
+// box styles
+////////////////////////
+
+@mixin centered {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@mixin self-clearing {
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+///////////////////////
+// ctas
+///////////////////////
+@mixin hover-and-focus {
+	&:hover, &:focus {
+		&:not([disabled]) {
+			@content;
+		}
+	}
+}
+
+@mixin cta-base {
+	cursor: pointer;
+	padding: rem(10px) rem(30px);
+	border-style: none;
+	font-weight: 800;
+	text-transform: uppercase;
+	border-radius: 3rem;
+	min-width: 8rem;
+	text-decoration: none;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+
+@mixin cta-transition {
+	transition-duration: 0.3s;
+	transition-property: color, background-color, box-shadow, stroke, opacity, border-color;
+	transition-timing-function: ease-in-out;
+}
+
+@mixin cta-text-colors($theme: $colors-light, $suffix: "", $property: color) {
+	#{$property}: map-get($theme, "cta-text");
+	@include hover-and-focus {
+		#{$property}: map-get($theme, "cta-bg#{$suffix}");
+	}
+}
+
+@mixin cta-background-colors($theme: $colors-light, $suffix: "", $property: background-color) {
+	#{$property}: map-get($theme, "cta-bg#{$suffix}");
+	@include hover-and-focus {
+		#{$property}: map-get($theme, "cta-text");
+	}
+}
+
+@mixin cta-colors($theme: $colors-light, $suffix: "") {
+	@include cta-text-colors($theme, $suffix, color);
+	@include cta-background-colors($theme, $suffix, background-color);
+	box-shadow: $box-shadow-val map-get($theme, "shadow");
+}
+
+@mixin cta($theme: $colors-light, $suffix: "") {
+	@include cta-base;
+	@include cta-colors($theme, $suffix);
+	@include cta-transition;
+}
+
+@mixin disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+///////////////////////
+// link
+///////////////////////
+@mixin link-colors($theme: $colors-light, $suffix: "", $property: color) {
+	#{$property}: map-get($theme, "link#{$suffix}");
+	@include hover-and-focus {
+		#{$property}: map-get($theme, "link-light#{$suffix}");
+	}
+}
+
+@mixin link($theme: $colors-light, $suffix: "") {
+	cursor: pointer;
+	-webkit-appearance: none;
+	border: none;
+	padding: 0;
+	transition: 0.1s linear color;
+	text-decoration: underline;
+	background-color: transparent;
+	@include link-colors($theme, $suffix);
+}
+
+//////////////////////////
+// tooltip
+//////////////////////////
+
+@mixin tooltip-arrow($root-selector: '') {
+	@each $position in ('top' 'bottom') {
+		#{$root-selector}[x-placement^=#{$position}] & {
+			border-#{$position}-color: inherit;
+		}
+	}
+
+	@each $position in ('start' 'end') {
+		#{$root-selector}[y-placement^=#{$position}] & {
+			border-#{$position}-color: inherit;
+		}
+	}
+}
+
+@mixin tooltip($background-color: theme-light("h1"), $theme: $colors-light, $suffix: "") {
+	background-color: $background-color;
+	font-weight: bold;
+	color: map-get($theme, "background#{$suffix}");
+	box-shadow: $box-shadow-val map-get($theme, "shadow");
+	border-top-color: $background-color;
+	border-bottom-color: $background-color;
+	border-left-color:  $background-color;
+	border-right-color:  $background-color;
+}

@@ -32,6 +32,9 @@ en:
       bv: BV (Bacterial Vaginosis)
       public_lice: Public Lice
       scabies: Scabies
+    caveat:
+      increased_by_fluids: "<sup>*</sup>This risk is lower if no fluids were exchanged"
+      if_strapon: "<sup>+</sup>This risk only applies if you were using a strap-on"
     transmission_risk:
       risk_level:
         zero: None
@@ -39,7 +42,8 @@ en:
         two: Low
         three: Moderate
         four: High
-  date:
+        five: Sources are conflicted, we'll make a recommendation below
+  time:
     formats:
       best_test_html: "<span class='month-year'>%b</span><span class='day'><span>%d</span></span>"
 

@@ -1,13 +1,42 @@
-<div class="centered-container">
-	<h2><%= t(".partner_html", {name: @partnership.partner.name}) %></h2>
-	<%= vuelidate_form_with model: @partnership, html: {class: "centered"} do |f| %>
-		<%= f.hidden_field :partner_id %>
-		<%= f.wizard "{stepClass: 'step'}" do %>
-			<%= render "fields", f: f %>
+<% content_for :body_class, 'vertical-center' %>
+<% content_for :inner_class, 'container--is-full-height' %>
+<div class="container--has-centered-text container--is-full-height container--has-centered-child">
+	<h1><%= t('.title_html') %></h1>
+	<%= vuelidate_form_with model: @partnership, html: {class: "centered container--has-centered-child__centered-child"}, vue: {':dynamic-validation' => "additional.uid"} do |f| %>
+		<%= f.wizard do %>
+			<%= f.step true do %>
+				<h2 class="stepper__h2"><%= t_action('.desc_html') %></h2>
+				<%= f.fields_for :partner, @partnership.partner do |pf1| %>
+					<%= pf1.text_field :name,
+						tooltip: true,
+						required: false,
+						in_step: true,
+						validators: [{kind: :require_unless_valid, options: {path: :uid}}]
+					%>
+				<% end %>
+				<h4>OR</h4>
+				<%= f.text_field :uid,
+					tooltip: true,
+					is_step: false,
+					in_step: true,
+					field_options: {
+						'@input-blur' => 'additionalField("uid", arguments[1])'
+					},
+					validators: [{kind: :require_unless_valid, options: {path: 'partner_attributes.name'}}]
+				%>
+			<% end %>
+			<% f.add_toggle(:tip, true) %>
+			<%= render "fields", f: f, partnership: @partnership %>
+			<%= f.text_field(:nickname, tooltip: {show_always: true}) %>
+
+			<%= f.step true, :"v-if" => '!vf.formData.uid || vf.$v.formData.uid.$invalid', ref: 'partner_attributes' do %>
+				<%= f.fields_for :partner, @partnership.partner do |pf2| %>
+					<%= render 'profiles/fields', f: pf2, profile: @partnership.partner, show_name: false %>
+				<% end %>
+			<% end %>
 			<% content_for :last_button do %>
-				<%= f.submit nil, :":class"=>'["not-button"]'%>
+				<%= f.parent_submit t('.submit'), :class=>"link link--no-line", "@click" => "onClick" %>
 			<% end %>
 		<% end %>
 	<% end %>
-	<%= link_to t(".back"), who_path, "data-animation-type" => "slideRight" if @partnership.partner.is_a?(UserProfile) %>
 </div>

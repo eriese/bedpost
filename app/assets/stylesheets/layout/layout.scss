@@ -1,0 +1,311 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body, #vue-container {
+	height: 100%;
+	font-size: $root-font-size;
+	font-family: $text-font;
+}
+
+body, body.has-form {
+	@each $theme, $theme-colors in $themes {
+		&.is-#{$theme} {
+			color: map-get($theme-colors, "text");
+			background-color: map-get($theme-colors, "background");
+
+			&.has-form {
+				background-color: map-get($theme-colors, "form-background");
+			}
+		}
+	}
+}
+
+body.is-light-contrast, body.is-dark-contrast {
+	font-weight: bold;
+
+	.container--has-contrast-background {
+		font-weight: normal;
+	}
+}
+
+body.vertical-center, .body--has-footer {
+	#vue-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		width: 100%;
+	}
+
+	&.body--has-columns {
+		.header--is-big {
+			flex-grow: 1;
+		}
+	}
+
+	main {
+		flex-grow: 2;
+		flex-basis: 100%;
+	}
+}
+
+h1 {
+	@include heading1;
+}
+
+h2 {
+	@include heading2;
+}
+
+.heading {
+	&--has-no-top-margin {
+		margin-top: 0;
+	}
+
+	&--has-half-margin {
+		margin: 0.5rem 0;
+	}
+}
+
+header {
+	text-align: center;
+	font-family: $font-header;
+	font-size: rem(55px);
+	position: relative;
+
+	> span, > a {
+		@include themed(color, "background-contrast");
+
+		body.is-light.has-form & {
+			color: theme-light-contrast("h1");
+		}
+	}
+
+	&.header {
+		&--is-small {
+			font-size: rem(32px);
+			line-height: 1.5;
+		}
+
+		&--has-nav {
+			box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+			text-align: left;
+		}
+	}
+}
+
+main {
+	clear: both;
+	padding: rem(10px);
+	padding-bottom: $spacing-default;
+	opacity: 0;
+
+	.no-js & {
+		opacity: 1;
+	}
+}
+
+ul {
+	&.no-dots li {
+		list-style-type: none;
+	}
+
+	&.--is-unstyled {
+		padding-inline-start: 0;
+		list-style-type: none;
+	}
+}
+
+p.description {
+	margin-top: 0;
+}
+
+#logo {
+	text-decoration: none;
+
+	img {
+		vertical-align: middle;
+		margin: $spacing-small;
+		height: 2.5rem;
+
+		@include media($mobile) {
+			height: 2rem;
+		}
+	}
+}
+
+.with-js noscript {
+	display: none;
+}
+
+.no-js {
+	@include media(('>phone', '!retina')) {
+		padding-left: $nav-width;
+	}
+
+	.js-only {
+		display: none !important;
+	}
+}
+
+#no-js-warning {
+	text-align: center;
+	font-weight: bold;
+	border: rem(1px) solid;
+	@include themed(border-color, "background-contrast");
+}
+
+#flash {
+	text-align: center;
+	font-weight: bold;
+	clear: both;
+
+	> div {
+		padding: 0.25rem;
+		border: rem(3px) solid transparent;
+		border-radius: $default-border-radius;
+		margin-bottom: $spacing-default;
+	}
+
+	.flash-notice {
+		@include themed(border-color, "background-contrast");
+	}
+
+	.flash-alert {
+		@include themed(border-color, "background-contrast");
+	}
+
+	.flash-error {
+		@include themed(border-color, "cta-bg");
+	}
+
+	.flash-message {
+		@include themed(border-color, "h1");
+	}
+}
+
+.aria-only {
+	font-size: 0rem;
+}
+
+.clear {
+	clear: both;
+}
+
+#page-container-inner {
+	max-width: rem(1000px);
+	@include centered;
+	@include self-clearing;
+}
+
+.container {
+	&--has-centered-text {
+		text-align: center;
+	}
+
+	&--is-centered {
+		margin-right: auto;
+		margin-left: auto;
+	}
+
+	&--is-full-height {
+		height: 100%;
+
+		&-with-constraint {
+			height: 100%;
+
+			@include media(">tablet") {
+				max-height: 30rem;
+			}
+		}
+	}
+
+	&--is-scrollable {
+		overflow: auto;
+	}
+
+	&--is-vertically-centered {
+		display: flex;
+		align-items: center;
+		align-content: center;
+	}
+
+	&--has-centered-child {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+
+		&__centered-child {
+			flex-basis: 50%;
+			flex-grow: 1;
+		}
+	}
+
+	&--has-static-info {
+		padding: 0 $spacing-medium;
+	}
+
+	&--is-card {
+		border-radius: $default-border-radius;
+		padding: $spacing-medium;
+	}
+
+	&--is-rounded {
+		border-radius: $default-border-radius;
+		padding: rem(10px);
+		margin-bottom: rem(10px);
+		transition: border-radius 0.2s ease-in-out;
+
+		&__title {
+			text-align: center;
+			margin: 0 0 0.2rem 0;
+		}
+
+		&.dropdown--is-closed {
+			border-radius: 1.5rem;
+		}
+	}
+
+	&--has-contrast-background {
+		@include themed-contrast(background-color, "background");
+		@include themed-contrast(color, "text");
+	}
+
+	&--has-contrast-border {
+		border: 2px solid;
+		@include themed(border-color, "background-contrast");
+	}
+
+	@include themed-styles using ($theme, $theme-colors) {
+		&--has-white-background {
+			background-color: $color-white;
+		}
+
+		&--has-gray-background {
+			background-color: theme-light("cta-bg");
+			color: $color-white;
+		}
+
+		&--has-dark-gray-background {
+			background-color: theme-light("h1");
+			color: $color-white;
+		}
+
+		&--has-dark-background {
+			background-color: theme-dark("background");
+			color: $color-white;
+		}
+	}
+}
+
+.desc {
+	h1 + &, h2 + &, h3 + &, h4 + &, {
+		line-height: 1rem;
+		margin-top: 0rem;
+		margin-bottom: 1rem;
+	}
+}
+
+span.confirmation {
+	display: block;
+}

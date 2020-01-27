@@ -1,9 +1,10 @@
 <div class="login">
-	<h1>Resend unlock instructions</h1>
+	<h1><%= t('.title') %></h1>
+	<h2><%= t('.desc') %></h2>
 	<%= vuelidate_form_for(resource, as: resource_name, url: unlock_path(resource_name), require_all: true, html: { method: :post, class: "big centered"}) do |f| %>
-	  <%= render "devise/shared/error_messages", resource: resource %>
-	  <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-	  <%= f.submit "Resend unlock instructions" %>
-	  <div class="additional"><%= render "devise/shared/links" %></div>
+		<%= render "devise/shared/error_messages", resource: resource %>
+		<%= f.email_field :email, autofocus: true, autocomplete: "email", skip_validations: [:uniqueness] %>
+		<%= f.submit :class => "cta" %>
+		<div class="additional"><%= render "devise/shared/links" %></div>
 	<% end %>
 </div>

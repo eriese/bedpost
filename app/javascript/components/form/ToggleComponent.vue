@@ -1,5 +1,5 @@
 <template>
-	<button :class="['toggle', {'not-button': !asButton}]" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
+	<button :class="['toggle']" @click="doToggle" type="button" :aria-pressed="pressed" :aria-expanded="expanded">{{toggleState}}</button>
 </template>
 
 <script>
@@ -15,7 +15,6 @@
  * @vue-prop {String} field the field that is being toggled
  * @vue-prop {Array} [clearOn] an array of values that should clear the field supplied by clear. If this property is not supplied, all toggles will clear the clear field
  * @vue-prop {Boolean} [expandable=false] does this toggle expand a menu?
- * @vue-prop {Boolean} [asButton=false] should the toggle be styled as a button?
  * @vue-computed {String} toggleState the label taken from symbols to describe the toggle's current state
  * @vue-computed {Number} index the index the current value has in the vals array
  * @vue-computed {Boolean} expanded is the menu this toggle expands exapnded?
@@ -57,10 +56,6 @@ export default {
 			type: Boolean,
 			required: false
 		},
-		asButton: {
-			type: Boolean,
-			default: false
-		}
 	},
 	computed: {
 		toggleState: function() {
@@ -100,18 +95,25 @@ export default {
 	methods: {
 		/**
 		 * Toggle to the next value
-		 *
-		 * @emits module:components/form/ToggleComponent~toggle-event
 		 */
 		doToggle() {
-			let new_ind = this.index + 1;
+			let newInd = this.index + 1;
 			// loop around to 0 if need be
-			if (new_ind == this.vals.length) {
-				new_ind = 0;
+			if (newInd == this.vals.length) {
+				newInd = 0;
 			}
 
+			this.onToggle(newInd);
+		},
+		/**
+		 * React to a new index
+		 *
+		 * @param  {number} newInd the new index
+		 * @emits module:components/form/ToggleComponent~toggle-event
+		 */
+		onToggle(newInd) {
 			// get the new value
-			let new_val = this.vals[new_ind];
+			let new_val = this.vals[newInd];
 			// check if this toggle should clear
 			let clear = null;
 			if (this.clear && (this.clearOn === undefined || this.clearOn.indexOf(new_val) >= 0)) {
@@ -119,7 +121,7 @@ export default {
 			}
 			// emit the event
 			this.$emit('toggle-event', this.$attrs.field, new_val,clear);
-		}
+		},
 	},
 	mounted: function() {
 		this.$emit('toggle-mounted');

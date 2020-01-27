@@ -1,0 +1,118 @@
+////////////////////////////////////////
+// V-Calendar
+////////////////////////////////////////
+#page-container #page-container-inner {
+	.vc-container {
+		--dot-diameter: 0.45rem;
+		--bar-height: rem(6px);
+	}
+
+	.vc-rounded-lg {
+		border-radius: $default-border-radius;
+	}
+
+	.vc-shadow {
+		body.is-light & {
+			box-shadow: $box-shadow-val theme-light('shadow');
+		}
+
+		body.is-dark & {
+			box-shadow: $box-shadow-val theme-dark('shadow');
+		}
+	}
+
+	.vc-popover-content-wrapper .vc-popover-content {
+		@include themed(border-color, $input-border-focus-key);
+	}
+
+	.vc-bg-white {
+		@include themed;
+	}
+
+	.vc-text-gray-900 {
+		@include themed(color, 'text');
+	}
+
+	.vc-text-gray-800 {
+		@include themed(color, 'h2');
+	}
+
+	.vc-text-gray-600 {
+		@include themed(color, 'cta-bg');
+
+		&.hover\:vc-opacity-50:hover, &.focus\:vc-bg-gray-200:focus {
+			opacity: 1;
+			@include themed(color, 'background');
+			@include themed(background-color, 'cta-bg');
+			border-radius: 50%
+		}
+	}
+
+	.vc-text-gray-500 {
+		@include themed(color, "h1");
+	}
+
+	.vc-text-white {
+		@include themed(color, "background");
+	}
+
+	.vc-bg-blue-600 {
+		@include themed(background-color, $input-border-focus-key);
+	}
+
+	.vc-bg-gray-800, .vc-bg-gray-900 {
+		@include themed(background-color, 'background');
+		@include themed(color, 'text');
+	}
+
+	.vc-day-layer {
+		.vc-day-layer ~ .vc-day-layer {
+			.vc-highlight {
+				box-shadow: none;
+			}
+		}
+	}
+
+	@mixin toggle-button($bg-key, $is-dark: true) {
+
+		@include themed(background-color, $bg-key);
+		@include themed(border-color, $bg-key);
+		border: rem(2px) solid;
+
+		body.is-light & {
+			box-shadow: $box-shadow-val theme-light('shadow');
+		}
+
+		body.is-dark & {
+			box-shadow: $box-shadow-val theme-dark('shadow');
+		}
+
+
+		&[aria-pressed=false] {
+			background-color: $color-white;
+			color: $color-black;
+
+			@if $is-dark {
+				color: $bg-color;
+			}
+		}
+
+		@if $is-dark {
+			color: $color-white;
+		}
+		@else {
+			color: $color-black;
+		}
+	}
+
+	$partner-color-keys: "input-border" "input-border-focus" "h1" "form-background" "h2" "cta-bg";
+	@for $i from 0 through 5 {
+		$color-key: nth($partner-color-keys, $i + 1);
+
+		.vc-bg-partnership-#{$i}-600,
+		.vc-bg-partnership-#{$i}-500,
+		.partnership-#{$i} {
+			@include toggle-button($color-key);
+		}
+	}
+}

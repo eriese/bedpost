@@ -5,6 +5,9 @@ en:
       new_encounter: I had sex
       title: Hi %{name}, what's new?
   application:
+    new:
+      title: Now more about this person...
+      desc: Tell us how to talk about this person and their body so we can describe your sex the way you would.
     edit:
       account_settings: Account Settings
       personal_prefs:
@@ -30,6 +33,8 @@ en:
               blank: Please tell us what you call your external genitals.
             uid:
               taken: That partnering ID is unavailable. Please try a different one.
+            tou:
+              acceptance: Please accept these terms in order to continue
   helpers:
     label:
       user_profile:
@@ -40,12 +45,17 @@ en:
         pronoun_id: What pronouns do you use?
         can_penetrate_group: Can your external genitals be used for penetration?
         old_password: Current password
-        new_password: New password
-        new_password_confirmation: Confirm your new password
+        password: New password
+        password_confirmation: Confirm your new password
         opt_in_group: Allow us to use your data (minus name and email) for research purposes?
         opt_in:
           'true': 'Yes'
           'false': 'No'
+        name: First name
+        registration:
+          name: First name
+          password: Password
+          password_confirmation: Confirm your password
     tooltip:
       user_profile:
         name: We really only care about your first name, but it's up to you.

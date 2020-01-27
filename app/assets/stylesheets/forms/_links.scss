@@ -1,0 +1,43 @@
+.link {
+	@include link;
+
+	@mixin themed-link($theme-map) {
+		@include link-colors($theme-map);
+		@include link-colors($theme-map, $property: stroke);
+
+		&--is-secondary {
+			@include link-colors($theme-map, $suffix: "-light");
+			@include link-colors($theme-map, $suffix: "-light", $property: stroke);
+		}
+	}
+
+	@each $theme, $theme-map in $themes {
+		body.is-#{$theme} & {
+			@include themed-link($theme-map);
+		}
+	}
+
+	@each $theme, $theme-map in $themes {
+		body &.link--is-#{$theme}-theme {
+			@include themed-link($theme-map);
+		}
+	}
+
+	@each $theme, $theme-map in $themes {
+		body.is-#{$theme} &.container--has-contrast-background__link {
+			@include themed-link(map-get($themes-contrast, $theme));
+		}
+	}
+
+	&--no-line {
+		text-decoration: none;
+	}
+
+	svg {
+		stroke: inherit;
+	}
+
+	&:disabled {
+		@include disabled
+	}
+}

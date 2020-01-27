@@ -1,7 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // fix webpacker's outdated setup for anything using css-loader
 module.exports = function(environment) {
-
 	const cssExtract = environment.plugins.find((p) => p.key == 'MiniCssExtract');
 	const extractIndex = environment.plugins.indexOf(cssExtract);
 	const MiniCssExtract = new MiniCssExtractPlugin( {
@@ -19,9 +18,9 @@ module.exports = function(environment) {
 			return;
 		}
 
-		thisLoader.use.unshift({loader: 'vue-style-loader', options: {}});
 		if(cssLoader.options.modules) {
 			cssLoader.options.modules = {localIdentName: cssLoader.options.localIdentName};
+			thisLoader.use.unshift({loader: 'vue-style-loader', options: {}});
 		}
 
 		delete cssLoader.options.localIdentName;

@@ -23,6 +23,7 @@ RSpec.describe StaticResource, type: :module do
 
 	after do
 		Rails.cache.clear
+		allow(StaticResourceTestModel).to receive(:where).and_call_original
 		StaticResourceTestModel.destroy_all
 	end
 
@@ -120,6 +121,46 @@ RSpec.describe StaticResource, type: :module do
 			end
 		end
 
+		describe '#newest' do
+			context 'without arguments' do
+				it 'calls order and then last' do
+					make_models(2)
+					order_query = double('OrderQuery', {last: nil})
+					allow(StaticResourceTestModel).to receive(:order) {order_query}
+					StaticResourceTestModel.newest
+					expect(StaticResourceTestModel).to have_received(:order).with(updated_at: :desc)
+					expect(order_query).to have_received(:last)
+				end
+
+				it 'caches' do
+					make_models(1)
+					StaticResourceTestModel.newest
+					expect(in_cache? 'newest').to be true
+				end
+			end
+
+			context 'with arguments' do
+				it 'calls where, then order, then last' do
+					make_models(2)
+					order_query = double('OrderQuery', last: nil)
+					where_query = double('WhereQuery', order: order_query)
+
+					allow(StaticResourceTestModel).to receive(:where) {where_query}
+					StaticResourceTestModel.newest(f_1: nil)
+					expect(StaticResourceTestModel).to have_received(:where).with(f_1: nil)
+					expect(where_query).to have_received(:order).with(updated_at: :desc)
+					expect(order_query).to have_received(:last)
+				end
+
+				it 'caches' do
+					make_models(1)
+					args = {f_1: nil}
+					StaticResourceTestModel.newest(**args)
+					expect(in_cache? "newest#{args.to_json}").to be true
+				end
+			end
+		end
+
 		describe '#grouped_by' do
 			it 'caches by column and instantiation arguments' do
 				make_models(2, f_1: "first")
@@ -163,24 +204,20 @@ RSpec.describe StaticResource, type: :module do
 			end
 		end
 
-		describe '#find_cached' do
-			it 'finds an entry by its id' do
-				model = StaticResourceTestModel.create
-				found = StaticResourceTestModel.find_cached(model.id)
-				expect(found).to eq model
-			end
-
-			it 'caches the found entry' do
+		describe '#cached' do
+			it 'caches the result' do
 				model = StaticResourceTestModel.create
 				expect(StaticResourceTestModel).to receive(:find).with(model.id).once
-				StaticResourceTestModel.find_cached(model.id)
-				StaticResourceTestModel.find_cached(model.id)
-				expect(in_cache?("_id:#{model.id}")).to be true
+				StaticResourceTestModel.cached(model.id) {StaticResourceTestModel.find(model.id)}
+				StaticResourceTestModel.cached(model.id) {StaticResourceTestModel.find(model.id)}
+				expect(in_cache?(model.id)).to be true
 			end
 
-			it 'accepts an optional argument to look for a field other than id' do
-				model = StaticResourceTestModel.create(f_1: "other")
-				found = StaticResourceTestModel.find_cached(model.f_1, field: :f_1)
+			it 'accepts a block that runs a query' do
+				model = StaticResourceTestModel.create(f_1: 'other', f_2: 'something')
+				found = StaticResourceTestModel.cached("#{model.f_1}-#{model.f_2}") do
+					StaticResourceTestModel.find_by(f_1: model.f_1, f_2: model.f_2)
+				end
 				expect(found).to eq model
 			end
 		end

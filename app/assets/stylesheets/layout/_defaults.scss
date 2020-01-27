@@ -1,0 +1,211 @@
+@import 'include-media-or/dist/_include-media-or';
+///////////////////////
+// initial setup
+///////////////////////
+$root-font-size: 16px;
+
+@function rem($numPx) {
+	@return ($numPx / $root-font-size) * 1rem;
+}
+
+///////////////////////
+// fonts
+///////////////////////
+$text-font: 'Open Sans', sans-serif;
+$font-header: 'Baloo', cursive;
+
+///////////////////////
+// spacing
+///////////////////////
+$spacing-default: 1rem;
+$spacing-medium:  $spacing-default * 1.5;
+$spacing-double:  $spacing-default * 2;
+$spacing-small:   $spacing-default / 2;
+$spacing-tiny:    $spacing-default / 4;
+
+///////////////////////
+// sizing
+///////////////////////
+$nav-width: rem(250px);
+$nav-button-width: rem(36px);
+$default-border-radius: 0.95rem;
+$default-border-radius-small: rem(5px);
+$box-shadow-val: 0px 0px 2px 1px;
+$box-shadow-val-small: 0px 0px 1px 1px;
+$constrained-width: 30rem;
+
+///////////////////////
+// breakpoints
+///////////////////////
+$screen-tablet: 580px;
+$screen-phone: 376px;
+$custom-media-expressions: (
+	"!retina": ('(-webkit-max-device-pixel-ratio: 1)', '(max--moz-device-pixel-ratio: 1)', '(-o-max-device-pixel-ratio: 1)', '(max-device-pixel-ratio: 1)'),
+	"retina": ('(min--moz-device-pixel-ratio: 1.5)', '(-o-min-device-pixel-ratio: 3/2)', '(-webkit-min-device-pixel-ratio: 1.5)', '(min-device-pixel-ratio: 1.5)', '(min-resolution: 144dpi)', '(min-resolution: 1.5dppx)'),
+);
+$media-expressions: map-merge($media-expressions, $custom-media-expressions);
+$breakpoints: map-merge($breakpoints, ("tablet": $screen-tablet, "phone": $screen-phone));
+$mobile: "<tablet" ("retina", "retina2x", "retina3x");
+///////////////////////
+// Themes
+///////////////////////
+$color-black: #333;
+$color-off-white: #EEE;
+$color-white: #FFF;
+
+$colors-light: (
+	"cta-text": $color-white,
+	"cta-bg": #7A405E,
+	"cta-bg-light": #AF6A64,
+	"cta-bg-form": #AF5D87,
+	"link": #7A405E,
+	"link-light": #AF6A64,
+	"link-light-light": #C78DAB,
+	"shadow": rgba($color-black, 0.3),
+	"h1": #433060,
+	"h2": $color-black,
+	"background": $color-white,
+	"background-contrast": #AF5C87,
+	"text": $color-black,
+	"input-border": #7B405E,
+	"input-border-focus": #AF6A64,
+	"form-background": #AF5D87,
+);
+
+$colors-dark: (
+	"cta-text": #2E2143,
+	"cta-bg": #C78DAB,
+	"cta-bg-light": #FC9890,
+	"cta-bg-form": #FC9890,
+	"link": #C78DAB,
+	"link-light": #FC9890,
+	"link-light-light": #AF5D87,
+	"shadow": rgba($color-white, 0.3),
+	"h1": #FFD6CC,
+	"h2": $color-off-white,
+	"background": #2E2143,
+	"background-contrast": #FC9890,
+	"text": $color-white,
+	"input-border": #7B405E,
+	"input-border-focus": #FFD6CC,
+	"form-background": #FC9890,
+);
+
+$colors-light-contrast: (
+	"cta-text": $color-white,
+	"cta-bg": map-get($colors-light, "cta-bg"),
+	"cta-bg-light": #AF6A64,
+	"cta-bg-form": #AF5D87,
+	"link": map-get($colors-light, "link"),
+	"link-light": #AF6A64,
+	"link-light-light": #C78DAB,
+	"shadow": rgba($color-black, 0.3),
+	"h1": $color-white,
+	"h2": $color-white,
+	"background": map-get($colors-light, "background-contrast"),
+	"background-contrast": $color-white,
+	"text": $color-black,
+	"input-border": #7B405E,
+	"input-border-focus": #AF6A64,
+	"form-background": #AF5D87,
+);
+
+$colors-dark-contrast: (
+	"cta-text": map-get($colors-dark, "background-contrast"),
+	"cta-bg": map-get($colors-light, "cta-bg"),
+	"cta-bg-light": map-get($colors-light, "h1"),
+	"cta-bg-form": map-get($colors-light, "cta-bg"),
+	"link": map-get($colors-light, "cta-bg"),
+	"link-light": map-get($colors-light, "h1"),
+	"link-light-light": #AF5D87,
+	"shadow": rgba($color-white, 0.3),
+	"h1": map-get($colors-light, "h1"),
+	"h2": $color-off-white,
+	"background": map-get($colors-dark, "background-contrast"),
+	"background-contrast": map-get($colors-dark, "background"),
+	"text": map-get($colors-dark, "background"),
+	"input-border": #7B405E,
+	"input-border-focus": #FFD6CC,
+	"form-background": map-get($colors-light, "cta-bg"),
+);
+
+$colors-flesh: (
+	"cta-text": #FFD6CC,
+	"cta-bg": #8365B2,
+	"cta-bg-light": #AF8B82,
+	"cta-bg-form": #7A405E,
+	"link": #8365B2,
+	"link-light": #AF8B82,
+	"link-light-light": #7A405E,
+	"shadow": rgba($color-white, 0.3),
+	"h1": #433060,
+	"h2": #7A405E,
+	"background": #FFD6CC,
+	"background-contrast": $color-white,
+	"text": #7A405E,
+	"input-border": #8365B2,
+	"input-border-focus": #AF8B82,
+	"form-background": #FFD6CC
+);
+
+$colors-flesh-contrast: (
+	"cta-text": $color-white,
+	"cta-bg": #8365B2,
+	"cta-bg-light": #AF8B82,
+	"cta-bg-form": #7A405E,
+	"link": #8365B2,
+	"link-light": #AF8B82,
+	"link-light-light": #7A405E,
+	"shadow": rgba($color-white, 0.3),
+	"h1": #433060,
+	"h2": #7A405E,
+	"background": $color-white,
+	"background-contrast": #FFD6CC,
+	"text": #7A405E,
+	"input-border": #8365B2,
+	"input-border-focus": #AF8B82,
+	"form-background": #FFD6CC
+);
+
+$themes: (
+	"light": $colors-light,
+	"dark": $colors-dark,
+	"light-contrast": $colors-light-contrast,
+	"dark-contrast": $colors-dark-contrast,
+	"flesh": $colors-flesh,
+	"flesh-contrast": $colors-flesh-contrast
+);
+
+$themes-inverse: (
+	"light": $colors-dark,
+	"dark": $colors-light,
+	"light-contrast": $colors-dark-contrast,
+	"dark-contrast": $colors-light-contrast,
+	"flesh": $colors-flesh-contrast,
+	"flesh-contrast": $colors-flesh
+);
+
+$themes-contrast: (
+	"light": $colors-light-contrast,
+	"dark": $colors-dark-contrast,
+	"light-contrast": $colors-light,
+	"dark-contrast": $colors-dark,
+	"flesh": $colors-flesh-contrast,
+	"flesh-contrast": $colors-flesh
+);
+
+:export {
+	@each $key, $value in $colors-dark {
+		darkTheme-#{unquote($key)}: $value;
+		lightTheme-#{unquote($key)}: map-get($colors-light, $key);
+	}
+}
+
+///////////////////////
+// input defaults
+///////////////////////
+$input-background-color: $color-white;
+$input-border-key: "input-border";
+$input-color-key: "input-border";
+$input-border-focus-key: "input-border-focus";
+$input-height: 2rem;

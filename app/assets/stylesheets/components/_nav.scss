@@ -1,0 +1,168 @@
+.main-nav {
+	position: absolute;
+	right: 0rem;
+	top: 0rem;
+	z-index: 100;
+
+	&__burger {
+		cursor: pointer;
+		min-width: unset;
+		background-color: transparent;
+		bottom: 0.35rem;
+		margin-right: 0.75rem;
+		right: $spacing-tiny;
+		border-radius: rem(5px);
+		position: relative;
+		z-index: 2;
+		padding: 0rem;
+		border: none;
+		@include themed(border-color, "background-contrast");
+
+		@include media($mobile) {
+			margin-right: 0.25rem;
+			bottom: 0.6rem;
+		}
+		body.has-form.is-light & {
+			border-color: theme-light-contrast('background-contrast');
+		}
+
+		&:hover, &:focus, &--open {
+			@include themed(border-color, "background");
+			@include themed(background-color, "background-contrast");
+
+			body.has-form.is-light & {
+				background-color: theme-light-contrast('background-contrast');
+				border-color: theme-light-contrast("background");
+			}
+		}
+
+		&__line {
+			border: rem(3px) solid;
+			border-color: inherit;
+			width: $nav-button-width;
+			margin: $spacing-tiny $spacing-tiny;
+			border-radius: $default-border-radius;
+			height: 0rem;
+		}
+
+		.no-js & {
+			display: none;
+		}
+	}
+
+	&__menu {
+		overflow: hidden;
+		position: absolute;
+		margin: 0rem;
+		right: 0;
+		z-index: 1;
+		height: 100vh;
+		box-sizing: border-box;
+		display: none;
+		top: 0;
+		padding-top: 100%;
+	}
+
+	&__menu-inner {
+		width: $nav-width;
+		border-left: 1px solid;
+		height: 100%;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		@include themed(background-color, "background-contrast");
+		@include themed(color, "background");
+
+		body.has-form.is-light & {
+			background-color: theme-light-contrast('background-contrast');
+			color: theme-light-contrast("background");
+		}
+
+		body.is-flesh & {
+			background-color: map-get($colors-flesh, 'cta-bg-light');
+		}
+	}
+
+	&__list {
+		padding-inline-start: 0rem;
+		margin: 0rem;
+		flex-grow: 1;
+	}
+
+	&__list-item {
+		list-style: none;
+		font-size: rem(22px);
+		line-height: rem(22px);
+		overflow: hidden;
+		white-space: nowrap;
+
+		&--user-name {
+			@include themed-contrast(color, "h1");
+			color: $color-off-white;
+			font-weight: bold;
+			padding: $spacing-default $spacing-tiny $spacing-default $spacing-default;
+		}
+
+		&__link {
+			text-decoration: none;
+			display: block;
+			height: 100%;
+			padding: 0.75rem $spacing-tiny 0.75rem $spacing-medium;
+			width: 100%;
+			text-align: left;
+			background-color: transparent;
+			border: none;
+
+			@include themed(color, "background");
+
+			body.has-form.is-light & {
+				color: theme-light-contrast("background");
+			}
+
+			&--selected {
+				@include themed(background-color, 'cta-bg');
+				@include themed(color, "cta-text");
+
+				body.has-form.is-light & {
+					color: theme-light-contrast("cta-text");
+				}
+			}
+
+			&--not-selected:not([disabled]) {
+				&:hover, &:focus {
+					@include themed(color, "cta-text");
+					@include themed(background-color, "cta-bg", 0.75);
+				}
+			}
+
+			&[disabled] {
+				@include disabled;
+			}
+		}
+	}
+
+	.no-js & {
+		&__menu {
+			display: block;
+			padding-top: 0rem;
+			position: static;
+			height: auto;
+
+			&-inner {
+				width: 100%;
+			}
+		}
+		@include media(('>tablet')) {
+			position: fixed;
+			height: 100%;
+
+			&__menu, &__menu-inner{
+				height: 100%;
+			}
+		}
+
+		@include media(('<=tablet')) {
+
+		}
+	}
+}

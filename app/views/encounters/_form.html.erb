@@ -1,8 +1,17 @@
-<%= vuelidate_form_with model: encounter, url: [partnership, encounter], html: {class: "centered"}, value_include: [:contacts] do |f| %>
+<%= vuelidate_form_with model: encounter, url: [partnership, encounter], html: {class: "centered"}, value_include: [:contacts], vue: {'track-failures': true} do |f| %>
 	<%= f.date_field :took_place %>
 	<%= f.text_area :notes %>
 	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
-	<dynamic-field-list component-type="encounter-contact-field" :list="vf.formData.contacts" base-name="<%= f.object_name %>[contacts_attributes]" @should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"></dynamic-field-list>
-	<%= f.check_box :fluids %>
-	<%= f.submit %>
+	<dynamic-field-list
+		component-type="encounter-contact-field"
+		v-model="vf.formData.contacts"
+		base-name="<%= f.object_name %>[contacts_attributes]"
+		@should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"
+		class="contact-field-list"
+		:$v="vf.$v.formData.contacts" >
+		<h2 class="h2--is-form-heading"><%= t('.contacts_title', partner_name: @partnership.partner.name) %></h2>
+		<p class="description description--is-form-description"><%= t('.contacts_desc') %></p>
+	</dynamic-field-list>
+	<%= f.radio_group :fluids, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", tooltip: true}} %>
+	<%= f.submit :class => "cta cta--is-form-submit" %>
 <% end %>

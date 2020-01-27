@@ -1,0 +1,9 @@
+<% content_for :body_class, "has-form #{local_assigns[:body_class] || 'is-light-contrast'}" %>
+<% content_for :main_class, "container--has-form" %>
+<div class="container--has-form__form container--has-white-background container--has-contrast-background">
+	<% unless local_assigns.has_key?(:skip_header) && skip_header %>
+		<h1 class="h1--is-form-title"><%= local_assigns.fetch(:header_text) { t_action('.title') } %></h1>
+	<% end %>
+	<%= yield %>
+	<%= link_to(t(".back"), back_path, class: "cta cta--is-back-btn") if local_assigns[:back_path].present? %>
+</div>

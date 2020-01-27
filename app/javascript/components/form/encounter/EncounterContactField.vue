@@ -12,7 +12,8 @@
 				:base-name="baseName"
 				v-model="_value.subject"
 				model="subject"
-				@change="updateContactType">
+				@change="updateContactType('subject')"
+				type="link">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow" role="radiogroup">
@@ -22,7 +23,8 @@
 					inputValue: c.key,
 					baseName}"
 				v-model="contact_type"
-				@change="resetInsts">
+				@change="resetInsts"
+				type="link">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow" role="radiogroup">
@@ -32,7 +34,8 @@
 				:base-name="baseName"
 				v-model="_value.object"
 				model="object"
-				@change="updateContactType">
+				@change="updateContactType('object')"
+				type="link">
 			</hidden-radio>
 		</div>
 		<div class="field-section" role="radiogroup">
@@ -44,7 +47,8 @@
 					baseName
 				}"
 				v-model="object_instrument_id"
-				@change="resetInsts(true)">
+				@change="resetInsts(true)"
+				type="link">
 			</hidden-radio>
 		</div>
 		<div class="field-section narrow">
@@ -60,7 +64,8 @@
 					baseName
 				}"
 				v-model="subject_instrument_id"
-				@change="setContact">
+				@change="setContact"
+				type="link">
 			</hidden-radio>
 		</div>
 	</div>
@@ -72,8 +77,8 @@
 					barrier: bType,
 					contact: value,
 					baseName,
-					encounterData: {
-						has_barrier: tracked.has_barrier,
+					encounterData: tracked,
+					contactData: {
 						index: watchKey,
 						instruments,
 						object_instrument_id,
@@ -95,7 +100,8 @@
 import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
 import hiddenRadio from './HiddenRadio.vue';
 import encounterContactBarrier from './EncounterContactBarrier.vue';
-import { required, minLength } from 'vuelidate/lib/validators';
+import { minLength, requiredUnless } from 'vuelidate/lib/validators';
+import EncounterBarrierTracker from '@modules/encounterBarrierTracker';
 
 export default {
 	data: function() {
@@ -114,17 +120,6 @@ export default {
 	components: {
 		'hidden-radio': hiddenRadio,
 		'barrier-input': encounterContactBarrier
-	},
-	validations() {
-		return {
-			value: {
-				subject: {blank: required},
-				object: {blank: required},
-			},
-			contact_type: {blank: required},
-			subject_instrument_id: {blank: required},
-			object_instrument_id: {blank: required},
-		};
 	},
 	computed: {
 		cType: function() {
@@ -148,7 +143,7 @@ export default {
 			return this.$_t('contact.with', {pronoun: this.value.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
 		},
 		incomplete() {
-			return this.$v.$invalid && this.$v.$anyDirty;
+			return this.$v && this.$v.$error;
 		}
 	},
 	methods: {
@@ -166,16 +161,16 @@ export default {
 				}
 				this[lstId] = newList;
 			});
-			this.setContact();
+			this.setContact(e);
 		},
-		setContact() {
-			if (this.contact_type && this.object_instrument_id && this.subject_instrument_id) {
-				let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
-				this._value.possible_contact_id = contact && contact._id;
-			} else {
-				this._value.possible_contact_id = null;
-			}
+		setContact(sourceEvent) {
+			let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
+			this._value.possible_contact_id = contact && contact._id;
 			this.onInput();
+			this.updateBarriers(true);
+			if (sourceEvent) {
+				this.$v.possible_contact_id.$touch();
+			}
 		},
 		objectInstsGet() {
 			return this.instsGet(false);
@@ -202,7 +197,9 @@ export default {
 			for (var i = 0; i < possibles.length; i++) {
 				let pos = possibles[i];
 				let instID = pos[checkKey];
-				if (shown[instID] || (forSubj && pos.object_instrument_id != this.object_instrument_id)) {
+				if (shown[instID] ||
+					(forSubj && pos.object_instrument_id != this.object_instrument_id) ||
+					(this.isSelf && !pos.self_possible)) {
 					continue;
 				}
 
@@ -234,21 +231,21 @@ export default {
 				return true;
 			};
 		},
-		updateContactType() {
+		updateContactType(updated) {
 			this.onInput();
 			this.resetInsts();
-			return;
-		},
-		updateBarriers(newBarriers, isInit) {
-			let hadBarriers = this.value.barriers.indexOf('fresh') >=0;
-			let hasBarriers = newBarriers.indexOf('fresh') >= 0;
-			if (isInit || hadBarriers != hasBarriers) {
-				let oldBarriers = this.tracked.has_barrier || 0;
-				let change = hasBarriers ? 1 : -1;
-				let newBarrierCount = Math.max(oldBarriers + change, 0);
-				this.$emit('track', 'has_barrier', newBarrierCount);
+			if (updated) {
+				this.$v[updated].$touch();
 			}
+		},
+		updateBarriers(noTouch) {
 			this.onInput();
+			if (noTouch !== true) {
+				this.$v && this.$v.barriers.$touch();
+			}
+			this.$nextTick(() => {
+				this.$emit('track');
+			});
 		},
 		onInput() {
 			this.$emit('input', this._value);
@@ -287,16 +284,18 @@ export default {
 		this.$parent.$emit('should-validate', 'contacts', {
 			tooShort: minLength(1),
 			$each: {
-				subject: {blank: required},
-				object: {blank: required},
-				position: {blank: required},
-				possible_contact_id: {
-					blank: (v) => v !== null,
-				},
+				subject: {blank: requiredUnless('_destroy')},
+				object: {blank: requiredUnless('_destroy')},
+				position: {blank: requiredUnless('_destroy')},
+				possible_contact_id: {blank: requiredUnless('_destroy')},
+				barriers: {}
 			}
 		});
 
+		this.$emit('start-tracking', (list) => new EncounterBarrierTracker(list, this.possibles));
+
 		this.updateContactType();
+		this.updateBarriers(true);
 	},
 };
 </script>

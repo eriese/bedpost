@@ -1,0 +1,27 @@
+<%= render 'forms/basic_form', skip_header: true, body_class: 'is-flesh', back_path: :back do %>
+	<div class="faq container--has-static-info">
+		<h1><%= t('faq.title') %></h1>
+		<% t('faq.sections', cascade: {allow_hash: true}).each do |section_key, section|%>
+			<nav class="faq__nav">
+				<ul class="--is-unstyled">
+					<drop-down arrow-class="link cta--is-arrow--is-small faq__nav-arrow" selector="li" class="faq__nav-item">
+						<a href="#<%= section_key %>" class="link link--no-line faq__nav-section" slot="title" data-turbolinks="false"><%= section[:title] %></a>
+						<ul class="no-dots">
+							<% section[:questions].each do |question_key, question| %>
+								<li><a href="#<%= question_key %>" class="link link--no-line faq__nav-question" data-turbolinks="false"><%= question[:question] %></a></li>
+							<% end %>
+						</ul>
+					</drop-down>
+				</ul>
+			</nav>
+		<% end %>
+
+		<% t('faq.sections', cascade: {allow_hash: true}).each do |section_key, section| %>
+			<h2 id="<%= section_key %>"><%= section[:title] %></h2>
+			<% section[:questions].each do |question_key, question| %>
+				<h3 id="<%= question_key %>"><%= question[:question] %></h3>
+				<p><%= question[:answer].html_safe %></p>
+			<% end %>
+		<% end %>
+	</div>
+<% end %>

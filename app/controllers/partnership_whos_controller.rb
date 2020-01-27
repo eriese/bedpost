@@ -1,26 +1,15 @@
 class PartnershipWhosController < ApplicationController
 	include WhosController
-	skip_before_action :check_first_time, only: [:new, :create]
-	after_action :clear_unsaved, only: [:new, :create]
+	skip_before_action :check_first_time, only: [:check]
+	after_action :clear_unsaved, only: [:check]
 
-	def new
-		p_id = params[:partnership_id]
-		#did the user get to this page from the dashboard?
-		@from_dash = from_dash?
-		@partnership = p_id.present? ? current_user_profile.partnerships.find(p_id) : current_user_profile.partnerships.new
+	respond_to :json
+
+	def edit
+		@partnership = current_user_profile.partnerships.find(params.require(:partnership_id))
 		@partnership.uid = flash[:who_attempt][:uid] if flash[:who_attempt].present?
-		render p_id.present? ? :edit : :new
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to partnerships_path
-	end
-
-	def create
-		@partnership = current_user_profile.partnerships.new(uid_param)
-		if @partnership.valid?
-			redirect_to new_partnership_path(p_id: @partnership.partner_id)
-		else
-			flash_and_respond who_path
-		end
 	end
 
 	def update
@@ -32,6 +21,13 @@ class PartnershipWhosController < ApplicationController
 		end
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to partnerships_path
+	end
+
+	def unique
+		ship_id = params[:id]
+		ship = ship_id.present? ? current_user_profile.partnerships.find(ship_id) : current_user_profile.partnerships.new
+		ship.assign_attributes(uid: params.require(:uid))
+		respond_with(ship)
 	end
 
 	private

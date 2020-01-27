@@ -19,7 +19,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field]).each do |selector|
+	alias_method :parent_hidden_field, :hidden_field
+	alias_method :parent_submit, :submit
+	alias_method :parent_file_field, :file_field
+
+	(field_helpers - [:fields_for, :fields, :label, :check_box, :hidden_field, :password_field, :range_field, :file_field]).each do |selector|
 		class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
 			alias_method :parent_#{selector}, :#{selector}
 			def #{selector}(method, options = {})  # def text_field(method, options = {})
@@ -40,7 +44,13 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 			options[:":num-steps"] = "stepper.numSteps"
 			options[:"aria-role"] = "region"
 			@template.content_tag(:"form-step", options) do
-				yield
+				unless options.delete(:exclude_slot)
+					@template.content_tag(:div, 'slot-scope' => 'stepSlot') do
+						yield
+					end
+				else
+					yield
+				end
 			end
 		else
 			yield
@@ -57,7 +67,6 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		return stepper
 	end
 
-	alias_method :parent_hidden_field, :hidden_field
 	def hidden_field(attribute, options={})
 		options = options.merge({label: false, validate: false, field_class: "hidden-field"})
 		field_builder(attribute, options).field do
@@ -73,6 +82,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
+	# TODO this has full_v_name, which doesn't exist anymore
 	def get_toggle_options(attribute, options, value)
 		toggle_opt = options.delete :toggle
 		if toggle_opt
@@ -94,6 +104,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	def submit(value = nil, options = {})
 		@template.content_tag(:div, super, {class: 'buttons'})
 	end
+
 	def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
 		add_to_class(args, "inline", :field_class) unless args[:inline] == false
 		args[:label_last] = true unless args.has_key? :label_last
@@ -117,22 +128,44 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def radio_group(attribute, buttons: [[:true], [:false]], options: {})
+	def radio_group(attribute, buttons: [[true], [false]], options: {})
 		group_scope = 'fe'
-		radio_opts = {inline: true, validate: false, class: options.delete(:radio_class), slot_scope: 'fec', parent_scope: group_scope}
-		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
-		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object[attribute]
+		group_opts = (options.delete(:group_options) || {}).reverse_merge(
+			field_role: :radiogroup,
+			slot_scope: group_scope,
+			field_id: "#{@object_name}_#{attribute}_group",
+			skip_value: true
+		)
 
-		group_opts = (options.delete(:group_options) || {}).merge({field_role: :radiogroup, slot_scope: group_scope})
+		radio_opts = {
+			inline: true,
+			validate: false,
+			required: false,
+			class: options.delete(:radio_class),
+			slot_scope: 'fec',
+			parent_scope: group_scope,
+			skip_value: true,
+			'aria-describedby' => group_opts[:field_id]
+		}
+
+		radio_opts[:label_last] = options.delete(:label_last) if options.has_key? :label_last
+		checked_val = options.has_key?(:checked_val) ? options[:checked_val] : @object.present? ? @object[attribute] : nil
+		checked_val ||= false
+
 		joiner = options.delete(:joiner)
-		builder = field_builder(attribute.to_s + "_group", group_opts)
+		builder = field_builder("#{attribute}_group", group_opts)
 
 		btns = buttons.map do |btn|
 			val = btn[0]
-			opts = radio_opts.merge ({label: {value: val.to_s}, checked: checked_val == val, :":value" => val}).merge(btn[1] || {})
+			opts = radio_opts.merge(
+				label: { value: val.to_s },
+				checked: checked_val == val,
+				':value' => val
+			).merge(btn[1] || {})
 			radio_button(attribute, val, opts)
 		end
 
+		add_value(attribute, checked_val)
 		builder.custom_field do
 			@template.content_tag(:div) do
 				builder.field_label <<
@@ -164,11 +197,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def password_field(attribute, args={})
+	def password_field(attribute, options={})
 		options = convert_options(options)
-		args[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
-		after_method = args[:show_toggle] ? :password_toggle : nil
-		field_builder(attribute, args).field(after_method) do
+		options[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
+		after_method = password_toggle(options[:show_toggle]) if options[:show_toggle].present?
+		field_builder(attribute, options).field(after_method) do
 			super
 		end
 	end
@@ -176,9 +209,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	def date_field(attribute, **options)
 		options = convert_options(options)
 		options[:is_date] = true
-		field_builder(attribute, options).field do
+		options[:id] = "#{attribute}_visible"
+		date_field_builder = field_builder(attribute, options)
+		date_field_builder.field do
 			mdl = options.delete "v-model"
-			@template.content_tag(:"v-date-picker", "", {"v-model" => mdl, ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
+			@template.content_tag(:"v-date-picker", "", {":value" => mdl, "v-on" => "#{date_field_builder.slot_scope}.$listeners", ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
 				options[:"slot-scope"] = 'dp'
 				options[:"v-bind"] = 'dp.inputProps'
 				options[:"v-on"] = 'dp.inputEvents'
@@ -188,10 +223,31 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def password_toggle
+	def file_field(attribute, **options)
+		no_js_field = @template.content_tag(:noscript) do
+			super
+		end
+		options = convert_options(options)
+		options[:model_value] = :none
+		field_builder(attribute, options).field do
+			input = super
+			input.sub('<input', '<file-input').html_safe +
+			no_js_field
+		end
+	end
+
+
+	def fields_for(record_name, record_object = nil, options = {}, &block)
+		options[:parent_builder] = self
+		options[:in_wizard] = @options[:wizard] if @options.has_key? :wizard
+		super
+	end
+
+	def password_toggle(toggle_class = nil)
+		add_class = toggle_class.is_a?(String) ? toggle_class : ''
 		@template.content_tag(:div, {class: "additional", slot: "additional"}) do
 			@template.content_tag(:p) do
-				toggle_tag(:password, {class: "no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
+				toggle_tag(:password, {class: "link link--no-line #{add_class}", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
 			end
 		end
 	end
@@ -209,22 +265,16 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def tooltip(attribute, key=true, html_options={})
-		show_always = html_options.delete :show_always
-		if show_always
-			opts = html_options
-			add_to_class(opts, "show-always")
-		else
-			opts = html_options.merge({role: "tooltip", :"v-show" => "#{html_options.delete(:slot_scope) || VuelidateFieldBuilder::SLOT_SCOPE}.focused"})
-		end
-		opts[:id] = "#{attribute}-tooltip-content"
-		add_to_class(opts, "tooltip")
-
-		@template.content_tag(:aside, opts) do
-			t_key = key == true ? attribute : key;
-			ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: "helpers.tooltip").translate
-		end
+		html_options[:key] = key
+		html_options[:object] = @object
+		Tags::Tooltip.new(@object_name, attribute, @template, html_options).render
 	end
 
+	def label(attribute, text=nil, options={}, &block)
+		Tags::Label.new(@object_name, attribute, @template, text, objectify_options(options)).render(&block)
+	end
+
+	# TODO this has full_v_name, which doesn't exist anymore
 	def toggle_tag(attribute, **toggle_options)
 		clear_opt = toggle_options.delete :":clear"
 		if clear_opt
@@ -251,7 +301,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	end
 
 	def objectify_options(options)
-		super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :label_last, :is_step)
+		super.except(:label, :validate, :show_toggle, :"v-show", :show_if, :tooltip, :label_last, :is_step, :parent_builder)
 	end
 
 	# get the validations that will be run on data from this form
@@ -262,6 +312,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	#add validations for the given attribute
 	def add_validation(attribute, attr_validators)
 		validations[attribute].concat(attr_validators)
+		@options[:parent_builder].add_nested(validations, @object_name, :validations) if @options[:parent_builder]
 	end
 
 	# get the values of fields in this form
@@ -271,21 +322,43 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	# add a field value to the form
 	def add_value(attribute, attr_value = nil)
-		if attr_value
-			value[attribute] = attr_value
-		elsif @object.respond_to?(attribute)
-			value[attribute] = @object.send(attribute)
+		if attr_value.nil?
+			attr_value = @object.respond_to?(attribute) ? @object.send(attribute) : nil
 		end
+		value[attribute] = attr_value
+
+		@options[:parent_builder].add_nested(value, @object_name, :value) if @options[:parent_builder]
+	end
+
+	# add nested values to the hash with the given name
+	def add_nested(nested_values = {}, nested_name, hash_name)
+		# get the correct hash
+		hsh = send(hash_name)
+		# make the key by stripping all but the last part of the object name
+		nested_key = nested_name.gsub(/(.*\[)|(\])/, '')
+		# the key should map to a hash regardless of which hash it's in
+		hsh[nested_key] = {} unless hsh.has_key?(nested_key) && hsh[nested_key].is_a?(Hash)
+		# merge in the values
+		hsh[nested_key].merge!(nested_values)
 	end
 
 	# add a toggle field and its starting value to the form
 	def add_toggle(attribute, start_val)
+		if @options[:parent_builder]
+			@options[:parent_builder].add_toggle(attribute, start_val)
+			return
+		end
 		toggles[attribute] = start_val || false unless toggles.has_key? attribute
 	end
 
 	# get the toggles on this form
 	def toggles
 		@toggles ||= @options.delete(:toggles) || {}
+	end
+
+	# get the name of the form for tracking purposes
+	def form_name
+		"#{@template.controller.action_name}_#{@object_name}"
 	end
 
 	# convert options into a HashWithIndifferentAccess for easier key access

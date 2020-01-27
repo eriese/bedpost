@@ -1,11 +1,11 @@
-<% content_for :header do %>
-	<header>
-		<span id="logo">Bed<span>Post</span></span>
-	</header>
-<% end %>
+<% body_class 'body--has-no-auth body--has-footer' %>
+<% content_for :header_class, 'header--is-big' %>
 
-<% content_for :main  do %>
-	<%= yield %>
+<% content_for :footer do %>
+	<nav>
+		<% content_for :footer_class, 'footer--is-at-bottom' %>
+		<%= render partial: 'footer' %>
+	</nav>
 <% end %>
 
 <%= render template: "layouts/application" %>

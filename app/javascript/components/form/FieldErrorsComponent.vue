@@ -11,6 +11,7 @@
 
 <script>
 import inputSlot from '@mixins/inputSlot';
+import {lazyChild, lazyParent} from '@mixins/lazyCoupled';
 /**
  * A component that wraps a form control and uses its validations to display error messages. Works best with parent [VuelidateFormComponent]{@link module:components/form/VuelidateFormComponent}
  *
@@ -32,7 +33,7 @@ import inputSlot from '@mixins/inputSlot';
  */
 export default {
 	name: 'field_errors',
-	mixins: [inputSlot],
+	mixins: [inputSlot, lazyChild, lazyParent],
 	data: function() {
 		return {
 			focused: false,
@@ -92,6 +93,11 @@ export default {
 			for (var validator in vParams) {
 				// the first invalid one
 				if (!this.vField[validator]) {
+
+					if(vParams[validator].responseMessage) {
+						let messages = vParams[validator].responseMessage.message;
+						return messages.join ? messages.join(this.$_t('join_delimeter')) : messages;
+					}
 					// make translation interpolation arguments based on the validation type
 					let params = {attribute: this.field};
 					switch(validator) {
@@ -180,10 +186,16 @@ export default {
 		},
 		/**
 		 * Callback for mousein and mouseout events
+		 *
 		 * @param  {boolean} isHovered is the mouse in?
 		 */
 		onHover(isHovered) {
 			this.hovered = isHovered;
+		},
+		onChildMounted() {
+			if (!this.input) {
+				this.input = this.$el.querySelector('input, select');
+			}
 		}
 	},
 	mounted() {
@@ -192,6 +204,11 @@ export default {
 		// if this is a date, convert the value to a date object
 		if (this.isDate) {
 			this.model = this.model ? new Date(this.model) : new Date();
+		}
+
+		// if there's an input, we're not waiting on a lazy-loaded child
+		if (this.input) {
+			this.$parent.$emit('lazy-child-present');
 		}
 	},
 };
@@ -214,6 +231,7 @@ function getDefaults (validator, field, modelName) {
 
 	// if there's a modelName given, add model and field keys at the beginning
 	if (modelName) {
+		modelName = modelName.replace('[', '.').replace(']', '');
 		defaults.unshift({scope: `mongoid.errors.models.${modelName}.${validator}`});
 		defaults.unshift({scope: `mongoid.errors.models.${modelName}.attributes.${field}.${validator}`});
 	}

@@ -1,8 +1,11 @@
 class TourNode
-  include Mongoid::Document
-  field :target, type: String
-  field :position, type: Integer
-  field :content, type: String
+	include Mongoid::Document
+	field :target, type: String
+	field :position, type: Integer
+	field :await_in_view, type: Boolean, default: false
+	field :content, type: String, localize: true
 
-  embedded_in :tour
+	index "content.en" => 1
+
+	embedded_in :tour
 end

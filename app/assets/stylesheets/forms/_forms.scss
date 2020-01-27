@@ -1,7 +1,59 @@
-@import "_defaults";
+.h1--is-form-title {
+	font-size: rem(30px);
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-weight: normal;
+}
+
+.h2--is-form-heading {
+	font-size: rem(18px);
+}
+
+
+.container--has-form {
+	max-width: $constrained-width;
+	padding: 1.5rem;
+	margin: 0 auto;
+
+	&__form {
+		background-color: theme-light("background");
+		border-radius: $default-border-radius-small;
+		box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+		padding-bottom: 60px;
+		padding-top: 1.5rem;
+	}
+}
+
+.cta--is-form-submit {
+	@include themed-styles using ($theme, $theme-colors) {
+		@include cta-background-colors($theme-colors, $suffix: "-form");
+	}
+
+	font-size: 0.75rem;
+}
+
+.description {
+	&--is-form-description {
+		font-size: 0.75rem;
+	}
+}
+
+label {
+	padding-left: 1rem;
+	font-weight: bold;
+	font-size: 0.75rem;
+	line-height: 1rem;
+
+	+ input,
+	+ select,
+	+ textarea {
+		margin-top: $spacing-tiny;
+	}
+}
 
 form.centered {
-	max-width: rem(400px);
+	max-width: $constrained-width;
+	width: 100%;
 	padding: 0rem rem(15px);
 	margin: 0rem auto;
 
@@ -19,7 +71,6 @@ form.centered {
 
 	label {
 		display: block;
-		line-height: 1;
 	}
 
 	.additional {
@@ -28,6 +79,10 @@ form.centered {
 		p {
 			margin: 0;
 		}
+	}
+
+	.buttons {
+		text-align: center;
 	}
 }
 
@@ -40,10 +95,6 @@ form.single {
 		}
 	}
 
-	label {
-		font-size: rem(20px);
-	}
-
 	.tooltip {
 		font-size: rem(18px);
 	}
@@ -52,13 +103,14 @@ form.single {
 form {
 	div.field-errors {
 		text-align: right;
-		color: $color-purple-light;
+		font-weight: bold;
 		font-size: rem(12px);
 		line-height: 1;
+		@include themed(color, "h1");
 	}
 
 	div.errors {
-		color: $color-purple-light;
+		@include themed(color, "h1");
 	}
 
 	div.range-indicator {
@@ -85,21 +137,6 @@ form {
 			}
 		}
 	}
-
-	.tooltip {
-		color: $color-green-dark;
-		font-size: rem(14px);
-		line-height: 1.25;
-		margin: rem(3px) auto;
-	}
-
-	.step {
-		background-color: $color-light-gray;
-		border-radius: rem(5px);
-		// padding: 15px;
-		margin-bottom: rem(25px);
-	}
-
 
 	.slide-bar-desc {
 		font-size: rem(14px);
@@ -133,6 +170,7 @@ form {
 		div[role=radiogroup] > div {
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 
 			.group-radios {
 				flex-shrink: 0;
@@ -160,115 +198,150 @@ form {
 			}
 		}
 	}
+
+	.additional {
+		.toggle {
+			font-size: rem(11px);
+		}
+	}
 }
 
 .flickity-enabled {
-	&:focus ~ .step-nav>.prog-buttons>li>button {
-		border: rem(2px) solid $color-green-light;
+	@include media(">phone", "!retina") {
+		&:focus ~ .stepper__nav .stepper__nav__button-item {
+			&--prev > *, &--next > * {
+				border: rem(2px) solid;
+				@include themed(border-color, "cta-bg");
+			}
+		}
 	}
 
 	.field {
 		margin-bottom: 0rem;
-
-		.additional {
-			height: rem(80px);
-
-			.explanation {
-				max-height: rem(40px);
-				overflow-y: auto;
-			}
-		}
 	}
 }
 
 .stepper {
 	position: relative;
 
-	.step-inner {
-		padding: rem(15px);
-		border-radius: inherit;
-	}
-
 	.flickity-viewport {
-		padding-bottom: rem(60px);
+		overflow: auto;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 
-	.form-step {
+	&__h2 {
+		margin-top: 0
+	}
+
+	&__outer {
+		position: relative;
+	}
+
+	&__step {
 		width: 100%;
-		padding: rem(5px);
 		box-sizing: border-box;
 
 		&:not(.is-selected) {
 			visibility: hidden;
+			max-height: 100%;
+			overflow: hidden;
+		}
+	}
+}
+
+.stepper__nav {
+	text-align: center;
+	width: 100%;
+	z-index: 1;
+	height: 3rem;
+
+	$dot-size: 0.5rem;
+	&__dots {
+		height: $dot-size;
+		line-height: 1;
+		width: 100%;
+		margin-top: 1rem;
+	}
+
+	&__dot {
+		display: inline-block;
+		margin: 0rem $dot-size;
+		width: $dot-size;
+		height: $dot-size;
+		border-radius: 50%;
+		opacity: 0.5;
+		@include themed($map-key: "cta-bg-light");
+
+		&--current {
+			opacity: 1;
+			@include themed($map-key: "cta-bg");
 		}
 	}
 
-	.step-nav {
-		// margin-top: 25px;
-		// margin-bottom: 10px;
-		text-align: center;
-		position: relative;
-		// bottom: 5px;
-		left: 0rem;
-		width: 100%;
-		z-index: 1;
-		height: 0rem;
+	&__button-list {
+		list-style: none;
+		padding-inline-start: 0;
+		margin: 0rem;
+	}
 
-		$dot-size: rem(8px);
-		.prog-dots {
-			height: $dot-size;
-			line-height: 0;
+	&__button-item {
+		display: inline-block;
+
+		&--next {
+			float: right;
+		}
+
+		&--prev {
+			float: left;
+		}
+
+		&--last, input[type=submit] {
+			float: right;
+			line-height: rem(32px);
+			vertical-align: middle;
+			font-weight: bold;
+			display: inline;
+			width: auto;
+			font-size: 1.75rem;
+		}
+
+		button {
+			border: 2px solid transparent;
+			@include cta-transition;
+			&:disabled {
+				@include disabled;
+			}
+		}
+
+		@include media(">=#{$constrained-width * 1.3}") {
 			position: absolute;
-			width: 100%;
-			bottom: rem(15px);
-		}
 
-		.prog-dot {
-			display: inline-block;
-			margin: 0rem $dot-size;
-			width: $dot-size;
-			height: $dot-size;
-			border-radius: 50%;
-			background-color: rgba($color-green-light, 0.5);
+			$button-offset: -20%;
 
-			&.current {
-				background-color: $color-green-dark;
-			}
-		}
-
-		.prog-buttons {
-			list-style: none;
-			padding-inline-start: 0;
-			margin: 0rem;
-
-			li {
-				display: inline-block;
-				position: absolute;
-				bottom: rem(35px);
-
-				&.next {
-					right: rem(20px);
-				}
-
-				&.prev {
-					left: rem(20px);
-				}
+			&--next {
+				right: $button-offset;
+				top: 10rem;
 			}
 
-			input[type=submit], button.last {
-				line-height: rem(32px);
-				vertical-align: middle;
-				font-weight: bold;
-				display: inline;
-				width: auto;
-				font-size: 1.75rem;
+			&--prev {
+				left: $button-offset;
+				top: 10rem;
+			}
+
+			&--last, input[type=submit] {
+				right: $button-offset / 2;
+				bottom: 0rem;
 			}
 		}
 	}
 }
 
+.dynamic-field-list {
+	@include self-clearing;
+}
 .dynamic-field {
-	padding: rem(5px);
+	padding: $spacing-tiny 0;
 
 	.dynamic-field-buttons {
 		float: right;
@@ -276,20 +349,6 @@ form {
 
 		+ div {
 			clear: both;
-		}
-
-		button.arrow-button {
-			$button-size: rem(30px);
-			margin: 0;
-			height: $button-size;
-			width: $button-size;
-			line-height: $button-size;
-
-			svg {
-				$svg-size: $button-size - rem(10px);
-				height: $svg-size;
-				width: $svg-size;
-			}
 		}
 	}
 }

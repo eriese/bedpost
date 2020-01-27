@@ -8,42 +8,60 @@ en:
               bad_key: That UID doesn't seem to connect to anyone...
               self_key: You can't have yourself as a partner
               taken: You already have a partnership with this person
+              one_of: Please either fill in a name or a user id
             partner:
               self_key: You can't have yourself as a partner
               taken: You already have a partnership with this person
+          partner_attributes:
+            attributes:
+              name:
+                one_of: Please either fill in a name or a user id
   partnerships:
     new:
-      partner_html: Tell us about your relationship with <b>%{name}</b>
-      why:
-        familiarity: Your familiarity with a person helps you make informed judgments about the other factors of your relationship. For instance, if you rate your trust with a person very high but you don't know them very well, your trust in them is less helpful of a measure.
-      how:
-        familiarity: TODO add this
+      title_html: New Relationship
+      desc_html: Tell us all about it!
+      why: &whys
+        familiarity: Knowledge is power! Helping us understand how familiar you are with a person gives context to your other answers and helps us do the math correctly when it is time to do our calculations.
+        exclusivity: We're often told that this is one of the biggest determining factors when it comes to sex and likelihood of infection, and we want to help you understand when exclusivity does and doesn't impact you.
+        trust: This one is a pretty broad concept, but this data helps us know how to weight your answers when it comes to exclusivity and prior discussion.
+        communication: Communication is everything! Without details in this category, we couldn't weight your answers to any of our other questions accurately.
+        prior_discussion: This helps us get a glimpse into your partner's risk-managment philosophy. It can also help us better understand how to use your communication and trust data in our calculations.
+      tip: &tips
+        familiarity: Pick the option that best reflects your relationship with the person. Go with your gut. The higher the score, the better you know them.
+        exclusivity: Think about your general barrier practices in this relationship, as well as what you know about their other sexual relationships. We'll still ask you about barriers in each encounter you log.
+        trust: Do you believe that what they tell you is true? This will help us decide how much weight to put on some of your other answers, so when in doubt, round down.
+        communication: All forms of communication are valid. Pick the one that feels like the best fit.
+        prior_discussion: Risk management includes but isn't limited to - testing schedule, STI status, and barrier use practices.
     show:
-      partner_html: Partnership with <b>%{name}</b>
+      title: Partnership
+      partner_html: with <b>%{name}</b>
       level_field_html: "%{field}: %{level}"
       encounters: Encounters with %{name}
       edit: Edit this partnership
+      new_encounter: Add a new encounter with %{name}
       destroy:
         text: Delete this partnership
         confirm: Are you sure? You won't be able to undo this, and you will lose all encounter data connected to this partnership. If you really mean it, click again to confirm.
       chart:
         aria_label: A radar chart showing the levels you desribed this partnership with. This data is available as an accessible table if you click the 'List View' button.
         desc: The more the chart is covered, the more this partnership reduces risk.
-        list_view: List View
-        chart_view: Chart View
+        list_view: List
+        chart_view: Chart
       fields:
         short:
           familiarity: Familiarity
           exclusivity: Exclusivity
           trust: Trust
           communication: Communication
-          prior_discussion: Risk Discussion
+          prior_discussion: Practices
     index:
       no_partnerships: You don't have any partnerships yet
       new_partnership: Add a partner
       latest_html: "Most recent encounter:<br>%{took_place}"
     edit:
       partner_html: Edit partnership with <b>%{name}</b>
+      <<: *whys
+      <<: *tips
       edit_partner_profile: Edit %{name}'s profile
       edit_partner_uid: Connect to a different profile
   partnership_whos:
@@ -63,27 +81,76 @@ en:
       partnership:
         nickname: Do you want to add a nickname for this person?
         familiarity: How well do you know this person?
-        exclusivity: How exclusively does this person have sex with you?
+        exclusivity: What do you know about their other partners and barrier use practices?
         trust: How much do you trust this person?
-        communication: How much ongoing communication does this person have with you?
-        prior_discussion: How much did you and this person discuss risk management before having sex?
-        uid: What's their user id?
+        communication: How much do you and this person communicate?
+        prior_discussion: What do you know about this person's approach to risk managment?
+        uid: Did they give you their user id?
     tooltip:
       partnership:
-        nickname: This might be something like their last name, or where you met them, something to help you identify them
-        exclusivity: We only care how exclusive this person is with you. Information about how many partners this person has will help us understand how risky they are as a partner to you. Don't worry, that's not the only factor we take into account.
+        uid: It's fine if they're not using BedPost or didn't tell you their user ID. Just leave this blank and we'll ask you some more questions about them for now. You can always connect this partnership with their profile later.
+        nickname: This might be something like their last name, or where you met them, something to help you identify them. You can leave it blank
     sliders:
       partnership:
+        familiarity:
+          one: "We just met"
+          two: "I've seen them around, this is the first time we've hooked up"
+          three: "We hook up sometimes, but don't have a close relationship"
+          four: "They are trusted by people I know, but we aren't close"
+          five: "We've been hooking up regularly < 3 months but don't know each other socially"
+          six: "We've been hooking up regularly 3+ months but don't know each other socially"
+          seven: "We've known each other socially for years but this is our first hookup"
+          eight: "We met as dates and have been dating for < 3 months"
+          nine: "We met as dates and have been dating for 3+ months"
+          ten: "We are in a long term relationship"
         exclusivity:
-          one: "%{count}: They're super slutty"
-          five: "%{count}: They have some trusted fuck buddies"
-          nine: "%{count}: We're in a closed, multi-person fluid bond"
-          ten: "%{count}: They only have sex with me"
-          other: "%{count}"
+          one: "I know they have barrier-free sex with other people"
+          two: "I don't know. We don't use gloves or dental dams in our sex."
+          three: "I am probably the only person they are having sex with, we use condoms only."
+          four: "I'm probably the only person they are having sex with, we use barriers (condoms, gloves, dental dams)"
+          five: "We use barriers and have discussed that we do the same with our other partners"
+          six: "I'm the only person they are having sex with right now. We use barriers."
+          seven: "They have sex with others, and use condoms when they do"
+          eight: "We have a partner or partners we have sex with, but no one has sex outside those relationships."
+          nine: "They have sex with others, and always use barriers (condoms, gloves, dental dams)"
+          ten: "We have agreed to be monogamous/ they only have sex with me"
+        trust:
+          one: "I explicity don't trust them, based on experience"
+          two: "I am hesitant to trust them or I don't know yet but we haven't had trust breaking experiences."
+          three: "We are working to build trust in our relationship. For the first time, or after some stumbles."
+          four: "I trust them based on reputation or community connections"
+          five: "I haven't thought about it before, but I know now that I do find them trustworthy"
+          six: "I trust them, because they've never given me a reason not to"
+          seven: "I trust them, they've shown me that they believe in doing the right thing"
+          eight: "I trust them more than I trust most people, based on experience in our relationship"
+          nine: "I trust them a lot and feel no hesitation about that"
+          ten: "100% - based on experiences we've had together during our relationship"
+        communication:
+          one: "I wouldn't know how to reach them again"
+          two: "I just got their contact info, I don't know yet!"
+          three: "I could reach them if it was an emergency"
+          four: "We interact online but only text or talk to hookup"
+          five: "They hit me up to hangout or hookup, I feel free to do the same"
+          six: "We talk weekly even if we aren't going to see each other"
+          seven: "We talk or text multiple times a week, no pretense needed"
+          eight: "We talk or text every day, even if it is about nothing"
+          nine: "We see each other on a regular schedule and talk in between"
+          ten: "I'm their go-to person when they need to talk about something"
+        prior_discussion:
+          one: "We didn't talk about it"
+          two: "We didn't talk about it, I know they use condoms with me."
+          three: "We talked about it, I know they haven't been tested recently. We don't use dental dams or gloves."
+          four: "We talked about it and consider our sex low risk. We don't use barriers."
+          five: "They get tested regularly, I know they don't use barriers."
+          six: "They get tested regularly, I don't know about barrier usage."
+          seven: "We discussed condoms as mandatory."
+          eight: "They get tested regularly and agree to use condoms in all sex."
+          nine: "We talk about our status, share test results regularly, and agree to use barriers with others."
+          ten: "We talk about it all, and we use barriers so we don't exchange fluids"
     toggles:
       partnership:
         why: Why is this important?
-        how: How does BedPost use this information?
+        tip: How do I decide?
     submit:
       partnership:
         create: Next
