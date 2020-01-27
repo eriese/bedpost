@@ -8,7 +8,7 @@
 		<%= link_to root_path, id: "logo" do %>
 			<%= image_tag "logo/#{theme}.png", alt: "BedPost" %>
 		<% end %>
-		<button type="button" @click="loadTour" v-if="hasTour && tourRuns > 0" :disabled="tourRunning" class="cta cta--tourguide cta--is-secondary js-only" title="<%= t("guide_button") %>">?</button>
+		<button type="button" @click="loadTour" style="display: none;" v-show="hasTour && tourRuns > 0" :disabled="tourRunning" class="cta cta--tourguide cta--is-secondary js-only" title="<%= t("guide_button") %>">?</button>
 	</header>
 <% end %>
 
