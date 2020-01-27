@@ -28,18 +28,10 @@ A user should be able to sign up for an account, add their partners, and add the
 #### Still needed
 - Back buttons everywhere
 - Email templates
-- FAQ page
-- Landing page
-- TOU
 - STI factsheets on all STIs mentioned
-- Localization/copy
 - Copy for page tours
 - Glossary of terms
-- Testing
-- Data entry about diagnoses/risks
 - Accessibility Audit
-- Security Audit
-- Tracking?
 
 ### Future
 - current recommended testing schedule
