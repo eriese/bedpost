@@ -7,7 +7,7 @@ class TermsController < ApplicationController
 		@terms = Terms.newest_of_type(@type_key)
 		# @is_accepted = current_user_profile.terms_accepted?(term_type)
 		@is_accepted = false
-		@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile[term_type]
+		@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile.terms[@type_key]
 	end
 
 	def update

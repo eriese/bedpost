@@ -23,7 +23,6 @@ RSpec.describe ApplicationController do
 		describe '#check_first_time' do
 			before :all do
 				Terms.create(terms: "some terms", type: :tou)
-				Terms.create(terms: "some terms", type: :privacy)
 			end
 
 			after :all do
@@ -35,7 +34,6 @@ RSpec.describe ApplicationController do
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}
 				expect(user).to_not be_terms_accepted :tou
-				expect(user).to_not be_terms_accepted :privacy
 				expect(user).to_not be_set_up
 				expect(user).to be_first_time
 				expect(response).to redirect_to(term_path(:tou))
@@ -47,7 +45,6 @@ RSpec.describe ApplicationController do
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}
 				expect(user).to be_terms_accepted :tou
-				expect(user).to be_terms_accepted :privacy
 				expect(user).to_not be_set_up
 				expect(user).to be_first_time
 				expect(response).to redirect_to edit_user_profile_registration_path
@@ -59,7 +56,6 @@ RSpec.describe ApplicationController do
 				allow(controller).to receive(:current_user_profile) {user}
 				get :show, params: {id: "id"}
 				expect(user).to be_terms_accepted :tou
-				expect(user).to be_terms_accepted :privacy
 				expect(user).to be_set_up
 				expect(user).to be_first_time
 				expect(response).to redirect_to first_time_path

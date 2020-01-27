@@ -71,7 +71,7 @@ en:
         opt_in:
           'true': 'Yes'
           'false': 'No'
-        medical_disclaimer_group: I read the disclaimer in the above terms and understand that BedPost is not a replacement for advice from a medical provider
+        medical_disclaimer_group: I understand that BedPost is not a replacement for advice from a medical provider
         medical_disclaimer:
           'true': 'Yes'
           'false': 'No'
@@ -89,6 +89,7 @@ en:
         privacy: Our privacy policy
       new: These terms have changed since you last accepted them. Please review the new terms and accept.
       last_updated: Last Updated %{updated}
+      read_privacy_html: Please also read our <a class="link" href="/privacy" target="_blank">Privacy Policy</a> to understand how we use your data and how we protect it
   application:
     wizard:
       submit: Finish
