@@ -103,15 +103,16 @@
 		-webkit-background-clip: border-box;
 		flex-shrink: 0;
 		align-self: center;
+		transform: rotate(45deg);
 		@include centered;
 
 		@include themed-styles using ($theme, $theme-colors) {
 			$fill: map-get($theme-colors, "cta-text");
-			@include background-svg(check-box-check($fill-color: $fill, $stroke-width: 0.6, $rotation: 45));
+			@include background-svg(check-box-check($fill-color: $fill, $stroke-width: 0.6));
 
 			@include hover-and-focus {
 				$fill: map-get($theme-colors, "cta-bg");
-				@include background-svg(check-box-check($fill-color: $fill, $stroke-width: 0.6, $rotation: 45));
+				@include background-svg(check-box-check($fill-color: $fill, $stroke-width: 0.6));
 			}
 		}
 
