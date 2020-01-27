@@ -1,15 +1,7 @@
 <% body_class 'body--is-first-time body--has-footer' %>
-<% content_for :header do %>
-	<header class="header--has-no-nav header--is-small">
-		<span id="logo">BedPost</span>
-	</header>
-<% end %>
-
-<% content_for :footer do %>
-	<nav>
-		<% content_for :footer_class, 'footer--is-at-bottom' %>
-		<%= render partial: 'footer' %>
-	</nav>
+<% content_for :header_class, 'header--has-no-nav header--is-small' %>
+<% content_for :nav do %>
+	<%= render "nav", first_time: true %>
 <% end %>
 
 <%= render template: "layouts/application" %>

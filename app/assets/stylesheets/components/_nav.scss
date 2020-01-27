@@ -124,11 +124,15 @@
 				}
 			}
 
-			&--not-selected:not(:disabled) {
+			&--not-selected:not([disabled]) {
 				&:hover, &:focus {
 					@include themed(color, "cta-text");
 					@include themed(background-color, "cta-bg", 0.75);
 				}
+			}
+
+			&[disabled] {
+				@include disabled;
 			}
 		}
 	}

@@ -85,7 +85,12 @@
 
 		<div id="vue-container" class="no-js <%= content_for :body_inner_class %>">
 			<%= yield :nav%>
-			<%= yield :header %>
+			<header class="<%= content_for :header_class %>">
+				<%= link_to root_path, id: "logo" do %>
+					<%= image_tag "logo/#{theme}.png", alt: "BedPost" %>
+				<% end %>
+				<%= yield :header %>
+			</header>
 			<main id="page-container" ref="container" class="<%= content_for :main_class %>">
 				<div id="page-container-inner" class="<%= content_for :inner_class %>">
 					<%= render "flash" %>

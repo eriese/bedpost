@@ -12,9 +12,13 @@
 				<li class="main-nav__list-item main-nav__list-item--user-name"><%= current_user_profile.name %></li>
 				<% ApplicationHelper::NAV_LINKS.each do |key, path| %>
 					<li class="main-nav__list-item">
-						<%= link_to_unless_current(t(key), path, class: 'link main-nav__list-item__link main-nav__list-item__link--not-selected') do %>
-						<span class="main-nav__list-item__link main-nav__list-item__link--selected"> <%= t(key) %> </span>
-						<%end%>
+						<% if local_assigns[:first_time] %>
+							<a class="link main-nav__list-item__link main-nav__list-item__link--not-selected" disabled><%= t(key) %></a>
+						<% else %>
+							<%= link_to_unless_current(t(key), path, class: 'link main-nav__list-item__link main-nav__list-item__link--not-selected') do %>
+							<span class="main-nav__list-item__link main-nav__list-item__link--selected"> <%= t(key) %> </span>
+							<%end%>
+						<% end %>
 					</li>
 				<% end %>
 				<li class="main-nav__list-item"><%= button_to "Log out", destroy_user_profile_session_path, method: "delete", class: "link main-nav__list-item__link main-nav__list-item__link--not-selected" %></li>
