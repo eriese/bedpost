@@ -38,8 +38,6 @@ class ApplicationController < ActionController::Base
 			if !current_user_profile.terms_accepted? :tou
 				term_path(:tou)
 			# if the user hasn't completed their profile, make them do it
-			elsif !current_user_profile.terms_accepted? :privacy
-				term_path(:privacy)
 			elsif !current_user_profile.set_up?
 				edit_user_profile_registration_path
 			# if the user hasn't taken any actions in the app yet, take them to the first time page

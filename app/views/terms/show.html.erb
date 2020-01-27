@@ -2,17 +2,21 @@
 <% content_for :main_class, "container--has-form" %>
 <% content_for :inner_class, 'container--is-full-height container--has-centered-child' %>
 <div id="terms-of-use" class="container--is-full-height container--has-centered-child container--has-centered-child__centered-child">
-	<h2 class="heading--has-no-top-margin"><%= t @terms.type, scope: 'terms.show.title' %></h2>
+	<h1 class="heading--has-no-top-margin"><%= t @terms.type, scope: 'terms.show.title' %></h1>
 	<% if @new_terms %>
 		<p class="container--has-centered-text desc"><%= t('.new') %></p>
 	<% end %>
 	<div class="container--has-white-background container--is-card container--has-centered-child__centered-child container--is-scrollable">
-		<%= @terms.terms %>
+		<p class="container--has-centered-text"><%= t('.last_updated', updated: l(@terms.updated_at, format: :long_date)) %></p>
+		<%= @terms.terms.html_safe %>
 	</div>
 	<% unless @is_accepted %>
 		<%= vuelidate_form_with scope: :terms, method: :put, class: 'centered'  do |f| %>
 			<%= f.radio_group :acceptance, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", validators: [{kind: :acceptance}]}} %>
-			<%= f.radio_group :opt_in, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", tooltip: true}} if @terms.type == :privacy%>
+			<% if @terms.type == :tou && !current_user_profile.set_up? %>
+				<%= f.radio_group :medical_disclaimer, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", validators: [{kind: :acceptance}]}} %>
+				<%= f.radio_group :opt_in, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", tooltip: true}} %>
+			<% end %>
 			<%= f.submit class: 'cta cta--is-form-submit' %>
 		<% end %>
 	<% end %>

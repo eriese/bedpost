@@ -63,12 +63,16 @@ en:
       other: "%{count}"
     label:
       terms:
-        acceptance_group: I have read these terms and I accept them
+        acceptance_group: I have read the above terms and I accept them
         acceptance:
           'true': 'Yes'
           'false': 'No'
         opt_in_group: I give permission for my data to be used anonymously for research
         opt_in:
+          'true': 'Yes'
+          'false': 'No'
+        medical_disclaimer_group: I read the disclaimer in the above terms and understand that BedPost is not a replacement for advice from a medical provider
+        medical_disclaimer:
           'true': 'Yes'
           'false': 'No'
     tooltip:
@@ -84,6 +88,7 @@ en:
         tou: Our terms of use
         privacy: Our privacy policy
       new: These terms have changed since you last accepted them. Please review the new terms and accept.
+      last_updated: Last Updated %{updated}
   application:
     wizard:
       submit: Finish

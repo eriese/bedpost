@@ -1,8 +1,10 @@
 class TermsController < ApplicationController
 	skip_before_action :check_first_time
+	before_action :validate_type
+
+
 	def show
-		term_type = params[:id].intern
-		@terms = Terms.newest_of_type(params[:id])
+		@terms = Terms.newest_of_type(@type_key)
 		# @is_accepted = current_user_profile.terms_accepted?(term_type)
 		@is_accepted = false
 		@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile[term_type]
@@ -18,5 +20,10 @@ class TermsController < ApplicationController
 			end
 		end
 		respond_with_submission_error({acceptance: [I18n.t('mongoid.errors.models.user_profile.attributes.tou.acceptance')]}, term_path(term_type))
+	end
+
+	def validate_type
+		@type_key = params.require(:id).intern
+		redirect_to(root_path) unless Terms::TYPES.include? @type_key
 	end
 end

@@ -45,15 +45,6 @@ feature "User creates account", :slow do
 			scenario 'the user is redirected first to the tou terms acceptance page' do
 				register_user
 				expect(page).to have_current_path(term_path(:tou))
-				expect(page).to have_no_css '#terms_opt_in_true'
-				accept_terms
-				expect(page).to have_current_path(term_path(:privacy))
-			end
-			scenario 'the user is next redirected to the privacy terms acceptance page' do
-				register_user
-				accept_terms
-				expect(page).to have_current_path(term_path(:privacy))
-				expect(page).to have_css '#terms_opt_in_true'
 				accept_terms
 				expect(page).to have_current_path(edit_user_profile_registration_path)
 			end
@@ -62,7 +53,6 @@ feature "User creates account", :slow do
 		context 'the edit_user_profile_registration page' do
 			before :each do
 				register_user
-				accept_terms
 				accept_terms
 			end
 
@@ -83,7 +73,6 @@ feature "User creates account", :slow do
 			scenario 'the user is marked as set up and taken to the first time page' do
 				register_user
 				accept_terms
-				accept_terms
 				fill_in_profile
 				expect(user).to be_set_up
 				expect(page).to have_current_path(first_time_path)
@@ -93,7 +82,6 @@ feature "User creates account", :slow do
 		context 'when visiting the first time page' do
 			before do
 				register_user
-				accept_terms
 				accept_terms
 				fill_in_profile
 			end
@@ -110,7 +98,6 @@ feature "User creates account", :slow do
 		context 'when adding the first partner' do
 			scenario 'filling in the partnership form brings the user back to the first_time page' do
 				register_user
-				accept_terms
 				accept_terms
 				fill_in_profile
 				find("a[href='#{new_partnership_path}']").click
@@ -133,7 +120,6 @@ feature "User creates account", :slow do
 
 			scenario 'the show encounter page has a button back to the first time page' do
 				register_user
-				accept_terms
 				accept_terms
 				fill_in_profile
 				find("a[href='#{new_partnership_path}']").click
@@ -163,7 +149,6 @@ feature "User creates account", :slow do
 
 			scenario 'it goes to the encounter who page' do
 				register_user
-				accept_terms
 				accept_terms
 				fill_in_profile
 

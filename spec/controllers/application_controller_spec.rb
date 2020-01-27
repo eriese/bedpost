@@ -41,16 +41,6 @@ RSpec.describe ApplicationController do
 				expect(response).to redirect_to(term_path(:tou))
 			end
 
-			it 'redirects to the term_path for privacy if the user has not accepted the privacy policy' do
-				user = UserProfile.new(terms: {tou: Terms.newest_of_type(:tou).updated_at + 1.day})
-				allow(controller).to receive(:current_user_profile) {user}
-				get :show, params: {id: "id"}
-				expect(user).to_not be_terms_accepted :privacy
-				expect(user).to_not be_set_up
-				expect(user).to be_first_time
-				expect(response).to redirect_to(term_path(:privacy))
-			end
-
 			it 'redirects to the edit_user_profile_registration_path if the user has accepted terms of use but is not fully set up' do
 				user = UserProfile.new
 				allow(user).to receive(:terms_accepted?) {true}
