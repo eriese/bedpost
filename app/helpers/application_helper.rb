@@ -1,6 +1,8 @@
 module ApplicationHelper
 	include VueHelper
 
+	THEME_REGEX = /(^|\s)is-(dark|light)(-contrast)?(\s|$)/
+
 	private
 	def self.url_helpers
 		Rails.application.routes.url_helpers
@@ -34,11 +36,29 @@ module ApplicationHelper
 	def body_class(clss = nil)
 		if clss.nil?
 			content = content_for :body_class
-			body_class('is-light') unless content.match(/(^|\s)is-(dark|light)(\s|$)/)
+			body_class('is-light') unless content.match(THEME_REGEX)
 			return content_for :body_class
 		end
 
 		content_for(:body_class, ' ') if content_for? :body_class
 		content_for :body_class, clss
+	end
+
+	def theme
+		# TODO: change this to the real regex once we have logos
+		body_class.match(THEME_REGEX)[0].strip
+	end
+
+	def analytics_id
+		return nil if user_profile_signed_in? && !current_user_profile.opt_in
+
+		# TODO: use an ENV variable for this
+		if Rails.env.development? || Rails.env.test?
+			'UA-156331784-2'
+		elsif ENV['IS_STAGING']
+			'UA-156331784-4'
+		else
+			'UA-156331784-3'
+		end
 	end
 end

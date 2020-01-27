@@ -20,7 +20,7 @@ module FeatureHelpers
 		fill_in 'First name*', with: @user_params[:name]
 		fill_in 'Email*', with: @user_params[:email]
 		fill_in 'Password*', with: @user_params[:password]
-		fill_in 'Re-type your password*', with: @user_params[:password]
+		fill_in 'Confirm your password*', with: @user_params[:password]
 		click_button "signup-submit"
 	end
 

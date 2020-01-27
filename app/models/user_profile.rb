@@ -2,7 +2,7 @@ class UserProfile < Profile
 	# Include default devise modules. Others available are:
 	# :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
 	devise :database_authenticatable, :registerable,
-				 :recoverable, :validatable, :confirmable,
+				 :recoverable, :validatable,
 				 :lockable, :timeoutable, :trackable
 
 	## Database authenticatable
@@ -21,9 +21,9 @@ class UserProfile < Profile
 	field :last_sign_in_ip,        type: String
 
 	## Confirmable
-	field :confirmation_token,     type: String
-	field :confirmed_at,           type: Time
-	field :confirmation_sent_at,   type: Time
+	# field :confirmation_token,     type: String
+	# field :confirmed_at,           type: Time
+	# field :confirmation_sent_at,   type: Time
 	# field :unconfirmed_email,    type: String # Only if using reconfirmable
 
 	## Lockable
@@ -43,7 +43,7 @@ class UserProfile < Profile
 	field :tours,                  type: Set
 
 	index({ email: 1 }, unique: true, sparse: true)
-	index({ uid: 1 }, unique: true, sparse: true)
+	index({ uid: 1 }, unique: true, sparse: true, collation: { locale: I18n.default_locale.to_s, strength: 2 } )
 
 	embeds_many :partnerships, cascade_callbacks: true
 
@@ -51,6 +51,7 @@ class UserProfile < Profile
 	validates_uniqueness_of :uid, case_sensitive: false
 	validates_presence_of :email, :encrypted_password, :uid, if: :active_for_authentication?
 	validates_presence_of :pronoun, :anus_name, :external_name, on: :update
+	validates_confirmation_of :password
 
 	BLACKLIST_FOR_SERIALIZATION += %i[partnerships password_digest tours]
 
@@ -226,6 +227,11 @@ class UserProfile < Profile
 
 	def self.where_partnered_to(profile_id)
 		where('partnerships.partner_id' => profile_id)
+	end
+
+	def self.with_uid(uid)
+		collation(locale: I18n.default_locale.to_s, strength: 2).
+			where(uid: uid).first
 	end
 
 	private

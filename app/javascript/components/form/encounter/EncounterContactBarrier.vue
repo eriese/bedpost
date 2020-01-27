@@ -85,6 +85,8 @@ export default {
 			return false;
 		},
 		shouldShow: function() {
+			// if it's a clean type, only continue if it's a cleanable instrument
+			if (this.barrier.key.includes('clean') && !this.canClean) {return false; }
 			// if it has no conditions, show it if it's cleanable
 			if (!this.barrier.encounter_conditions && !this.barrier.contact_conditions) { return this.canClean; }
 

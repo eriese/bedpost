@@ -42,6 +42,7 @@ en:
         two: Low
         three: Moderate
         four: High
+        five: Sources are conflicted, we'll make a recommendation below
   time:
     formats:
       best_test_html: "<span class='month-year'>%b</span><span class='day'><span>%d</span></span>"

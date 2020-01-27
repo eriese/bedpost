@@ -5,28 +5,7 @@ $tooltip-arrow-size: 0.5rem;
 .tippy-arrow {
 	border-width: $tooltip-arrow-size;
 
-	@each $position in ('top' 'bottom') {
-		.tippy-popper[x-placement^=#{$position}] & {
-			border-#{$position}-color: inherit;
-		}
-	}
-
-	@each $position in ('start' 'end') {
-		.tippy-popper[y-placement^=#{$position}] & {
-			border-#{$position}-color: inherit;
-		}
-	}
-}
-
-@mixin tooltip($background-color: theme-light("h1"), $theme: $colors-light, $suffix: "") {
-	background-color: $background-color;
-	font-weight: bold;
-	color: map-get($theme, "background#{$suffix}");
-	box-shadow: $box-shadow-val map-get($theme, "shadow");
-	border-top-color: $background-color;
-	border-bottom-color: $background-color;
-	border-left-color:  $background-color;
-	border-right-color:  $background-color;
+	@include tooltip-arrow('.tippy-popper');
 }
 
 .tippy-tooltip {

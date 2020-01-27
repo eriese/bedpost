@@ -30,6 +30,11 @@ export default {
 		showAlways: Boolean,
 		useScope: Object,
 		toSelector: String,
+		interactive: Boolean,
+		placement: {
+			type: String,
+			default: 'bottom'
+		}
 	},
 	data() {
 		return {
@@ -41,10 +46,11 @@ export default {
 				arrow: true,
 				boundary: 'scrollParent',
 				flip: true,
-				placement: 'top',
+				placement: this.placement,
 				aria: null,
 				toSelector: this.toSelector,
 				theme: this.theme,
+				interactive: this.interactive
 			}
 		};
 	},

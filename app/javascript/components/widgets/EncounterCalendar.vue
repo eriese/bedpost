@@ -10,24 +10,26 @@
 				</v-select>
 			</div>
 			<toggle-switch :symbols="['calendar_view', 'list_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle-switch>
-			<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
-				<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
-					<div class="popover-day-title">
-						{{ dayTitle }}
-						</div>
-						<v-popover-row
-							v-for="attr in attributes"
-							:key="attr.key"
-							:attribute="attr">
-							<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
-							<a class="link" :href="attr.customData.href">{{ attr.customData.notes }}</a>
-					</v-popover-row>
+			<div class="container--has-contrast-border container--is-centered container--is-rounded encounter-calendar__container">
+				<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
+					<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
+						<div class="popover-day-title">
+							{{ dayTitle }}
+							</div>
+							<v-popover-row
+								v-for="attr in attributes"
+								:key="attr.key"
+								:attribute="attr">
+								<span class="encounter-partner-name">{{attr.customData.partnerName}}:</span>
+								<a class="link" :href="attr.customData.href">{{ attr.customData.notes }}</a>
+						</v-popover-row>
+					</div>
+				</v-calendar>
+				<div v-if="viewType=='list'">
+					<ul class="encounter-list no-dots container--is-card">
+						<encounter-list-item v-for="enc in selectedEncounters" :key="enc.customData.encID" :encounter="enc"></encounter-list-item>
+					</ul>
 				</div>
-			</v-calendar>
-			<div v-if="viewType=='list'">
-				<ul class="encounter-list no-dots card">
-					<encounter-list-item v-for="enc in selectedEncounters" :key="enc.customData.encID" :encounter="enc"></encounter-list-item>
-				</ul>
 			</div>
 		</div>
 	</div>

@@ -7,7 +7,7 @@
 	justify-content: center;
 	align-content: center;
 	padding: 0;
-	right: $spacing-default;
+	right: $spacing-double + $nav-button-width;
 	top: $spacing-small;
 	font-size: 1.5rem;
 }
@@ -17,19 +17,15 @@
 		@include themed-inverse($map-key: "background");
 		@include themed-inverse(border-color, "background");
 		@include themed-inverse(color, "text");
-	}
 
-	body.is-light &, body.is-dark & {
-		.v-step {
-			&__arrow {
-				border-color: inherit;
-			}
-
-			&__cta {
-				margin: 0 $spacing-small;
-			}
+		&__cta {
+			margin: 0 $spacing-small;
 		}
 	}
+}
+
+.v-step__arrow {
+	@include tooltip-arrow('.v-tour .v-step');
 }
 
 

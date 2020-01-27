@@ -1,5 +1,6 @@
-<% content_for :body_class, 'has-cards vertical-center is-dark body--has-columns' %>
-<div class="vertical-center">
+<% content_for :body_class, 'vertical-center is-dark-contrast body--has-columns' %>
+<% content_for :main_class, 'container--is-vertically-centered' %>
+<div>
 	<div class="columns">
 		<div class="landing-text column">
 			<h1 class="header">Let's talk about risk</h1>
@@ -17,22 +18,22 @@
 
 		</div>
 		<div class="login column">
-			<div class="card">
+			<div class="container--is-card container--has-contrast-background">
 				<div class="login">
 					<h1>Sign up</h1>
-
-					<%= vuelidate_form_with model: resource, as: resource_name, url: registration_path(resource_name), html: {class: "centered"}, require_all: true do |f| %>
-						<%= f.text_field :name %>
-						<%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-						<%= f.text_field(:token, tooltip: true) if ENV['IS_BETA'] %>
-						<%= f.password_field :password, autocomplete: "new-password" %>
-						<%= f.password_field :password_confirmation, autocomplete: "new-password", show_toggle: true%>
-						<%= f.submit "Sign up", id: "signup-submit", :class => "cta"%>
+					<%= vuelidate_form_with model: resource, url: registration_path(resource_name), html: {class: "centered"}, require_all: true, vue: {':analytics-event': "['signup', {method: 'password'}]"}, name: 'signup' do |f| %>
+						<%= f.text_field :name, label: 'registration.name' %>
+						<%= f.email_field :email, autofocus: true, autocomplete: "email", label: 'registration.email' %>
+						<%= f.text_field(:token, tooltip: {interactive: true}) if ENV['IS_BETA'] %>
+						<%= f.password_field :password, autocomplete: "new-password", label: 'registration.password' %>
+						<%= f.password_field :password_confirmation, autocomplete: "new-password", show_toggle: 'container--has-contrast-background__link', label: 'registration.password_confirmation'%>
+						<%= f.submit "Sign up", id: "signup-submit", :class => "cta cta--is-form-submit"%>
 						<div class="additional">
-							<%= render "devise/shared/links" %>
+							<%= render "devise/shared/links", link_class: 'container--has-contrast-background__link' %>
 						</div>
 					<% end %>
 				</div>
 			</div>
 	</div>
+</div>
 </div>

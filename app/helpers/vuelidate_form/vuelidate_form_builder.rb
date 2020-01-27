@@ -104,6 +104,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	def submit(value = nil, options = {})
 		@template.content_tag(:div, super, {class: 'buttons'})
 	end
+
 	def check_box(attribute, args={}, checked_value = "1", unchecked_value = "0")
 		add_to_class(args, "inline", :field_class) unless args[:inline] == false
 		args[:label_last] = true unless args.has_key? :label_last
@@ -196,11 +197,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def password_field(attribute, args={})
+	def password_field(attribute, options={})
 		options = convert_options(options)
-		args[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
-		after_method = args[:show_toggle] ? :password_toggle : nil
-		field_builder(attribute, args).field(after_method) do
+		options[:":type"] = "#{SLOT_SCOPE}.toggles['password']"
+		after_method = password_toggle(options[:show_toggle]) if options[:show_toggle].present?
+		field_builder(attribute, options).field(after_method) do
 			super
 		end
 	end
@@ -242,10 +243,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		super
 	end
 
-	def password_toggle
+	def password_toggle(toggle_class = nil)
+		add_class = toggle_class.is_a?(String) ? toggle_class : ''
 		@template.content_tag(:div, {class: "additional", slot: "additional"}) do
 			@template.content_tag(:p) do
-				toggle_tag(:password, {class: "link link--no-line", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
+				toggle_tag(:password, {class: "link link--no-line #{add_class}", :":symbols" => "['hide_password', 'show_password']", :":translate" => true, :":vals" => "['text', 'password']", start_val: "password"})
 			end
 		end
 	end
@@ -266,6 +268,10 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		html_options[:key] = key
 		html_options[:object] = @object
 		Tags::Tooltip.new(@object_name, attribute, @template, html_options).render
+	end
+
+	def label(attribute, text=nil, options={}, &block)
+		Tags::Label.new(@object_name, attribute, @template, text, objectify_options(options)).render(&block)
 	end
 
 	# TODO this has full_v_name, which doesn't exist anymore
@@ -348,6 +354,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	# get the toggles on this form
 	def toggles
 		@toggles ||= @options.delete(:toggles) || {}
+	end
+
+	# get the name of the form for tracking purposes
+	def form_name
+		"#{@template.controller.action_name}_#{@object_name}"
 	end
 
 	# convert options into a HashWithIndifferentAccess for easier key access

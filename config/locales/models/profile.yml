@@ -20,7 +20,6 @@ en:
         external_name: What's a fun word they call their external genitals?
         internal_name: What's a fun word they call their vagina?
         pronoun_id: What pronouns do they use?
-        password_confirmation: Re-type your password
         uid: Partnering ID
         can_penetrate:
           'true': 'Yes'

@@ -122,7 +122,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 	# generate the label for the field if there is one
 	def field_label
 		return "" unless @label_options.present?
-		@form_builder.label(@label_key, @label_options)
+		@form_builder.label(@attribute, @label_options)
 	end
 
 	# generate the tooltip for the field if there is one
@@ -259,21 +259,14 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		# tell it if it's required so it can add an aterisk
 		defaults = {'required' => @required}
 		# get the label key
-		@label_key = if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
+		if label_opt.is_a?(Symbol) || label_opt.is_a?(String)
 			# the option is the key
-			label_opt
+			defaults['key'] = label_opt
 		elsif label_opt.is_a?(Hash)
 			# merge the given options
 			defaults.merge!(label_opt)
-			# get the key option
-			defaults.has_key?("key") ? defaults.delete("key") : @attribute
-		else
-			# fallback to the attribute name
-			@attribute
 		end
 
-		# set an id
-		defaults[:id] ||= "#{@label_key}#{defaults["value"]}-label"
 		defaults
 	end
 

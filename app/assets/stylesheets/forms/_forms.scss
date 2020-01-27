@@ -25,9 +25,10 @@
 }
 
 .cta--is-form-submit {
-	body.is-light & {
-		@include cta-background-colors($suffix: "-form");
+	@include themed-styles using ($theme, $theme-colors) {
+		@include cta-background-colors($theme-colors, $suffix: "-form");
 	}
+
 	font-size: 0.75rem;
 }
 
@@ -102,18 +103,14 @@ form.single {
 form {
 	div.field-errors {
 		text-align: right;
-		color: theme-light("h1");
 		font-weight: bold;
 		font-size: rem(12px);
 		line-height: 1;
-
-		body.is-dark &, body.is-dark.has-cards .card & {
-			color: theme-dark("h1");
-		}
+		@include themed(color, "h1");
 	}
 
 	div.errors {
-		color: theme-light("h1");
+		@include themed(color, "h1");
 	}
 
 	div.range-indicator {
@@ -228,7 +225,9 @@ form {
 	position: relative;
 
 	.flickity-viewport {
-		overflow: hidden auto;
+		overflow: auto;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 
 	&__h2 {
@@ -255,12 +254,14 @@ form {
 	text-align: center;
 	width: 100%;
 	z-index: 1;
+	height: 3rem;
 
 	$dot-size: 0.5rem;
 	&__dots {
 		height: $dot-size;
-		line-height: 0;
+		line-height: 1;
 		width: 100%;
+		margin-top: 1rem;
 	}
 
 	&__dot {

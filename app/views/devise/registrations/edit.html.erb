@@ -1,4 +1,4 @@
-<%= render 'forms/basic_form', skip_header: true, back_path: :back do %>
+<%= render 'forms/basic_form', skip_header: true, back_path: resource.set_up? ? :back : nil do %>
 	<%= vuelidate_form_with model: resource, html: {class: "centered", method: :put}, vue: {name: resource_name}, url: registration_path(resource_name) do |f| %>
 		<%= content_tag(:h1, t_action(".account_settings"), class: 'h1--is-form-title') if resource.set_up?%>
 		<%= render  "profiles/fields", f: f, profile: resource, show_name: resource.set_up? do |p| %>
@@ -22,7 +22,7 @@
 	<% end %>
 
 	<% if resource.set_up? %>
-		<%= vuelidate_form_with scope: :account_delete, html: {class: "centered", method: :delete}, vue: {name: :account_delete}, url: registration_path(resource_name) do |f| %>
+		<%= vuelidate_form_with scope: :account_delete, html: {class: "centered", method: :delete}, vue: {'ignore-abandons': true}, url: registration_path(resource_name) do |f| %>
 			<h2 class="with-desc h2--is-form-heading"><%= t_action(".delete_profile.title") %></h2>
 			<p class="description"><%= t_action(".delete_profile.desc") %></p>
 			<%= f.password_field :current_password, required: true, show_toggle: true %>

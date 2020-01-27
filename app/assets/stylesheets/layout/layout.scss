@@ -8,27 +8,19 @@ html, body, #vue-container {
 	font-family: $text-font;
 }
 
-body, body.has-cards .card {
-	color: theme-light("text");
-	background-color: theme-light("background");
-}
-
-body.is-dark, body.is-dark.has-cards .card {
-	color: theme-dark("text");
-	background-color: theme-dark("background");
-}
-
-body.has-cards {
-	font-weight: bold;
-	color: theme-dark("background");
-	background-color: theme-light("background-contrast");
-
-	&.is-dark {
-		color: theme-dark("background");
-		background-color: theme-dark("background-contrast");
+body {
+	@each $theme, $theme-colors in $themes {
+		&.is-#{$theme} {
+			color: map-get($theme-colors, "text");
+			background-color: map-get($theme-colors, "background");
+		}
 	}
+}
 
-	.card {
+body.is-light-contrast, body.is-dark-contrast {
+	font-weight: bold;
+
+	.container--has-contrast-background {
 		font-weight: normal;
 	}
 }
@@ -69,6 +61,10 @@ h2 {
 	&--has-no-top-margin {
 		margin-top: 0;
 	}
+
+	&--has-half-margin {
+		margin: 0.5rem 0;
+	}
 }
 
 header {
@@ -80,12 +76,8 @@ header {
 	> span, > a {
 		@include themed(color, "background-contrast");
 
-		body.has-cards & {
-			color: theme-light("background");
-		}
-
-		body.is-dark.has-cards & {
-			color: theme-light("h1");
+		body.is-light.has-form & {
+			color: theme-light-contrast("h1");
 		}
 	}
 
@@ -97,6 +89,7 @@ header {
 
 		&--has-nav {
 			box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+			text-align: left;
 		}
 	}
 }
@@ -129,14 +122,15 @@ p.description {
 
 #logo {
 	text-decoration: none;
-}
 
-.card {
-	border-radius: $default-border-radius;
-	padding: $spacing-medium;
+	img {
+		vertical-align: middle;
+		margin: $spacing-small;
+		height: 2.5rem;
 
-	&--has-no-padding {
-		padding: 0;
+		@include media($mobile) {
+			height: 2rem;
+		}
 	}
 }
 
@@ -159,7 +153,6 @@ p.description {
 	font-weight: bold;
 	border: rem(1px) solid;
 	@include themed(border-color, "background-contrast");
-	@include themed-with-cards(border-color, "h1");
 }
 
 #flash {
@@ -176,22 +169,18 @@ p.description {
 
 	.flash-notice {
 		@include themed(border-color, "background-contrast");
-		@include themed-with-cards(border-color, "h1");
 	}
 
 	.flash-alert {
 		@include themed(border-color, "background-contrast");
-		@include themed-with-cards(border-color, "h1");
 	}
 
 	.flash-error {
 		@include themed(border-color, "cta-bg");
-		@include themed-with-cards(border-color, "background");
 	}
 
 	.flash-message {
 		@include themed(border-color, "h1");
-		@include themed-with-cards(border-color, "cta-bg");
 	}
 }
 
@@ -235,7 +224,7 @@ p.description {
 		overflow: auto;
 	}
 
-	&--vertical-center {
+	&--is-vertically-centered {
 		display: flex;
 		align-items: center;
 		align-content: center;
@@ -247,7 +236,7 @@ p.description {
 		align-items: stretch;
 
 		&__centered-child {
-			flex-basis: 100%;
+			flex-basis: 50%;
 			flex-grow: 1;
 		}
 	}
@@ -255,18 +244,60 @@ p.description {
 	&--has-static-info {
 		padding: 0 $spacing-medium;
 	}
-}
 
-.centered-container {
-	text-align: center;
-}
+	&--is-card {
+		border-radius: $default-border-radius;
+		padding: $spacing-medium;
+	}
 
-.centered-text {
-	text-align: center;
+	&--is-rounded {
+		border-radius: $default-border-radius;
+		padding: rem(10px);
+		margin-bottom: rem(10px);
+		transition: border-radius 0.2s ease-in-out;
+
+		&__title {
+			text-align: center;
+			margin: 0 0 0.2rem 0;
+		}
+
+		&.dropdown--is-closed {
+			border-radius: 1.5rem;
+		}
+	}
+
+	&--has-contrast-background {
+		@include themed-contrast(background-color, "background");
+		@include themed-contrast(color, "text");
+	}
+
+	&--has-contrast-border {
+		border: 2px solid;
+		@include themed(border-color, "background-contrast");
+	}
+
+	&--has-white-background {
+		background-color: $color-white;
+	}
+
+	&--has-gray-background {
+		background-color: theme-light("cta-bg");
+		color: $color-white;
+	}
+
+	&--has-dark-gray-background {
+		background-color: theme-light("h1");
+		color: $color-white;
+	}
+
+	&--has-dark-background {
+		background-color: theme-dark("background");
+		color: $color-white;
+	}
 }
 
 .desc {
-	h1 + &, h2 + &, h3 + & {
+	h1 + &, h2 + &, h3 + &, h4 + &, {
 		line-height: 1rem;
 		margin-top: 0rem;
 		margin-bottom: 1rem;
@@ -275,73 +306,4 @@ p.description {
 
 span.confirmation {
 	display: block;
-}
-
-.edit-button {
-	float: right;
-}
-
-.rounded-container {
-	border-radius: $default-border-radius;
-	padding: rem(10px);
-	margin-bottom: rem(10px);
-	color: $color-white;
-	transition: border-radius 0.2s ease-in-out;
-
-	.rounded-container-title {
-		text-align: center;
-		margin: 0 0 0.2rem 0;
-	}
-
-	&.dropdown--is-closed {
-		border-radius: 1.5rem;
-	}
-}
-
-.dark-container {
-	@extend .rounded-container;
-	background-color: theme-dark("background");
-	// color: $color-off-white;
-}
-
-.light-container {
-	@extend .rounded-container;
-	background-color: $color-purple-light;
-	// color: $color-off-white;
-}
-
-.gray-container {
-	@extend .rounded-container;
-	background-color: theme-light("cta-bg");
-}
-
-.dark-gray-container {
-	@extend .rounded-container;
-	background-color: theme-light("h1");
-	// color: $color-off-white;
-}
-
-.dark-border-container {
-	@extend .rounded-container;
-	border: rem(2px) solid $color-purple-dark;
-}
-
-.light-border-container {
-	@extend .rounded-container;
-	border: rem(2px) solid $color-purple-light;
-}
-
-.gray-border-container {
-	@extend .rounded-container;
-	border: rem(2px) solid $color-light-gray;
-}
-
-.vertical-center {
-	display: flex;
-	align-items: center;
-	align-content: center;
-}
-
-.clear-fix{
-	@include self-clearing;
 }

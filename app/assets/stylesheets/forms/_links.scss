@@ -1,22 +1,31 @@
-.link,
-input[type="submit"].not-button {
-	body.is-light &, body.is-dark &.link--is-light-theme {
-		@include link;
-		@include link-colors($colors-light, $property: stroke);
+.link {
+	@include link;
+
+	@mixin themed-link($theme-map) {
+		@include link-colors($theme-map);
+		@include link-colors($theme-map, $property: stroke);
 
 		&--is-secondary {
-			@include link($suffix: "-light");
-			@include link-colors($suffix: "-light", $property: stroke);
+			@include link-colors($theme-map, $suffix: "-light");
+			@include link-colors($theme-map, $suffix: "-light", $property: stroke);
 		}
 	}
 
-	body.is-dark &, body.is-light &.link--is-dark-theme {
-		@include link-colors($colors-dark);
-		@include link-colors($colors-dark, $property: stroke);
+	@each $theme, $theme-map in $themes {
+		body.is-#{$theme} & {
+			@include themed-link($theme-map);
+		}
+	}
 
-		&--is-secondary {
-			@include link($colors-dark, $suffix: "-light");
-			@include link-colors($colors-dark, $suffix: "-light", $property: stroke);
+	@each $theme, $theme-map in $themes {
+		body &.link--is-#{$theme}-theme {
+			@include themed-link($theme-map);
+		}
+	}
+
+	@each $theme, $theme-map in $themes {
+		body.is-#{$theme} &.container--has-contrast-background__link {
+			@include themed-link(map-get($themes-contrast, $theme));
 		}
 	}
 

@@ -1,13 +1,11 @@
 <% body_class 'body--has-auth' %>
+<% content_for :header_class, 'header--is-small header--has-nav ' %>
 <% content_for :nav do %>
 	<%= render "nav" %>
 <% end %>
 
-<% content_for :header  do%>
-	<header class="header--is-small header--has-nav <%= content_for :header_class %>">
-		<%= link_to 'BedPost', root_path, id: "logo"%>
-		<button type="button" @click="loadTour" v-if="hasTour && tourRuns > 0" :disabled="tourRunning" class="cta cta--tourguide cta--is-secondary js-only" title="<%= t("guide_button") %>">?</button>
-	</header>
+<% content_for :header do %>
+	<button type="button" @click="loadTour" style="display: none;" v-show="hasTour && tourRuns > 0" :disabled="tourRunning" class="cta cta--tourguide cta--is-secondary js-only" title="<%= t("guide_button") %>">?</button>
 <% end %>
 
 <%= render template: "layouts/application" %>

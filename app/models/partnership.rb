@@ -16,7 +16,7 @@ class Partnership
 
 	validates :partner, uniqueness: true, not_self: true
 	validates :uid,
-		foreign_key: {key_class: UserProfile},
+		foreign_key: {query: Proc.new { |value| UserProfile.with_uid value }},
 		not_self: {method: :uid},
 		exclusion: {in: ->(ship) {Profile.find(ship.user_profile.partnerships.map { |s| s.partner_id unless s == ship}.compact).pluck(:uid).compact}, message: :taken},
 		uniqueness: true,
@@ -32,11 +32,12 @@ class Partnership
 	end
 
 	def uid=(value)
-		return unless value.present?
+		return if value.blank?
+
 		value.downcase!
-		ptnr = UserProfile.where({uid: value}).first
-		self.partner = ptnr if (ptnr && ptnr != user_profile)
-		@uid = value if ptnr || self.partner_id.nil?
+		ptnr = UserProfile.with_uid(value)
+		self.partner = ptnr if ptnr && ptnr != user_profile
+		@uid = value if ptnr || partner_id.nil?
 	end
 
 	def last_took_place(if_none = nil)
@@ -87,5 +88,4 @@ class Partnership
 	def remove_from_partner(prev_partner = partner_id)
 		RemoveOrphanedProfileJob.perform_later(prev_partner.to_s) unless prev_partner.nil?
 	end
-
 end

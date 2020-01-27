@@ -1,6 +1,6 @@
 .main-nav {
 	position: absolute;
-	left: 0rem;
+	right: 0rem;
 	top: 0rem;
 	z-index: 100;
 
@@ -8,29 +8,41 @@
 		cursor: pointer;
 		min-width: unset;
 		background-color: transparent;
-		bottom: $spacing-small;
-		left: $spacing-default;
+		bottom: 0.35rem;
+		margin-right: 0.75rem;
+		right: $spacing-tiny;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
 		padding: 0rem;
 		border: none;
 		@include themed(border-color, "background-contrast");
-		@include themed-with-cards(border-color, "background");
+
+		@include media($mobile) {
+			margin-right: 0.25rem;
+			bottom: 0.6rem;
+		}
+		body.has-form.is-light & {
+			border-color: theme-light-contrast('background-contrast');
+		}
 
 		&:hover, &:focus, &--open {
 			@include themed(border-color, "background");
 			@include themed(background-color, "background-contrast");
-			@include themed-with-cards(border-color, "background-contrast");
-			@include themed-with-cards(background-color, "background");
+
+			body.has-form.is-light & {
+				background-color: theme-light-contrast('background-contrast');
+				border-color: theme-light-contrast("background");
+			}
 		}
 
 		&__line {
-			border: rem(2.75px) solid;
+			border: rem(3px) solid;
 			border-color: inherit;
 			width: $nav-button-width;
 			margin: $spacing-tiny $spacing-tiny;
 			border-radius: $default-border-radius;
+			height: 0rem;
 		}
 
 		.no-js & {
@@ -42,25 +54,29 @@
 		overflow: hidden;
 		position: absolute;
 		margin: 0rem;
+		right: 0;
 		z-index: 1;
 		height: 100vh;
 		box-sizing: border-box;
 		display: none;
 		top: 0;
-		padding-top: calc(100% + #{$spacing-tiny});
+		padding-top: 100%;
 	}
 
 	&__menu-inner {
 		width: $nav-width;
-		border-right: 1px solid;
+		border-left: 1px solid;
 		height: 100%;
 		box-sizing: border-box;
-		@include themed(background-color, "background-contrast");
-		@include themed(color, "background");
-		@include themed-with-cards(background-color, "background");
-		@include themed-with-cards(color, "background-contrast");
 		display: flex;
 		flex-direction: column;
+		@include themed(background-color, "background-contrast");
+		@include themed(color, "background");
+
+		body.has-form.is-light & {
+			background-color: theme-light-contrast('background-contrast');
+			color: theme-light-contrast("background");
+		}
 	}
 
 	&__list {
@@ -77,86 +93,72 @@
 		white-space: nowrap;
 
 		&--user-name {
+			@include themed-contrast(color, "h1");
 			color: $color-off-white;
 			font-weight: bold;
 			padding: $spacing-default $spacing-tiny $spacing-default $spacing-default;
 		}
 
 		&__link {
-			body.is-light &, body.is-dark & {
-				text-decoration: none;
-				display: block;
-				height: 100%;
-				padding: 0.75rem $spacing-tiny 0.75rem $spacing-medium;
-				width: 100%;
-				text-align: left;
-				background-color: transparent;
-				border: none;
-			}
+			text-decoration: none;
+			display: block;
+			height: 100%;
+			padding: 0.75rem $spacing-tiny 0.75rem $spacing-medium;
+			width: 100%;
+			text-align: left;
+			background-color: transparent;
+			border: none;
 
 			@include themed(color, "background");
-			@include themed-with-cards(color, "cta-bg");
+
+			body.has-form.is-light & {
+				color: theme-light-contrast("background");
+			}
 
 			&--selected {
-				background-color: theme-dark("cta-bg");
-				color: theme-dark("cta-text");
+				@include themed(background-color, 'cta-bg');
+				@include themed(color, "cta-text");
+
+				body.has-form.is-light & {
+					color: theme-light-contrast("cta-text");
+				}
 			}
 
-			&--not-selected:not(:disabled) {
+			&--not-selected:not([disabled]) {
 				&:hover, &:focus {
-					color: theme-dark("cta-text");
-					background-color: rgba(theme-dark("cta-bg"), 0.5);
+					@include themed(color, "cta-text");
+					@include themed(background-color, "cta-bg", 0.75);
 				}
 			}
-		}
-	}
 
-	body.is-dark & {
-		&__burger {
-			box-shadow: none;
-		}
-
-		&__list-item {
-			&__link {
-				&--selected {
-					background-color: theme-light("cta-bg");
-					color: theme-light("cta-text");
-				}
-
-				&--not-selected:not(:disabled) {
-					&:hover, &:focus {
-						color: theme-light("cta-text");
-						background-color: rgba(theme-light("cta-bg"), 0.5);
-					}
-				}
-			}
-		}
-	}
-
-	body.is-light.has-cards & {
-		&__list-item {
-			&--user-name {
-				color: theme-light('h1');
+			&[disabled] {
+				@include disabled;
 			}
 		}
 	}
 
 	.no-js & {
+		&__menu {
+			display: block;
+			padding-top: 0rem;
+			position: static;
+			height: auto;
+
+			&-inner {
+				width: 100%;
+			}
+		}
 		@include media(('>tablet')) {
 			position: fixed;
+			height: 100%;
+
+			&__menu, &__menu-inner{
+				height: 100%;
+			}
 		}
 
 		@include media(('<=tablet')) {
-			&__menu {
-				display: block;
-				padding-top: 0rem;
-				position: static;
-				height: auto;
 
-				&-inner {
-					width: 100%;
-				}
-			}
 		}
 	}
 }

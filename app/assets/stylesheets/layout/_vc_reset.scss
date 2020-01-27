@@ -65,6 +65,14 @@
 		@include themed(color, 'text');
 	}
 
+	.vc-day-layer {
+		.vc-day-layer ~ .vc-day-layer {
+			.vc-highlight {
+				box-shadow: none;
+			}
+		}
+	}
+
 	@mixin toggle-button($bg-key, $is-dark: true) {
 
 		@include themed(background-color, $bg-key);

@@ -114,7 +114,7 @@ module EncountersHelper
 					#return the string
 					named
 					#join them with the join delimeter
-				end.join(t('join_delimeter'))
+				end.sort.join(t('join_delimeter'))
 
 				# make the html with the resulting strings
 				content_tag(:span, date_txt, {class: clss}) +
@@ -195,7 +195,7 @@ module EncountersHelper
 	end
 
 	def group_risks_by_diagnosis(obj)
-		obj.risks.each_with_object({}) do |(k, v), o|
+		grouped = obj.risks.each_with_object({}) do |(k, v), o|
 			lvl, caveats = v
 			next if lvl == Diagnosis::TransmissionRisk::NO_RISK
 
@@ -216,5 +216,7 @@ module EncountersHelper
 			o[lvl][:diagnoses] << diagnosis_t
 			o[lvl][:caveats] << caveats_translated if caveats_translated.any?
 		end
+
+		grouped.each {|lvl, hsh| hsh[:diagnoses].sort! }
 	end
 end
