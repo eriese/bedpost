@@ -53,7 +53,7 @@ en:
       display_risks_drop_down_html: '"Hide Risks" : "Show Risks"'
       display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
       self_risk_html: Your concern was <b>%{risk_level}</b>
-      overall_risk_html: We had <b>%{risk_level}</b>
+      overall_risk_html: We think chances are <b>%{risk_level}</b>
       notes:
         title: "Your Notes:"
       breakdown: "Let's break it down:"
@@ -92,7 +92,7 @@ en:
       make_partner: Add a partner
     form:
       contacts_title: We want the details!
-      contacts_desc: Our logic works best if you tell us things in the order they happened, but we know sometimes a lot is going on at once.
+      contacts_desc: Our logic works best if you tell us things in the order they happened, but we get that things can move quickly in the heat of the moment
       submit: Finish
   encounter_whos:
     new:

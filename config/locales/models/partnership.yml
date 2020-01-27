@@ -88,8 +88,8 @@ en:
         uid: Did they give you their user id?
     tooltip:
       partnership:
-        uid: It's fine if they're not using BedPost or didn't tell you their user ID. Just leave this blank and we'll ask you some more questions about them for now. You can always connect this partnership with their profile later.
-        nickname: This might be something like their last name, or where you met them, something to help you identify them. You can leave it blank
+        uid: You can connect with your partners to user their body language preferences! Don’t worry, you can always do this later
+        nickname: This might be where you met, a defining characteristic, anything to jog your memory.
     sliders:
       partnership:
         familiarity:
