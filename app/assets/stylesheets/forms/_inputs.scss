@@ -356,24 +356,22 @@ input[disabled=disabled] {
 
 .double-prog-bar {
 	$progbar-height: 1.25rem;
-	$progbar-border: rem(2px);
 	border-radius: $default-border-radius;
 	position: relative;
-	background-color: $color-off-white;
 	height: $progbar-height;
-	border: $progbar-border solid;
-	@include themed-inverse(border-color, "cta-bg");
+	@include themed-inverse(background-color, "background");
 	width: 84%;
 	margin: rem(5px) 8%;
 
 
 	.benchmark {
+		$benchmark-width: 0.5rem;
 		position: absolute;
-		height: $progbar-height * 1.5;
-		width: rem(6px);
-		margin-left: rem(-3px);
-		top: $progbar-height * -0.25 - $progbar-border;
-		@include themed-inverse(background-color, 'cta-bg');
+		height: $progbar-height * 1.6;
+		width: $benchmark-width;
+		margin-left: $benchmark-width / -2;
+		top: $progbar-height * -0.3;
+		@include themed(background-color, 'link-light-light');
 		z-index: 1;
 		border-radius: $default-border-radius;
 	}
@@ -382,7 +380,7 @@ input[disabled=disabled] {
 		position: absolute;
 		height: 100%;
 		left: 0;
-		@include themed-inverse(background-color, "background");
+		@include themed(background-color, "h1");
 		border-top-left-radius: $default-border-radius;
 		border-bottom-left-radius: $default-border-radius;
 	}

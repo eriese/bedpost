@@ -271,7 +271,7 @@ p.description {
 	}
 
 	&--has-contrast-background {
-		@include themed-contrast(background-color, "background");
+		@include themed(background-color, "background-contrast");
 		@include themed-contrast(color, "text");
 	}
 
@@ -283,6 +283,7 @@ p.description {
 	@include themed-styles using ($theme, $theme-colors) {
 		&--has-white-background {
 			background-color: $color-white;
+			color: theme-dark("background");
 		}
 
 		&--has-gray-background {

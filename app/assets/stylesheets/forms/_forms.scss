@@ -27,6 +27,9 @@
 .cta--is-form-submit {
 	@include themed-styles using ($theme, $theme-colors) {
 		@include cta-background-colors($theme-colors, $suffix: "-form");
+		@include hover-and-focus {
+			color: map-get($theme-colors, "cta-bg-form");
+		}
 	}
 
 	font-size: 0.75rem;

@@ -2,9 +2,9 @@
 <h1><%= t(".took_place", {took_place: l(@encounter.took_place, format: :long_date)}) %></h1>
 <h2><%= t('.title', partner: @partner.name) %></h2>
 <div>
-	<bubble target="progbar-benchmark" position="top" add-class="bubble-above" theme="light"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
+	<bubble target="progbar-benchmark" position="top" add-class="bubble-above" theme="dark"><%= t(".self_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.self_risk})}) %></bubble>
 	<prog-bar :benchmark="<%= @encounter.self_risk %>" :max="<%= Diagnosis::TransmissionRisk::HIGH %>" :progress="<%= @encounter.overall_risk %>" :middle="<%= Diagnosis::TransmissionRisk::MODERATE %>" :log-scale="true"></prog-bar>
-	<bubble target="progbar-fill" position="bottom-end" add-class="bubble-below" theme="light"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
+	<bubble target="progbar-fill" position="bottom-end" add-class="bubble-below" theme="dark"><%= t(".overall_risk_html", {risk_level: t("diagnosis.transmission_risk.risk_level", {count: @encounter.overall_risk})}) %></b></bubble>
 </div>
 
 <% if @encounter.notes.present? %>
