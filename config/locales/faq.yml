@@ -2,18 +2,18 @@ en:
   faq:
     title: FAQ
     sections:
-      setup:
-        title: Setup
-        questions:
-          starting:
-            question: Where do I start?
-            answer: Lorem Ipsum
+      # setup:
+      #   title: Setup
+      #   questions:
+      #     starting:
+      #       question: Where do I start?
+      #       answer: Lorem Ipsum
       help:
         title: Help!
         questions:
-          reset_password:
-            question: I forgot my password. How do I reset it?
-            answer: lorem
+          # reset_password:
+          #   question: I forgot my password. How do I reset it?
+          #   answer: lorem
           report_a_bug:
             question: Something isn’t working right! How do I report a bug?
             answer: If something went wrong while you were using BedPost, we really appreciate you letting us know. You can tell us about it using our <a href="/feedback/bug">bug report form</a>. If you're inside the app, you can also open the side navigation menu and click <b>Report a Bug</b> at the bottom. We’ll ask you for a little more info (like what you were doing and what you were expecting to see) and you can also add screenshots or recordings so we can better understand exactly how to fix it.
