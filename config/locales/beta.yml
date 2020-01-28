@@ -28,7 +28,7 @@ en:
       bug:
         title: Describe the bug in a few words
       user_profile:
-        token: You should have received this token in your email after taking our <a href="/login" target="_blank" class="link link--is-dark-theme"> pre-beta survey</a>
+        token: You should have received this token in your email after taking our <a href="https://www.surveymonkey.com/r/X7KSTKN" target="_blank" class="link link--is-dark-theme"> pre-beta survey</a>
   mongoid:
     errors:
       models:

@@ -1,6 +1,7 @@
 .columns {
 	@media (min-width: $screen-tablet) {
 		display: flex;
+		align-items: center;
 
 		&--wrap {
 			flex-wrap: wrap;
