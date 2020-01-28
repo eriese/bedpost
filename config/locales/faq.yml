@@ -11,19 +11,41 @@ en:
       help:
         title: Help!
         questions:
-          reset:
+          reset_password:
             question: I forgot my password. How do I reset it?
             answer: lorem
+          report_a_bug:
+            question: Something isn’t working right! How do I report a bug?
+            answer: If something went wrong while you were using BedPost, we really appreciate you letting us know. You can tell us about it using our <a href="/feedback/bug">bug report form</a>. If you're inside the app, you can also open the side navigation menu and click <b>Report a Bug</b> at the bottom. We’ll ask you for a little more info (like what you were doing and what you were expecting to see) and you can also add screenshots or recordings so we can better understand exactly how to fix it.
+
       basics:
         title: BedPost Basics
         questions:
           partner_difference:
-            question: My partner and I both use BedPost, why do our encounter reviews say different things?
-            answer: Lorem
-      talk:
+            question: My partner and I both use BedPost. Why are we getting different results for the same sex?
+            answer: Transmission likelihood calculation involves two elements - The scores you’ve provided for your partnership, and the chances associated with the happenings you track in your encounter (the sex!) So, there are several ways this could happen. You and your partner may have applied different scores to the partnership when entering it in BedPost. Or, more likely, some of the sex you are having involves different likelihood for the giver and receiver. So, even though y’all had the exact same sex, and tracked it identically, the outcomes could vary!
+          timeline:
+            question: What does this testing timeline mean?
+            answer: If you get tested immediately after an encounter that concerns you, you're likely to get a false negative. When we present you with a testing timeline, we’re providing you with the soonest dates that a test would be valid, based on the incubation time of different infections. If we calculate that these tests can all wait until your regularly scheduled test (Medical Providers suggest sexually active people get tested every 3-6 months), we’ll let you know.
+          tracking:
+            question: What can I track with BedPost?
+            answer: BedPost allows you to track both your sexual partners and the encounters (sex!) you have with them. You can also revisit your encounters to track the risk associated with them. Currently, we can only track sex between two people, but we’re working on it.
+          body_language:
+            question: Why do you care about my pronouns and what I call my parts?
+            answer: Being body and sexuality inclusive is at the core of our mission at BedPost. When you’re tracking your sex we want it to feel as relaxed as possible (we know that sure helps us remember what happened!) and knowing what pronouns to use for you, and what feels natural to call parts of your body, as well as your partners, helps us make that experience a little bit more natural. You’re playing sexy MadLibs, shouldn’t you be able to do it with the right pronouns?
+          uuid:
+            question: What can my partners see if I give them my BedPost user ID?
+            answer: We will never share your encounters, partnership scoring, or other partnerships with anyone. The only thing that connecting a partnership to your profile will give your partners access to is your name, your pronouns, and your body language preferences. We do this to give you control over how you get talked about even when you're not there. Maybe you haven't discussed these specifics with everyone in your life, or maybe you want to change them and have that change be reflected in the way your partners talk about the sex they have with you.
+      talk_to_us:
         title: Talk to Us
         questions:
-          social:
+          get_social:
             question: Where can I find you on the internet?
-            answer: lorem
+            answer: We’d love to get social with you, too! Come follow us on Instagram at <a href="https://www.instagram.com/bedpost.app/">@bedpost.app</a> for more updates, posts, and fun content.
+          request_a_feature:
+            question: I really want you to implement my idea in BedPost! How do I request a feature?
+            answer: If there's something else you wish you could do on BedPost, or you'd like more options around what is available today, the BedPost team really wants to hear from you! You can go to our <a href="/feedback/feature">feature request form</a> and tell us all about it. If you're using the app and suddenly have a stroke of brilliance, you can open the side navigation and you'll see a link to <b>Request a Feature</b> at the bottom of the menu.
+          contact_us:
+            question: This FAQ didn’t answer my question, or I have other things to say to you. How do I contact BedPost?
+            answer: Our inbox is always open! Email us at <a href="mailto:support@bedpost.me">support@bedpost.me</a>. We'd love to know what's on your mind.
 

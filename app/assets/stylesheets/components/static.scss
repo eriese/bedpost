@@ -15,8 +15,20 @@
 			height: 1.25rem;
 		}
 
+		&-question {
+			line-height: 1.25;
+			margin-bottom: $spacing-small;
+		}
+
 		.dropdown-content {
 			flex-basis: 100%;
+		}
+	}
+
+	&__question {
+		a {
+			@include link($colors-flesh);
+			font-weight: bold;
 		}
 	}
 }
