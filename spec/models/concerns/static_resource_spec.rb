@@ -6,6 +6,7 @@ class StaticResourceTestModel
 
 	field :f_1
 	field :f_2
+	field :updated_at, type: Time
 end
 
 RSpec.describe StaticResource, type: :module do
@@ -122,13 +123,23 @@ RSpec.describe StaticResource, type: :module do
 		end
 
 		describe '#newest' do
+			it 'gets the one most recently updated' do
+				make_models(2)
+				expected = StaticResourceTestModel.first
+				expected.update(updated_at: Time.now)
+				StaticResourceTestModel.last.update(updated_at: Time.now - 1.day)
+
+				actual = StaticResourceTestModel.newest
+				expect(actual).to eq expected
+			end
+
 			context 'without arguments' do
 				it 'calls order and then last' do
 					make_models(2)
 					order_query = double('OrderQuery', {last: nil})
 					allow(StaticResourceTestModel).to receive(:order) {order_query}
 					StaticResourceTestModel.newest
-					expect(StaticResourceTestModel).to have_received(:order).with(updated_at: :desc)
+					expect(StaticResourceTestModel).to have_received(:order).with(updated_at: :asc)
 					expect(order_query).to have_received(:last)
 				end
 
@@ -148,7 +159,7 @@ RSpec.describe StaticResource, type: :module do
 					allow(StaticResourceTestModel).to receive(:where) {where_query}
 					StaticResourceTestModel.newest(f_1: nil)
 					expect(StaticResourceTestModel).to have_received(:where).with(f_1: nil)
-					expect(where_query).to have_received(:order).with(updated_at: :desc)
+					expect(where_query).to have_received(:order).with(updated_at: :asc)
 					expect(order_query).to have_received(:last)
 				end
 

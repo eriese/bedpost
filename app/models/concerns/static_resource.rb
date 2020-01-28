@@ -24,10 +24,10 @@ module StaticResource
 		end
 
 		def newest(**args)
-			return Rails.cache.fetch('newest', namespace: name) { order(updated_at: :desc).last(id_sort: :none) } unless args.any?
+			return Rails.cache.fetch('newest', namespace: name) { order(updated_at: :asc).last(id_sort: :none) } unless args.any?
 
 			key = args.to_json
-			return Rails.cache.fetch("newest#{key}", namespace: name) { where(args).order(updated_at: :desc).last(id_sort: :none) }
+			return Rails.cache.fetch("newest#{key}", namespace: name) { where(args).order(updated_at: :asc).last(id_sort: :none) }
 		end
 
 		def grouped_by(column, instantiate=true)
