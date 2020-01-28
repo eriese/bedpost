@@ -5,7 +5,7 @@ class TermsController < ApplicationController
 
 	def show
 		@terms = Terms.newest_of_type(@type_key)
-		@is_accepted = current_user_profile.terms_accepted?(term_type)
+		@is_accepted = current_user_profile.terms_accepted?(@type_key)
 		@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile.terms[@type_key]
 	end
 

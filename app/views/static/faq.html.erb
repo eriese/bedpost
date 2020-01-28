@@ -20,7 +20,9 @@
 			<h2 id="<%= section_key %>"><%= section[:title] %></h2>
 			<% section[:questions].each do |question_key, question| %>
 				<h3 id="<%= question_key %>"><%= question[:question] %></h3>
-				<p class="faq__question"><%= question[:answer].html_safe %></p>
+				<div class="faq__question">
+					<p><%= question[:answer].html_safe %></p>
+				</div>
 			<% end %>
 		<% end %>
 	</div>
