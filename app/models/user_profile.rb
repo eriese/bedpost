@@ -78,6 +78,7 @@ class UserProfile < Profile
 	# @return [true] if the user has completed full profile setup
 	def set_up?
 		pronoun_id.present?
+		# false
 	end
 
 	# Is this the user's first time using the app?

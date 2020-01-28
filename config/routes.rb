@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 		put 'profile', to: 'user_profiles/registrations#update'
 		delete 'profile', to: 'user_profiles/registrations#destroy', as: :destroy_user_profile_registration
 		get 'uniqueness', to: 'user_profiles/registrations#unique'
+		if ENV['IS_BETA']
+			get 'beta_signup', to: 'user_profiles/registrations#new_beta', as: :beta_registration
+		end
 	end
 	devise_for :user_profiles, skip: [:registrations], path: "", singular: :user_profile, path_names: {
 			sign_in: 'login', sign_out: 'logout',

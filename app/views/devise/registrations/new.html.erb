@@ -3,34 +3,23 @@
 <div>
 	<div class="columns">
 		<div class="landing-text column">
-			<h1 class="header">Let's talk about risk</h1>
-
+			<h1 class="header">Let's talk about sex</h1>
 			<p>It's a fact: the only risk-free sex is no sex. But there are a limitless reasons to have sex, and limitless ways, and we think that's worthwhile. </p>
-
 			<h2>Is risk limitless too?</h2>
-
-			<p>The good news is, it's not. There are a lot of scare tactics and myths out there that can leave us confused about how much risk our sex lives really involve: Can we get or give an STI from that? When should we get tested? What will happen if a test comes back positive?</p>
-
+			<p> The good news is, it's not. There are a lot of scare tactics and myths out there that can leave us confused about how much risk our sex lives really involve: Can we get or give an STI from that? When should we get tested? What will happen if a test comes back positive?</p>
 			<h2>BedPost wants you to have the answers</h2>
-			<p>Tailored to your body and the sex you have with it, BedPost helps you go confidently into the risky world of sex and handle what comes.</p>
-
-			<p> And if you want to figure out how to reduce your risk? We've got tips for that too, but we're not pushy about it.</p>
-
+			<p>This is the last time you’ll hear us talk about risk. Tailored to your body and the sex you have with it, BedPost helps you cut the confusion and shame and assess the likelihood of Sexually Transmitted Infection (STI) based on the sex you have. We’ll also provide you with a testing schedule tailored to your behavior. </p>
+			<p>And if you want to figure out how to reduce that likelihood? We've got tips for that too, but we're not pushy about it.</p>
 		</div>
 		<div class="login column">
 			<div class="container--is-card container--has-contrast-background">
 				<div class="login">
-					<h1>Sign up</h1>
-					<%= vuelidate_form_with model: resource, url: registration_path(resource_name), html: {class: "centered"}, require_all: true, vue: {':analytics-event': "['signup', {method: 'password'}]"}, name: 'signup' do |f| %>
-						<%= f.text_field :name, label: 'registration.name' %>
-						<%= f.email_field :email, autofocus: true, autocomplete: "email", label: 'registration.email' %>
-						<%= f.text_field(:token, tooltip: {interactive: true}) if ENV['IS_BETA'] %>
-						<%= f.password_field :password, autocomplete: "new-password", label: 'registration.password' %>
-						<%= f.password_field :password_confirmation, autocomplete: "new-password", show_toggle: 'container--has-contrast-background__link', label: 'registration.password_confirmation'%>
-						<%= f.submit "Sign up", id: "signup-submit", :class => "cta cta--is-form-submit"%>
-						<div class="additional">
-							<%= render "devise/shared/links", link_class: 'container--has-contrast-background__link' %>
-						</div>
+					<% if ENV['IS_BETA'] %>
+						<h1>Join Our Beta</h1>
+						<h2>To participate in our Beta, please take our survey. Once that's completed, we'll send you an email with a token to let you get started!</h2>
+						<a href="https://www.surveymonkey.com/r/X7KSTKN" class="cta">Take me to the survey!</a>
+					<% else %>
+						<%= render 'form'%>
 					<% end %>
 				</div>
 			</div>

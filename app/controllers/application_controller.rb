@@ -35,11 +35,9 @@ class ApplicationController < ActionController::Base
 		return unless user_profile_signed_in? && storable_location?
 
 		redirect_path =
-			if !current_user_profile.terms_accepted? :tou
-				term_path(:tou)
+			if terms = Terms::TYPES.find { |type| !current_user_profile.terms_accepted? type }
+				term_path(terms)
 			# if the user hasn't completed their profile, make them do it
-			elsif !current_user_profile.terms_accepted? :privacy
-				term_path(:privacy)
 			elsif !current_user_profile.set_up?
 				edit_user_profile_registration_path
 			# if the user hasn't taken any actions in the app yet, take them to the first time page

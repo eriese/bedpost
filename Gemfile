@@ -22,6 +22,7 @@ gem "i18n-js"
 # gem 'mini_racer', platforms: :ruby
 
 gem 'mongoid', '~> 7.0'
+gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks

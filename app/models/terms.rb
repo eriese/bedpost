@@ -3,10 +3,12 @@ class Terms
 	include Mongoid::Timestamps::Short
 	include StaticResource
 
+	TYPES = %i[tou].freeze
+
 	field :terms, type: String
 	field :type, type: Symbol
 
-	index({updated_at: -1, type: 1})
+	index(updated_at: -1, type: 1)
 
 	def self.newest_of_type(type_to_get)
 		newest(type: type_to_get)
