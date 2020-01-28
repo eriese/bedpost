@@ -22,10 +22,6 @@ if Rails.env.development?
 	)
 end
 
-# temporary terms of use
-Terms.create(terms: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi, inventore delectus, laborum excepturi repudiandae, ex quae eveniet, modi culpa sequi distinctio perspiciatis voluptate sint molestiae! Iure suscipit, vitae eaque ut. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo quibusdam eum et quis ipsum consectetur iusto eligendi labore ab quaerat in tempora fuga eaque debitis, delectus incidunt, minus alias amet. \n Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex ducimus quis voluptatem sed pariatur optio dignissimos. Eum vero quibusdam ducimus cumque earum dicta accusantium a libero aut debitis, facere repellendus! \n Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque provident iusto suscipit sunt incidunt explicabo laudantium culpa dolore quo totam eligendi, ea unde tenetur quidem, illo dolor neque, aliquam commodi.", type: :tou)
-Terms.create(terms: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus eius omnis expedita, eveniet id ut molestiae deserunt, libero modi magni adipisci sed ea non ipsam repellendus voluptas quia nihil labore!", type: :privacy)
-
 ############################
 # Contact Instruments
 ############################
@@ -50,6 +46,7 @@ external_genitals = Contact::Instrument.new(
 		can_be_penetrated_by: [:can_penetrate],
 		can_penetrate: [:can_penetrate],
 		can_be_sucked_by_self: [:can_penetrate],
+		can_be_kissed_by_self: [:can_penetrate],
 		can_be_licked_by_self: [:can_penetrate]
 	}
 )
