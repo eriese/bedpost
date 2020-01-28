@@ -2,22 +2,52 @@ en:
   faq:
     title: FAQ
     sections:
-      # setup:
-      #   title: Setup
-      #   questions:
-      #     starting:
-      #       question: Where do I start?
-      #       answer: Lorem Ipsum
+      setup:
+        title: Setup
+        questions:
+          starting:
+            question: Where do I start?
+            answer: To participate in our Beta, head to our <a href="/signup">signup page</a> and click <b>Take me to the survey!</b> Once you've completed the survey, you'll receive an invitation with instructions on how to make an account with BedPost. Once you've logged in we have a tutorial to walk you through using our features. If you ever get confused on a page, look for the question mark button in the top right of the screen. Pressing it will allow you to take the tour of that page again.
+          save_icon:
+            question: How can I save BedPost as an icon on my phone's home screen?
+            answer: |+
+              We recommend doing this for easy access to the web version of the app until we have one you can download.
+              <h4>iPhone</h4>
+              <h5 id="iphone-safari"> Easiest: Add Using Safari</h5>
+              <ol aria-describedby="iphone-safari">
+                <li>Open <a href="https://bedpost.me">bedpost.me</a> from <b>Safari</b></li>
+                <li>Click the <b>Share</b> icon, the middle button in the bottom of your browser window</li>
+                <li>Click <b>Add to Home Screen</b>. It should be the fifth item in the list.</li>
+                <li>Edit the icon name (if you want) and click <b>Add</b></li>
+              </ol>
+              <h5 id="iphone-shortcut">Alternative: Add a new Shortcut</h5>
+              <p>On your iPhone, you also have the option to create a custom shortcut, which can be set as an icon on your home screen and can take a specific action, including opening a URL in your browser of choice. If you prefer not to use Safari, this option allows you to open BedPost in whichever browser you like.</p>
+              <ol aria-describedby="iphone-shortcut">
+                <li>Navigate to your <b>Shortcuts</b> app (use the search bar to find it)</li>
+                <li>Click <b>Create Shortcut</b> then click <b>Add Action</b></li>
+                <li>Search for your preferred browser and click the option <b>Open URLs in ___</b></li>
+                <li>The shortcut will have a default url. Click it to change it to <b>https://bedpost.me</b></li>
+                <li>Click the options button (three dots in a circle in the top right of the screen) to open the action details.</li>
+                <li> Click <b>Add to Home Screen</b>. You will be able to change the shortcut text under <b>Home Screen Name and Icon</b> (you can change the image too, if you want, by clicking it). Then click <b>Add</b> in the top right</li>
+              </ol>
+              <h4>Android</h4>
+              <ol>
+                <li>Open <a href="https//bedpost.me">bedpost.me</a> in your preferred browser</li>
+                <li>Click the menu icon in the top right of the screen and then <b>Add to Home Screen</b></li>
+                <li>Edit your shortcut name if you want</li>
+              </ol>
       help:
         title: Help!
         questions:
-          # reset_password:
-          #   question: I forgot my password. How do I reset it?
-          #   answer: lorem
+          reset_password:
+            question: I forgot my password. How do I reset it?
+            answer: No worries! You can <a href="/recover/new">reset your password right here</a>. Give us your email address and we'll send a reset link. You can also always find a link to password reset on our <a href="/login">login page</a>.
+          change_password:
+            question: How do I change my password if I know my current one?
+            answer: We recommend periodically updating passwords for optimal security. You can change your password any time when you're logged in by opening the navigation menu and clicking on <a href="/profile">Edit Profile</a>. Just scroll down to the section marked <b>Security</b>, enter your <b>Current password</b>, then enter and confirm your <b>New password</b> and click <b>Save</b>.
           report_a_bug:
             question: Something isn’t working right! How do I report a bug?
             answer: If something went wrong while you were using BedPost, we really appreciate you letting us know. You can tell us about it using our <a href="/feedback/bug">bug report form</a>. If you're inside the app, you can also open the side navigation menu and click <b>Report a Bug</b> at the bottom. We’ll ask you for a little more info (like what you were doing and what you were expecting to see) and you can also add screenshots or recordings so we can better understand exactly how to fix it.
-
       basics:
         title: BedPost Basics
         questions:
