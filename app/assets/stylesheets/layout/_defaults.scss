@@ -161,10 +161,10 @@ $colors-dark-contrast: (
 
 $colors-flesh: (
 	"cta-text": $pale-jasper,
-	"cta-bg": $dahlia-purple,
+	"cta-bg": $tolopea,
 	"cta-bg-light": $coyote-tracks,
 	"cta-bg-form": $scintillating-violet,
-	"link": $dahlia-purple,
+	"link": $tolopea,
 	"link-light": $coyote-tracks,
 	"link-light-light": $scintillating-violet,
 	"shadow": rgba($color-white, 0.3),
@@ -173,8 +173,8 @@ $colors-flesh: (
 	"background": $pale-jasper,
 	"background-contrast": $color-white,
 	"text": $scintillating-violet,
-	"input-border": $dahlia-purple,
-	"input-border-focus": $coyote-tracks,
+	"input-border": $coyote-tracks,
+	"input-border-focus": $tolopea,
 	"form-background": $pale-jasper
 );
 
@@ -219,7 +219,7 @@ $themes-contrast: (
 	"light": $colors-light-contrast,
 	"dark": $colors-dark-contrast,
 	"light-contrast": $colors-light,
-	"dark-contrast": $colors-light,
+	"dark-contrast": $colors-flesh,
 	"flesh": $colors-flesh-contrast,
 	"flesh-contrast": $colors-flesh
 );

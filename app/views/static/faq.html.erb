@@ -4,8 +4,8 @@
 		<% t('faq.sections', cascade: {allow_hash: true}).each do |section_key, section|%>
 			<nav class="faq__nav">
 				<ul class="--is-unstyled">
-					<drop-down arrow-class="link cta--is-arrow--is-small faq__nav-arrow" selector="li" class="faq__nav-item">
-						<a href="#<%= section_key %>" class="link link--no-line faq__nav-section" slot="title" data-turbolinks="false"><%= section[:title] %></a>
+					<drop-down arrow-class="link container--has-contrast-background__link cta--is-arrow--is-small faq__nav-arrow" selector="li" class="faq__nav-item">
+						<a href="#<%= section_key %>" class="link container--has-contrast-background__link link--no-line faq__nav-section" slot="title" data-turbolinks="false"><%= section[:title] %></a>
 						<ul class="no-dots">
 							<% section[:questions].each do |question_key, question| %>
 								<li class="faq__nav-question"><a href="#<%= question_key %>" class="link link--no-line" data-turbolinks="false"><%= question[:question] %></a></li>
