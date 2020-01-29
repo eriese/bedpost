@@ -22,6 +22,13 @@ en:
       fisted: fisted
       licked: licked
       kissed: kissed
+    contact_type_action:
+      penetrated: penetrating
+      touched: touching
+      sucked: sucking
+      fisted: fisting
+      licked: licking
+      kissed: kissing
     with: with %{pronoun}
     using: using
     instrument:
@@ -108,6 +115,17 @@ en:
           'true': 'Yes'
           'false': 'No'
         self_risk: How concerned are you about the possibility of STIs from this encounter?
+        subject: Who was %{contact_type} %{object_name}?
+        contact_type: What did %{subject_name} do with %{object_reflexive_name}?
+        object:
+          partner: Who was %{subject_name} %{contact_type}?
+          user: Who were you %{contact_type}?
+        subject_instrument:
+          partner: What part of %{subject_name} was %{subject_name} %{contact_type} %{object_reflexive_name} with?
+          user: What part of you were you %{contact_type} %{object_reflexive_name} with?
+        object_instrument:
+          partner: What part of %{object_reflexive_name} was %{subject_name} %{contact_type}?
+          user: What part of %{object_reflexive_name} were you %{contact_type}?
     tooltip:
       encounter:
         fluids_group: Did you get ejaculate in your eye?

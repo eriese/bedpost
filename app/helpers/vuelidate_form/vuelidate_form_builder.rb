@@ -130,11 +130,15 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 
 	def radio_group(attribute, buttons: [[true], [false]], options: {})
 		group_scope = 'fe'
+		group_id = "#{@object_name}_#{attribute}_group"
 		group_opts = (options.delete(:group_options) || {}).reverse_merge(
-			field_role: :radiogroup,
 			slot_scope: group_scope,
-			field_id: "#{@object_name}_#{attribute}_group",
-			skip_value: true
+			skip_value: true,
+			field_html: {
+				'aria-labelledby' => "#{group_id}-label",
+				role: :radiogroup,
+				id: group_id
+			}
 		)
 
 		radio_opts = {
@@ -169,7 +173,11 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		builder.custom_field do
 			@template.content_tag(:div) do
 				builder.field_label <<
-				@template.content_tag(:div, @template.safe_join(btns, joiner), {class: "group-radios"})
+				@template.content_tag(
+					:div,
+					@template.safe_join(btns, joiner),
+					{ class: 'group-radios' }
+				)
 			end <<
 			builder.field_tooltip
 		end
