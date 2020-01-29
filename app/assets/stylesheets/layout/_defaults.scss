@@ -52,11 +52,15 @@ $mobile: "<tablet" ("retina", "retina2x", "retina3x");
 ///////////////////////
 // browns
 $coyote-tracks: #af8b82;
+$roxy-brown: #7A534A;
+$chocolate-fondant: #56362E;
+
+// oranges
 $canyon-rose: #af6a64;
 $lolly: #fc9890;
 $pale-jasper: #ffd6cc;
 
-//purples
+// purples
 $tolopea: #2e2143;
 $jakarta-skyline: #433060;
 $dahlia-purple: #8365b2;
@@ -162,10 +166,10 @@ $colors-dark-contrast: (
 $colors-flesh: (
 	"cta-text": $pale-jasper,
 	"cta-bg": $tolopea,
-	"cta-bg-light": $coyote-tracks,
+	"cta-bg-light": $roxy-brown,
 	"cta-bg-form": $scintillating-violet,
 	"link": $tolopea,
-	"link-light": $coyote-tracks,
+	"link-light": $roxy-brown,
 	"link-light-light": $scintillating-violet,
 	"shadow": rgba($color-white, 0.3),
 	"h1": $jakarta-skyline,
@@ -173,7 +177,7 @@ $colors-flesh: (
 	"background": $pale-jasper,
 	"background-contrast": $color-white,
 	"text": $scintillating-violet,
-	"input-border": $coyote-tracks,
+	"input-border": $roxy-brown,
 	"input-border-focus": $tolopea,
 	"form-background": $pale-jasper
 );
@@ -181,19 +185,19 @@ $colors-flesh: (
 $colors-flesh-contrast: (
 	"cta-text": $color-white,
 	"cta-bg": $dahlia-purple,
-	"cta-bg-light": $coyote-tracks,
+	"cta-bg-light": $roxy-brown,
 	"cta-bg-form": $scintillating-violet,
 	"link": $dahlia-purple,
-	"link-light": $coyote-tracks,
+	"link-light": $roxy-brown,
 	"link-light-light": $scintillating-violet,
 	"shadow": rgba($color-white, 0.3),
-	"h1": $jakarta-skyline,
+	"h1": $chocolate-fondant,
 	"h2": $scintillating-violet,
 	"background": $color-white,
 	"background-contrast": $pale-jasper,
 	"text": $scintillating-violet,
 	"input-border": $dahlia-purple,
-	"input-border-focus": $coyote-tracks,
+	"input-border-focus": $roxy-brown,
 	"form-background": $pale-jasper
 );
 
@@ -211,7 +215,7 @@ $themes-inverse: (
 	"dark": $colors-light,
 	"light-contrast": $colors-dark-contrast,
 	"dark-contrast": $colors-light,
-	"flesh": $colors-flesh-contrast,
+	"flesh": $colors-dark-contrast,
 	"flesh-contrast": $colors-flesh
 );
 

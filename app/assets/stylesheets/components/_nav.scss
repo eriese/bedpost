@@ -79,7 +79,7 @@
 		}
 
 		body.is-flesh & {
-			background-color: map-get($colors-flesh, 'cta-bg-light');
+			background-color: map-get($colors-flesh-contrast, 'h1');
 		}
 	}
 
@@ -101,6 +101,10 @@
 			color: $color-off-white;
 			font-weight: bold;
 			padding: $spacing-default $spacing-tiny $spacing-default $spacing-default;
+
+			body.is-flesh & {
+				color: $color-off-white;
+			}
 		}
 
 		&__link {
