@@ -82,6 +82,8 @@ en:
       caret:
         left: Go Back
         right: Continue
+        down: See more
+        up: See less
   terms:
     show:
       title:
@@ -121,3 +123,6 @@ en:
   list_view: List View
   chart_view: Chart View
   calendar_view: Calendar View
+  remove: Remove
+  move_down: Move down
+  move_up: Move up

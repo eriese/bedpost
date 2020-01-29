@@ -13,6 +13,7 @@ en:
               blank: Please choose a partner
         contact:
           incomplete: Oops, you left something blank here
+          aria_incomplete: on contact %{index}
   contact:
     contact_type:
       penetrated: penetrated
@@ -50,8 +51,6 @@ en:
       risk_line_html: "<span class='risk-level'>%{level}:</span> <span class='diagnoses'>%{diagnosis}</span>"
       risk_with_caveats_line_html: "%{line}<br><span class='risk-caveats'>%{caveats}</span>"
       caveat_marks_html: "%{diagnosis}<sup>%{marks}</sup>"
-      display_risks_drop_down_html: '"Hide Risks" : "Show Risks"'
-      display_overall_risks_drop_down_html: '"Hide Overall Risks" : "Show Overall Risks"'
       self_risk_html: Your concern was <b>%{risk_level}</b>
       overall_risk_html: We think chances are <b>%{risk_level}</b>
       notes:
@@ -63,15 +62,15 @@ en:
         title: The Sex
         fluid_exchange: Additional fluid exchange
       risks:
-        title: The Overall Risks
-        no_risks: None! Nothing you did carried any risk
-        no_risks_contact: This activity carries no risk
+        title: Overall Likelihoods
+        no_risks: Nothing to call out; nothing you did allows for STI transmission
+        no_risks_contact: This activity doesn't transmit STIs
       advice:
         title: Our Advice
         desc: "We think this is a good testing schedule:"
         routine: "We think you should get checked for these on your regular schedule:"
         show_anyway: Show me when my earliest test opportunities are anyway
-        hide_lower_risk: Hide test dates for lower risk infections
+        hide_lower_risk: Hide test dates for lower likelihoods
         no_schedule: Based on our data, we have no testing callouts for this encounter.
         key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such low likelihood"
     index:

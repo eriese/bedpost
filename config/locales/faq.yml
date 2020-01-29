@@ -51,6 +51,13 @@ en:
       basics:
         title: BedPost Basics
         questions:
+          calculation:
+            question: How does transmission likelihood calculation work?
+            answer: |+
+              <h4>The short version:</h4>
+              <p>We start by casting the widest net possible, assuming all STIs are present to be transmitted. Then we narrow it by considering the relationship data you provided and the details you entered about the interactions. </p>
+              <h4>The long version:</h4>
+              <p>Research at the level of specificity we're aiming for is pretty thin, which is why <b>bedpost is not meant to be a replacement for talking to a medical provider</b>, but we use any existing data we could find on the chance that each contact you have in an encounter could allow what's in your partner's system to get into yours. Then we use what you told us about your relationship to lower the likelihood that your partner has an STI that they or you don't know about. Lastly, we look at whether you used barriers and where fluids went over the course of your interaction, because avoiding fluid exchange can majorly reduce your chances of transmission of most STIs. This all comes together to give us the rough estimate we show you. </p>
           partner_difference:
             question: My partner and I both use BedPost. Why are we getting different results for the same sex?
             answer: Transmission likelihood calculation involves two elements - The scores you’ve provided for your partnership, and the chances associated with the happenings you track in your encounter (the sex!) So, there are several ways this could happen. You and your partner may have applied different scores to the partnership when entering it in BedPost. Or, more likely, some of the sex you are having involves different likelihood for the giver and receiver. So, even though y’all had the exact same sex, and tracked it identically, the outcomes could vary!
