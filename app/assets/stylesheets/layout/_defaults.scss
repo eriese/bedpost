@@ -54,6 +54,7 @@ $mobile: "<tablet" ("retina", "retina2x", "retina3x");
 $coyote-tracks: #af8b82;
 $roxy-brown: #7A534A;
 $chocolate-fondant: #56362E;
+$root-brew: #250900;
 
 // oranges
 $canyon-rose: #af6a64;
@@ -90,19 +91,19 @@ $color-white: #FFF;
 $colors-light: (
 	"cta-text": $color-white,
 	"cta-bg": $scintillating-violet,
-	"cta-bg-light": $canyon-rose,
+	"cta-bg-light": $roxy-brown,
 	"cta-bg-form": $guppy-violet,
 	"link": $scintillating-violet,
-	"link-light": $canyon-rose,
+	"link-light": $roxy-brown,
 	"link-light-light": $bonny-belle,
 	"shadow": rgba($color-black, 0.3),
 	"h1": $jakarta-skyline,
 	"h2": $color-black,
 	"background": $color-white,
-	"background-contrast": $guppy-violet,
+	"background-contrast": $potent-purple,
 	"text": $color-black,
 	"input-border": $scintillating-violet,
-	"input-border-focus": $canyon-rose,
+	"input-border-focus": $roxy-brown,
 	"form-background": $guppy-violet,
 );
 
@@ -128,10 +129,10 @@ $colors-dark: (
 $colors-light-contrast: (
 	"cta-text": $color-white,
 	"cta-bg": map-get($colors-light, "cta-bg"),
-	"cta-bg-light": $canyon-rose,
+	"cta-bg-light": $roxy-brown,
 	"cta-bg-form": $guppy-violet,
 	"link": map-get($colors-light, "link"),
-	"link-light": $canyon-rose,
+	"link-light": $roxy-brown,
 	"link-light-light": $bonny-belle,
 	"shadow": rgba($color-black, 0.3),
 	"h1": $color-white,
@@ -140,7 +141,7 @@ $colors-light-contrast: (
 	"background-contrast": $color-white,
 	"text": $color-black,
 	"input-border": $scintillating-violet,
-	"input-border-focus": $canyon-rose,
+	"input-border-focus": $roxy-brown,
 	"form-background": $guppy-violet,
 );
 
@@ -175,7 +176,7 @@ $colors-flesh: (
 	"h1": $jakarta-skyline,
 	"h2": $scintillating-violet,
 	"background": $pale-jasper,
-	"background-contrast": $color-white,
+	"background-contrast": $chocolate-fondant,
 	"text": $scintillating-violet,
 	"input-border": $roxy-brown,
 	"input-border-focus": $tolopea,

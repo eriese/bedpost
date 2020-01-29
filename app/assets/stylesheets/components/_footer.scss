@@ -21,14 +21,14 @@
 
 		.footer--is-in-nav & {
 			@include themed-inverse(color, "h1");
-			body.has-form.is-light & {
-				color: theme-light-contrast("link-light");
+			body.has-form.is-light-contrast & {
+				color: theme-light("h1");
 			}
 
 			&:hover, &:focus {
 				@include themed-inverse(color, "link");
-				body.has-form.is-light & {
-					color: theme-dark-contrast("link");
+				body.has-form.is-light-contrast & {
+					color: theme-light("link");
 				}
 			}
 		}
