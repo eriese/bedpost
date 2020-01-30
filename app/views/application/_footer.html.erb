@@ -2,7 +2,7 @@
 	<li class="footer__item">
 		<%= link_to 'Request a Feature', feedback_path(feedback_type: :feature), class: 'footer__link' %>
 	</li>
-	<span class="footer__divider">|</span>
+	<span class="footer__divider" aria-hidden="true">|</span>
 	<li class="footer__item">
 		<%= link_to 'Report a Bug', feedback_path(feedback_type: :bug), class: 'footer__link' %>
 	</li>
@@ -14,11 +14,11 @@
 	<li class="footer__item">
 		<a href="/about" class="footer__link">About</a>
 	</li>
-	<span class="footer__divider">|</span>
+	<span class="footer__divider" aria-hidden="true">|</span>
 	<li class="footer__item">
 		<a href="/faq" class="footer__link">FAQ</a>
 	</li>
-	<span class="footer__divider">|</span>
+	<span class="footer__divider" aria-hidden="true">|</span>
 	<li class="footer__item">
 		<a href="/privacy" class="footer__link">Privacy</a>
 	</li>
