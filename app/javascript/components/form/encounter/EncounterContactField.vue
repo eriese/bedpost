@@ -1,12 +1,29 @@
 <template>
-<fieldset class="contact-field-container" :class="{blurred: !focused, invalid: incomplete}" :aria-invalid="incomplete" :aria-labelledby="`as-sentence-${watchKey}`" :aria-describedby="`contact-error-${watchKey}`">
-	<div v-if="incomplete" class="contact-error" aria-live="polite" :id="`contact-error-${watchKey}`">{{$_t('mongoid.errors.models.contact.incomplete')}} <div class="aria-only">{{$_t('mongoid.errors.models.contact.aria_incomplete', {index: watchKey + 1})}}</div></div>
+<fieldset
+	class="contact-field-container"
+	:class="{blurred: !focused, invalid: incomplete}"
+	:aria-invalid="incomplete"
+	:aria-labelledby="`as-sentence-${watchKey}`"
+	:aria-describedby="`contact-error-${watchKey}`">
+	<div
+		v-if="incomplete"
+		class="contact-error"
+		aria-live="polite"
+		:id="`contact-error-${watchKey}`">
+		{{$_t('mongoid.errors.models.contact.incomplete')}}
+		<span class="aria-only">{{$_t('mongoid.errors.models.contact.aria_incomplete', {index: watchKey + 1})}}</span>
+	</div>
 	<legend class="aria-only" aria-live="polite" :id="`as-sentence-${watchKey}`">{{asSentence}}</legend>
 	<input type="hidden" :value="value._id" :name="baseName + '[_id]'" v-if="!value.newRecord">
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
 	<input type="hidden" :value="value.possible_contact_id" :name="baseName + '[possible_contact_id]'">
 	<div class="contact-field" role="group">
-		<div class="field-section narrow" role="radiogroup" :aria-label="radiogroupLabels.subject" :id="`-contact-${watchKey}`" :aria-controls="`subject_instrument-contact-${watchKey}`">
+		<div
+			class="field-section narrow"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.subject"
+			:id="`-contact-${watchKey}`"
+			:aria-controls="`subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'user'}, {label: partner.name, inputValue: 'partner'}]"
 				:key="'subj' + i.inputValue"
 				v-bind="i"
@@ -17,7 +34,12 @@
 				type="link">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow" role="radiogroup" :aria-label="radiogroupLabels.contact_type" :id="`contact_type-contact-${watchKey}`" :aria-controls="`object_instrument-contact-${watchKey} subject_instrument-contact-${watchKey}`">
+		<div
+			class="field-section narrow"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.contact_type"
+			:id="`contact_type-contact-${watchKey}`"
+			:aria-controls="`object_instrument-contact-${watchKey} subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="c in contacts"
 				:key="c.key" v-bind="{
 					labelKey: 'contact.contact_type.' + c.t_key,
@@ -28,7 +50,12 @@
 				type="link">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow" role="radiogroup" :aria-label="radiogroupLabels.object" :id="`object-contact-${watchKey}`" :aria-controls="`object_instrument-contact-${watchKey}`">
+		<div
+			class="field-section narrow"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.object"
+			:id="`object-contact-${watchKey}`"
+			:aria-controls="`object_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, inputValue: 'partner'}, {labelKey: 'my', inputValue: 'user'}]"
 				:key="'obj' + i.inputValue"
 				v-bind="i"
@@ -39,7 +66,12 @@
 				type="link">
 			</hidden-radio>
 		</div>
-		<div class="field-section" role="radiogroup" :aria-label="radiogroupLabels.object_instrument" :id="`object_instrument-contact-${watchKey}`" :aria-controls="`subject_instrument-contact-${watchKey}`">
+		<div
+			class="field-section"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.object_instrument"
+			:id="`object_instrument-contact-${watchKey}`"
+			:aria-controls="`subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="oi in objectInsts"
 				:key="oi._id"
 				v-bind="{
@@ -55,7 +87,11 @@
 		<div class="field-section narrow">
 			<p v-html="subjPossessive"></p>
 		</div>
-		<div class="field-section" role="radiogroup" :aria-label="radiogroupLabels.subject_instrument" :id="`subject_instrument-contact-${watchKey}`">
+		<div
+			class="field-section"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.subject_instrument"
+			:id="`subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="si in subjectInsts" v-show="subjectInsts.length > 1"
 				:key="si._id"
 				v-bind="{
@@ -71,7 +107,7 @@
 		</div>
 	</div>
 	<div class="contact-barriers clear-fix">
-		<div>
+		<fieldset aria-label="Barriers and conditions">
 			<barrier-input v-for="(bType, bKey) in barriers"
 				:key="baseName + bKey"
 				v-model="_value.barriers"
@@ -93,7 +129,7 @@
 					}
 				}">
 			</barrier-input>
-		</div>
+		</fieldset>
 	</div>
 </fieldset>
 </template>
