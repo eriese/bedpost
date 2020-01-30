@@ -15,19 +15,19 @@
 <% end %>
 <h3 class="container--has-centered-text"><%= t('.breakdown') %></h3>
 
-<drop-down class="container--is-rounded container--has-gray-background encounter-show-container" arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true">
+<drop-down class="container--is-rounded container--has-gray-background encounter-show-container" arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true" id="contact-review">
 	<h4 class="container--is-rounded__title light-purple-text" slot="title"><%= t('.sex.title') %></h4>
 	<div>
 		<%= display_contacts @encounter %>
 		<p class="contacts-show__fluids"><b class="fluids__title"><%= t('.sex.fluid_exchange') %></b> <span class="fluids__response"><%= t(@encounter.fluids ? 'yes' : 'no') %></span></p>
 	</div>
 </drop-down>
-<drop-down arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true" class="container--is-rounded container--has-dark-gray-background encounter-show-container">
+<drop-down arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true" class="container--is-rounded container--has-dark-gray-background encounter-show-container" id="risk-review">
 	<h4 class="container--is-rounded__title" slot="title"><%= t('.risks.title') %></h4>
 	<%= display_risks @encounter %>
 </drop-down>
 
-<drop-down class="container--is-rounded container--has-dark-background encounter-show-container" arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true" :start-open="true">
+<drop-down class="container--is-rounded container--has-dark-background encounter-show-container" arrow-class="link link--is-dark-theme--is-secondary cta--is-arrow--is-medium" :title-button="true" :start-open="true" id="schedule-review">
 	<h4 class="container--is-rounded__title" slot="title"><%= t('.advice.title') %></h4>
 	<% if @encounter.schedule.any? %>
 		<content-requester toggle-back="<%= t('.advice.hide_lower_risk') %>" toggle-class="link--is-dark-theme--is-secondary">

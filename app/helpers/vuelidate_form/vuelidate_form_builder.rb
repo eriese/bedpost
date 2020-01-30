@@ -57,7 +57,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 	end
 
-	def wizard(options = "{}")
+	def wizard(**options)
 		old_wiz_val = @options[:wizard]
 		@options[:wizard] = true
 		stepper = @template.render "wizard", options: options do

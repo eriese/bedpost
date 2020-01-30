@@ -18,8 +18,8 @@
 						<div class="v-step__buttons">
 							<button @click.prevent="tour.stop" v-if="!tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonSkip }}</button>
 							<button @click.prevent="tour.previousStep" v-if="!tour.isFirst" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonPrevious }}</button>
-							<button @click.prevent="tour.nextStep" v-if="!tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonNext }}</button>
-							<button @click.prevent="tour.stop" v-if="tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonStop }}</button>
+							<button ref="next-button" @click.prevent="tour.nextStep" v-if="!tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonNext }}</button>
+							<button ref="next-button" @click.prevent="tour.stop" v-if="tour.isLast" class="cta cta--inverse cta--is-compact v-step__cta">{{ tour.labels.buttonStop }}</button>
 						</div>
 					</div>
 				</v-step>
@@ -55,6 +55,7 @@
 			return {
 				callbacks: {
 					onStop: this.onStop,
+					onNextStep: this.onNext,
 				},
 				stepOptions: {
 					modifiers: {
@@ -62,7 +63,8 @@
 							boundariesElement: 'viewport'
 						}
 					}
-				}
+				},
+				previouslyActive: null
 			}
 		},
 		props: {
@@ -119,10 +121,13 @@
 			 * starts the tour if there is one
 			 */
 			startTour(entries) {
+				this.previouslyActive = document.activeElement;
 				// start if the first step is visible
 				let firstVisibility = this.firstStepTarget && getComputedStyle(this.firstStepTarget).visibility;
-				if (!entries || firstVisibility == 'visible') {
-					this.tour && this.tour.start()
+				if (!entries ||
+					(entries[0].isIntersecting && firstVisibility == 'visible')) {
+					this.tour && this.tour.start();
+					this.focusButton();
 				}
 			},
 			/**
@@ -131,7 +136,18 @@
 			 */
 			onStop() {
 				this.$emit('tour-stopped');
+				this.previouslyActive && this.previouslyActive.focus();
+				this.previouslyActive = null;
 			},
+			onNext(currentStep) {
+				this.$emit('next-step', currentStep + 1);
+				this.focusButton();
+			},
+			focusButton() {
+				setTimeout(() => {
+					this.$refs['next-button'] && this.$refs['next-button'][0].focus();
+				}, 100)
+			}
 		},
 		beforeDestroy() {
 			this.observer && this.observer.disconnect();

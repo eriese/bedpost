@@ -11,6 +11,8 @@
 				locale: "<%= I18n.locale %>"
 			};
 
+			window.idRegex = /[a-f\d]{24}/gi
+
 			window.pageloadEventName = 'bedpost:pageload';
 
 			window.clearTiming = function() {
@@ -51,7 +53,6 @@
 	<body class="<%= body_class %>">
 		<%= javascript_tag nonce: true do%>
 			<%= include_gon(need_tag: false)%>
-
 			<% unless analytics_id.nil?  %>
 				// google analytics pageview
 				window.dataLayer = window.dataLayer || [];
@@ -65,7 +66,7 @@
 					gtag('set', 'dimension3', '<%= current_user_profile.has_internal? %>')
 				<% end %>
 
-				var pageName = document.location.pathname.replace(/[a-f\d]{24}/gi, "*");
+				var pageName = document.location.pathname.replace(window.idRegex, "*");
 				gtag('set', 'page_path', pageName);
 
 				var gtagConfig = {
@@ -81,6 +82,8 @@
 
 				gtag('config', '<%= analytics_id %>', gtagConfig);
 			<% end %>
+
+			window.tourPath = undefined;
 		<% end %>
 
 		<div id="vue-container" class="no-js <%= content_for :body_inner_class %>">
@@ -97,7 +100,7 @@
 					<%= yield %>
 				</div>
 			</main>
-			<tour-holder :steps="tourSteps" @tour-stopped="onTourStop" @tour-started="onTourStart" :tour-runs="tourRuns"></tour-holder>
+			<tour-holder :steps="tourSteps" @tour-stopped="onTourStop" @tour-started="onTourStart" @next-step="onTourNext" :tour-runs="tourRuns"></tour-holder>
 			<footer>
 				<%= yield :footer %>
 			</footer>

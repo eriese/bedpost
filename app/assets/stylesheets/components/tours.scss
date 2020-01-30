@@ -17,7 +17,12 @@
 		@include themed-inverse($map-key: "background");
 		@include themed-inverse(border-color, "background");
 		@include themed-inverse(color, "text");
+		z-index: 10;
 
+		&__buttons {
+			display: flex;
+			justify-content: space-between;
+		}
 		&__cta {
 			margin: 0 $spacing-small;
 		}

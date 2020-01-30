@@ -26,7 +26,11 @@ const mountBase = (mock, options) => {
 
 	return mount({
 		template: "<div/>",
-		mixins: [tourRoot]
+		mixins: [tourRoot],
+		methods: {
+			gtagSet: jest.fn(),
+			sendAnalyticsEvent: jest.fn()
+		}
 	}, options)
 }
 

@@ -13,7 +13,7 @@ en:
         zero: Add a partner
         other: Add another partner
     show:
-      button_skip: Skip tour
+      button_skip: Skip
       button_previous: Previous
       button_next: Next
       button_stop:

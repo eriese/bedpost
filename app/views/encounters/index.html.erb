@@ -6,7 +6,7 @@
 	<h1><%= t('.title') %></h1>
 	<% if @is_partner %>
 		<h2 class="desc"><%= t(".with_partner", partner_name: first_partner["display"]) %></h2>
-		<div class="desc"><%= link_to(t(".all"), encounters_path) if @is_partner %></div>
+		<div class="desc"><%= link_to(t(".all"), encounters_path, class: "link") if @is_partner %></div>
 	<% end %>
 	<encounter-calendar :partnerships="<%= @partnerships.to_json %>" class="container--has-centered-child__centered-child container--has-centered-text">
 		<h3><%= t(".no_encounters.#{trans_key}", partner_name: first_partner["partner_name"]) %></h3>

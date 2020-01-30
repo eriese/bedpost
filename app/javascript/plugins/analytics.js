@@ -112,6 +112,9 @@ export default {
 			methods: {
 				sendAnalyticsEvent,
 				sendAnalyticsTimingEvent,
+				gtagSet(key, value) {
+					hasGTag() && window.gtag('set', key, value);
+				}
 			}
 		});
 	}
