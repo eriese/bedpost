@@ -123,9 +123,9 @@
 			startTour(entries) {
 				this.previouslyActive = document.activeElement;
 				// start if the first step is visible
-				let entriesVisible = entries && entries[0].isIntersecting
 				let firstVisibility = this.firstStepTarget && getComputedStyle(this.firstStepTarget).visibility;
-				if (!entries || (entriesVisible && firstVisibility == 'visible')) {
+				if (!entries ||
+					(entries[0].isIntersecting && firstVisibility == 'visible')) {
 					this.tour && this.tour.start();
 					this.focusButton();
 				}
@@ -145,8 +145,8 @@
 			},
 			focusButton() {
 				setTimeout(() => {
-					this.$refs['next-button'][0].focus();
-				}, 50)
+					this.$refs['next-button'] && this.$refs['next-button'][0].focus();
+				}, 100)
 			}
 		},
 		beforeDestroy() {

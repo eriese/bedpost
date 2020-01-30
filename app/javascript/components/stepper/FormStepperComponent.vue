@@ -117,7 +117,7 @@ export default {
 		/** move to the next step */
 		next: function() {
 			// don't move forward if the step is not ready
-			if (!this.getCurStep().checkComplete(false)) {
+			if (!this.getCurStep().checkComplete()) {
 				return;
 			}
 
@@ -156,7 +156,7 @@ export default {
 		setStepComplete: function(isComplete) {
 			// if an isComplete isn't provided, get one from the current step
 			if (typeof isComplete != 'boolean') {
-				isComplete = this.getCurStep().checkComplete();
+				isComplete = this.getCurStep().checkComplete(false);
 			}
 
 			// set readiness in the completes array and update whether this step is pending
