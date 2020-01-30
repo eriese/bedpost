@@ -22,18 +22,10 @@
 			margin-right: 0.25rem;
 			bottom: 0.6rem;
 		}
-		body.has-form.is-light & {
-			border-color: theme-light-contrast('background-contrast');
-		}
 
 		&:hover, &:focus, &--open {
 			@include themed(border-color, "background");
 			@include themed(background-color, "background-contrast");
-
-			body.has-form.is-light & {
-				background-color: theme-light-contrast('background-contrast');
-				border-color: theme-light-contrast("background");
-			}
 		}
 
 		&__line {
@@ -72,15 +64,6 @@
 		flex-direction: column;
 		@include themed(background-color, "background-contrast");
 		@include themed(color, "background");
-
-		body.has-form.is-light & {
-			background-color: theme-light-contrast('background-contrast');
-			color: theme-light-contrast("background");
-		}
-
-		body.is-flesh & {
-			background-color: map-get($colors-flesh, 'cta-bg-light');
-		}
 	}
 
 	&__list {
@@ -101,6 +84,14 @@
 			color: $color-off-white;
 			font-weight: bold;
 			padding: $spacing-default $spacing-tiny $spacing-default $spacing-default;
+
+			body.is-flesh & {
+				color: $color-off-white;
+			}
+
+			body.is-dark & {
+				color: theme-dark-contrast("background");
+			}
 		}
 
 		&__link {

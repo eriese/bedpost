@@ -1,4 +1,4 @@
-<%= render 'forms/basic_form', back_path: :back, header_text: t(".title.#{@feedback_type}")  do %>
+<%= render 'forms/basic_form', back_path: :back, header_text: t(".title.#{@feedback_type}"), body_class: 'is-flesh'  do %>
 	<%= vuelidate_form_with scope: @feedback_type, class: "centered", require_all: true do |f| %>
 		<%= render @feedback_type.to_s, f: f %>
 		<%= f.submit nil, class: 'cta cta--is-form-submit' %>
