@@ -1,11 +1,29 @@
 <template>
-<div class="contact-field-container" :class="{blurred: !focused, invalid: incomplete}">
-	<div v-if="incomplete" class="contact-error">{{$_t('mongoid.errors.models.contact.incomplete')}}</div>
+<fieldset
+	class="contact-field-container"
+	:class="{blurred: !focused, invalid: incomplete}"
+	:aria-invalid="incomplete"
+	:aria-labelledby="`as-sentence-${watchKey}`"
+	:aria-describedby="`contact-error-${watchKey}`">
+	<div
+		v-if="incomplete"
+		class="contact-error"
+		aria-live="polite"
+		:id="`contact-error-${watchKey}`">
+		{{$_t('mongoid.errors.models.contact.incomplete')}}
+		<span class="aria-only">{{$_t('mongoid.errors.models.contact.aria_incomplete', {index: watchKey + 1})}}</span>
+	</div>
+	<legend class="aria-only" aria-live="polite" :id="`as-sentence-${watchKey}`">{{asSentence}}</legend>
 	<input type="hidden" :value="value._id" :name="baseName + '[_id]'" v-if="!value.newRecord">
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
 	<input type="hidden" :value="value.possible_contact_id" :name="baseName + '[possible_contact_id]'">
-	<div class="contact-field">
-		<div class="field-section narrow" role="radiogroup">
+	<div class="contact-field" role="group">
+		<div
+			class="field-section narrow"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.subject"
+			:id="`-contact-${watchKey}`"
+			:aria-controls="`subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'user'}, {label: partner.name, inputValue: 'partner'}]"
 				:key="'subj' + i.inputValue"
 				v-bind="i"
@@ -16,7 +34,12 @@
 				type="link">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow" role="radiogroup">
+		<div
+			class="field-section narrow"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.contact_type"
+			:id="`contact_type-contact-${watchKey}`"
+			:aria-controls="`object_instrument-contact-${watchKey} subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="c in contacts"
 				:key="c.key" v-bind="{
 					labelKey: 'contact.contact_type.' + c.t_key,
@@ -27,7 +50,12 @@
 				type="link">
 			</hidden-radio>
 		</div>
-		<div class="field-section narrow" role="radiogroup">
+		<div
+			class="field-section narrow"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.object"
+			:id="`object-contact-${watchKey}`"
+			:aria-controls="`object_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="i in [{label: partnerPronoun.possessive, inputValue: 'partner'}, {labelKey: 'my', inputValue: 'user'}]"
 				:key="'obj' + i.inputValue"
 				v-bind="i"
@@ -38,7 +66,12 @@
 				type="link">
 			</hidden-radio>
 		</div>
-		<div class="field-section" role="radiogroup">
+		<div
+			class="field-section"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.object_instrument"
+			:id="`object_instrument-contact-${watchKey}`"
+			:aria-controls="`subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="oi in objectInsts"
 				:key="oi._id"
 				v-bind="{
@@ -54,7 +87,11 @@
 		<div class="field-section narrow">
 			<p v-html="subjPossessive"></p>
 		</div>
-		<div class="field-section" role="radiogroup">
+		<div
+			class="field-section"
+			role="radiogroup"
+			:aria-label="radiogroupLabels.subject_instrument"
+			:id="`subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="si in subjectInsts" v-show="subjectInsts.length > 1"
 				:key="si._id"
 				v-bind="{
@@ -70,9 +107,12 @@
 		</div>
 	</div>
 	<div class="contact-barriers clear-fix">
-		<div>
+		<fieldset aria-label="Barriers and conditions">
 			<barrier-input v-for="(bType, bKey) in barriers"
 				:key="baseName + bKey"
+				v-model="_value.barriers"
+				@change="updateBarriers"
+				ref="barriers"
 				v-bind="{
 					barrier: bType,
 					contact: value,
@@ -87,13 +127,11 @@
 						objectInstrumentName: objectName,
 						subjectInstrumentName: subjectName,
 					}
-				}"
-				v-model="_value.barriers"
-				@change="updateBarriers">
+				}">
 			</barrier-input>
-		</div>
+		</fieldset>
 	</div>
-</div>
+</fieldset>
 </template>
 
 <script>
@@ -142,8 +180,44 @@ export default {
 			}
 			return this.$_t('contact.with', {pronoun: this.value.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
 		},
-		incomplete() {
-			return this.$v && this.$v.$error;
+		radiogroupLabels() {
+			const contact_type = this.$_t(this.cType.t_key, {scope: 'contact.contact_type_action'});
+			let object_name, object_reflexive_name;
+			if (this.value.object == 'user') {
+				object_name = this.$_t('you');
+				object_reflexive_name = this.isSelf ? this.$_t('yourself') : object_name;
+			} else {
+				object_name = this.partner.name;
+				object_reflexive_name = this.isSelf ? this.partnerPronoun.reflexive : this.partner.name;
+			}
+
+			const subject_name = this.value.subject == 'user' ? this.$_t('you') : this.partner.name;
+
+			const tArgs = {
+				contact_type,
+				object_name,
+				subject_name,
+				object_reflexive_name,
+				scope: 'helpers.label.encounter'
+			};
+
+			return {
+				contact_type: this.$_t('contact_type', tArgs),
+				subject: this.$_t('subject', tArgs),
+				object: this.$_t(`object.${this.value.subject}`, tArgs),
+				subject_instrument: this.$_t(`subject_instrument.${this.value.subject}`, tArgs),
+				object_instrument: this.$_t(`object_instrument.${this.value.subject}`, tArgs),
+			};
+		},
+		asSentence() {
+			let subject = this.value.subject == 'user' ? this.$_t('I') : this.partner.name;
+			let contact = this.$_t(`contact.contact_type.${this.cType.t_key}`);
+			let object = this.value.object == 'user' ? this.$_t('my') : this.partnerPronoun.possessive;
+			let objInst = this.object_instrument_id ? this.instruments[this.object_instrument_id][this.value.object + '_name'] : 'blank';
+			let subjInst = this.subjectInsts.length > 1 ?
+				(this.subject_instrument_id ? this.instruments[this.subject_instrument_id][this.value.subject + '_name'] : 'blank') : '';
+
+			return `contact ${this.watchKey + 1}: ${subject} ${contact} ${object} ${objInst} ${this.subjPossessive} ${subjInst}`;
 		}
 	},
 	methods: {
@@ -246,9 +320,6 @@ export default {
 			this.$nextTick(() => {
 				this.$emit('track');
 			});
-		},
-		onInput() {
-			this.$emit('input', this._value);
 		},
 		blur() {
 			this.focused = false;

@@ -38,11 +38,17 @@ export default {
 		},
 		getFirstInput() {
 			return this.$el.querySelector('input');
-		}
+		},
+		onInput() {
+			this.$emit('input', this._value);
+		},
 	},
 	computed: {
-		_value: function() {
+		_value() {
 			return Object.assign({}, this.value);
+		},
+		incomplete() {
+			return this.$v && this.$v.$error;
 		}
 	},
 	mounted: function() {
