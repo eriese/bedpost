@@ -166,9 +166,10 @@ def insert_tours(tour_configs)
 	Tour.destroy_all
 	orig_locale = I18n.locale
 	tour_configs.each do |page_name, tour_nodes|
-		tour = Tour.find_or_create_by(page_name: page_name)
+		fte_only = tour_nodes.shift if tour_nodes[0].is_a? Boolean
+		tour = Tour.find_or_create_by(page_name: page_name, fte_only: fte_only || false)
 		tour.tour_nodes = tour_nodes.map do |node|
-			tour_node = TourNode.new(target: node[:target], position: node[:position])
+			tour_node = TourNode.new(target: node[:target], position: node[:position], await_in_view: node[:await_in_view])
 			node[:content].each do |locale, txt|
 				I18n.locale = locale
 				tour_node.content = txt
@@ -182,14 +183,14 @@ def insert_tours(tour_configs)
 end
 
 tour_configs = {
-	'-profile' => [{
+	'-profile' => [true, {
 		target: '.description',
 		position: 0,
 		content: {
 			en: 'We created your account! Before we get into the fun stuff, tell us about yourself so we can talk about you in ways that feel good and fun.'
 		}
 	}],
-	'-partners-new' => [{
+	'-partners-new-0' => [{
 		target: '#partnership_uid',
 		await_in_view: true,
 		position: 0,
@@ -203,12 +204,13 @@ tour_configs = {
 		content: {
 			en: "If you don't have their id, just give us their name and we'll walk you through putting the language in later."
 		}
-	},{
+	}],
+	'-partners-new-1' => [{
 		target: '.stepper__step:nth-child(2) .field .slide-bar-desc',
 		await_in_view: true,
 		position: 2,
 		content: {
-			en: "Pick what sounds the most true, even if it's not exact. If you're not sure, you should round down."
+			en: "Pick what sounds the most true, even if it's not exact. If you're not sure, it's best to round down."
 		}
 	}],
 	'-partners--encounters-new' => [{

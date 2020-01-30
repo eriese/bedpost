@@ -19,15 +19,23 @@ export default {
 			tourData: null,
 			tourRunning: false,
 			tourRuns: 0,
+			currentStep: 0,
+			tourPath: null,
+			pageTourPath: window.location.pathname.replace(/\//g, '-').replace(window.idRegex, ''),
 		};
 	},
 	computed: {
 		tourPage() {
-			let path = window.location.pathname.replace(/\//g, '-').replace(window.idRegex, '');
-			return `/tours/${path}.json`;
+			return `/tours/${this.tourPath}.json`;
 		}
 	},
 	methods: {
+		setTourPath(value) {
+			this.tourPath = value;
+			this.tourData = null;
+			this.hasTour = false;
+			this.loadTour();
+		},
 		/**
 		 * Set the tour steps from the tour data
 		 */
@@ -41,6 +49,14 @@ export default {
 		 */
 		onTourStop() {
 			this.tourRunning = false;
+			if (this.tourSteps && this.currentStep < this.tourSteps.length - 1) {
+				this.gtagSet('metric2', 1);
+			}
+			this.sendAnalyticsEvent(this.tourPage, {
+				'event_category': 'Tour Stop',
+				'event_label': this.currentStep
+			});
+
 			this.tourSteps = null;
 			axios.put(this.tourPage).catch(function () {});
 		},
@@ -52,47 +68,73 @@ export default {
 		onTourStart() {
 			this.tourRunning = true;
 			this.tourRuns++;
+			this.currentStep = 0;
+		},
+
+		/**
+		 * When the next button on the tour is pressed
+		 *
+		 * @param  {number} currentStep the step the tour is now on
+		 */
+		onTourNext(currentStep) {
+			this.currentStep = currentStep;
 		},
 		/**
 		 * Load the tour data if there is any
 		 */
 		loadTour: async function() {
-			// if there's already a tour loaded, just use that
-			if (this.tourData) {
-				this.setTourSteps();
+			if (this.tourPath === null) {
 				return;
 			}
 
-			try {
-				// request the tour data for this page
-				let response = await axios.get(this.tourPage, {
-					params: {force: this.hasTour}
-				});
-
-				// if there is a tour
-				if (response.data.has_tour !== false) {
-
-					// show the tour button on the page
-					this.hasTour = true;
-
-					// if a tour was returned (the user hasn't seen it before)
-					if(response.data.tour_nodes) {
-						// save the data and set the steps
-						this.tourData = response.data;
-						this.setTourSteps();
-					} else {
-						this.tourRuns++;
-					}
-				}
-			} catch(e) {
-				console.debug(e.response);
+			if (this.hasTour) {
+				this.gtagSet('metric3', 1);
 			}
+
+			// if there's already a tour loaded, just use that
+			if (this.tourData) {
+				this.setTourSteps();
+				this.gtagSet('metric3', 1);
+			}
+			else {
+
+				try {
+					// request the tour data for this page
+					let response = await axios.get(this.tourPage, {
+						params: {force: this.hasTour}
+					});
+
+					// if there is a tour
+					if (response.data.has_tour !== false) {
+
+						// show the tour button on the page
+						this.hasTour = true;
+
+						// if a tour was returned (the user hasn't seen it before)
+						if(response.data.tour_nodes) {
+							// save the data and set the steps
+							this.tourData = response.data;
+							this.setTourSteps();
+						} else {
+							this.tourRuns++;
+						}
+
+					}
+				} catch(e) {
+					console.debug(e.response);
+				}
+			}
+
+			this.sendAnalyticsEvent(this.tourPage, {
+				'event_category': 'Tour Start',
+			});
 		}
 	},
 	components: {
 		'tour-holder': TourHolder
 	},
 	created() {
+		this.tourPath = this.pageTourPath,
 		this.loadTour();
 	}
 };

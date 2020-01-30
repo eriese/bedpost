@@ -3,7 +3,7 @@
 <div class="container--has-centered-text container--is-full-height container--has-centered-child">
 	<h1><%= t('.title_html') %></h1>
 	<%= vuelidate_form_with model: @partnership, html: {class: "centered container--has-centered-child__centered-child"}, vue: {':dynamic-validation' => "additional.uid"} do |f| %>
-		<%= f.wizard do %>
+		<%= f.wizard :"v-bind" => "{stepCallbacks: {0: ['tour-step', `${pageTourPath}-0`], 1: ['tour-step', `${pageTourPath}-1`]}}", "@tour-step": "setTourPath" do %>
 			<%= f.step true do %>
 				<h2 class="stepper__h2"><%= t_action('.desc_html') %></h2>
 				<%= f.fields_for :partner, @partnership.partner do |pf1| %>

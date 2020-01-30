@@ -67,7 +67,8 @@ export default {
 	},
 	props: {
 		stepClass: String, // a class to add to steps
-		lastButton: String // text of the last button if nothing is provided for the slot
+		lastButton: String, // text of the last button if nothing is provided for the slot
+		stepCallbacks: Object,
 	},
 	watch: {
 		$children: function(newVal, oldVal) {
@@ -75,6 +76,7 @@ export default {
 		},
 		curIndex: function(newInd, oldInd) {
 			this.processIndex(newInd, oldInd);
+			this.emitNewStep();
 		}
 	},
 	computed: {
@@ -115,7 +117,7 @@ export default {
 		/** move to the next step */
 		next: function() {
 			// don't move forward if the step is not ready
-			if (!this.getCurStep().checkComplete()) {
+			if (!this.getCurStep().checkComplete(false)) {
 				return;
 			}
 
@@ -154,7 +156,7 @@ export default {
 		setStepComplete: function(isComplete) {
 			// if an isComplete isn't provided, get one from the current step
 			if (typeof isComplete != 'boolean') {
-				isComplete = this.getCurStep().checkComplete(false);
+				isComplete = this.getCurStep().checkComplete();
 			}
 
 			// set readiness in the completes array and update whether this step is pending
@@ -206,6 +208,11 @@ export default {
 			// get whether the current step is complete
 			this.setStepComplete();
 		},
+		emitNewStep: function() {
+			if (this.stepCallbacks && this.stepCallbacks[this.curIndex]) {
+				this.$emit.apply(this, this.stepCallbacks[this.curIndex]);
+			}
+		},
 		onChildMounted: function() {
 			// make a flikity instance
 			this.flickityOptions.on = {change: this.setIndex};
@@ -214,6 +221,7 @@ export default {
 			// process the children
 			this.processChildren(this.$children);
 			this.$emit('stepper-mounted', this);
+			this.emitNewStep();
 		}
 	},
 	mounted: function() {
