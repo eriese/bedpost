@@ -23,7 +23,7 @@ export default {
 	},
 	computed: {
 		tourPage() {
-			let path = window.location.pathname.replace(/\//g, '-');
+			let path = window.location.pathname.replace(/\//g, '-').replace(window.idRegex, '');
 			return `/tours/${path}.json`;
 		}
 	},

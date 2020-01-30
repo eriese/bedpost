@@ -163,6 +163,7 @@ HIGH = Diagnosis::TransmissionRisk::HIGH
 # TOURS
 #############################
 def insert_tours(tour_configs)
+	Tour.destroy_all
 	orig_locale = I18n.locale
 	tour_configs.each do |page_name, tour_nodes|
 		tour = Tour.find_or_create_by(page_name: page_name)
@@ -189,11 +190,70 @@ tour_configs = {
 		}
 	}],
 	'-partners-new' => [{
-		target: '.stepper__step:nth-child(2) .field .slide-bar-desc',
+		target: '#partnership_uid',
 		await_in_view: true,
 		position: 0,
 		content: {
-			en: "Here's why we want to know: we use this data to calculate risk mitigation, if you're not sure, you should round down because a partnership can never increase your risk, it can only decrease it."
+			en: "If your partner also uses BedPost, connecting with their userID is a handy shortcut to using the body language they like."
+		}
+	},{
+		target: '#partnership_partner_attributes_name',
+		await_in_view: true,
+		position: 1,
+		content: {
+			en: "If you don't have their id, just give us their name and we'll walk you through putting the language in later."
+		}
+	},{
+		target: '.stepper__step:nth-child(2) .field .slide-bar-desc',
+		await_in_view: true,
+		position: 2,
+		content: {
+			en: "Pick what sounds the most true, even if it's not exact. If you're not sure, you should round down."
+		}
+	}],
+	'-partners--encounters-new' => [{
+		target: '#encounter_notes',
+		position: 0,
+		content: {
+			en: 'This section is just for you. You can leave it blank or write anything you want to remember about this encounter.'
+		}
+	},{
+		target: '.dynamic-field-list__item:first-of-type',
+		position: 1,
+		content: {
+			en: "Fill this out like sexy madlibs. As you make your selections, you'll see the options change to allow you to tell us the whole story."
+		}
+	},{
+		target: '.cta--is-add-btn',
+		position: 2,
+		content: {
+			en: 'When we say we want the details, we mean ALL the details. Add as many contacts as you can remember.'
+		}
+	}],
+	'-partners--encounters-' => [{
+		target: '#tippy-2 .tippy-tooltip',
+		position: 0,
+		await_in_view: true,
+		content: {
+			en: 'Here you can see how your sense of this encounter compares to ours. We like it as a way to gauge whether you tend to over or underestimate.'
+		},
+	},{
+		target: '#contact-review .dropdown-button',
+		position: 1,
+		content: {
+			en: 'Look here to see what you got up to, and the transmission likelihood from each contact'
+		}
+	},{
+		target: '#risk-review .dropdown-button',
+		position: 2,
+		content: {
+			en: 'Here you can check out what we calculated as the overall chances of STI transmission from this encounter'
+		}
+	},{
+		target: '#schedule-review',
+		position: 3,
+		content: {
+			en: 'This is what we think is a good testing schedule based on what you told us. For stuff that\'s pretty unlikely we\'ll always recommend just making sure your doctor checks it on your next test. For higher likelihoods we\'ll tell you the soonest you can get a test with a reliable result.'
 		}
 	}]
 }

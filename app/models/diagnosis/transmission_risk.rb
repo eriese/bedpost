@@ -39,10 +39,10 @@ class Diagnosis::TransmissionRisk
 
 	def applies_to_contact?(subject_person, object_person)
 		return false if subject_conditions.present? &&
-			subject_conditions.any? { |c| !subject_person.call(c) }
+			subject_conditions.any? { |c| !subject_person.send(c) }
 
 		return false if object_conditions.present? &&
-			object_conditions.any? { |c| !object_person.call(c) }
+			object_conditions.any? { |c| !object_person.send(c) }
 
 		true
 	end

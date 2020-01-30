@@ -11,6 +11,8 @@
 				locale: "<%= I18n.locale %>"
 			};
 
+			window.idRegex = /[a-f\d]{24}/gi
+
 			window.pageloadEventName = 'bedpost:pageload';
 
 			window.clearTiming = function() {
@@ -65,7 +67,7 @@
 					gtag('set', 'dimension3', '<%= current_user_profile.has_internal? %>')
 				<% end %>
 
-				var pageName = document.location.pathname.replace(/[a-f\d]{24}/gi, "*");
+				var pageName = document.location.pathname.replace(window.idRegex, "*");
 				gtag('set', 'page_path', pageName);
 
 				var gtagConfig = {
