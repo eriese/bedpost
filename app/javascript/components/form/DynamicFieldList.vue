@@ -2,54 +2,13 @@
 	<div class="dynamic-field-list" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
 		<slot></slot>
 		<div v-for="(comp, index) in list" :key="comp[idKey]" ref="list_item" class="dynamic-field-list__item">
-			<div
-				v-if="showDeleted || !comp._destroy"
-				@focusin="setFocus(index)"
-				@click="setFocus(index, true)"
-				class="dynamic-field step"
-				:class="{incomplete: $vEach[index] && $vEach[index].$error, deleted: comp._destroy}"
-				role="group"
-				:id="`dynamic-list-item-${index}`">
-				<div
-					class="dynamic-field-buttons clear-fix"
-					@focusin.stop
-					v-if="optional || numSubmitting > 1 || index != firstIndex"
-					role="toolbar">
-					<arrow-button
-						class="link cta--is-arrow--is-small" v-if="index > firstIndex"
-						v-bind="{
-							direction: 'up',
-							tKey: 'move_up',
-							shape: 'arrow'
-						}"
-						@click.stop="moveSpaces(index,-1)"></arrow-button>
-					<arrow-button
-						class="link cta--is-arrow--is-small"
-						v-if="index < lastIndex"
-						v-bind="{
-							direction: 'down',
-							tKey: 'move_down',
-							shape: 'arrow'
-						}"
-						@click.stop="moveSpaces(index,1)"></arrow-button>
-					<arrow-button
-						class="link cta--is-arrow--is-small"
-						shape="x"
-						v-if="optional || numSubmitting > 1"
-						@click.stop="removeFromList(index)"
-						t-key="remove"></arrow-button>
+			<div v-if="showDeleted || !comp._destroy" @focusin="setFocus(index)" @click="setFocus(index, true)" class="dynamic-field step" :class="{incomplete: $vEach[index] && $vEach[index].$error, deleted: comp._destroy}" role="group" :id="`dynamic-list-item-${index}`">
+				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || index != firstIndex" role="toolbar">
+					<arrow-button class="link cta--is-arrow--is-small" v-if="index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(index,-1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" v-if="index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
 				</div>
-				<component
-					ref="list_component"
-					:is="componentType"
-					:base-name="`${baseName}[${index}]`"
-					v-model="list[index]"
-					:watch-key="index" :tracked="tracker"
-					class="clear"
-					@track="track"
-					@start-tracking="startTracking"
-					:$v="$vEach[index]"
-					@input="onInput"></component>
+				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="tracker" class="clear" @track="track" @start-tracking="startTracking" :$v="$vEach[index]" @input="onInput"></component>
 			</div>
 			<deleted-child v-else :base-name="`${baseName}[${index}]`" :item="list[index]" :id-key="idKey"></deleted-child>
 		</div>
