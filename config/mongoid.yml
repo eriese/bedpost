@@ -173,7 +173,7 @@ production:
       # credentials safe e.g. <%#= ENV['MONGODB_URI'] %>.
       # uri: <%#= Rails.application.credentials.mongodb[:uri] %>
       database: bedpost_<%= ENV['CNAME'] || 'production' %>
-      hosts: <%= ENV['DB_HOSTS'].split(',') %>
+      hosts: <%= (ENV['DB_HOSTS'] || '').split(',') %>
       # uri: <%= ENV['DB_URI'] %>
       options:
         user: <%= ENV['DB_USER'] %>
