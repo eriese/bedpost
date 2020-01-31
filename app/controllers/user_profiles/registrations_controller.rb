@@ -15,9 +15,11 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	end
 
 	# POST /resource
-	# def create
-	# 	super
-	# end
+	def create
+		super do |resource|
+			RegistrationMailer.confirmation(resource.id.to_s).deliver_later
+		end
+	end
 
 	# GET /resource/edit
 	# def edit
