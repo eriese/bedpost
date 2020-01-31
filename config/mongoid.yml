@@ -173,13 +173,15 @@ production:
       # credentials safe e.g. <%#= ENV['MONGODB_URI'] %>.
       # uri: <%#= Rails.application.credentials.mongodb[:uri] %>
       database: bedpost_<%= ENV['CNAME'] || 'production' %>
-      hosts: <%= ENV['DB_HOST'] && (ENV['DB_HOST'] + ':' + (ENV['DB_PORT'] || 27017)) || ''  %>
+      hosts: <%= ENV['DB_HOSTS'].split(',') %>
+      # uri: <%= ENV['DB_URI'] %>
       options:
         user: <%= ENV['DB_USER'] %>
-        password: <%= ENV['DB_PASSWORD'] %>
+        password: '<%= ENV['DB_PASSWORD'] %>'
         ssl: true
         ssl_verify: false
-        ssl_ca_file: 'rd-combined-ca-bundle.pem'
+        ssl_ca_cert: ~/rd-combined-ca-bundle.pem'
+        auth_source: admin
 
         # The default timeout is 5, which is the time in seconds
         # for a connection to time out.
