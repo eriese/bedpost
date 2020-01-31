@@ -54,6 +54,6 @@ module Bedpost
 		# Suppress logger output for asset requests.
 		config.assets.quiet = true
 
-		config.console = Pry
+		# config.console = Pry
 	end
 end
