@@ -5,17 +5,25 @@
 	z-index: 100;
 
 	&__burger {
+		$b: &;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: $spacing-tiny;
 		cursor: pointer;
 		min-width: unset;
 		background-color: transparent;
-		bottom: 0.35rem;
 		margin-right: 0.75rem;
-		right: $spacing-tiny;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
-		padding: 0rem;
 		border: none;
+		top: rem(2px);
+		overflow: hidden;
+
 		@include themed(border-color, "background-contrast");
 
 		@include media($mobile) {
@@ -29,12 +37,39 @@
 		}
 
 		&__line {
-			border: rem(3px) solid;
+			width: 100%;
+			border: rem(2px) solid;
 			border-color: inherit;
 			width: $nav-button-width;
-			margin: $spacing-tiny $spacing-tiny;
 			border-radius: $default-border-radius;
-			height: 0rem;
+			transition-property: transform, top, left, background-color, opacity;
+		    transition-duration: .2s;
+		    transition-timing-function: linear;
+
+			&:not(:first-of-type) {
+				margin-top: $spacing-small;
+			}
+		}
+
+		&--open {
+			#{$b}__line {
+				margin: 0;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+
+				&:nth-child(1) {
+					transform: translate(calc(-50%), calc(-50% - #{rem(1px)})) rotate(45deg);
+				}
+
+				&:nth-child(2) {
+					opacity: 0;
+				}
+
+				&:nth-child(3) {
+					transform: translate(calc(-50%), calc(-50% - #{rem(1px)})) rotate(-45deg);
+				}
+			}
 		}
 
 		.no-js & {
