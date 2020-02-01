@@ -52,7 +52,7 @@ gem 'rack-cors'
 gem 'http'
 #handle env vars
 
-
+gem 'route_downcaser'
 group :development, :test do
 	gem 'rspec-rails', '~> 3.8'
 	gem "rails-controller-testing"
