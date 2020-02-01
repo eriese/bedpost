@@ -12,4 +12,8 @@ class BetaMailerPreview < ActionMailer::Preview
 
 		BetaMailer.bug_report(report)
 	end
+
+	def beta_invite
+		BetaMailer.beta_invite "enoch.riese@gmail.com", "Enoch"
+	end
 end
