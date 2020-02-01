@@ -2,6 +2,7 @@
 
 class UserProfiles::SessionsController < Devise::SessionsController
 	# before_action :configure_sign_in_params, only: [:create]
+	respond_to :json, except: [:new, :edit]
 
 	# GET /resource/sign_in
 	# def new

@@ -128,7 +128,7 @@ en:
           user: What part of %{object_reflexive_name} were you %{contact_type}?
     tooltip:
       encounter:
-        fluids_group: Did you get ejaculate in your eye?
+        fluids_group: "Example: did you get ejaculate in your eye?"
     sliders:
       encounter:
         self_risk:
