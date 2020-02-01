@@ -42,24 +42,25 @@
 			border-color: inherit;
 			width: $nav-button-width;
 			border-radius: $default-border-radius;
-			transition-property: transform, top, left, background-color, opacity;
-		    transition-duration: .2s;
+			transition-property: transform, top, left, opacity;
+		    transition-duration: .3s;
 		    transition-timing-function: linear;
 
 			&:not(:first-of-type) {
-				margin-top: $spacing-small;
+				margin-top: rem(6px);
 			}
 		}
 
 		&--open {
+			display: block;
 			#{$b}__line {
 				margin: 0;
 				position: absolute;
-				top: 50%;
-				left: 50%;
+				left: $spacing-tiny;
+				top: $spacing-tiny;
 
 				&:nth-child(1) {
-					transform: translate(calc(-50%), calc(-50% - #{rem(1px)})) rotate(45deg);
+					transform: translateY(#{(2.75rem - $spacing-small) / 2 - rem(1px)}) rotate(45deg);
 				}
 
 				&:nth-child(2) {
@@ -67,7 +68,7 @@
 				}
 
 				&:nth-child(3) {
-					transform: translate(calc(-50%), calc(-50% - #{rem(1px)})) rotate(-45deg);
+					transform: translateY(#{(2.75rem - $spacing-small) / 2 - rem(1px)}) rotate(-45deg);
 				}
 			}
 		}
