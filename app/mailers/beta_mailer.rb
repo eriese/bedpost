@@ -18,7 +18,7 @@ class BetaMailer < ApplicationMailer
 		@name = name
 		@token = BetaToken.create(email: to_address)
 		urls = Rails.application.routes.url_helpers
-		@signup_url = ENV['IS_BETA'] ? urls.beta_registration_path : urls.new_user_profile_registration_url
+		@signup_url = ENV['IS_BETA'] ? urls.beta_registration_url : urls.new_user_profile_registration_url
 		mail(to: to_address, subject: "Welcome to BedPost Beta!")
 	end
 end

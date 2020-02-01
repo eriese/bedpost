@@ -11,7 +11,6 @@ class SendBetaInviteJob < ApplicationJob
 		response_json = response.parse.with_indifferent_access
 		questions = response_json[:pages][1][:questions]
 		email = questions[EMAIL_INDEX][:answers][0][:text]
-		binding.pry
 		name = questions[NAME_INDEX][:answers][0][:text]
 		BetaMailer.beta_invite(email, name).deliver_now
 	end
