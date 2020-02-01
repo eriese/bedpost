@@ -65,9 +65,9 @@ module ApplicationHelper
 		if Rails.env.development? || Rails.env.test?
 			'UA-156331784-2'
 		elsif ENV['IS_STAGING']
-			'UA-156331784-4'
-		else
 			'UA-156331784-3'
+		else
+			'UA-156331784-4'
 		end
 	end
 end
