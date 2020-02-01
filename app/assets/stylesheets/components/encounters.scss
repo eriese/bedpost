@@ -218,29 +218,30 @@
 	clear: both;
 	padding-inline-start: 0rem;
 	list-style-type: none;
+	border: 1px solid $canyon-rose;
+	margin-top: $spacing-tiny;
+	margin-bottom: $spacing-small;
+	border-radius: $default-border-radius-small;
+	overflow: hidden;
 
 	li {
 		@include self-clearing;
 		padding: rem(5px) rem(10px);
 		font-size: 0.85rem;
 
-		&:first-child {
-			margin-top: $spacing-tiny;
-			border-top-right-radius: rem(5px);
-			border-top-left-radius: rem(5px);
-		}
+		$gradient: $color-white $bonny-belle $guppy-violet $scintillating-violet $potent-purple $squant;
 
-		&:last-child {
-			margin-bottom: $spacing-small;
-			border-bottom-right-radius: rem(5px);
-			border-bottom-left-radius: rem(5px);
-		}
-
-		$gradient: $color-white theme-dark('h1') theme-dark('background-contrast') theme-light('link-light') theme-dark('cta-bg-light');
-		@for $i from 1 through 5 {
+		@for $i from 1 through 6 {
 			&.risk-#{$i - 1} {
 				background-color: nth($gradient, $i);
-				color: black;
+
+				@if $i < 4 {
+					color: black;
+				}
+
+				@else {
+					color: $color-white;
+				}
 			}
 		}
 

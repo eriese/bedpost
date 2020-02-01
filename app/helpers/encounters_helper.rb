@@ -55,7 +55,7 @@ module EncountersHelper
 		t_key += "_html"
 
 		content_tag(:li, {class: "contact-show"}) do
-			content_tag(:"drop-down", ':title-button' => true, 'arrow-class' => 'link link--is-secondary cta--is-arrow--is-small') do
+			content_tag(:"drop-down", ':title-button' => true, 'arrow-class' => 'link link--is-dark-theme--is-secondary cta--is-arrow--is-small') do
 				content_tag(:span, t(t_key, keys), {slot: "title"}) +
 					content_tag(:span, t('encounters.show.contact_risks'), class: 'contact-show__risks-title') +
 					display_risks(contact)

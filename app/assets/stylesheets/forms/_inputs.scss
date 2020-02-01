@@ -359,7 +359,7 @@ input[disabled=disabled] {
 	border-radius: $default-border-radius;
 	position: relative;
 	height: $progbar-height;
-	@include themed-inverse(background-color, "background");
+	@include themed-contrast(background-color, "background");
 	width: 84%;
 	margin: rem(5px) 8%;
 
@@ -371,7 +371,8 @@ input[disabled=disabled] {
 		width: $benchmark-width;
 		margin-left: $benchmark-width / -2;
 		top: $progbar-height * -0.3;
-		@include themed(background-color, 'link-light-light');
+		// @include themed(background-color, 'link-light-light');
+		background-color: $liliac;
 		z-index: 1;
 		border-radius: $default-border-radius;
 	}
@@ -380,7 +381,7 @@ input[disabled=disabled] {
 		position: absolute;
 		height: 100%;
 		left: 0;
-		@include themed(background-color, "h1");
+		@include themed(background-color, "cta-bg");
 		border-top-left-radius: $default-border-radius;
 		border-bottom-left-radius: $default-border-radius;
 	}
