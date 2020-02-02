@@ -32,7 +32,7 @@
 en:
   time:
     formats:
-      most_recent: '%d %b, %Y'
+      most_recent: '%b %d, %Y'
       long_date: '%B %d, %Y'
   errors:
     messages:
