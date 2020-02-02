@@ -15,7 +15,7 @@ en:
               <h4>iPhone</h4>
               <h5 id="iphone-safari"> Easiest: Add Using Safari</h5>
               <ol aria-describedby="iphone-safari">
-                <li>Open <a href="https://bedpost.me">bedpost.me</a> from <b>Safari</b></li>
+                <li>Open <a href="https://www.bedpost.me">www.bedpost.me</a> from <b>Safari</b></li>
                 <li>Click the <b>Share</b> icon, the middle button in the bottom of your browser window</li>
                 <li>Click <b>Add to Home Screen</b>. It should be the fifth item in the list.</li>
                 <li>Edit the icon name (if you want) and click <b>Add</b></li>
@@ -26,13 +26,13 @@ en:
                 <li>Navigate to your <b>Shortcuts</b> app (use the search bar to find it)</li>
                 <li>Click <b>Create Shortcut</b> then click <b>Add Action</b></li>
                 <li>Search for your preferred browser and click the option <b>Open URLs in ___</b></li>
-                <li>The shortcut will have a default url. Click it to change it to <b>https://bedpost.me</b></li>
+                <li>The shortcut will have a default url. Click it to change it to <b>https://www.bedpost.me</b></li>
                 <li>Click the options button (three dots in a circle in the top right of the screen) to open the action details.</li>
                 <li> Click <b>Add to Home Screen</b>. You will be able to change the shortcut text under <b>Home Screen Name and Icon</b> (you can change the image too, if you want, by clicking it). Then click <b>Add</b> in the top right</li>
               </ol>
               <h4>Android</h4>
               <ol>
-                <li>Open <a href="https//bedpost.me">bedpost.me</a> in your preferred browser</li>
+                <li>Open <a href="https//www.bedpost.me">www.bedpost.me</a> in your preferred browser</li>
                 <li>Click the menu icon in the top right of the screen and then <b>Add to Home Screen</b></li>
                 <li>Edit your shortcut name if you want</li>
               </ol>
@@ -84,5 +84,5 @@ en:
             answer: If there's something else you wish you could do on BedPost, or you'd like more options around what is available today, the BedPost team really wants to hear from you! You can go to our <a href="/feedback/feature">feature request form</a> and tell us all about it. If you're using the app and suddenly have a stroke of brilliance, you can open the side navigation and you'll see a link to <b>Request a Feature</b> at the bottom of the menu.
           contact_us:
             question: This FAQ didn’t answer my question, or I have other things to say to you. How do I contact BedPost?
-            answer: Our inbox is always open! Email us at <a href="mailto:support@bedpost.me">support@bedpost.me</a>. We'd love to know what's on your mind.
+            answer: Our inbox is always open! Email us at <a href="mailto:support@bedpost.me" target="_blank">support@bedpost.me</a>. We'd love to know what's on your mind.
 
