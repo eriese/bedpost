@@ -1,4 +1,8 @@
+require 'colorize'
+
 namespace :eb do
+	PROD_ENV = 'bedpost-prod-1'
+
 	def deploy_to_environment(args)
 		environment_name = args[:environment_name]
 		sh "eb use #{environment_name}" if environment_name.present?
@@ -18,28 +22,66 @@ namespace :eb do
 			puts 'Skipping setting RAILS_MASTER_KEY because no key file was found'
 		end
 
-		branch_name = `git symbolic-ref --quiet --short HEAD`.chomp
-		branch_name = '' if branch_name == 'master'
+		branch_name = current_branch_name
+		environment_name ||= current_env_name
 		commit_name = `git rev-parse --short HEAD`.chomp
-
-		unless environment_name
-			envs = `eb list`.split("\n")
-			environment_name = envs.find { |n| n.start_with? '*' }[2..-1]
-		end
 
 		build_name = "#{environment_name}:#{branch_name}#{branch_name.empty? ? '' : '.'}#{commit_name}"
 		puts "Deploying build #{build_name} to #{environment_name}"
 		build_name
 	end
 
+	def current_env_name
+		envs = `eb list`.split("\n")
+		envs.find { |n| n.start_with? '*' }.sub('* ', '')
+	end
+
+	def safe_env?(args)
+		environment_name = args[:environment_name] || current_env_name
+		if environment_name == PROD_ENV
+			puts "You're trying to deploy to production. If you really want to do that, you have to use rake eb:deploy_prod"
+			false
+		else
+			true
+		end
+	end
+
+	def current_branch_name
+		branch_name = `git symbolic-ref --quiet --short HEAD`.chomp
+		branch_name == 'master' ? '' : branch_name
+	end
+
 	desc 'set the master key environment variable and then deploy'
 	task :deploy, [:environment_name] do |t, args|
+		return unless safe_env? args
 		build_name = deploy_to_environment args
 		sh "eb deploy -l #{build_name}"
 	end
 
 	task :deploy_staged, [:environment_name] do |t, args|
+		return unless safe_env? args
 		build_name = deploy_to_environment args
 		sh "eb deploy -l #{build_name}-staged --staged"
+	end
+
+	desc 'deploy to production and reset the used environment after'
+	task :deploy_prod do
+		current_branch = current_branch_name
+		if current_branch != 'master'
+			puts "You're trying to deploy a branch that isn't master to production. Are you sure that's right? Type the current branch name to continue".blue.bold
+			given_branch = gets.chomp
+			return unless given_branch == current_branch
+		end
+
+		orig_env = current_env_name
+		puts 'switching to production environment'
+		sh "eb use #{PROD_ENV}"
+		deploy_to_environment
+		if orig_env == "#{PROD_ENV}"
+			puts "You current beanstalk environment is production. Be Careful!".orange.bold
+		else
+			puts "switching back to #{orig_env} environment"
+			sh "eb use #{orig_env}"
+		end
 	end
 end

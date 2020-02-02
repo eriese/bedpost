@@ -23,7 +23,7 @@ if Rails.env.development?
 			end
 
 			if errors.empty?
-				puts 'All checks passed. You are ready to push!'.blue.bold
+				puts 'All checks passed. You are ready to push!'.green.bold
 			else
 				puts 'Please fix the following errors before pushing:'.red.bold
 				errors.each { |k, e| puts "#{k}: #{e}".to_s.red }
