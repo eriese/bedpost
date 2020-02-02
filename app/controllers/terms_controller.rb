@@ -2,11 +2,9 @@ class TermsController < ApplicationController
 	skip_before_action :check_first_time
 	before_action :validate_type
 
-
 	def show
 		@terms = Terms.newest_of_type(@type_key)
-		# @is_accepted = current_user_profile.terms_accepted?(@type_key)
-		@is_accepted = false
+		@is_accepted = current_user_profile.terms_accepted?(@type_key)
 		@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile.terms[@type_key]
 	end
 

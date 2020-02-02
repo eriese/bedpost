@@ -156,20 +156,20 @@ input[type=radio] {
 				padding: 0;
 				font-weight: bolder;
 				text-transform: uppercase;
-				@include themed(color, "form-background");
+				@include themed(color, "cta-bg-form");
 				@include cta-transition;
 			}
 
 			&:checked {
 				+ label {
-					@include themed(background, "form-background");
+					@include themed(background, "cta-bg-form");
 					@include themed(color, "background");
 				}
 			}
 
 			&:focus, &:hover {
 				+ label {
-					@include themed(border-color, "form-background");
+					@include themed(border-color, "cta-bg-form");
 				}
 			}
 		}
