@@ -9,7 +9,7 @@
 			margin-top: -$spacing-tiny;
 		}
 	}
-	.incomplete {
+	.incomplete.blurred {
 		background-color: theme-dark('h1');
 		.contact-error {
 			font-size: 0.75rem;
