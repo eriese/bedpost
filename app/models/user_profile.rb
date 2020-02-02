@@ -56,11 +56,14 @@ class UserProfile < Profile
 	BLACKLIST_FOR_SERIALIZATION += %i[partnerships password_digest tours]
 
 	after_create do |user|
-		beta_token = BetaToken.where(email: user.email).first.destroy if ENV['IS_BETA']
+		if ENV['IS_BETA']
+			beta_token = BetaToken.where(email: user.email).first
+			beta_token.destroy unless beta_token.nil?
+		end
 	end
 
 	def email=(value)
-		super(value.downcase) unless value == nil
+		super(value.nil? ? value : value.downcase)
 	end
 
 	def encounters
