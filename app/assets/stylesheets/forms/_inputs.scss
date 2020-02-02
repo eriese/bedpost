@@ -133,7 +133,8 @@ input[type=radio] {
 			}
 
 			&:checked + label {
-				@media (min-width: rem(500px)) {
+					font-size: 1rem;
+				@include media (">phone") {
 					font-size: 1.1rem;
 				}
 				font-weight: bolder;

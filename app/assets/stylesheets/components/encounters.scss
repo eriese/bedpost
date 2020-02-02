@@ -2,7 +2,7 @@
 	.dynamic-field {
 		border-radius: $default-border-radius;
 		padding: $spacing-tiny $spacing-tiny $spacing-small $spacing-tiny;
-		border: 2px solid theme-dark('h1');
+		border: 2px solid $pale-jasper;
 		margin-bottom: $spacing-small;
 
 		&-buttons {
