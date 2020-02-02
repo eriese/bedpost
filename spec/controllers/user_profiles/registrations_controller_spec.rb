@@ -15,13 +15,20 @@ RSpec.describe UserProfiles::RegistrationsController, type: :controller do
 	describe 'POST #create' do
 		context 'with valid parameters' do
 			def get_valid_params
-				{user_profile: attributes_for(:user_profile)}
+					{user_profile: @user_attributes}
 			end
 
 			def get_new_prof(params)
-				UserProfile.find_by(email: params[:user_profile][:email])
+				UserProfile.find_by(email: params[:user_profile][:email].downcase)
 			end
 
+			before do
+				@user_attributes = attributes_for(:user_profile)
+				if ENV['IS_BETA']
+					@token = BetaToken.create(email: @user_attributes[:email])
+					@user_attributes[:token] = @token.token
+				end
+			end
 			after :each do
 				cleanup @prof
 			end

@@ -72,7 +72,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 			token_params = params.require(resource_name).permit(:email, :token)
 			token_params[:email].downcase!
 			unless BetaToken.where(token_params).exists?
-				err = {token: ["We don't recognize this beta token with your email address"]}
+				err = {form_error: ["We don't recognize this beta token with your email address"]}
 				respond_with_submission_error(err,  new_registration_path(resource_name))
 			end
 		end
