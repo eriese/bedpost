@@ -122,9 +122,15 @@
 // ctas
 ///////////////////////
 @mixin hover-and-focus {
-	&:hover, &:focus {
-		&:not([disabled]) {
+	&:not([disabled]) {
+		&:focus, &:active {
 			@content;
+		}
+
+		@media (hover: hover) {
+			&:hover {
+				@content;
+			}
 		}
 	}
 }
