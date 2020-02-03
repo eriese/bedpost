@@ -214,10 +214,10 @@ input[type=range] {
 	-webkit-appearance: none;
 	border: none;
 	background: transparent;
-	margin: rem(25px) 0 rem(20px) 0;
+	margin: 1rem 0 rem(20px) 0;
 
 	form.centered & {
-		margin-bottom: rem(10px);
+		margin-bottom: 0;
 	}
 
 	$kit-tracks: -webkit-slider-runnable-track -moz-range-track -ms-track;
