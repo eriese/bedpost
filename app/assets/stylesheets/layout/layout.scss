@@ -125,16 +125,17 @@ fieldset {
 	padding: 0;
 	margin: 0;
 }
+
 #logo {
 	text-decoration: none;
 
 	img {
 		vertical-align: middle;
 		margin: $spacing-small;
-		height: 2.5rem;
+		height: $header-height-default - $spacing-small * 2;
 
 		@include media($mobile) {
-			height: 2rem;
+			height: $header-height-mobile - $spacing-small *2;
 		}
 	}
 }
@@ -145,7 +146,7 @@ fieldset {
 
 .no-js {
 	@include media(('>phone', '!retina')) {
-		padding-left: $nav-width;
+		padding-right: $nav-width;
 	}
 
 	.js-only {

@@ -3,15 +3,24 @@
 	right: 0rem;
 	top: 0rem;
 	z-index: 100;
+	height: $header-height-default;
+	display: flex;
+
+	@include media($mobile) {
+		height: $header-height-mobile;
+	}
+
 
 	&__burger {
+		$line-height: rem(5px);
 		$b: &;
+		align-self: center;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		width: 2.75rem;
-		height: 2.75rem;
+		width: $nav-button-width + $spacing-tiny * 2;;
+		height:  $line-height * 7;
 		padding: $spacing-tiny;
 		cursor: pointer;
 		min-width: unset;
@@ -21,14 +30,12 @@
 		position: relative;
 		z-index: 2;
 		border: none;
-		top: rem(2px);
 		overflow: hidden;
 
 		@include themed(border-color, "background-contrast");
 
 		@include media($mobile) {
 			margin-right: 0.25rem;
-			bottom: 0.6rem;
 		}
 
 		&:hover, &:focus, &--open {
@@ -38,29 +45,37 @@
 
 		&__line {
 			width: 100%;
-			border: rem(2px) solid;
+			border: $line-height/2 solid;
 			border-color: inherit;
 			width: $nav-button-width;
 			border-radius: $default-border-radius;
-			transition-property: transform, top, left, opacity;
-		    transition-duration: .3s;
-		    transition-timing-function: linear;
+			transition-property: transform, top, bottom, opacity, width;
+				transition-duration: .3s;
+				transition-timing-function: linear;
+			position: absolute;
 
-			&:not(:first-of-type) {
-				margin-top: rem(6px);
+
+			&:first-child {
+				top: $spacing-tiny;
+			}
+
+			&:nth-child(2) {
+				top: calc(50% - #{$line-height/2});
+			}
+
+			&:last-child {
+				bottom: $spacing-tiny;
 			}
 		}
 
 		&--open {
-			display: block;
 			#{$b}__line {
 				margin: 0;
-				position: absolute;
-				left: $spacing-tiny;
-				top: $spacing-tiny;
+				width: $nav-button-width - $spacing-small;
 
 				&:nth-child(1) {
-					transform: translateY(#{(2.75rem - $spacing-small) / 2 - rem(1px)}) rotate(45deg);
+					top: calc(50% - #{$line-height/2});
+					transform: rotate(45deg);
 				}
 
 				&:nth-child(2) {
@@ -68,7 +83,8 @@
 				}
 
 				&:nth-child(3) {
-					transform: translateY(#{(2.75rem - $spacing-small) / 2 - rem(1px)}) rotate(-45deg);
+					bottom: calc(50% - #{$line-height/2});
+					transform: rotate(-45deg);
 				}
 			}
 		}
