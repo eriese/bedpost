@@ -284,7 +284,8 @@ describe('Encounter Contact Field Component', () => {
 		});
 	});
 
-	function chooseRadio(wrapper, inst_type, value) {
+	async function chooseRadio(wrapper, inst_type, value) {
+		await wrapper.vm.$nextTick();
 		const name = `${wrapper.vm.baseName}[${inst_type}_instrument_id]`;
 		const radio = wrapper.findAll(HiddenRadio).filter(w => w.vm.inputName == name && w.vm.inputValue == value);
 		radio.at(0).find('input').setChecked(true);
@@ -292,38 +293,39 @@ describe('Encounter Contact Field Component', () => {
 	}
 
 	describe('resetInsts', () => {
-		it('is called with true when a new object_instrument_id is selected', () => {
+		it('is called with true when a new object_instrument_id is selected', async () => {
 			const {wrapper} = setup({possible_contact_id: 'pos1'});
+			await wrapper.vm.$nextTick();
 			const resetInsts = jest.fn();
 			wrapper.setMethods({resetInsts});
 
-			chooseRadio(wrapper, 'object', 'hand');
+			await chooseRadio(wrapper, 'object', 'hand');
 			expect(resetInsts).toHaveBeenCalledWith(true);
 		});
 
 		describe('with an invalid contact', () => {
-			it('sets the subject_instrument_id if there is only one option', () => {
+			it('sets the subject_instrument_id if there is only one option', async () => {
 				const {wrapper} = setup({possible_contact_id: 'pos1'});
-				chooseRadio(wrapper, 'object', 'hand');
+				await chooseRadio(wrapper, 'object', 'hand');
 				expect(wrapper.vm.subject_instrument_id).toEqual('tongue');
 			});
 
-			it('unsets the subject_instrument_id if there is more than one option', () => {
+			it('unsets the subject_instrument_id if there is more than one option', async () => {
 				const {wrapper} = setup({possible_contact_id: 'pos3'});
 
-				chooseRadio(wrapper, 'object', 'anus');
+				await chooseRadio(wrapper, 'object', 'anus');
 				expect(wrapper.vm.subject_instrument_id).toBeFalsy();
 			});
 		});
 	});
 
 	describe('setContact', () => {
-		it('is called when a new subject_instrument_id is selected', () => {
+		it('is called when a new subject_instrument_id is selected', async () => {
 			const {wrapper} = setup({possible_contact_id: 'pos1'});
 			const setContact = jest.fn();
 			wrapper.setMethods({setContact});
 
-			chooseRadio(wrapper, 'subject', 'anus');
+			await chooseRadio(wrapper, 'subject', 'anus');
 			expect(setContact).toHaveBeenCalled();
 		});
 

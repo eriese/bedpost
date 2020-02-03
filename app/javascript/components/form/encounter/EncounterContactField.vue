@@ -271,10 +271,12 @@ export default {
 		},
 		updateContactType(updated) {
 			this.onInput();
-			this.resetInsts();
 			if (updated) {
 				this.$v[updated].$touch();
 			}
+			this.$nextTick(() => {
+				this.resetInsts();
+			});
 		},
 		updateBarriers(noTouch) {
 			this.onInput();
