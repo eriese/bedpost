@@ -18,7 +18,25 @@ module CleanupHelpers
 		result
 	end
 
-	def clean_devise_jobs
-		Delayed::Backend::Mongoid::Job.where(queue: 'devise_notifications').destroy_all
+	def clean_mailer_jobs
+		Delayed::Backend::Mongoid::Job.where(:queue.in => ['devise_notifications', 'mailers']).destroy_all
+	end
+
+	def print_db_remnants(include_dummies=true)
+		db_has = false
+		Mongoid.default_client.collections.each do |c|
+			if c.count > 0 && (include_dummies || !collection_is_only_dummy?(c))
+				db_has = true
+				puts "#{c.namespace}: #{c.count}".light_magenta.bold
+			end
+		end
+		db_has
+	end
+
+	def collection_is_only_dummy?(collection)
+		return false if !['pronouns', 'profiles'].include?(collection.name) || collection.count > 1
+
+		check_name = collection.name == 'pronouns' ? Pronoun.first.subject : Profile.first.name
+		check_name == 'dummy'
 	end
 end
