@@ -53,6 +53,8 @@ class EncountersController < ApplicationController
 
 	def update
 		prms = e_params
+		# set barriers to an empty array if none were submitted
+		prms[:contacts_attributes].each { |i, a| a[:barriers] ||= [] } if prms[:contacts_attributes].present?
 		if @encounter.update(prms)
 			redirect_to partnership_encounter_path(@partnership, @encounter)
 		else

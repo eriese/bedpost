@@ -224,6 +224,11 @@ RSpec.describe EncountersController, type: :controller do
 		before :each do
 			allow(controller).to receive(:check_first_time)
 			make_user_and_encounters num_encounters: 1
+			@ship = @user.partnerships.first
+			@encounter = @ship.encounters.first
+
+			@genitals = create(:contact_instrument, name: :genitals)
+			@possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
 		end
 
 		after :each do
@@ -232,21 +237,42 @@ RSpec.describe EncountersController, type: :controller do
 
 		context 'with valid params' do
 			it 'updates the encounter' do
-				ship = @user.partnerships.first
-				encounter = ship.encounters.first
-
-				@genitals = create(:contact_instrument, name: :genitals)
-				@possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
-
-				encounter.contacts << build(:encounter_contact, possible_contact: @possible1, subject: :user, object: :user);
+				@encounter.contacts.first.update(possible_contact: @possible1, subject: :user, object: :user)
 
 				new_notes = "Something else"
-				post :update, params: {id: encounter.to_param, partnership_id: ship.to_param, encounter: {notes: new_notes, contacts_attributes: [{_id: encounter.contacts.first.id, object: :partner}]}}
+				post :update, params: {
+					id: @encounter.to_param,
+					partnership_id: @ship.to_param,
+					encounter: {
+						notes: new_notes,
+						contacts_attributes: {
+							0 => {_id: @encounter.contacts.first.id, object: :partner}
+						}
+					}
+				}
 
-				encounter.reload
-				expect(encounter.notes).to eq new_notes
-				expect(encounter.contacts.first.object).to eq :partner
-				expect(ship.reload.encounters.first.notes).to eq new_notes
+				@encounter.reload
+				expect(@encounter.notes).to eq new_notes
+				expect(@encounter.contacts.first.object).to eq :partner
+				expect(@ship.reload.encounters.first.notes).to eq new_notes
+			end
+
+			it 'removes barriers if none were submitted for contacts that previosly had barriers' do
+				@encounter.contacts.first.update(barriers: [:fresh]);
+				expect(@encounter.contacts.first.barriers).not_to be_empty
+
+				post :update, params: {
+					id: @encounter.to_param,
+					partnership_id: @ship.to_param,
+					encounter: {
+						contacts_attributes: {
+							0 => {_id: @encounter.contacts.first.id}
+						}
+					}
+				}
+
+				@encounter.reload
+				expect(@encounter.contacts.first.barriers).to be_empty
 			end
 		end
 
