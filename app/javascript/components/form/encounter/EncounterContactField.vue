@@ -6,17 +6,7 @@
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
 	<input type="hidden" :value="value.possible_contact_id" :name="baseName + '[possible_contact_id]'">
 	<div class="contact-field" role="group">
-		<div class="field-section narrow" role="radiogroup" :aria-label="radiogroupLabels.subject" :id="`-contact-${watchKey}`" :aria-controls="`subject_instrument-contact-${watchKey}`">
-			<hidden-radio v-for="i in [{labelKey: 'I', inputValue: 'user'}, {label: partner.name, inputValue: 'partner'}]"
-				:key="'subj' + i.inputValue"
-				v-bind="i"
-				:base-name="baseName"
-				v-model="_value.subject"
-				model="subject"
-				@change="updateContactType('subject')"
-				type="link">
-			</hidden-radio>
-		</div>
+		<contact-field-section class="narrow" :contact-index="watchKey" :label="radiogroupLabels.subject" field="subject" :controls="['subject_instrument_id']" :value-list="[{labelKey: 'I', inputValue: 'user'}, {label: partner.name, inputValue: 'partner'}]" :default-props="{baseName}" key-field="inputValue" v-model="_value.subject" @change="updateContactType('subject')"></contact-field-section>
 		<div class="field-section narrow" role="radiogroup" :aria-label="radiogroupLabels.contact_type" :id="`contact_type-contact-${watchKey}`" :aria-controls="`object_instrument-contact-${watchKey} subject_instrument-contact-${watchKey}`">
 			<hidden-radio v-for="c in contacts"
 				:key="c.key" v-bind="{
@@ -100,10 +90,11 @@
 
 <script>
 import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
-import hiddenRadio from './HiddenRadio.vue';
+import encounterContactFieldSection from '@components/form/encounter/EncounterContactFieldSection.vue';
 import encounterContactBarrier from './EncounterContactBarrier.vue';
 import { minLength, requiredUnless } from 'vuelidate/lib/validators';
 import EncounterBarrierTracker from '@modules/encounterBarrierTracker';
+import hiddenRadio from './HiddenRadio.vue';
 
 export default {
 	data: function() {
@@ -120,8 +111,9 @@ export default {
 	mixins: [dynamicFieldListItem],
 	track: ['has_barrier'],
 	components: {
-		'hidden-radio': hiddenRadio,
-		'barrier-input': encounterContactBarrier
+		'contact-field-section': encounterContactFieldSection,
+		'barrier-input': encounterContactBarrier,
+		'hidden-radio': hiddenRadio
 	},
 	computed: {
 		cType: function() {
