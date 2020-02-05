@@ -1,16 +1,27 @@
 <template>
 	<div class="dynamic-field-list" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
 		<slot></slot>
-		<div v-for="(comp, index) in list" :key="comp[idKey]" ref="list_item" class="dynamic-field-list__item">
-			<div v-if="showDeleted || !comp._destroy" @focusin="setFocus(index)" @click="setFocus(index, true)" class="dynamic-field step" :class="{incomplete: $vEach[index] && $vEach[index].$error, blurred: index != focusIndex, deleted: comp._destroy}" role="group" :id="`dynamic-list-item-${index}`">
-				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || index != firstIndex" role="toolbar">
-					<arrow-button class="link cta--is-arrow--is-small" v-if="index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(index,-1)"></arrow-button>
-					<arrow-button class="link cta--is-arrow--is-small" v-if="index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
-					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
+		<div v-for="comp in internalList" :key="comp.item[idKey]" ref="list_item" class="dynamic-field-list__item">
+			<div v-if="showDeleted || !comp._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="{incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}" role="group" :id="`dynamic-list-item-${comp.index}`">
+				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || comp.index != firstIndex" role="toolbar">
+					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,-1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(comp.index)" t-key="remove"></arrow-button>
 				</div>
-				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="tracker" class="clear" @track="track" @start-tracking="startTracking" :$v="$vEach[index]" @input="onInput"></component>
+				<component
+					ref="list_component"
+					v-model="comp.item"
+					class="clear"
+					:is="componentType"
+					:watch-key="comp.index"
+					:tracked="tracker"
+					:state="comp"
+					:$v="$vEach[comp.index]"
+					@track="track"
+					@start-tracking="startTracking"
+					@input="onInput"></component>
 			</div>
-			<deleted-child v-else :base-name="`${baseName}[${index}]`" :item="list[index]" :id-key="idKey"></deleted-child>
+			<deleted-child v-else :base-name="`${baseName}[${comp.index}]`" :item="list[comp.index]" :id-key="idKey"></deleted-child>
 		</div>
 		<button type="button" class="cta cta--is-form-submit cta--is-add-btn cta--is-add-btn--is-small" @click="addToList" title="Add Another"></button>
 	</div>
@@ -20,6 +31,10 @@
 import {gsap} from 'gsap';
 import deletedChild from '@components/functional/DeletedChild.vue';
 import {lazyParent} from '@mixins/lazyCoupled';
+
+const getContructor = (fileName) => {
+
+}
 
 export default {
 	name: 'dynamic_field_list',
@@ -33,9 +48,11 @@ export default {
 			tracker: null,
 			numSubmitting: 0,
 			toDelete: [],
+			internalList: [],
+			stateConstructor: null,
 		};
 	},
-	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v'],
+	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass'],
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];
@@ -52,19 +69,22 @@ export default {
 		$vEach: function() {
 			return this.$v && this.$v.$each && this.$v.$each.$iter || [];
 		},
-		list: function() {
-			return this.value.slice();
+		list() {
+			return this.internalList.map ((i) => i.item);
 		}
 	},
 	methods: {
-		addToList() {
-			let newObj = Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
+		addToList(newObj) {
+			newObj = newObj || Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
 			newObj[this.idKey] = Date.now();
-			this.list.push(newObj);
+
+			let state = this.generateState(newObj);
+
+			this.internalList.push(state);
 			this.numSubmitting += 1;
 			this.onInput();
 			this.$nextTick(() => {
-				this.setFocus(this.list.length - 1, true);
+				this.setFocus(state.index, true);
 			});
 		},
 		removeFromList(index) {
@@ -132,8 +152,9 @@ export default {
 		},
 		updateIndices(startVal, startInd) {
 			for (var i = startVal; i < this.list.length; i++) {
-				if (!this.list[i]._destroy) {
-					this.$set(this.list[i], 'position', startInd++);
+				this.list[i].index = i;
+				if (!this.list[i].obj._destroy) {
+					this.$set(this.list[i].obj, 'position', startInd++);
 				}
 			}
 
@@ -150,13 +171,33 @@ export default {
 		onInput() {
 			this.$emit('input', this.list);
 		},
+		generateState(listItem) {
+			let itemState = new this.stateConstructor(listItem, this);
+			itemState.index = this.internalList.length;
+			itemState.baseName = this.baseName;
+			return itemState;
+		}
 	},
-	created() {
-		this.numSubmitting = this.list.length;
+	created: async function() {
+		let mod;
+		if (this.stateClass) {
+			mod = await import( /* webpackChunkName: 'state' */ '@components/form/state/' + this.stateClass + '.js');
+			this.stateConstructor = mod.default;
+		} else {
+			this.stateConstructor = (item) => {
+				return {
+					index: this.list.length,
+					item
+				}
+			}
+		}
+
+		this.numSubmitting = this.value.length;
 		if (this.numSubmitting == 0 && !this.optional) {
 			this.addToList();
 		} else {
-			this.updateIndices(0,0);
+			this.internalList = this.value.map(this.generateState);
+			this.setFocus(this.lastIndex);
 		}
 	}
 };

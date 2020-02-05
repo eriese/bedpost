@@ -15,7 +15,8 @@
 		"Atomics": "readonly",
 		"SharedArrayBuffer": "readonly",
 		"process": "readonly",
-		"Utils": "readonly"
+		"Utils": "readonly",
+		"gon": "readonly"
 	},
 	"parserOptions": {
 		"ecmaVersion": 2018,

@@ -10,6 +10,7 @@ export default {
 			default: function() { return {}; },
 		},
 		$v: Object,
+		state: Object
 	},
 	mixins: [lazyChild],
 	watch: {
