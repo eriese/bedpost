@@ -34,14 +34,11 @@ export default class ContactState extends BaseState {
 
 	get hasSubjectInstruments() { return this.shownInstruments.subject.length > 1; }
 
-	// get objectName() {
-	// 	let p_inst_id = this.object_instrument_id;
-	// 	return p_inst_id ? this.instruments[p_inst_id][this.contact.object + '_name'] : '';
-	// }
-	// get subjectName() {
-	// 	let p_inst_id = this.subject_instrument_id;
-	// 	return p_inst_id ? this.instruments[p_inst_id][this.contact.subject + '_name'] : '';
-	// }
+	instrumentName(actor) {
+		let instID  = this[`${actor}_instrument_id`];
+		return instID ? this.instruments[instID][`${this.contact[actor]}_name`] : '';
+	}
+
 	get subjPossessive() {
 		if (this.shownInstruments.subject.length <= 1) {
 			return '';

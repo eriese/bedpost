@@ -2,7 +2,7 @@
 	<div class="dynamic-field-list" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
 		<slot></slot>
 		<div v-for="comp in internalList" :key="comp.item[idKey]" ref="list_item" class="dynamic-field-list__item">
-			<div v-if="showDeleted || !comp._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="{incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}" role="group" :id="`dynamic-list-item-${comp.index}`">
+			<div v-if="showDeleted || !comp.item._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="{incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}" role="group" :id="`dynamic-list-item-${comp.index}`">
 				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || comp.index != firstIndex" role="toolbar">
 					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,-1)"></arrow-button>
 					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,1)"></arrow-button>
@@ -14,7 +14,7 @@
 					class="clear"
 					:is="componentType"
 					:watch-key="comp.index"
-					:tracked="tracker"
+					:tracker="tracker"
 					:state="comp"
 					:$v="$vEach[comp.index]"
 					@track="track"
@@ -31,10 +31,6 @@
 import {gsap} from 'gsap';
 import deletedChild from '@components/functional/DeletedChild.vue';
 import {lazyParent} from '@mixins/lazyCoupled';
-
-const getContructor = (fileName) => {
-
-}
 
 export default {
 	name: 'dynamic_field_list',
@@ -75,8 +71,10 @@ export default {
 	},
 	methods: {
 		addToList(newObj) {
-			newObj = newObj || Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
-			newObj[this.idKey] = Date.now();
+			if (!newObj || newObj instanceof MouseEvent) {
+				newObj = Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
+				newObj[this.idKey] = Date.now();
+			}
 
 			let state = this.generateState(newObj);
 
@@ -119,7 +117,7 @@ export default {
 			let oldStart = Math.min(index, newInd);
 			let oldPos = this.list[oldStart].position;
 
-			Array.move(this.list, index, newInd);
+			Array.move(this.internalList, index, newInd);
 			this.updateIndices(oldStart, oldPos);
 		},
 		blurChild(index) {
@@ -150,14 +148,17 @@ export default {
 		track() {
 			this.tracker && this.tracker.update(this.list);
 		},
-		updateIndices(startVal, startInd) {
-			for (var i = startVal; i < this.list.length; i++) {
-				this.list[i].index = i;
-				if (!this.list[i].obj._destroy) {
-					this.$set(this.list[i].obj, 'position', startInd++);
+		updateIndices() {
+			let startInd = 0;
+			for (var i = 0; i < this.internalList.length; i++) {
+				let listItem = this.internalList[i];
+				listItem.index = i;
+				if (!listItem.item._destroy) {
+					this.$set(listItem.item, 'position', startInd++);
 				}
 			}
 
+			this.track();
 			this.onInput();
 		},
 		onChildMounted() {
@@ -167,6 +168,8 @@ export default {
 			if (this.tracker === null) {
 				this.tracker = trackerFactory(this.list);
 			}
+
+			this.track();
 		},
 		onInput() {
 			this.$emit('input', this.list);

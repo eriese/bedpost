@@ -5,7 +5,7 @@ export default {
 		baseName: String,
 		watchKey: [String, Number],
 		value: Object,
-		tracked: {
+		tracker: {
 			type: Object,
 			default: function() { return {}; },
 		},

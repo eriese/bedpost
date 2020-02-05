@@ -315,7 +315,7 @@ describe('Encounter Contact Field Component', () => {
 	});
 
 	describe('updateBarriers', () => {
-		it('dirties the barriers', () => {
+		it('dirties the barriers if called with a truthy value', () => {
 			const {wrapper} = setup();
 			wrapper.vm.$v.$reset();
 
@@ -323,9 +323,9 @@ describe('Encounter Contact Field Component', () => {
 			expect(wrapper.vm.$v.barriers.$dirty).toBe(true);
 		});
 
-		it('does not dirty the barriers if called with true', () => {
+		it('does not dirty the barriers if called with false', () => {
 			const {wrapper} = setup();
-			wrapper.vm.updateBarriers(true);
+			wrapper.vm.updateBarriers(false);
 			expect(wrapper.vm.$v.$anyDirty).toBe(false);
 		});
 	});

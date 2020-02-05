@@ -39,6 +39,19 @@
 			:state="state"
 			@change="setContact()"></contact-field-section>
 	</div>
+	<div class="contact-barriers clear-fix">
+		<div>
+			<barrier-input
+				v-for="(bType, bKey) in barriers"
+				ref="barriers"
+				:key="state.baseName + bKey"
+				:barrier="bType"
+				:state="state"
+				:base-name="state.baseName"
+				:tracker="tracker"
+				@change="updateBarriers"></barrier-input>
+		</div>
+	</div>
 </fieldset>
 </template>
 
@@ -71,21 +84,17 @@ export default {
 				this.touchInput('possible_contact_id');
 			}
 			this.touchInput(sourceEvent);
-			this.updateBarriers(true);
+			this.updateBarriers(false);
 		},
 		touchInput(field) {
 			if (!this.$v || !this.$v[field]) { return; }
 			this.$v[field].$touch();
-			this.onInput();
 		},
-		updateBarriers(noTouch) {
-			this.onInput();
-			if (noTouch !== true) {
-				this.$v && this.$v.barriers.$touch();
+		updateBarriers(touch) {
+			if (touch) {
+				this.touchInput('barriers');
 			}
-			this.$nextTick(() => {
-				this.$emit('track');
-			});
+			this.$emit('track');
 		},
 		blur() {
 			this.focused = false;

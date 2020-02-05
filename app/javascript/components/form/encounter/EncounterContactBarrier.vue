@@ -1,6 +1,6 @@
 <template>
 	<div class="input" v-if="shouldShow">
-		<input type="checkbox" ref="input" :value="inputValue" v-on="cListeners" :name="inputName" :id="inputId" :disabled="shouldDisable">
+		<input type="checkbox" ref="input" :value="barrier.key"  :name="inputName" :id="inputId" :disabled="shouldDisable" v-model="state.contact.barriers" v-on="cListeners">
 		<label :for="inputId">{{labelText}}</label>
 	</div>
 </template>
@@ -32,16 +32,20 @@ const matcher = '(su|o)bject';
  */
 export default {
 	name: 'encounter_contact_barrier_input',
-	props: ['barrier', 'modelValue', 'contact', 'encounterData', 'contactData'],
+	props: ['barrier', 'state', 'tracker'],
 	mixins: [customInput],
 	model: {
-		prop: 'modelValue',
 		event: 'change'
 	},
+	data() {
+		let actorMatches = this.barrier.key.match(new RegExp(matcher));
+		return {
+			inputValue: this.barrier.key,
+			actor: actorMatches ? actorMatches[0] : null,
+		};
+	},
 	computed: {
-		modelName: function() {
-			return 'barriers][';
-		},
+		modelName: () => 'barrier][',
 		labelText: function() {
 			// get default arguments and key
 			let transArgs = {scope: 'contact.barrier'},
@@ -51,36 +55,19 @@ export default {
 				// the key has no mention of which actor
 				key = key.replace(new RegExp('_' + matcher), '');
 				// put the instrument and name in the arguments
-				transArgs.instrument = this.contactData[`${this.actor}InstrumentName`];
+				transArgs.instrument = this.state.instrumentName(this.actor);
 				transArgs.name = this.personName;
 				// pluralize as needed
 				transArgs.count = transArgs.instrument.match(/[^s]s$/) ? 1 : 0;
 			}
+
 			return this.$_t(key, transArgs);
-		},
-		inputValue: function() {
-			return this.barrier.key;
-		},
-		valInd: function() {
-			return this.modelValue.indexOf(this.inputValue);
-		},
-		cListeners: function() {
-			let vm = this;
-			return Object.assign({}, this.$listeners, {
-				change: function(e) {
-					vm.toggleChecked(e.target.checked);
-				}
-			});
-		},
-		actor: function() {
-			let matches = this.barrier.key.match(new RegExp(matcher));
-			return matches ? matches[0] : null;
 		},
 		canClean: function() {
 			if (this.actor == null) {return true;}
-			let instID = this.contactData[this.actor + '_instrument_id'];
+			let instID = this.state[this.actor + '_instrument_id'];
 			if (instID) {
-				return this.contactData.instruments[instID].can_clean;
+				return this.state.instruments[instID].can_clean;
 			}
 			return false;
 		},
@@ -88,44 +75,35 @@ export default {
 			// if it's a clean type, only continue if it's a cleanable instrument
 			if (this.barrier.key.includes('clean') && !this.canClean) {return false; }
 			// if it has no conditions, show it if it's cleanable
-			if (!this.barrier.encounter_conditions && !this.barrier.contact_conditions) { return this.canClean; }
+			if (!this.barrier.encounter_conditions
+				&& !this.barrier.contact_conditions) { return this.canClean; }
 
 			// if it has encounter conditions but all are false, don't show
-			if (this.barrier.encounter_conditions && this.encounterData && this.barrier.encounter_conditions.every((c) => !this.encounterData[c](this.contact))) { return false; }
+			if (this.barrier.encounter_conditions &&
+				(!this.tracker ||
+				this.barrier.encounter_conditions.every((c) => {
+					return !this.tracker[c](this.state.contact);
+				}))
+			) { return false; }
 
 			// if it has contact_conditions but some are false, don't show
-			if (this.barrier.contact_conditions && this.barrier.contact_conditions.some((c) => !this.contactData[c])) { return false; }
+			if (this.barrier.contact_conditions &&
+				this.barrier.contact_conditions.some((c) => {
+					return !this.state[c];
+				})
+			) { return false; }
 
 			// show
 			return true;
 		},
 		shouldDisable: function() {
-			return this.barrier.exclude.some((c) => this.modelValue.indexOf(c) >=0);
+			return this.barrier.exclude.some((c) => this.state.contact.barriers.indexOf(c) >=0);
 		},
 		personName() {
-			let person = this.contact[this.actor];
+			let person = this.state.contact[this.actor];
 			return person == 'user' ?
 				this.$_t('my') :
-				this.$_t('name_possessive', {name: this.contactData.partnerName});
-		}
-	},
-	methods: {
-		toggleChecked(isChecked) {
-			let newValue = [...this.modelValue];
-			if (isChecked && this.valInd < 0) {
-				newValue.push(this.inputValue);
-			} else if (!isChecked && this.valInd >= 0) {
-				newValue.splice(this.valInd, 1);
-			}
-
-			this.$emit('change', newValue);
-		},
-	},
-	updated: function() {
-		if (this.shouldShow) {
-			this.$refs.input.checked = this.valInd >= 0;
-		} else if (this.valInd >= 0) {
-			this.toggleChecked(false);
+				this.$_t('name_possessive', {name: this.state.partner.name});
 		}
 	},
 };

@@ -7,30 +7,33 @@ describe ('Encounter contact barrier component', () => {
 	const baseName = 'encounter[contacts_attributes][0]';
 
 	const WrapperComponent = {
-		template: '<div><encounter-contact-barrier v-bind="barrierProps" v-model="barrierProps.contact.barriers"></encounter-contact-barrier></div>',
+		template: '<div><encounter-contact-barrier v-bind="barrierProps" v-model="barrierProps.state.contact.barriers"></encounter-contact-barrier></div>',
 		components: {
 			EncounterContactBarrier,
 		},
 		props: ['barrierProps'],
 	};
 
-	function makeWrapper(contact, barrier, has_barrier) {
-		const contactData = {
-			index: contact.position,
-			object_instrument_id: 'hand',
-			subject_instrument_id: 'hand',
-			partnerName: 'Alice',
-			objectInstrumentName: 'hand',
-			subjectInstrumentName: 'hand',
-			instruments: {
-				hand: {
-					can_clean: true,
-				}
-			}
-		};
+	function makeWrapper(contact, barrier, has_barrier, instrumentName) {
+		instrumentName = instrumentName || 'hand';
 
-		const tracker = {
-			has_barrier: () => has_barrier
+		const state = {
+			contact,
+			index: contact.position,
+			object_instrument_id: instrumentName,
+			subject_instrument_id: instrumentName,
+			partner: {
+				name: 'Alice',
+			},
+			instrumentName: () => instrumentName,
+			instruments: {
+				[instrumentName]: {
+					can_clean: true,
+				},
+			},
+			tracker: {
+				has_barrier: () => has_barrier
+			}
 		};
 
 		const localVue = createLocalVue();
@@ -40,10 +43,8 @@ describe ('Encounter contact barrier component', () => {
 			propsData: {
 				barrierProps: {
 					barrier,
-					contact,
-					encounterData: tracker,
 					baseName,
-					contactData,
+					state,
 				},
 			},
 			localVue
@@ -125,11 +126,8 @@ describe ('Encounter contact barrier component', () => {
 			it('includes the name the subject uses for the instrument', async () => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'random';
-				wrapper.setProps({
-					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
-				});
+				const wrapper = makeWrapper(contact, cleanSubject, false, subjectInstrumentName);
 
 				expect(wrapper.text()).toContain(subjectInstrumentName);
 			});
@@ -137,17 +135,14 @@ describe ('Encounter contact barrier component', () => {
 			it('includes the name of the partner if the subject is partner', async () => {
 				await I18nConfig.setup();
 				const wrapper = makeWrapper(contact, cleanSubject, false);
-				expect(wrapper.text()).toContain(wrapper.vm.contactData.partnerName);
+				expect(wrapper.text()).toContain(wrapper.vm.state.partner.name);
 			});
 
 			it('pluralizes if the name of the instrument ends in an s', async() => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'hands';
-				wrapper.setProps({
-					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
-				});
+				const wrapper = makeWrapper(contact, cleanSubject, false, subjectInstrumentName);
 
 				const namePossessive = wrapper.vm.personName;
 				const expected = I18nConfig.t('contact.barrier.clean', {count: 1, instrument: subjectInstrumentName, name: namePossessive});
@@ -157,11 +152,8 @@ describe ('Encounter contact barrier component', () => {
 			it('does not pluralize if the name of the instrument ends in ss (e.g. ass)', async () => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'ass';
-				wrapper.setProps({
-					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
-				});
+				const wrapper = makeWrapper(contact, cleanSubject, false, subjectInstrumentName);
 
 				const namePossessive = wrapper.vm.personName;
 				const expected = I18nConfig.t('contact.barrier.clean', {count: 0, instrument: subjectInstrumentName, name: namePossessive});
@@ -171,69 +163,12 @@ describe ('Encounter contact barrier component', () => {
 			it('does not pluralize if the name of the instrument is singular', async () => {
 				await I18nConfig.setup();
 
-				const wrapper = makeWrapper(contact, cleanSubject, false);
 				const subjectInstrumentName = 'hand';
-				wrapper.setProps({
-					contactData: Object.assign({},wrapper.vm.contactData, {subjectInstrumentName})
-				});
+				const wrapper = makeWrapper(contact, cleanSubject, false, subjectInstrumentName);
 
 				const namePossessive = wrapper.vm.personName;
 				const expected = I18nConfig.t('contact.barrier.clean', {count: 0, instrument: subjectInstrumentName, name: namePossessive});
 				expect(wrapper.text()).toEqual(expected);
-			});
-		});
-	});
-
-	describe('toggleChecked', () => {
-		const newBarrier = {
-			key: 'fresh',
-			conditions: null,
-			exclude: ['old', 'clean_subject', 'clean_object'],
-		};
-
-		describe('when it is in the list', () => {
-			const contact = {
-				barriers: ['fresh'],
-				object: 'partner',
-				position: 0,
-				possible_contact_id: null,
-				subject: 'partner',
-				newRecord: true,
-			};
-
-			it('removes itself from the list if it is being unchecked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, true);
-				wrapper.vm.toggleChecked(false);
-				expect(wrapper.emitted('change')[0][0]).not.toContain(newBarrier.key);
-			});
-
-			it('does not remove itself from the list if it is being checked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, true);
-				wrapper.vm.toggleChecked(true);
-				expect(wrapper.emitted('change')[0][0]).toContain(newBarrier.key);
-			});
-		});
-
-		describe('when it is not in the list', () => {
-			const contact = {
-				barriers: [],
-				object: 'partner',
-				position: 0,
-				possible_contact_id: null,
-				subject: 'partner',
-				newRecord: true,
-			};
-
-			it('adds itself to the list if it is being checked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, true);
-				wrapper.vm.toggleChecked(true);
-				expect(wrapper.emitted('change')[0][0]).toContain(newBarrier.key);
-			});
-
-			it('does not add itself to the list if it is being unchecked', () => {
-				const wrapper = makeWrapper(contact, newBarrier, true);
-				wrapper.vm.toggleChecked(false);
-				expect(wrapper.emitted('change')[0][0]).not.toContain(newBarrier.key);
 			});
 		});
 	});

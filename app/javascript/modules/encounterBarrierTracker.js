@@ -20,20 +20,21 @@ export default class EncounterBarrierTracker {
 		}
 
 		// process existing contacts
-		this.processContacts();
+		this.processContacts(contacts);
 	}
 
 	/**
 	 * Process the contacts after they have been updated
 	 */
-	update() {
-		this.processContacts();
+	update(contacts) {
+		this.processContacts(contacts);
 	}
 
 	/**
 	 * Process the contacts to find barrier placement
 	 */
-	processContacts() {
+	processContacts(contacts) {
+		this.contacts = contacts;
 		// make a fresh object
 		this.barriers = {
 			user: {},
