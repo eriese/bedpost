@@ -14,7 +14,7 @@ class RegistrationMailer < ApplicationMailer
 		@email = email
 		@name = name
 		@is_soft_delete = is_soft_delete
-		subject = "You successfully deleted your account with bedpost"
+		subject = 'You successfully deleted your account with bedpost'
 		mail(to: @email, subject: subject)
 	end
 end
