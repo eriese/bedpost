@@ -175,10 +175,7 @@ export default {
 			this.$emit('input', this.list);
 		},
 		generateState(listItem) {
-			let itemState = new this.stateConstructor(listItem, this);
-			itemState.index = this.internalList.length;
-			itemState.baseName = this.baseName;
-			return itemState;
+			return new this.stateConstructor(listItem, this, this.baseName, this.internalList.length);
 		}
 	},
 	created: async function() {
@@ -200,6 +197,7 @@ export default {
 			this.addToList();
 		} else {
 			this.internalList = this.value.map(this.generateState);
+			this.updateIndices();
 			this.setFocus(this.lastIndex);
 		}
 	}

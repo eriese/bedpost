@@ -242,6 +242,15 @@ describe('Encounter Contact Field Component', () => {
 		expect(result).toBe(true);
 	});
 
+	it('has the correct names for _id, position, and possible_contact_id', () => {
+		const {wrapper} = setup();
+
+		['_id', 'position', 'possible_contact_id'].forEach((n) => {
+			const contains = wrapper.contains(`[name="${wrapper.vm.state.baseName}[${n}]"]`);
+			expect(contains).toBe(true);
+		});
+	});
+
 	describe('validation', () => {
 		it('emits a validation configuration from its parent', () => {
 			const {parent} = setup();

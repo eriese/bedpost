@@ -31,9 +31,10 @@ describe ('Encounter contact barrier component', () => {
 					can_clean: true,
 				},
 			},
-			tracker: {
-				has_barrier: () => has_barrier
-			}
+		};
+
+		const tracker = {
+			has_barrier: () => has_barrier
 		};
 
 		const localVue = createLocalVue();
@@ -45,6 +46,7 @@ describe ('Encounter contact barrier component', () => {
 					barrier,
 					baseName,
 					state,
+					tracker,
 				},
 			},
 			localVue
@@ -80,7 +82,7 @@ describe ('Encounter contact barrier component', () => {
 				barriers: [],
 				object: 'partner',
 				position: 1,
-				possible_contact_id: null,
+				possible_contact_id: 'pos',
 				subject: 'user',
 				newRecord: true,
 			};
@@ -95,7 +97,7 @@ describe ('Encounter contact barrier component', () => {
 				barriers: [],
 				object: 'partner',
 				position: 1,
-				possible_contact_id: null,
+				possible_contact_id: 'pos',
 				subject: 'user',
 				newRecord: true,
 			};

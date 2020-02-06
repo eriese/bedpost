@@ -2,9 +2,9 @@
 <fieldset class="contact-field-container" :class="{blurred: !focused, invalid: incomplete}" :aria-invalid="incomplete" :aria-labelledby="`as-sentence-${watchKey}`" :aria-describedby="`contact-error-${watchKey}`">
 	<div v-if="incomplete && !focused" class="contact-error" aria-live="polite" :id="`contact-error-${watchKey}`">{{$_t('mongoid.errors.models.contact.incomplete')}} <div class="aria-only">{{$_t('mongoid.errors.models.contact.aria_incomplete', {index: watchKey + 1})}}</div></div>
 	<legend class="aria-only" aria-live="polite" :id="`as-sentence-${watchKey}`">{{state.asSentence}}</legend>
-	<input type="hidden" :value="value._id" :name="baseName + '[_id]'" v-if="!value.newRecord">
-	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
-	<input type="hidden" :value="value.possible_contact_id" :name="baseName + '[possible_contact_id]'">
+	<input type="hidden" :value="value._id" :name="state.baseName + '[_id]'" v-if="!value.newRecord">
+	<input type="hidden" :value="value.position" :name="state.baseName + '[position]'">
+	<input type="hidden" :value="value.possible_contact_id" :name="state.baseName + '[possible_contact_id]'">
 	<div class="contact-field" role="group">
 		<contact-field-section
 			class="narrow"
@@ -62,13 +62,19 @@ import encounterContactBarrier from './EncounterContactBarrier.vue';
 import { minLength, requiredUnless } from 'vuelidate/lib/validators';
 import EncounterBarrierTracker from '@modules/encounterBarrierTracker';
 
+/**
+ * A compound form control for describing an encounter contact
+ *
+ * @module
+ * @vue-data {boolean} focused=true is this field currently focused?
+ * @vue-data {boolean} onKeyChange=false 	don't react to a key change on this list item
+ * @mixes dynamicFieldListItem
+ */
 export default {
 	data: function() {
 		const data = Object.assign({}, gon.encounter_data, {
-			orderInd: 0,
-			objectInsts: [],
-			subjectInsts: [],
 			focused: true,
+			onKeyChange: false
 		});
 		return data;
 	},
@@ -79,36 +85,66 @@ export default {
 		'barrier-input': encounterContactBarrier,
 	},
 	methods: {
-		setContact(sourceEvent) {
+		/**
+		 * Set the possible contact id based on the selected options
+		 *
+		 * @param {string} changedField the field that was changed
+		 */
+		setContact(changedField) {
+			// touch the field
+			this.touchInput(changedField);
+			// if this updates the possible contact, touch it as well
 			if (this.state.setContact()) {
 				this.touchInput('possible_contact_id');
 			}
-			this.touchInput(sourceEvent);
+			// update the barriers, but don't mark them as touched
 			this.updateBarriers(false);
 		},
+		/**
+		 * Mark the given field as dirty in the validation
+		 *
+		 * @param  {string} field the field name
+		 */
 		touchInput(field) {
 			if (!this.$v || !this.$v[field]) { return; }
 			this.$v[field].$touch();
 		},
+		/**
+		 * Update the barriers
+		 *
+		 * @param  {boolean} touch 	mark them as dirty?
+		 * @emits track
+		 */
 		updateBarriers(touch) {
 			if (touch) {
 				this.touchInput('barriers');
 			}
 			this.$emit('track');
 		},
+		/**
+		 * blur the field
+		 */
 		blur() {
 			this.focused = false;
 			this.$v.$touch();
 		},
+		/**
+		 * focus the field
+		 */
 		focus() {
 			this.focused = true;
 		},
+		/**
+		 * Get the first input in the field
+		 *
+		 * @return {HTMLElement} the input
+		 */
 		getFirstInput() {
 			return this.$el.querySelector(':checked');
 		},
-		onKeyChange() {},
 	},
 	mounted: function() {
+		// send validation through the parent to the form
 		this.$parent.$emit('should-validate', 'contacts', {
 			tooShort: minLength(1),
 			$each: {
@@ -120,6 +156,7 @@ export default {
 			}
 		});
 
+		// send the tracker factory to the parent
 		this.$emit('start-tracking', (list) => new EncounterBarrierTracker(list, this.possibles));
 	},
 };

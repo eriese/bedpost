@@ -14,19 +14,16 @@ const matcher = '(su|o)bject';
  * a custom input for barriers in an encounter
  *
  * @vue-prop {object} barrier													the barrier that is this input's value
- * @vue-prop {Array} modelValue												the barriers list that this input adds its value to
- * @vue-prop {object} contact													the contact this input supplies barriers for
- * @vue-prop {EncounterBarrierTracker} encounterData	the tracker to check encounter_conditions against
- * @vue-prop {object} contactData											additional data about the contact
+ * @vue-prop {ContactState} state											the ContactState instance holding all necessary data on the contact
+ * @vue-prop {EncounterBarrierTracker} tracker				the tracker to check encounter_conditions against
+ * @vue-data {string} inputValue											the value of this checkbox
+ * @vue-data {string} actor														who (subject or object) this instrument belongs to if this is a clean_instrument barrier
  * @vue-computed {string} modelName										the string to add to the baseName to get the inputName for this input
  * @vue-computed {string} labelText 									the text for the label
- * @vue-computed {string} inputValue									the value of this checkbox
- * @vue-computed {number} valInd 											the index of this checkbox's value in the modelValue
- * @vue-computed {object} cListeners 									the listeners to apply to the input
- * @vue-computed {string} actor												who (subject or object) this instrument belongs to if this is a clean_instrument barrier
  * @vue-computed {boolean} canClean										can the instrument referred to by this barrier be cleaned? returns true if this is not a clean_instrument barrier
  * @vue-computed {boolean} shouldShow									should this checkbox show?
  * @vue-computed {boolean} shouldDisable							should this checkbox be disabled?
+ * @vue-computed {string} personName									the possessive form of the pronoun or name of the actor
  * @mixes customInput
  *
  */
@@ -45,8 +42,8 @@ export default {
 		};
 	},
 	computed: {
-		modelName: () => 'barrier][',
-		labelText: function() {
+		modelName: () => 'barriers][',
+		labelText() {
 			// get default arguments and key
 			let transArgs = {scope: 'contact.barrier'},
 				key = this.barrier.key;
@@ -63,15 +60,19 @@ export default {
 
 			return this.$_t(key, transArgs);
 		},
-		canClean: function() {
+		canClean() {
+			// if it's not relevant whether it can be cleaned, return true
 			if (this.actor == null) {return true;}
+			// get whether the current instrument this applies to is cleanable
 			let instID = this.state[this.actor + '_instrument_id'];
 			if (instID) {
 				return this.state.instruments[instID].can_clean;
 			}
+
+			// if there's no instrument, it can't be cleaned
 			return false;
 		},
-		shouldShow: function() {
+		shouldShow() {
 			// if it's a clean type, only continue if it's a cleanable instrument
 			if (this.barrier.key.includes('clean') && !this.canClean) {return false; }
 			// if it has no conditions, show it if it's cleanable
@@ -96,7 +97,8 @@ export default {
 			// show
 			return true;
 		},
-		shouldDisable: function() {
+		shouldDisable() {
+			// if any of the barriers it's mutually exclusive with are selected, disable it
 			return this.barrier.exclude.some((c) => this.state.contact.barriers.indexOf(c) >=0);
 		},
 		personName() {

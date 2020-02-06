@@ -1,7 +1,11 @@
 import BaseState from '@components/form/state/BaseState';
+
+/**
+ * An object to track the state of a contact being built by EncounterContactField
+ */
 export default class ContactState extends BaseState {
-	constructor(contact, vm) {
-		super(contact, vm);
+	constructor(contact, vm, baseName, index) {
+		super(contact, vm, baseName, index);
 		// add all the gon data
 		Object.assign(this, gon.encounter_data);
 
@@ -26,19 +30,19 @@ export default class ContactState extends BaseState {
 	}
 
 
+	/** the contact object */
 	get contact() { return this.item; }
 
+	/** the contact_type object */
 	get cType() { return this.contacts[this.contact_type]; }
 
+	/** is this contact a self-contact? */
 	get isSelf() { return this.contact.subject == this.contact.object; }
 
+	/** should this contact show subject instrument options? */
 	get hasSubjectInstruments() { return this.shownInstruments.subject.length > 1; }
 
-	instrumentName(actor) {
-		let instID  = this[`${actor}_instrument_id`];
-		return instID ? this.instruments[instID][`${this.contact[actor]}_name`] : '';
-	}
-
+	/** the posessive pronoun for the subject of this contact */
 	get subjPossessive() {
 		if (this.shownInstruments.subject.length <= 1) {
 			return '';
@@ -46,11 +50,14 @@ export default class ContactState extends BaseState {
 		return this.$_t('contact.with', {pronoun: this.contact.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
 	}
 
+	/** the possible contact id of this contact */
 	get possible_contact_id() {
+		// get the possible contact that matches the contact_type, subject_instrument_id, and object_instrument_id
 		let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
 		return contact && contact._id;
 	}
 
+	/** aria labels for each radio group in the field */
 	get radiogroupLabels() {
 		const contact_type = this.$_t(this.cType.t_key, {scope: 'contact.contact_type_action'});
 		let object_name, object_reflexive_name;
@@ -81,6 +88,7 @@ export default class ContactState extends BaseState {
 		};
 	}
 
+	/** the instruments to show as options for subject and object instrument id */
 	get shownInstruments() {
 		const current_object = this.object_instrument_id;
 
@@ -88,25 +96,30 @@ export default class ContactState extends BaseState {
 		let newObjects = [];
 		let newSubjects = [];
 
+		// get the condition keys to only show instruments the actors have
 		let objConditionKeys = this.getConditionKey(false);
 		let subjConditionKeys = this.getConditionKey(true);
+		// for each possible contact in the contact_type
 		this.possibles[this.contact_type].forEach((p) => {
-			const pObj = this.instruments[p.object_instrument_id];
+			// skip it if it's not currently possible
 			if (this.isSelf && !p.self_possible) {
 				return;
 			}
 
+			// add it to possible object instruments if it's not already in the list and the person has it
+			const pObj = this.instruments[p.object_instrument_id];
 			if (!shown.object[pObj._id] && this.personHasInst(pObj, this.contact.object, objConditionKeys)) {
 				newObjects.push(pObj);
 				shown.object[pObj._id] = true;
 			}
 
-			if (!current_object ||
-				pObj._id != current_object ||
-				shown.subject[p.subject_instrument_id]) {
+			// skip if this possible object instrument isn't the currently selected one
+			// or this possible subject instrument is already show
+			if (pObj._id != current_object || shown.subject[p.subject_instrument_id]) {
 				return;
 			}
 
+			// add it to possible subject instruments if the person has it
 			const pSubj = this.instruments[p.subject_instrument_id];
 			if (this.personHasInst(pSubj, this.contact.subject, subjConditionKeys)) {
 				newSubjects.push(pSubj);
@@ -120,6 +133,7 @@ export default class ContactState extends BaseState {
 		};
 	}
 
+	/** the current state as a sentence */
 	get asSentence() {
 		let subject = this.contact.subject == 'user' ? this.$_t('I') : this.partner.name;
 		let contact = this.$_t(`contact.contact_type.${this.cType.t_key}`);
@@ -131,44 +145,97 @@ export default class ContactState extends BaseState {
 		return `contact ${this.index + 1}: ${subject} ${contact} ${object} ${objInst} ${this.subjPossessive} ${subjInst}`;
 	}
 
-	personHasInst(instrument, person, conditionKeys) {
-		let key = instrument.conditions && conditionKeys.find((k) => instrument.conditions[k] !== undefined);
-
-		if(!key) { return true; }
-		let failed = instrument.conditions[key].find((c) => !this[person][c]);
-		return !failed;
+	/**
+	 * Get the given actor's name for the chosen instrument
+	 *
+	 * @param  {string} actor 'object' or 'subject'
+	 * @return {string}       the proper language for the actor's instrument
+	 */
+	instrumentName(actor) {
+		let instID  = this[`${actor}_instrument_id`];
+		return instID ? this.instruments[instID][`${this.contact[actor]}_name`] : '';
 	}
 
+	/**
+	 * Does the given person have the given instrument?
+	 *
+	 * @param  {object} instrument    the instrument
+	 * @param  {object} person        the person's data
+	 * @param  {string[]} conditionKeys keys to look for conditions within
+	 * @return {boolean}               whether the person has the instrument and it can be shown as an option
+	 */
+	personHasInst(instrument, person, conditionKeys) {
+		// find the first set of conditions that exists on the instrument
+		let key = instrument.conditions && conditionKeys.find((k) => instrument.conditions[k] !== undefined);
+
+		// if there isn't one, the person has the instrument
+		if(!key) { return true; }
+		// the person has the instrument if all conditions are true
+		return instrument.conditions[key].every((c) => this[person][c]);
+	}
+
+	/**
+	 * Get the keys for possible conditions on an instrument
+	 *
+	 * @param  {boolean} forSubject are these keys for the subject? false if they are for the object
+	 * @return {string[]}            condition keys
+	 */
 	getConditionKey(forSubject) {
 		let conditionKey = this.cType[forSubject ? 'inst_key' : 'inverse_inst'];
 		let conditions = ['all', conditionKey];
+		// add the self key in the middle
 		if (this.isSelf) {
 			conditions.splice(1, 0, conditionKey += '_self');
 		}
 		return conditions;
 	}
 
+	/**
+	 * Set the possible contact id
+	 *
+	 * @return {boolean} whether the possible contact id changed
+	 */
 	setContact() {
+		// get the old value
 		const oldPossible = this.contact.possible_contact_id;
+		// set the instruments properly
 		this.findNewInst('object');
 		this.findNewInst('subject');
+
+		// get the possible contact id
 		this.contact.possible_contact_id = this.possible_contact_id;
 		return oldPossible != this.contact.possible_contact_id;
 	}
 
+	/**
+	 * Get the instrument_id value for the actor after changes to the state
+	 *
+	 * @param  {string} actor 'subject' or 'object'
+	 */
 	findNewInst(actor) {
+		// get possible instruments for the actor
 		let insts = this.shownInstruments[actor];
+		// get the current instrument
 		let key = `${actor}_instrument_id`;
 		let curID = this[key];
 
+		// if there is only one possible, select it
 		if (insts.length == 1) {
 			this[key] = insts[0]._id;
 		} else if (curID) {
+			// otherwise find the current or an alias of it in the new set
 			let newInst = insts.find((i) => curID == i._id || this.isAlias(curID, i));
 			this[key] = newInst && newInst._id;
 		}
 	}
 
+	/**
+	 * Is the given id an alias of the given instrument (or vice versa)?
+	 *
+	 * @param  {string}  id         an instrument id
+	 * @param  {object}  instrument an instrument
+	 * @return {boolean}            whether they are the same instrument by different names
+	 */
 	isAlias(id, instrument) {
 		return instrument.alias_of_id == id || this.instruments[id].alias_of_id == instrument._id;
 	}

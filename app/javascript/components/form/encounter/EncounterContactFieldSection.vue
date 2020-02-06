@@ -14,6 +14,12 @@
 
 <script>
 import hiddenRadio from './HiddenRadio.vue';
+
+/**
+ * Functions to get the values for the section by field
+ *
+ * @type {object}
+ */
 const valueLists = {
 	subject: (state) => [{labelKey: 'I', inputValue: 'user'}, {label: state.partner.name, inputValue: 'partner'}],
 	contact_type: (state) => state.contacts,
@@ -22,6 +28,11 @@ const valueLists = {
 	subject_instrument_id: (state) => state.shownInstruments.subject
 };
 
+/**
+ * Fields whose values are controlled by the keyed field
+ *
+ * @type {object}
+ */
 const controls = {
 	subject: ['subject_instrument_id'],
 	contact_type: ['object_instrument_id', 'subject_instrument_id'],
@@ -29,6 +40,19 @@ const controls = {
 	object_instrument_id: ['subject_instrument_id'],
 };
 
+/**
+ * A component to handle logic within a radio group inside of an EncounterContactField
+ *
+ * @module
+ * @vue-prop {ContactState} state						the state of the contact this section is for
+ * @vue-prop {string} field									the name of the field this section is for
+ * @vue-prop {string} value									the current value of this section's v-model
+ * @vue-computed {object[]} radios					the list of values to bind to the radio buttons in this section
+ * @vue-computed {object} valueConverters 	functions to convert the valueList to the needed properties for being a radio button
+ * @vue-prop {object[]} valueList						the values to use to make the radio values
+ * @vue-computed {string} _value						the current value of the field
+ * @vue-computed {string} ariaControls			the space-separated list of ids of fields this field impacts the value of
+ */
 export default {
 	name: 'encounter-contact-field-section',
 	components: {
@@ -37,45 +61,18 @@ export default {
 	model: {
 		event: 'change'
 	},
-	data() {
-		return {
-			valueConverters : {
-				contact_type: (c) => {
-					return {
-						labelKey: `contact.contact_type.${c.t_key}`,
-						inputValue: c.key
-					};
-				},
-				subject_instrument_id: (i) => {
-					return {
-						label: i[`${this.state.contact.subject}_name`],
-						inputValue: i._id
-					};
-				},
-				object_instrument_id: (i) => {
-					return {
-						label: i[`${this.state.contact.object}_name`],
-						inputValue: i._id
-					};
-				}
-			}
-		};
-	},
 	props: {
 		state: Object,
 		field: String,
-		valueList: [Array, Object],
-		defaultProps: Object,
-		keyField: String,
 		value: String,
 	},
 	computed: {
 		radios() {
 			const lst = [];
-			for (var v in this._valueList) {
-				if(!this._valueList.hasOwnProperty(v)) { continue; }
-				let val = this._valueList[v];
-				val = this.valueConverters[this.field] ? this.valueConverters[this.field](val) : val;
+			for (var v in this.valueList) {
+				if(!this.valueList.hasOwnProperty(v)) { continue; }
+				let val = this.valueList[v];
+				val = this.valueConverter(val);
 
 				lst.push({
 					baseName: this.state.baseName,
@@ -86,8 +83,28 @@ export default {
 
 			return lst;
 		},
-		_valueList() {
-			return this.valueList || valueLists[this.field](this.state);
+		valueConverter() {
+			switch(this.field) {
+			case 'contact_type':
+				return (c) => {
+					return {
+						labelKey: `contact.contact_type.${c.t_key}`,
+						inputValue: c.key
+					};
+				};
+			case 'subject_instrument_id':
+			case 'object_instrument_id':
+				return (i) => {
+					return {
+						label: i[`${this.state.contact.object}_name`],
+						inputValue: i._id
+					};
+				};
+			}
+			return (a) => a;
+		},
+		valueList() {
+			return valueLists[this.field](this.state);
 		},
 		_value() {
 			return this.value;
