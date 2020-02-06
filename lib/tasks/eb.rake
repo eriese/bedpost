@@ -78,7 +78,7 @@ namespace :eb do
 		sh "eb use #{PROD_ENV}"
 		deploy_to_environment
 		if orig_env == "#{PROD_ENV}"
-			puts "You current beanstalk environment is production. Be Careful!".orange.bold
+			puts "Your current beanstalk environment is production. Be Careful!".light_white.bold.on_magenta
 		else
 			puts "switching back to #{orig_env} environment"
 			sh "eb use #{orig_env}"

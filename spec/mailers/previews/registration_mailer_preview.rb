@@ -6,4 +6,11 @@ class RegistrationMailerPreview < ActionMailer::Preview
 		RegistrationMailer.confirmation(@user.id)
 	end
 
+	def soft_removal
+		RegistrationMailer.removal("adfljhdf8347ljkahf", 'email@email.com', 'Enoch', true);
+	end
+
+	def hard_removal
+		RegistrationMailer.removal("adfljhdf8347ljkahf", 'email@email.com', 'Enoch', false);
+	end
 end

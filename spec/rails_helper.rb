@@ -66,18 +66,13 @@ RSpec.configure do |config|
 
 	#clear the dummy user after all the tests are run
 	config.after :suite do
-		Delayed::Worker.delay_jobs = false
-		Delayed::Worker.new.work_off
+		work_jobs
 		UserProfileHelpers.clear_all_dummies
-		db_has = false
-		Mongoid.default_client.collections.each do |c|
-			if c.count > 0
-				db_has = true
-				puts "#{c.namespace}: #{c.count}"
-			end
-		end
+		puts
+		puts
+		db_has = print_db_remnants
 
-		puts "Database is clean" unless db_has
+		puts "Database is clean".green.bold unless db_has
 	end
 
 	config.around :each, :run_job_immediately do |example|
@@ -88,7 +83,8 @@ RSpec.configure do |config|
 	end
 
 	config.after :each do
-		clean_devise_jobs
+		clean_mailer_jobs
 		work_jobs
+		print_db_remnants false
 	end
 end
