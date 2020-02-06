@@ -1,3 +1,4 @@
+import EncounterUtils from '@components/form/encounter/EncounterUtils';
 /**
  * An object to track the placement of barriers on encounter contacts
  */
@@ -7,9 +8,11 @@ export default class EncounterBarrierTracker {
 	 *
 	 * @param  {Array} contacts         	the list of contacts for the encounter
 	 * @param  {object} possibleContacts 	the possible contacts from the EncounterContactField
+	 * @param {object} instruments				the instruments keyed by id
 	 */
-	constructor(contacts, possibleContacts) {
+	constructor(contacts, possibleContacts, instruments) {
 		this.contacts = contacts;
+		this.instruments = instruments;
 
 		// restructure the possible contacts to be more useful for the tracker
 		this.possibleContacts = {};
@@ -37,30 +40,43 @@ export default class EncounterBarrierTracker {
 	 * Process the contacts to find barrier placement
 	 */
 	processContacts() {
+		let that = this;
 		// make a fresh object
-		this.barriers = {
+		that.barriers = {
 			user: {},
 			partner: {},
 		};
 
 		// go through the contacts
-		this.contacts.forEach((c) => {
-			// if it doesn't have a possible contact id yet or doesn't have a fresh barrier, skip it
-			if (!c.possible_contact_id || c.barriers.every((b) => b != 'fresh')) { return; }
+		that.contacts.forEach((c) => {
+			// if it doesn't have a possible contact id yet or doesn't have a new or old barrier, skip it
+			if (!c.possible_contact_id || c.barriers.every((b) => b != 'fresh' && b != 'old')) { return; }
 
 			// get the possible contact
-			let possibleContact = this.possibleContacts[c.possible_contact_id];
+			let possibleContact = that.possibleContacts[c.possible_contact_id];
 			// paths to set for this contact
 			let paths = [`${c.subject}.${possibleContact.subject_instrument_id}`, `${c.object}.${possibleContact.object_instrument_id}`];
+			// track whether it is the first barrier on both instruments
+			let isFirst = [false, false];
 			// set the value of each path if it is not already set
-			paths.forEach((path) => {
-				if (Object.getAtPath(this.barriers, path) === undefined) {
+			paths.forEach((path, i) => {
+
+				if (Object.getAtPath(that.barriers, path) === undefined) {
+					isFirst[i] = true;
 					// the value is the first contact position that has a fresh barrier on this instrument for this person
-					Object.setAtPath(this.barriers, path, c.position);
+					Object.setAtPath(that.barriers, path, c.position);
 				}
-			}, this);
-		}, this);
+			});
+
+			// if it's now first, but it used to say it reused a barrier, make it have a new barrier
+			let oldIndex = c.barriers.indexOf('old');
+			if (oldIndex >= 0 && isFirst[0] && isFirst[1]) {
+				c.barriers[oldIndex] = 'fresh';
+			}
+		});
 	}
+
+
 
 	/**
 	 * Could there be an old barrier for this contact?
