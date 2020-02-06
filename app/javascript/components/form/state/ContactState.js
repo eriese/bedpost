@@ -127,9 +127,12 @@ export default class ContactState extends BaseState {
 			}
 		});
 
+		const sortFunc = (a,b) => (a.alias_of_id || a._id).localeCompare((b.alias_of_id || b._id));
+		this._subjectInstruments = newSubjects.sort(sortFunc);
+		this._objectInstruments = newObjects.sort(sortFunc);
 		return {
-			subject: newSubjects.sort(),
-			object: newObjects.sort()
+			subject: this._subjectInstruments,
+			object: this._objectInstruments
 		};
 	}
 
