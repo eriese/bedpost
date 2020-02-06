@@ -12,7 +12,7 @@ environment.loaders.append('vue', vue);
 environment.plugins.append('VueLoaderPlugin', new VueLoaderPlugin({
 	chunkFilename: 'js/vue/[name]-[contenthash].chunk.js'
 }));
-// environment.plugins.append('CleanWebpackPlugin', new CleanWebpackPlugin());
+environment.plugins.append('CleanWebpackPlugin', new CleanWebpackPlugin());
 
 environment.config.merge({
 	resolve: {
@@ -32,26 +32,26 @@ environment.config.merge({
 		runtimeChunk: 'single',
 		moduleIds: 'hashed',
 		chunkIds: 'named',
-		// splitChunks: {
-		// 	maxAsyncRequests: Infinity,
-		// 	maxInitialRequests: Infinity,
-		// 	chunks: 'async',
-		// 	name(module, chunks, cacheGroupKey) {
-		// 		const moduleFileName = module.identifier().split('/').reduceRight(item => item).replace(/\.js(on)?/, '');
-		// 		if (moduleFileName.indexOf('css') >= 0) {
-		// 			return `${cacheGroupKey}-css/${moduleFileName.split('?')[0]}`;
-		// 		}
-		// 		return `${cacheGroupKey}/${moduleFileName}`;
-		// 	},
-		// 	cacheGroups: {
-		// 		vendors: {
-		// 			reuseExistingChunk: true,
-		// 		},
-		// 		locale: {
-		// 			test: /locales/,
-		// 		}
-		// 	}
-		// }
+		splitChunks: {
+			maxAsyncRequests: Infinity,
+			maxInitialRequests: Infinity,
+			chunks: 'async',
+			name(module, chunks, cacheGroupKey) {
+				const moduleFileName = module.identifier().split('/').reduceRight(item => item).replace(/\.js(on)?/, '');
+				if (moduleFileName.indexOf('css') >= 0) {
+					return `${cacheGroupKey}-css/${moduleFileName.split('?')[0]}`;
+				}
+				return `${cacheGroupKey}/${moduleFileName}`;
+			},
+			cacheGroups: {
+				vendors: {
+					reuseExistingChunk: true,
+				},
+				locale: {
+					test: /locales/,
+				}
+			}
+		}
 	}
 });
 
