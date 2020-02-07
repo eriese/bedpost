@@ -30,19 +30,39 @@ export default class ContactState extends BaseState {
 	}
 
 
-	/** the contact object */
+	/**
+	 * the contact object
+	 *
+	 * @return {object} the contact
+	 */
 	get contact() { return this.item; }
 
-	/** the contact_type object */
+	/**
+	 * the contact_type object
+	 *
+	 * @return {object} the contact_type properties
+	 */
 	get cType() { return this.contacts[this.contact_type]; }
 
-	/** is this contact a self-contact? */
+	/**
+	 * is this contact a self-contact?
+	 *
+	 * @return {boolean} whether the subject and object of the contact are the same
+	 */
 	get isSelf() { return this.contact.subject == this.contact.object; }
 
-	/** should this contact show subject instrument options? */
+	/**
+	 * should this contact show subject instrument options?
+	 *
+	 * @return {boolean}
+	 */
 	get hasSubjectInstruments() { return this.shownInstruments.subject.length > 1; }
 
-	/** the posessive pronoun for the subject of this contact */
+	/**
+	 * the posessive pronoun for the subject of this contact
+	 *
+	 * @return {string}
+	 */
 	get subjPossessive() {
 		if (this.shownInstruments.subject.length <= 1) {
 			return '';
@@ -50,14 +70,22 @@ export default class ContactState extends BaseState {
 		return this.$_t('contact.with', {pronoun: this.contact.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
 	}
 
-	/** the possible contact id of this contact */
+	/**
+	 * the possible contact id of this contact
+	 *
+	 * @return {object} the contact that matches the chosen instruments and contact type
+	 */
 	get possible_contact_id() {
 		// get the possible contact that matches the contact_type, subject_instrument_id, and object_instrument_id
 		let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
 		return contact && contact._id;
 	}
 
-	/** aria labels for each radio group in the field */
+	/**
+	 * aria labels for each radio group in the field
+	 *
+	 * @return {object} aria labels keyed by field
+	 */
 	get radiogroupLabels() {
 		const contact_type = this.$_t(this.cType.t_key, {scope: 'contact.contact_type_action'});
 		let object_name, object_reflexive_name;
@@ -88,7 +116,11 @@ export default class ContactState extends BaseState {
 		};
 	}
 
-	/** the instruments to show as options for subject and object instrument id */
+	/**
+	 * the instruments to show as options for subject and object instrument id
+	 *
+	 * @return {object} a dictionary of option arrays
+	 */
 	get shownInstruments() {
 		const current_object = this.object_instrument_id;
 
@@ -136,7 +168,11 @@ export default class ContactState extends BaseState {
 		};
 	}
 
-	/** the current state as a sentence */
+	/**
+	 * the current state as a sentence
+	 *
+	 * @return {string} a sentence representation of what the user has chosen for the contact
+	 */
 	get asSentence() {
 		let subject = this.contact.subject == 'user' ? this.$_t('I') : this.partner.name;
 		let contact = this.$_t(`contact.contact_type.${this.cType.t_key}`);

@@ -120,7 +120,7 @@ describe ('Encounter contact barrier component', () => {
 				barriers: [],
 				object: 'partner',
 				position: 0,
-				possible_contact_id: null,
+				possible_contact_id: 'pos1',
 				subject: 'partner',
 				newRecord: true,
 			};

@@ -150,13 +150,12 @@ export default {
 		},
 		updateIndices() {
 			let startInd = 0;
-			for (var i = 0; i < this.internalList.length; i++) {
-				let listItem = this.internalList[i];
+			this.internalList.forEach((listItem, i) => {
 				listItem.index = i;
 				if (!listItem.item._destroy) {
 					this.$set(listItem.item, 'position', startInd++);
 				}
-			}
+			})
 
 			this.track();
 			this.onInput();
