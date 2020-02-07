@@ -381,19 +381,32 @@ RSpec.describe UserProfile, type: :model do
 		end
 
 		describe '#soft_destroy' do
+			before :each do
+				@user = create(:user_profile)
+			end
+
+			after :each do
+				cleanup(@user, @partner, @dummy)
+			end
+
+			it 'sends a removal confirmation email' do
+				allow(RegistrationMailer).to receive(:removal).and_call_original
+				expect(@user.soft_destroy).to be true
+				expect(RegistrationMailer).to have_received(:removal).with(@user.id.to_s, @user.email, @user.name, @user.opt_in)
+			end
 
 			context 'with a user with #opt_in = true' do
 				before :each do
-					@user = create(:user_profile, opt_in: true)
-				end
-				after :each do
-					cleanup(@user)
+					@user.update(opt_in: true)
 				end
 
-				it 'clears the email address' do
+				it 'replaces the email address, name, and uid' do
+					orig_name = @user.name
 					expect(@user.soft_destroy).to be true
 					@user.reload
-					expect(@user.email).to be_nil
+					expect(@user.name).not_to eq orig_name
+					expect(@user.email).to eq "#{@user.name}@bedpost.me"
+					expect(@user.uid).to eq @user.name
 				end
 
 				it 'sets a deleted_at timestamp' do
@@ -404,14 +417,6 @@ RSpec.describe UserProfile, type: :model do
 			end
 
 			context 'with a user with #opt_in = false' do
-				before :each do
-					@user = create(:user_profile)
-				end
-
-				after :each do
-					cleanup(@user, @partner, @dummy)
-				end
-
 				it 'calls destroy on the user' do
 					allow(@user).to receive(:destroy).and_call_original
 					expect(@user.soft_destroy).to be true
@@ -437,7 +442,7 @@ RSpec.describe UserProfile, type: :model do
 
 		describe '#self.where_partnered_to' do
 			after do
-				cleanup(@user, @partner)
+				cleanup @user
 			end
 
 			it 'returns a query for UserProfiles that have a partnership with the given profile_id' do
@@ -462,7 +467,7 @@ RSpec.describe UserProfile, type: :model do
 			it 'destroys dummy partners when it is destroyed' do
 				@user = create(:user_profile)
 				@partner = create(:profile)
-				clean_devise_jobs
+				clean_mailer_jobs
 
 				@user.partnerships.create(partner: @partner)
 				expect { @user.destroy; work_jobs }.to change(Profile, :count).by(-2)
