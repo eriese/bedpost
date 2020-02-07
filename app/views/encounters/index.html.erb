@@ -20,4 +20,6 @@
 	<h1 class="with-desc"><%= t('.no_partners.title') %></h1>
 	<h2 class="desc"><%= t('.no_partners.desc') %></h2>
 	<div class="container--has-centered-child__centered-child"><%= link_to t('.make_partner'), new_partnership_path, :class => "link" %></div>
+
+	<%= link_to(t(".back"), root_path, class: "cta cta--is-back-btn as-button")  %>
 <% end %>
