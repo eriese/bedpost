@@ -120,30 +120,32 @@ export default {
 			Array.move(this.internalList, index, newInd);
 			this.updateIndices(oldStart, oldPos);
 		},
-		blurChild(index) {
-			setTimeout((vm) => {
-				if (vm.focusIndex != index) {
-					vm.$refs.list_component[index].blur();
-				}
-			}, 50, this);
-		},
-		focusChild(index) {
-			if (this.focusIndex != index) {
-				this.focusIndex = index;
-				this.$refs.list_component[index].focus();
-			}
-		},
+		/**
+		 * Focus the list item at the given index and blur all others
+		 * @param {number} index      the index the item has in the list
+		 * @param {boolean} focusFirst whether the item should set the focus on its first input
+		 */
 		setFocus(index, focusFirst) {
-			if (index == this.focusIndex || !this.$refs.list_component) {return;}
+			// if there aren't items, do nothing
+			if (!this.$refs.list_component) { return; }
+
+			// if it's not a new index, just focus it
+			if (index == this.focusIndex) {
+				this.$refs.list_component[index].focus();
+				return;
+			}
+
+			// set the new index
 			this.focusIndex = index;
-			for (let i = 0; i < this.$refs.list_component.length; i++) {
-				let comp = this.$refs.list_component[i];
+			this.$refs.list_component.forEach((comp) => {
+				// focus the selected item
 				if (comp.watchKey == this.focusIndex) {
 					comp[focusFirst ? 'focusFirst' : 'focus']();
 				} else {
+					// blur all others
 					comp.blur();
 				}
-			}
+			})
 		},
 		track() {
 			this.tracker && this.tracker.update(this.list);
