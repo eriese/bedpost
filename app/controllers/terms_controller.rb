@@ -1,11 +1,16 @@
 class TermsController < ApplicationController
 	skip_before_action :check_first_time
+	skip_before_action :authenticate_user_profile!
 	before_action :validate_type
 
 	def show
 		@terms = Terms.newest_of_type(@type_key)
-		@is_accepted = current_user_profile.terms_accepted?(@type_key)
-		@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile.terms[@type_key]
+		if user_profile_signed_in?
+			@is_accepted = current_user_profile.terms_accepted?(@type_key)
+			@new_terms = !@is_accepted && current_user_profile.terms && current_user_profile.terms[@type_key]
+		else
+			@not_form = true
+		end
 	end
 
 	def update
