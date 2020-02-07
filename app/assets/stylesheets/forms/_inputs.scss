@@ -133,7 +133,8 @@ input[type=radio] {
 			}
 
 			&:checked + label {
-				@media (min-width: rem(500px)) {
+					font-size: 1rem;
+				@include media (">phone") {
 					font-size: 1.1rem;
 				}
 				font-weight: bolder;
@@ -156,20 +157,20 @@ input[type=radio] {
 				padding: 0;
 				font-weight: bolder;
 				text-transform: uppercase;
-				@include themed(color, "form-background");
+				@include themed(color, "cta-bg-form");
 				@include cta-transition;
 			}
 
 			&:checked {
 				+ label {
-					@include themed(background, "form-background");
+					@include themed(background, "cta-bg-form");
 					@include themed(color, "background");
 				}
 			}
 
 			&:focus, &:hover {
 				+ label {
-					@include themed(border-color, "form-background");
+					@include themed(border-color, "cta-bg-form");
 				}
 			}
 		}
@@ -213,10 +214,10 @@ input[type=range] {
 	-webkit-appearance: none;
 	border: none;
 	background: transparent;
-	margin: rem(25px) 0 rem(20px) 0;
+	margin: 1rem 0 rem(20px) 0;
 
 	form.centered & {
-		margin-bottom: rem(10px);
+		margin-bottom: 0;
 	}
 
 	$kit-tracks: -webkit-slider-runnable-track -moz-range-track -ms-track;

@@ -142,8 +142,12 @@ form {
 	}
 
 	.slide-bar-desc {
-		font-size: rem(14px);
+		font-size: 0.75rem;
+		text-align: center;
 		clear: both;
+		margin-bottom: 1.5rem;
+		font-weight: bold;
+		@include themed(color, $input-border-key);
 	}
 }
 

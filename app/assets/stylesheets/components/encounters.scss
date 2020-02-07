@@ -2,14 +2,14 @@
 	.dynamic-field {
 		border-radius: $default-border-radius;
 		padding: $spacing-tiny $spacing-tiny $spacing-small $spacing-tiny;
-		border: 2px solid theme-dark('h1');
+		border: 2px solid $pale-jasper;
 		margin-bottom: $spacing-small;
 
 		&-buttons {
 			margin-top: -$spacing-tiny;
 		}
 	}
-	.incomplete {
+	.incomplete.blurred {
 		background-color: theme-dark('h1');
 		.contact-error {
 			font-size: 0.75rem;

@@ -1,6 +1,6 @@
 <template>
 <fieldset class="contact-field-container" :class="{blurred: !focused, invalid: incomplete}" :aria-invalid="incomplete" :aria-labelledby="`as-sentence-${watchKey}`" :aria-describedby="`contact-error-${watchKey}`">
-	<div v-if="incomplete" class="contact-error" aria-live="polite" :id="`contact-error-${watchKey}`">{{$_t('mongoid.errors.models.contact.incomplete')}} <div class="aria-only">{{$_t('mongoid.errors.models.contact.aria_incomplete', {index: watchKey + 1})}}</div></div>
+	<div v-if="incomplete && !focused" class="contact-error" aria-live="polite" :id="`contact-error-${watchKey}`">{{$_t('mongoid.errors.models.contact.incomplete')}} <div class="aria-only">{{$_t('mongoid.errors.models.contact.aria_incomplete', {index: watchKey + 1})}}</div></div>
 	<legend class="aria-only" aria-live="polite" :id="`as-sentence-${watchKey}`">{{asSentence}}</legend>
 	<input type="hidden" :value="value._id" :name="baseName + '[_id]'" v-if="!value.newRecord">
 	<input type="hidden" :value="value.position" :name="baseName + '[position]'">
@@ -271,10 +271,12 @@ export default {
 		},
 		updateContactType(updated) {
 			this.onInput();
-			this.resetInsts();
 			if (updated) {
 				this.$v[updated].$touch();
 			}
+			this.$nextTick(() => {
+				this.resetInsts();
+			});
 		},
 		updateBarriers(noTouch) {
 			this.onInput();

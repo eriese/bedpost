@@ -12,7 +12,7 @@
 	</div>
 </div>
 <p class="container--has-centered-text"><%= t('.read_privacy_html') %></p>
-<% unless @is_accepted %>
+<% unless @is_accepted || @not_form %>
 	<%= vuelidate_form_with scope: :terms, method: :put  do |f| %>
 		<%= f.radio_group :acceptance, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", validators: [{kind: :acceptance}]}} %>
 		<% if @terms.type == :tou && !current_user_profile.set_up? %>
