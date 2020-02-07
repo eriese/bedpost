@@ -1,0 +1,17 @@
+Hello <%= @name %>, <br>
+You have successfully deleted your account with BedPost.
+
+<h2 style="margin-top: 15px;">What this means for your data:</h2>
+<ul>
+	<li>Any BedPost users who were partnered with you using your userID are now partnered with a dummy account that has your last language preferences. They will only know you deleted your account if you choose to tell them.</li>
+
+<% if @is_soft_delete %>
+	<li>
+		Because you opted in to allow your data to be used for research, we still have any encounters and partnerships that you created while you were using the app. Your name and email address have been removed from our database, and are no longer associated with that information.
+
+		<b>If this was a mistake and you meant for your information to be completely removed, please respond to this email so that we can take care of that for you.</b> We'll need your database ID (it's <%= @user_id %>).
+	</li>
+<% else %>
+	<li>Your partnerships and encounters have been fully removed from our database. We keep backups for 30 days, after which point we will not be able to recover them.</li>
+<% end %>
+</ul>

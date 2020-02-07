@@ -183,14 +183,22 @@ class UserProfile < Profile
 	end
 
 	def soft_destroy
+		destroyed = false
 		if opt_in
-			update_attribute(:deleted_at, Time.current)
-			update_attribute(:email, '')
-			true
+			new_identifier = generate_uid
+			destroyed = update(
+				deleted_at: Time.current,
+				email: "#{new_identifier}@bedpost.me",
+				name: new_identifier,
+				uid: new_identifier
+			)
 		else
 			replace_with_dummy
-			destroy
+			destroyed = destroy
 		end
+		RegistrationMailer.removal(id.to_s, email, name, opt_in).deliver_later if destroyed
+
+		destroyed
 	end
 
 	def timeout_in

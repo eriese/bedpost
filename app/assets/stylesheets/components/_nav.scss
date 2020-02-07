@@ -3,24 +3,39 @@
 	right: 0rem;
 	top: 0rem;
 	z-index: 100;
+	height: $header-height-default;
+	display: flex;
+
+	@include media($mobile) {
+		height: $header-height-mobile;
+	}
+
 
 	&__burger {
+		$line-height: rem(5px);
+		$b: &;
+		align-self: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: $nav-button-width + $spacing-tiny * 2;;
+		height:  $line-height * 7;
+		padding: $spacing-tiny;
 		cursor: pointer;
 		min-width: unset;
 		background-color: transparent;
-		bottom: 0.35rem;
 		margin-right: 0.75rem;
-		right: $spacing-tiny;
 		border-radius: rem(5px);
 		position: relative;
 		z-index: 2;
-		padding: 0rem;
 		border: none;
+		overflow: hidden;
+
 		@include themed(border-color, "background-contrast");
 
 		@include media($mobile) {
 			margin-right: 0.25rem;
-			bottom: 0.6rem;
 		}
 
 		&:hover, &:focus, &--open {
@@ -29,12 +44,49 @@
 		}
 
 		&__line {
-			border: rem(3px) solid;
+			width: 100%;
+			border: $line-height/2 solid;
 			border-color: inherit;
 			width: $nav-button-width;
-			margin: $spacing-tiny $spacing-tiny;
 			border-radius: $default-border-radius;
-			height: 0rem;
+			transition-property: transform, top, bottom, opacity, width;
+				transition-duration: .3s;
+				transition-timing-function: linear;
+			position: absolute;
+
+
+			&:first-child {
+				top: $spacing-tiny;
+			}
+
+			&:nth-child(2) {
+				top: calc(50% - #{$line-height/2});
+			}
+
+			&:last-child {
+				bottom: $spacing-tiny;
+			}
+		}
+
+		&--open {
+			#{$b}__line {
+				margin: 0;
+				width: $nav-button-width - $spacing-small;
+
+				&:nth-child(1) {
+					top: calc(50% - #{$line-height/2});
+					transform: rotate(45deg);
+				}
+
+				&:nth-child(2) {
+					opacity: 0;
+				}
+
+				&:nth-child(3) {
+					bottom: calc(50% - #{$line-height/2});
+					transform: rotate(-45deg);
+				}
+			}
 		}
 
 		.no-js & {

@@ -6,11 +6,11 @@ module UserProfileHelpers
 	public
 	def dummy_user
 		dummy_pronoun
-		@@_dummy_user ||= FactoryBot.create(:user_profile)
+		@@_dummy_user ||= FactoryBot.create(:user_profile, name: 'dummy')
 	end
 
 	def dummy_pronoun
-		@@_dummy_pronoun ||= FactoryBot.create(:pronoun)
+		@@_dummy_pronoun ||= FactoryBot.create(:pronoun, subject: 'dummy')
 		return @@_dummy_pronoun
 	end
 
