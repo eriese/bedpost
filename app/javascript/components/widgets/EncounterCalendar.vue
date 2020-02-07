@@ -10,8 +10,9 @@
 				</v-select>
 			</div>
 			<toggle-switch :symbols="['calendar_view', 'list_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle-switch>
-			<div class="container--has-contrast-border container--is-centered container--is-rounded encounter-calendar__container">
-				<v-calendar v-if="viewType == 'calendar'" v-bind="calendarProps">
+			<calendar-explainer :calendar="$refs['calendar']" :set-tab="true" :container="$refs['calendar-container']" v-show="viewType=='calendar'"></calendar-explainer>
+			<div class="container--has-contrast-border container--is-centered container--is-rounded encounter-calendar__container" tabindex="0" ref="calendar-container">
+				<v-calendar v-show="viewType == 'calendar'" v-bind="calendarProps" ref="calendar">
 					<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
 						<div class="popover-day-title">
 							{{ dayTitle }}
@@ -25,7 +26,7 @@
 						</v-popover-row>
 					</div>
 				</v-calendar>
-				<div v-if="viewType=='list'">
+				<div v-show="viewType=='list'">
 					<ul class="encounter-list no-dots container--is-card">
 						<encounter-list-item v-for="enc in selectedEncounters" :key="enc.customData.encID" :encounter="enc"></encounter-list-item>
 					</ul>
@@ -155,6 +156,6 @@
 			onToggle(field, newVal) {
 				this[field] = newVal
 			}
-		}
+		},
 	}
 </script>
