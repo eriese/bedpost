@@ -9384,10 +9384,10 @@ uuid@^3.0.1, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
 
-v-calendar@1.0.0-beta.16:
-  version "1.0.0-beta.16"
-  resolved "https://registry.yarnpkg.com/v-calendar/-/v-calendar-1.0.0-beta.16.tgz#5dbf46c7cfe681ea403334f1e333f4feb6a68155"
-  integrity sha512-k91PnjAVygnHTZPJS8jjvYOfUNmULYf50c9MjOG4tVXqVNYwbFlUZXjLaZQuXQEEEo3HIkGAQSjskoQPrppaVg==
+v-calendar@1.0.0-beta.21:
+  version "1.0.0-beta.21"
+  resolved "https://registry.yarnpkg.com/v-calendar/-/v-calendar-1.0.0-beta.21.tgz#45917ee336d229a29adfc1a65ef24220b9a68b1b"
+  integrity sha512-E7Ay02YOCq0ztmF2eZu/PQyumuHK5i6A+sXGn5ZujXBWnM32d9OcJqvAjmqP/B+to+eUkr4G6I3DiFN0dSRycQ==
   dependencies:
     lodash "^4.17.11"
     popper.js "^1.14.7"

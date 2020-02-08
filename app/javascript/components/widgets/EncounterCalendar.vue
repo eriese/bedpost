@@ -10,10 +10,12 @@
 				</v-select>
 			</div>
 			<toggle-switch :symbols="['calendar_view', 'list_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle-switch>
-			<calendar-explainer :calendar="$refs['calendar']" :set-tab="true" :container="$refs['calendar-container']" v-show="viewType=='calendar'"></calendar-explainer>
-			<div class="container--has-contrast-border container--is-centered container--is-rounded encounter-calendar__container" tabindex="0" ref="calendar-container">
-				<v-calendar v-show="viewType == 'calendar'" v-bind="calendarProps" ref="calendar">
-					<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }">
+			<calendar-explainer :calendar="$refs.calendar"  show-instructions="viewType=='calendar'">
+			<div class="container--has-contrast-border container--is-centered container--is-rounded encounter-calendar__container" ref="calendar-container" @keydown="explainer.handleKey" role="application" aria-roledescription="Calendar" slot-scope="explainer">
+				<v-calendar v-show="viewType == 'calendar'" v-bind="calendarProps" ref="calendar" v-on="explainer.calendarListeners">
+
+					<!-- <div slot="day-content" slot-scope="dcScope"><span class="vc-day-content vc-focusable vc-font-medium vc-text-sm vc-cursor-pointer focus:vc-font-bold vc-rounded-full" v-bind="dcScope.dayProps" ref="content" v-on="dcScope.dayEvents">{{dcScope.day.label}}</span></div> -->
+					<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }" id="day-popover">
 						<div class="popover-day-title">
 							{{ dayTitle }}
 							</div>
@@ -32,6 +34,7 @@
 					</ul>
 				</div>
 			</div>
+			</calendar-explainer>
 		</div>
 	</div>
 </template>
@@ -71,7 +74,7 @@
 					maxDate: new Date(),
 					isExpanded: true,
 					// isDark: document.body.classList.contains('is-dark'),
-					columns: this.$screens({md: 2, lg: 3}, 1),
+					// columns: this.$screens({md: 2, lg: 3}, 1),
 					attributes: this.selectedEncounters,
 					toPage: this.mostRecent,
 				}
@@ -155,7 +158,10 @@
 			},
 			onToggle(field, newVal) {
 				this[field] = newVal
-			}
+			},
+			// handleKey(e) {
+			// 	console.log(e);
+			// }
 		},
 	}
 </script>
