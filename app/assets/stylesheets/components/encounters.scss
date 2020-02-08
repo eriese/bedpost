@@ -9,7 +9,7 @@
 			margin-top: -$spacing-tiny;
 		}
 	}
-	.incomplete.blurred {
+	.incomplete {
 		background-color: theme-dark('h1');
 		.contact-error {
 			font-size: 0.75rem;
@@ -328,7 +328,11 @@
 
 	.encounter-calendar__container {
 		margin-top: $spacing-default;
+		&:focus {
+			box-shadow: $box-shadow-val theme-dark("shadow");
+		}
 	}
+
 
 	.vc-container {
 		border: none;

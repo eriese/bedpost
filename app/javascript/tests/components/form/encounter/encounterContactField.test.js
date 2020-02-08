@@ -2,7 +2,7 @@ import {createLocalVue, mount} from '@vue/test-utils';
 import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
 import EncounterContactField from '@components/form/encounter/EncounterContactField.vue';
 import Vuelidate from 'vuelidate';
-import HiddenRadio from '@components/form/encounter/HiddenRadio.vue';
+import ContactState from '@components/form/state/ContactState';
 
 describe('Encounter Contact Field Component', () => {
 	global.gon = {
@@ -148,14 +148,14 @@ describe('Encounter Contact Field Component', () => {
 	};
 
 	const defaultProps = {
-		baseName: 'encounter[contacts_attributes][1]',
+		baseName: 'encounter[contacts_attributes]',
 	};
 
 	const wrapperComponent = {
-		template: '<encounter-contact-field v-bind="fieldProps" :$v="fieldV" v-model="value[0]"/>',
+		template: '<encounter-contact-field v-bind="fieldProps" :state="state" :$v="fieldV" v-model="value[0]"/>',
 		props: {
 			fieldProps: Object,
-			value: Array
+			value: Array,
 		},
 		components: {
 			'encounter-contact-field': EncounterContactField,
@@ -163,6 +163,7 @@ describe('Encounter Contact Field Component', () => {
 		data() {
 			return {
 				givenValidation: {},
+				state: null
 			};
 		},
 		validations() {
@@ -180,6 +181,9 @@ describe('Encounter Contact Field Component', () => {
 		},
 		created() {
 			this.$on('should-validate', this.addValidation);
+			this.state = new ContactState(this.value[0], this);
+			this.state.baseName = this.fieldProps.baseName;
+			this.state.index = 0;
 		}
 	};
 
@@ -203,6 +207,13 @@ describe('Encounter Contact Field Component', () => {
 		return {wrapper, parent};
 	}
 
+	function chooseRadio(wrapper, field, value) {
+		const name = `${wrapper.vm.state.baseName}[${field}]`;
+		const radio = wrapper.find(`[name="${name}"][value=${value}]`);
+		radio.find('input').setChecked(true);
+		return radio;
+	}
+
 	it('mounts with a new record', () => {
 		let {wrapper} = setup({newRecord: true});
 		expect(wrapper.exists()).toBeTruthy();
@@ -211,44 +222,33 @@ describe('Encounter Contact Field Component', () => {
 	it('mounts with an existing record', () => {
 		let {wrapper} = setup({possible_contact_id: 'pos2'});
 		expect(wrapper.exists()).toBeTruthy();
-		expect(wrapper.vm.contact_type).toBe('penetrated');
+		expect(wrapper.vm.state.contact_type).toBe('penetrated');
 	});
 
 	it('has the correct subject input name', () => {
 		const {wrapper} = setup();
 
-		const fieldName = `${wrapper.vm.baseName}[subject]`;
-		const radios = wrapper.findAll(HiddenRadio);
-		let partnerSubjectRadio;
-		for (let r = 0; r < radios.length; r++) {
-			let radio = radios.at(r);
-			let radioInput = radio.vm.$refs.input;
-			if (radioInput.name == fieldName && radioInput.value == 'partner') {
-				partnerSubjectRadio = radio;
-				break;
-			}
-		}
+		const fieldName = `${wrapper.vm.state.baseName}[subject]`;
+		const result = wrapper.contains(`[name='${fieldName}']`);
 
-		expect(partnerSubjectRadio).not.toBeNull();
+		expect(result).toBe(true);
 	});
 
 	it('has the correct object input name', () => {
 		const {wrapper} = setup();
 
-		const fieldName = `${wrapper.vm.baseName}[object]`;
-		const radios = wrapper.findAll(HiddenRadio);
-		let partnerObjectRadio;
+		const fieldName = `${wrapper.vm.state.baseName}[object]`;
+		const result = wrapper.contains(`[name='${fieldName}']`);
+		expect(result).toBe(true);
+	});
 
-		for (let r = 0; r < radios.length; r++) {
-			let radio = radios.at(r);
-			let radioInput = radio.vm.$refs.input;
-			if (radioInput.name == fieldName && radioInput.value == 'partner') {
-				partnerObjectRadio = radio;
-				break;
-			}
-		}
+	it('has the correct names for _id, position, and possible_contact_id', () => {
+		const {wrapper} = setup();
 
-		expect(partnerObjectRadio).not.toBeNull();
+		['_id', 'position', 'possible_contact_id'].forEach((n) => {
+			const contains = wrapper.contains(`[name="${wrapper.vm.state.baseName}[${n}]"]`);
+			expect(contains).toBe(true);
+		});
 	});
 
 	describe('validation', () => {
@@ -259,119 +259,72 @@ describe('Encounter Contact Field Component', () => {
 		});
 	});
 
-	describe('onKeyChange', () => {
-		it('is called when the watchKey changes', () => {
-			let watchKey = 0;
-			const onKeyChange = jest.fn();
-			const {wrapper} = setup({}, {watchKey});
-			wrapper.setMethods({onKeyChange});
+	// describe('onKeyChange', () => {
+	// 	it('is called when the watchKey changes', () => {
+	// 		let watchKey = 0;
+	// 		const onKeyChange = jest.fn();
+	// 		const {wrapper} = setup({}, {watchKey});
+	// 		wrapper.setMethods({onKeyChange});
 
-			wrapper.setProps({watchKey: watchKey + 1});
+	// 		wrapper.setProps({watchKey: watchKey + 1});
 
-			expect(onKeyChange).toHaveBeenCalledTimes(1);
-		});
+	// 		expect(onKeyChange).toHaveBeenCalledTimes(1);
+	// 	});
 
-		it('calls updateContactType', () => {
-			const updateContactType = jest.fn();
-			const {wrapper} = setup();
+	// 	it('calls updateContactType', () => {
+	// 		const updateContactType = jest.fn();
+	// 		const {wrapper} = setup();
 
-			wrapper.setMethods({updateContactType});
-			wrapper.vm.onKeyChange();
-			return wrapper.vm.$nextTick().then(() => {
-				expect(updateContactType).toHaveBeenCalledTimes(1);
-			});
+	// 		wrapper.setMethods({updateContactType});
+	// 		wrapper.vm.onKeyChange();
+	// 		return wrapper.vm.$nextTick().then(() => {
+	// 			expect(updateContactType).toHaveBeenCalledTimes(1);
+	// 		});
 
-		});
-	});
+	// 	});
+	// });
 
-	async function chooseRadio(wrapper, inst_type, value) {
-		await wrapper.vm.$nextTick();
-		const name = `${wrapper.vm.baseName}[${inst_type}_instrument_id]`;
-		const radio = wrapper.findAll(HiddenRadio).filter(w => w.vm.inputName == name && w.vm.inputValue == value);
-		radio.at(0).find('input').setChecked(true);
-		return radio.at(0);
-	}
 
-	describe('resetInsts', () => {
-		it('is called with true when a new object_instrument_id is selected', async () => {
-			const {wrapper} = setup({possible_contact_id: 'pos1'});
-			await wrapper.vm.$nextTick();
-			const resetInsts = jest.fn();
-			wrapper.setMethods({resetInsts});
 
-			await chooseRadio(wrapper, 'object', 'hand');
-			expect(resetInsts).toHaveBeenCalledWith(true);
-		});
-
+	describe('cascading', () => {
 		describe('with an invalid contact', () => {
 			it('sets the subject_instrument_id if there is only one option', async () => {
 				const {wrapper} = setup({possible_contact_id: 'pos1'});
-				await chooseRadio(wrapper, 'object', 'hand');
-				expect(wrapper.vm.subject_instrument_id).toEqual('tongue');
+				await chooseRadio(wrapper, 'object_instrument_id', 'hand');
+				expect(wrapper.vm.state.subject_instrument_id).toEqual('tongue');
 			});
 
 			it('unsets the subject_instrument_id if there is more than one option', async () => {
 				const {wrapper} = setup({possible_contact_id: 'pos3'});
 
-				await chooseRadio(wrapper, 'object', 'anus');
-				expect(wrapper.vm.subject_instrument_id).toBeFalsy();
+				await chooseRadio(wrapper, 'object_instrument_id', 'anus');
+				expect(wrapper.vm.state.subject_instrument_id).toBeFalsy();
 			});
 		});
 	});
 
 	describe('setContact', () => {
-		it('is called when a new subject_instrument_id is selected', async () => {
-			const {wrapper} = setup({possible_contact_id: 'pos1'});
-			const setContact = jest.fn();
-			wrapper.setMethods({setContact});
-
-			await chooseRadio(wrapper, 'subject', 'anus');
-			expect(setContact).toHaveBeenCalled();
-		});
-
-		it('dirties the possible_contact_id if it is called with any argument', () => {
-			const {wrapper} = setup({possible_contact_id: 'pos1'});
-			wrapper.vm.$v.$reset();
-
-			wrapper.vm.setContact('anything');
-			expect(wrapper.vm.$v.possible_contact_id.$dirty).toBe(true);
-		});
-
-		it('does not dirty the possible_contact_id if it is called with no arguments', () => {
+		it('touches fields when they are changed', () => {
 			const {wrapper} = setup();
-			wrapper.vm.$v.$reset();
+			expect(wrapper.vm.$v.$anyDirty).toBe(false);
 
-			wrapper.vm.setContact();
-			expect(wrapper.vm.$v.possible_contact_id.$dirty).toBe(false);
-		});
-	});
-
-	describe('updateContactType', () => {
-		it('dirties the object if called with "object"', () => {
-			const {wrapper} = setup();
-			wrapper.vm.$v.$reset();
-
-			wrapper.vm.updateContactType('object');
-			expect(wrapper.vm.$v.object.$dirty).toBe(true);
-		});
-
-		it('dirties the subject if called with "subject"', () => {
-			const {wrapper} = setup();
-			wrapper.vm.$v.$reset();
-
-			wrapper.vm.updateContactType('subject');
+			chooseRadio(wrapper, 'subject', 'partner');
+			expect(wrapper.vm.$v.$anyDirty).toBe(true);
 			expect(wrapper.vm.$v.subject.$dirty).toBe(true);
 		});
 
-		it('does not dirty anything if called with no arguments', () => {
+		it('touches the possible contact field when it is changed through choosing instruments', () => {
 			const {wrapper} = setup();
-			wrapper.vm.updateContactType();
+			chooseRadio(wrapper, 'object_instrument_id', 'anus');
 			expect(wrapper.vm.$v.$anyDirty).toBe(false);
+			chooseRadio(wrapper, 'subject_instrument_id', 'hand');
+			expect(wrapper.vm.value.possible_contact_id).toBeTruthy();
+			expect(wrapper.vm.$v.possible_contact_id.$dirty).toBe(true);
 		});
 	});
 
 	describe('updateBarriers', () => {
-		it('dirties the barriers', () => {
+		it('dirties the barriers if called with a truthy value', () => {
 			const {wrapper} = setup();
 			wrapper.vm.$v.$reset();
 
@@ -379,9 +332,9 @@ describe('Encounter Contact Field Component', () => {
 			expect(wrapper.vm.$v.barriers.$dirty).toBe(true);
 		});
 
-		it('does not dirty the barriers if called with true', () => {
+		it('does not dirty the barriers if called with false', () => {
 			const {wrapper} = setup();
-			wrapper.vm.updateBarriers(true);
+			wrapper.vm.updateBarriers(false);
 			expect(wrapper.vm.$v.$anyDirty).toBe(false);
 		});
 	});

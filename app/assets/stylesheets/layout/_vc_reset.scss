@@ -2,6 +2,17 @@
 // V-Calendar
 ////////////////////////////////////////
 #page-container #page-container-inner {
+	#calendar-instructions {
+		position: absolute;
+		background-color: rgba($jakarta-skyline, 0.95);
+		margin-left: rem(275px);
+		margin-right: $spacing-default;
+		padding: $spacing-default;
+		border-radius: $default-border-radius;
+		color: $color-white;
+		font-weight: bold;
+	}
+
 	.vc-container {
 		--dot-diameter: 0.45rem;
 		--bar-height: rem(6px);

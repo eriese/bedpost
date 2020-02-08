@@ -5,7 +5,7 @@
 <% end %>
 
 <% content_for :header do %>
-	<button type="button" @click="loadTour" style="display: none;" v-show="hasTour && tourRuns > 0" :disabled="tourRunning" class="cta cta--tourguide cta--is-secondary js-only" title="<%= t("guide_button") %>">?</button>
+	<button type="button" @click="loadTour" style="display: none;" v-show="hasTour && tourRuns > 0" :disabled="tourRunning" class="cta cta--tourguide cta--is-secondary js-only" title="<%= t("guide_button") %>" aria-haspopup="true">?</button>
 <% end %>
 
 <%= render template: "layouts/application" %>

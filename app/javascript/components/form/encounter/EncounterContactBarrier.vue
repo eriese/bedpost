@@ -1,6 +1,6 @@
 <template>
 	<div class="input" v-if="shouldShow">
-		<input type="checkbox" ref="input" :value="inputValue" v-on="cListeners" :name="inputName" :id="inputId" :disabled="shouldDisable">
+		<input type="checkbox" ref="input" :value="barrier.key"  :name="inputName" :id="inputId" :disabled="shouldDisable" v-model="state.contact.barriers" v-on="cListeners">
 		<label :for="inputId">{{labelText}}</label>
 	</div>
 </template>
@@ -14,35 +14,38 @@ const matcher = '(su|o)bject';
  * a custom input for barriers in an encounter
  *
  * @vue-prop {object} barrier													the barrier that is this input's value
- * @vue-prop {Array} modelValue												the barriers list that this input adds its value to
- * @vue-prop {object} contact													the contact this input supplies barriers for
- * @vue-prop {EncounterBarrierTracker} encounterData	the tracker to check encounter_conditions against
- * @vue-prop {object} contactData											additional data about the contact
+ * @vue-prop {ContactState} state											the ContactState instance holding all necessary data on the contact
+ * @vue-prop {EncounterBarrierTracker} tracker				the tracker to check encounter_conditions against
+ * @vue-data {string} inputValue											the value of this checkbox
+ * @vue-data {string} actor														who (subject or object) this instrument belongs to if this is a clean_instrument barrier
  * @vue-computed {string} modelName										the string to add to the baseName to get the inputName for this input
  * @vue-computed {string} labelText 									the text for the label
- * @vue-computed {string} inputValue									the value of this checkbox
- * @vue-computed {number} valInd 											the index of this checkbox's value in the modelValue
- * @vue-computed {object} cListeners 									the listeners to apply to the input
- * @vue-computed {string} actor												who (subject or object) this instrument belongs to if this is a clean_instrument barrier
  * @vue-computed {boolean} canClean										can the instrument referred to by this barrier be cleaned? returns true if this is not a clean_instrument barrier
  * @vue-computed {boolean} shouldShow									should this checkbox show?
  * @vue-computed {boolean} shouldDisable							should this checkbox be disabled?
+ * @vue-computed {string} personName									the possessive form of the pronoun or name of the actor
  * @mixes customInput
  *
  */
 export default {
 	name: 'encounter_contact_barrier_input',
-	props: ['barrier', 'modelValue', 'contact', 'encounterData', 'contactData'],
+	props: ['barrier', 'state', 'tracker'],
 	mixins: [customInput],
 	model: {
-		prop: 'modelValue',
 		event: 'change'
 	},
+	data() {
+		let actorMatches = this.barrier.key.match(new RegExp(matcher));
+		return {
+			inputValue: this.barrier.key,
+			actor: actorMatches ? actorMatches[0] : null,
+			contact_conditions: this.barrier.contact_conditions || [],
+			encounter_conditions: this.barrier.encounter_conditions || []
+		};
+	},
 	computed: {
-		modelName: function() {
-			return 'barriers][';
-		},
-		labelText: function() {
+		modelName: () => 'barriers][',
+		labelText() {
 			// get default arguments and key
 			let transArgs = {scope: 'contact.barrier'},
 				key = this.barrier.key;
@@ -51,81 +54,59 @@ export default {
 				// the key has no mention of which actor
 				key = key.replace(new RegExp('_' + matcher), '');
 				// put the instrument and name in the arguments
-				transArgs.instrument = this.contactData[`${this.actor}InstrumentName`];
+				transArgs.instrument = this.state.instrumentName(this.actor);
 				transArgs.name = this.personName;
 				// pluralize as needed
 				transArgs.count = transArgs.instrument.match(/[^s]s$/) ? 1 : 0;
 			}
+
 			return this.$_t(key, transArgs);
 		},
-		inputValue: function() {
-			return this.barrier.key;
-		},
-		valInd: function() {
-			return this.modelValue.indexOf(this.inputValue);
-		},
-		cListeners: function() {
-			let vm = this;
-			return Object.assign({}, this.$listeners, {
-				change: function(e) {
-					vm.toggleChecked(e.target.checked);
-				}
-			});
-		},
-		actor: function() {
-			let matches = this.barrier.key.match(new RegExp(matcher));
-			return matches ? matches[0] : null;
-		},
-		canClean: function() {
+		canClean() {
+			// if it's not relevant whether it can be cleaned, return true
 			if (this.actor == null) {return true;}
-			let instID = this.contactData[this.actor + '_instrument_id'];
+			// get whether the current instrument this applies to is cleanable
+			let instID = this.state[this.actor + '_instrument_id'];
 			if (instID) {
-				return this.contactData.instruments[instID].can_clean;
+				return this.state.instruments[instID].can_clean;
 			}
+
+			// if there's no instrument, it can't be cleaned
 			return false;
 		},
-		shouldShow: function() {
+		shouldShow() {
 			// if it's a clean type, only continue if it's a cleanable instrument
 			if (this.barrier.key.includes('clean') && !this.canClean) {return false; }
+
 			// if it has no conditions, show it if it's cleanable
-			if (!this.barrier.encounter_conditions && !this.barrier.contact_conditions) { return this.canClean; }
+			if (this.encounter_conditions.length == 0
+				&& !this.contact_conditions.length == 0) { return this.canClean; }
 
 			// if it has encounter conditions but all are false, don't show
-			if (this.barrier.encounter_conditions && this.encounterData && this.barrier.encounter_conditions.every((c) => !this.encounterData[c](this.contact))) { return false; }
+			if (!this.tracker ||
+				this.encounter_conditions.every((c) => {
+					return !this.tracker[c](this.state.contact);
+				})
+			) { return false; }
 
 			// if it has contact_conditions but some are false, don't show
-			if (this.barrier.contact_conditions && this.barrier.contact_conditions.some((c) => !this.contactData[c])) { return false; }
+			if (this.contact_conditions.some((c) => {
+				return !this.state[c];
+			})
+			) { return false; }
 
 			// show
 			return true;
 		},
-		shouldDisable: function() {
-			return this.barrier.exclude.some((c) => this.modelValue.indexOf(c) >=0);
+		shouldDisable() {
+			// if any of the barriers it's mutually exclusive with are selected, disable it
+			return this.barrier.exclude.some((c) => this.state.contact.barriers.indexOf(c) >=0);
 		},
 		personName() {
-			let person = this.contact[this.actor];
+			let person = this.state.contact[this.actor];
 			return person == 'user' ?
 				this.$_t('my') :
-				this.$_t('name_possessive', {name: this.contactData.partnerName});
-		}
-	},
-	methods: {
-		toggleChecked(isChecked) {
-			let newValue = [...this.modelValue];
-			if (isChecked && this.valInd < 0) {
-				newValue.push(this.inputValue);
-			} else if (!isChecked && this.valInd >= 0) {
-				newValue.splice(this.valInd, 1);
-			}
-
-			this.$emit('change', newValue);
-		},
-	},
-	updated: function() {
-		if (this.shouldShow) {
-			this.$refs.input.checked = this.valInd >= 0;
-		} else if (this.valInd >= 0) {
-			this.toggleChecked(false);
+				this.$_t('name_possessive', {name: this.state.partner.name});
 		}
 	},
 };
