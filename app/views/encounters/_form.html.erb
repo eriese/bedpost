@@ -10,7 +10,8 @@
 		class="contact-field-list"
 		:$v="vf.$v.formData.contacts"
 		label="contact-form-title"
-		description="contact-form-description">
+		description="contact-form-description"
+		state-class="ContactState">
 		<h2 class="h2--is-form-heading" id="contact-form-title"><%= t('.contacts_title', partner_name: @partnership.partner.name) %></h2>
 		<p class="description description--is-form-description" id="contact-form-description"><%= t('.contacts_desc') %></p>
 	</dynamic-field-list>

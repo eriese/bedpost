@@ -5,11 +5,12 @@ export default {
 		baseName: String,
 		watchKey: [String, Number],
 		value: Object,
-		tracked: {
+		tracker: {
 			type: Object,
 			default: function() { return {}; },
 		},
 		$v: Object,
+		state: Object
 	},
 	mixins: [lazyChild],
 	watch: {

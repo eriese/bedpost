@@ -4,17 +4,17 @@ describe('Encounter Barrier Tracker class', () => {
 	describe('processContacts', () => {
 		it('ignores contacts that do not have a possible_contact_id', () => {
 			const tracker = new EncounterBarrierTracker([{}], {});
-			tracker.processContacts();
+
 			expect(tracker.barriers.user).toEqual({});
 			expect(tracker.barriers.partner).toEqual({});
 		});
 
-		it('ignores contacts that do not have a fresh barrier', () => {
+		it('ignores contacts that do not have a fresh or old barrier', () => {
 			const tracker = new EncounterBarrierTracker([{
 				possible_contact_id: 'pos1',
-				barriers: ['clean_object', 'clean_subject', 'old']
+				barriers: ['clean_object', 'clean_subject']
 			}], {});
-			tracker.processContacts();
+
 			expect(tracker.barriers.user).toEqual({});
 			expect(tracker.barriers.partner).toEqual({});
 		});
@@ -33,7 +33,7 @@ describe('Encounter Barrier Tracker class', () => {
 					object_instrument_id: 'mouth'
 				}]
 			});
-			tracker.processContacts();
+
 			expect(tracker.barriers.user).toEqual({hand: 1});
 			expect(tracker.barriers.partner).toEqual({mouth: 1});
 		});
@@ -62,9 +62,37 @@ describe('Encounter Barrier Tracker class', () => {
 					object_instrument_id: 'anus'
 				}]
 			});
-			tracker.processContacts();
+
 			expect(tracker.barriers.user).toEqual({hand: 1});
 			expect(tracker.barriers.partner).toEqual({mouth: 1, anus: 2});
+		});
+
+		it('changes an old barrier to a fresh barrier if an old barrier contact is moved about the first barrier use', () => {
+			const tracker = new EncounterBarrierTracker([{
+				possible_contact_id: 'pos1',
+				barriers: ['old'],
+				subject: 'user',
+				object: 'partner',
+				position: 1
+			}, {
+				possible_contact_id: 'pos2',
+				barriers: ['fresh'],
+				subject: 'user',
+				object: 'partner',
+				position: 2
+			}], {
+				penetrated: [{
+					_id: 'pos1',
+					subject_instrument_id: 'hand',
+					object_instrument_id: 'mouth'
+				}, {
+					_id: 'pos2',
+					subject_instrument_id: 'hand',
+					object_instrument_id: 'anus'
+				}]
+			});
+
+			expect(tracker.contacts[0].barriers).toEqual(['fresh']);
 		});
 	});
 

@@ -1,16 +1,27 @@
 <template>
 	<div class="dynamic-field-list" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
 		<slot></slot>
-		<div v-for="(comp, index) in list" :key="comp[idKey]" ref="list_item" class="dynamic-field-list__item">
-			<div v-if="showDeleted || !comp._destroy" @focusin="setFocus(index)" @click="setFocus(index, true)" class="dynamic-field step" :class="{incomplete: $vEach[index] && $vEach[index].$error, blurred: index != focusIndex, deleted: comp._destroy}" role="group" :id="`dynamic-list-item-${index}`">
-				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || index != firstIndex" role="toolbar">
-					<arrow-button class="link cta--is-arrow--is-small" v-if="index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(index,-1)"></arrow-button>
-					<arrow-button class="link cta--is-arrow--is-small" v-if="index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(index,1)"></arrow-button>
-					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(index)" t-key="remove"></arrow-button>
+		<div v-for="comp in internalList" :key="comp.item[idKey]" ref="list_item" class="dynamic-field-list__item">
+			<div v-if="showDeleted || !comp.item._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="{incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}" role="group" :id="`dynamic-list-item-${comp.index}`">
+				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || comp.index != firstIndex" role="toolbar">
+					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,-1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(comp.index)" t-key="remove"></arrow-button>
 				</div>
-				<component ref="list_component" :is="componentType" :base-name="`${baseName}[${index}]`" v-model="list[index]" :watch-key="index" :tracked="tracker" class="clear" @track="track" @start-tracking="startTracking" :$v="$vEach[index]" @input="onInput"></component>
+				<component
+					ref="list_component"
+					v-model="comp.item"
+					class="clear"
+					:is="componentType"
+					:watch-key="comp.index"
+					:tracker="tracker"
+					:state="comp"
+					:$v="$vEach[comp.index]"
+					@track="track"
+					@start-tracking="startTracking"
+					@input="onInput"></component>
 			</div>
-			<deleted-child v-else :base-name="`${baseName}[${index}]`" :item="list[index]" :id-key="idKey"></deleted-child>
+			<deleted-child v-else :base-name="`${baseName}[${comp.index}]`" :item="list[comp.index]" :id-key="idKey"></deleted-child>
 		</div>
 		<button type="button" class="cta cta--is-form-submit cta--is-add-btn cta--is-add-btn--is-small" @click="addToList" title="Add Another"></button>
 	</div>
@@ -33,9 +44,11 @@ export default {
 			tracker: null,
 			numSubmitting: 0,
 			toDelete: [],
+			internalList: [],
+			stateConstructor: null,
 		};
 	},
-	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v'],
+	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass'],
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];
@@ -52,19 +65,24 @@ export default {
 		$vEach: function() {
 			return this.$v && this.$v.$each && this.$v.$each.$iter || [];
 		},
-		list: function() {
-			return this.value.slice();
+		list() {
+			return this.internalList.map ((i) => i.item);
 		}
 	},
 	methods: {
-		addToList() {
-			let newObj = Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
-			newObj[this.idKey] = Date.now();
-			this.list.push(newObj);
+		addToList(newObj) {
+			if (!newObj || newObj instanceof MouseEvent) {
+				newObj = Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
+				newObj[this.idKey] = Date.now();
+			}
+
+			let state = this.generateState(newObj);
+
+			this.internalList.push(state);
 			this.numSubmitting += 1;
 			this.onInput();
 			this.$nextTick(() => {
-				this.setFocus(this.list.length - 1, true);
+				this.setFocus(state.index, true);
 			});
 		},
 		removeFromList(index) {
@@ -99,44 +117,49 @@ export default {
 			let oldStart = Math.min(index, newInd);
 			let oldPos = this.list[oldStart].position;
 
-			Array.move(this.list, index, newInd);
+			Array.move(this.internalList, index, newInd);
 			this.updateIndices(oldStart, oldPos);
 		},
-		blurChild(index) {
-			setTimeout((vm) => {
-				if (vm.focusIndex != index) {
-					vm.$refs.list_component[index].blur();
-				}
-			}, 50, this);
-		},
-		focusChild(index) {
-			if (this.focusIndex != index) {
-				this.focusIndex = index;
-				this.$refs.list_component[index].focus();
-			}
-		},
+		/**
+		 * Focus the list item at the given index and blur all others
+		 * @param {number} index      the index the item has in the list
+		 * @param {boolean} focusFirst whether the item should set the focus on its first input
+		 */
 		setFocus(index, focusFirst) {
-			if (index == this.focusIndex || !this.$refs.list_component) {return;}
+			// if there aren't items, do nothing
+			if (!this.$refs.list_component) { return; }
+
+			// if it's not a new index, just focus it
+			if (index == this.focusIndex) {
+				this.$refs.list_component[index].focus();
+				return;
+			}
+
+			// set the new index
 			this.focusIndex = index;
-			for (let i = 0; i < this.$refs.list_component.length; i++) {
-				let comp = this.$refs.list_component[i];
+			this.$refs.list_component.forEach((comp) => {
+				// focus the selected item
 				if (comp.watchKey == this.focusIndex) {
 					comp[focusFirst ? 'focusFirst' : 'focus']();
 				} else {
+					// blur all others
 					comp.blur();
 				}
-			}
+			})
 		},
 		track() {
 			this.tracker && this.tracker.update(this.list);
 		},
-		updateIndices(startVal, startInd) {
-			for (var i = startVal; i < this.list.length; i++) {
-				if (!this.list[i]._destroy) {
-					this.$set(this.list[i], 'position', startInd++);
+		updateIndices() {
+			let startInd = 0;
+			this.internalList.forEach((listItem, i) => {
+				listItem.index = i;
+				if (!listItem.item._destroy) {
+					this.$set(listItem.item, 'position', startInd++);
 				}
-			}
+			})
 
+			this.track();
 			this.onInput();
 		},
 		onChildMounted() {
@@ -146,17 +169,37 @@ export default {
 			if (this.tracker === null) {
 				this.tracker = trackerFactory(this.list);
 			}
+
+			this.track();
 		},
 		onInput() {
 			this.$emit('input', this.list);
 		},
+		generateState(listItem) {
+			return new this.stateConstructor(listItem, this, this.baseName, this.internalList.length);
+		}
 	},
-	created() {
-		this.numSubmitting = this.list.length;
+	created: async function() {
+		let mod;
+		if (this.stateClass) {
+			mod = await import( /* webpackChunkName: 'state' */ '@components/form/state/' + this.stateClass + '.js');
+			this.stateConstructor = mod.default;
+		} else {
+			this.stateConstructor = (item) => {
+				return {
+					index: this.list.length,
+					item
+				}
+			}
+		}
+
+		this.numSubmitting = this.value.length;
 		if (this.numSubmitting == 0 && !this.optional) {
 			this.addToList();
 		} else {
-			this.updateIndices(0,0);
+			this.internalList = this.value.map(this.generateState);
+			this.updateIndices();
+			this.setFocus(this.lastIndex);
 		}
 	}
 };
