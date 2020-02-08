@@ -11,9 +11,15 @@
 	<encounter-calendar :partnerships="<%= @partnerships.to_json %>" class="container--has-centered-child__centered-child container--has-centered-text">
 		<h3><%= t(".no_encounters.#{trans_key}", partner_name: first_partner["partner_name"]) %></h3>
 	</encounter-calendar>
-	<div><%= link_to '', @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, title: t(".new"), class: "cta cta--is-add-btn"%></div>
+	<div>
+		<%= link_to '', @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, title: t(".new"), class: "cta cta--is-add-btn"%>
+
+		<%= link_to(t(".back"), root_path, class: "cta cta--is-back-btn")  %>
+	</div>
 <% else %>
 	<h1 class="with-desc"><%= t('.no_partners.title') %></h1>
 	<h2 class="desc"><%= t('.no_partners.desc') %></h2>
 	<div class="container--has-centered-child__centered-child"><%= link_to t('.make_partner'), new_partnership_path, :class => "link" %></div>
+
+	<%= link_to(t(".back"), root_path, class: "cta cta--is-back-btn")  %>
 <% end %>
