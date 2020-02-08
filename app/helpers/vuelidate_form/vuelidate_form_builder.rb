@@ -227,6 +227,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 				options[:"v-on"] = 'dp.inputEvents'
 				parent_text_field(attribute, options)
 			end <<
+			@template.content_tag(:'calendar-explainer', '', { ':datepicker': '$refs.datepicker', 'v-show': "#{date_field_builder.slot_scope}.focusedOnly", id: 'calendar-instructions' }) <<
 			parent_hidden_field(attribute, {:"v-model"=> mdl})
 		end
 	end

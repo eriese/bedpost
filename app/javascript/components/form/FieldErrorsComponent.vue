@@ -1,5 +1,5 @@
 <template>
-	<div @mouseover="onHover(true)" @mouseleave="onHover(false)">
+	<div @mouseover="onHover(true)" @mouseleave="onHover(false)" aria-role="presentation">
 		<slot v-bind="slotScope"></slot>
 		<div :id="field + '-error'" class="field-errors" aria-live="assertive" aria-atomic="true" v-if="errorMsg">
 			<div class="aria-only" v-html="$_t('helpers.aria.invalid')"></div>
@@ -64,6 +64,7 @@ export default {
 				ariaRequired: this.vField && this.vField.blank !== undefined,
 				ariaInvalid: this.vField && this.vField.$invalid && (this.vField.$dirty || this.vField.submitted === false),
 				focused: this.focused || this.hovered,
+				focusedOnly: this.focused,
 			};
 		},
 		errorMsg: function() {

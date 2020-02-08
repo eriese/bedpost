@@ -194,6 +194,12 @@ fieldset {
 	font-size: 0rem;
 }
 
+.keyboard-only {
+	@media(any-hover: none) and (any-pointer: coarse), (any-hover: none) and (any-pointer: fine) {
+		display: none;
+	}
+}
+
 .clear {
 	clear: both;
 }

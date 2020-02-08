@@ -328,7 +328,11 @@
 
 	.encounter-calendar__container {
 		margin-top: $spacing-default;
+		&:focus {
+			box-shadow: $box-shadow-val theme-dark("shadow");
+		}
 	}
+
 
 	.vc-container {
 		border: none;
