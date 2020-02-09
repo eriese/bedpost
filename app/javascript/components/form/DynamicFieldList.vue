@@ -94,7 +94,7 @@ export default {
 					this.updateIndices(index, oldPos);
 				}
 				this.numSubmitting -= 1;
-
+				this.focusIndex -= 1;
 				this.$nextTick(() => {
 					gsap.set(this.$refs.list_item, {opacity: 1});
 				});
@@ -130,8 +130,8 @@ export default {
 			if (!this.$refs.list_component) { return; }
 
 			// if it's not a new index, just focus it
-			if (index == this.focusIndex) {
-				this.$refs.list_component[index].focus();
+			if (index == this.focusIndex && this.$children[index].focus) {
+				this.$children[index].focus();
 				return;
 			}
 
