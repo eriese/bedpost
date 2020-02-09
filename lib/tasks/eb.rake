@@ -74,7 +74,7 @@ namespace :eb do
 	task :deploy_prod do
 		current_branch = current_branch_name
 		if current_branch.present?
-			puts "You're trying to deploy a branch that isn't master to production. Are you sure that's right? Type the current branch name to continue".blue.bold
+			print "You're trying to deploy a branch that isn't master to production. Are you sure that's right? Type the current branch name to continue".blue.bold
 			unless STDIN.gets.chomp == current_branch
 				puts "No match. Exiting.".bold
 				next
