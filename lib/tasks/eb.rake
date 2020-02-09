@@ -67,10 +67,12 @@ namespace :eb do
 	desc 'deploy to production and reset the used environment after'
 	task :deploy_prod do
 		current_branch = current_branch_name
-		if current_branch != 'master'
+		if current_branch.present?
 			puts "You're trying to deploy a branch that isn't master to production. Are you sure that's right? Type the current branch name to continue".blue.bold
-			given_branch = gets.chomp
-			return unless given_branch == current_branch
+			unless STDIN.gets.chomp == current_branch
+				puts "No match. Exiting.".bold
+				next
+			end
 		end
 
 		orig_env = current_env_name
