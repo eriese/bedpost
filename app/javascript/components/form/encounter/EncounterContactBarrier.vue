@@ -39,8 +39,8 @@ export default {
 		return {
 			inputValue: this.barrier.key,
 			actor: actorMatches ? actorMatches[0] : null,
-			contact_conditions: this.barrier.contact_conditions || [],
-			encounter_conditions: this.barrier.encounter_conditions || []
+			contact_conditions: this.barrier.contact_conditions,
+			encounter_conditions: this.barrier.encounter_conditions
 		};
 	},
 	computed: {
@@ -79,18 +79,17 @@ export default {
 			if (this.barrier.key.includes('clean') && !this.canClean) {return false; }
 
 			// if it has no conditions, show it if it's cleanable
-			if (this.encounter_conditions.length == 0
-				&& !this.contact_conditions.length == 0) { return this.canClean; }
+			if (!this.encounter_conditions && !this.contact_conditions) { return this.canClean; }
 
 			// if it has encounter conditions but all are false, don't show
 			if (!this.tracker ||
-				this.encounter_conditions.every((c) => {
+				(this.encounter_conditions && this.encounter_conditions.every((c) => {
 					return !this.tracker[c](this.state.contact);
-				})
+				}))
 			) { return false; }
 
 			// if it has contact_conditions but some are false, don't show
-			if (this.contact_conditions.some((c) => {
+			if (this.contact_conditions && this.contact_conditions.some((c) => {
 				return !this.state[c];
 			})
 			) { return false; }
