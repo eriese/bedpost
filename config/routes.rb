@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 	if ENV['IS_BETA']
 		get 'beta', to: 'beta#index'
 		post 'beta', to: 'beta#create'
+		post 'beta_google', to: 'beta#create_google'
 	end
 
 	get '*static', to: 'static#static_or_404', as: :static

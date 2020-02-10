@@ -27,4 +27,15 @@ class BetaController < ApplicationController
 			head :unauthorized
 		end
 	end
+
+	def create_google
+		google_params = params.require(:payload).permit(:form_id, :email, :name)
+		expected_form_id = Rails.application.credentials.dig(:google_forms, :form_id)
+		if google_params[:form_id] != expected_form_id
+			Rails.logger.warn "google forms webhook submission from incorrect form id: #{google_params[:form_id]}"
+		else
+			BetaMailer.beta_invite(google_params[:email], google_params[:name]).deliver_later
+			Rails.logger.warn('google forms response webhook properly received')
+		end
+	end
 end
