@@ -6,7 +6,7 @@
 			<br>Home and End to navigate to week ends,
 			<br>PageUp and PageDown to navigate by month,
 			<br>Alt+PageUp and Alt+PageDown to navigate by year
-			<br>Z and X to jump to the next or previous marked date
+			<span v-if="calDates"><br>Z and X to jump to the next or previous marked date</span>
 		</p>
 	</div>
 </template>

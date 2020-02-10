@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm';
+import Vue from 'vue';
 import TurbolinksAdapter from 'vue-turbolinks';
 import Vuelidate from 'vuelidate';
 import VCalendar from 'v-calendar';
