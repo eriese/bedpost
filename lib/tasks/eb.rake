@@ -59,13 +59,11 @@ namespace :eb do
 
 	desc 'set the master key environment variable and then deploy'
 	task :deploy, [:environment_name] do |t, args|
-		return unless safe_env? args
 		build_name = deploy_to_environment args
 		deploy(build_name)
 	end
 
 	task :deploy_staged, [:environment_name] do |t, args|
-		return unless safe_env? args
 		build_name = deploy_to_environment args
 		sh "eb deploy -l #{build_name}-staged --staged"
 	end
