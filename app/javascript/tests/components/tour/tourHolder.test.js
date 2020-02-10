@@ -63,7 +63,9 @@ describe("TourHolder component", () => {
 					steps: [{target: '#t-1', content: 'some text'}]
 				});
 
-				expect(wrapper.emitted('tour-started')).toHaveLength(1);
+				return wrapper.vm.$nextTick().then(() => {
+					expect(wrapper.emitted('tour-started')).toHaveLength(1);
+				});
 			});
 
 			test('it runs the tour immediately if the tour has run before on this page load', () => {
@@ -84,8 +86,10 @@ describe("TourHolder component", () => {
 					steps: [{target: '#t-1', content: 'some text'}]
 				});
 
-				jest.advanceTimersByTime(0);
-				expect(startMock).toHaveBeenCalledTimes(1);
+				return wrapper.vm.$nextTick().then(() => {
+					jest.advanceTimersByTime(0);
+					expect(startMock).toHaveBeenCalledTimes(1);
+				});
 			});
 
 			test('it runs the tour after a delay if it is the first run on page load', () => {
@@ -106,9 +110,11 @@ describe("TourHolder component", () => {
 					steps: [{target: '#t-1', content: 'some text'}]
 				});
 
-				expect(startMock).not.toHaveBeenCalled();
-				jest.advanceTimersByTime(2000);
-				expect(startMock).toHaveBeenCalledTimes(1);
+				return wrapper.vm.$nextTick().then(() => {
+					expect(startMock).not.toHaveBeenCalled();
+					jest.advanceTimersByTime(2000);
+					expect(startMock).toHaveBeenCalledTimes(1);
+				});
 			});
 
 			test('it sets up an IntersectionObserver if the first step requires waiting for the target to be in view', () => {
@@ -138,12 +144,14 @@ describe("TourHolder component", () => {
 					steps: [{target: '#t-1', content: 'some text', await_in_view: true}]
 				});
 
-				jest.advanceTimersByTime(0);
-				expect(intersectionCallback).not.toBeUndefined();
-				expect(startMock).not.toHaveBeenCalled();
+				return wrapper.vm.$nextTick().then(() => {
+					jest.advanceTimersByTime(0);
+					expect(intersectionCallback).not.toBeUndefined();
+					expect(startMock).not.toHaveBeenCalled();
 
-				intersectionCallback([]);
-				expect(startMock).toHaveBeenCalledTimes(1);
+					intersectionCallback([]);
+					expect(startMock).toHaveBeenCalledTimes(1);
+				});
 			});
 		});
 	});

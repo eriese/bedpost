@@ -2,6 +2,7 @@ import Vue from 'vue';
 import TurbolinksAdapter from 'vue-turbolinks';
 import Vuelidate from 'vuelidate';
 import VCalendar from 'v-calendar';
+
 import vSelect from 'vue-select';
 
 import bedpostVueGlobals from '@plugins/bedpostVueGlobals';

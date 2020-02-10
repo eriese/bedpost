@@ -304,38 +304,47 @@ describe('Encounter Contact Field Component', () => {
 	});
 
 	describe('setContact', () => {
-		it('touches fields when they are changed', () => {
+		it('touches fields when they are changed', async () => {
 			const {wrapper} = setup();
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.$v.$anyDirty).toBe(false);
 
 			chooseRadio(wrapper, 'subject', 'partner');
+
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.$v.$anyDirty).toBe(true);
 			expect(wrapper.vm.$v.subject.$dirty).toBe(true);
 		});
 
-		it('touches the possible contact field when it is changed through choosing instruments', () => {
+		it('touches the possible contact field when it is changed through choosing instruments', async () => {
 			const {wrapper} = setup();
 			chooseRadio(wrapper, 'object_instrument_id', 'anus');
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.$v.$anyDirty).toBe(false);
+
 			chooseRadio(wrapper, 'subject_instrument_id', 'hand');
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.value.possible_contact_id).toBeTruthy();
 			expect(wrapper.vm.$v.possible_contact_id.$dirty).toBe(true);
 		});
 	});
 
 	describe('updateBarriers', () => {
-		it('dirties the barriers if called with a truthy value', () => {
+		it('dirties the barriers if called with a truthy value', async() => {
 			const {wrapper} = setup();
+			await wrapper.vm.$nextTick();
 			wrapper.vm.$v.$reset();
 
 			wrapper.vm.updateBarriers('any_arg');
+			await wrapper.vm.$nextTick()
 			expect(wrapper.vm.$v.barriers.$dirty).toBe(true);
 		});
 
 		it('does not dirty the barriers if called with false', () => {
 			const {wrapper} = setup();
 			wrapper.vm.updateBarriers(false);
-			expect(wrapper.vm.$v.$anyDirty).toBe(false);
+			return wrapper.vm.$nextTick(() =>
+				expect(wrapper.vm.$v.$anyDirty).toBe(false));
 		});
 	});
 });

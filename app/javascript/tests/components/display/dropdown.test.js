@@ -79,7 +79,7 @@ describe('Dropdown component', () => {
 				expect(wrapper.contains(ArrowButton)).toBe(true);
 			});
 
-			it('binds open and closed to up and down on the arrow', () => {
+			it('binds open and closed to up and down on the arrow', async () => {
 				const arrowStub = {
 					template: '<div/>',
 					props: {
@@ -97,13 +97,14 @@ describe('Dropdown component', () => {
 				expect(arrow.props('direction')).toEqual('down');
 
 				wrapper.setData({isOpen: true});
+				await wrapper.vm.$nextTick();
 				expect(arrow.props('direction')).toEqual('up');
 			});
 		});
 	});
 
 	describe('with button slot content', () => {
-		it('mounts with the proper scope', () => {
+		it('mounts with the proper scope', async() => {
 
 			const wrapper = shallowMount(DropDown, {
 				scopedSlots: {
@@ -116,6 +117,7 @@ describe('Dropdown component', () => {
 			expect(button.text()).toEqual('closed');
 
 			wrapper.find('.dropdown-button').trigger('click');
+			await wrapper.vm.$nextTick();
 			expect(button.text()).toEqual('open');
 		});
 	});
