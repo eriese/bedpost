@@ -13,8 +13,6 @@
 			<calendar-explainer :calendar="$refs.calendar"  show-instructions="viewType=='calendar'">
 			<div class="container--has-contrast-border container--is-centered container--is-rounded encounter-calendar__container" ref="calendar-container" @keydown="explainer.handleKey" role="application" aria-roledescription="Calendar" slot-scope="explainer">
 				<v-calendar v-show="viewType == 'calendar'" v-bind="calendarProps" ref="calendar" v-on="explainer.calendarListeners">
-
-					<!-- <div slot="day-content" slot-scope="dcScope"><span class="vc-day-content vc-focusable vc-font-medium vc-text-sm vc-cursor-pointer focus:vc-font-bold vc-rounded-full" v-bind="dcScope.dayProps" ref="content" v-on="dcScope.dayEvents">{{dcScope.day.label}}</span></div> -->
 					<div slot="day-popover" slot-scope="{ day, dayTitle, attributes }" id="day-popover">
 						<div class="popover-day-title">
 							{{ dayTitle }}
@@ -41,6 +39,7 @@
 
 <script>
 	import encounterListItem from "@components/functional/EncounterListItem";
+	import PopoverRow from 'v-calendar/lib/components/popover-row.umd.min'
 
 	/**
 	 * A calendar component to display a user's encounters with one or more partners
@@ -56,7 +55,8 @@
 	export default {
 		name: 'encounter-calendar',
 		components: {
-			encounterListItem
+			encounterListItem,
+			'v-popover-row': PopoverRow
 		},
 		data() {
 			return {

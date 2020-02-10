@@ -51,6 +51,8 @@ const mountOptions = {
 	}
 }
 
+window.matchMedia = window.matchMedia || jest.fn();
+
 describe("Encounter calendar component", () => {
 	describe("computed values", () => {
 		test("selectedEncounters sorts by date descending", () => {
