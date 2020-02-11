@@ -3,6 +3,9 @@ import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
 import EncounterContactField from '@components/form/encounter/EncounterContactField.vue';
 import Vuelidate from 'vuelidate';
 import ContactState from '@components/form/state/ContactState';
+import { axe, toHaveNoViolations } from 'jest-axe';
+
+expect.extend(toHaveNoViolations);
 
 describe('Encounter Contact Field Component', () => {
 	global.gon = {
@@ -213,6 +216,11 @@ describe('Encounter Contact Field Component', () => {
 		radio.find('input').setChecked(true);
 		return radio;
 	}
+
+	it('is basically accessible', async() => {
+		let {wrapper} = setup({newRecord: true});
+		expect(await axe(wrapper.element)).toHaveNoViolations();
+	});
 
 	it('mounts with a new record', () => {
 		let {wrapper} = setup({newRecord: true});
