@@ -2,6 +2,7 @@ import {shallowMount, createLocalVue} from '@vue/test-utils';
 // import VCalendar from 'v-calendar';
 jest.mock('v-calendar/lib/components/popover-row.umd.min');
 import EncounterCalendar from '@components/widgets/EncounterCalendar.vue';
+import vSelect from 'vue-select';
 
 
 const partnerships = [{
@@ -47,7 +48,7 @@ const mountOptions = {
 		$screens: jest.fn()
 	},
 	stubs: {
-		'v-select': true,
+		'v-select': vSelect,
 		'v-calendar': true,
 		'toggle-switch': true,
 		'calendar-explainer': true,
@@ -55,8 +56,6 @@ const mountOptions = {
 	},
 	localVue
 };
-
-// window.matchMedia = window.matchMedia || jest.fn()
 
 describe('Encounter calendar component', () => {
 	describe('computed values', () => {

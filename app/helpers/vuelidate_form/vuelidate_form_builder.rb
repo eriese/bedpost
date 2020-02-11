@@ -221,13 +221,15 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		date_field_builder = field_builder(attribute, options)
 		date_field_builder.field do
 			mdl = options.delete "v-model"
-			@template.content_tag(:"v-date-picker", "", {":value" => mdl, "v-on" => "#{date_field_builder.slot_scope}.$listeners", ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
-				options[:"slot-scope"] = 'dp'
-				options[:"v-bind"] = 'dp.inputProps'
-				options[:"v-on"] = 'dp.inputEvents'
-				parent_text_field(attribute, options)
+			@template.content_tag(:'calendar-explainer', {':show-instructions': "#{date_field_builder.slot_scope}.focusedOnly", "v-on" => "#{date_field_builder.slot_scope}.$listeners", role: 'combobox'}) do
+
+				@template.content_tag(:"v-date-picker", "", {":value" => mdl, 'slot-scope': 'explainer', 'v-on': 'explainer.calendarListeners', ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
+					options[:"slot-scope"] = 'dp'
+					options[:"v-bind"] = 'dp.inputProps'
+					options[:"v-on"] = 'dp.inputEvents'
+					parent_text_field(attribute, options)
+				end
 			end <<
-			@template.content_tag(:'calendar-explainer', '', { ':datepicker': '$refs.datepicker', 'v-show': "#{date_field_builder.slot_scope}.focusedOnly", id: 'calendar-instructions' }) <<
 			parent_hidden_field(attribute, {:"v-model"=> mdl})
 		end
 	end

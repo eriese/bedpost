@@ -3,7 +3,7 @@
 		<slot v-if="!hasEncounters" ></slot>
 		<div v-else>
 			<div v-if="partnerships.length > 1">
-				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
+				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty" @input="handleSelect" ref="select">
 					<template v-slot:selected-option="opt">
 						<span class="vs__selected-inner"><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
 					</template>
@@ -160,6 +160,16 @@ export default {
 		onToggle(field, newVal) {
 			this[field] = newVal;
 		},
+		handleSelect() {
+			if (this.empty) {
+				this.$refs.select.$refs.search.setAttribute('disabled', 'disabled');
+			} else {
+				this.$refs.select.$refs.search.removeAttribute('disabled');
+			}
+		}
 	},
+	mounted() {
+		this.handleSelect();
+	}
 };
 </script>
