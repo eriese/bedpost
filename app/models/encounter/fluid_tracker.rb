@@ -20,8 +20,12 @@ class Encounter::FluidTracker
 	end
  end
 
- def track_after(contact, other_inst)
+ def track_after(contact, other_inst, is_subject)
 	return unless other_inst.has_fluids
+
+	inst_barriers = is_subject ? @inst.subject_barriers : @inst.object_barriers
+	return if contact.has_barrier? && inst_barriers.blank?
+
 	lst = get_list(contact, contact.is_self?)
 	lst << other_inst.alias_name
  end

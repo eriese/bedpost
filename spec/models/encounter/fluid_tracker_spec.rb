@@ -62,7 +62,7 @@ RSpec.describe Encounter::FluidTracker, type: :model do
 				contact = double("EncounterContact")
 
 				tracker = Encounter::FluidTracker.new(inst, :user)
-				tracker.track_after(contact, inst)
+				tracker.track_after(contact, inst, true)
 
 				expect(tracker.own_on_barrier).to be_empty
 				expect(tracker.other_on_barrier).to be_empty
@@ -74,11 +74,11 @@ RSpec.describe Encounter::FluidTracker, type: :model do
 		context 'with a barrier' do
 			context 'in a self-contact' do
 				it 'adds the other instrument alias name to @own_on_barrier' do
-					inst = build_stubbed(:contact_instrument, has_fluids: true, _id: :genitals, alias_of_id: :external_genitals)
+					inst = build_stubbed(:contact_instrument, has_fluids: true, _id: :genitals, alias_of_id: :external_genitals, subject_barriers: [{}])
 					contact = double("EncounterContact", {has_barrier?: true, is_self?: true})
 
 					tracker = Encounter::FluidTracker.new(inst, :user)
-					tracker.track_after(contact, inst)
+					tracker.track_after(contact, inst, true)
 
 					expect(tracker.own_on_barrier).to include(inst.alias_name)
 				end
@@ -86,11 +86,11 @@ RSpec.describe Encounter::FluidTracker, type: :model do
 
 			context 'in a partner contact' do
 				it 'adds the other instrument id to @other_on_barrier' do
-					inst = build_stubbed(:contact_instrument, has_fluids: true, _id: :genitals)
+					inst = build_stubbed(:contact_instrument, has_fluids: true, _id: :genitals, subject_barriers: [{}])
 					contact = double("EncounterContact", {has_barrier?: true, is_self?: false})
 
 					tracker = Encounter::FluidTracker.new(inst, :user)
-					tracker.track_after(contact, inst)
+					tracker.track_after(contact, inst, true)
 
 					expect(tracker.other_on_barrier).to include(inst._id)
 				end
@@ -104,7 +104,7 @@ RSpec.describe Encounter::FluidTracker, type: :model do
 					contact = double("EncounterContact", {has_barrier?: false, is_self?: true})
 
 					tracker = Encounter::FluidTracker.new(inst, :user)
-					tracker.track_after(contact, inst)
+					tracker.track_after(contact, inst, false)
 
 					expect(tracker.own_on_instrument).to include(inst._id)
 				end
@@ -116,7 +116,7 @@ RSpec.describe Encounter::FluidTracker, type: :model do
 					contact = double("EncounterContact", {has_barrier?: false, is_self?: false})
 
 					tracker = Encounter::FluidTracker.new(inst, :user)
-					tracker.track_after(contact, inst)
+					tracker.track_after(contact, inst, false)
 
 					expect(tracker.other_on_instrument).to include(inst._id)
 				end

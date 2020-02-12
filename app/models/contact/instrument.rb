@@ -40,6 +40,7 @@ class Contact::Instrument
 				# (methods: Contact::ContactType.inst_methods)
 				hsh[:user_name] = i.get_user_name_for(user)
 				hsh[:partner_name] = i.get_user_name_for(partner)
+				hsh[:alias_name] = i.alias_name
 				[i.id, hsh]
 			end]
 		end

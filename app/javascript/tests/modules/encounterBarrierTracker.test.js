@@ -14,15 +14,20 @@ const defaultPossibles = {
 
 const defaultInstruments = {
 	hand: {
-		subject_barriers: [{type: 'glove'}]
+		subject_barriers: [{type: 'glove'}],
+		alias_name: 'hand'
 	},
 	mouth: {
-		subject_barriers: [{type: 'dam'}]
+		subject_barriers: [{type: 'dam'}],
+		alias_name: 'mouth'
 	},
 	anus: {
-		object_barriers: [{type: 'condom'}]
+		object_barriers: [{type: 'condom'}],
+		alias_name: 'anus'
 	},
-	external_genitals: {}
+	external_genitals: {
+		alias_name: 'external_genitals'
+	}
 };
 
 describe('Encounter Barrier Tracker class', () => {
