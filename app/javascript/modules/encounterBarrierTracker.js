@@ -83,31 +83,50 @@ export default class EncounterBarrierTracker {
 		});
 	}
 
+	/**
+	 * Check to see which barriers are possible in the given contact circumstances and run a callback on each one
+	 *
+	 * @param  {object}   contact         the contact object
+	 * @param  {object}   possibleContact the possible contact description
+	 * @param  {Function} callback        a callback to run on each barrier that is possible for the contact
+	 ** @param {object} barrier 	the barrier description object
+	 ** @param {object} instrument 	the instrument this barrier is associated with
+	 ** @param {number} i the index of ACTORS for the current actor
+	 */
 	checkInstrumentBarriers(contact, possibleContact, callback) {
+		// for each actor type
 		for (var i = 0; i < ACTORS.length; i++) {
 			const actor = ACTORS[i];
 			const instrumentID = possibleContact[`${actor}_instrument_id`];
 			const instrument = this.instruments[instrumentID];
 			const instBarriers = instrument[`${actor}_barriers`];
 
+			// if the instrument has no possible barriers, continue
 			if (!instBarriers || instBarriers.length == 0) {
 				continue;
 			}
 
 			const that = this;
+			// get the person who might be using this barrier
+			const person = that[contact[actor]];
+			// each possible barrier
 			instBarriers.forEach((barrier) => {
-				const person = that[contact[actor]];
+				// if there are conditions, check that they all apply to the person
 				if (barrier.conditions && barrier.conditions.some((condition) => !person[condition])) {
 					return;
 				}
 
+				// get the other instrument in the contact
 				const otherInstActor = ACTORS[i == 0 ? 1 : 0];
 				const otherInstID = possibleContact[`${otherInstActor}_instrument_id`];
+				// use the alias name to make sure the references are corrent
 				const otherInstAlias = this.instruments[otherInstID].alias_name;
+				// if the barrier can only be used with certain other instruments, see if the other isntrument is one
 				if(barrier.with_insts && barrier.with_insts.indexOf(otherInstAlias) == -1) {
 					return;
 				}
 
+				// run the callback
 				callback && callback(barrier, instrument, i);
 			});
 		}
@@ -127,16 +146,20 @@ export default class EncounterBarrierTracker {
 		let possibleContact = this.possibleContacts[contact.possible_contact_id];
 		// get the positions of the barriers
 		let has = false;
+
+		// get possible barriers
 		this.checkInstrumentBarriers(contact, possibleContact, (barrier, instrument, i) => {
 			let actor = ACTORS[i];
 			let person = contact[actor];
 
+			// see if this barrier has already been used on this instrument
 			let instrumentBarriers = this.barriers[person][instrument.alias_name];
 			if (instrumentBarriers && instrumentBarriers[barrier.type] < contact.position) {
 				has = true;
 			}
 		});
 
+		// if any barrier has already been used on any instrument in the contact, it's considered to have a barrier
 		return has;
 	}
 }

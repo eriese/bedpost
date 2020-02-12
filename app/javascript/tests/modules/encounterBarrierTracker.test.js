@@ -104,7 +104,69 @@ describe('Encounter Barrier Tracker class', () => {
 
 			expect(tracker.contacts[0].barriers).toEqual(['fresh']);
 		});
+
+		it('associates a barrier with the object instrument if the instrument has object_barriers', () => {
+			const tracker = new EncounterBarrierTracker([{
+				possible_contact_id: 'pos2',
+				barriers: ['fresh'],
+				subject: 'user',
+				object: 'partner',
+				position: 1
+			}], defaultPossibles, {
+				hand: {
+					alias_name: 'hand'
+				},
+				anus: {
+					alias_name: 'anus',
+					object_barriers: [{type: 'condom'}]
+				}
+			}, {}, {});
+			expect(tracker.barriers.partner.anus).toEqual({condom: 1});
+		});
+
+		it('does not associate a barrier with an instrument that does not pass the conditions for the person using it', () => {
+			const tracker = new EncounterBarrierTracker([{
+				possible_contact_id: 'pos2',
+				barriers: ['fresh'],
+				subject: 'user',
+				object: 'partner',
+				position: 1
+			}], defaultPossibles, {
+				hand: {
+					alias_name: 'hand',
+					subject_barriers: [{type: 'glove', conditions: ['can_penetrate']}]
+				},
+				anus: {
+					alias_name: 'anus',
+					object_barriers: [{type: 'condom'}]
+				}
+			}, {}, {});
+			expect(tracker.barriers.partner.anus).toEqual({condom: 1});
+			expect(tracker.barriers.user.hand).toBeUndefined();
+		});
+
+		it('does not associate a barrier with an instrument that requires specific other instruments if none of those are present', () => {
+			const tracker = new EncounterBarrierTracker([{
+				possible_contact_id: 'pos2',
+				barriers: ['fresh'],
+				subject: 'user',
+				object: 'partner',
+				position: 1
+			}], defaultPossibles, {
+				hand: {
+					alias_name: 'hand',
+					subject_barriers: [{type: 'glove', with_insts: ['mouth']}]
+				},
+				anus: {
+					alias_name: 'anus',
+					object_barriers: [{type: 'condom'}]
+				}
+			}, {}, {});
+			expect(tracker.barriers.partner.anus).toEqual({condom: 1});
+			expect(tracker.barriers.user.hand).toBeUndefined();
+		});
 	});
+
 
 	describe('has_barrier', () => {
 		it('returns false if the given contact does not have a possible contact id', () => {
