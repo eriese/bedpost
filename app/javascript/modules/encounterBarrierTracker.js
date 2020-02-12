@@ -1,4 +1,6 @@
 import EncounterUtils from '@components/form/encounter/EncounterUtils';
+
+const ACTORS = ['subject', 'object'];
 /**
  * An object to track the placement of barriers on encounter contacts
  */
@@ -9,10 +11,14 @@ export default class EncounterBarrierTracker {
 	 * @param  {Array} contacts         	the list of contacts for the encounter
 	 * @param  {object} possibleContacts 	the possible contacts from the EncounterContactField
 	 * @param {object} instruments				the instruments keyed by id
+	 * @param {object} partner 						data on the partner
+	 * @param {object} user 							data on the user
 	 */
-	constructor(contacts, possibleContacts, instruments) {
+	constructor(contacts, possibleContacts, instruments, partner, user) {
 		this.contacts = contacts;
 		this.instruments = instruments;
+		this.partner = partner;
+		this.user = user;
 
 		// restructure the possible contacts to be more useful for the tracker
 		this.possibleContacts = {};
@@ -57,26 +63,54 @@ export default class EncounterBarrierTracker {
 			// paths to set for this contact
 			let paths = [`${c.subject}.${possibleContact.subject_instrument_id}`, `${c.object}.${possibleContact.object_instrument_id}`];
 			// track whether it is the first barrier on both instruments
-			let isFirst = [false, false];
+			let isFirst = true;
 			// set the value of each path if it is not already set
-			paths.forEach((path, i) => {
-
+			this.checkInstrumentBarriers(c, possibleContact, (barrier, i) => {
+				const path = `${paths[i]}.${barrier.type}`;
 				if (Object.getAtPath(that.barriers, path) === undefined) {
-					isFirst[i] = true;
+					// isFirst.push(barrier.type);
 					// the value is the first contact position that has a fresh barrier on this instrument for this person
 					Object.setAtPath(that.barriers, path, c.position);
+				} else {
+					isFirst = false;
 				}
 			});
 
 			// if it's now first, but it used to say it reused a barrier, make it have a new barrier
 			let oldIndex = c.barriers.indexOf('old');
-			if (oldIndex >= 0 && isFirst[0] && isFirst[1]) {
+			if (oldIndex >= 0 && isFirst) {
 				c.barriers.splice(oldIndex, 1, 'fresh');
 			}
 		});
 	}
 
+	checkInstrumentBarriers(contact, possibleContact, callback) {
+		for (var i = 0; i < ACTORS.length; i++) {
+			const actor = ACTORS[i];
+			const instrumentID = possibleContact[`${actor}_instrument_id`];
+			const instrument = this.instruments[instrumentID];
+			const instBarriers = instrument[`${actor}_barriers`];
 
+			if (!instBarriers || instBarriers.length == 0) {
+				continue;
+			}
+
+			const that = this;
+			instBarriers.forEach((barrier) => {
+				const person = that[contact[actor]];
+				if (barrier.conditions && barrier.conditions.some((condition) => !person[condition])) {
+					return;
+				}
+
+				const otherInstActor = ACTORS[i == 0 ? 1 : 0];
+				if(barrier.with_insts && barrier.with_insts.indexOf(possibleContact[`${otherInstActor}_instrument_id`]) == -1) {
+					return;
+				}
+
+				callback && callback(barrier, i);
+			});
+		}
+	}
 
 	/**
 	 * Could there be an old barrier for this contact?
@@ -87,14 +121,22 @@ export default class EncounterBarrierTracker {
 	has_barrier(contact) {
 		// if there's no possible contact id, we can't get the instruments, so skip it
 		if (!contact.possible_contact_id) { return false; }
+
 		// get the possible contact
 		let possibleContact = this.possibleContacts[contact.possible_contact_id];
 		// get the positions of the barriers
-		let subjBarrierIndex = this.barriers[contact.subject][possibleContact.subject_instrument_id];
-		let objBarrierIndex = this.barriers[contact.object][possibleContact.object_instrument_id];
+		let has = false;
+		this.checkInstrumentBarriers(contact, possibleContact, (barrier, i) => {
+			let actor = ACTORS[i];
+			let person = contact[actor];
+			let instrumentID = possibleContact[`${actor}_instrument_id`];
 
-		// return true if either index is less that this contact's position
-		return (subjBarrierIndex !== undefined && subjBarrierIndex < contact.position) ||
-			(objBarrierIndex !== undefined && objBarrierIndex < contact.position);
+			let instrumentBarriers = this.barriers[person][instrumentID];
+			if (instrumentBarriers && instrumentBarriers[barrier.type] < contact.position) {
+				has = true;
+			}
+		});
+
+		return has;
 	}
 }

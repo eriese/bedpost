@@ -8,6 +8,9 @@ class Contact::Instrument
 	field :can_clean, type: Boolean, default: false
 	field :has_fluids, type: Boolean, default: true
 	field :conditions, type: Hash
+	field :subject_barriers, type: Array
+	field :object_barriers, type: Array
+
 	index({name: 1}, {unique: true})
 
 	has_many :as_subject, class_name: 'PossibleContact', inverse_of: :subject_instrument, dependent: :restrict_with_error
