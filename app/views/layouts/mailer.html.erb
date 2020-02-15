@@ -644,13 +644,6 @@ Need help? Want to get in touch with us? Email us at&nbsp;<a style="color: #ffd6
 
 												</td>
 										</tr>
-										<% if @reason %>
-										<tr>
-											<td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;color: #FFD6CC;font-family: &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;text-align: center;">
-												<div><%= @reason %></div>
-											</td>
-										</tr>
-										<% end %>
 								</tbody></table>
 				<!--[if mso]>
 				</td>
@@ -754,6 +747,13 @@ Need help? Want to get in touch with us? Email us at&nbsp;<a style="color: #ffd6
 												</tbody></table>
 										</td>
 								</tr>
+								<% if @reason %>
+								<tr>
+									<td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;color: #FFD6CC;font-family: &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;text-align: center;">
+										<div><%= @reason %></div>
+									</td>
+								</tr>
+								<% end %>
 						</tbody></table>
 				</td>
 		</tr>
