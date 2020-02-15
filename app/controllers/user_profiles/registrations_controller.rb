@@ -62,20 +62,25 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 		respond_with(profile)
 	end
 
-
 	# protected
 
 	# If you have extra params to permit, append them to the sanitizer.
 	def configure_sign_up_params
 		devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
-		if ENV['IS_BETA']
-			token_params = params.require(resource_name).permit(:email, :token)
-			token_params[:email].downcase!
-			unless BetaToken.where(token_params).exists?
-				err = {form_error: ["We don't recognize this beta token with your email address"]}
-				respond_with_submission_error(err,  new_registration_path(resource_name))
-			end
+		return unless ENV['IS_BETA']
+
+		token_params = params.require(resource_name).permit(:email, :token)
+		found = true
+		begin
+			token = BetaToken.find_token(token_params[:token].downcase)
+			found = token.email.downcase = token_params[:email].downcase
+		rescue Mongoid::Errors::DocumentNotFound
+			found = false
 		end
+		return if found
+
+		err = { form_error: ["Uh oh! We don't recognize this beta token with your email address"] }
+		respond_with_submission_error(err, new_registration_path(resource_name))
 	end
 
 	# If you have extra params to permit, append them to the sanitizer.
