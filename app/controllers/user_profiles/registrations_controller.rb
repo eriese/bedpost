@@ -73,7 +73,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 		found = true
 		begin
 			token = BetaToken.find_token(token_params[:token].downcase)
-			found = token.email.downcase = token_params[:email].downcase
+			found = token.email.downcase == token_params[:email].downcase
 		rescue Mongoid::Errors::DocumentNotFound
 			found = false
 		end
