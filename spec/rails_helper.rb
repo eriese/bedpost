@@ -85,6 +85,6 @@ RSpec.configure do |config|
 	config.after :each do
 		clean_mailer_jobs
 		work_jobs
-		print_db_remnants false
+		# print_db_remnants false
 	end
 end

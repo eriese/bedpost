@@ -7,7 +7,6 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 
 	respond_to :json, except: [:new, :edit]
 
-
 	# GET /resource/sign_up
 	def new_beta
 		build_resource
@@ -17,7 +16,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	# POST /resource
 	def create
 		super do |resource|
-			RegistrationMailer.confirmation(resource.id.to_s).deliver_later
+			RegistrationMailer.delay.confirmation(resource.id.to_s) if resource.persisted?
 		end
 	end
 
@@ -79,8 +78,11 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 		end
 		return if found
 
-		err = { form_error: ["Uh oh! We don't recognize this beta token with your email address"] }
-		respond_with_submission_error(err, new_registration_path(resource_name))
+		build_resource(sign_up_params)
+		clean_up_passwords resource
+		resource.errors.add(:form_error, "Uh oh! We don't recognize this beta token with your email address")
+
+		respond_with resource
 	end
 
 	# If you have extra params to permit, append them to the sanitizer.
