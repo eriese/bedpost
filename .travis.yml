@@ -17,7 +17,7 @@ before_script:
   - gem install brakeman
   - gem install bundler-audit
 script:
-  - SKIP_PENDING=true bundle exec rake
+  - SKIP_PENDING=true IS_BETA=true bundle exec rake
   - yarn jest --verbose=false
   - codecov
   - brakeman -q

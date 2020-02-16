@@ -1,5 +1,5 @@
 class BetaMailer < ApplicationMailer
-	self.delivery_method = :ses
+	self.delivery_method = Rails.env.test? ? :test : :ses
 	FEATURE_EMAIL = Rails.application.credentials.dig(:trello, :features) || 'support@bedpost.me'
 	BUG_EMAIL = Rails.application.credentials.dig(:trello, :bugs) || 'support@bedpost.me'
 

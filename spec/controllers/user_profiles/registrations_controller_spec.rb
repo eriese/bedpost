@@ -13,9 +13,69 @@ RSpec.describe UserProfiles::RegistrationsController, type: :controller do
 	end
 
 	describe 'POST #create' do
+		context 'with a beta token' do
+			around do |example|
+				was_beta = ENV['IS_BETA']
+				ENV['IS_BETA'] = 'true'
+				@token = BetaToken.find_or_create_by(email: 'email@email.com')
+				example.run
+				cleanup @token, UserProfile.where(email: @token.email).first
+				ENV['IS_BETA'] = was_beta
+			end
+
+			def do_post(email: nil, token: nil)
+				user_attrs = attributes_for(:user_profile)
+				post :create, format: :json, params: {
+					user_profile: {
+						email: email || @token.email,
+						token: token || @token.token,
+						password: user_attrs[:password],
+						password_confirmation: user_attrs[:password],
+						name: user_attrs[:name]
+					}
+				}
+			end
+
+			context 'with a correct email and token' do
+				it 'registers with a correct email and token in lowercase' do
+					expect { do_post }.to change(UserProfile, :count).by(1)
+				end
+
+				it 'registers with a correct email in random cases' do
+					expect { do_post email: 'EmaIL@emAIl.com' }.to change(UserProfile, :count).by(1)
+				end
+
+				it 'registers with a correct token in uppercase' do
+					expect { do_post token: @token.token.upcase }.to change(UserProfile, :count).by(1)
+				end
+
+				it 'destroys the token' do
+					expect { do_post }.to change(BetaToken, :count).by(-1)
+				end
+			end
+
+			context 'with incorrect email or token' do
+				it 'responds with unprocessable entity with a token that does not exist' do
+					do_post token: 'random'
+					expect(response).to have_http_status(:unprocessable_entity)
+				end
+
+				it 'responds with unprocessable entity with an email that is not associated with the token' do
+					do_post email: 'random@email.com'
+					expect(response).to have_http_status(:unprocessable_entity)
+				end
+
+				it 'returns a form error' do
+					do_post email: 'random@email.com'
+					response_json = JSON.parse(response.body)
+					expect(response_json['errors']).to have_key('form_error')
+				end
+			end
+		end
+
 		context 'with valid parameters' do
 			def get_valid_params
-					{user_profile: @user_attributes}
+				{ user_profile: @user_attributes }
 			end
 
 			def get_new_prof(params)
