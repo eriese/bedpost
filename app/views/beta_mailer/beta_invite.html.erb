@@ -1,4 +1,4 @@
 Hi <%= @name %>,
-<p>We're so excited to have you with us. Please go to <%= link_to @signup_url, @signup_url %> to sign up!</p>
+<p>We're so excited to have you with us. Please go to <%= link_to @signup_url, @signup_url, {style: link_styles} %> to sign up!</p>
 
 <p>You'll need to enter this token to register: <b><%= @token.token %></b></p>

@@ -8,7 +8,7 @@ if Rails.env.development?
 			puts 'running checks'.blue.bold
 			errors = []
 			{
-				RSpec: "SKIP_PENDING=true IS_BETA=#{ENV['IS_BETA']} rspec",
+				RSpec: "SKIP_PENDING=true IS_BETA=true rspec",
 				Jest: 'yarn test --verbose=false',
 				Brakeman: 'bundle exec brakeman -q',
 				'Bundle Audit' => 'bundle audit --update'
