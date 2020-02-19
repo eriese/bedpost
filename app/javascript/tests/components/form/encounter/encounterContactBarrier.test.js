@@ -25,7 +25,7 @@ describe ('Encounter contact barrier component', () => {
 			partner: {
 				name: 'Alice',
 			},
-			instrumentName: () => instrumentName,
+			chosenInstrumentName: () => instrumentName,
 			instruments: {
 				[instrumentName]: {
 					can_clean: true,

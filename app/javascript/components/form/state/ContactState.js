@@ -13,6 +13,7 @@ export default class ContactState extends BaseState {
 		this.contact_type = 'touched';
 		this.subject_instrument_id = null;
 		this.object_instrument_id = null;
+		this.encounter = vm.formData;
 
 		// if there's an existing contact, get the internal fields for it
 		if (contact.possible_contact_id) {
@@ -54,17 +55,31 @@ export default class ContactState extends BaseState {
 	/**
 	 * should this contact show subject instrument options?
 	 *
-	 * @return {boolean}
+	 * @return {boolean} whether the subject instrument options should show
 	 */
 	get hasSubjectInstruments() { return this.shownInstruments.subject.length > 1; }
 
 	/**
+	 * The selected partner in this encounter
+	 *
+	 * @return {object} data on the partner
+	 */
+	get partner() { return this.encounter.partnership_id && this.partners.find((p) => p._id == this.encounter.partnership_id);}
+
+	/**
+	 * The pronoun the selected partner uses
+	 *
+	 * @return {object} the pronoun data
+	 */
+	get partnerPronoun() { return this.partner && this.pronouns[this.partner.pronoun_id]; }
+
+	/**
 	 * the posessive pronoun for the subject of this contact
 	 *
-	 * @return {string}
+	 * @return {string} the possessive pronoun
 	 */
 	get subjPossessive() {
-		if (this.shownInstruments.subject.length <= 1) {
+		if (this.shownInstruments.subject.length <= 1 || !this.partnerPronoun) {
 			return '';
 		}
 		return this.$_t('contact.with', {pronoun: this.contact.subject == 'user' ? this.$_t('my') : this.partnerPronoun.possessive});
@@ -185,14 +200,30 @@ export default class ContactState extends BaseState {
 	}
 
 	/**
+	 * Get the given actor's name for the given instrument
+	 *
+	 * @param  {string} instrument the instrument to get a name for
+	 * @param  {string} actor 'object' or 'subject'
+	 * @return {string}       the proper language for the actor's instrument
+	 */
+	instrumentName(instrument, actor) {
+		if (!instrument.user_override) { return this.$_t(instrument._id, {scope: 'contact.instrument'}); }
+
+		let person = this[this.contact[actor]];
+		return person[instrument.user_override];
+	}
+
+	/**
 	 * Get the given actor's name for the chosen instrument
 	 *
 	 * @param  {string} actor 'object' or 'subject'
 	 * @return {string}       the proper language for the actor's instrument
 	 */
-	instrumentName(actor) {
+	chosenInstrumentName(actor) {
 		let instID  = this[`${actor}_instrument_id`];
-		return instID ? this.instruments[instID][`${this.contact[actor]}_name`] : '';
+		if (!instID) {return '';}
+		let instrument = this.instruments[instID];
+		return this.instrumentName(instrument, actor);
 	}
 
 	/**

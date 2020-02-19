@@ -31,13 +31,12 @@ Rails.application.routes.draw do
 		put 'who', to: 'partnership_whos#update'
 		patch 'who', to: 'partnership_whos#update'
 		get 'uniqueness', to: 'partnership_whos#unique'
-		resources :encounters
 	end
 
 	get 'encounters/who', to: 'encounter_whos#new'
 	post 'encounters/who', to: 'encounter_whos#create'
+	resources :encounters
 
-	resources :encounters, only: [:index]
 
 	get 'first_time', to: 'tours#index'
 	post 'first_time', to: 'tours#create'

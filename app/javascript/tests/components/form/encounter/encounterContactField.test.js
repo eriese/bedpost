@@ -121,23 +121,34 @@ describe('Encounter Contact Field Component', () => {
 					}
 				]
 			},
-			partnerPronoun: {
-				obj_possessive: 'theirs',
-				object: 'them',
-				possessive: 'their',
-				reflexive: 'themself',
-				subject: 'they',
-				_id: '5bdb87db72c3e67e31d1b542'
+			pronouns: {
+				'5bdb87db72c3e67e31d1b542': {
+					obj_possessive: 'theirs',
+					object: 'them',
+					possessive: 'their',
+					reflexive: 'themself',
+					subject: 'they',
+					_id: '5bdb87db72c3e67e31d1b542'
+				}
 			},
 			barriers: {},
-			partner: {
+			partners: [{
 				name: 'Alice',
 				'pronoun_id': '5bdb87db72c3e67e31d1b542',
 				anus_name: 'a_n',
 				external_name: 'e_n',
 				internal_name: 'i_n',
-				can_penetrate: false
-			},
+				can_penetrate: false,
+				_id: 'partner1'
+			}],
+			user: {
+				name: 'Bob',
+				'pronoun_id': '5bdb87db72c3e67e31d1b542',
+				anus_name: 'Ba_n',
+				external_name: 'Be_n',
+				internal_name: 'Bi_n',
+				can_penetrate: false,
+			}
 		},
 		dummy: {
 			barriers: [],
@@ -163,7 +174,10 @@ describe('Encounter Contact Field Component', () => {
 		data() {
 			return {
 				givenValidation: {},
-				state: null
+				state: null,
+				formData: {
+					partnership_id: 'partner1'
+				}
 			};
 		},
 		validations() {
@@ -181,9 +195,7 @@ describe('Encounter Contact Field Component', () => {
 		},
 		created() {
 			this.$on('should-validate', this.addValidation);
-			this.state = new ContactState(this.value[0], this);
-			this.state.baseName = this.fieldProps.baseName;
-			this.state.index = 0;
+			this.state = new ContactState(this.value[0], this, this.fieldProps.baseName, 0);
 		}
 	};
 

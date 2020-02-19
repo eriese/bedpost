@@ -126,15 +126,35 @@ class UserProfile < Profile
 		save(validate: false)
 	end
 
+	def first_elem(partner_field)
+		{ '$arrayElemAt' => ["$partner.#{partner_field}", 0] }
+	end
+
 	# An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter
 	def partners_with_most_recent
 		UserProfile.collection.aggregate(partners_lookup + [
 			{'$project' => {
 				most_recent: {'$max' => '$encounters.took_place'},
 				nickname: 1,
-				partner_name: {'$arrayElemAt' => ['$partner.name', 0]}
+				partner_name: first_elem('name')
 			}},
 			{'$sort' => {most_recent: -1}}
+		])
+	end
+
+	def partners_with_profiles
+		UserProfile.collection.aggregate(partners_lookup + [
+			{
+				'$project': {
+					name: first_elem('name'),
+					pronoun_id: first_elem('pronoun_id'),
+					anus_name: first_elem('a_n'),
+					external_name: first_elem('e_n'),
+					internal_name: first_elem('i_n'),
+					can_penetrate: first_elem('c_p'),
+					partner_name: { '$concat': [first_elem('name'), ' ', '$nickname'] }
+				}
+			}
 		])
 	end
 
@@ -157,7 +177,7 @@ class UserProfile < Profile
 
 		UserProfile.collection.aggregate(lookup + [
 			{'$project' => {
-				encounters: {took_place: 1, notes: 1, _id: 1},
+				# encounters: {took_place: 1, notes: 1, _id: 1},
 				nickname: 1,
 				partner_name: {'$arrayElemAt' => ['$partner.name', 0]}
 			}},

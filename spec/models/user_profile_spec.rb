@@ -291,6 +291,41 @@ RSpec.describe UserProfile, type: :model do
 			end
 		end
 
+		describe '#partners_with_profiles' do
+			before do
+				@user = create(:user_profile)
+				@p1 = create(:profile, name: 'Fred')
+				@p2 = create(:profile, name: 'Andy')
+
+				@p1_nickname = "friend"
+				@p2_nickname = "lover"
+				@user.partnerships = [build(:partnership, partner: @p1, nickname: @p1_nickname), build(:partnership, partner: @p2, nickname: @p2_nickname)]
+			end
+
+			after do
+				cleanup @user, @p1, @p2
+			end
+
+			it 'returns a list of the partnerships the user has' do
+				result = @user.partners_with_profiles.as_json
+				expect(result.size).to be 2
+			end
+
+			it 'attaches the partnership id as _id' do
+				result = @user.partners_with_profiles.as_json
+				expect(result[0]['_id']).to eq @user.partnerships.first.id.to_s
+			end
+
+			it 'has all needed fields' do
+				fred = @user.partners_with_profiles.as_json[0]
+				expect(fred['partner_name']).to eq "#{@p1.name} #{@p1_nickname}"
+				expect(fred['pronoun_id']).to eq @p1.pronoun_id.to_s
+				['name', 'anus_name', 'external_name', 'internal_name', 'can_penetrate'].each do |f|
+					expect(fred[f]).to eq @p1.send(f)
+				end
+			end
+		end
+
 		describe '#partners_with_encounters' do
 			before :all do
 				@hand = create(:contact_instrument, name: :hand)
