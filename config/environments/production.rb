@@ -1,4 +1,7 @@
-Rails.application.routes.default_url_options = { host: "#{ENV['CNAME'] ? (ENV['CNAME'] + '.') : ''}bedpost.me"}
+Rails.application.routes.default_url_options = {
+	host: "#{ENV['CNAME'] ? (ENV['CNAME'] + '.') : ''}bedpost.me",
+	protocol: 'https'
+}
 
 Rails.application.configure do
 	# Verifies that versions and hashed value of the package contents in the project's package.json

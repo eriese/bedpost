@@ -19,7 +19,7 @@ class BetaMailer < ApplicationMailer
 		to_address.downcase!
 		@token = BetaToken.find_or_create_by(email: to_address)
 		urls = Rails.application.routes.url_helpers
-		@signup_url = ENV['IS_BETA'] ? urls.beta_registration_url : urls.new_user_profile_registration_url
+		@signup_url = urls.beta_registration_url
 		@reason = 'You are receiving this email because you completed our survey to request an invitation to join our beta. If you don\'t want to receive any more communication from us, simply ignore this email and you won\'t hear from us again.'
 		mail(to: to_address, subject: 'Welcome to BedPost Beta!')
 	end
