@@ -11,20 +11,6 @@ RSpec.describe Partnership, type: :model do
 		cleanup(@user, @user2, @partner)
 	end
 
-	describe '#encounters' do
-		before :all do
-			@user = create(:user_profile)
-			@partner = create(:profile)
-			@obj = @user.partnerships.create(partner: @partner)
-		end
-
-		it_should_behave_like 'an object that dirty-tracks its embedded relations', Partnership, true
-
-		it 'responds to encounters' do
-			expect(@obj).to respond_to :encounters
-		end
-	end
-
 	describe '#partner' do
 		it 'can accept a profile as a partner' do
 			create_ship(:profile)
@@ -231,7 +217,7 @@ RSpec.describe Partnership, type: :model do
 				create_ship(:profile)
 				@hand = create(:contact_instrument, name: :hand)
 				@possible = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
-				enc = create(:encounter, partnership: @ship, contacts: [build(:encounter_contact, possible_contact: @possible)])
+				enc = create(:encounter, partnership: @ship, user_profile: @user, contacts: [build(:encounter_contact, possible_contact: @possible)])
 				expect(@ship.last_took_place).to eq enc.took_place
 			end
 		end

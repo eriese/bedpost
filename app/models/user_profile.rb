@@ -46,6 +46,7 @@ class UserProfile < Profile
 	index({ uid: 1 }, unique: true, sparse: true, collation: { locale: I18n.default_locale.to_s, strength: 2 } )
 
 	embeds_many :partnerships, cascade_callbacks: true
+	embeds_many :encounters, cascade_callbacks: true
 
 	validates_presence_of :password, :password_confirmation, on: :create
 	validates_uniqueness_of :uid, case_sensitive: false
@@ -66,11 +67,11 @@ class UserProfile < Profile
 		super(value.nil? ? value : value.downcase)
 	end
 
-	def encounters
-		enc = []
-		partnerships.each { |p| enc += p.encounters }
-		enc
-	end
+	# def encounters
+	# 	enc = []
+	# 	partnerships.each { |p| enc += p.encounters }
+	# 	enc
+	# end
 
 	# TODO: implement this when implementing risk-to-partner calculations. take user's activities, risk-taking behavior, results, etc. into account
 	def risk_mitigator
@@ -127,12 +128,14 @@ class UserProfile < Profile
 	end
 
 	def first_elem(partner_field)
-		{ '$arrayElemAt' => ["$partner.#{partner_field}", 0] }
+		# { '$arrayElemAt' => [
+			"$partner.#{partner_field}"
+			# , 0] }
 	end
 
 	# An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter
 	def partners_with_most_recent
-		UserProfile.collection.aggregate(partners_lookup + [
+		UserProfile.collection.aggregate(partners_lookup(true) + [
 			{'$project' => {
 				most_recent: {'$max' => '$encounters.took_place'},
 				nickname: 1,
@@ -160,27 +163,27 @@ class UserProfile < Profile
 
 	# An aggregate query to get the user's partnerships (including partner names) with all of their encounters
 	def partners_with_encounters(partnership_id = nil)
-		lookup = partners_lookup
+		lookup = partners_lookup(true)
 		if partnership_id
 			partnership_id = BSON::ObjectId(partnership_id) unless partnership_id.is_a? BSON::ObjectId
-			lookup.insert(lookup_index, {'$match' => {'_id' => partnership_id}})
+			lookup.insert(lookup_index(lookup), {'$match' => {'_id' => partnership_id}})
 		else
-			lookup.insert(lookup_index, {'$redact' => {
+			lookup << {'$redact' => {
 				'$cond' => {
 					if: {'$and' => [{'$isArray' => '$encounters'}, {'$gt' => [{'$size' => '$encounters'}, 0]}]},
 					then: '$$KEEP',
 					else: '$$PRUNE'
 					}
 				}
-			})
+			}
 		end
 
 		UserProfile.collection.aggregate(lookup + [
 			{'$project' => {
-				# encounters: {took_place: 1, notes: 1, _id: 1},
+				encounters: {took_place: 1, notes: 1, _id: 1, partnership_id: 1},
 				nickname: 1,
-				partner_name: {'$arrayElemAt' => ['$partner.name', 0]}
-			}},
+				partner_name: '$partner.name'
+			}}
 		])
 	end
 
@@ -293,21 +296,38 @@ class UserProfile < Profile
 	end
 
 	# an aggregation query pipeline that uses a lookup to join with the partners' profiles
-	def partners_lookup
-		[
+	def partners_lookup(include_encounters = false)
+		actions = [
 			{ '$match' => { '_id' => id } },
-			{ '$unwind' => '$partnerships' },
-			{ '$replaceRoot' => { newRoot: '$partnerships' } },
+			{ '$unwind' => '$partnerships' }
+		]
+		new_root =
+			if include_encounters
+				{
+					'$mergeObjects': ['$partnerships', { 'encounters': {
+						'$filter': {
+							input: '$encounters', as: 'enc', cond: { '$eq' => ['$$enc.partnership_id', '$partnerships._id'] }
+						}
+					} }]
+				}
+			else
+				'$partnerships'
+			end
+
+		actions + [
+			{ '$replaceRoot' => { newRoot: new_root } }
+		] + [
 			{ '$lookup' => {
 				from: 'profiles',
 				localField: 'partner_id',
 				foreignField: '_id',
 				as: 'partner'
-			} }
+			} },
+			{ '$unwind' => '$partner' }
 		]
 	end
 
-	def lookup_index
-		partners_lookup.index { |q| q.key? '$lookup' }
+	def lookup_index(pipeline)
+		pipeline.index { |q| q.key? '$lookup' }
 	end
 end

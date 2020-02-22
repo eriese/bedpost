@@ -55,25 +55,6 @@ RSpec.describe UserProfile, type: :model do
 	end
 
 	context 'methods' do
-		describe '#encounters' do
-			before :each do
-				@user = create(:user_profile)
-			end
-
-			after :each do
-				cleanup(@user)
-			end
-
-			it 'gets an array of all encounters embedded in the partnerships of the user' do
-				ship = @user.partnerships.create(partner: dummy_user)
-				encounter = ship.encounters.create
-
-				result = @user.encounters
-				expect(result).to include encounter
-				expect(result.size).to eq 1
-			end
-		end
-
 		describe '#as_json' do
 			it 'does not include the passsword or encrypted_password' do
 				user = build_stubbed(:user_profile)
@@ -196,13 +177,13 @@ RSpec.describe UserProfile, type: :model do
 				p1_last = Date.new(2019, 10, 31)
 				p2_last = Date.new(2019, 8, 24)
 
-				@user.partnerships.first.encounters = [
-					build(:encounter, took_place: p1_last, contacts: [build(:encounter_contact, possible_contact: @pos)]),
-					build(:encounter, took_place: p1_last - 1.day, contacts: [build(:encounter_contact, possible_contact: @pos)])
+				@user.encounters = [
+					build(:encounter, took_place: p1_last, partnership: @user.partnerships.first, contacts: [build(:encounter_contact, possible_contact: @pos)]),
+					build(:encounter, took_place: p1_last - 1.day, partnership: @user.partnerships.first, contacts: [build(:encounter_contact, possible_contact: @pos)]),
+					build(:encounter, took_place: p2_last, partnership: @user.partnerships.last, contacts: [build(:encounter_contact, possible_contact: @pos)])
 				]
-				@user.partnerships.last.encounters = [
-					build(:encounter, took_place: p2_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
-				]
+
+				@user.save
 
 				result = @user.partners_with_most_recent.to_a
 
@@ -223,11 +204,9 @@ RSpec.describe UserProfile, type: :model do
 				p1_last = Date.new(2019, 8, 24)
 				p2_last = Date.new(2019, 10, 31)
 
-				@user.partnerships.first.encounters = [
-					build(:encounter, took_place: p1_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
-				]
-				@user.partnerships.last.encounters = [
-					build(:encounter, took_place: p2_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
+				@user.encounters = [
+					build(:encounter, took_place: p1_last, partnership: @user.partnerships.first, contacts: [build(:encounter_contact, possible_contact: @pos)]),
+					build(:encounter, took_place: p2_last, partnership: @user.partnerships.last, contacts: [build(:encounter_contact, possible_contact: @pos)])
 				]
 
 				result = @user.partners_with_most_recent.to_a
@@ -235,8 +214,8 @@ RSpec.describe UserProfile, type: :model do
 			end
 
 			it 'gracefully handles partnerships with no encounters' do
-				@user.partnerships.first.encounters = [
-					build(:encounter, took_place: Date.new(2019, 10, 31), contacts: [build(:encounter_contact, possible_contact: @pos)])
+				@user.encounters = [
+					build(:encounter, took_place: Date.new(2019, 10, 31), partnership: @user.partnerships.first, contacts: [build(:encounter_contact, possible_contact: @pos)])
 				]
 
 				result = @user.partners_with_most_recent.to_a
@@ -308,6 +287,7 @@ RSpec.describe UserProfile, type: :model do
 
 			it 'returns a list of the partnerships the user has' do
 				result = @user.partners_with_profiles.as_json
+
 				expect(result.size).to be 2
 			end
 
@@ -343,17 +323,18 @@ RSpec.describe UserProfile, type: :model do
 
 				@p1_nickname = "friend"
 				@p2_nickname = "lover"
-				@user.partnerships = [build(:partnership, partner: @p1, nickname: @p1_nickname), build(:partnership, partner: @p2, nickname: @p2_nickname)]
+
+				ship1 = build(:partnership, partner: @p1, nickname: @p1_nickname)
+				ship2 = build(:partnership, partner: @p2, nickname: @p2_nickname)
+				@user.partnerships = [ship1, ship2]
 
 				p1_last = Date.new(2019, 10, 31)
 				p2_last = Date.new(2019, 8, 24)
 
-				@user.partnerships.first.encounters = [
-					build(:encounter, took_place: p1_last, contacts: [build(:encounter_contact, possible_contact: @pos)]),
-					build(:encounter, took_place: p1_last - 1.day, contacts: [build(:encounter_contact, possible_contact: @pos)])
-				]
-				@user.partnerships.last.encounters = [
-					build(:encounter, took_place: p2_last, contacts: [build(:encounter_contact, possible_contact: @pos)])
+				@user.encounters = [
+					build(:encounter, took_place: p1_last, contacts: [build(:encounter_contact, possible_contact: @pos)], partnership: ship1),
+					build(:encounter, took_place: p1_last - 1.day, contacts: [build(:encounter_contact, possible_contact: @pos)], partnership: ship1),
+					build(:encounter, took_place: p2_last, contacts: [build(:encounter_contact, possible_contact: @pos)], partnership: ship2)
 				]
 
 				@user.save
@@ -370,15 +351,14 @@ RSpec.describe UserProfile, type: :model do
 					expect(result.size).to be @user.partnerships.size
 
 					r_ship1 = result[0]
-					u_ship1 = @user.partnerships[0]
-					expect(r_ship1["_id"]).to eq u_ship1.id
+					u_ship1 = @user.partnerships.find(r_ship1["_id"])
 					expect(r_ship1["encounters"].size).to be u_ship1.encounters.size
-					expect(r_ship1["partner_name"]).to eq @p1.name
+					expect(r_ship1["partner_name"]).to eq u_ship1.partner.name
 					expect(r_ship1["nickname"]).to eq u_ship1.nickname
 
 					r_ship1_enc0 = r_ship1["encounters"][0]
-					u_ship1_enc0 = u_ship1.encounters[0]
-					expect(r_ship1_enc0["_id"]).to eq u_ship1_enc0.id
+					u_ship1_enc0 = @user.encounters.find(r_ship1_enc0['_id'])
+					expect(r_ship1_enc0["partnership_id"]).to eq u_ship1.id
 					expect(r_ship1_enc0).to have_key "took_place"
 					expect(r_ship1_enc0).to have_key "notes"
 				end

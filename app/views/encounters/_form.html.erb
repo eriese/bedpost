@@ -3,21 +3,22 @@
 	<%= f.date_field :took_place %>
 	<%= f.text_area :notes %>
 	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
-	<dynamic-field-list
-		v-if="vf.formData.partnership_id"
-		component-type="encounter-contact-field"
-		v-model="vf.formData.contacts"
-		base-name="<%= f.object_name %>[contacts_attributes]"
-		@should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"
-		class="contact-field-list"
-		:$v="vf.$v.formData.contacts"
-		:form-data ="vf.formData"
-		label="contact-form-title"
-		description="contact-form-description"
-		state-class="ContactState">
-		<h2 class="h2--is-form-heading" id="contact-form-title"><%= t('.contacts_title') %></h2>
-		<p class="description description--is-form-description" id="contact-form-description"><%= t('.contacts_desc') %></p>
-	</dynamic-field-list>
-	<%= f.radio_group :fluids, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", tooltip: true}} %>
-	<%= f.submit :class => "cta cta--is-form-submit" %>
+	<div v-if="vf.formData.partnership_id">
+		<dynamic-field-list
+			component-type="encounter-contact-field"
+			v-model="vf.formData.contacts"
+			base-name="<%= f.object_name %>[contacts_attributes]"
+			@should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"
+			class="contact-field-list"
+			:$v="vf.$v.formData.contacts"
+			:form-data ="vf.formData"
+			label="contact-form-title"
+			description="contact-form-description"
+			state-class="ContactState">
+			<h2 class="h2--is-form-heading" id="contact-form-title"><%= t('.contacts_title') %></h2>
+			<p class="description description--is-form-description" id="contact-form-description"><%= t('.contacts_desc') %></p>
+		</dynamic-field-list>
+		<%= f.radio_group :fluids, options: {radio_class: "hidden-radio hidden-radio--cta", group_options: {field_class: "toggler", tooltip: true}} %>
+	</div>
+	<%= f.submit :class => "cta cta--is-form-submit", ':disabled' => 'vf.formData.partnership_id === undefined' %>
 <% end %>
