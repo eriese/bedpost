@@ -46,6 +46,13 @@ RSpec.describe PartnershipsController, type: :controller do
 			get :index
 			expect(controller.current_user_profile.partnerships.length).to be 1
 		end
+
+		it 'adds the encounter flow tag to the session if there is an encounter parameter' do
+			@profile = create(:user_profile)
+			sign_in(@profile)
+			get :new, params: {enc: 'true'}
+			expect(session[:new_encounter]).to be true
+		end
 	end
 
 	describe 'POST #create', no_skip: true do
@@ -100,7 +107,7 @@ RSpec.describe PartnershipsController, type: :controller do
 					post :create, session: {new_encounter: true}, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
 
 					ship = @user.reload.partnerships.last
-					expect(response).to redirect_to new_encounter_path
+					expect(response).to redirect_to new_encounter_path(partnership_id: ship.id)
 				end
 			end
 		end

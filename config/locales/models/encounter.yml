@@ -100,6 +100,8 @@ en:
       contacts_title: We want the details!
       contacts_desc: Our logic works best if you tell us things in the order they happened, but we get that things can move quickly in the heat of the moment
       submit: Finish
+      add_partner: Add a new partner
+      prompt: Choose a partner
   encounter_whos:
     new:
       title: Cool!

@@ -123,7 +123,7 @@
 									partnerName: partner.display,
 									notes: enc.notes || this.$_t('encounters.index.no_notes'),
 									partnerClass: partnerClass,
-									href: `/partners/${partner._id}/encounters/${enc._id}`
+									href: `/encounters/${enc._id}`
 								},
 							// show popover on focus
 							popover: {

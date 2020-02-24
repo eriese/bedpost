@@ -10,6 +10,7 @@ class PartnershipsController < ApplicationController
 	end
 
 	def new
+		session[:new_encounter] = true if params[:enc] == 'true'
 		@partnership = current_user_profile.partnerships.new(partner: Profile.new)
 	end
 
@@ -23,7 +24,7 @@ class PartnershipsController < ApplicationController
 
 		if partnership.save
 			# if they were making a new encounter, send them to do that
-			redirect_to session.delete(:new_encounter) ? new_encounter_path : partnership_path(partnership)
+			redirect_to session.delete(:new_encounter) ? new_encounter_path(partnership_id: partnership.id) : partnership_path(partnership)
 		else
 			respond_with_submission_error(partnership.errors.messages, new_partnership_path)
 			clear_unsaved

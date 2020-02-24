@@ -1,5 +1,15 @@
 <%= vuelidate_form_with model: encounter, url: encounter, html: {class: "centered"}, value_include: [:contacts], vue: {'track-failures': true} do |f| %>
-	<%= f.select :partnership_id, options_for_select(@partnerships.map { |p| [p['partner_name'], p['_id']] }), {}, {required: true} %>
+	<% content_for :new_partner_link do %>
+		<%= content_tag :div, slot: 'additional', class: 'additional' do %>
+			<%= content_tag :p do %>
+				<%= link_to t('.add_partner'), new_partnership_path(enc: true), class: 'link' %>
+			<% end %>
+		<% end %>
+	<% end %>
+	<%= f.select :partnership_id, nil, {}, required: true, after_content: content_for(:new_partner_link) do %>
+		<option value=""><%= t(".prompt") %></option>
+		<optgroup><%= options_for_select(@partnerships.map { |p| [p['partner_name'], p['_id']] })%></optgroup>
+	<% end %>
 	<%= f.date_field :took_place %>
 	<%= f.text_area :notes %>
 	<%= f.range_field :self_risk, in: Diagnosis::TransmissionRisk::NO_RISK..Diagnosis::TransmissionRisk::HIGH %>
