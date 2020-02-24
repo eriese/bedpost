@@ -67,8 +67,8 @@ export default class EncounterBarrierTracker {
 				const person = c[ACTORS[i]];
 				const path = `${person}.${instrument.alias_name}.${barrier.type}`;
 				if (Object.getAtPath(that.barriers, path) === undefined) {
-					// isFirst.push(barrier.type);
-					// the value is the first contact position that has a fresh barrier on this instrument for this person
+					// the value is the first contact position that has a
+					// fresh barrier of this type on this instrument for this person
 					Object.setAtPath(that.barriers, path, c.position);
 				} else {
 					isFirst = false;
@@ -78,6 +78,7 @@ export default class EncounterBarrierTracker {
 			// if it's now first, but it used to say it reused a barrier, make it have a new barrier
 			let oldIndex = c.barriers.indexOf('old');
 			if (oldIndex >= 0 && isFirst) {
+				// splice so that vue knows a change was made to the array
 				c.barriers.splice(oldIndex, 1, 'fresh');
 			}
 		});
