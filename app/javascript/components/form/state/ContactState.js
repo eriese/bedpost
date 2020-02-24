@@ -298,7 +298,7 @@ export default class ContactState extends BaseState {
 			this[key] = insts[0]._id;
 		} else if (curID) {
 			// otherwise find the current or an alias of it in the new set
-			let newInst = insts.find((i) => curID == i._id || this.isAlias(curID, i));
+			let newInst = insts.find((i) => curID == i._id) || insts.find((i) => this.isAlias(curID, i));
 			this[key] = newInst && newInst._id;
 		}
 	}
