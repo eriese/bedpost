@@ -214,12 +214,13 @@
 	}
 }
 
-button.vs__deselect{
-	fill: theme-light("cta-bg");
+button.vs__deselect {
+	stroke: $jakarta-skyline;
+	height: 1.5rem;
 
 	&:hover, &:focus {
 		background-color: transparent;
-		fill: theme-light("cta-bg-light");
+		stroke: theme-light("cta-bg");
 	}
 }
 

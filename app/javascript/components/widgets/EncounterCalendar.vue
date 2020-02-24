@@ -4,9 +4,15 @@
 		<div v-else>
 			<div v-if="partnerships.length > 1">
 				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty">
-					<template v-slot:selected-option="opt">
-						<span class="vs__selected-inner"><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
+					<template v-slot:selected-option-container="{option, deselect, multiple, disabled}" >
+						<span class="vs__selected" :key="option.index" :class="`partnership-${option.index}`">
+							<span class="vs__selected-inner">{{option.display}}</span>
+							<arrow-button v-if="multiple" :disabled="disabled" @click="deselect(option)" class="vs__deselect" aria-label="Remove option" shape="x" t-key="remove"></arrow-button>
+						</span>
 					</template>
+					<span slot="selected-option" slot-scope="option">
+						<span class="vs__selected-inner"><span class="partner-indicator"></span>{{option.display}}</span>
+					</span>
 				</v-select>
 			</div>
 			<toggle-switch :symbols="['calendar_view', 'list_view']" :translate="'encounters.index'" :vals="['calendar', 'list']" field="viewType" :val="viewType" @toggle-event="onToggle"></toggle-switch>
