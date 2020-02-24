@@ -94,9 +94,10 @@ export default {
 				};
 			case 'subject_instrument_id':
 			case 'object_instrument_id':
+				var actor = this.field.split('_')[0];
 				return (i) => {
 					return {
-						label: i[`${this.state.contact.object}_name`],
+						label: i[`${this.state.contact[actor]}_name`],
 						inputValue: i._id
 					};
 				};
