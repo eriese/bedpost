@@ -22,7 +22,7 @@ class EncounterWhosController < ApplicationController
 		else
 			# otherwise send them to make an encounter with the partner
 			partner = current_user_profile.partnerships.find(partner_id)
-			redirect_to new_partnership_encounter_path(partner)
+			redirect_to new_encounter_path(partnership_id: partner_id)
 		end
 	rescue Mongoid::Errors::DocumentNotFound
 		respond_with_submission_error({partnership_id: :blank}, encounters_who_path)

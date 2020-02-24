@@ -15,7 +15,7 @@ RSpec.describe EncounterWhosController, type: :controller do
 			it 'redirects to the new encounter path for the partnership' do
 				@ship = @user.partnerships.create(partner: dummy_user)
 				post :create, params: {encounter: {partnership_id: @ship.id}}
-				expect(response).to redirect_to new_partnership_encounter_path(@ship)
+				expect(response).to redirect_to new_encounter_path(partnership_id: @ship.id)
 			end
 		end
 

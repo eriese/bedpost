@@ -20,7 +20,7 @@ feature "User creates new partnership through encounter", :slow do
 			visit root_path
 			expect(page).to have_current_path(root_path)
 			# go to the new encounter page
-			find_link(href: encounters_who_path).click
+			find_link(href: new_encounter_path).click
 			select(I18n.t('encounter_whos.new.new_partner'), from: 'encounter_partnership_id')
 			find('input[name="commit"]').click
 
@@ -45,7 +45,7 @@ feature "User creates new partnership through encounter", :slow do
 			visit root_path
 			expect(page).to have_current_path(root_path)
 			# go to the new encounter page
-			find_link(href: encounters_who_path).click
+			find_link(href: new_encounter_path).click
 			select(I18n.t('encounter_whos.new.new_partner'), from: 'encounter_partnership_id')
 			find('input[name="commit"]').click
 

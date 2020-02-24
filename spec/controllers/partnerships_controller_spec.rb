@@ -100,7 +100,7 @@ RSpec.describe PartnershipsController, type: :controller do
 					post :create, session: {new_encounter: true}, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
 
 					ship = @user.reload.partnerships.last
-					expect(response).to redirect_to new_partnership_encounter_path(ship)
+					expect(response).to redirect_to new_encounter_path
 				end
 			end
 		end

@@ -20,6 +20,7 @@ class EncountersController < ApplicationController
 
 	def show
 		@force = params[:force]
+		@partner = @encounter.partnership.partner
 		Encounter::RiskCalculator.new(@encounter).track(force: @force)
 		respond_to do |format|
 			# just send the alternate schedule html if it's a json request
@@ -29,24 +30,28 @@ class EncountersController < ApplicationController
 	end
 
 	def new
-		@encounter = Encounter.new
-		@partners = current_user_profile.partners_with_profiles
+		given_partnership = params[:partnership_id]
+		if current_user_profile.partnerships.where(id: given_partnership).exists?
+			@encounter = current_user_profile.encounters.new(partnership_id: given_partnership)
+		else
+			@encounter = current_user_profile.encounters.new
+		end
+		@partnerships = current_user_profile.partners_with_profiles.to_a
 		gon_encounter_data
 	end
 
 	def create
-
-		encounter = @partnership.encounters.new(e_params)
+		encounter = current_user_profile.encounters.new(e_params)
 		if encounter.save
-			redirect_to partnership_encounter_path(@partnership, encounter)
+			redirect_to encounter_path(encounter)
 		else
-			respond_with_submission_error(encounter.errors.messages, new_partnership_encounter_path(@partnership))
+			respond_with_submission_error(encounter.errors.messages, new_encounter_path)
 			clear_unsaved
 		end
 	end
 
 	def edit
-		@partners = current_user_profile.partners_with_profiles
+		@partnerships = current_user_profile.partners_with_profiles.to_a
 		gon_encounter_data
 	end
 
@@ -55,9 +60,9 @@ class EncountersController < ApplicationController
 		# set barriers to an empty array if none were submitted
 		prms[:contacts_attributes].each { |i, a| a[:barriers] ||= [] } if prms[:contacts_attributes].present?
 		if @encounter.update(prms)
-			redirect_to partnership_encounter_path(@partnership, @encounter)
+			redirect_to encounter_path(@encounter)
 		else
-			respond_with_submission_error(@encounter.errors.messages, edit_partnership_encounter_path(@partnership, @encounter))
+			respond_with_submission_error(@encounter.errors.messages, edit_encounter_path(@encounter))
 		end
 	end
 
@@ -69,25 +74,25 @@ class EncountersController < ApplicationController
 
 	private
 	def set_encounter
-		@encounter = @partnership.encounters.find(params[:id]) if set_partnership
-		@partner = @partnership.partner
+		@encounter = current_user_profile.encounters.find(params[:id])
+		@partnership = @encounter.partnership
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_back(fallback_location: encounters_path)
 	end
 
 	def clear_unsaved
-		@partnership.clear_unsaved_encounters if @partnership
+		current_user_profile.clear_unsaved_encounters
 	end
 
 	def e_params
 		c_attrs = [{:barriers => []}, :possible_contact_id, :position, :_destroy, :subject, :object]
 		c_attrs << :_id unless action_name == "create"
-		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: c_attrs)
+		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, :partnership_id, contacts_attributes: c_attrs)
 	end
 
 	def gon_encounter_data
 		gon.encounter_data = {
-			partners: @partners,
+			partners: @partnerships,
 			contacts: Contact::ContactType::TYPES,
 			user: current_user_profile.as_json_private,
 			instruments: Contact::Instrument.as_map,

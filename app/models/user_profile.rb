@@ -164,7 +164,7 @@ class UserProfile < Profile
 	# An aggregate query to get the user's partnerships (including partner names) with all of their encounters
 	def partners_with_encounters(partnership_id = nil)
 		lookup = partners_lookup(true)
-		if partnership_id
+		if partnership_id.present?
 			partnership_id = BSON::ObjectId(partnership_id) unless partnership_id.is_a? BSON::ObjectId
 			lookup.insert(lookup_index(lookup), {'$match' => {'_id' => partnership_id}})
 		else

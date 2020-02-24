@@ -23,7 +23,7 @@ class PartnershipsController < ApplicationController
 
 		if partnership.save
 			# if they were making a new encounter, send them to do that
-			redirect_to session.delete(:new_encounter) ? new_partnership_encounter_path(partnership) : partnership_path(partnership)
+			redirect_to session.delete(:new_encounter) ? new_encounter_path : partnership_path(partnership)
 		else
 			respond_with_submission_error(partnership.errors.messages, new_partnership_path)
 			clear_unsaved

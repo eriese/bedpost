@@ -36,7 +36,7 @@
 			<% end %>
 		</content-requester>
 		<% if @force %>
-			<%= link_to t('.advice.hide_lower_risk'), partnership_encounter_path(@partnership, @encounter), class: "link link--is-dark-theme--is-secondary" %>
+			<%= link_to t('.advice.hide_lower_risk'), encounter_path(@encounter), class: "link link--is-dark-theme--is-secondary" %>
 		<% end %>
 	<% else %>
 		<p><%= t('.advice.no_schedule') %></p>
@@ -47,5 +47,5 @@
 <% if current_user_profile.first_time? %>
 	<%= link_to t(".continue_first_time"), first_time_path, class: 'link' %>
 <% else %>
-	<%= link_to t(".edit"), edit_partnership_encounter_path(@partnership, @encounter), {class: 'cta--is-floating-right link'} %>
+	<%= link_to t(".edit"), edit_encounter_path(@encounter), {class: 'cta--is-floating-right link'} %>
 <% end %>

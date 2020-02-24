@@ -12,7 +12,7 @@
 		<h3><%= t(".no_encounters.#{trans_key}", partner_name: first_partner["partner_name"]) %></h3>
 	</encounter-calendar>
 	<div>
-		<%= link_to '', @is_partner ? new_partnership_encounter_path(first_partner["_id"]) : encounters_who_path, title: t(".new"), class: "cta cta--is-add-btn"%>
+		<%= link_to '', new_encounter_path(first_partner["_id"]), title: t(".new"), class: "cta cta--is-add-btn"%>
 
 		<%= link_to(t(".back"), root_path, class: "cta cta--is-back-btn")  %>
 	</div>
