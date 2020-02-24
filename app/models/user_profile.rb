@@ -67,12 +67,6 @@ class UserProfile < Profile
 		super(value.nil? ? value : value.downcase)
 	end
 
-	# def encounters
-	# 	enc = []
-	# 	partnerships.each { |p| enc += p.encounters }
-	# 	enc
-	# end
-
 	# TODO: implement this when implementing risk-to-partner calculations. take user's activities, risk-taking behavior, results, etc. into account
 	def risk_mitigator
 		0
@@ -127,10 +121,8 @@ class UserProfile < Profile
 		save(validate: false)
 	end
 
-	def first_elem(partner_field)
-		# { '$arrayElemAt' => [
-			"$partner.#{partner_field}"
-			# , 0] }
+	def partner_elem(partner_field)
+		"$partner.#{partner_field}"
 	end
 
 	# An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter
@@ -139,7 +131,7 @@ class UserProfile < Profile
 			{'$project' => {
 				most_recent: {'$max' => '$encounters.took_place'},
 				nickname: 1,
-				partner_name: first_elem('name')
+				partner_name: partner_elem('name')
 			}},
 			{'$sort' => {most_recent: -1}}
 		])
@@ -149,13 +141,13 @@ class UserProfile < Profile
 		UserProfile.collection.aggregate(partners_lookup + [
 			{
 				'$project': {
-					name: first_elem('name'),
-					pronoun_id: first_elem('pronoun_id'),
-					anus_name: first_elem('a_n'),
-					external_name: first_elem('e_n'),
-					internal_name: first_elem('i_n'),
-					can_penetrate: first_elem('c_p'),
-					partner_name: { '$concat': [first_elem('name'), ' ', '$nickname'] }
+					name: partner_elem('name'),
+					pronoun_id: partner_elem('pronoun_id'),
+					anus_name: partner_elem('a_n'),
+					external_name: partner_elem('e_n'),
+					internal_name: partner_elem('i_n'),
+					can_penetrate: partner_elem('c_p'),
+					partner_name: { '$concat': [partner_elem('name'), ' ', '$nickname'] }
 				}
 			}
 		])

@@ -36,7 +36,7 @@ class BetaController < ApplicationController
 			head :unauthorized
 		else
 			email = google_params[:email].downcase
-			BetaMailer.delay.beta_invite(email, google_params[:name])
+			BetaMailer.delay(queue: 'mailers').beta_invite(email, google_params[:name])
 			Rails.logger.warn('google forms response webhook properly received')
 			head :ok
 		end

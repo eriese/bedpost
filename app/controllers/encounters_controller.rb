@@ -33,6 +33,8 @@ class EncountersController < ApplicationController
 		given_partnership = params[:partnership_id]
 		if current_user_profile.partnerships.where(id: given_partnership).exists?
 			@encounter = current_user_profile.encounters.new(partnership_id: given_partnership)
+		elsif current_user_profile.partnerships.count == 1
+			@encounter = current_user_profile.encounters.new(partnership_id: current_user_profile.partnerships.first.id)
 		else
 			@encounter = current_user_profile.encounters.new
 		end

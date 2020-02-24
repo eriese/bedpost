@@ -132,7 +132,7 @@ RSpec.describe EncountersController, type: :controller do
 
 	describe 'GET #new' do
 		before :each do
-			make_user_and_encounters
+			make_user_and_encounters num_partners: 2
 		end
 
 		it 'makes a new encounter and includes the given partner' do
@@ -143,7 +143,6 @@ RSpec.describe EncountersController, type: :controller do
 		end
 
 		it 'makes a new encounter with no partner if none is given' do
-			ship = @user.partnerships.first
 			get :new
 			expect(assigns[:encounter]).to be_a Encounter
 			expect(assigns[:encounter].partnership_id).to be_nil
@@ -153,6 +152,12 @@ RSpec.describe EncountersController, type: :controller do
 			get :new, params: {partnership_id: 'invalid'}
 			expect(assigns[:encounter]).to be_a Encounter
 			expect(assigns[:encounter].partnership_id).to be_nil
+		end
+
+		it 'makes a new encounter with the first partner if there is only one partner' do
+			@user.partnerships.last.destroy
+			get :new
+			expect(assigns[:encounter].partnership_id).to eq @user.partnerships.first.id
 		end
 
 		it 'adds all the partners to the page' do

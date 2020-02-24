@@ -15,11 +15,11 @@ class TrelloController < ApplicationController
 			report = params.require(:bug).permit(:title, :reproduced_times, :expected_behavior, :actual_behavior, :steps, :notes)
 			screenshots = params.require(:bug).permit(screenshots: [])[:screenshots]
 			attachments = screenshots.nil? ? {} : Hash[screenshots.map { |s| [s.original_filename, s.tempfile.read] }]
-			BetaMailer.delay.bug_report(report, attachments)
+			BetaMailer.delay(queue: 'mailers').bug_report(report, attachments)
 			flash[:notice] = "Successfully submitted bug report"
 		when :feature
 			report = params.require(:feature).permit(:title, :what, :why)
-			BetaMailer.delay.feature_request(report)
+			BetaMailer.delay(queue: 'mailers').feature_request(report)
 			flash[:notice] = "Successfully submitted feature request"
 		end
 		redirect_to feedback_path(feedback_type: @feedback_type)

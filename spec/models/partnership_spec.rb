@@ -11,6 +11,52 @@ RSpec.describe Partnership, type: :model do
 		cleanup(@user, @user2, @partner)
 	end
 
+	describe '#encounters' do
+		before do
+			create_ship(:profile)
+			@partner2 = create(:profile)
+			@ship2 = @user.partnerships.new(partner: @partner2)
+			@user.save
+
+			@hand = create(:contact_instrument, name: 'hand')
+			@pos1 = create(:possible_contact, object_instrument: @hand, subject_instrument: @hand)
+		end
+
+		after do
+			cleanup(@user, @partner, @partner2, @pos1, @hand)
+		end
+		it 'returns an empty array if the user has no encounters' do
+			expect(@ship.encounters).to eq []
+		end
+
+		it 'gets the encounters the user has for this partnership' do
+			@enc1 = build(:encounter, partnership_id: @ship.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc2 = build(:encounter, partnership_id: @ship.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc3 = build(:encounter, partnership_id: @ship2.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+
+			@user.encounters = [@enc1, @enc2, @enc3]
+			@user.save
+
+			result = @ship.encounters
+			expect(result.size).to be 2
+			expect(result).to include(@enc1)
+			expect(result).to include(@enc2)
+		end
+
+		it 'does not get encounters the user has for other partnerships' do
+			@enc1 = build(:encounter, partnership_id: @ship.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc2 = build(:encounter, partnership_id: @ship2.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc3 = build(:encounter, partnership_id: @ship2.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+
+			@user.encounters = [@enc1, @enc2, @enc3]
+			@user.save
+
+			result = @ship2.encounters
+			expect(result.size).to be 2
+			expect(result).not_to include(@enc1)
+		end
+	end
+
 	describe '#partner' do
 		it 'can accept a profile as a partner' do
 			create_ship(:profile)
