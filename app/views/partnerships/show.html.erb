@@ -24,7 +24,7 @@
 		</p>
 	<% end %>
 	<p>
-		<%= link_to t(".new_encounter", {name: @partnership.partner.name}), new_encounter_path, class: "link" %>
+		<%= link_to t(".new_encounter", {name: @partnership.partner.name}), new_encounter_path(partnership_id: @partnership.id), class: "link" %>
 	</p>
 	<p><%= link_to t(".edit"), edit_partnership_path(@partnership), class: "link" %></p>
 	<p>

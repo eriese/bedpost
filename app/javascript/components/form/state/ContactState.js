@@ -92,6 +92,10 @@ export default class ContactState extends BaseState {
 	 */
 	get possible_contact_id() {
 		// get the possible contact that matches the contact_type, subject_instrument_id, and object_instrument_id
+		if(this.shownInstruments.subject.every((i) => i._id != this.subject_instrument_id) ||
+			this.shownInstruments.object.every((i) => i._id != this.object_instrument_id) ) {
+			return undefined;
+		}
 		let contact = this.possibles[this.contact_type].find((i) => i.subject_instrument_id == this.subject_instrument_id && i.object_instrument_id == this.object_instrument_id);
 		return contact && contact._id;
 	}
