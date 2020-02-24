@@ -20,14 +20,13 @@ feature "User creates new partnership through encounter", :slow do
 			visit root_path
 			expect(page).to have_current_path(root_path)
 			# go to the new encounter page
-			find_link(href: encounters_who_path).click
-			select(I18n.t('encounter_whos.new.new_partner'), from: 'encounter_partnership_id')
-			find('input[name="commit"]').click
+			find_link(href: new_encounter_path).click
+			click_on I18n.t('encounters.form.add_partner')
 
 			@partner = create(:user_profile)
 
 			# get redirected to new partnership
-			expect(page).to have_current_path(new_partnership_path)
+			expect(page).to have_current_path(new_partnership_path(enc: true))
 
 			# fill in the partnership with the uid and submit
 			fill_in 'partnership_uid', with: @partner.uid
@@ -36,7 +35,7 @@ feature "User creates new partnership through encounter", :slow do
 			#expect to land on a new encounter form for the partnership
 			partnership = @user.reload.partnerships.last
 			expect(partnership.uid).to eq @partner.uid
-			expect(page).to have_current_path(new_partnership_encounter_path(partnership))
+			expect(page).to have_current_path(new_encounter_path(partnership_id: partnership.id))
 		end
 	end
 
@@ -45,12 +44,11 @@ feature "User creates new partnership through encounter", :slow do
 			visit root_path
 			expect(page).to have_current_path(root_path)
 			# go to the new encounter page
-			find_link(href: encounters_who_path).click
-			select(I18n.t('encounter_whos.new.new_partner'), from: 'encounter_partnership_id')
-			find('input[name="commit"]').click
+			find_link(href: new_encounter_path).click
+			click_on I18n.t('encounters.form.add_partner')
 
 			# get redirected to new partnership
-			expect(page).to have_current_path(new_partnership_path)
+			expect(page).to have_current_path(new_partnership_path(enc: true))
 
 			# fill in the profile details and partnership and submit
 			fill_in_partnership
@@ -58,7 +56,7 @@ feature "User creates new partnership through encounter", :slow do
 			#expect to land on a new encounter form for the partnership
 			partnership = @user.reload.partnerships.last
 			expect(partnership.partner_id).to eq Profile.last.id
-			expect(page).to have_current_path(new_partnership_encounter_path(partnership))
+			expect(page).to have_current_path(new_encounter_path(partnership_id: partnership.id))
 		end
 	end
 end

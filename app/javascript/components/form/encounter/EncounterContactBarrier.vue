@@ -54,7 +54,7 @@ export default {
 				// the key has no mention of which actor
 				key = key.replace(new RegExp('_' + matcher), '');
 				// put the instrument and name in the arguments
-				transArgs.instrument = this.state.instrumentName(this.actor);
+				transArgs.instrument = this.state.chosenInstrumentName(this.actor);
 				transArgs.name = this.personName;
 				// pluralize as needed
 				transArgs.count = transArgs.instrument.match(/[^s]s$/) ? 1 : 0;

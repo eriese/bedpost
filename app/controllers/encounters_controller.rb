@@ -8,46 +8,52 @@ class EncountersController < ApplicationController
 		@is_partner = params[:partnership_id].present?
 		# and whether the user has any partnerships regardless of whether or not those partnerships have encounters
 		@has_partners = current_user_profile.partnerships.any?
-		#use an aggregation to get all necessary data about partnerships that have encounters
+		# use an aggregation to get all necessary data about partnerships that have encounters
 		@partnerships = current_user_profile.partners_with_encounters(params[:partnership_id]).to_a
 		@partnerships.each_with_index do |ship, i|
-			#add an index
+			# add an index
 			ship[:index] = i
-			#create the display name
-			ship[:display] = Partnership.make_display(ship["partner_name"], ship["nickname"])
+			# create the display name
+			ship[:display] = Partnership.make_display(ship['partner_name'], ship['nickname'])
 		end
 	end
 
 	def show
-		return unless set_partnership(encounters_path)
 		@force = params[:force]
+		@partner = @encounter.partnership.partner
 		Encounter::RiskCalculator.new(@encounter).track(force: @force)
 		respond_to do |format|
 			# just send the alternate schedule html if it's a json request
-			format.json {render inline: helpers.display_schedule(@encounter)}
-			format.html {render :show}
+			format.json { render inline: helpers.display_schedule(@encounter) }
+			format.html { render :show }
 		end
 	end
 
 	def new
-		return unless set_partnership(encounters_who_path)
-		@partner = @partnership.partner
-		@encounter = @partnership.encounters.new
+		given_partnership = params[:partnership_id]
+		if current_user_profile.partnerships.where(id: given_partnership).exists?
+			@encounter = current_user_profile.encounters.new(partnership_id: given_partnership)
+		elsif current_user_profile.partnerships.count == 1
+			@encounter = current_user_profile.encounters.new(partnership_id: current_user_profile.partnerships.first.id)
+		else
+			@encounter = current_user_profile.encounters.new
+		end
+		@partnerships = current_user_profile.partners_with_profiles.to_a
 		gon_encounter_data
 	end
 
 	def create
-		return unless set_partnership(encounters_who_path)
-		encounter = @partnership.encounters.new(e_params)
+		encounter = current_user_profile.encounters.new(e_params)
 		if encounter.save
-			redirect_to partnership_encounter_path(@partnership, encounter)
+			redirect_to encounter_path(encounter)
 		else
-			respond_with_submission_error(encounter.errors.messages, new_partnership_encounter_path(@partnership))
+			respond_with_submission_error(encounter.errors.messages, new_encounter_path)
 			clear_unsaved
 		end
 	end
 
 	def edit
+		@partnerships = current_user_profile.partners_with_profiles.to_a
 		gon_encounter_data
 	end
 
@@ -56,9 +62,9 @@ class EncountersController < ApplicationController
 		# set barriers to an empty array if none were submitted
 		prms[:contacts_attributes].each { |i, a| a[:barriers] ||= [] } if prms[:contacts_attributes].present?
 		if @encounter.update(prms)
-			redirect_to partnership_encounter_path(@partnership, @encounter)
+			redirect_to encounter_path(@encounter)
 		else
-			respond_with_submission_error(@encounter.errors.messages, edit_partnership_encounter_path(@partnership, @encounter))
+			respond_with_submission_error(@encounter.errors.messages, edit_encounter_path(@encounter))
 		end
 	end
 
@@ -69,39 +75,31 @@ class EncountersController < ApplicationController
 
 
 	private
-	def set_partnership(redirect_path = partnerships_path)
-		@partnership = current_user_profile.partnerships.find(params[:partnership_id])
-		return true
-	rescue Mongoid::Errors::DocumentNotFound
-		redirect_to redirect_path
-		return false
-	end
-
 	def set_encounter
-		@encounter = @partnership.encounters.find(params[:id]) if set_partnership
-		@partner = @partnership.partner
+		@encounter = current_user_profile.encounters.find(params[:id])
+		@partnership = @encounter.partnership
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_back(fallback_location: encounters_path)
 	end
 
 	def clear_unsaved
-		@partnership.clear_unsaved_encounters if @partnership
+		current_user_profile.clear_unsaved_encounters
 	end
 
 	def e_params
 		c_attrs = [{:barriers => []}, :possible_contact_id, :position, :_destroy, :subject, :object]
 		c_attrs << :_id unless action_name == "create"
-		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, contacts_attributes: c_attrs)
+		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, :partnership_id, contacts_attributes: c_attrs)
 	end
 
 	def gon_encounter_data
 		gon.encounter_data = {
-			partner: @partnership.partner.as_json_private,
+			partners: @partnerships,
 			contacts: Contact::ContactType::TYPES,
 			user: current_user_profile.as_json_private,
-			instruments: Contact::Instrument.hashed_for_partnership(current_user_profile, @partnership.partner),
+			instruments: Contact::Instrument.as_map,
 			possibles: PossibleContact.hashed_for_partnership,
-			partnerPronoun: @partnership.partner.pronoun,
+			pronouns: Pronoun.as_map,
 			barriers: Contact::BarrierType::TYPES
 		}
 		gon.dummy = EncounterContact.new

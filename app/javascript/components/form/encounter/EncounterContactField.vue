@@ -84,6 +84,9 @@ export default {
 		'contact-field-section': encounterContactFieldSection,
 		'barrier-input': encounterContactBarrier,
 	},
+	watch: {
+		'state.encounter.partnership_id': 'setContact'
+	},
 	methods: {
 		/**
 		 * Set the possible contact id based on the selected options
@@ -92,7 +95,9 @@ export default {
 		 */
 		setContact(changedField) {
 			// touch the field
-			this.touchInput(changedField);
+			if (changedField) {
+				this.touchInput(changedField);
+			}
 			// if this updates the possible contact, touch it as well
 			if (this.state.setContact()) {
 				this.touchInput('possible_contact_id');

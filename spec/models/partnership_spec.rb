@@ -12,16 +12,48 @@ RSpec.describe Partnership, type: :model do
 	end
 
 	describe '#encounters' do
-		before :all do
-			@user = create(:user_profile)
-			@partner = create(:profile)
-			@obj = @user.partnerships.create(partner: @partner)
+		before do
+			create_ship(:profile)
+			@partner2 = create(:profile)
+			@ship2 = @user.partnerships.new(partner: @partner2)
+			@user.save
+
+			@hand = create(:contact_instrument, name: 'hand')
+			@pos1 = create(:possible_contact, object_instrument: @hand, subject_instrument: @hand)
 		end
 
-		it_should_behave_like 'an object that dirty-tracks its embedded relations', Partnership, true
+		after do
+			cleanup(@user, @partner, @partner2, @pos1, @hand)
+		end
+		it 'returns an empty array if the user has no encounters' do
+			expect(@ship.encounters).to eq []
+		end
 
-		it 'responds to encounters' do
-			expect(@obj).to respond_to :encounters
+		it 'gets the encounters the user has for this partnership' do
+			@enc1 = build(:encounter, partnership_id: @ship.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc2 = build(:encounter, partnership_id: @ship.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc3 = build(:encounter, partnership_id: @ship2.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+
+			@user.encounters = [@enc1, @enc2, @enc3]
+			@user.save
+
+			result = @ship.encounters
+			expect(result.size).to be 2
+			expect(result).to include(@enc1)
+			expect(result).to include(@enc2)
+		end
+
+		it 'does not get encounters the user has for other partnerships' do
+			@enc1 = build(:encounter, partnership_id: @ship.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc2 = build(:encounter, partnership_id: @ship2.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+			@enc3 = build(:encounter, partnership_id: @ship2.id, contacts: [build(:encounter_contact, possible_contact: @pos1)])
+
+			@user.encounters = [@enc1, @enc2, @enc3]
+			@user.save
+
+			result = @ship2.encounters
+			expect(result.size).to be 2
+			expect(result).not_to include(@enc1)
 		end
 	end
 
@@ -231,7 +263,7 @@ RSpec.describe Partnership, type: :model do
 				create_ship(:profile)
 				@hand = create(:contact_instrument, name: :hand)
 				@possible = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
-				enc = create(:encounter, partnership: @ship, contacts: [build(:encounter_contact, possible_contact: @possible)])
+				enc = create(:encounter, partnership: @ship, user_profile: @user, contacts: [build(:encounter_contact, possible_contact: @possible)])
 				expect(@ship.last_took_place).to eq enc.took_place
 			end
 		end

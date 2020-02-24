@@ -16,7 +16,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	# POST /resource
 	def create
 		super do |resource|
-			RegistrationMailer.delay.confirmation(resource.id.to_s) if resource.persisted?
+			RegistrationMailer.delay(queue: 'mailers').confirmation(resource.id.to_s) if resource.persisted?
 		end
 	end
 

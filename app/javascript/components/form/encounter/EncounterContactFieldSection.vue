@@ -97,7 +97,7 @@ export default {
 				var actor = this.field.split('_')[0];
 				return (i) => {
 					return {
-						label: i[`${this.state.contact[actor]}_name`],
+						label: this.state.instrumentName(i, actor),
 						inputValue: i._id
 					};
 				};

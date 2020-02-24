@@ -127,17 +127,17 @@ feature "User creates account", :slow do
 				fill_in_partnership
 
 				ship = user.partnerships.first
-				new_enc_path = new_partnership_encounter_path(ship)
+				new_enc_path = new_encounter_path
 				click_on(I18n.t('tours.index.add_encounter'))
 				# find("a[href='#{new_enc_path}']").click
 
 				# skip filling out that form
 				expect(page).to have_current_path(new_enc_path)
-				ship.encounters << build(:encounter, contacts: [build(:encounter_contact, possible_contact: @p1)])
+				user.encounters << build(:encounter, contacts: [build(:encounter_contact, possible_contact: @p1)], partnership_id: ship.id)
 				user.save
 
 				# go to the view page
-				visit partnership_encounter_path(ship, ship.encounters.first)
+				visit encounter_path(user.encounters.first)
 				expect(page).to have_link({href: first_time_path})
 			end
 		end
@@ -147,7 +147,7 @@ feature "User creates account", :slow do
 				cleanup user, @partner1, @partner2
 			end
 
-			scenario 'it goes to the encounter who page' do
+			scenario 'it goes to the new encounter page' do
 				register_user
 				accept_terms
 				fill_in_profile
@@ -163,7 +163,7 @@ feature "User creates account", :slow do
 				visit page.current_path
 
 				click_on(I18n.t('tours.index.add_encounter'))
-				expect(page).to have_current_path(encounters_who_path)
+				expect(page).to have_current_path(new_encounter_path)
 			end
 		end
 	end

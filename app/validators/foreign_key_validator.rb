@@ -1,7 +1,9 @@
 class ForeignKeyValidator < ActiveModel::EachValidator
 	def validate_each(record, attribute, value)
+		return true if value.blank?
+
 		associated = if options[:query]
-			options[:query].call(value)
+			options[:query].call(value, record)
 		else
 			key_class = options[:key_class]
 			key_name = options[:key_name] || attribute

@@ -59,7 +59,7 @@ RSpec.describe "tours/index", type: :view do
 		end
 
 		it 'has a link to the new encounter path with the partner' do
-			assert_select("a[href='#{new_partnership_encounter_path(@first_partner)}']", {text: I18n.t("tours.index.add_encounter")})
+			assert_select("a[href='#{new_encounter_path}']", {text: I18n.t("tours.index.add_encounter")})
 		end
 
 		it 'has an exit button' do
@@ -90,7 +90,7 @@ RSpec.describe "tours/index", type: :view do
 		end
 
 		it 'has a link to the new encounter path with the partner' do
-			assert_select("a[href='#{encounters_who_path}']", {text: I18n.t("tours.index.add_encounter")})
+			assert_select("a[href='#{new_encounter_path}']", {text: I18n.t("tours.index.add_encounter")})
 		end
 
 		it 'has an exit button' do

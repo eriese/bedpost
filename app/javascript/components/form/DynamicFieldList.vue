@@ -48,7 +48,7 @@ export default {
 			stateConstructor: null,
 		};
 	},
-	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass'],
+	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass', 'formData'],
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];

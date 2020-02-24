@@ -21,7 +21,7 @@ RSpec.describe Tour, type: :model do
 			end
 
 			it 'strips ids out of page names' do
-				orig_page_name = Rails.application.routes.url_helpers.partnership_encounter_path(build_stubbed(:partnership), build_stubbed(:encounter))
+				orig_page_name = Rails.application.routes.url_helpers.encounter_path(build_stubbed(:encounter))
 				# strip the slashes out because this is how it comes in from the front
 				orig_page_name.tr!('/', '_')
 				stripped_page_name = orig_page_name.gsub(described_class::STRIP_IDS_REGEX, '')
