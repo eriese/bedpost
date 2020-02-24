@@ -31,13 +31,14 @@ class EncountersController < ApplicationController
 
 	def new
 		given_partnership = params[:partnership_id]
-		if current_user_profile.partnerships.where(id: given_partnership).exists?
-			@encounter = current_user_profile.encounters.new(partnership_id: given_partnership)
-		elsif current_user_profile.partnerships.count == 1
-			@encounter = current_user_profile.encounters.new(partnership_id: current_user_profile.partnerships.first.id)
-		else
-			@encounter = current_user_profile.encounters.new
-		end
+		partnership_id =
+			if current_user_profile.partnerships.where(id: given_partnership).exists?
+				given_partnership
+			elsif current_user_profile.partnerships.count == 1
+				current_user_profile.partnerships.first.id
+			end
+
+		@encounter = current_user_profile.encounters.new(partnership_id: partnership_id)
 		@partnerships = current_user_profile.partners_with_profiles.to_a
 		gon_encounter_data
 	end
