@@ -48,7 +48,7 @@ export default {
 			stateConstructor: null,
 		};
 	},
-	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass'],
+	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass', 'formData'],
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];
@@ -94,7 +94,7 @@ export default {
 					this.updateIndices(index, oldPos);
 				}
 				this.numSubmitting -= 1;
-
+				this.focusIndex -= 1;
 				this.$nextTick(() => {
 					gsap.set(this.$refs.list_item, {opacity: 1});
 				});
@@ -120,43 +120,44 @@ export default {
 			Array.move(this.internalList, index, newInd);
 			this.updateIndices(oldStart, oldPos);
 		},
-		blurChild(index) {
-			setTimeout((vm) => {
-				if (vm.focusIndex != index) {
-					vm.$refs.list_component[index].blur();
-				}
-			}, 50, this);
-		},
-		focusChild(index) {
-			if (this.focusIndex != index) {
-				this.focusIndex = index;
-				this.$refs.list_component[index].focus();
-			}
-		},
+		/**
+		 * Focus the list item at the given index and blur all others
+		 * @param {number} index      the index the item has in the list
+		 * @param {boolean} focusFirst whether the item should set the focus on its first input
+		 */
 		setFocus(index, focusFirst) {
-			if (index == this.focusIndex || !this.$refs.list_component) {return;}
+			// if there aren't items, do nothing
+			if (!this.$refs.list_component) { return; }
+
+			// if it's not a new index, just focus it
+			if (index == this.focusIndex && this.$children[index].focus) {
+				this.$children[index].focus();
+				return;
+			}
+
+			// set the new index
 			this.focusIndex = index;
-			for (let i = 0; i < this.$refs.list_component.length; i++) {
-				let comp = this.$refs.list_component[i];
+			this.$refs.list_component.forEach((comp) => {
+				// focus the selected item
 				if (comp.watchKey == this.focusIndex) {
 					comp[focusFirst ? 'focusFirst' : 'focus']();
 				} else {
+					// blur all others
 					comp.blur();
 				}
-			}
+			})
 		},
 		track() {
 			this.tracker && this.tracker.update(this.list);
 		},
 		updateIndices() {
 			let startInd = 0;
-			for (var i = 0; i < this.internalList.length; i++) {
-				let listItem = this.internalList[i];
+			this.internalList.forEach((listItem, i) => {
 				listItem.index = i;
 				if (!listItem.item._destroy) {
 					this.$set(listItem.item, 'position', startInd++);
 				}
-			}
+			})
 
 			this.track();
 			this.onInput();

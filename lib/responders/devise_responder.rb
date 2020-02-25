@@ -8,4 +8,9 @@ class DeviseResponder < UniquenessResponder
 			to_format
 		end
 	end
+
+	def default_action
+		@action = :new_beta if ENV['IS_BETA'] && post?
+		super
+	end
 end

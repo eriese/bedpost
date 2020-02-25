@@ -53,6 +53,7 @@ const mountOptions = {
 		'toggle-switch': true,
 		'calendar-explainer': true,
 		'v-popover-row': true,
+		'arrow-button': true
 	},
 	localVue
 };

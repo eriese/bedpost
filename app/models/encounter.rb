@@ -5,11 +5,16 @@ class Encounter
 	field :fluids, type: Boolean, default: false
 	field :self_risk, type: Integer, default: 0
 	field :took_place, type: DateTime
+	field :partnership_id, type: BSON::ObjectId
 
-	embedded_in :partnership
+	embedded_in :user_profile
+	belongs_to :partnership, class_name: 'Partnership'
 	embeds_many :contacts, class_name: 'EncounterContact', order: :position.asc
 	accepts_nested_attributes_for :contacts, allow_destroy: true
 
+	validates :partnership_id, presence: true, foreign_key: {
+		query: proc { |value, record| record.user_profile.partnerships.find(value) }
+	}
 
 	validates_presence_of :took_place
 	validates_length_of :contacts, minimum: 1
@@ -33,6 +38,14 @@ class Encounter
 
 	def overall_risk
 		risks.values.max || Diagnosis::TransmissionRisk::NO_RISK
+	end
+
+	def partnership
+		partnership_id && user_profile.partnerships.find(partnership_id)
+	end
+
+	def partnership=(new_ship)
+		self.partnership_id = new_ship.id
 	end
 
 	def self.display_fields

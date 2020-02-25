@@ -4,8 +4,11 @@
 		<div v-else>
 			<div v-if="partnerships.length > 1">
 				<v-select v-model="selectedPartners" multiple :options="availablePartners" label="display" :close-on-select="false" :no-drop="empty" :searchable="!empty" @input="handleSelect" ref="select">
-					<template v-slot:selected-option="opt">
-						<span class="vs__selected-inner"><span :class="`partnership-${opt.index}`" class="partner-indicator"></span>{{opt.display}}</span>
+					<template v-slot:selected-option-container="{option, deselect, multiple, disabled}" >
+						<span class="vs__selected" :class="`partnership-${option.index}`">
+							<span class="vs__selected-inner">{{option.display}}</span>
+							<arrow-button v-if="multiple" :disabled="disabled" @click="deselect(option)" class="vs__deselect" aria-label="Remove option" shape="x" t-key="remove"></arrow-button>
+						</span>
 					</template>
 				</v-select>
 			</div>
@@ -19,7 +22,7 @@
 							</div>
 							<v-popover-row
 								v-for="attr in attributes"
-								:key="attr.key"
+								:key="attr.customData.encID"
 								:attribute="attr">
 								<a class="link" :href="attr.customData.href"><b class="encounter-partner-name">{{attr.customData.partnerName}}:</b>{{ attr.customData.notes }}</a>
 						</v-popover-row>
@@ -109,9 +112,8 @@ export default {
 				if (partner.encounters == undefined) {return;}
 				// each partner gets their own class, tied to their index in the partnership array so it doesn't change as selectedPartner changed
 				const partnerClass = `partnership-${partner.index}`;
-
 				// for each of the partner's encounters
-				partner.encounters.forEach((enc) => {
+				partner.encounters.forEach((enc, ) => {
 					ret.push({
 						// the date it took place
 						dates: new Date(enc.took_place),
@@ -126,7 +128,7 @@ export default {
 							partnerName: partner.display,
 							notes: enc.notes || this.$_t('encounters.index.no_notes'),
 							partnerClass: partnerClass,
-							href: `/partners/${partner._id}/encounters/${enc._id}`
+							href: `/encounters/${enc._id}`
 						},
 						// show popover on focus
 						popover: {

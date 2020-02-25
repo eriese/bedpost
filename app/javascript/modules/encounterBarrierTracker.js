@@ -50,7 +50,7 @@ export default class EncounterBarrierTracker {
 		// go through the contacts
 		that.contacts.forEach((c) => {
 			// if it doesn't have a possible contact id yet or doesn't have a new or old barrier, skip it
-			if (!c.possible_contact_id || c.barriers.every((b) => b != 'fresh' && b != 'old')) { return; }
+			if (c._destroy || !c.possible_contact_id || c.barriers.every((b) => b != 'fresh' && b != 'old')) { return; }
 
 			// get the possible contact
 			let possibleContact = that.possibleContacts[c.possible_contact_id];
@@ -71,7 +71,7 @@ export default class EncounterBarrierTracker {
 			// if it's now first, but it used to say it reused a barrier, make it have a new barrier
 			let oldIndex = c.barriers.indexOf('old');
 			if (oldIndex >= 0 && isFirst[0] && isFirst[1]) {
-				c.barriers[oldIndex] = 'fresh';
+				c.barriers.splice(oldIndex, 1, 'fresh');
 			}
 		});
 	}

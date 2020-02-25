@@ -3,8 +3,10 @@
 ////////////////////////////////////////
 #page-container #page-container-inner {
 	.vc-container {
-		--dot-diameter: 0.45rem;
+		--dot-diameter: 0.65rem;
 		--bar-height: rem(6px);
+		--day-content-height: 2.25rem;
+		--day-content-width: 2.25rem;
 	}
 
 	.vc-rounded-lg {
@@ -73,20 +75,12 @@
 		}
 	}
 
-	@mixin toggle-button($bg-key, $is-dark: true) {
-
-		@include themed(background-color, $bg-key);
-		@include themed(border-color, $bg-key);
+	@mixin toggle-button($bg-color, $is-dark: true) {
+		background-color: $bg-color;
 		border: rem(2px) solid;
+		border-color: $bg-color;
 
-		body.is-light & {
-			box-shadow: $box-shadow-val theme-light('shadow');
-		}
-
-		body.is-dark & {
-			box-shadow: $box-shadow-val theme-dark('shadow');
-		}
-
+		box-shadow: $box-shadow-val theme-dark('shadow');
 
 		&[aria-pressed=false] {
 			background-color: $color-white;
@@ -105,9 +99,9 @@
 		}
 	}
 
-	$partner-color-keys: "input-border" "input-border-focus" "h1" "form-background" "h2" "cta-bg";
-	@for $i from 0 through 5 {
-		$color-key: nth($partner-color-keys, $i + 1);
+	$partner-colors: $liliac $coyote-tracks $pale-jasper $bonny-belle $color-off-white $dahlia-purple $lolly $guppy-violet $spanish-grey;
+	@for $i from 0 through 8 {
+		$color-key: nth($partner-colors, $i + 1);
 
 		.vc-bg-partnership-#{$i}-600,
 		.vc-bg-partnership-#{$i}-500,

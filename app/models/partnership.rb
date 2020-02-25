@@ -1,5 +1,6 @@
 class Partnership
 	include Mongoid::Document
+
 	LEVEL_FIELDS = [:familiarity, :exclusivity, :communication, :trust, :prior_discussion]
 	field :nickname, type: String
 
@@ -9,7 +10,6 @@ class Partnership
 	end
 
 	embedded_in :user_profile
-	embeds_many :encounters
 	belongs_to :partner, class_name: "Profile"
 
 	index({partner_id: 1}, {unique: true})
@@ -39,6 +39,13 @@ class Partnership
 		self.partner = ptnr if ptnr && ptnr != user_profile
 		@uid = value if ptnr || partner_id.nil?
 	end
+
+	def encounters
+		return [] if user_profile.encounters.blank?
+
+		user_profile.encounters.where(partnership_id: id)
+	end
+
 
 	def last_took_place(if_none = nil)
 		encounters.any? ? encounters.last.took_place : (if_none.nil? ? Date.today : if_none)

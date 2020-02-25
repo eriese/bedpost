@@ -14,7 +14,7 @@
 		</li>
 		<% if @has_partnerships %>
 			<li class="button-list__item">
-				<%= link_to (@num_partnerships == 1 ? new_partnership_encounter_path(@first_partner) : encounters_who_path) , {class: "cta cta--is-square", data: {animation_type: 'slideLeft'}} do %>
+				<%= link_to new_encounter_path , {class: "cta cta--is-square", data: {animation_type: 'slideLeft'}} do %>
 					<span class="cta--is-square__heading"><%= t(".add_encounter") %></span>
 				<% end %>
 			</li>

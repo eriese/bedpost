@@ -9,12 +9,13 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 	end
 
 	def stub_encounter
+		ship = build_stubbed(:partnership, partner: build_stubbed(:profile))
 		@user = build_stubbed(
 			:user_profile,
-			partnerships: [build_stubbed(:partnership, partner: build_stubbed(:profile), encounters: [build(:encounter)]
-			)]
+			encounters: [build(:encounter, partnership_id: ship.id)],
+			partnerships: [ship]
 		)
-		@user.partnerships.first.encounters.first
+		@user.encounters.first
 	end
 
 

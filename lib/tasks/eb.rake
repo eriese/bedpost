@@ -3,7 +3,7 @@ require 'colorize'
 namespace :eb do
 	PROD_ENV = 'bedpost-prod-1'
 
-	def deploy_to_environment(args)
+	def deploy_to_environment(args, unsafe_allowed=false)
 		environment_name = args[:environment_name]
 		sh "eb use #{environment_name}" if environment_name.present?
 
@@ -24,6 +24,8 @@ namespace :eb do
 
 		branch_name = current_branch_name
 		environment_name ||= current_env_name
+		return unless unsafe_allowed || safe_env?({environment_name: environment_name})
+
 		commit_name = `git rev-parse --short HEAD`.chomp
 
 		build_name = "#{environment_name}:#{branch_name}#{branch_name.empty? ? '' : '.'}#{commit_name}"
@@ -51,15 +53,17 @@ namespace :eb do
 		branch_name == 'master' ? '' : branch_name
 	end
 
-	desc 'set the master key environment variable and then deploy'
-	task :deploy, [:environment_name] do |t, args|
-		return unless safe_env? args
-		build_name = deploy_to_environment args
+	def deploy(build_name)
 		sh "eb deploy -l #{build_name}"
 	end
 
+	desc 'set the master key environment variable and then deploy'
+	task :deploy, [:environment_name] do |t, args|
+		build_name = deploy_to_environment args
+		deploy(build_name)
+	end
+
 	task :deploy_staged, [:environment_name] do |t, args|
-		return unless safe_env? args
 		build_name = deploy_to_environment args
 		sh "eb deploy -l #{build_name}-staged --staged"
 	end
@@ -67,16 +71,19 @@ namespace :eb do
 	desc 'deploy to production and reset the used environment after'
 	task :deploy_prod do
 		current_branch = current_branch_name
-		if current_branch != 'master'
-			puts "You're trying to deploy a branch that isn't master to production. Are you sure that's right? Type the current branch name to continue".blue.bold
-			given_branch = gets.chomp
-			return unless given_branch == current_branch
+		if current_branch.present?
+			print "You're trying to deploy a branch that isn't master to production. Are you sure that's right? Type the current branch name to continue".blue.bold
+			unless STDIN.gets.chomp == current_branch
+				puts "No match. Exiting.".bold
+				next
+			end
 		end
 
 		orig_env = current_env_name
 		puts 'switching to production environment'
 		sh "eb use #{PROD_ENV}"
-		deploy_to_environment
+		build_name = deploy_to_environment({}, true)
+		deploy(build_name)
 		if orig_env == "#{PROD_ENV}"
 			puts "Your current beanstalk environment is production. Be Careful!".light_white.bold.on_magenta
 		else

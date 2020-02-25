@@ -7,7 +7,6 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 
 	respond_to :json, except: [:new, :edit]
 
-
 	# GET /resource/sign_up
 	def new_beta
 		build_resource
@@ -17,7 +16,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 	# POST /resource
 	def create
 		super do |resource|
-			RegistrationMailer.confirmation(resource.id.to_s).deliver_later
+			RegistrationMailer.delay(queue: 'mailers').confirmation(resource.id.to_s) if resource.persisted?
 		end
 	end
 
@@ -40,7 +39,7 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 			Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
 			set_flash_message! :notice, :destroyed
 			yield resource if block_given?
-			respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
+			redirect_to after_sign_out_path_for(resource_name)
 		else
 			respond_with resource
 		end
@@ -62,20 +61,28 @@ class UserProfiles::RegistrationsController < Devise::RegistrationsController
 		respond_with(profile)
 	end
 
-
 	# protected
 
 	# If you have extra params to permit, append them to the sanitizer.
 	def configure_sign_up_params
 		devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
-		if ENV['IS_BETA']
-			token_params = params.require(resource_name).permit(:email, :token)
-			token_params[:email].downcase!
-			unless BetaToken.where(token_params).exists?
-				err = {form_error: ["We don't recognize this beta token with your email address"]}
-				respond_with_submission_error(err,  new_registration_path(resource_name))
-			end
+		return unless ENV['IS_BETA']
+
+		token_params = params.require(resource_name).permit(:email, :token)
+		found = true
+		begin
+			token = BetaToken.find_token(token_params[:token].downcase)
+			found = token.email.downcase == token_params[:email].downcase
+		rescue Mongoid::Errors::DocumentNotFound
+			found = false
 		end
+		return if found
+
+		build_resource(sign_up_params)
+		clean_up_passwords resource
+		resource.errors.add(:form_error, "Uh oh! We don't recognize this beta token with your email address")
+
+		respond_with resource
 	end
 
 	# If you have extra params to permit, append them to the sanitizer.

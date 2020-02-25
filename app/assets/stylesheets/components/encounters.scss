@@ -9,7 +9,7 @@
 			margin-top: -$spacing-tiny;
 		}
 	}
-	.incomplete.blurred {
+	.incomplete {
 		background-color: theme-dark('h1');
 		.contact-error {
 			font-size: 0.75rem;
@@ -396,9 +396,9 @@
 		}
 
 		&__selected {
-			color: theme-light('text');
+			color: black;
 			border-radius: $default-border-radius;
-			background-color: $color-off-white;
+			font-weight: 600;
 			border: none;
 			padding: $spacing-tiny $spacing-small;
 		}

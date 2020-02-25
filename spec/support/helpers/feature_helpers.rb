@@ -4,6 +4,10 @@ module FeatureHelpers
 		strip_tags(I18n.t(key, options)).strip
 	end
 
+	def env_registration_path
+		ENV['IS_BETA'] ? beta_registration_path : new_user_profile_registration_path
+	end
+
 	def login_new_user
 		user_params = attributes_for(:user_profile)
 		@user = create(:user_profile, user_params);
@@ -15,8 +19,12 @@ module FeatureHelpers
 	end
 
 	def register_user
-		visit new_user_profile_registration_path
+		visit env_registration_path
 		@user_params = attributes_for(:user_profile)
+		if ENV['IS_BETA']
+			token = BetaToken.create(email: @user_params[:email])
+			fill_in 'Registration Token*', with: token.token
+		end
 		fill_in 'First name*', with: @user_params[:name]
 		fill_in 'Email*', with: @user_params[:email]
 		fill_in 'Password*', with: @user_params[:password]

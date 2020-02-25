@@ -1,5 +1,5 @@
 class BetaMailer < ApplicationMailer
-	self.delivery_method = :ses
+	self.delivery_method = Rails.env.test? ? :test : :ses
 	FEATURE_EMAIL = Rails.application.credentials.dig(:trello, :features) || 'support@bedpost.me'
 	BUG_EMAIL = Rails.application.credentials.dig(:trello, :bugs) || 'support@bedpost.me'
 
@@ -16,9 +16,11 @@ class BetaMailer < ApplicationMailer
 
 	def beta_invite(to_address, name)
 		@name = name
-		@token = BetaToken.create(email: to_address.downcase)
+		to_address.downcase!
+		@token = BetaToken.find_or_create_by(email: to_address)
 		urls = Rails.application.routes.url_helpers
-		@signup_url = ENV['IS_BETA'] ? urls.beta_registration_url : urls.new_user_profile_registration_url
-		mail(to: to_address, subject: "Welcome to BedPost Beta!")
+		@signup_url = urls.beta_registration_url
+		@reason = 'You are receiving this email because you completed our survey to request an invitation to join our beta. If you don\'t want to receive any more communication from us, simply ignore this email and you won\'t hear from us again.'
+		mail(to: to_address, subject: 'Welcome to BedPost Beta!')
 	end
 end

@@ -15,4 +15,4 @@ xoxo <br>
 The BedPost Team <br>
 Enoch Riese - founder
 <br>
-<p>PS - We’d love it if you shared BedPost with your friends and lovers using this link <a href="https://www.surveymonkey.com/r/X97MS6X" style="<%= link_styles %>">https://www.surveymonkey.com/r/X97MS6X</a></p>
+<p>PS - We’d love it if you shared BedPost with your friends and lovers using this link <%= link_to ENV['SURVEY_URL'], ENV['SURVEY_URL'], style: link_styles, target: '_blank' %></p>
