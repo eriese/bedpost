@@ -8,6 +8,9 @@ class Contact::Instrument
 	field :can_clean, type: Boolean, default: false
 	field :has_fluids, type: Boolean, default: true
 	field :conditions, type: Hash
+	field :subject_barriers, type: Array
+	field :object_barriers, type: Array
+
 	index({name: 1}, {unique: true})
 
 	has_many :as_subject, class_name: 'PossibleContact', inverse_of: :subject_instrument, dependent: :restrict_with_error
@@ -37,6 +40,7 @@ class Contact::Instrument
 				# (methods: Contact::ContactType.inst_methods)
 				hsh[:user_name] = i.get_user_name_for(user)
 				hsh[:partner_name] = i.get_user_name_for(partner)
+				hsh[:alias_name] = i.alias_name
 				[i.id, hsh]
 			end]
 		end
