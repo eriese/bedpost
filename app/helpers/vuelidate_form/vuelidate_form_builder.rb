@@ -170,9 +170,10 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		end
 
 		add_value(attribute, checked_val)
-		builder.custom_field do
+		builder.custom_field(nil, :fieldset) do
 			@template.content_tag(:div) do
-				builder.field_label <<
+				lbl = builder.field_label
+				lbl.sub('<label', '<legend').sub('label>', 'legend>').html_safe <<
 				@template.content_tag(
 					:div,
 					@template.safe_join(btns, joiner),
@@ -217,18 +218,19 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 	def date_field(attribute, **options)
 		options = convert_options(options)
 		options[:is_date] = true
-		options[:id] = "#{attribute}_visible"
 		date_field_builder = field_builder(attribute, options)
 		date_field_builder.field do
 			mdl = options.delete "v-model"
-			@template.content_tag(:"v-date-picker", "", {":value" => mdl, "v-on" => "#{date_field_builder.slot_scope}.$listeners", ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
-				options[:"slot-scope"] = 'dp'
-				options[:"v-bind"] = 'dp.inputProps'
-				options[:"v-on"] = 'dp.inputEvents'
-				parent_text_field(attribute, options)
+			@template.content_tag(:'calendar-explainer', {':show-instructions': "#{date_field_builder.slot_scope}.focusedOnly", "v-on" => "#{date_field_builder.slot_scope}.$listeners", role: 'combobox'}) do
+
+				@template.content_tag(:"v-date-picker", "", {":value" => mdl, 'slot-scope': 'explainer', 'v-on': 'explainer.calendarListeners', ":popover" => "{visibility: 'focus'}", ref: "datepicker"}) do
+					options[:"slot-scope"] = 'dp'
+					options[:"v-bind"] = 'dp.inputProps'
+					options[:"v-on"] = 'dp.inputEvents'
+					parent_text_field(attribute, options)
+				end
 			end <<
-			@template.content_tag(:'calendar-explainer', '', { ':datepicker': '$refs.datepicker', 'v-show': "#{date_field_builder.slot_scope}.focusedOnly", id: 'calendar-instructions' }) <<
-			parent_hidden_field(attribute, {:"v-model"=> mdl})
+			parent_hidden_field(attribute, { "v-model": mdl, id: "#{attribute}_hidden" })
 		end
 	end
 

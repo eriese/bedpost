@@ -62,10 +62,8 @@ group :development, :test do
 	gem 'rspec-rails', '~> 3.8'
 	gem "rails-controller-testing"
 	# Call 'byebug' anywhere in the code to stop execution and get a debugger console
-
 	gem 'pry-remote'
 	gem 'pry-byebug'
-
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 

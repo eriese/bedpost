@@ -1,0 +1,25 @@
+.keyboard-instructions {
+	background-color: rgba($jakarta-skyline, 0.95);
+	padding: $spacing-default;
+	border-radius: $default-border-radius;
+	color: $color-white;
+	text-align: center;
+
+	&--has-datepicker {
+		position: absolute;
+		margin-left: rem(275px);
+		margin-right: $spacing-default;
+	}
+
+
+	&__key {
+		border: solid $pale-jasper;
+		color: $pale-jasper;
+		border-width: 1px 1px 3px 3px;
+		padding: 0.15rem 0.4rem;
+		border-radius: 0.2rem;
+		font-weight: bold;
+		margin: 0.1rem;
+		line-height: 2.5;
+	}
+}

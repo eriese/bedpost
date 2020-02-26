@@ -38,7 +38,7 @@ describe('Hidden Radio Component', () => {
 			expect(setChecked).toHaveBeenCalled();
 		});
 
-		it('is called on update', () => {
+		it('is called on update', async() => {
 			const setChecked = jest.fn();
 			const wrapper = mount(HiddenRadio, {
 				localVue: setupLocalVue(),
@@ -50,10 +50,11 @@ describe('Hidden Radio Component', () => {
 			setChecked.mockClear();
 
 			wrapper.setProps({baseName: 'base'});
+			await wrapper.vm.$nextTick();
 			expect(setChecked).toHaveBeenCalled();
 		});
 
-		it('checks the input if the values match', () => {
+		it('checks the input if the values match', async() => {
 			const wrapper = mount(HiddenRadio, {
 				localVue: setupLocalVue(),
 				propsData: {
@@ -69,11 +70,13 @@ describe('Hidden Radio Component', () => {
 			wrapper.setProps({
 				checked: 'val',
 			});
+
+			await wrapper.vm.$nextTick();
 			expect(spy).toHaveBeenCalled();
 			expect(input.checked).toBe(true);
 		});
 
-		it('un-checks the input if the values do not match', () => {
+		it('un-checks the input if the values do not match', async() => {
 			const wrapper = mount(HiddenRadio, {
 				localVue: setupLocalVue(),
 				propsData: {
@@ -89,6 +92,7 @@ describe('Hidden Radio Component', () => {
 			wrapper.setProps({
 				checked: 'something',
 			});
+			await wrapper.vm.$nextTick();
 			expect(spy).toHaveBeenCalled();
 			expect(input.checked).toBe(false);
 		});

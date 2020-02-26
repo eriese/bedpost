@@ -23,7 +23,7 @@
 			</div>
 			<deleted-child v-else :base-name="`${baseName}[${comp.index}]`" :item="list[comp.index]" :id-key="idKey"></deleted-child>
 		</div>
-		<button type="button" class="cta cta--is-form-submit cta--is-add-btn cta--is-add-btn--is-small" @click="addToList" title="Add Another"></button>
+		<button type="button" class="cta cta--is-form-submit cta--is-add-btn cta--is-add-btn--is-small" @click="addToList" title="Add Another" aria-label="Add Another"></button>
 	</div>
 </template>
 

@@ -67,6 +67,7 @@ export default {
 		data.attrs = data.attrs || {};
 		data.attrs.type = data.attrs.type || 'button';
 		data.attrs.title = parent.$_t(props.tKey || `helpers.arrow_button.${props.shape || 'custom'}.${props.direction || (props.path ? 'custom' : 'left')}`);
+		data.attrs['aria-label'] = data.attrs.title;
 		// set props to given bindings
 		data.props = props.bind;
 		// add base class

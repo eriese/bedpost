@@ -34,7 +34,9 @@ describe('Tooltip component', () => {
 
 			wrapper.find(TippyComponent).setProps({visible: true});
 
-			expect(wrapper.contains(`.tippy-tooltip.${wrapper.vm.theme}-theme`)).toBe(true);
+			return wrapper.vm.$nextTick(() => {
+				expect(wrapper.contains(`.tippy-tooltip.${wrapper.vm.theme}-theme`)).toBe(true);
+			});
 		});
 
 		it('adds a theme to the aside', () => {
@@ -56,7 +58,7 @@ describe('Tooltip component', () => {
 			jest.useRealTimers();
 		});
 
-		it('sets a timeout to delay showing or hiding the tooltip when fieldFocused == true', () => {
+		it('sets a timeout to delay showing or hiding the tooltip when fieldFocused == true', async () => {
 			const wrapper = mount(Tooltip, {
 				propsData: {
 					useScope: {focused: false, hovered: false}
@@ -67,9 +69,10 @@ describe('Tooltip component', () => {
 				useScope: {focused: true, hovered: false}
 			});
 
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.tippyProps.visible).toBe(false);
 			jest.runAllTimers();
-
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.tippyProps.visible).toBe(true);
 		});
 

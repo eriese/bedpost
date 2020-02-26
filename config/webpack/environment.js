@@ -23,6 +23,7 @@ environment.config.merge({
 			'@plugins': path.resolve(__dirname, '..', '..', 'app/javascript/plugins'),
 			'@locales': path.resolve(__dirname, '..', '..', 'app/javascript/locales'),
 			'@stylesheets': path.resolve(__dirname, '..', '..', 'app/assets/stylesheets'),
+			'vue$': 'vue/dist/vue.esm.js', // 'vue/dist/vue.common.js' for webpack 1
 		}
 	},
 	output: {
