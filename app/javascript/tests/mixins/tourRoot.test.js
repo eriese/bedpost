@@ -87,7 +87,8 @@ describe("Tour Root mixin", () => {
 					mixins: [tourRoot]
 				}, {
 					methods: {
-						loadTour
+						loadTour,
+						sendAnalyticsEvent: jest.fn()
 					}
 				})
 
@@ -144,7 +145,10 @@ describe("Tour Root mixin", () => {
 		test("it adds the TourHolder component", () => {
 			const wrapper = mount({
 				template: "<div><tour-holder/></div>",
-				mixins: [tourRoot]
+				mixins: [tourRoot],
+				methods: {
+					sendAnalyticsEvent: jest.fn()
+				}
 			})
 
 			expect(wrapper.contains(TourHolder)).toBe(true);

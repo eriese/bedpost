@@ -30,6 +30,11 @@ export default {
 		}
 	},
 	methods: {
+		/**
+		 * reset the tour to the given page
+		 *
+		 * @param {string} value the path of this page
+		 */
 		setTourPath(value) {
 			this.tourPath = value;
 			this.tourData = null;

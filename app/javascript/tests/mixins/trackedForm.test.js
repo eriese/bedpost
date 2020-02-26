@@ -1,5 +1,5 @@
 jest.mock('@plugins/analytics');
-import {mount, createLocalVue} from '@vue/test-utils';
+import {mount} from '@vue/test-utils';
 import {sendAnalyticsEvent, hasGTag} from '@plugins/analytics';
 import TrackedForm from '@mixins/trackedForm';
 
