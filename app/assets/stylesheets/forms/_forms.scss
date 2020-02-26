@@ -41,7 +41,7 @@
 	}
 }
 
-label {
+label, legend {
 	padding-left: 1rem;
 	font-weight: bold;
 	font-size: 0.75rem;
@@ -174,7 +174,7 @@ form {
 	}
 
 	&.toggler {
-		div[role=radiogroup] > div {
+		fieldset[role=radiogroup] > div {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
