@@ -88,7 +88,7 @@ export default {
 		removeFromList(index) {
 			gsap.to(this.$refs.list_item[index], 0.3, {opacity: 0, onComplete: () => {
 				let deleted = this.list[index];
-				deleted._destroy = true;
+				this.$set(deleted, '_destroy', true);
 				let oldPos = deleted.position;
 				if (oldPos < this.numSubmitting) {
 					this.updateIndices(index, oldPos);
