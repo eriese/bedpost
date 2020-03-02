@@ -126,7 +126,7 @@ class Encounter::RiskCalculator
 				fluids_present = (@cur_contact.is_self? || @person == person) &&
 					tracker.fluids_present?(@cur_contact)
 			else
-				tracker.track_after(@cur_contact, other_inst, is_subject)
+				tracker.track_after(@cur_contact, other_inst)
 			end
 		end
 		fluids_present

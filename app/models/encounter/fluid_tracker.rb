@@ -20,15 +20,8 @@ class Encounter::FluidTracker
 	end
  end
 
- # track where fluids are at the end of the given contact
- def track_after(contact, other_inst, is_subject)
-	# if the other instrument has no fluids, then nothing has changed
+ def track_after(contact, other_inst)
 	return unless other_inst.has_fluids
-
-	# if this instrument has no barriers that can associate with it but the contact has barriers, then nothing has changed
-	inst_barriers = is_subject ? @inst.subject_barriers : @inst.object_barriers
-	return if contact.has_barrier? && inst_barriers.blank?
-
 	lst = get_list(contact, contact.is_self?)
 	lst << other_inst.alias_name
  end

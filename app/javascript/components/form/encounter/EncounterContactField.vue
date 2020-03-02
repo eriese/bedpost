@@ -163,7 +163,7 @@ export default {
 		});
 
 		// send the tracker factory to the parent
-		this.$emit('start-tracking', (list) => new EncounterBarrierTracker(list, this.possibles, this.instruments, this.partner, this.user));
+		this.$emit('start-tracking', (list) => new EncounterBarrierTracker(list, this.possibles, this.instruments));
 	},
 };
 </script>
