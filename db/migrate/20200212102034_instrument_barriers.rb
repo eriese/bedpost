@@ -18,7 +18,8 @@ class InstrumentBarriers < Mongoid::Migration
 				subject_barriers: [{ type: :dam }]
 			},
 			toy: {
-				subject_barriers: [{ type: :condom }, { type: :glove }]
+				subject_barriers: [{ type: :condom }, { type: :glove }],
+				object_barriers: [{ type: :condom }, { type: :glove }]
 			}
 		}
 
