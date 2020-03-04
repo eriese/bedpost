@@ -43,6 +43,8 @@ Rails.application.routes.draw do
 	resources :tours, only: [:show, :update]
 	resources :terms, only: [:show, :update]
 
+	resource :overview, only: [:show, :create]
+
 	get 'feedback/*feedback_type', to: 'trello#new', as: :feedback
 	post 'feedback/*feedback_type', to: 'trello#create'
 
