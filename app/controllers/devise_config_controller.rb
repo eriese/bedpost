@@ -1,7 +1,7 @@
 require "responders/devise_responder"
 class DeviseConfigController < ApplicationController
 	self.responder = DeviseResponder
-	respond_to :json, :html
+	respond_to :html, :json
 
 	def is_flashing_format?
 		true
