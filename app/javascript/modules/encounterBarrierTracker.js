@@ -8,16 +8,17 @@ export default class EncounterBarrierTracker {
 	/**
 	 * Create a tracker
 	 *
-	 * @param  {Array} contacts         	the list of contacts for the encounter
-	 * @param  {object} possibleContacts 	the possible contacts from the EncounterContactField
-	 * @param {object} instruments				the instruments keyed by id
-	 * @param {object} partner 						data on the partner
-	 * @param {object} user 							data on the user
+	 * @param {Array}  formData           the encounter form data object
+	 * @param {object} possibleContacts   the possible contacts from the EncounterContactField
+	 * @param {object} instruments        the instruments keyed by id
+	 * @param {object} partners           a map of data on the all possible partners
+	 * @param {object} user               data on the user
 	 */
-	constructor(contacts, possibleContacts, instruments, partner, user) {
-		this.contacts = contacts;
+	constructor(formData, possibleContacts, instruments, partners, user) {
+		this.encounter = formData;
+		this.contacts = formData.contacts;
 		this.instruments = instruments;
-		this.partner = partner;
+		this.partners = partners;
 		this.user = user;
 
 		// restructure the possible contacts to be more useful for the tracker
@@ -29,7 +30,11 @@ export default class EncounterBarrierTracker {
 		}
 
 		// process existing contacts
-		this.update(contacts);
+		this.update(this.contacts);
+	}
+
+	get partner() {
+		return this.partners.find((p) => p._id == this.encounter.partnership_id);
 	}
 
 	/**
