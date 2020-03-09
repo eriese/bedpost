@@ -4,4 +4,15 @@ class StiTest
 	field :tested_on, type: DateTime
 
 	index(tested_on: -1, tested_for: 1)
+
+	PARAM_FORMAT = '%b-%d-%Y'.freeze
+
+	def to_param
+		I18n.localize(tested_on, format: PARAM_FORMAT)
+	end
+
+	def tested_on=(val)
+		dt = val.is_a?(String) ? DateTime.parse(val) : val
+		super(dt.beginning_of_day)
+	end
 end

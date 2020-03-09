@@ -33,10 +33,8 @@ Rails.application.routes.draw do
 		get 'uniqueness', to: 'partnership_whos#unique'
 	end
 
-	get 'encounters/who', to: 'encounter_whos#new'
-	post 'encounters/who', to: 'encounter_whos#create'
 	resources :encounters
-
+	resources :sti_tests, param: :tested_on
 
 	get 'first_time', to: 'tours#index'
 	post 'first_time', to: 'tours#create'

@@ -1,0 +1,2 @@
+class StiTestsController < ApplicationController
+end

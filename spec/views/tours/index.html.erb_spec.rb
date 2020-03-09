@@ -25,7 +25,7 @@ RSpec.describe "tours/index", type: :view do
 		end
 
 		it 'does not have a link to the new encounter path' do
-			assert_select("a[href='#{encounters_who_path}']", false)
+			assert_select("a[href='#{new_encounter_path}']", false)
 		end
 
 		it 'has an exit button' do
