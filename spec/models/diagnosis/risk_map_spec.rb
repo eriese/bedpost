@@ -24,21 +24,21 @@ RSpec.describe Diagnosis::RiskMap, type: :model do
 			end
 
 			it 'lower array and higher primitive' do
-				map = described_class[:b, [1, :caveat]]
+				map = described_class[:b, [1, [:caveat]]]
 				map[:b] = 2
 				expect(map[:b]).to be 2
 			end
 
 			it 'lower primitive and higher array' do
 				map = described_class[:b, 1]
-				map[:b] = [2, :caveat]
-				expect(map[:b]).to eq [2, :caveat]
+				map[:b] = [2, [:caveat]]
+				expect(map[:b]).to eq [2, [:caveat]]
 			end
 
 			it 'lower array and higher array' do
-				map = described_class[:b, [1, :caveat1]]
-				map[:b] = [2, :caveat2]
-				expect(map[:b]).to eq [2, :caveat2]
+				map = described_class[:b, [1, [:caveat1]]]
+				map[:b] = [2, [:caveat2]]
+				expect(map[:b]).to eq [2, [:caveat2]]
 			end
 		end
 
@@ -50,21 +50,21 @@ RSpec.describe Diagnosis::RiskMap, type: :model do
 			end
 
 			it 'higher array and lower primitive' do
-				map = described_class[:b, [2, :caveat]]
+				map = described_class[:b, [2, [:caveat]]]
 				map[:b] = 1
-				expect(map[:b]).to eq [2, :caveat]
+				expect(map[:b]).to eq [2, [:caveat]]
 			end
 
 			it 'higher primitive and lower array' do
 				map = described_class[:b, 2]
-				map[:b] = [1, :caveat]
+				map[:b] = [1, [:caveat]]
 				expect(map[:b]).to eq 2
 			end
 
 			it 'higher array and lower array' do
-				map = described_class[:b, [2, :caveat2]]
-				map[:b] = [1, :caveat1]
-				expect(map[:b]).to eq [2, :caveat2]
+				map = described_class[:b, [2, [:caveat2]]]
+				map[:b] = [1, [:caveat1]]
+				expect(map[:b]).to eq [2, [:caveat2]]
 			end
 		end
 
@@ -87,7 +87,7 @@ RSpec.describe Diagnosis::RiskMap, type: :model do
 		end
 
 		it 'returns the first index is the value is an array' do
-			map = described_class[:b, [1, :caveat]]
+			map = described_class[:b, [1, [:caveat]]]
 			expect(map.risk_level(:b)).to be 1
 		end
 	end
@@ -104,8 +104,25 @@ RSpec.describe Diagnosis::RiskMap, type: :model do
 		end
 
 		it 'returns the second index is the value is an array' do
-			map = described_class[:b, [1, :caveat]]
-			expect(map.risk_caveats(:b)).to be :caveat
+			map = described_class[:b, [1, [:caveat]]]
+			expect(map.risk_caveats(:b)).to eq [:caveat]
+		end
+	end
+
+	describe '#merge' do
+		it 'chooses the higher values' do
+			map1 = described_class[:a, 1, :b, [2, [:caveat]], :c, [1, [:caveat1]]]
+			map2 = described_class[:a, 2, :b, [1, [:caveat1]], :c, [1, [:caveat2]]]
+
+			result = map1.merge(map2)
+			expect(result).to eq(a: 2, b: [2, [:caveat]], c: [1, [:caveat1, :caveat2]])
+		end
+
+		it 'has the same result no matter the direction of the merge' do
+			map1 = described_class[:a, 1, :b, [2, [:caveat]], :c, [1, [:caveat1]]]
+			map2 = described_class[:a, 2, :b, [1, [:caveat1]], :c, [1, [:caveat2]]]
+
+			expect(map1.merge(map2)).to eq map2.merge(map1)
 		end
 	end
 end
