@@ -1,0 +1,12 @@
+<%= render 'forms/basic_form', back_path: :back, header_text: t('.title') do %>
+	<%= vuelidate_form_with scope: :sti_tests, value_include: [{tests_for: []}], class: 'centered' do |f| %>
+		<dynamic-field-list
+			component-type="sti-test-input"
+			v-model="vf.formData.tests_for"
+			base-name="sti_tests[tests_for]"
+			:$v="vf.$v.formData.tests_for"
+			:form-data="vf.formData"
+			></dynamic-field-list>
+		<%= f.submit class: 'cta cta--is-form-submit' %>
+	<% end %>
+<% end %>

@@ -2,8 +2,9 @@ class StiTest
 	include Mongoid::Document
 	field :tested_for, type: Symbol
 	field :tested_on, type: DateTime
+	field :positive, type: Boolean, default: false
 
-	index(tested_on: -1, tested_for: 1)
+	index({ tested_on: -1, tested_for: 1 }, unique: true)
 
 	PARAM_FORMAT = '%b-%d-%Y'.freeze
 

@@ -4,8 +4,8 @@
 		<div v-for="comp in internalList" :key="comp.item[idKey]" ref="list_item" class="dynamic-field-list__item">
 			<div v-if="showDeleted || !comp.item._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="{incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}" role="group" :id="`dynamic-list-item-${comp.index}`">
 				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || comp.index != firstIndex" role="toolbar">
-					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,-1)"></arrow-button>
-					<arrow-button class="link cta--is-arrow--is-small" v-if="comp.index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" v-if="ordered && comp.index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,-1)"></arrow-button>
+					<arrow-button class="link cta--is-arrow--is-small" v-if="ordered && comp.index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,1)"></arrow-button>
 					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(comp.index)" t-key="remove"></arrow-button>
 				</div>
 				<component
@@ -17,6 +17,7 @@
 					:tracker="tracker"
 					:state="comp"
 					:$v="$vEach[comp.index]"
+					:base-name="`${baseName}[${comp.index}]`"
 					@track="track"
 					@start-tracking="startTracking"
 					@input="onInput"></component>
@@ -48,7 +49,7 @@ export default {
 			stateConstructor: null,
 		};
 	},
-	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass', 'formData'],
+	props: ['componentType', 'value', 'baseName', 'dummyKey', 'showDeleted', 'optional', '$v', 'stateClass', 'formData', 'ordered'],
 	computed: {
 		dummy: function() {
 			return gon[this.dummyKey || 'dummy'];
@@ -188,6 +189,7 @@ export default {
 			this.stateConstructor = (item) => {
 				return {
 					index: this.list.length,
+					baseName: this.baseName,
 					item
 				}
 			}
