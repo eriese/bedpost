@@ -1,0 +1,86 @@
+#vue-container .dynamic-field-list--has-sti-test-inputs {
+	&__column-labels {
+		display: flex;
+
+		label {
+			text-align: center;
+
+			&:first-child {
+				flex-grow: 1;
+			}
+
+			&:last-child {
+				flex-basis: rem(100px);
+			}
+		}
+	}
+	.dynamic-field--is-sti-test-input {
+		display: flex;
+
+		.dynamic-field-buttons {
+			flex-grow: 0;
+			margin-top: 0;
+			display: flex;
+			align-items: center;
+		}
+
+		.sti-test-input {
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+		}
+
+		.v-select {
+			flex-grow: 1;
+		}
+
+		.vs__dropdown-toggle {
+			padding: 0;
+			margin: 0;
+
+			input.vs__search {
+				margin: 0;
+			}
+		}
+
+		.group-radios {
+			flex-shrink: 0;
+			.input {
+				margin: 0;
+			}
+			label {
+				margin-right: 0rem;
+				margin-left: 0.15rem;
+			}
+		}
+
+		.vs__selected {
+			font-size: 0.85rem;
+			word-wrap: break-word;
+			word-break: break-word;
+			margin: 0;
+			padding: 0 2.15rem 0 0.25rem;
+			min-height: $input-height;
+			+ input {
+				border-color: transparent;
+				z-index: -1;
+				height: 0px;
+				padding: 0;
+			}
+		}
+
+		.vs--open .vs__selected {
+			white-space: nowrap;
+			width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: inline-block;
+			line-height: $input-height;
+			+ input {
+				@include base-input;
+				z-index: 0;
+				background-color: transparent;
+			}
+		}
+	}
+}

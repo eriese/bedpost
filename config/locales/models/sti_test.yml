@@ -2,3 +2,6 @@ en:
   sti_tests:
     new:
       title: New Test
+      tests_title: What did you get tested for?
+      tested_for: STI
+      positive: Result

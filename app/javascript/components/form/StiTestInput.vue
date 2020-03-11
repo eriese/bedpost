@@ -1,12 +1,14 @@
 <template>
-	<div>
+	<div class="input sti-test-input">
 		<input type="hidden" :name="`${inputName}[tested_for]`" v-model="value.tested_for">
+		<input type="hidden" :name="`${inputName}[tested_on]`" v-model="state.tested_on">
 		<v-select
 			:options="availableDiagnoses"
 			v-model="value.tested_for"
 			:input-id="inputId"
 			:reduce="option => option.value"
 			:clearable="false"
+			:placeholder="value.tested_for"
 			></v-select>
 		<div class="group-radios" role="radiogroup">
 			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="true" type="cta" label="Poz"></hidden-radio>
@@ -53,7 +55,7 @@ export default {
 			}
 
 			return gon.diagnoses.reduce((res, diag) => {
-				if (that.tracker.selected.indexOf(diag._id)) {
+				if (this.value.tested_for == diag._id || that.tracker.selected.indexOf(diag._id) < 0) {
 					res.push({
 						label: that.$_t(diag._id, {scope: 'diagnosis.name_formal'}),
 						value: diag._id

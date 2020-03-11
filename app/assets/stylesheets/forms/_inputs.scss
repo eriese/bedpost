@@ -423,3 +423,62 @@ input[disabled=disabled] {
 		left: rem(1px);
 	}
 }
+
+
+#vue-container .vs {
+	&--unsearchable .vs__dropdown-toggle {
+		cursor: auto;
+	}
+
+	&__dropdown-toggle {
+		border: none;
+		padding-bottom: $spacing-small;
+		margin-bottom: $spacing-tiny;
+		border-radius: 0px;
+		border-width: 0px;
+	}
+
+	&__selected-options {
+		padding: 0;
+	}
+
+	&__open-indicator {
+		position: absolute;
+		right: 1.25rem;
+		bottom: $input-height / 2 - rem(5px);
+		@include link-colors($colors-light, '', fill);
+	}
+
+	&__selected {
+		color: black;
+		border-radius: $default-border-radius;
+		font-weight: 600;
+		border: none;
+		padding: $spacing-tiny $spacing-small;
+	}
+
+
+	&__search {
+		border-left: 1px solid;
+		background-color: $input-background-color;
+		@include themed(border-color, $input-border-key);
+		flex-basis: 100%;
+
+		&:focus {
+			background-color: $input-background-color;
+			flex-basis: 100%;
+			@include themed(border-color, $input-border-focus-key);
+		}
+	}
+
+	&__actions {
+		padding: 0;
+		position: relative;
+	}
+
+	&__dropdown-menu {
+		width: auto !important;
+		max-width: 85vw;
+		min-width: 100%;
+	}
+}

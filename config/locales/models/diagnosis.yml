@@ -14,7 +14,7 @@ en:
       cmv: CMV
       molluscum: Molluscum
       bv: BV
-      public_lice: Crabs
+      pubic_lice: Crabs
       scabies: Scabies
     name_formal:
       chlamydia: Chlamydia
@@ -30,7 +30,7 @@ en:
       cmv: CMV (Cytomegalovirus)
       molluscum: Molluscum Contagiosum
       bv: BV (Bacterial Vaginosis)
-      public_lice: Public Lice
+      pubic_lice: Public Lice
       scabies: Scabies
     caveat:
       increased_by_fluids: "<sup>*</sup>This risk is lower if no fluids were exchanged"

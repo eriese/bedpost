@@ -1,9 +1,9 @@
 <template>
-	<div class="dynamic-field-list" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
+	<div :class="`dynamic-field-list dynamic-field-list--has-${componentType}s`" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
 		<slot></slot>
-		<div v-for="comp in internalList" :key="comp.item[idKey]" ref="list_item" class="dynamic-field-list__item">
-			<div v-if="showDeleted || !comp.item._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="{incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}" role="group" :id="`dynamic-list-item-${comp.index}`">
-				<div class="dynamic-field-buttons clear-fix" @focusin.stop v-if="optional || numSubmitting > 1 || comp.index != firstIndex" role="toolbar">
+		<div v-for="comp in internalList" :key="comp.item[idKey]" ref="list_item" class="dynamic-field-list__item ">
+			<div v-if="showDeleted || !comp.item._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="[`dynamic-field--is-${componentType}`, {incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}]" role="group" :id="`dynamic-list-item-${comp.index}`">
+				<div class="dynamic-field-buttons" @focusin.stop v-if="optional || numSubmitting > 1 || comp.index != firstIndex" role="toolbar">
 					<arrow-button class="link cta--is-arrow--is-small" v-if="ordered && comp.index > firstIndex" v-bind="{direction: 'up', tKey: 'move_up', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,-1)"></arrow-button>
 					<arrow-button class="link cta--is-arrow--is-small" v-if="ordered && comp.index < lastIndex" v-bind="{direction: 'down', tKey: 'move_down', shape: 'arrow'}" @click.stop="moveSpaces(comp.index,1)"></arrow-button>
 					<arrow-button class="link cta--is-arrow--is-small" shape="x" v-if="optional || numSubmitting > 1" @click.stop="removeFromList(comp.index)" t-key="remove"></arrow-button>
@@ -11,7 +11,7 @@
 				<component
 					ref="list_component"
 					v-model="comp.item"
-					class="clear"
+					:class="{clear: ordered}"
 					:is="componentType"
 					:watch-key="comp.index"
 					:tracker="tracker"
