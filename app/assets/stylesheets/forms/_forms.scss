@@ -348,6 +348,10 @@ form {
 
 .dynamic-field-list {
 	@include self-clearing;
+
+	&__shortcuts {
+		margin-bottom: $spacing-medium;
+	}
 }
 .dynamic-field {
 	padding: $spacing-tiny 0;

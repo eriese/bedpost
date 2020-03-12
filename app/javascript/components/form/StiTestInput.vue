@@ -1,16 +1,18 @@
 <template>
 	<div class="input sti-test-input">
-		<input type="hidden" :name="`${inputName}[tested_for]`" v-model="value.tested_for">
-		<input type="hidden" :name="`${inputName}[tested_on]`" v-model="state.tested_on">
-		<v-select
-			:options="availableDiagnoses"
-			v-model="value.tested_for"
-			:input-id="inputId"
-			:reduce="option => option.value"
-			:clearable="false"
-			:placeholder="value.tested_for"
-			></v-select>
-		<fieldset class="group-radios" role="radiogroup">
+		<fieldset aria-labelledby="tested-for-label" class="sti-test-input__sti-input">
+			<input type="hidden" :name="`${inputName}[tested_for]`" v-model="value.tested_for">
+			<input type="hidden" :name="`${inputName}[tested_on]`" v-model="state.tested_on">
+			<v-select
+				:options="availableDiagnoses"
+				v-model="value.tested_for"
+				:input-id="inputId"
+				:reduce="option => option.value"
+				:clearable="false"
+				:placeholder="value.tested_for"
+				></v-select>
+		</fieldset>
+		<fieldset class="group-radios sti-test-input__result-input" role="radiogroup" aria-labelledby="result-label">
 			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="true" type="cta" label="Poz"></hidden-radio>
 			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="false" type="cta" label="Neg"></hidden-radio>
 		</fieldset>

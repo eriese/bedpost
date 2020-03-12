@@ -28,11 +28,23 @@
 			flex-grow: 1;
 			display: flex;
 			align-items: center;
+
+			&__sti-input {
+				flex-grow: 1
+			}
+
+			&__result-input {
+				flex-shrink: 0;
+				.input {
+					margin: 0;
+				}
+				label {
+					margin-right: 0rem;
+					margin-left: 0.15rem;
+				}
+			}
 		}
 
-		.v-select {
-			flex-grow: 1;
-		}
 
 		.vs__dropdown-toggle {
 			padding: 0;
@@ -40,17 +52,6 @@
 
 			input.vs__search {
 				margin: 0;
-			}
-		}
-
-		.group-radios {
-			flex-shrink: 0;
-			.input {
-				margin: 0;
-			}
-			label {
-				margin-right: 0rem;
-				margin-left: 0.15rem;
 			}
 		}
 

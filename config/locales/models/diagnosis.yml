@@ -3,7 +3,7 @@ en:
     name_casual:
       chlamydia: Chlamydia
       gonorrhea: Gonorrhea
-      syphillis: Syphillis
+      syphillis: Syphilis
       hiv: HIV
       hep_c: Hep C
       hep_b: Hep B
@@ -19,7 +19,7 @@ en:
     name_formal:
       chlamydia: Chlamydia
       gonorrhea: Gonorrhea
-      syphillis: Syphillis
+      syphillis: Syphilis
       hiv: HIV (Human Immunodeficiency Virus)
       hep_c: Hepatitis C
       hep_b: Hepatitis B
