@@ -5,3 +5,6 @@ en:
       tests_title: What did you get tested for?
       tested_for: STI
       positive: Result
+      default_tests_title: Add all the STIs in a %{category}
+    default_tests:
+      default: Basic STI Panel

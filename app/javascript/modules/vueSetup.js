@@ -27,6 +27,7 @@ const dynamicFieldList = () => import (/* webpackChunkName: "components/dynamic-
 
 const encounterContactField = () => import (/* webpackChunkName: "components/encounter-contact-field", webpackPreload: true */ "@components/form/encounter/EncounterContactField.vue");
 const stiTestInput = () => import (/* webpackChunkName: "conponents/sti-test-input", webpackPreload: true */ '@components/form/StiTestInput.vue');
+const defaultTestsButton = () => import (/* wepbackChunkName: "components/sti-test-input", webpackPreload: true*/ '@components/form/stiTest/DefaultTestsButton.vue');
 
 const dropDown = () => import (/* webpackChunkName: "components/dropdown", webpackPreload: true */ "@components/display/DropDown.vue");
 const progBar = () => import (/* webpackChunkName: "components/prog-bar", webpackPreload: true */ "@components/display/ProgBar.vue");
@@ -70,6 +71,7 @@ export default function addVue() {
 	Vue.component('form-step', formStep);
 	Vue.component('encounter-contact-field', encounterContactField);
 	Vue.component('sti-test-input', stiTestInput);
+	Vue.component('default-tests-button', defaultTestsButton);
 	Vue.component('dynamic-field-list', dynamicFieldList);
 
 	Vue.component('drop-down', dropDown);

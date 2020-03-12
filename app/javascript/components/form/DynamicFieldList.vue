@@ -1,6 +1,6 @@
 <template>
-	<div :class="`dynamic-field-list dynamic-field-list--has-${componentType}s`" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
-		<slot></slot>
+	<fieldset :class="`dynamic-field-list dynamic-field-list--has-${componentType}s`" role="group" :aria-activedescendant="`dynamic-list-item-${focusIndex}`">
+		<slot v-bind="{addToList}"></slot>
 		<div v-for="comp in internalList" :key="comp.item[idKey]" ref="list_item" class="dynamic-field-list__item ">
 			<div v-if="showDeleted || !comp.item._destroy" @focusin="setFocus(comp.index)" @click="setFocus(comp.index, true)" class="dynamic-field step" :class="[`dynamic-field--is-${componentType}`, {incomplete: $vEach[comp.index] && $vEach[comp.index].$error, blurred: comp.index != focusIndex, deleted: comp.item._destroy}]" role="group" :id="`dynamic-list-item-${comp.index}`">
 				<div class="dynamic-field-buttons" @focusin.stop v-if="optional || numSubmitting > 1 || comp.index != firstIndex" role="toolbar">
@@ -25,7 +25,7 @@
 			<deleted-child v-else :base-name="`${baseName}[${comp.index}]`" :item="list[comp.index]" :id-key="idKey"></deleted-child>
 		</div>
 		<button type="button" class="cta cta--is-form-submit cta--is-add-btn cta--is-add-btn--is-small" @click="addToList" title="Add Another" aria-label="Add Another"></button>
-	</div>
+	</fieldset>
 </template>
 
 <script>
@@ -71,10 +71,11 @@ export default {
 		}
 	},
 	methods: {
-		addToList(newObj) {
-			if (!newObj || newObj instanceof MouseEvent) {
-				newObj = Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
-				newObj[this.idKey] = Date.now();
+		addToList(objectProps) {
+			let newObj = Object.assign({}, this.dummy, {newRecord: true, position: this.numSubmitting});
+			newObj[this.idKey] = Date.now();
+			if (objectProps && !(objectProps instanceof MouseEvent)) {
+				Object.assign(newObj, objectProps)
 			}
 
 			let state = this.generateState(newObj);
@@ -178,6 +179,11 @@ export default {
 		},
 		generateState(listItem) {
 			return new this.stateConstructor(listItem, this, this.baseName, this.internalList.length);
+		},
+		parseList() {
+			this.internalList = this.value.map(this.generateState);
+			this.updateIndices();
+			this.setFocus(this.lastIndex);
 		}
 	},
 	created: async function() {
@@ -199,9 +205,7 @@ export default {
 		if (this.numSubmitting == 0 && !this.optional) {
 			this.addToList();
 		} else {
-			this.internalList = this.value.map(this.generateState);
-			this.updateIndices();
-			this.setFocus(this.lastIndex);
+			this.parseList();
 		}
 	}
 };

@@ -10,10 +10,10 @@
 			:clearable="false"
 			:placeholder="value.tested_for"
 			></v-select>
-		<div class="group-radios" role="radiogroup">
+		<fieldset class="group-radios" role="radiogroup">
 			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="true" type="cta" label="Poz"></hidden-radio>
 			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="false" type="cta" label="Neg"></hidden-radio>
-		</div>
+		</fieldset>
 	</div>
 </template>
 

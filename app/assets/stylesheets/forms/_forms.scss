@@ -6,7 +6,9 @@
 }
 
 .h2--is-form-heading {
+	@include heading2;
 	font-size: rem(18px);
+	padding: 0;
 }
 
 
