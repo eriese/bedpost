@@ -10,7 +10,11 @@
 				:reduce="option => option.value"
 				:clearable="false"
 				:placeholder="value.tested_for"
-				></v-select>
+				>
+				<template v-slot:search="search">
+					<input class="vs__search" v-bind="{...search.attributes, 'aria-labelledby': 'tested-for-label', placeholder: chosenDiagnosis}" v-on="search.events">
+				</template>
+				</v-select>
 		</fieldset>
 		<fieldset class="group-radios sti-test-input__result-input" role="radiogroup" aria-labelledby="result-label">
 			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="true" type="cta" label="Poz"></hidden-radio>
@@ -65,6 +69,9 @@ export default {
 				}
 				return res;
 			}, []);
+		},
+		chosenDiagnosis() {
+			return this.value.tested_for && this.$_t(this.value.tested_for, {scope: 'diagnosis.name_formal'});
 		}
 	},
 	mounted() {

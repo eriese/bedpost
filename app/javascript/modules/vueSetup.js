@@ -26,7 +26,7 @@ const fileInput = () => import (/* webpackChunkName: "components/file-input", we
 const dynamicFieldList = () => import (/* webpackChunkName: "components/dynamic-field-list", webpackPreload: true */ "@components/form/DynamicFieldList.vue");
 
 const encounterContactField = () => import (/* webpackChunkName: "components/encounter-contact-field", webpackPreload: true */ "@components/form/encounter/EncounterContactField.vue");
-const stiTestInput = () => import (/* webpackChunkName: "conponents/sti-test-input", webpackPreload: true */ '@components/form/StiTestInput.vue');
+const stiTestInput = () => import (/* webpackChunkName: "conponents/sti-test-input", webpackPreload: true */ '@components/form/stiTest/StiTestInput.vue');
 const defaultTestsButton = () => import (/* wepbackChunkName: "components/sti-test-input", webpackPreload: true*/ '@components/form/stiTest/DefaultTestsButton.vue');
 
 const dropDown = () => import (/* webpackChunkName: "components/dropdown", webpackPreload: true */ "@components/display/DropDown.vue");
