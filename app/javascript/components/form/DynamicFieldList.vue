@@ -169,7 +169,7 @@ export default {
 		},
 		startTracking(trackerFactory) {
 			if (this.tracker === null) {
-				this.tracker = trackerFactory(this.list);
+				this.tracker = trackerFactory(this.formData);
 			}
 
 			this.track();
