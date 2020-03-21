@@ -34,18 +34,18 @@ en:
     formats:
       most_recent: '%b %d, %Y'
       long_date: '%B %d, %Y'
+  date:
+    formats:
+      long_date: '%B %d, %Y'
   errors:
     messages:
       email: Please enter a valid email address.
       blank: Oops, this one's blank!
       acceptance: Uh oh! You have to accept before you can continue
       vague: Hmm... something went unexpectedly wrong
-  reset:
-    errors:
-      email:
-        not_found_html: we couldn't find an account with that email address. Please try a different one or <a href="%{url}">sign up</a>
-    success: successfully reset password
   helpers:
+    flash:
+      no_sti_tests_with_date: We couldn't find any tests for that date
     submit:
       update: Save
       create: Save

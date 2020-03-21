@@ -34,7 +34,7 @@ class StiInputTracker {
 
 	update(list) {
 		this.selected = list.reduce((arr, t) => {
-			t.tested_for && arr.push(t.tested_for);
+			t.tested_for_id && arr.push(t.tested_for_id);
 			return arr;
 		}, []);
 	}
@@ -60,7 +60,7 @@ export default {
 			}
 
 			return gon.diagnoses.reduce((res, diag) => {
-				if (this.value.tested_for == diag._id || that.tracker.selected.indexOf(diag._id) < 0) {
+				if (this.value.tested_for_id == diag._id || that.tracker.selected.indexOf(diag._id) < 0) {
 					res.push({
 						label: that.$_t(diag._id, {scope: 'diagnosis.name_formal'}),
 						value: diag._id
@@ -70,7 +70,7 @@ export default {
 			}, []);
 		},
 		chosenDiagnosis() {
-			return this.value.tested_for && this.$_t(this.value.tested_for, {scope: 'diagnosis.name_formal'});
+			return this.value.tested_for_id && this.$_t(this.value.tested_for_id, {scope: 'diagnosis.name_formal'});
 		},
 	},
 	mounted() {

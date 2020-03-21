@@ -93,4 +93,40 @@ RSpec.describe StiTestsController, type: :controller do
 			end
 		end
 	end
+
+	describe 'GET #show' do
+		context 'with a valid date' do
+			before do
+				date = DateTime.current
+				@test1 = build(:sti_test, tested_for_id: :hiv, tested_on: date)
+				@test2 = build(:sti_test, tested_for_id: :hpv, tested_on: date)
+				@test3 = build(:sti_test, tested_for_id: :hiv, tested_on: (date + 1.day))
+
+				@user.sti_tests = [@test1, @test2, @test3]
+				@user.save
+			end
+
+			it 'shows a list of all tests from that date' do
+				get :show, params: { tested_on: @test1.to_param }
+				expect(assigns[:sti_tests]).to eq [@test1, @test2]
+			end
+		end
+
+		context 'with an invalid date' do
+			it 'redirects to the index page if the parameter is not a date' do
+				get :show, params: { tested_on: 'day' }
+				expect(response).to redirect_to sti_tests_path
+			end
+
+			it 'redirects to the index page if the parameter is a date for which the user has no tests' do
+				get :show, params: { tested_on: StiTest.date_to_param(DateTime.current) }
+				expect(response).to redirect_to sti_tests_path
+			end
+
+			it 'adds a flash notice for the redirec' do
+				get :show, params: { tested_on: StiTest.date_to_param(DateTime.current) }
+				expect(flash[:notice]).to eq I18n.t(:no_sti_tests_with_date, scope: 'helpers.flash')
+			end
+		end
+	end
 end

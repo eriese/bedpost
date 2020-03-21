@@ -23,17 +23,17 @@ export default {
 		populateDefaults() {
 			const that = this;
 			let id = Date.now();
-			let emptyVals = that.value.filter((v) => v.tested_for === null);
+			let emptyVals = that.value.filter((v) => v.tested_for_id === null);
 			that.diagnoses.forEach((d) => {
 				if (d.category.indexOf(that.category) < 0) { return; }
 
-				const preExisting = that.value.find((v) => v.tested_for == d._id && v._destroy !== true);
+				const preExisting = that.value.find((v) => v.tested_for_id == d._id && v._destroy !== true);
 				if (preExisting !== undefined) { return; }
 
 				if (emptyVals.length) {
-					emptyVals.pop().tested_for = d._id;
+					emptyVals.pop().tested_for_id = d._id;
 				} else {
-					that.$emit('populate', {tested_for: d._id, _id: id++});
+					that.$emit('populate', {tested_for_id: d._id, _id: id++});
 				}
 			});
 		}

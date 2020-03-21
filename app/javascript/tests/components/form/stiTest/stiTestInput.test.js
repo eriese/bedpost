@@ -17,7 +17,7 @@ describe('Sti Test Input Component', () => {
 			const input = shallowMount(StiTestInput, {
 				propsData: {
 					value: {
-						tested_for: undefined,
+						tested_for_id: undefined,
 						tested_on: new Date(),
 						positive: false
 					},
@@ -51,7 +51,7 @@ describe('Sti Test Input Component', () => {
 
 		it('does not include options that have been selected by another input', () => {
 			const {input, tracker} = mountInput();
-			tracker.update([{tested_for: 'hpv'}]);
+			tracker.update([{tested_for_id: 'hpv'}]);
 
 			const actual = input.vm.availableDiagnoses;
 			expect(actual).toHaveLength(2);

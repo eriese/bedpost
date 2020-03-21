@@ -7,6 +7,7 @@ module ApplicationHelper
 		'is-light' => 'is-light',
 		'is-dark-contrast' => 'is-dark',
 		'is-flesh' => 'is-light',
+		'is-flesh-contrast' => 'is-dark',
 		default: 'contrast'
 	}.freeze
 

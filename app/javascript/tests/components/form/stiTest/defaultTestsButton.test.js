@@ -62,36 +62,36 @@ describe('Default Test Button Component', () => {
 		}
 
 		it('overwrites empty entries in the list', () => {
-			const list = [{tested_for: null}];
+			const list = [{tested_for_id: null}];
 			const {parentWrapper, button} = mountWrapper(list);
 
 			button.vm.populateDefaults();
 
 			expect(parentWrapper.vm.valueList).toHaveLength(2);
-			expect(parentWrapper.vm.valueList[0].tested_for).toEqual('hpv');
-			expect(parentWrapper.vm.valueList[1].tested_for).toEqual('hiv');
+			expect(parentWrapper.vm.valueList[0].tested_for_id).toEqual('hpv');
+			expect(parentWrapper.vm.valueList[1].tested_for_id).toEqual('hiv');
 		});
 
 		it('leaves already selected non-applicable stis in the list', () => {
-			const list = [{tested_for: 'hsv'}];
+			const list = [{tested_for_id: 'hsv'}];
 			const {parentWrapper, button} = mountWrapper(list);
 
 			button.vm.populateDefaults();
 			expect(parentWrapper.vm.valueList).toHaveLength(3);
-			expect(parentWrapper.vm.valueList[0].tested_for).toEqual('hsv');
-			expect(parentWrapper.vm.valueList[1].tested_for).toEqual('hpv');
-			expect(parentWrapper.vm.valueList[2].tested_for).toEqual('hiv');
+			expect(parentWrapper.vm.valueList[0].tested_for_id).toEqual('hsv');
+			expect(parentWrapper.vm.valueList[1].tested_for_id).toEqual('hpv');
+			expect(parentWrapper.vm.valueList[2].tested_for_id).toEqual('hiv');
 		});
 
 		it('does not duplicate entries', () => {
-			const list = [{tested_for: 'hiv'}];
+			const list = [{tested_for_id: 'hiv'}];
 			const {parentWrapper, button} = mountWrapper(list);
 
 			button.vm.populateDefaults();
 
 			expect(parentWrapper.vm.valueList).toHaveLength(2);
-			expect(parentWrapper.vm.valueList[0].tested_for).toEqual('hiv');
-			expect(parentWrapper.vm.valueList[1].tested_for).toEqual('hpv');
+			expect(parentWrapper.vm.valueList[0].tested_for_id).toEqual('hiv');
+			expect(parentWrapper.vm.valueList[1].tested_for_id).toEqual('hpv');
 		});
 	});
 });

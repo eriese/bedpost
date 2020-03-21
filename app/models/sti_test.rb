@@ -1,6 +1,6 @@
 class StiTest
 	include Mongoid::Document
-	field :tested_on, type: DateTime
+	field :tested_on, type: Date
 	field :positive, type: Boolean, default: false
 
 	belongs_to :tested_for, class_name: 'Diagnosis'
@@ -14,11 +14,15 @@ class StiTest
 	end
 
 	def tested_on=(val)
-		dt = val.is_a?(String) ? DateTime.parse(val) : val
-		super(dt.beginning_of_day)
+		dt = self.class.param_to_date(val)
+		super(dt)
 	end
 
 	def self.date_to_param(dt)
 		I18n.localize(dt, format: PARAM_FORMAT)
+	end
+
+	def self.param_to_date(prm)
+		dt = prm.is_a?(String) ? Date.parse(prm) : prm
 	end
 end

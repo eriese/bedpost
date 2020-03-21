@@ -1,6 +1,9 @@
 class StiTestsController < ApplicationController
 	after_action :clear_unsaved, only: [:create]
 
+	def index
+	end
+
 	def new
 		gon_sti_test_data
 	end
@@ -24,6 +27,16 @@ class StiTestsController < ApplicationController
 	end
 
 	def show
+		@tested_on = StiTest.param_to_date(params[:tested_on])
+		found_tests = current_user_profile.sti_tests.where(tested_on: @tested_on)
+		if found_tests.exists?
+			@sti_tests = found_tests.to_a
+		else
+			flash[:notice] = I18n.t(:no_sti_tests_with_date, scope: 'helpers.flash')
+			redirect_to sti_tests_path
+		end
+	rescue ArgumentError
+		redirect_to sti_tests_path
 	end
 
 	def gon_sti_test_data
