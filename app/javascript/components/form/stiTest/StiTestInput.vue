@@ -1,5 +1,5 @@
 <template>
-	<div class="input sti-test-input" slot-scope="fe" >
+	<div class="input sti-test-input">
 		<fieldset aria-labelledby="tested-for-label" class="sti-test-input__sti-input">
 			<input type="hidden" :name="`${state.baseName}[tested_for_id]`" v-model="value.tested_for_id">
 			<input type="hidden" :name="`${state.baseName}[tested_on]`" v-model="state.tested_on">
@@ -55,7 +55,7 @@ export default {
 	computed: {
 		availableDiagnoses() {
 			let that = this;
-			if (!this.tracker) {
+			if (!this.tracker || !this.tracker.selected) {
 				return [];
 			}
 
