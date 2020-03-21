@@ -1,15 +1,14 @@
 <template>
-	<div class="input sti-test-input">
+	<div class="input sti-test-input" slot-scope="fe" >
 		<fieldset aria-labelledby="tested-for-label" class="sti-test-input__sti-input">
-			<input type="hidden" :name="`${inputName}[tested_for]`" v-model="value.tested_for">
-			<input type="hidden" :name="`${inputName}[tested_on]`" v-model="state.tested_on">
+			<input type="hidden" :name="`${state.baseName}[tested_for_id]`" v-model="value.tested_for_id">
+			<input type="hidden" :name="`${state.baseName}[tested_on]`" v-model="state.tested_on">
 			<v-select
 				:options="availableDiagnoses"
-				v-model="value.tested_for"
+				v-model="value.tested_for_id"
 				:input-id="inputId"
 				:reduce="option => option.value"
 				:clearable="false"
-				:placeholder="value.tested_for"
 				>
 				<template v-slot:search="search">
 					<input class="vs__search" v-bind="{...search.attributes, 'aria-labelledby': 'tested-for-label', placeholder: chosenDiagnosis}" v-on="search.events">
@@ -17,8 +16,8 @@
 				</v-select>
 		</fieldset>
 		<fieldset class="group-radios sti-test-input__result-input" role="radiogroup" aria-labelledby="result-label">
-			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="true" type="cta" label="Poz"></hidden-radio>
-			<hidden-radio role="presentation" class="inline field" :base-name="inputName" v-model="value.positive" input-value="false" type="cta" label="Neg"></hidden-radio>
+			<hidden-radio role="presentation" class="inline field" :base-name="state.baseName" v-model="value.positive" input-value="true" type="cta" label="Poz"></hidden-radio>
+			<hidden-radio role="presentation" class="inline field" :base-name="state.baseName" v-model="value.positive" input-value="false" type="cta" label="Neg"></hidden-radio>
 		</fieldset>
 	</div>
 </template>
@@ -29,8 +28,8 @@ import dynamicFieldListItem from '@mixins/dynamicFieldListItem';
 import HiddenRadio from '@components/form/encounter/HiddenRadio.vue';
 
 class StiInputTracker {
-	constructor(list) {
-		this.update(list);
+	constructor(formData) {
+		this.update(formData.tests_for);
 	}
 
 	update(list) {
@@ -72,7 +71,7 @@ export default {
 		},
 		chosenDiagnosis() {
 			return this.value.tested_for && this.$_t(this.value.tested_for, {scope: 'diagnosis.name_formal'});
-		}
+		},
 	},
 	mounted() {
 		this.$emit('start-tracking', (list) => new StiInputTracker(list));

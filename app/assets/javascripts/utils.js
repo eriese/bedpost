@@ -9,7 +9,7 @@ Object.getAtPath = function(o, s) {
 	let a = s.split('.');
 	for (let i = 0, n = a.length; i < n; ++i) {
 		let k = a[i];
-		if (k in o) {
+		if (o !== undefined && k in o) {
 			o = o[k];
 		} else {
 			return;

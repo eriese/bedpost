@@ -39,6 +39,7 @@ en:
       email: Please enter a valid email address.
       blank: Oops, this one's blank!
       acceptance: Uh oh! You have to accept before you can continue
+      vague: Hmm... something went unexpectedly wrong
   reset:
     errors:
       email:

@@ -1,23 +1,25 @@
 <%= render 'forms/basic_form', back_path: :back, header_text: t('.title') do %>
-	<%= vuelidate_form_with scope: :sti_tests, value_include: [{tests_for: []}], class: 'centered' do |f| %>
+	<%= vuelidate_form_with scope: :sti_tests, value_include: [{tests_for: []}], class: 'centered', url: sti_tests_path do |f| %>
 		<%= f.date_field :tested_on %>
 		<dynamic-field-list
 			component-type="sti-test-input"
-			v-model="vf.formData.tests_for"
+			v-model="<%= f.class::SLOT_SCOPE %>.formData.tests_for"
 			base-name="sti_tests[tests_for]"
-			:$v="vf.$v.formData.tests_for"
-			:form-data="vf.formData"
+			:$v="<%= f.class::SLOT_SCOPE %>.$v.formData.tests_for"
+			:form-data="<%= f.class::SLOT_SCOPE %>.formData"
+			:submission-error="<%= f.class::SLOT_SCOPE %>.submissionError && <%= f.class::SLOT_SCOPE %>.submissionError.tests_for"
+			@should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"
 			state-class="StiTestState">
 			<template v-slot="{addToList, parseList}">
 				<legend class="h2--is-form-heading" id="sti-test-form-title"><%= t_action('.tests_title') %></legend>
 				<div class="dynamic-field-list__shortcuts">
-					<default-tests-button category="default" v-model="vf.formData.tests_for" @populate="addToList"></default-tests-button>
+					<default-tests-button category="default" v-model="<%= f.class::SLOT_SCOPE %>.formData.tests_for" @populate="addToList"></default-tests-button>
 				</div>
 				<div class="dynamic-field-list--has-sti-test-inputs__column-labels">
 					<label id="tested-for-label"><%= t_action('.tested_for') %></label><label id="result-label"><%= t_action('.positive') %></label>
 				</div>
 			</template>
-			</dynamic-field-list>
+		</dynamic-field-list>
 		<%= f.submit class: 'cta cta--is-form-submit' %>
 	<% end %>
 <% end %>
