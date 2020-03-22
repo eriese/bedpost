@@ -43,6 +43,7 @@ en:
       blank: Oops, this one's blank!
       acceptance: Uh oh! You have to accept before you can continue
       vague: Hmm... something went unexpectedly wrong
+      incomplete: Uh oh! You didn't put in all the required data
   helpers:
     flash:
       no_sti_tests_with_date: We couldn't find any tests for that date
