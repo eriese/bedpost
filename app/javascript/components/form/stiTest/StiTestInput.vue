@@ -34,7 +34,7 @@ class StiInputTracker {
 
 	update(list) {
 		this.selected = list.reduce((arr, t) => {
-			t.tested_for_id && arr.push(t.tested_for_id);
+			t.tested_for_id && !t._destroy && arr.push(t.tested_for_id);
 			return arr;
 		}, []);
 	}

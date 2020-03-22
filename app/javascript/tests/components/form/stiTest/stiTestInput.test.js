@@ -55,7 +55,15 @@ describe('Sti Test Input Component', () => {
 
 			const actual = input.vm.availableDiagnoses;
 			expect(actual).toHaveLength(2);
-			expect(actual).not.toContain(expect.objectContaining({value: 'hpv'}));
+			expect(actual).not.toContainEqual(expect.objectContaining({value: 'hpv'}));
+		});
+
+		it('includes options that were selected and then deleted', () => {
+			const {input, tracker} = mountInput();
+			tracker.update([{tested_for: 'hpv', _destroy: true}]);
+
+			const actual = input.vm.availableDiagnoses;
+			expect(actual).toContainEqual(expect.objectContaining({value: 'hpv'}));
 		});
 
 		it('maps diagnoses to objects with label and value', () => {
