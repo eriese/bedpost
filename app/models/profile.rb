@@ -5,6 +5,7 @@ class Profile
 	include GlobalID::Identification
 	include NormalizeBlankValues
 	include DeAliasFields
+	include HasStaticRelations
 
 	field :name, type: String
 	field :a_n, as: :anus_name, type: String
@@ -12,7 +13,7 @@ class Profile
 	field :i_n, as: :internal_name, type: String
 	field :c_p, as: :can_penetrate, type: Boolean, default: false
 
-	belongs_to :pronoun, optional: true
+	has_static_relation :pronoun, optional: true
 
 	validates_presence_of :name
 	#only run this validation on the base class
