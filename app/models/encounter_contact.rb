@@ -1,6 +1,7 @@
 class EncounterContact
 	include Mongoid::Document
 	include NormalizeBlankValues
+	include HasStaticRelations
 
 	field :barriers, type: Contact::BarrierType::BarrierArray, default: []
 	field :position, type: Integer, default: -> {encounter.present? ? encounter.contacts.length : 0}
@@ -8,7 +9,7 @@ class EncounterContact
 	field :subject, type: Symbol, default: :user
 
 	embedded_in :encounter
-	belongs_to :possible_contact
+	has_static_relation :possible_contact
 
 	validates_uniqueness_of :position
 	validates_presence_of :position, :object, :subject
