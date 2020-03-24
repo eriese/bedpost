@@ -1,4 +1,15 @@
 en:
+  mongoid:
+    errors:
+      models:
+        sti_test:
+          attributes:
+            tested_on:
+              taken: You already gave us test results for this date
+        sti_test_result:
+          attributes:
+            tested_for_id:
+              taken: You already gave us %{value} test results for this date
   sti_tests:
     new:
       title: New Test

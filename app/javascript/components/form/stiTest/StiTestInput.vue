@@ -2,7 +2,6 @@
 	<div class="input sti-test-input" :class="{'input--has-errors': errorMsg}">
 		<fieldset aria-labelledby="tested-for-label" class="sti-test-input__sti-input">
 			<input type="hidden" :name="`${state.baseName}[tested_for_id]`" v-model="value.tested_for_id">
-			<input type="hidden" :name="`${state.baseName}[tested_on]`" v-model="state.tested_on">
 			<v-select
 				:options="availableDiagnoses"
 				v-model="value.tested_for_id"
@@ -33,7 +32,7 @@ import {submitted} from '@modules/validation/validators';
 
 class StiInputTracker {
 	constructor(formData) {
-		this.update(formData.tests_for);
+		this.update(formData.results);
 	}
 
 	update(list) {
@@ -92,7 +91,7 @@ export default {
 
 		const indexFinder = (val) => val && `${val}.0` || '';
 
-		this.$parent.$emit('should-validate', 'tests_for', {
+		this.$parent.$emit('should-validate', 'results', {
 			$each: {
 				tested_for_id: {
 					submitted: submitted(indexFinder)

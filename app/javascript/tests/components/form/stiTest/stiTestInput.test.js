@@ -18,7 +18,6 @@ describe('Sti Test Input Component', () => {
 				propsData: {
 					value: {
 						tested_for_id: undefined,
-						tested_on: new Date(),
 						positive: false
 					},
 					state: {
@@ -38,7 +37,7 @@ describe('Sti Test Input Component', () => {
 			});
 
 			const trackerFactory = input.emitted('start-tracking')[0][0];
-			const tracker = trackerFactory({tests_for: []});
+			const tracker = trackerFactory({results: []});
 			input.setProps({tracker});
 
 			return {input, tracker};
