@@ -1,6 +1,7 @@
 class Diagnosis::TransmissionRisk
 	include Mongoid::Document
 	include StaticResource
+	include HasStaticRelations
 
 	NO_DATA = -1
 	NO_RISK = 0
@@ -22,8 +23,8 @@ class Diagnosis::TransmissionRisk
 	# conditions for the risk to apply. if the condition is not met, none of the risks in this instance apply
 	field :subject_conditions, type: Array
 	field :object_conditions, type: Array
-	belongs_to :possible_contact, class_name: 'PossibleContact'
-	belongs_to :diagnosis, class_name: 'Diagnosis'
+	has_static_relation :possible_contact, class_name: 'PossibleContact'
+	has_static_relation :diagnosis, class_name: 'Diagnosis'
 
 	def risk_to_person(encounter_contact, bump_risk, person = :user)
 		lvl = NO_RISK

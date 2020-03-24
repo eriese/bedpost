@@ -1,7 +1,8 @@
 require 'colorize'
 
 namespace :eb do
-	PROD_ENV = 'bedpost-prod-1'
+	PROD_ENV = 'bedpost-prod-1'.freeze
+	STAGING_ENV = 'bepost-staging-2'.freeze
 
 	def deploy_to_environment(args, unsafe_allowed=false)
 		environment_name = args[:environment_name]
@@ -55,6 +56,16 @@ namespace :eb do
 
 	def deploy(build_name)
 		sh "eb deploy -l #{build_name}"
+	end
+
+	desc 'set the elastic beanstalk environment to production'
+	task :use_prod do
+		sh "eb use #{PROD_ENV}"
+	end
+
+	desc 'set the elastic beanstalk environment to staging'
+	task :use_staging do
+		sh "eb use #{STAGING_ENV}"
 	end
 
 	desc 'set the master key environment variable and then deploy'
