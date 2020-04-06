@@ -1,16 +1,16 @@
 <% body_class  'is-flesh-contrast' %>
 <h1><%= t('.title') %></h1>
-<h2 class="desc"><%= t('.title_desc', tested_on: l(@tested_on, format: :long_date)) %></h2>
+<h2 class="desc"><%= t('.title_desc', tested_on: l(@sti_test.tested_on, format: :long_date)) %></h2>
 
 <table class="table table--is-list-display container--is-centered test-results" >
 	<tr>
 		<th><%= t('.tested_for') %></th>
 		<th><%= t('.result') %></th>
 	</tr>
-	<% @sti_tests.each do |tst| %>
-		<tr class="test-results__result--is-<%= tst.positive ?  'positive' : 'negative' %>">
-			<td><%= t(tst.tested_for_id, scope: 'diagnosis.name_formal') %></td>
-			<td class=""><%= t(tst.positive ? '.poz' : '.neg') %></td>
+	<% @sti_test.results.each do |res| %>
+		<tr class="test-results__result--is-<%= res.positive ?  'positive' : 'negative' %>">
+			<td><%= t(res.tested_for_id, scope: 'diagnosis.name_formal') %></td>
+			<td class=""><%= t(res.positive ? '.poz' : '.neg') %></td>
 		</tr>
 	<% end %>
 </table>

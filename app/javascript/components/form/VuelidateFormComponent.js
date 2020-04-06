@@ -76,7 +76,9 @@ export default {
 				submissionError: this.submissionError,
 				formData: this.formData,
 				addValidation: (key, validations) => {
-					this.$set(this.adlValidations, key, validations);
+					if (this.adlValidations[key] === undefined) {
+						this.$set(this.adlValidations, key, validations);
+					}
 				},
 				addStepper: (newStepper) => {
 					this.$set(this, 'stepper', newStepper);

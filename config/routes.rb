@@ -34,6 +34,8 @@ Rails.application.routes.draw do
 	end
 
 	resources :encounters
+	get 'sti_tests/uniqueness', to: 'sti_tests#unique'
+	get 'sti_tests/:current_tested_on/uniqueness', to: 'sti_tests#unique'
 	resources :sti_tests, param: :tested_on
 
 	get 'first_time', to: 'tours#index'

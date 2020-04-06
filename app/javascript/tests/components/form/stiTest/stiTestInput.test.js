@@ -18,7 +18,6 @@ describe('Sti Test Input Component', () => {
 				propsData: {
 					value: {
 						tested_for_id: undefined,
-						tested_on: new Date(),
 						positive: false
 					},
 					state: {
@@ -38,7 +37,7 @@ describe('Sti Test Input Component', () => {
 			});
 
 			const trackerFactory = input.emitted('start-tracking')[0][0];
-			const tracker = trackerFactory({tests_for: []});
+			const tracker = trackerFactory({results: []});
 			input.setProps({tracker});
 
 			return {input, tracker};
@@ -55,7 +54,15 @@ describe('Sti Test Input Component', () => {
 
 			const actual = input.vm.availableDiagnoses;
 			expect(actual).toHaveLength(2);
-			expect(actual).not.toContain(expect.objectContaining({value: 'hpv'}));
+			expect(actual).not.toContainEqual(expect.objectContaining({value: 'hpv'}));
+		});
+
+		it('includes options that were selected and then deleted', () => {
+			const {input, tracker} = mountInput();
+			tracker.update([{tested_for: 'hpv', _destroy: true}]);
+
+			const actual = input.vm.availableDiagnoses;
+			expect(actual).toContainEqual(expect.objectContaining({value: 'hpv'}));
 		});
 
 		it('maps diagnoses to objects with label and value', () => {

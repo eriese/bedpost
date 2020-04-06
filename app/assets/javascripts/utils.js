@@ -1,6 +1,6 @@
 // from https://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-with-string-key?noredirect=1&lq=1
 Object.getAtPath = function(o, s) {
-	if (!o || typeof o != 'object') {
+	if (!o || !s || typeof o != 'object') {
 		return;
 	}
 

@@ -227,7 +227,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		end
 
 		# the generated validations for the attribute
-		defaults[':v-field'] = "vf.$v.formData#{submission_error.gsub('submissionError', '$v.formData')}"
+		defaults[':$v'] = "vf.$v.formData#{submission_error.gsub('submissionError', '$v.formData')}"
 		#whether this attribute is a date
 		defaults[':is-date'] = true if @options[:is_date]
 		defaults
