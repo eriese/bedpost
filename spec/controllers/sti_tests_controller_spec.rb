@@ -24,9 +24,13 @@ RSpec.describe StiTestsController, type: :controller do
 			tst = build(:sti_test, *arguments)
 			json = tst.as_json(include: [:results])
 			json[:results_attributes] = {}
-			json.delete('results').each_with_index { |r, i| json[:results_attributes][i] = r }
+			json.delete('results').each_with_index do |r, i|
+				r.delete('_id')
+				json[:results_attributes][i] = r
+			end
 			json
 		end
+
 		context 'with valid parameters' do
 			it 'adds the tests to the user' do
 				tst = test_attributes(tested_for: [:hpv, :hiv])
@@ -93,10 +97,9 @@ RSpec.describe StiTestsController, type: :controller do
 		context 'with a valid date' do
 			before do
 				date = Date.current
-				@test1 = build(:sti_test, tested_on: date, tested_for: [:hiv, :hpv])
-				@test2 = build(:sti_test, tested_on: date - 1.day, tested_for: [:hiv])
+				@test1 = create(:sti_test, user_profile: @user, tested_on: date, tested_for: [:hiv, :hpv])
+				@test2 = create(:sti_test, user_profile: @user, tested_on: date - 1.day, tested_for: [:hiv])
 
-				@user.sti_tests = [@test1, @test2]
 				@user.save
 			end
 
@@ -121,6 +124,19 @@ RSpec.describe StiTestsController, type: :controller do
 				get :show, params: { tested_on: StiTest.date_to_param(DateTime.current) }
 				expect(flash[:notice]).to eq I18n.t(:no_sti_tests_with_date, scope: 'helpers.flash')
 			end
+		end
+	end
+
+	describe 'PUT #update' do
+		context 'with valid changes' do
+			def update_params
+			end
+			before do
+				@user.sti_tests.create(:sti_test, tested_for: [:hiv, :hpv])
+			end
+
+			it 'updates the status of test results'
+
 		end
 	end
 end

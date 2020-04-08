@@ -3,16 +3,17 @@
 	border-collapse: collapse;
 	color: inherit;
 	&--is-list-display {
-		th {
+		&__header {
 			font-size: 1.15rem;
 		}
 
-		td {
+		&__cell {
 			font-size: 1rem;
 			padding: $spacing-default $spacing-small $spacing-tiny $spacing-small;
 			vertical-align: bottom;
 			border-bottom: 2px solid;
 			border-bottom-color: inherit;
+			line-height: 1.5;
 		}
 	}
 }

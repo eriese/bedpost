@@ -4,13 +4,15 @@
 
 <table class="table table--is-list-display container--is-centered test-results" >
 	<tr>
-		<th><%= t('.tested_for') %></th>
-		<th><%= t('.result') %></th>
+		<th class="table--is-list-display__header" scope="col"><%= t('.tested_for') %></th>
+		<th class="table--is-list-display__header" scope="col"><%= t('.result') %></th>
 	</tr>
 	<% @sti_test.results.each do |res| %>
 		<tr class="test-results__result--is-<%= res.positive ?  'positive' : 'negative' %>">
-			<td><%= t(res.tested_for_id, scope: 'diagnosis.name_formal') %></td>
-			<td class=""><%= t(res.positive ? '.poz' : '.neg') %></td>
+			<th class="table--is-list-display__cell" scope="row"><%= t(res.tested_for_id, scope: 'diagnosis.name_formal') %></td>
+			<td class="table--is-list-display__cell"><%= t(res.positive ? '.poz' : '.neg') %></td>
 		</tr>
 	<% end %>
 </table>
+
+<%= link_to t(".edit"), edit_sti_test_path(@sti_test), {class: 'cta--is-floating-right cta cta--is-round'} %>

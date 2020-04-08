@@ -5,19 +5,22 @@ en:
         sti_test:
           attributes:
             tested_on:
-              taken: You already gave us test results for this date
+              taken_html: You already gave us results for this date; You can <a href="%{url}" class="link">click here to edit your previously saved results</a>
         sti_test_result:
           attributes:
             tested_for_id:
               taken: You already gave us %{value} test results for this date
   sti_tests:
-    new:
+    new: &news
       title: New Test
       tests_title: What did you get tested for?
       tested_for: STI
       positive: Result
       tested_on: Date of the test
       default_tests_title: Add all the STIs in a %{category}
+    edit:
+      <<: *news
+      title: Edit Test
     default_tests:
       default: Basic STI Panel
     show:

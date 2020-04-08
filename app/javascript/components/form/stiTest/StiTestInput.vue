@@ -1,6 +1,7 @@
 <template>
 	<div class="input sti-test-input" :class="{'input--has-errors': errorMsg}">
 		<fieldset aria-labelledby="tested-for-label" class="sti-test-input__sti-input">
+			<input type="hidden" :name="`${state.baseName}[_id]`" v-model="value._id">
 			<input type="hidden" :name="`${state.baseName}[tested_for_id]`" v-model="value.tested_for_id">
 			<v-select
 				:options="availableDiagnoses"
