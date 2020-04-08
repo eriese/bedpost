@@ -26,6 +26,10 @@ class StiTest
 		super(dt)
 	end
 
+	def any_positive?
+		results.any? { |r| r.positive }
+	end
+
 	def error_messages
 		if results?
 			errors.messages.merge({

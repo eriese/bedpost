@@ -3,6 +3,7 @@ class StiTestsController < ApplicationController
 	before_action :get_test_from_date, only: [:edit, :update, :show, :destroy]
 
 	def index
+		@sti_tests = current_user_profile.sti_tests
 	end
 
 	def new
@@ -29,7 +30,7 @@ class StiTestsController < ApplicationController
 
 	def update
 		if @sti_test.update(test_params)
-			flash[:notice] = t(:success)
+			flash[:notice] = t(:success, scope: 'sti_tests.update')
 			redirect_to(sti_test_path(@sti_test))
 		else
 			respond_with_submission_error(@sti_test.error_messages, edit_sti_test_path(@sti_test))

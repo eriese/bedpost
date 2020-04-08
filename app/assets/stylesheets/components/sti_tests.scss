@@ -57,7 +57,7 @@
 .test-results {
 	&__result {
 		&--is-positive {
-			color: $liliac;
+			@include themed(color, 'h2');
 		}
 	}
 }

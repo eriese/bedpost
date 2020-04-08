@@ -11,6 +11,12 @@ en:
             tested_for_id:
               taken: You already gave us %{value} test results for this date
   sti_tests:
+    index:
+      title: All STI Tests
+      tested_on: Test Date
+      num_tested: '# of Tests'
+      any_poz: Any Tests Positive?
+      new_test: Add a new STI test
     new: &news
       title: New Test
       tests_title: What did you get tested for?
@@ -30,3 +36,5 @@ en:
       result: Result
       neg: Negative
       poz: Positive
+    update:
+      success: Successfully updated your test results!

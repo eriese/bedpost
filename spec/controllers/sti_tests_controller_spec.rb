@@ -131,12 +131,15 @@ RSpec.describe StiTestsController, type: :controller do
 		context 'with valid changes' do
 			def update_params
 			end
+
 			before do
 				@user.sti_tests.create(:sti_test, tested_for: [:hiv, :hpv])
 			end
 
-			it 'updates the status of test results'
-
+			it 'updates the status of existing test results'
+			it 'adds new test results'
+			it 'removes removed test results'
+			it 'can change the date of the test'
 		end
 	end
 end
