@@ -1,20 +1,22 @@
 <% body_class 'is-dark-contrast' %>
-<h1><%= t('.title') %></h1>
-<table class="table table--is-list-display container--is-centered test-results">
-	<tr>
-		<th class="table--is-list-display__header" scope="col"><%= t('.tested_on') %></th>
-		<th class="table--is-list-display__header" scope="col"><%= t('.num_tested') %></th>
-		<th class="table--is-list-display__header" scope="col"><%= t('.any_poz') %></th>
-	</tr>
-	<% @sti_tests.each do |tst| %>
-	<tr>
-		<th class="table--is-list-display__cell" scope="row"><%= link_to l(tst.tested_on, format: :long_date), sti_test_path(tst), class: 'link' %></th>
-		<td class="table--is-list-display__cell"><%= tst.results.size %></td>
-		<% any_poz = tst.any_positive? %>
-		<td class="table--is-list-display__cell test-results__result--is-<%= any_poz ? 'positive' : 'negative' %>"><%= t(any_poz ? 'yes' : 'no') %></td>
-	</tr>
-	<% end %>
-</table>
+<div class="container--is-narrow container--is-centered">
+	<h1><%= t('.title') %></h1>
+	<table class="table table--is-list-display container--is-centered test-results">
+		<tr>
+			<th class="table--is-list-display__header" scope="col"><%= t('.tested_on') %></th>
+			<th class="table--is-list-display__header" scope="col"><%= t('.num_tested') %></th>
+			<th class="table--is-list-display__header" scope="col"><%= t('.any_poz') %></th>
+		</tr>
+		<% @sti_tests.each do |tst| %>
+		<tr>
+			<th class="table--is-list-display__cell" scope="row"><%= link_to l(tst.tested_on, format: :long_date), sti_test_path(tst), class: 'link' %></th>
+			<td class="table--is-list-display__cell"><%= tst.results.size %></td>
+			<% any_poz = tst.any_positive? %>
+			<td class="table--is-list-display__cell test-results__result--is-<%= any_poz ? 'positive' : 'negative' %>"><%= t(any_poz ? 'yes' : 'no') %></td>
+		</tr>
+		<% end %>
+	</table>
 
-<%= link_to '', new_sti_test_path, title: t(".new_test"), 'aria-label': t('.new_test'), :class => "cta cta--is-add-btn" %>
-<%= link_to(t(".back"), root_path, class: "cta cta--is-back-btn")  %>
+	<%= link_to '', new_sti_test_path, title: t(".new_test"), 'aria-label': t('.new_test'), :class => "cta cta--is-add-btn" %>
+	<%= link_to(t(".back"), root_path, class: "cta cta--is-back-btn")  %>
+</div>

@@ -1,18 +1,24 @@
 <% body_class  'is-flesh-contrast' %>
-<h1><%= t('.title') %></h1>
-<h2 class="desc"><%= t('.title_desc', tested_on: l(@sti_test.tested_on, format: :long_date)) %></h2>
+<div class="container--is-narrow container--is-centered">
+	<h1><%= t('.title') %></h1>
+	<h2 class="desc"><%= t('.title_desc', tested_on: l(@sti_test.tested_on, format: :long_date)) %></h2>
 
-<table class="table table--is-list-display container--is-centered test-results" >
-	<tr>
-		<th class="table--is-list-display__header" scope="col"><%= t('.tested_for') %></th>
-		<th class="table--is-list-display__header" scope="col"><%= t('.result') %></th>
-	</tr>
-	<% @sti_test.results.each do |res| %>
-		<tr class="test-results__result--is-<%= res.positive ?  'positive' : 'negative' %>">
-			<th class="table--is-list-display__cell" scope="row"><%= t(res.tested_for_id, scope: 'diagnosis.name_formal') %></td>
-			<td class="table--is-list-display__cell"><%= t(res.positive ? '.poz' : '.neg') %></td>
+	<table class="table table--is-list-display container--is-centered test-results" >
+		<tr>
+			<th class="table--is-list-display__header" scope="col"><%= t('.tested_for') %></th>
+			<th class="table--is-list-display__header" scope="col"><%= t('.result') %></th>
 		</tr>
-	<% end %>
-</table>
+		<% @sti_test.results.each do |res| %>
+			<tr class="test-results__result--is-<%= res.positive ?  'positive' : 'negative' %>">
+				<th class="table--is-list-display__cell" scope="row"><%= t(res.tested_for_id, scope: 'diagnosis.name_formal') %></td>
+				<td class="table--is-list-display__cell"><%= t(res.positive ? '.poz' : '.neg') %></td>
+			</tr>
+		<% end %>
+	</table>
 
-<%= link_to t(".edit"), edit_sti_test_path(@sti_test), {class: 'cta--is-floating-right cta cta--is-round'} %>
+	<div class="clear additional">
+		<p><%= confirm_link_to t('.destroy.text'), sti_test_path(@sti_test), method: :delete, alert_class: 'confirmation', data: {confirm: t('.destroy.confirm')}, class: 'link' %></p>
+	</div>
+	<%= link_to t('.edit'), edit_sti_test_path(@sti_test), {class: 'cta--is-floating-right cta cta--is-round'} %>
+	<%= link_to(t('.back'), sti_tests_path, class: 'cta cta--is-back-btn')  %>
+</div>

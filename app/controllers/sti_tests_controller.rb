@@ -37,6 +37,16 @@ class StiTestsController < ApplicationController
 		end
 	end
 
+	def destroy
+		if @sti_test.destroy
+			flash[:notice] = t(:success, scope: 'sti_tests.destroy')
+			redirect_to(sti_tests_path)
+		else
+			flash[:error] = t(:error_html, scope: 'sti_tests.destroy')
+			redirect_to sti_test_path(@sti_test)
+		end
+	end
+
 	def unique
 		current_date_param = params[:current_tested_on]
 		tst = if current_date_param.blank?

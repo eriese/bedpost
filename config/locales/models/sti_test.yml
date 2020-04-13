@@ -14,8 +14,8 @@ en:
     index:
       title: All STI Tests
       tested_on: Test Date
-      num_tested: '# of Tests'
-      any_poz: Any Tests Positive?
+      num_tested: STIs Tested
+      any_poz: Positive Tests?
       new_test: Add a new STI test
     new: &news
       title: New Test
@@ -36,5 +36,10 @@ en:
       result: Result
       neg: Negative
       poz: Positive
+      destroy:
+        text: Delete these test results
     update:
       success: Successfully updated your test results!
+    destroy:
+      success: Successfully deleted your test results.
+      error_html: Hm... We had a problem deleting your test results. Please <a href="/feedback/bug" class="link">submit a bug report</a>, because this shouldn't happen.
