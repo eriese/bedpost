@@ -1,6 +1,9 @@
 <% body_class 'is-dark-contrast' %>
 <div class="container--is-narrow container--is-centered">
 	<h1><%= t('.title') %></h1>
+<% if @sti_tests.blank? %>
+	<h2><%= t('.no_tests') %></h2>
+<% else %>
 	<table class="table table--is-list-display container--is-centered test-results">
 		<tr>
 			<th class="table--is-list-display__header" scope="col"><%= t('.tested_on') %></th>
@@ -16,6 +19,7 @@
 		</tr>
 		<% end %>
 	</table>
+<% end %>
 
 	<%= link_to '', new_sti_test_path, title: t(".new_test"), 'aria-label': t('.new_test'), :class => "cta cta--is-add-btn" %>
 	<%= link_to(t(".back"), root_path, class: "cta cta--is-back-btn")  %>

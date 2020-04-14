@@ -17,6 +17,7 @@ en:
       num_tested: STIs Tested
       any_poz: Positive Tests?
       new_test: Add a new STI test
+      no_tests: You haven't entered any test results yet
     new: &news
       title: New Test
       tests_title: What did you get tested for?
