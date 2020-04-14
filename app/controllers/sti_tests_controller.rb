@@ -50,10 +50,11 @@ class StiTestsController < ApplicationController
 	def unique
 		current_date_param = params[:current_tested_on]
 		tst = if current_date_param.blank?
-			current_user_profile.sti_tests.new(tested_on: tested_on_date)
+			current_user_profile.sti_tests.new
 		else
 			current_user_profile.sti_tests.with_date(current_date_param)
 		end
+		tst.tested_on = tested_on_date
 		respond_with(tst)
 	end
 

@@ -31,13 +31,15 @@ class StiTest
 	end
 
 	def error_messages
-		if results?
-			errors.messages.merge({
-				results: results.map { |r| r.errors.messages }
-			})
-		else
-			{ form_error: I18n.t(:incomplete, scope: 'errors.messages') }
-		end
+		additional_messages =
+			if results?
+				({
+					results: results.map { |r| r.errors.messages }
+				})
+			else
+				{ form_error: I18n.t(:incomplete, scope: 'errors.messages') }
+			end
+		errors.messages.merge(additional_messages)
 	end
 
 	def self.with_date(date)
