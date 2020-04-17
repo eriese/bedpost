@@ -23,7 +23,7 @@
 		"vue-tour": "^1.1.0",
 		"vue-turbolinks": "^2.0.4",
 		"vuelidate": "^0.7.4",
-		"webpack": "^4.0.0"
+		"webpack": "^4.41.2"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.5.5",
@@ -41,7 +41,7 @@
 		"eslint-plugin-jest": "^23.0.4",
 		"eslint-plugin-jsdoc": "^18.1.4",
 		"eslint-plugin-vue": "^6.0.1",
-		"jest": "^24.9.0",
+		"jest": "^25.3.0",
 		"jest-axe": "^3.3.0",
 		"mini-css-extract-plugin": "^0.8.0",
 		"node-sass": "^4.13.0",
