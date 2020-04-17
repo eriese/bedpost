@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 	before_action :authenticate_user_profile!
 	before_action :check_first_time
 
+	respond_to :html, :json
 	layout :choose_layout
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})

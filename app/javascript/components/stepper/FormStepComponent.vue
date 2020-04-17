@@ -114,7 +114,7 @@
 				// only do the work if it's not an optional step
 				if (!this.optional) {
 					// get the inital validity of each field for its completeness
-					this.completes = this.fields.map((f) => f.vField === undefined || !f.vField.$invalid);
+					this.completes = this.fields.map((f) => f.validity);
 				}
 			}
 		},

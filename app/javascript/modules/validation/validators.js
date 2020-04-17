@@ -9,37 +9,45 @@ import axios from 'axios';
 /**
  * Make a validator that checks whether the field has a submission error
  *
- * @param  {string[]} path the path to the field in the object
+ * @param  {string[]|function} path the path to the field in the object, or a function with arguments (value, vm) to get the path
+ * @param  {boolean}           ignoreDestroy don't use the object destroy flag to override a submission error
  * @return {boolean}      whether there is a submission error at this path and the current value matches the errored value
  */
-export const submitted = (path) => {
+export const submitted = (path, ignoreDestroy) => {
 	// hold onto the value that caused the error
-	let erroredVal = undefined;
+	let erroredVals = [];
 	// hold onto the previous error
 	let prevError = undefined;
 
 	// make the validator
-	return helpers.withParams({type: 'submissionError', path: path}, function (value) {
+	return helpers.withParams({type: 'submissionError', path: path}, function (value, parentVal) {
 		let fieldError = undefined;
 
-		// look for the field in the submission error
-		fieldError = this.submissionError && this.submissionError[path[path.length - 1]];
+		let pathStr = typeof path == 'function' ? path.apply(this, [value, this]) : path.join('.');
 
+		// look for the field in the submission error
+		fieldError = Object.getAtPath(this.submissionError, pathStr);
+		let valAlreadyErrored = erroredVals.indexOf(value) > -1;
 		// if there isn't one, it's valid
-		if (!fieldError) {
+		if ((!fieldError && !valAlreadyErrored)
+			|| (!ignoreDestroy && parentVal._destroy)) {
 			return true;
 		}
 
-		// set a new erroredVal if there wasn't one or this is a new error
-		if (erroredVal === undefined || prevError != this.submissionError) {
-			erroredVal = value;
+		if (!valAlreadyErrored) {
+			const erroredVal = fieldError.value !== undefined;
+			// set a new erroredVal if there wasn't one or this is a new error
+			if ((erroredVal && fieldError.value == value)
+				|| (!erroredVal && prevError != this.submissionError)) {
+				erroredVals.push(value);
+			}
 		}
 
 		// save this error for next time
 		prevError = this.submissionError;
 
 		// there's an error if the value is the same as the one that caused the error
-		return value != erroredVal;
+		return erroredVals.indexOf(value) < 0;
 	});
 };
 

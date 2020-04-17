@@ -7,6 +7,7 @@ module ApplicationHelper
 		'is-light' => 'is-light',
 		'is-dark-contrast' => 'is-dark',
 		'is-flesh' => 'is-light',
+		'is-flesh-contrast' => 'is-dark',
 		default: 'contrast'
 	}.freeze
 
@@ -20,7 +21,8 @@ module ApplicationHelper
 		"nav.dashboard" => url_helpers.root_path,
 		"nav.user_profile_edit" => url_helpers.edit_user_profile_registration_path,
 		"nav.partners" => url_helpers.partnerships_path,
-		"nav.encounters" => url_helpers.encounters_path
+		"nav.encounters" => url_helpers.encounters_path,
+		"nav.sti_tests" => url_helpers.sti_tests_path
 	}
 
 	def pronouns
