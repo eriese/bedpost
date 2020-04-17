@@ -5,19 +5,29 @@ en:
         sti_test:
           attributes:
             tested_on:
-              taken: You already gave us test results for this date
+              taken_html: You already gave us results for this date; You can <a href="%{url}" class="link">click here to edit your previously saved results</a>
         sti_test_result:
           attributes:
             tested_for_id:
               taken: You already gave us %{value} test results for this date
   sti_tests:
-    new:
+    index:
+      title: All STI Tests
+      tested_on: Test Date
+      num_tested: STIs Tested
+      any_poz: Positive Tests?
+      new_test: Add a new STI test
+      no_tests: You haven't entered any test results yet
+    new: &news
       title: New Test
       tests_title: What did you get tested for?
       tested_for: STI
       positive: Result
       tested_on: Date of the test
       default_tests_title: Add all the STIs in a %{category}
+    edit:
+      <<: *news
+      title: Edit Test
     default_tests:
       default: Basic STI Panel
     show:
@@ -27,3 +37,10 @@ en:
       result: Result
       neg: Negative
       poz: Positive
+      destroy:
+        text: Delete these test results
+    update:
+      success: Successfully updated your test results!
+    destroy:
+      success: Successfully deleted your test results.
+      error_html: Hm... We had a problem deleting your test results. Please <a href="/feedback/bug" class="link">submit a bug report</a>, because this shouldn't happen.

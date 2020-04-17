@@ -106,7 +106,7 @@ en:
   previous: Previous
   back: Back
   edit: Edit
-  confirm: Are you sure? Click again to confirm, or click anywhere else to cancel
+  confirm: Are you sure? You won't be able to undo this. If you really mean it, click again to confirm. Otherwise click anywhere else to cancel
   field_html: "<b>%{field}</b>: %{value}"
   I: I
   my: my
@@ -120,6 +120,7 @@ en:
     user_profile_edit: "Edit Profile"
     partners: "Partners"
     encounters: "Encounters"
+    sti_tests: STI Tests
   guide_button: "Load a guide to this page"
   loading: Loading...
   list_view: List View

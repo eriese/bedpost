@@ -6,7 +6,14 @@ class StiTest
 	embeds_many :results, class_name: 'StiTestResult'
 	accepts_nested_attributes_for :results, allow_destroy: true
 	index({ tested_on: -1 }, unique: true)
-	validates :tested_on, presence: true, uniqueness: true
+	validates :tested_on,
+		presence: true,
+		uniqueness: {
+			message: -> (object, _data) do
+				url = Rails.application.routes.url_helpers.edit_sti_test_path(object)
+				I18n.t 'mongoid.errors.models.sti_test.attributes.tested_on.taken_html', url: url
+			end
+		}
 
 	PARAM_FORMAT = '%b-%d-%Y'.freeze
 
@@ -17,6 +24,22 @@ class StiTest
 	def tested_on=(val)
 		dt = self.class.param_to_date(val)
 		super(dt)
+	end
+
+	def any_positive?
+		results.any? { |r| r.positive }
+	end
+
+	def error_messages
+		additional_messages =
+			if results?
+				({
+					results: results.map { |r| r.errors.messages }
+				})
+			else
+				{ form_error: I18n.t(:incomplete, scope: 'errors.messages') }
+			end
+		errors.messages.merge(additional_messages)
 	end
 
 	def self.with_date(date)

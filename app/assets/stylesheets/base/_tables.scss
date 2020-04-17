@@ -2,17 +2,24 @@
 	@include themed(border-color, "background-contrast");
 	border-collapse: collapse;
 	color: inherit;
+
 	&--is-list-display {
-		th {
+		margin-bottom: $spacing-medium;
+
+		&__header {
 			font-size: 1.15rem;
+			padding: 0 $spacing-small;
+			text-align: center;
 		}
 
-		td {
+		&__cell {
 			font-size: 1rem;
 			padding: $spacing-default $spacing-small $spacing-tiny $spacing-small;
 			vertical-align: bottom;
 			border-bottom: 2px solid;
 			border-bottom-color: inherit;
+			line-height: 1.5;
+			text-align: center;
 		}
 	}
 }

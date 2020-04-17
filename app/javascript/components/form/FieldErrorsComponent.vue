@@ -115,7 +115,14 @@ export default {
 		this.input = this.$el.querySelector('input, select');
 		// if this is a date, convert the value to a date object
 		if (this.isDate) {
-			this.model = this.model ? new Date(this.model) : new Date();
+			if (!this.model) {
+				this.model = new Date();
+			}
+			else {
+				let offset = new Date().getTimezoneOffset() * 60 * 1000;
+				let timestamp = Date.parse(this.model);
+				this.model = new Date(timestamp + offset);
+			}
 		}
 
 		// if there's an input, we're not waiting on a lazy-loaded child

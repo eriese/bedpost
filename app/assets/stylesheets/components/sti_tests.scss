@@ -33,11 +33,13 @@
 			align-items: center;
 
 			&__sti-input {
-				flex-grow: 1
+				flex-grow: 1;
+				flex-basis: 50%;
 			}
 
 			&__result-input {
 				flex-shrink: 0;
+				flex-basis: rem(90px);
 				.input {
 					margin: 0;
 				}
@@ -57,7 +59,7 @@
 .test-results {
 	&__result {
 		&--is-positive {
-			color: $liliac;
+			@include themed(color, 'h2');
 		}
 	}
 }

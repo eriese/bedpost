@@ -1,0 +1,25 @@
+<%= render 'forms/basic_form', back_path: :back, header_text: t_action('.title') do %>
+	<%= vuelidate_form_with model: @sti_test, value_include: [:results], class: 'centered' do |f| %>
+		<%= f.date_field :tested_on %>
+		<dynamic-field-list
+			component-type="sti-test-input"
+			v-model="<%= f.class::SLOT_SCOPE %>.formData.results"
+			base-name="<%= f.object_name %>[results_attributes]"
+			:$v="<%= f.class::SLOT_SCOPE %>.$v.formData.results"
+			:form-data="<%= f.class::SLOT_SCOPE %>.formData"
+			:submission-error="<%= f.class::SLOT_SCOPE %>.submissionError.results"
+			@should-validate="<%= f.class::SLOT_SCOPE %>.addValidation"
+			state-class="StiTestState">
+			<template v-slot="{addToList, parseList}">
+				<legend class="h2--is-form-heading" id="sti-test-form-title"><%= t_action('.tests_title') %></legend>
+				<div class="dynamic-field-list__shortcuts">
+					<default-tests-button category="default" v-model="<%= f.class::SLOT_SCOPE %>.formData.results" @populate="addToList"></default-tests-button>
+				</div>
+				<div class="dynamic-field-list--has-sti-test-inputs__column-labels">
+					<label id="tested-for-label"><%= t_action('.tested_for') %></label><label id="result-label"><%= t_action('.positive') %></label>
+				</div>
+			</template>
+		</dynamic-field-list>
+		<%= f.submit class: 'cta cta--is-form-submit' %>
+	<% end %>
+<% end %>

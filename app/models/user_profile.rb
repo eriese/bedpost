@@ -47,7 +47,7 @@ class UserProfile < Profile
 
 	embeds_many :partnerships, cascade_callbacks: true
 	embeds_many :encounters, cascade_callbacks: true
-	embeds_many :sti_tests, cascade_callbacks: true
+	embeds_many :sti_tests, order: :tested_on.desc, cascade_callbacks: true
 
 	validates_presence_of :password, :password_confirmation, on: :create
 	validates_uniqueness_of :uid, case_sensitive: false
