@@ -3,7 +3,13 @@ import bedpostVueGlobals from '@plugins/bedpostVueGlobals';
 import EncounterContactField from '@components/form/encounter/EncounterContactField.vue';
 import Vuelidate from 'vuelidate';
 import ContactState from '@components/form/state/ContactState';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { configureAxe, toHaveNoViolations } from 'jest-axe';
+
+const axe = configureAxe({
+	rules: {
+		region: {enabled: false}
+	}
+});
 
 expect.extend(toHaveNoViolations);
 
