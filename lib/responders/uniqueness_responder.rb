@@ -1,9 +1,9 @@
 class UniquenessResponder < ActionController::Responder
 	def respond
 		if controller.action_name == 'unique'
-			resource.valid?
-			if resource.errors.any?
-				controller.render json: resource.errors.messages
+			if resource && !resource.valid?
+				messages = resource.respond_to?(:error_messages) ? resource.error_messages : resource.errors.messages
+				controller.render json: messages
 			else
 				controller.render json: true
 			end

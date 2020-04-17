@@ -56,7 +56,7 @@ $mobile: "<tablet" ("retina", "retina2x", "retina3x");
 $coyote-tracks: #af8b82;
 $roxy-brown: #7A534A;
 $chocolate-fondant: #56362E;
-$root-brew: #250900;
+$root-brew: #37241f;
 
 // oranges
 $canyon-rose: #9F615C;
@@ -141,7 +141,7 @@ $colors-light-contrast: (
 	"h2": $color-white,
 	"background": map-get($colors-light, "background-contrast"),
 	"background-contrast": $color-white,
-	"text": $color-black,
+	"text": $color-white,
 	"input-border": $scintillating-violet,
 	"input-border-focus": $roxy-brown,
 	"form-background": $guppy-violet,
@@ -186,21 +186,21 @@ $colors-flesh: (
 );
 
 $colors-flesh-contrast: (
-	"cta-text": $color-white,
-	"cta-bg": $dahlia-purple,
-	"cta-bg-light": $roxy-brown,
+	"cta-text": $root-brew,
+	"cta-bg": $bonny-belle,
+	"cta-bg-light": $coyote-tracks,
 	"cta-bg-form": $scintillating-violet,
-	"link": $dahlia-purple,
-	"link-light": $roxy-brown,
+	"link": $bonny-belle,
+	"link-light": $coyote-tracks,
 	"link-light-light": $scintillating-violet,
 	"shadow": rgba($color-white, 0.3),
-	"h1": $chocolate-fondant,
-	"h2": $scintillating-violet,
-	"background": $color-white,
+	"h1": $pale-jasper,
+	"h2": $liliac,
+	"background": $root-brew,
 	"background-contrast": $pale-jasper,
-	"text": $scintillating-violet,
-	"input-border": $dahlia-purple,
-	"input-border-focus": $roxy-brown,
+	"text": $color-white,
+	"input-border": $bonny-belle,
+	"input-border-focus": $coyote-tracks,
 	"form-background": $pale-jasper
 );
 

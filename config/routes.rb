@@ -33,15 +33,17 @@ Rails.application.routes.draw do
 		get 'uniqueness', to: 'partnership_whos#unique'
 	end
 
-	get 'encounters/who', to: 'encounter_whos#new'
-	post 'encounters/who', to: 'encounter_whos#create'
 	resources :encounters
-
+	get 'sti_tests/uniqueness', to: 'sti_tests#unique'
+	get 'sti_tests/:current_tested_on/uniqueness', to: 'sti_tests#unique'
+	resources :sti_tests, param: :tested_on
 
 	get 'first_time', to: 'tours#index'
 	post 'first_time', to: 'tours#create'
 	resources :tours, only: [:show, :update]
 	resources :terms, only: [:show, :update]
+
+	resource :overview, only: [:show, :create]
 
 	get 'feedback/*feedback_type', to: 'trello#new', as: :feedback
 	post 'feedback/*feedback_type', to: 'trello#create'
