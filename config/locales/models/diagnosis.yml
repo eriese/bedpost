@@ -3,7 +3,7 @@ en:
     name_casual:
       chlamydia: Chlamydia
       gonorrhea: Gonorrhea
-      syphillis: Syphillis
+      syphillis: Syphilis
       hiv: HIV
       hep_c: Hep C
       hep_b: Hep B
@@ -14,23 +14,23 @@ en:
       cmv: CMV
       molluscum: Molluscum
       bv: BV
-      public_lice: Crabs
+      pubic_lice: Crabs
       scabies: Scabies
     name_formal:
       chlamydia: Chlamydia
       gonorrhea: Gonorrhea
-      syphillis: Syphillis
-      hiv: HIV (Human Immunodeficiency Virus)
+      syphillis: Syphilis
+      hiv: HIV
       hep_c: Hepatitis C
       hep_b: Hepatitis B
       hep_a: Hepatitis A
       hsv: HSV (Herpes Simplex Virus 1 or 2)
-      hpv: HPV (Human Papiloma Virus)
+      hpv: HPV (Human Papillomavirus)
       trich: Trichomoniasis
       cmv: CMV (Cytomegalovirus)
       molluscum: Molluscum Contagiosum
       bv: BV (Bacterial Vaginosis)
-      public_lice: Public Lice
+      pubic_lice: Crabs (Pubic Lice)
       scabies: Scabies
     caveat:
       increased_by_fluids: "<sup>*</sup>This risk is lower if no fluids were exchanged"

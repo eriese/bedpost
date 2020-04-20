@@ -4,12 +4,15 @@ class ApplicationController < ActionController::Base
 	before_action :authenticate_user_profile!
 	before_action :check_first_time
 
+	respond_to :html, :json
 	layout :choose_layout
 
 	def respond_with_submission_error(error, redirect, status = :unprocessable_entity, adl_json = {})
-		flash[:submission_error] = error;
 		respond_to do |format|
-			format.html {redirect_to redirect}
+			format.html do
+				flash[:submission_error] = error
+				redirect_to redirect
+			end
 			format.json {render json: {errors: error}.deep_merge(adl_json), status: status}
 		end
 	end

@@ -64,7 +64,7 @@
 @mixin heading1 {
 	font-family: $font-header;
 	font-size: rem(40px);
-	margin: 0.5rem 0;
+	margin: 1.5rem 0;
 	text-align: center;
 	line-height: 1.15;
 	color: theme-light("h1");
@@ -80,6 +80,7 @@
 	font-weight: 700;
 	font-size: rem(24px);
 	text-align: center;
+	margin: 1.25rem 0;
 	@include themed(color, "h2");
 
 	&.has-desc {

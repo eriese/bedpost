@@ -3,6 +3,7 @@ en:
     show:
       new_partnership: I met someone
       new_encounter: I had sex
+      new_sti_test: I got tested
       title: Hi %{name}, what's new?
   application:
     new:

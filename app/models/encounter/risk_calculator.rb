@@ -24,7 +24,7 @@ class Encounter::RiskCalculator
 				hsh[key] = Encounter::FluidTracker.new(@instruments[key], :user)
 			end
 		}
-		@risk_map = Hash.new(0)
+		@risk_map = Diagnosis::RiskMap.new
 		@base_risk = 0
 	end
 
@@ -108,7 +108,7 @@ class Encounter::RiskCalculator
 
 				contact.set_risk(risk.diagnosis_id, lvl, risk.caveats)
 				# apply the max risk
-				@risk_map[risk.diagnosis_id] = lvl if lvl > old_lvl
+				@risk_map[risk.diagnosis_id] = lvl
 			end
 		end
 

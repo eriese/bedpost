@@ -1,0 +1,66 @@
+#vue-container .dynamic-field-list--has-sti-test-inputs {
+	&__column-labels {
+		display: flex;
+
+		label {
+			text-align: center;
+
+			&:first-child {
+				flex-grow: 1;
+			}
+
+			&:last-child {
+				flex-basis: rem(100px);
+			}
+		}
+	}
+	.dynamic-field--is-sti-test-input {
+		display: flex;
+		width: 100%;
+
+		.dynamic-field-buttons {
+			flex-grow: 0;
+			margin-top: 0;
+			display: flex;
+			align-items: center;
+		}
+
+		.sti-test-input {
+			flex-wrap: wrap;
+			align-self: top;
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+
+			&__sti-input {
+				flex-grow: 1;
+				flex-basis: 50%;
+			}
+
+			&__result-input {
+				flex-shrink: 0;
+				flex-basis: rem(90px);
+				.input {
+					margin: 0;
+				}
+				label {
+					margin-right: 0rem;
+					margin-left: 0.15rem;
+				}
+			}
+
+			&__errors {
+				flex-basis: 100%;
+			}
+		}
+	}
+}
+
+.test-results {
+	&__result {
+		&--is-positive {
+			@include themed(color, 'h2');
+		}
+	}
+}
+

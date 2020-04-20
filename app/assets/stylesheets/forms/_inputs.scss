@@ -423,3 +423,102 @@ input[disabled=disabled] {
 		left: rem(1px);
 	}
 }
+
+
+#vue-container .vs {
+	&--unsearchable .vs__dropdown-toggle {
+		cursor: auto;
+	}
+
+	&__dropdown-toggle {
+		border: none;
+		padding-bottom: $spacing-small;
+		margin-bottom: $spacing-tiny;
+		border-radius: 0px;
+		border-width: 0px;
+	}
+
+	&__selected-options {
+		padding: 0;
+	}
+
+	&__open-indicator {
+		position: absolute;
+		right: 1.25rem;
+		bottom: $input-height / 2 - rem(5px);
+		@include link-colors($colors-light, '', fill);
+	}
+
+	&__selected {
+		color: black;
+		border-radius: $default-border-radius;
+		font-weight: 600;
+		border: none;
+		padding: $spacing-tiny $spacing-small;
+	}
+
+
+	&__search {
+		border-left: 1px solid;
+		background-color: $input-background-color;
+		@include themed(border-color, $input-border-key);
+		flex-basis: 100%;
+
+		&:focus {
+			background-color: $input-background-color;
+			flex-basis: 100%;
+			@include themed(border-color, $input-border-focus-key);
+		}
+	}
+
+	&__actions {
+		padding: 0;
+		position: relative;
+	}
+
+	&__dropdown-menu {
+		width: auto !important;
+		max-width: 85vw;
+		min-width: 100%;
+	}
+
+	&--single {
+		.vs__dropdown-toggle {
+			padding: 0;
+			margin: 0;
+
+			input.vs__search {
+				margin: 0;
+			}
+		}
+
+		.vs__selected {
+			font-size: 0.85rem;
+			word-wrap: break-word;
+			word-break: break-word;
+			margin: 0;
+			padding: 0 2.15rem 0 0.25rem;
+			min-height: $input-height;
+			+ input {
+				border-color: transparent;
+				z-index: -1;
+				height: 0px;
+				padding: 0;
+			}
+		}
+
+		&.vs--open .vs__selected {
+			white-space: nowrap;
+			width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: inline-block;
+			line-height: $input-height;
+			+ input {
+				@include base-input;
+				z-index: 0;
+				// background-color: transparent;
+			}
+		}
+	}
+}

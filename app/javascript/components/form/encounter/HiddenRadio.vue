@@ -1,5 +1,5 @@
 <template>
-	<div class="input">
+	<div class="input" role="presentation">
 		<input ref="input" type="radio" class="hidden-radio" :value="inputValue" v-on="cListeners" :name="inputName" :id="inputId" :class="['hidden-radio', `hidden-radio--${$attrs.type}`]">
 		<label :for="inputId">{{labelText}}</label>
 	</div>
@@ -22,8 +22,11 @@ export default {
 	},
 	methods: {
 		setChecked() {
+			if (this.checked == undefined || this.inputValue == undefined) {
+				return;
+			}
 			// have to do this manually instead of on the dom because for some reason, it doesn't stick when you change the order of the contact fields
-			this.$refs.input.checked = this.checked == this.inputValue;
+			this.$refs.input.checked = this.checked == this.inputValue || this.checked.toString() == this.inputValue.toString();
 		}
 	},
 	updated: function() {
