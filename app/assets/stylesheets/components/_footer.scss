@@ -6,6 +6,25 @@
 
 	&__item {
 		display: inline-block;
+		line-height: 1.5;
+		margin-bottom: $spacing-small;
+
+		&--has-line-after {
+			box-sizing: padding-box;
+			padding-right: $spacing-small + rem(1px);
+			margin-right: $spacing-small;
+			border-right: 1px solid;
+			@include themed(border-color, "text");
+		}
+
+		&--has-break-before {
+			display: initial;
+
+			&::before {
+				content: "\A";
+				white-space: pre;
+			}
+		}
 	}
 
 	&__link {

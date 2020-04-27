@@ -1,28 +1,22 @@
 <ul class="footer <%= content_for :footer_class %>">
-	<li class="footer__item">
+	<li class="footer__item footer__item--has-line-after">
 		<%= link_to 'Request a Feature', feedback_path(feedback_type: :feature), class: 'footer__link' %>
 	</li>
-	<span class="footer__divider" aria-hidden="true">|</span>
-	<li class="footer__item">
+	<li class="footer__item ">
 		<%= link_to 'Report a Bug', feedback_path(feedback_type: :bug), class: 'footer__link' %>
 	</li>
-	<br>
 	<!-- <li class="footer__item">
 		<a href="" class="footer__link">STI Resources</a>
 	</li> -->
-	<!-- <span class="footer__divider">|</span> -->
-	<li class="footer__item">
+	<li class="footer__item footer__item--has-line-after footer__item--has-break-before">
 		<a href="/about" class="footer__link">About</a>
 	</li>
-	<span class="footer__divider" aria-hidden="true">|</span>
-	<li class="footer__item">
+	<li class="footer__item footer__item--has-line-after">
 		<a href="/faq" class="footer__link">FAQ</a>
 	</li>
-	<span class="footer__divider" aria-hidden="true">|</span>
-	<li class="footer__item">
+	<li class="footer__item footer__item--has-line-after">
 		<a href="/privacy" class="footer__link">Privacy</a>
 	</li>
-	<span class="footer__divider" aria-hidden="true">|</span>
 	<li class="footer__item">
 		<%= link_to 'Terms of Use', term_path(:tou), class: "footer__link" %>
 	</li>
