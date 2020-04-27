@@ -1,5 +1,5 @@
 <template>
-	<div @mouseover="onHover(true)" @mouseleave="onHover(false)" aria-role="presentation">
+	<div @mouseover="onHover(true)" @mouseleave="onHover(false)" role="presentation">
 		<slot v-bind="slotScope"></slot>
 		<div v-html="errorHTML"></div>
 		<slot name="additional"></slot>
