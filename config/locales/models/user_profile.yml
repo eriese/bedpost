@@ -5,11 +5,13 @@ en:
       new_encounter: I had sex
       new_sti_test: I got tested
       title: Hi %{name}, what's new?
+      page_title: Dashboard
   application:
     new:
       title: Now more about this person...
       desc: Tell us how to talk about this person and their body so we can describe your sex the way you would.
     edit:
+      page_title: Edit user Profile
       account_settings: Account Settings
       personal_prefs:
         title: Body Language

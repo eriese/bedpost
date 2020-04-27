@@ -35,7 +35,7 @@
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
 		<link href="https://fonts.googleapis.com/css?family=Baloo|Open+Sans:400,700,800&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+		<%= stylesheet_link_tag 'application', media: 'all' %>
 
 		<%= javascript_include_tag 'application' %>
 		<%= javascript_pack_tag 'runtime' %>
@@ -54,7 +54,7 @@
 			<% end %>
 			<script type="text/javascript" src="http://localhost:35729/livereload.js?"></script>
 		<% end %>
-		<title><%= t('.page_title') %></title>
+		<title><%= page_title + ' — ' + t('app_title')%></title>
 	</head>
 
 	<body class="<%= body_class %>">

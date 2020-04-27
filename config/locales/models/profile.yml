@@ -1,6 +1,7 @@
 en:
   profiles: &PROFILES_VIEWS
     edit:
+      page_title: Edit partner profile
       title: Edit partner profile
       personal_prefs: &PREFS_TITLES
         title: Body Language

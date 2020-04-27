@@ -12,6 +12,7 @@ en:
               taken: You already gave us %{value} test results for this date
   sti_tests:
     index:
+      page_title: Your STI tests
       title: All STI Tests
       tested_on: Test Date
       num_tested: STIs Tested
@@ -19,6 +20,7 @@ en:
       new_test: Add a new STI test
       no_tests: You haven't entered any test results yet
     new: &news
+      page_title: New STI test results
       title: New Test
       tests_title: What did you get tested for?
       tested_for: STI
@@ -27,10 +29,12 @@ en:
       default_tests_title: Add all the STIs in a %{category}
     edit:
       <<: *news
+      page_title: Edit test results
       title: Edit Test
     default_tests:
       default: Basic STI Panel
     show:
+      page_title: Your STI test results
       title: Test Results
       title_desc: from %{tested_on}
       tested_for: STI

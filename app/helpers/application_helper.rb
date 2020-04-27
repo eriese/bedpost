@@ -35,11 +35,18 @@ module ApplicationHelper
 
 		ac = controller.action_name
 		prefixes = controller.lookup_context.prefixes
-		new_default = prefixes.map { |pr| "#{pr}.#{ac}#{key}".to_sym} + default
+		new_default = prefixes.map { |pr| "#{pr.sub('/', '.')}.#{ac}#{key}".to_sym} + default
 
 		new_key = new_default.shift
 		options[:default] = new_default
 		t(new_key, options)
+	end
+
+	def page_title(title = nil)
+		if title.nil?
+			return content_for(:page_title) || t_action('.page_title')
+		end
+		content_for :page_title, title
 	end
 
 	def body_class(clss = nil)

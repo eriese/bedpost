@@ -51,6 +51,7 @@ en:
         old: the same barrier
   encounters:
     show:
+      page_title: Your encounter
       took_place: "%{took_place}"
       title: with %{partner}
       contact_html: "<b>%{subject_pronoun}</b> %{contact_type} <b>%{object_possessive} %{object_instrument}</b> with <b>%{subject_possessive} %{subject_instrument}</b>"
@@ -81,6 +82,7 @@ en:
         no_schedule: Based on our data, we have no testing callouts for this encounter.
         key_html: "<b>*</b> - we don't actually recommend getting tested on this schedule for such low likelihood"
     index:
+      page_title: Your encounters
       title: Your Encounters
       with_partner: with %{partner_name}
       no_encounters:
@@ -102,6 +104,8 @@ en:
       submit: Finish
       add_partner: Add a new partner
       prompt: Choose a partner
+    edit:
+      page_title: Edit your encounter
   encounter_whos:
     new:
       title: Cool!

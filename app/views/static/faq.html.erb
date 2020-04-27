@@ -1,4 +1,5 @@
 <%= render 'forms/basic_form', skip_header: true, body_class: 'is-flesh', back_path: :back do %>
+<%= page_title 'FAQ' %>
 	<div class="faq container--has-static-info">
 		<h1><%= t('faq.title') %></h1>
 		<% t('faq.sections', cascade: {allow_hash: true}).each do |section_key, section|%>

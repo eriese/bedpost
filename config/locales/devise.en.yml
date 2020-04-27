@@ -45,9 +45,11 @@ en:
       updated: "Your password has been changed successfully. You are now signed in."
       updated_not_active: "Your password has been changed successfully."
       new:
+        page_title: Forgot password
         title: Forgot your password?
         desc: Enter your email address and we'll send you reset instructions.
       edit:
+        page_title: Password reset
         title: Change your password
     registrations:
       destroyed: "Your account has been successfully deleted."
@@ -60,11 +62,14 @@ en:
       updated_but_not_signed_in: "Your account has been updated successfully, but since your password was changed, you need to sign in again"
       form:
         title: Create an Account
+      new:
+        page_title: Create an account
     sessions:
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
       new:
+        page_title: Log in
         title: Log In
         submit: Submit
     unlocks:
@@ -72,6 +77,7 @@ en:
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
       unlocked: "Your account has been unlocked successfully. Please sign in to continue."
       new:
+        page_title: Unlock account
         title: Need new unlock instructions?
         desc: Enter your email address and we'll send them to you.
   errors:

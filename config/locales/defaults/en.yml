@@ -88,6 +88,7 @@ en:
         up: See less
   terms:
     show:
+      page_title: Terms of use
       title:
         tou: Our terms of use
         privacy: Our privacy policy
@@ -129,4 +130,4 @@ en:
   remove: Remove
   move_down: Move down
   move_up: Move up
-  page_title: BedPost App
+  app_title: BedPost App

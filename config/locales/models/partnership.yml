@@ -18,7 +18,8 @@ en:
                 one_of: Please either fill in a name or a user id
   partnerships:
     new:
-      title_html: New Relationship
+      page_title: New Partnership
+      title_html: New Partnership
       desc_html: Tell us all about it!
       why: &whys
         familiarity: Knowledge is power! Helping us understand how familiar you are with a person gives context to your other answers and helps us do the math correctly when it is time to do our calculations.
@@ -33,6 +34,7 @@ en:
         communication: All forms of communication are valid. Pick the one that feels like the best fit.
         prior_discussion: Risk management includes but isn't limited to - testing schedule, STI status, and barrier use practices.
     show:
+      page_title: View Partnership
       title: Partnership
       partner_html: with <b>%{name}</b>
       level_field_html: "%{field}: %{level}"
@@ -55,10 +57,12 @@ en:
           communication: Communication
           prior_discussion: Practices
     index:
+      page_title: Your partnerships
       no_partnerships: You don't have any partnerships yet
       new_partnership: Add a partner
       latest_html: "Most recent encounter:<br>%{took_place}"
     edit:
+      page_title: Edit partnership
       partner_html: Edit partnership with <b>%{name}</b>
       <<: *whys
       <<: *tips
