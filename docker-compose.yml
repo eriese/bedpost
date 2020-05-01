@@ -1,0 +1,13 @@
+version: '3.6'
+
+services:
+  db:
+    image: mongo:latest
+    volumes:
+      - /data/db:/data/db
+  app:
+    image: bedpost/bedpost:latest
+    ports:
+      - 3000:3000
+    links:
+      - db
