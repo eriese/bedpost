@@ -12,6 +12,8 @@ module StaticResource
 		else
 			Rails.cache.delete_matched('*', namespace: self.class.name)
 		end
+	rescue RuntimeError
+		Rails.logger.debug 'no cache to clear'
 	end
 
 	class_methods do
@@ -51,6 +53,8 @@ module StaticResource
 			Rails.cache.fetch(key, namespace: name) do
 				yield
 			end
+		rescue RuntimeError
+			yield
 		end
 	end
 end

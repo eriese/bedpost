@@ -179,7 +179,7 @@ namespace :eb do
 	desc 'un-pause all resources for the staging environment'
 	task :unpause_staging do
 		use_env(STAGING_ENV)
-		create_staging_cache
+		# create_staging_cache
 		puts 'scaling up staging load balancer'
 		sh 'eb scale 1'
 	end
