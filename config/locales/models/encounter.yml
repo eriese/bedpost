@@ -106,6 +106,8 @@ en:
       prompt: Choose a partner
     edit:
       page_title: Edit your encounter
+    new:
+      page_title: New encounter
   encounter_whos:
     new:
       title: Cool!
