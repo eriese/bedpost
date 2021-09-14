@@ -13,7 +13,7 @@ RSpec.describe "tours/index", type: :view do
 
 		it 'has a title with the name of the user in it' do
 			assert_select('h1', {text: /#{@user.name}/})
-			assert_select('h1', {text: I18n.t("tours.index.header", {name: @user.name})})
+			assert_select('h1', {text: I18n.t("tours.index.header", name: @user.name)})
 		end
 
 		it 'has a description' do
@@ -45,13 +45,13 @@ RSpec.describe "tours/index", type: :view do
 
 		it 'has a title with the name of the user in it' do
 			assert_select('h1', {text: /#{@user.name}/})
-			assert_select('h1', {text: I18n.t("tours.index.header2", {name: @user.name})})
+			assert_select('h1', {text: I18n.t("tours.index.header2", name: @user.name)})
 		end
 
 		it 'has a description that indicates the user has one partnership' do
 			partner_name = @first_partner.partner.name
 			assert_select('p', {text: /#{partner_name}/})
-			assert_select('p', {text: I18n.t("tours.index.desc2.one", {partner_name: partner_name})})
+			assert_select('p', {text: I18n.t("tours.index.desc2.one", partner_name: partner_name)})
 		end
 
 		it 'has a link to the new partnership path' do
@@ -78,7 +78,7 @@ RSpec.describe "tours/index", type: :view do
 
 		it 'has a title with the name of the user in it' do
 			assert_select('h1', {text: /#{@user.name}/})
-			assert_select('h1', {text: I18n.t("tours.index.header2", {name: @user.name})})
+			assert_select('h1', {text: I18n.t("tours.index.header2", name: @user.name)})
 		end
 
 		it 'has a description that indicates that the user has multiple partnerships' do

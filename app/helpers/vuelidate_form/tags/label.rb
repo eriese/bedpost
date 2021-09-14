@@ -56,7 +56,7 @@ module VuelidateForm
 
 			private def render_component(builder)
 				content = builder.translation
-				content = I18n.t("helpers.required", {content: content}) if (@options['required'])
+				content = I18n.t("helpers.required", **{content: content}) if (@options['required'])
 				content.html_safe
 			end
 		end

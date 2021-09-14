@@ -1,22 +1,21 @@
 module VuelidateForm::VuelidateFormHelper
 	def vuelidate_form_with(**options)
-		prc = block_given? ? Proc.new : nil
-		generate_form_using(:form_with, [options], options, prc)
+		prc = block_given? ? Proc.new {} : nil
+
+		generate_form_using(Proc.new do|blc|
+			form_with(**options, &blc)
+		end, prc, options)
 	end
 
-	def vuelidate_form_for(record, options = {}, &block)
-		generate_form_using(:form_for, [record, options], options, block)
+	def vuelidate_form_for(record, **options, &block)
+		generate_form_using(Proc.new { |blc|form_for(record, **options, &blc)}, block, options)
 	end
 
 	private
-	def generate_form_using(method, args, options, block)
-		form_opts = (options.delete(:vue) || {}).with_indifferent_access
-		form_opts['name'] = options.delete(:name) if options.has_key? :name
-		set_options(options)
+	def generate_form_using(mtd_call, block, options)
+		form_opts = process_options(options)
 		form_obj = nil
-		stepper_options = options.delete :stepper
-		options[:wizard] ||= stepper_options.present?
-		form_text = send(method, *args) do |f|
+		blc = Proc.new do|f|
 			#grab the form builder during building
 			form_obj = f
 
@@ -25,9 +24,19 @@ module VuelidateForm::VuelidateFormHelper
 			#do normal building business
 			block.call(f) if block
 		end
+		form_text = mtd_call.call(blc)
 
 		#wrap in vue component template
 		add_valid_form_wrapper(form_obj, form_text, form_opts)
+	end
+
+	def process_options(options)
+		form_opts = (options.delete(:vue) || {}).with_indifferent_access
+		form_opts['name'] = options.delete(:name) if options.has_key? :name
+		stepper_options = options.delete :stepper
+		options[:wizard] ||= stepper_options.present?
+		set_options(options)
+		form_opts
 	end
 
 	def set_options(options)

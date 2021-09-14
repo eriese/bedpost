@@ -65,7 +65,7 @@ module VuelidateForm; class VuelidateFormBuilder; class VuelidateFieldBuilder
 		step_options = @options.delete(:step_options) || {}
 		step_options[:exclude_slot] = true
 		# build the wizard step first (it won't wrap if this isn't a step)
-		@form_builder.step(@is_step, step_options.symbolize_keys) do
+		@form_builder.step(@is_step, **step_options.symbolize_keys) do
 			# wrap the field-errors component in the step
 			@template.content_tag(:"field-errors", @error_wrapper_options) do
 				# wrap the inner wrapper in the component and around the block output

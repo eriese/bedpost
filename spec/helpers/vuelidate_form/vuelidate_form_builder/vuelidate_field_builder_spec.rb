@@ -312,7 +312,7 @@ RSpec.describe VuelidateForm::VuelidateFormBuilder::VuelidateFieldBuilder, type:
 			builder = stub_builder options: {required: true}
 			result = builder.send(:field_label)
 
-			expected = I18n.t("helpers.required", {content: ""})
+			expected = I18n.t("helpers.required", **{content: ""})
 			expect(result).to include(expected)
 		end
 	end

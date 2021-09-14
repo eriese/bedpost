@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-	add_template_helper(MailerHelper)
+	helper MailerHelper
 	default from: 'support@bedpost.me'
 	layout 'mailer'
 end

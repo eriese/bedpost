@@ -19,9 +19,9 @@ Rails.application.routes.draw do
 	}, controllers: {
 		sessions: 'user_profiles/sessions'
 	}
-	authenticated :user_profile do
-		root to: 'user_profiles#show'
-	end
+	# authenticated :user_profile do
+		# root to: 'user_profiles#show'
+	# end
 
 	get 'partners/uniqueness', to: 'partnership_whos#unique'
 
@@ -56,6 +56,7 @@ Rails.application.routes.draw do
 
 	get '*static', to: 'static#static_or_404', as: :static
 
-	root to: redirect('/signup')
+	# root to: redirect('/signup')
+	root to: 'user_profiles#show'
 	# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

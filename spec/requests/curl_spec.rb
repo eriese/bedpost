@@ -19,7 +19,7 @@ RSpec.describe "Curl", type: :request do
 			it "returns html for #{type}" do
 				req_path = path.is_a?(Symbol) ? send(path) : path
 				get req_path, headers: headers
-				expect(response.content_type).to eq 'text/html'
+				expect(response.content_type).to eq 'text/html; charset=utf-8'
 			end
 		end
 	end

@@ -39,7 +39,7 @@ module ApplicationHelper
 
 		new_key = new_default.shift
 		options[:default] = new_default
-		t(new_key, options)
+		t(new_key, **options)
 	end
 
 	def body_class(clss = nil)

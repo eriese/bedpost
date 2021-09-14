@@ -16,6 +16,6 @@ class ForeignKeyValidator < ActiveModel::EachValidator
 	end
 
 	def error(record, attribute)
-		record.errors.add(attribute, :bad_key, {attribute: attribute})
+		record.errors.add(attribute, :bad_key, attribute: attribute)
 	end
 end

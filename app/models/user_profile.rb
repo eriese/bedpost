@@ -55,7 +55,7 @@ class UserProfile < Profile
 	validates_presence_of :pronoun, :anus_name, :external_name, on: :update
 	validates_confirmation_of :password
 
-	BLACKLIST_FOR_SERIALIZATION += %i[partnerships password_digest tours]
+	BLACKLIST_FOR_SERIALIZATION = %i[partnerships password_digest tours]
 
 	after_create do |user|
 		if ENV['IS_BETA']
