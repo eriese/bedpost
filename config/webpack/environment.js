@@ -3,11 +3,11 @@ const { VueLoaderPlugin } = require('vue-loader');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const vue = require('./loaders/vue');
-const cssFix = require('./loaders/css');
+// const cssFix = require('./loaders/css');
 // const erb =  require('./loaders/erb')
 const path = require('path');
 
-cssFix(environment);
+// cssFix(environment);
 environment.loaders.append('vue', vue);
 environment.plugins.append('VueLoaderPlugin', new VueLoaderPlugin({
 	chunkFilename: 'js/vue/[name]-[contenthash].chunk.js'

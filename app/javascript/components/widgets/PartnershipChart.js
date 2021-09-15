@@ -1,7 +1,8 @@
-import Chart from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 import {Radar} from 'vue-chartjs';
 import sassColors from '@modules/sassColors';
 
+Chart.register(...registerables);
 /**
  * Original _drawLabels function from the radialLinear axis
  *

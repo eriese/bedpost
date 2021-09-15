@@ -4,11 +4,10 @@
 	"dependencies": {
 		"@popperjs/core": "^2.10.1",
 		"@rails/ujs": "^6.1.4-1",
-		"@rails/webpacker": "^5.4.2",
+		"@rails/webpacker": "^5.4.3",
 		"@vue/compiler-sfc": "^3.2.11",
 		"axios": "^0.21.4",
-		"chart.js": "^3.5.1",
-		"css-loader": "^6.2.0",
+		"chart.js": "2.9.4",
 		"flickity": "^2.2.2",
 		"gsap": "^3.7.1",
 		"i18n-js": "^3.8.0",
@@ -24,8 +23,7 @@
 		"vue-tippy": "^4.11.0",
 		"vue-tour": "^2.0.0",
 		"vue-turbolinks": "^2.2.2",
-		"vuelidate": "^0.7.4",
-		"webpack": "^5.52.1"
+		"vuelidate": "^0.7.4"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.15.5",
@@ -37,19 +35,21 @@
 		"babel-core": "7.0.0-bridge.0",
 		"babel-jest": "^27.2.0",
 		"babel-loader": "^8.2.2",
+		"browserslist": "^4.17.0",
 		"clean-webpack-plugin": "^4.0.0",
 		"core-js": "^3.17.3",
+		"css-loader": "^5.0.0",
 		"eslint": "^7.32.0",
 		"eslint-plugin-jest": "^24.4.0",
 		"eslint-plugin-jsdoc": "^36.1.0",
 		"eslint-plugin-vue": "^7.17.0",
 		"jest-axe": "^5.0.1",
-		"mini-css-extract-plugin": "^2.3.0",
-		"node-sass": "^6.0.1",
-		"sass-loader": "^12.1.0",
+		"node-sass": "^5.0.0",
+		"sass-loader": "10.1.1",
 		"vue-jest": "^3.0.4",
-		"webpack-cli": "^4.8.0",
-		"webpack-dev-server": "^4.2.1"
+		"webpack": "^4.0.0",
+		"webpack-cli": "3.3.12",
+		"webpack-dev-server": "~3"
 	},
 	"scripts": {
 		"test": "jest --collectCoverage=false",
