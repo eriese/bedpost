@@ -24,7 +24,12 @@ class Partnership
 
 	after_save :add_to_partner
 	before_destroy :remove_from_partner
-
+	before_validation do
+		LEVEL_FIELDS.each do |f|
+			raw_val = send(f)
+			send("#{f}=".intern, raw_val)
+		end
+	end
 	accepts_nested_attributes_for :partner
 
 	def uid

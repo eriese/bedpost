@@ -14,7 +14,8 @@ global.document.createRange = () => ({
 describe('Tooltip component', () => {
 	it('uses a tippy component by default', () => {
 		const wrapper = mount(Tooltip);
-		expect(wrapper.contains(TippyComponent)).toBe(true);
+
+		expect(wrapper.findComponent(TippyComponent)).not.toBeUndefined();
 	});
 
 	it('uses an aside to replace the tippy component if it is meant to show always', () => {
@@ -24,19 +25,15 @@ describe('Tooltip component', () => {
 			}
 		});
 
-		expect(wrapper.contains('aside.tippy-popper')).toBe(true);
-		expect(wrapper.contains(TippyComponent)).toBe(false);
+		expect(wrapper.find('aside.tippy-popper').exists()).toBeTruthy();
+		expect(wrapper.findComponent(TippyComponent).exists()).toBeFalsy();
 	});
 
 	describe('theme', () => {
 		it('adds a theme to the TippyComponent', () => {
 			const wrapper = mount(Tooltip);
 
-			wrapper.find(TippyComponent).setProps({visible: true});
-
-			return wrapper.vm.$nextTick(() => {
-				expect(wrapper.contains(`.tippy-tooltip.${wrapper.vm.theme}-theme`)).toBe(true);
-			});
+			expect(wrapper.find(`.tippy-tooltip.${wrapper.vm.theme}-theme`)).not.toBeUndefined();
 		});
 
 		it('adds a theme to the aside', () => {
@@ -46,7 +43,7 @@ describe('Tooltip component', () => {
 				}
 			});
 
-			expect(wrapper.contains(`.tippy-tooltip.${wrapper.vm.theme}-theme`)).toBe(true);
+			expect(wrapper.find(`.tippy-tooltip.${wrapper.vm.theme}-theme`)).not.toBeUndefined();
 		});
 	});
 

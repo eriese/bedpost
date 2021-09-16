@@ -199,6 +199,7 @@ module VuelidateForm; class VuelidateFormBuilder < ActionView::Helpers::FormBuil
 		options["aria-describedby"] = desc_id
 		options[:min] ||= options[:in].min
 		options[:max] ||= options[:in].max
+		options[:step] ||= 1
 		field_builder(attribute, options).field do
 			@template.render "forms/range_field", options: options, attribute: attribute, object_name: @object_name, desc_id: desc_id, t_key: "helpers.sliders.#{@object_name}.#{attribute}" do
 				super

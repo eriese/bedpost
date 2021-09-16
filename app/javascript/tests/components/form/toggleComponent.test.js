@@ -1,21 +1,33 @@
-import {mount} from '@vue/test-utils';
+import {mount, createLocalVue} from '@vue/test-utils';
 import Toggle from '@components/form/ToggleComponent.vue';
+
+function mountLocal(component, args) {
+	const $_t = jest.fn();
+	const localVue = createLocalVue();
+	localVue.mixin({
+		methods: {
+			$_t
+		}
+	});
+
+	return [mount(component, {...args, localVue}), $_t];
+}
 
 describe('Toggle Component', () => {
 	it('has default symbols -/+', () => {
-		const wrapper = mount(Toggle);
+		const [wrapper] = mountLocal(Toggle);
 		expect(wrapper.vm.symbols).toEqual(['-', '+']);
 	});
 
 	it('has default values true/false', () => {
-		const wrapper = mount(Toggle);
+		const [wrapper] = mountLocal(Toggle);
 		expect(wrapper.vm.vals).toEqual([true, false]);
 	});
 
 	it('chooses its symbol based on the matching index in the vals array', () => {
 		const symbols = ['a', 'b'],
 			vals = [1, 2];
-		const wrapper = mount(Toggle, {
+		const [wrapper] = mountLocal(Toggle, {
 			propsData: {
 				symbols,
 				vals,
@@ -31,7 +43,7 @@ describe('Toggle Component', () => {
 			const symbols = ['a', 'b'],
 				vals = [1, 2],
 				field = 'aField';
-			const wrapper = mount(Toggle, {
+			const [wrapper] = mountLocal(Toggle, {
 				propsData: {
 					symbols,
 					vals,
@@ -51,7 +63,7 @@ describe('Toggle Component', () => {
 		it('emits a new value from the beginning of the vals array if the current value is at the end of it', () => {
 			const symbols = ['a', 'b'],
 				vals = [1, 2];
-			const wrapper = mount(Toggle, {
+			const [wrapper] = mountLocal(Toggle, {
 				propsData: {
 					symbols,
 					vals,
@@ -70,7 +82,7 @@ describe('Toggle Component', () => {
 		describe('with a clear value', () => {
 			it('emits the clear value if no clearOn prop is defined', () => {
 				const clear = 'doClear';
-				const wrapper = mount(Toggle, {
+				const [wrapper] = mountLocal(Toggle, {
 					propsData: {
 						clear
 					},
@@ -86,7 +98,7 @@ describe('Toggle Component', () => {
 					val = 'a',
 					vals = ['b', 'a'];
 
-				const wrapper = mount(Toggle, {
+				const [wrapper] = mountLocal(Toggle, {
 					propsData: {
 						clear,
 						clearOn,
@@ -105,7 +117,7 @@ describe('Toggle Component', () => {
 					val = 'b',
 					vals = ['b', 'a'];
 
-				const wrapper = mount(Toggle, {
+				const [wrapper] = mountLocal(Toggle, {
 					propsData: {
 						clear,
 						clearOn,
@@ -122,7 +134,7 @@ describe('Toggle Component', () => {
 
 	describe('expanded', () => {
 		it('marks itself as expanded if it is expandable and the value is truthy', () => {
-			const wrapper = mount(Toggle, {
+			const [wrapper] = mountLocal(Toggle, {
 				propsData: {
 					expandable: true,
 					val: true
@@ -134,7 +146,7 @@ describe('Toggle Component', () => {
 		});
 
 		it('marks itself as not expanded if it is expandable and the value is falsy', () => {
-			const wrapper = mount(Toggle, {
+			const [wrapper] = mountLocal(Toggle, {
 				propsData: {
 					expandable: true,
 					val: false
@@ -147,7 +159,7 @@ describe('Toggle Component', () => {
 		});
 
 		it('does not have an aria-expanded attribute if it is not expandable', () => {
-			const wrapper = mount(Toggle);
+			const [wrapper] = mountLocal(Toggle);
 			expect(wrapper.html()).not.toContain('aria-expanded');
 		});
 	});
@@ -155,7 +167,7 @@ describe('Toggle Component', () => {
 	describe('toggleState', () => {
 		it('allows a constant state label', () => {
 			const label = 'label';
-			const wrapper = mount(Toggle, {
+			const [wrapper] = mountLocal(Toggle, {
 				propsData: {
 					symbols: label,
 					val: true,
@@ -172,7 +184,7 @@ describe('Toggle Component', () => {
 			const symbols = ['a', 'b', 'c'];
 			const vals = ['val1', 'val2', 'val3'];
 
-			const wrapper = mount(Toggle, {
+			const [wrapper] = mountLocal(Toggle, {
 				propsData: {
 					symbols,
 					vals,
@@ -182,42 +194,40 @@ describe('Toggle Component', () => {
 
 			expect(wrapper.vm.toggleState).toEqual(symbols[1]);
 			wrapper.setProps({val: vals[2]});
-			expect(wrapper.vm.toggleState).toEqual(symbols[2]);
+
+			return wrapper.vm.$nextTick(() => {
+				expect(wrapper.vm.toggleState).toEqual(symbols[2]);
+			});
+
 		});
 	});
 
 	describe('translate', () => {
 		it('accepts a boolean, which will cause it to translate the key', () => {
-			const symbols = ['a', 'b'], vals = [1, 2], $_t = jest.fn();
+			const symbols = ['a', 'b'], vals = [1, 2];
 
-			mount(Toggle, {
+			const [, $_t] = mountLocal(Toggle, {
 				propsData: {
 					symbols,
 					vals,
 					translate: true,
 					val: 1,
-				},
-				methods: {
-					$_t
-				},
+				}
 			});
 
 			expect($_t).toHaveBeenCalledWith('a');
 		});
 
 		it('accepts a string, which will be used as the scope to translate the key', () => {
-			const symbols = ['a', 'b'], vals = [1, 2], $_t = jest.fn(), translate= 'scope';
+			const symbols = ['a', 'b'], vals = [1, 2], translate= 'scope';
 
-			mount(Toggle, {
+			const [, $_t] = mountLocal(Toggle, {
 				propsData: {
 					symbols,
 					vals,
 					translate,
 					val: 1,
-				},
-				methods: {
-					$_t
-				},
+				}
 			});
 
 			expect($_t).toHaveBeenCalledWith('a', {scope: translate});

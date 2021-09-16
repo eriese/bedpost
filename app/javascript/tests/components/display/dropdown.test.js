@@ -1,4 +1,4 @@
-import {shallowMount} from '@vue/test-utils';
+import {shallowMount, createLocalVue} from '@vue/test-utils';
 import DropDown from '@components/display/DropDown.vue';
 import ArrowButton from '@components/functional/ArrowButton';
 
@@ -64,6 +64,10 @@ describe('Dropdown component', () => {
 	describe('rendering', () => {
 		describe('button slot default', () => {
 			it ('renders an arrow button', () => {
+				const localVue = createLocalVue();
+				localVue.mixin({
+					methods: {$_t: jest.fn()}
+				});
 				const wrapper = shallowMount(DropDown, {
 					propsData: {
 						startOpen: true
@@ -71,12 +75,10 @@ describe('Dropdown component', () => {
 					stubs: {
 						'arrow-button': ArrowButton
 					},
-					methods: {
-						$_t: (str) => str
-					}
+					localVue
 				});
 
-				expect(wrapper.contains(ArrowButton)).toBe(true);
+				expect(wrapper.findComponent(ArrowButton)).not.toBeUndefined();
 			});
 
 			it('binds open and closed to up and down on the arrow', async () => {
@@ -93,7 +95,7 @@ describe('Dropdown component', () => {
 					}
 				});
 
-				const arrow = wrapper.find(arrowStub);
+				const arrow = wrapper.findComponent(arrowStub);
 				expect(arrow.props('direction')).toEqual('down');
 
 				wrapper.setData({isOpen: true});

@@ -52,7 +52,7 @@ describe ('Encounter contact barrier component', () => {
 			localVue
 		});
 
-		return parent.find(EncounterContactBarrier);
+		return parent.findComponent(EncounterContactBarrier);
 	}
 	describe('old barrier', () => {
 		const oldBarrier = {

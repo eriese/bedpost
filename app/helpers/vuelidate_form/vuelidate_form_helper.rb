@@ -1,10 +1,9 @@
 module VuelidateForm::VuelidateFormHelper
-	def vuelidate_form_with(**options)
-		prc = block_given? ? Proc.new {} : nil
+	def vuelidate_form_with(**options, &block)
 
 		generate_form_using(Proc.new do|blc|
 			form_with(**options, &blc)
-		end, prc, options)
+		end, block, options)
 	end
 
 	def vuelidate_form_for(record, **options, &block)

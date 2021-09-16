@@ -103,6 +103,7 @@ feature "User creates account", :slow do
 				find("a[href='#{new_partnership_path}']").click
 
 				fill_in_partnership
+				expect(page).to have_no_selector(".field-errors")
 
 				expect(page).to have_current_path(first_time_path)
 			end
@@ -138,7 +139,8 @@ feature "User creates account", :slow do
 
 				# go to the view page
 				visit encounter_path(user.encounters.first)
-				expect(page).to have_link({href: first_time_path})
+				expect(page).to have_current_path(encounter_path(user.encounters.first))
+				expect(page).to have_selector("[href='#{first_time_path}']")
 			end
 		end
 

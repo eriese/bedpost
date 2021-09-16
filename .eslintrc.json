@@ -25,7 +25,8 @@
 	"plugins": [
 		"vue",
 		"jsdoc",
-		"jest"
+		"jest",
+		"jest-dom"
 	],
 	"rules": {
 		"indent": [

@@ -166,7 +166,7 @@ def insert_tours(tour_configs)
 	Tour.destroy_all
 	orig_locale = I18n.locale
 	tour_configs.each do |page_name, tour_nodes|
-		fte_only = tour_nodes.shift if tour_nodes[0].is_a? Boolean
+		fte_only = tour_nodes.shift if !!tour_nodes[0] == tour_nodes[0]
 		tour = Tour.find_or_create_by(page_name: page_name, fte_only: fte_only || false)
 		tour.tour_nodes = tour_nodes.map do |node|
 			tour_node = TourNode.new(target: node[:target], position: node[:position], await_in_view: node[:await_in_view])

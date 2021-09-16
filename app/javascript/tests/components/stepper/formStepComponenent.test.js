@@ -9,12 +9,18 @@ function mountWrapper(slotContent, localVue, optional) {
 		propsData: {
 			optional: optional,
 		},
-		methods: {
-			$_t: jest.fn()
-		},
 	};
 
-	if (localVue) { mountOptions.localVue = localVue; }
+	if (!localVue) {
+		localVue = createLocalVue();
+	}
+
+	localVue.mixin({
+		methods: {
+			$_t: jest.fn()
+		}
+	});
+	mountOptions.localVue = localVue;
 
 	return mount(FormStepComponent, mountOptions);
 }

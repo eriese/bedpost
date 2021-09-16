@@ -1,5 +1,5 @@
 <% content_for :body_class, 'is-dark' %>
-<h1><%= t ".title", {name: current_user_profile.name}%></h1>
+<h1><%= t ".title", name: current_user_profile.name%></h1>
 
 <ul class="button-list dash-buttons">
 	<li class="button-list__item"><%= link_to new_partnership_path, class: 'cta cta--is-square' do %>

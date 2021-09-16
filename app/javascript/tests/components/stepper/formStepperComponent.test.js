@@ -1,42 +1,39 @@
 import {mount, createLocalVue} from '@vue/test-utils';
 import FormStepperComponent from '@components/stepper/FormStepperComponent.vue';
 
+function mountBase() {
+	const localVue = createLocalVue();
+	localVue.mixin({
+		methods: {$_t: jest.fn()}
+	})
+
+	return mount(FormStepperComponent, {localVue});
+}
+
 describe('Form Stepper Component', () => {
 	describe('mounted', () => {
 		it('adds a listener to process its children when a new step is added', () => {
-			const processChildren = jest.fn();
-			const wrapper = mount(FormStepperComponent, {
-				methods: {
-					processChildren,
-					$_t: jest.fn()
-				}
-			});
+			const wrapper = mountBase(FormStepperComponent);
+
+			const processChildren = jest.spyOn(wrapper.vm, 'processChildren');
 
 			wrapper.vm.$emit('step-added');
 			expect(processChildren).toHaveBeenCalled();
 		});
 
 		it('adds a listener to process its children when a step is removed', () => {
-			const processChildren = jest.fn();
-			const wrapper = mount(FormStepperComponent, {
-				methods: {
-					processChildren,
-					$_t: jest.fn()
-				}
-			});
+			const wrapper = mountBase(FormStepperComponent);
+
+			const processChildren = jest.spyOn(wrapper.vm, 'processChildren');
 
 			wrapper.vm.$emit('step-removed');
 			expect(processChildren).toHaveBeenCalled();
 		});
 
 		it('does not process its children until they are mounted', () => {
-			const processChildren = jest.fn();
-			const wrapper = mount(FormStepperComponent, {
-				methods: {
-					processChildren,
-					$_t: jest.fn()
-				}
-			});
+			const wrapper = mountBase(FormStepperComponent);
+
+			const processChildren = jest.spyOn(wrapper.vm, 'processChildren');
 
 			expect(processChildren).not.toHaveBeenCalled();
 
@@ -47,13 +44,7 @@ describe('Form Stepper Component', () => {
 		});
 
 		it('does not emit that it is mounted until its children are mounted', () => {
-			const processChildren = jest.fn();
-			const wrapper = mount(FormStepperComponent, {
-				methods: {
-					processChildren,
-					$_t: jest.fn()
-				}
-			});
+			const wrapper = mountBase(FormStepperComponent);
 
 			expect(wrapper.emitted('stepper-mounted')).toBeFalsy();
 
@@ -67,6 +58,11 @@ describe('Form Stepper Component', () => {
 	describe('processChildren', () => {
 		function setupWrapper(slotContent) {
 			const localVue = createLocalVue();
+			localVue.mixin({
+				methods: {
+					$_t: jest.fn()
+				}
+			});
 
 			const FormStep = {
 				name: 'form_step',
@@ -90,9 +86,6 @@ describe('Form Stepper Component', () => {
 			localVue.component('other-child', OtherChild);
 
 			return mount(FormStepperComponent, {
-				methods: {
-					$_t: jest.fn()
-				},
 				scopedSlots: {
 					default: slotContent
 				},
@@ -121,14 +114,9 @@ describe('Form Stepper Component', () => {
 		});
 
 		it('calls processIndex after processing the children', () => {
-			const processIndex = jest.fn();
-			const wrapper = mount(FormStepperComponent, {
-				methods: {
-					$_t: jest.fn(),
-					setStepComplete: jest.fn(),
-					processIndex
-				}
-			});
+			const wrapper = mountBase(FormStepperComponent, {});
+
+			const processIndex = jest.spyOn(wrapper.vm, 'processIndex');
 
 			wrapper.vm.processChildren([]);
 			expect(processIndex).toHaveBeenCalled();
@@ -138,6 +126,11 @@ describe('Form Stepper Component', () => {
 	describe('findNext', () => {
 		function setupWrapper(completes) {
 			const localVue = createLocalVue();
+			localVue.mixin({
+				methods: {
+					$_t: jest.fn()
+				}
+			});
 
 			const FormStep = {
 				name: 'form_step',
@@ -154,9 +147,6 @@ describe('Form Stepper Component', () => {
 					return {
 						completes
 					};
-				},
-				methods: {
-					$_t: jest.fn()
 				},
 				scopedSlots: {
 					default: slotContent

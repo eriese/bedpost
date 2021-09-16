@@ -42,7 +42,7 @@ describe("Tourguide plugin", () => {
 
 		setTimeout(() => {
 			// restore error logging
-			expect(wrapper.contains(VStep)).toBe(true)
+			expect(wrapper.findComponent(VStep)).not.toBeUndefined();
 			done()
 		})
 	})

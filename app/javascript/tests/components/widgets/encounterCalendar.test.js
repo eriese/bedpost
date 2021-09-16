@@ -36,13 +36,15 @@ const partnerships = [{
 }];
 
 const localVue = createLocalVue();
+localVue.mixin({
+	methods: {
+		$_t: (key) => key
+	}
+});
 
 const mountOptions = {
 	propsData: {
 		partnerships
-	},
-	methods: {
-		$_t(key) {return key;}
 	},
 	mocks: {
 		$screens: jest.fn()

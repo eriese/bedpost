@@ -12,7 +12,7 @@ describe('DeletedChild functional component', () => {
 		});
 
 		test('it is empty', () => {
-			expect(wrapper.isEmpty()).toBe(true);
+			expect(wrapper.element.tagName).toBeUndefined();
 		});
 	})
 
@@ -29,15 +29,15 @@ describe('DeletedChild functional component', () => {
 		});
 
 		test('it is not empty', () => {
-			expect(wrapper.isEmpty()).toBe(false);
+			expect(wrapper.element).not.toBeEmptyDOMElement();
 		})
 
 		test('it has a hidden input named _destroy with a value of true', () => {
-			expect(wrapper.contains('input[type=hidden][name="nm[_destroy]"][value=true]')).toBe(true);
+			expect(wrapper.find('input[type=hidden][name="nm[_destroy]"][value=true]')).toBeTruthy();
 		})
 
 		test('it has a hidden input with the idKey in the name and that field from the item as the value', () => {
-			expect(wrapper.contains('input[type=hidden][name="nm[val]"][value=someValue]')).toBe(true);
+			expect(wrapper.find('input[type=hidden][name="nm[val]"][value=someValue]')).toBeTruthy();
 		})
 	})
 })

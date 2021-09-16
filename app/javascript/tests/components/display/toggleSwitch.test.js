@@ -1,5 +1,5 @@
 import ToggleSwitch from '@components/display/ToggleSwitch.vue';
-import {mount} from '@vue/test-utils';
+import {mount, createLocalVue} from '@vue/test-utils';
 
 describe('Toggle Switch Component', () => {
 	describe('toggleState', () => {
@@ -22,7 +22,6 @@ describe('Toggle Switch Component', () => {
 		});
 
 		it('is attached to the buttons', () => {
-			const doToggle = jest.fn();
 			const wrapper = mount(ToggleSwitch, {
 				attrs: {
 					field: 'field'
@@ -30,11 +29,10 @@ describe('Toggle Switch Component', () => {
 				propsData: {
 					vals: ['0', '1', '2', '3'],
 					symbols: ['zero', 'one', 'two', 'three']
-				},
-				methods: {
-					doToggle
 				}
 			});
+
+			const doToggle = jest.spyOn(wrapper.vm, 'doToggle');
 
 			const buttons = wrapper.findAll('button');
 			expect(buttons).toHaveLength(4);
@@ -64,6 +62,8 @@ describe('Toggle Switch Component', () => {
 		it('creates a map of translated symbols when translate is true', () => {
 			const symbols = ['zero', 'one', 'two', 'three'];
 			const $_t = (s) => `t_${s}`;
+			const localVue = createLocalVue();
+			localVue.mixin({methods: {$_t}});
 			const wrapper = mount(ToggleSwitch, {
 				attrs: {
 					field: 'field'
@@ -73,9 +73,7 @@ describe('Toggle Switch Component', () => {
 					symbols,
 					translate: true,
 				},
-				methods: {
-					$_t
-				}
+				localVue
 			});
 
 			expect(wrapper.vm.displayStrings).toEqual(symbols.map($_t));
@@ -84,6 +82,8 @@ describe('Toggle Switch Component', () => {
 		it('creates a map of translated symbols using translate as a key when translate is a string', () => {
 			const symbols = ['zero', 'one', 'two', 'three'];
 			const $_t = (s, o) => `t_${s}_${o.scope}`;
+			const localVue = createLocalVue();
+			localVue.mixin({methods: {$_t}});
 			const wrapper = mount(ToggleSwitch, {
 				attrs: {
 					field: 'field'
@@ -93,9 +93,7 @@ describe('Toggle Switch Component', () => {
 					symbols,
 					translate: 'trans',
 				},
-				methods: {
-					$_t
-				}
+				localVue
 			});
 
 			expect(wrapper.vm.displayStrings).toEqual(symbols.map((s) => $_t(s, {scope: 'trans'})));

@@ -56,7 +56,7 @@ describe('Default Test Button Component', () => {
 				localVue
 			});
 
-			const button = parentWrapper.find(DefaultTestsButton);
+			const button = parentWrapper.findComponent(DefaultTestsButton);
 
 			return {parentWrapper, button};
 		}

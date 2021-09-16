@@ -5,7 +5,7 @@ RSpec.describe StaticController, type: :controller do
 		context 'with a valid page' do
 			it 'renders the view' do
 				get :static_or_404, params: {static: 'faq'}
-				expect(response).to render_template 'faq.html.erb'
+				expect(response).to render_template 'static/faq'
 			end
 		end
 

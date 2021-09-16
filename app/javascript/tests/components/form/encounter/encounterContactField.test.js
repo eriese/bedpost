@@ -224,7 +224,7 @@ describe('Encounter Contact Field Component', () => {
 			propsData: {fieldProps, value},
 			localVue,
 		});
-		let wrapper = parent.find(EncounterContactField);
+		let wrapper = parent.findComponent(EncounterContactField);
 		return {wrapper, parent};
 	}
 
@@ -255,7 +255,7 @@ describe('Encounter Contact Field Component', () => {
 		const {wrapper} = setup();
 
 		const fieldName = `${wrapper.vm.state.baseName}[subject]`;
-		const result = wrapper.contains(`[name='${fieldName}']`);
+		const result = wrapper.find(`[name='${fieldName}']`) !== undefined;
 
 		expect(result).toBe(true);
 	});
@@ -264,7 +264,7 @@ describe('Encounter Contact Field Component', () => {
 		const {wrapper} = setup();
 
 		const fieldName = `${wrapper.vm.state.baseName}[object]`;
-		const result = wrapper.contains(`[name='${fieldName}']`);
+		const result = wrapper.find(`[name='${fieldName}']`) !== undefined;
 		expect(result).toBe(true);
 	});
 
@@ -272,7 +272,7 @@ describe('Encounter Contact Field Component', () => {
 		const {wrapper} = setup();
 
 		['_id', 'position', 'possible_contact_id'].forEach((n) => {
-			const contains = wrapper.contains(`[name="${wrapper.vm.state.baseName}[${n}]"]`);
+			const contains = wrapper.find(`[name="${wrapper.vm.state.baseName}[${n}]"]`) !== undefined;
 			expect(contains).toBe(true);
 		});
 	});

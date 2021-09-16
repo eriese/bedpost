@@ -59,16 +59,21 @@ export default {
 	computed: {
 		availableDiagnoses() {
 			let that = this;
+			const dxToOption = (dx) => {
+				return {
+					label: that.$_t(dx._id, {scope: 'diagnosis.name_formal'}),
+					value: dx._id
+				};
+			};
+
 			if (!this.tracker || !this.tracker.selected) {
-				return [];
+				return gon.diagnoses
+				// .map(dxToOption);
 			}
 
 			return gon.diagnoses.reduce((res, diag) => {
-				if (this.value.tested_for_id == diag._id || that.tracker.selected.indexOf(diag._id) < 0) {
-					res.push({
-						label: that.$_t(diag._id, {scope: 'diagnosis.name_formal'}),
-						value: diag._id
-					});
+				if (that.value.tested_for_id == diag._id || that.tracker.selected.indexOf(diag._id) < 0) {
+					res.push(dxToOption(diag));
 				}
 				return res;
 			}, []);

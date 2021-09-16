@@ -20,7 +20,7 @@ describe('Hidden Radio Component', () => {
 
 	it ('emits a change event when checked', () => {
 		const wrapper = mount(parent, {localVue: setupLocalVue()});
-		const radio = wrapper.find(HiddenRadio);
+		const radio = wrapper.getComponent(HiddenRadio);
 		radio.find('input').setChecked(true);
 		expect(radio.emitted('change')).toBeTruthy();
 	});
@@ -28,11 +28,10 @@ describe('Hidden Radio Component', () => {
 	describe('setChecked', () => {
 		it('is called on mount', () => {
 			const setChecked = jest.fn();
-			const wrapper = mount(HiddenRadio, {
-				localVue: setupLocalVue(),
-				methods: {
-					setChecked
-				}
+			const cleanSpec = {...HiddenRadio};
+			cleanSpec.methods = {...cleanSpec.methods, setChecked};
+			const wrapper = mount(cleanSpec, {
+				localVue: setupLocalVue()
 			});
 
 			expect(setChecked).toHaveBeenCalled();
@@ -40,11 +39,11 @@ describe('Hidden Radio Component', () => {
 
 		it('is called on update', async() => {
 			const setChecked = jest.fn();
-			const wrapper = mount(HiddenRadio, {
-				localVue: setupLocalVue(),
-				methods: {
-					setChecked
-				}
+			const cleanSpec = {...HiddenRadio};
+			cleanSpec.methods = {...cleanSpec.methods, setChecked};
+
+			const wrapper = mount(cleanSpec, {
+				localVue: setupLocalVue()
 			});
 
 			setChecked.mockClear();

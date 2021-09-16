@@ -53,7 +53,8 @@ module FeatureHelpers
 		indexes.each do |i|
 			fill_in "partnership_#{fields[i]}", with: lvls[i]
 		end
-		fill_in_profile(attributes_for(:profile), is_user: false) if and_profile
+		partner_attrs = attributes_for(:profile)
+		fill_in_profile(partner_attrs, is_user: false) if and_profile
 		find('input[name="commit"]').click
 	end
 

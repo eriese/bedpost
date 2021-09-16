@@ -156,7 +156,8 @@ export default {
 		setStepComplete: function(isComplete) {
 			// if an isComplete isn't provided, get one from the current step
 			if (typeof isComplete != 'boolean') {
-				isComplete = this.getCurStep().checkComplete(false);
+				const curStep = this.getCurStep()
+				isComplete = curStep !== undefined && curStep.checkComplete(false);
 			}
 
 			// set readiness in the completes array and update whether this step is pending

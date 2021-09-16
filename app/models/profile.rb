@@ -32,6 +32,6 @@ class Profile
 	end
 
 	def name_possessive
-		I18n.t(:name_possessive, {name: name})
+		I18n.t(:name_possessive, name: name)
 	end
 end

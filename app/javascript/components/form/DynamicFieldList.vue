@@ -32,6 +32,7 @@
 import {gsap} from 'gsap';
 import deletedChild from '@components/functional/DeletedChild.vue';
 import {lazyParent} from '@mixins/lazyCoupled';
+import BaseState from '@components/form/state/BaseState'
 
 export default {
 	name: 'dynamic_field_list',
@@ -192,13 +193,7 @@ export default {
 			mod = await import( /* webpackChunkName: 'state' */ '@components/form/state/' + this.stateClass + '.js');
 			this.stateConstructor = mod.default;
 		} else {
-			this.stateConstructor = (item) => {
-				return {
-					index: this.list.length,
-					baseName: this.baseName,
-					item
-				}
-			}
+			this.stateConstructor = BaseState;
 		}
 
 		this.numSubmitting = this.value.length;

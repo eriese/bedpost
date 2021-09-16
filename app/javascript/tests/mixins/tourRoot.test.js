@@ -1,4 +1,4 @@
-import {mount} from "@vue/test-utils";
+import {mount, createLocalVue} from "@vue/test-utils";
 import tourRoot from "@mixins/tourRoot.js";
 import TourHolder from "@components/tour/TourHolder.vue";
 
@@ -18,19 +18,25 @@ const getTour = () => Promise.resolve({
 	data: tourData
 })
 
-const mountBase = (mock, options) => {
+const mountBase = (mock, options = {}) => {
 	axios.get.mockClear();
 	if (mock) {
 		axios.get.mockImplementationOnce(mock);
 	}
 
-	return mount({
-		template: "<div/>",
-		mixins: [tourRoot],
+	const localVue = createLocalVue();
+	localVue.mixin({
 		methods: {
 			gtagSet: jest.fn(),
 			sendAnalyticsEvent: jest.fn()
 		}
+	})
+
+	options.localVue =localVue;
+
+	return mount({
+		template: "<div/>",
+		mixins: [tourRoot],
 	}, options)
 }
 
@@ -84,8 +90,7 @@ describe("Tour Root mixin", () => {
 				const loadTour = jest.fn()
 				const wrapper = mount({
 					template: "<div/>",
-					mixins: [tourRoot]
-				}, {
+					mixins: [tourRoot],
 					methods: {
 						loadTour,
 						sendAnalyticsEvent: jest.fn()
@@ -127,11 +132,9 @@ describe("Tour Root mixin", () => {
 
 			describe("when a tour exists but the user has seen it", () => {
 				test("it sets hasTour to true but does not set the tourSteps", async() => {
-					const setTourSteps = jest.fn()
-					const wrapper = mountBase(getTrue, {
-						methods: {setTourSteps}
-					});
+					const wrapper = mountBase(getTrue);
 
+					const setTourSteps = jest.spyOn(wrapper.vm, 'setTourSteps');
 					await wrapper.vm.$nextTick(() => {
 						expect(wrapper.vm.hasTour).toBe(true)
 						expect(setTourSteps).not.toHaveBeenCalled()
@@ -151,7 +154,7 @@ describe("Tour Root mixin", () => {
 				}
 			})
 
-			expect(wrapper.contains(TourHolder)).toBe(true);
+			expect(wrapper.findComponent(TourHolder)).toBeTruthy();
 		})
 	})
 })

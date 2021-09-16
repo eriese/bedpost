@@ -38,7 +38,7 @@ module EncountersHelper
 
 		keys = {
 			subject_pronoun: (subj_user ? t("you") : @partner.name).capitalize,
-			contact_type: t(possible.contact_type.key, {scope: "contact.contact_type"}),
+			contact_type: t(possible.contact_type.key, scope: "contact.contact_type"),
 			object_possessive: obj_user ? t("your") : @partner.name_possessive,
 			object_instrument: get_instrument(possible, contact, true),
 			subject_possessive: subj_user ? t("your") : @partner.pronoun.possessive,
@@ -49,14 +49,14 @@ module EncountersHelper
 		if contact.barriers.any?
 			t_key += "_with_barriers"
 			barrier_args = keys.merge(scope: 'contact.barrier.show')
-			keys[:barriers] = contact.barriers.map { |b| t(b, barrier_args) }.join(t("and_delimeter"))
+			keys[:barriers] = contact.barriers.map { |b| t(b, **barrier_args) }.join(t("and_delimeter"))
 		end
 
 		t_key += "_html"
 
 		content_tag(:li, {class: "contact-show"}) do
 			content_tag(:"drop-down", ':title-button' => true, 'arrow-class' => 'link link--is-dark-theme--is-secondary cta--is-arrow--is-small') do
-				content_tag(:span, t(t_key, keys), {slot: "title"}) +
+				content_tag(:span, t(t_key, **keys), {slot: "title"}) +
 					content_tag(:span, t('encounters.show.contact_risks'), class: 'contact-show__risks-title') +
 					display_risks(contact)
 			end

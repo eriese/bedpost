@@ -21,7 +21,7 @@ describe("ArrowButton functional component", () => {
 	describe("rendering", () => {
 		test('it is a button', () => {
 			let wrapper = setup();
-			expect(wrapper.is("button")).toBeTruthy();
+			expect(wrapper.element.tagName).toEqual("BUTTON");
 		})
 	})
 })
