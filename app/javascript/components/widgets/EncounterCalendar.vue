@@ -118,9 +118,9 @@ export default {
 						// the date it took place
 						dates: new Date(enc.took_place),
 						// add a dot if there's more than one partner
-						dot: highlight ? false : partnerClass,
+						dot: highlight ? false : {class: partnerClass, color: partnerClass},
 						// add a highlight if there's only one partner
-						highlight: highlight ? partnerClass : false,
+						highlight: highlight ? {class: partnerClass, color: partnerClass} : false,
 						// data to pass to the popover
 						customData: {
 							partnerID: partner._id,
@@ -163,6 +163,8 @@ export default {
 			this[field] = newVal;
 		},
 		handleSelect() {
+			if (this.partnerships.length <= 1) {return;}
+
 			if (this.empty) {
 				this.$refs.select.$refs.search.setAttribute('disabled', 'disabled');
 			} else {
