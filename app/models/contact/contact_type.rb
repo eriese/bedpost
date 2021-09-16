@@ -14,7 +14,7 @@ class Contact::ContactType
 	end
 
 	def display
-		return I18n.t(@t_key, scope: "contact.contact_type")
+		return I18n.t(@t_key, scope: 'contact.contact_type')
 	end
 
 	class << self
@@ -39,39 +39,41 @@ class Contact::ContactType
 		end
 
 		def inst_methods
-			@methods ||= TYPES.map { |k, t| [t.inst_key, t.inverse_inst, t.inst_key.to_s + "_self", t.inverse_inst.to_s + "_self"] }.flatten.uniq
+			@methods ||= TYPES.map { |k, t|
+				[t.inst_key, t.inverse_inst, t.inst_key.to_s + '_self', t.inverse_inst.to_s + '_self']
+			}.flatten.uniq
 		end
 	end
 
-
 	private
+
 	BASES = [{
 		key: :penetrated,
 		inst_key: :can_penetrate,
 		inverse_inst: :can_be_penetrated_by,
 		inverse_key: :penetrated_by
-	},{
+	}, {
 		key: :touched,
 		inst_key: :can_touch,
 		inverse_inst: :can_touch
-	},{
+	}, {
 		key: :sucked,
 		inst_key: :can_suck,
 		inverse_inst: :can_be_sucked_by,
 		inverse_key: :sucked_by
-	},{
+	}, {
 		key: :fisted,
 		inst_key: :can_fist,
 		inverse_inst: :can_be_fisted_by
-	},{
+	}, {
 		key: :kissed,
 		inst_key: :can_kiss,
 		inverse_inst: :can_be_kissed_by
-	},{
+	}, {
 		key: :licked,
 		inst_key: :can_lick,
 		inverse_inst: :can_be_licked_by
 	}]
 
-	TYPES = Hash[BASES.map {|r| [r[:key], new(r)] }]
+	TYPES = Hash[BASES.map { |r| [r[:key], new(r)] }]
 end

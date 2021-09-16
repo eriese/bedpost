@@ -5,7 +5,7 @@ class RemoveOrphanedProfileJob < ApplicationJob
 		return if profile_id.blank?
 
 		profile = Profile.find(profile_id)
-		return unless profile._type == "Profile"
+		return unless profile._type == 'Profile'
 
 		num_partnered_to = UserProfile.where_partnered_to(profile.id).count
 		profile.destroy if num_partnered_to == 0

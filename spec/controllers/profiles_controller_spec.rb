@@ -24,7 +24,6 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe ProfilesController, type: :controller do
-
 	# This should return the minimal set of attributes required to create a valid
 	# Profile. As you add validations to Profile, be sure to
 	# adjust the attributes here as well.
@@ -33,61 +32,64 @@ RSpec.describe ProfilesController, type: :controller do
 		cleanup @partnership, @prof
 	end
 
-	describe "GET #show" do
-		it "shows the profile of the partner in the partnership" do
+	describe 'GET #show' do
+		it 'shows the profile of the partner in the partnership' do
 			@prof = create(:profile)
 			@partnership = dummy_user.partnerships.create(partner: @prof)
 
-			get :show, params: {partnership_id: @partnership.to_param}, session: dummy_user_session
+			get :show, params: { partnership_id: @partnership.to_param }, session: dummy_user_session
 			expect(response).to be_successful
 			expect(assigns(:profile)).to eq @prof
 		end
 	end
 
-	describe "GET #edit" do
-		context "the user made a dummy profile for their partner" do
-			it "returns the edit page for that dummy partner" do
+	describe 'GET #edit' do
+		context 'the user made a dummy profile for their partner' do
+			it 'returns the edit page for that dummy partner' do
 				@prof = create(:profile)
 				@partnership = dummy_user.partnerships.create(partner: @prof)
-				get :edit, params: {partnership_id: @partnership.to_param}, session: dummy_user_session
+				get :edit, params: { partnership_id: @partnership.to_param }, session: dummy_user_session
 				expect(response).to be_successful
 				expect(assigns(:profile)).to eq @prof
 			end
 		end
 
-		context "the user is partnered with another user on the platform" do
-			it "redirects the user to the partnership page" do
+		context 'the user is partnered with another user on the platform' do
+			it 'redirects the user to the partnership page' do
 				@prof = create(:user_profile)
 				@partnership = dummy_user.partnerships.create(partner: @prof)
-				get :edit, params: {partnership_id: @partnership.to_param}, session: dummy_user_session
+				get :edit, params: { partnership_id: @partnership.to_param }, session: dummy_user_session
 
 				expect(response).to redirect_to @partnership
 			end
 		end
 	end
 
-	describe "PUT #update" do
+	describe 'PUT #update' do
 		before :each do
 			@prof = create(:profile)
 			@partnership = dummy_user.partnerships.create(partner: @prof)
 		end
 
-		context "with valid params" do
-			it "updates the requested profile" do
-				put :update, params: {partnership_id: @partnership.to_param, profile: {external_name: "something"}}, session: dummy_user_session
+		context 'with valid params' do
+			it 'updates the requested profile' do
+				put :update, params: { partnership_id: @partnership.to_param, profile: { external_name: 'something' } },
+																	session: dummy_user_session
 				@prof.reload
-				expect(@prof.external_name).to eq "something"
+				expect(@prof.external_name).to eq 'something'
 			end
 
-			it "redirects to the partnership the profile is attached to" do
-				put :update, params: {partnership_id: @partnership.to_param, profile: {external_name: "something"}}, session: dummy_user_session
+			it 'redirects to the partnership the profile is attached to' do
+				put :update, params: { partnership_id: @partnership.to_param, profile: { external_name: 'something' } },
+																	session: dummy_user_session
 				expect(response).to redirect_to @partnership
 			end
 		end
 
-		context "with invalid params" do
+		context 'with invalid params' do
 			it "returns a success response (i.e. to display the 'edit' template)" do
-				put :update, params: {partnership_id: @partnership.to_param, profile: {external_name: nil}}, session: dummy_user_session
+				put :update, params: { partnership_id: @partnership.to_param, profile: { external_name: nil } },
+																	session: dummy_user_session
 				expect(response).to redirect_to edit_partnership_profile_path(@partnership)
 			end
 		end

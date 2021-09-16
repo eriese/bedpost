@@ -17,7 +17,7 @@ gem 'webpacker', '~> 5.x'
 # put javascript variables directly from the controller
 gem 'gon'
 # add internationalization to javascript
-gem "i18n-js"
+gem 'i18n-js'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 
@@ -41,7 +41,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'devise'
 gem 'mailjet'
-gem "aws-ses", "~> 0.7.1", :require => 'aws/ses'
+gem 'aws-ses', '~> 0.7.1', :require => 'aws/ses'
 
 gem 'daemons'
 gem 'delayed_job'
@@ -49,7 +49,7 @@ gem 'delayed_job_mongoid'
 
 gem 'rack-cors'
 gem 'http'
-#handle env vars
+# handle env vars
 
 gem 'route_downcaser'
 gem 'colorize'
@@ -59,7 +59,7 @@ gem 'pry-stack_explorer'
 
 group :development, :test do
 	gem 'rspec-rails', '~> 5.0.2'
-	gem "rails-controller-testing"
+	gem 'rails-controller-testing'
 	# Call 'byebug' anywhere in the code to stop execution and get a debugger console
 	gem 'pry-remote'
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -72,7 +72,7 @@ group :development do
 	gem 'guard'
 	gem 'guard-rspec'
 	gem 'guard-livereload', '~> 2.5', require: false
-	gem "rack-livereload"
+	gem 'rack-livereload'
 	gem 'guard-webpack'
 	gem 'guard-shell'
 	# gem 'guard-rails', require: false
@@ -86,7 +86,7 @@ group :development do
 	gem 'brakeman'
 	gem 'bundler-audit'
 
-	#linting
+	# linting
 	gem 'rubocop'
 	gem 'rubocop-thread_safety'
 	gem 'rubocop-rspec'

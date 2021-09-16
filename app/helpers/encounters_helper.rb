@@ -1,19 +1,18 @@
 module EncountersHelper
-
 	def encounters_as_attributes
 		attrs = if @partners.present?
-			@partners.each_with_index.map do |partner, i|
-				partner_name = partner.display(@partner_names[i])
-				partner_class = "partnership-#{i}"
-				partner.encounters.map { |enc| encounter_as_calendar_attr(enc, partner_class, partner_name) }
-			end.flatten
-		else
-			@encounters.map {|enc| encounter_as_calendar_attr(enc)}
-		end
+											@partners.each_with_index.map do |partner, i|
+												partner_name = partner.display(@partner_names[i])
+												partner_class = "partnership-#{i}"
+												partner.encounters.map { |enc| encounter_as_calendar_attr(enc, partner_class, partner_name) }
+											end.flatten
+										else
+											@encounters.map { |enc| encounter_as_calendar_attr(enc) }
+										end
 		attrs.to_json
 	end
 
-	def encounter_as_calendar_attr(encounter, dot_class=false, partner_name=nil)
+	def encounter_as_calendar_attr(encounter, dot_class = false, partner_name = nil)
 		{
 			dates: encounter.took_place.to_json,
 			highlight: dot_class == false,
@@ -28,7 +27,7 @@ module EncountersHelper
 	def display_contacts(encounter)
 		@t_block ||= method(:t)
 		@partner = encounter.partnership.partner
-		content_tag(:ul, safe_join(encounter.contacts.map { |c| display_contact(c) }), {class: "contacts-show no-dots"})
+		content_tag(:ul, safe_join(encounter.contacts.map { |c| display_contact(c) }), { class: 'contacts-show no-dots' })
 	end
 
 	def display_contact(contact)
@@ -37,26 +36,27 @@ module EncountersHelper
 		subj_user = contact.subject == :user
 
 		keys = {
-			subject_pronoun: (subj_user ? t("you") : @partner.name).capitalize,
-			contact_type: t(possible.contact_type.key, scope: "contact.contact_type"),
-			object_possessive: obj_user ? t("your") : @partner.name_possessive,
+			subject_pronoun: (subj_user ? t('you') : @partner.name).capitalize,
+			contact_type: t(possible.contact_type.key, scope: 'contact.contact_type'),
+			object_possessive: obj_user ? t('your') : @partner.name_possessive,
 			object_instrument: get_instrument(possible, contact, true),
-			subject_possessive: subj_user ? t("your") : @partner.pronoun.possessive,
+			subject_possessive: subj_user ? t('your') : @partner.pronoun.possessive,
 			subject_instrument: get_instrument(possible, contact, false),
 		}
 
-		t_key = ".contact"
+		t_key = '.contact'
 		if contact.barriers.any?
-			t_key += "_with_barriers"
+			t_key += '_with_barriers'
 			barrier_args = keys.merge(scope: 'contact.barrier.show')
-			keys[:barriers] = contact.barriers.map { |b| t(b, **barrier_args) }.join(t("and_delimeter"))
+			keys[:barriers] = contact.barriers.map { |b| t(b, **barrier_args) }.join(t('and_delimeter'))
 		end
 
-		t_key += "_html"
+		t_key += '_html'
 
-		content_tag(:li, {class: "contact-show"}) do
-			content_tag(:"drop-down", ':title-button' => true, 'arrow-class' => 'link link--is-dark-theme--is-secondary cta--is-arrow--is-small') do
-				content_tag(:span, t(t_key, **keys), {slot: "title"}) +
+		content_tag(:li, { class: 'contact-show' }) do
+			content_tag(:"drop-down", ':title-button' => true,
+																													'arrow-class' => 'link link--is-dark-theme--is-secondary cta--is-arrow--is-small') do
+				content_tag(:span, t(t_key, **keys), { slot: 'title' }) +
 					content_tag(:span, t('encounters.show.contact_risks'), class: 'contact-show__risks-title') +
 					display_risks(contact)
 			end
@@ -67,7 +67,7 @@ module EncountersHelper
 		is_encounter = obj.is_a? Encounter
 		grouped = group_risks_by_diagnosis(obj)
 		risk_items = risk_inner_html(grouped, is_encounter)
-		content_tag(:ul, safe_join(risk_items), {class: "risks-show"})
+		content_tag(:ul, safe_join(risk_items), { class: 'risks-show' })
 	end
 
 	# write the html to display the recommended testing schedule based on the risks in this encounter
@@ -76,7 +76,7 @@ module EncountersHelper
 		was_forced = false
 
 		# sort the schedule dates, then loop
-		sorted_keys = encounter.schedule.keys.sort do |a,b|
+		sorted_keys = encounter.schedule.keys.sort do |a, b|
 			if a.is_a?(Symbol)
 				1
 			elsif b.is_a? Symbol
@@ -86,8 +86,8 @@ module EncountersHelper
 			end
 		end
 		sched = sorted_keys.each_with_object([]) do |dt, ary|
-			#add a list item to the array
-			ary << content_tag(:li, {class: 'schedule-el'}) do
+			# add a list item to the array
+			ary << content_tag(:li, { class: 'schedule-el' }) do
 				# if the date is :routing
 				if dt == :routine
 					clss = 'schedule-routine'
@@ -111,27 +111,27 @@ module EncountersHelper
 						named += '*'
 						was_forced = true
 					end
-					#return the string
+					# return the string
 					named
-					#join them with the join delimeter
+					# join them with the join delimeter
 				end.sort.join(t('join_delimeter'))
 
 				# make the html with the resulting strings
-				content_tag(:span, date_txt, {class: clss}) +
-				content_tag(:span, diag_string, {class: 'schedule-diagnoses'})
+				content_tag(:span, date_txt, { class: clss }) +
+					content_tag(:span, diag_string, { class: 'schedule-diagnoses' })
 			end
 		end
 
 		div = content_tag(:div, options) do
 			inner = if was_forced || sorted_keys[0] != :routine
-				content_tag(:p, t('encounters.show.advice.desc'))
-			else
-				ActiveSupport::SafeBuffer.new
-			end
+												content_tag(:p, t('encounters.show.advice.desc'))
+											else
+												ActiveSupport::SafeBuffer.new
+											end
 
 			inner += content_tag(:ul, safe_join(sched), class: 'schedule-show')
 			if was_forced
-				inner += content_tag(:div, t('encounters.show.advice.key_html'), {class: 'schedule-key'})
+				inner += content_tag(:div, t('encounters.show.advice.key_html'), { class: 'schedule-key' })
 			end
 			inner
 		end
@@ -217,6 +217,6 @@ module EncountersHelper
 			o[lvl][:caveats] << caveats_translated if caveats_translated.any?
 		end
 
-		grouped.each {|lvl, hsh| hsh[:diagnoses].sort! }
+		grouped.each { |lvl, hsh| hsh[:diagnoses].sort! }
 	end
 end

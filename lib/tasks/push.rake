@@ -8,7 +8,7 @@ if Rails.env.development?
 			puts 'running checks'.blue.bold
 			errors = []
 			{
-				RSpec: "SKIP_PENDING=true IS_BETA=true rspec",
+				RSpec: 'SKIP_PENDING=true IS_BETA=true rspec',
 				Jest: 'yarn test --verbose=false',
 				Brakeman: 'bundle exec brakeman -q',
 				'Bundle Audit' => 'bundle audit --update'
@@ -16,7 +16,7 @@ if Rails.env.development?
 				sh command do |ok, response|
 					unless ok
 						puts "stopping because of #{key} failure: ", response
-						errors << {key: response}
+						errors << { key: response }
 						break
 					end
 				end

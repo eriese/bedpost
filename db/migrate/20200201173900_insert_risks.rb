@@ -821,6 +821,6 @@ class InsertRisks < Mongoid::Migration
 	end
 
 	def self.down
-		PossibleContact.all.each {|p| p.transmission_risks = [] }
+		PossibleContact.all.each { |p| p.transmission_risks = [] }
 	end
 end

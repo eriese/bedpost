@@ -3,9 +3,9 @@ class BetaMailer < ApplicationMailer
 	FEATURE_EMAIL = Rails.application.credentials.dig(:trello, :features) || 'support@bedpost.me'
 	BUG_EMAIL = Rails.application.credentials.dig(:trello, :bugs) || 'support@bedpost.me'
 
-	def bug_report(report, screenshots=nil)
+	def bug_report(report, screenshots = nil)
 		@report = report
-		screenshots.each {|k,v| attachments[k] = v} unless screenshots.nil?
+		screenshots.each { |k, v| attachments[k] = v } unless screenshots.nil?
 		mail(to: BUG_EMAIL, subject: @report[:title])
 	end
 

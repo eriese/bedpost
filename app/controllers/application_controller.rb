@@ -13,11 +13,12 @@ class ApplicationController < ActionController::Base
 				flash[:submission_error] = error
 				redirect_to redirect
 			end
-			format.json {render json: {errors: error}.deep_merge(adl_json), status: status}
+			format.json { render json: { errors: error }.deep_merge(adl_json), status: status }
 		end
 	end
 
 	private
+
 	# Its important that the location is NOT stored if:
 	# - The request method is not GET (non idempotent)
 	# - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an
@@ -52,7 +53,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	def skip_timeout
-		request.env["devise.skip_timeout"] = true
+		request.env['devise.skip_timeout'] = true
 	end
 
 	# set the layout based on whether there is a user who should be able to access all authorize features

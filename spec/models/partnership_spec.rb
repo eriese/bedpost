@@ -80,7 +80,7 @@ RSpec.describe Partnership, type: :model do
 			create_ship(:user_profile)
 			@user.save
 
-			#get everything fresh
+			# get everything fresh
 			saved_user = UserProfile.find(@user.id)
 			expect(saved_user.partnerships.length).to eq 1
 			saved_ship = saved_user.partnerships[0]
@@ -141,10 +141,10 @@ RSpec.describe Partnership, type: :model do
 			it 'sets the uid but not the partner if given an invalid uid' do
 				@user = create(:user_profile)
 				ship = @user.partnerships.new
-				ship.uid = "invalid"
+				ship.uid = 'invalid'
 
 				expect(ship.partner_id).to be_nil
-				expect(ship.uid).to eq "invalid"
+				expect(ship.uid).to eq 'invalid'
 			end
 
 			it 'sets the uid but not the partner if given the uid of the user' do
@@ -161,7 +161,7 @@ RSpec.describe Partnership, type: :model do
 				@partner = create(:user_profile)
 
 				ship = @user.partnerships.new(partner: @partner)
-				ship.uid = "invalid"
+				ship.uid = 'invalid'
 
 				expect(ship.partner_id).to eq @partner.id
 				expect(ship.uid).to eq @partner.uid
@@ -197,9 +197,9 @@ RSpec.describe Partnership, type: :model do
 		describe 'getter' do
 			it 'gets the uid that was set with an invalid input' do
 				@user = create(:user_profile)
-				ship = @user.partnerships.new(uid: "invalid")
+				ship = @user.partnerships.new(uid: 'invalid')
 
-				expect(ship.uid).to eq "invalid"
+				expect(ship.uid).to eq 'invalid'
 			end
 
 			it 'does not check the partner if the setter has been invoked' do
@@ -233,12 +233,13 @@ RSpec.describe Partnership, type: :model do
 				ship2 = @user.partnerships.new(uid: @partner.uid)
 				expect(ship2).to_not be_valid
 				expect(ship2).to have_validation_error_for :uid, :exclusion
-				expect(ship2.errors.messages[:uid]).to include(I18n.t("mongoid.errors.models.partnership.attributes.uid.taken", default: [:"mongoid.errors.messages.taken"]))
+				expect(ship2.errors.messages[:uid]).to include(I18n.t('mongoid.errors.models.partnership.attributes.uid.taken',
+																																																										default: [:"mongoid.errors.messages.taken"]))
 			end
 
 			it 'gives a bad_key error if the uid does not correspond with the uid of a user in the database' do
 				@user = create(:user_profile)
-				ship = @user.partnerships.new(uid: "invalid")
+				ship = @user.partnerships.new(uid: 'invalid')
 
 				expect(ship).to_not be_valid
 				expect(ship).to have_validation_error_for :uid, :bad_key
@@ -263,7 +264,8 @@ RSpec.describe Partnership, type: :model do
 				create_ship(:profile)
 				@hand = create(:contact_instrument, name: :hand)
 				@possible = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
-				enc = create(:encounter, partnership: @ship, user_profile: @user, contacts: [build(:encounter_contact, possible_contact: @possible)])
+				enc = create(:encounter, partnership: @ship, user_profile: @user,
+																													contacts: [build(:encounter_contact, possible_contact: @possible)])
 				expect(@ship.last_took_place).to eq enc.took_place
 			end
 		end
@@ -276,7 +278,7 @@ RSpec.describe Partnership, type: :model do
 
 			it 'returns the given value' do
 				create_ship(:profile)
-				given = "today"
+				given = 'today'
 				expect(@ship.last_took_place(given)).to eq given
 			end
 		end
@@ -294,7 +296,8 @@ RSpec.describe Partnership, type: :model do
 			ship1 = build_stubbed(:partnership, familiarity: 1, exclusivity: 1, communication: 1, trust: 1, prior_discussion: 1)
 			expect(ship1.risk_mitigator).to eq 0
 
-			ship2 = build_stubbed(:partnership, familiarity: 10, exclusivity: 10, communication: 10, trust: 10, prior_discussion: 10)
+			ship2 = build_stubbed(:partnership, familiarity: 10, exclusivity: 10, communication: 10, trust: 10,
+																																							prior_discussion: 10)
 			expect(ship2.risk_mitigator).to eq 4
 
 			ship3 = build_stubbed(:partnership, familiarity: 5, exclusivity: 5, communication: 5, trust: 5, prior_discussion: 5)
@@ -341,7 +344,7 @@ RSpec.describe Partnership, type: :model do
 					expect(result).to be false
 					result
 				end
-				@ship.update(nickname: "new nickname")
+				@ship.update(nickname: 'new nickname')
 			end
 		end
 	end

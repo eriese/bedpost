@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe RegistrationMailer, type: :mailer do
 	before :all do
@@ -16,7 +16,7 @@ RSpec.describe RegistrationMailer, type: :mailer do
 		end
 
 		context 'with a soft delete' do
-			let (:mail) {described_class.removal(user_id, email, name, true).deliver_now}
+			let (:mail) { described_class.removal(user_id, email, name, true).deliver_now }
 
 			it 'has the correct subject' do
 				expect(mail.subject).to eq 'You successfully deleted your account with bedpost'
@@ -28,7 +28,7 @@ RSpec.describe RegistrationMailer, type: :mailer do
 		end
 
 		context 'with a hard delete' do
-			let (:mail) {described_class.removal(user_id, email, name, false).deliver_now}
+			let (:mail) { described_class.removal(user_id, email, name, false).deliver_now }
 
 			it 'has the correct subject' do
 				expect(mail.subject).to eq 'You successfully deleted your account with bedpost'

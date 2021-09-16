@@ -24,8 +24,8 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "SKIP_PENDING=true rspec -f doc" do
-	require "guard/rspec/dsl"
+guard :rspec, cmd: 'SKIP_PENDING=true rspec -f doc' do
+	require 'guard/rspec/dsl'
 	dsl = Guard::RSpec::Dsl.new(self)
 
 	# Feel free to open issues for suggestions and improvements
@@ -65,7 +65,7 @@ guard :rspec, cmd: "SKIP_PENDING=true rspec -f doc" do
 	# Turnip features and steps
 	watch(%r{^spec/acceptance/(.+)\.feature$})
 	watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$}) do |m|
-		Dir[File.join("**/#{m[1]}.feature")][0] || "spec/acceptance"
+		Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance'
 	end
 end
 
@@ -94,7 +94,7 @@ guard 'livereload', js_apple_webkit_extra_wait_time: 50 do
 		watch(%r{
 					(?:app|vendor)
 					(?:/assets/\w+/(?<path>[^.]+) # path+base without extension
-					 (?<ext>\.#{ext})) # matching extension (must be first encountered)
+						(?<ext>\.#{ext})) # matching extension (must be first encountered)
 					(?:\.\w+|$) # other extensions
 					}x) do |m|
 			path = m[1]
@@ -114,8 +114,8 @@ end
 #   watch(%r{file/path}) { `command(s)` }
 #
 guard :shell do
-	watch(%r{(?!.*?(docs|tests|locales)).*app\/javascript\/(.*)\.(js|vue)}) {|m|
-		n "change in #{m[0]}" "Javascript changes"
+	watch(%r{(?!.*?(docs|tests|locales)).*app\/javascript\/(.*)\.(js|vue)}) { |m|
+		n "change in #{m[0]}" 'Javascript changes'
 		puts 're-building jsdoc'
 		`rm -r app/javascript/docs/doc; jsdoc -c app/javascript/docs/jsdoc_conf.json`
 	}

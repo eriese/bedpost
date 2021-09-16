@@ -17,7 +17,8 @@ RSpec.describe Tour, type: :model do
 				tour = create(:tour)
 				allow(Rails.cache).to receive(:fetch)
 				described_class.by_page(tour.page_name)
-				expect(Rails.cache).to have_received(:fetch).with("page_name:#{tour.page_name},fte_only:false", namespace: described_class.name)
+				expect(Rails.cache).to have_received(:fetch).with("page_name:#{tour.page_name},fte_only:false",
+																																																						namespace: described_class.name)
 			end
 
 			it 'strips ids out of page names' do
@@ -27,20 +28,21 @@ RSpec.describe Tour, type: :model do
 				stripped_page_name = orig_page_name.gsub(described_class::STRIP_IDS_REGEX, '')
 				allow(Rails.cache).to receive(:fetch)
 				described_class.by_page!(orig_page_name)
-				expect(Rails.cache).to have_received(:fetch).with("page_name:#{stripped_page_name},fte_only:false", namespace: described_class.name)
+				expect(Rails.cache).to have_received(:fetch).with("page_name:#{stripped_page_name},fte_only:false",
+																																																						namespace: described_class.name)
 			end
 
 			describe 'fte_only' do
 				context 'when true' do
 					it 'returns a tour marked fte_only' do
 						tour = create(:tour, fte_only: true)
-						result = described_class.by_page(tour.page_name, true);
+						result = described_class.by_page(tour.page_name, true)
 						expect(result).to eq tour
 					end
 
 					it 'returns a tour not marked fte_only if there is no tour for the same page that is fte_only' do
 						tour = create(:tour, fte_only: false)
-						result = described_class.by_page(tour.page_name, true);
+						result = described_class.by_page(tour.page_name, true)
 						expect(result).to eq tour
 					end
 

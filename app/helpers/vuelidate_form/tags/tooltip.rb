@@ -6,7 +6,8 @@ module VuelidateForm
 			def content(options = {})
 				key = options.delete('key')
 				t_key = key.blank? || key == true ? @method_name : key
-				translation = ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key, scope: 'helpers.tooltip').translate
+				translation = ActionView::Helpers::Tags::Translator.new(@object, @object_name, t_key,
+																																																												scope: 'helpers.tooltip').translate
 				translation.present? ? translation.html_safe : ''
 			end
 
@@ -31,6 +32,7 @@ module VuelidateForm
 
 			def add_default_name_and_id(options = {})
 				return unless generate_ids?
+
 				index = name_and_id_index(options)
 				parent_id = tag_id(index)
 				options['id'] = "#{parent_id}-tooltip-content"

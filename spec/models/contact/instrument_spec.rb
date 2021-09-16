@@ -7,7 +7,7 @@ RSpec.describe Contact::Instrument, type: :model do
 		end
 
 		it 'uses the name as the id' do
-			@inst = Contact::Instrument.new(name: :hand);
+			@inst = Contact::Instrument.new(name: :hand)
 			@inst.save
 			expect(@inst.id).to eq @inst.name
 		end
@@ -17,8 +17,8 @@ RSpec.describe Contact::Instrument, type: :model do
 		describe '#get_user_name_for' do
 			context 'with a user_override' do
 				it 'returns the user-inputted name for the instrument' do
-					user = double({external_name: "ext"})
-					inst = build(:contact_instrument, name: "external_genitals", user_override: :external_name)
+					user = double({ external_name: 'ext' })
+					inst = build(:contact_instrument, name: 'external_genitals', user_override: :external_name)
 
 					t_block = I18n.method(:t)
 					result = inst.get_user_name_for(user)
@@ -28,18 +28,18 @@ RSpec.describe Contact::Instrument, type: :model do
 
 			context 'without user_override' do
 				it 'defaults to using regular I18n' do
-					inst_name = "hand"
+					inst_name = 'hand'
 					inst = build(:contact_instrument, name: inst_name)
 					result = inst.get_user_name_for(double())
 
-					expect(result).to eq I18n.t(inst_name, scope: "contact.instrument")
+					expect(result).to eq I18n.t(inst_name, scope: 'contact.instrument')
 				end
 
 				it 'uses the given block to translate' do
-					inst_name = "hand"
+					inst_name = 'hand'
 					inst = build(:contact_instrument, name: inst_name)
 
-					prc = Proc.new {|given| given.to_s*2}
+					prc = Proc.new { |given| given.to_s * 2 }
 					result = inst.get_user_name_for(double(), &prc)
 
 					expect(result).to eq prc.call(inst_name)

@@ -3,7 +3,7 @@ require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/rails'
@@ -64,7 +64,7 @@ RSpec.configure do |config|
 		FakeRedis.enable
 	end
 
-	#clear the dummy user after all the tests are run
+	# clear the dummy user after all the tests are run
 	config.after :suite do
 		work_jobs
 		UserProfileHelpers.clear_all_dummies
@@ -72,7 +72,7 @@ RSpec.configure do |config|
 		puts
 		db_has = print_db_remnants
 
-		puts "Database is clean".green.bold unless db_has
+		puts 'Database is clean'.green.bold unless db_has
 	end
 
 	config.around :each, :run_job_immediately do |example|

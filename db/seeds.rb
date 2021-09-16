@@ -2,21 +2,21 @@
 # Pronouns
 ############################
 [
-	{subject: "ze", object: "hir", possessive: "hir" , obj_possessive: "hirs", reflexive: "hirself"},
-	{subject: "she", object: "her", possessive: "her", obj_possessive: "hers", reflexive: "herself"},
-	{subject: "he", object: "him", possessive: "his", obj_possessive: "his", reflexive: "himself"},
-	{subject: "they", object: "them", possessive: "their", obj_possessive: "theirs", reflexive: "themself"}
-].each {|pr| Pronoun.find_or_create_by(pr)}
+	{ subject: 'ze', object: 'hir', possessive: 'hir', obj_possessive: 'hirs', reflexive: 'hirself' },
+	{ subject: 'she', object: 'her', possessive: 'her', obj_possessive: 'hers', reflexive: 'herself' },
+	{ subject: 'he', object: 'him', possessive: 'his', obj_possessive: 'his', reflexive: 'himself' },
+	{ subject: 'they', object: 'them', possessive: 'their', obj_possessive: 'theirs', reflexive: 'themself' }
+].each { |pr| Pronoun.find_or_create_by(pr) }
 
 # seed a dev user who is already confirmed
 if Rails.env.development?
 	user = UserProfile.find_or_create_by(
-		email: "devuser@bedpost.me",
-		password: "password",
-		password_confirmation: "password",
-		name: "Dev User",
-		anus_name: "anus",
-		external_name: "external genitals",
+		email: 'devuser@bedpost.me',
+		password: 'password',
+		password_confirmation: 'password',
+		name: 'Dev User',
+		anus_name: 'anus',
+		external_name: 'external genitals',
 		can_penetrate: true,
 		pronoun: Pronoun.last
 	)
@@ -77,44 +77,47 @@ toy.upsert
 	el: hand,
 	contacts: {
 		touched: [[external_genitals, true], [anus, true], [mouth, true], [hand, true], [toy, true], [tongue, true]],
-		penetrated: [[internal_genitals, true],[anus, true],[mouth, true],[toy, true]],
-		fisted: [[internal_genitals, true],[anus, true],[mouth, true]]
+		penetrated: [[internal_genitals, true], [anus, true], [mouth, true], [toy, true]],
+		fisted: [[internal_genitals, true], [anus, true], [mouth, true]]
 	}
-},{
+}, {
 	el: external_genitals,
 	contacts: {
-		touched: [[anus,false],[mouth,true],[toy,true],[external_genitals,false],[tongue,true]],
-		penetrated: [[internal_genitals,false], [anus,true], [mouth,true], [toy,true]]
+		touched: [[anus, false], [mouth, true], [toy, true], [external_genitals, false], [tongue, true]],
+		penetrated: [[internal_genitals, false], [anus, true], [mouth, true], [toy, true]]
 	}
-},{
+}, {
 	el: mouth,
 	contacts: {
-		touched: [[anus,false], [mouth,false], [toy,true], [tongue,false]],
-		sucked: [[hand,true], [external_genitals,true], [anus,false], [mouth,false], [toy,true], [tongue,false]]
+		touched: [[anus, false], [mouth, false], [toy, true], [tongue, false]],
+		sucked: [[hand, true], [external_genitals, true], [anus, false], [mouth, false], [toy, true], [tongue, false]]
 	}
-},{
+}, {
 	el: toy,
 	contacts: {
-		touched: [[anus,true], [toy,true], [tongue,true]],
-		penetrated: [[external_genitals,true], [internal_genitals,true], [anus,true], [mouth,true], [toy,true]]
+		touched: [[anus, true], [toy, true], [tongue, true]],
+		penetrated: [[external_genitals, true], [internal_genitals, true], [anus, true], [mouth, true], [toy, true]]
 	}
-},{
+}, {
 	el: tongue,
 	contacts: {
-		touched: [[tongue,false]],
-		penetrated: [[external_genitals,false], [internal_genitals,false], [anus,false], [mouth,false], [toy,false]],
+		touched: [[tongue, false]],
+		penetrated: [[external_genitals, false], [internal_genitals, false], [anus, false], [mouth, false], [toy, false]],
 		licked: [[anus, false]]
 	}
 }].each do |inst|
 	inst[:contacts].each do |c, i_lst|
 		i_lst.each do |i|
-			PossibleContact.find_or_create_by(contact_type: c, subject_instrument: inst[:el], object_instrument: i[0], self_possible: i[1])
-			PossibleContact.find_or_create_by(contact_type: c, subject_instrument: i[0], object_instrument: inst[:el], self_possible: i[1]) if c == :touched
+			PossibleContact.find_or_create_by(contact_type: c, subject_instrument: inst[:el], object_instrument: i[0],
+																																					self_possible: i[1])
+			PossibleContact.find_or_create_by(contact_type: c, subject_instrument: i[0], object_instrument: inst[:el],
+																																					self_possible: i[1]) if c == :touched
 		end
 	end
 end
 
-PossibleContact.where(subject_instrument_id: :hand, contact_type: :penetrated).update_all(subject_instrument_id: :fingers)
+PossibleContact.where(subject_instrument_id: :hand,
+																						contact_type: :penetrated).update_all(subject_instrument_id: :fingers)
 PossibleContact.where(object_instrument_id: :hand, contact_type: :sucked).update_all(object_instrument_id: :fingers)
 
 PossibleContact.where(subject_instrument_id: :mouth, contact_type: :touched).update_all(contact_type: :kissed)
@@ -124,14 +127,21 @@ PossibleContact.where(subject_instrument_id: :tongue, contact_type: :touched).up
 # Diagnoses
 ############################
 [
-	{name: :chlamydia, gestation_min: 1, gestation_max: 4, in_fluids: true, local: true, category: [:curable, :bacterial, :common, :must_treat]},
-	{name: :gonorrhea, gestation_min: 1, gestation_max: 3, in_fluids: true, local: true, category: [:curable, :bacterial, :common, :must_treat]},
-	{name: :syphillis, gestation_min: 1, gestation_max: 12, in_fluids: true, local: true, category: [:curable, :bacterial, :common, :must_treat]},
-	{name: :hiv, gestation_min: 4, gestation_max: 12, in_fluids: true, local: false, category: [:treatable, :viral, :must_treat]},
-	{name: :hep_c, gestation_min: 6, gestation_max: 12, in_fluids: true, local: false, category: [:hep, :must_treat]},
-	{name: :hsv, gestation_min: 3, gestation_max: 12, in_fluids: false, local: true, category: [:skin, :viral, :common, :not_standard, :managed]},
-	{name: :hpv, gestation_min: 8, gestation_max: 80, in_fluids: false, local: true, category: [:skin, :viral, :self_clearing]},
-	{name: :bv, gestation_min: 0, gestation_max: 1, in_fluids: true, local: true, only_vaginal: true, category: [:curable, :bacterial, :not_standard]},
+	{ name: :chlamydia, gestation_min: 1, gestation_max: 4, in_fluids: true, local: true,
+			category: [:curable, :bacterial, :common, :must_treat] },
+	{ name: :gonorrhea, gestation_min: 1, gestation_max: 3, in_fluids: true, local: true,
+			category: [:curable, :bacterial, :common, :must_treat] },
+	{ name: :syphillis, gestation_min: 1, gestation_max: 12, in_fluids: true, local: true,
+			category: [:curable, :bacterial, :common, :must_treat] },
+	{ name: :hiv, gestation_min: 4, gestation_max: 12, in_fluids: true, local: false,
+			category: [:treatable, :viral, :must_treat] },
+	{ name: :hep_c, gestation_min: 6, gestation_max: 12, in_fluids: true, local: false, category: [:hep, :must_treat] },
+	{ name: :hsv, gestation_min: 3, gestation_max: 12, in_fluids: false, local: true,
+			category: [:skin, :viral, :common, :not_standard, :managed] },
+	{ name: :hpv, gestation_min: 8, gestation_max: 80, in_fluids: false, local: true,
+			category: [:skin, :viral, :self_clearing] },
+	{ name: :bv, gestation_min: 0, gestation_max: 1, in_fluids: true, local: true, only_vaginal: true,
+			category: [:curable, :bacterial, :not_standard] },
 
 	# {name: :trich, gestation_min: 1, gestation_max: 4, in_fluids: true, local: true, category: [:parasitic, :common, :curable]},
 	# {name: :cmv, gestation_min: 3, gestation_max: 12, in_fluids: true, category: [:viral, :not_standard]},
@@ -148,7 +158,6 @@ NEGLIGIBLE = Diagnosis::TransmissionRisk::NEGLIGIBLE
 LOW = Diagnosis::TransmissionRisk::LOW
 MODERATE = Diagnosis::TransmissionRisk::MODERATE
 HIGH = Diagnosis::TransmissionRisk::HIGH
-
 
 # PossibleContact.find_by(contact_type: :touched, subject_instrument_id: :hand, object_instrument_id: :external_genitals).transmission_risks = [:hpv, :chlamydia, :hsv, :syphillis].map { |t| Diagnosis::TransmissionRisk.new({diagnosis_id: t, risk_to_subject: NEGLIGIBLE, risk_to_object: NEGLIGIBLE}) } +
 # [Diagnosis::TransmissionRisk.new({diagnosis_id: :bv, risk_to_subject: NO_RISK, risk_to_object: LOW, risk_to_self: LOW})]
@@ -195,9 +204,9 @@ tour_configs = {
 		await_in_view: true,
 		position: 0,
 		content: {
-			en: "If your partner also uses BedPost, connecting with their userID is a handy shortcut to using the body language they like."
+			en: 'If your partner also uses BedPost, connecting with their userID is a handy shortcut to using the body language they like.'
 		}
-	},{
+	}, {
 		target: '#partnership_partner_attributes_name',
 		await_in_view: true,
 		position: 1,
@@ -219,13 +228,13 @@ tour_configs = {
 		content: {
 			en: 'This section is just for you. You can leave it blank or write anything you want to remember about this encounter.'
 		}
-	},{
+	}, {
 		target: '.dynamic-field-list__item:first-of-type',
 		position: 1,
 		content: {
 			en: "Fill this out like sexy madlibs. As you make your selections, you'll see the options change to allow you to tell us the whole story."
 		}
-	},{
+	}, {
 		target: '.cta--is-add-btn',
 		position: 2,
 		content: {
@@ -239,19 +248,19 @@ tour_configs = {
 		content: {
 			en: 'Here you can see how your sense of this encounter compares to ours. We like it as a way to gauge whether you tend to over or underestimate.'
 		},
-	},{
+	}, {
 		target: '#contact-review .dropdown-button',
 		position: 1,
 		content: {
 			en: 'Look here to see what you got up to, and the transmission likelihood from each contact'
 		}
-	},{
+	}, {
 		target: '#risk-review .dropdown-button',
 		position: 2,
 		content: {
 			en: 'Here you can check out what we calculated as the overall chances of STI transmission from this encounter'
 		}
-	},{
+	}, {
 		target: '#schedule-review',
 		position: 3,
 		content: {

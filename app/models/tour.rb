@@ -12,7 +12,7 @@ class Tour
 	# search by page and cache
 	def self.by_page(page_name, fte_only = false)
 		page_name = page_name.gsub(STRIP_IDS_REGEX, '')
-		args = {page_name: page_name}
+		args = { page_name: page_name }
 		key = "page_name:#{page_name},fte_only:#{fte_only}"
 		cached(key) do
 			if fte_only

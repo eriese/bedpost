@@ -22,7 +22,7 @@ module StaticResource
 		end
 
 		def as_map
-			cached('as_map') {HashWithIndifferentAccess[all.map { |i| [i.id, i] }] }
+			cached('as_map') { HashWithIndifferentAccess[all.map { |i| [i.id, i] }] }
 		end
 
 		def newest(**args)
@@ -32,14 +32,14 @@ module StaticResource
 			return cached("newest#{key}") { where(args).order(updated_at: :asc).last(id_sort: :none) }
 		end
 
-		def grouped_by(column, instantiate=true)
+		def grouped_by(column, instantiate = true)
 			cached("#{column}_#{instantiate}") do
 				query = collection.aggregate([{
-					'$group' => {
-						'_id' => "$#{column}",
-						'members' => { '$push' => '$$ROOT' }
-						}
-					}])
+																																		'$group' => {
+																																			'_id' => "$#{column}",
+																																			'members' => { '$push' => '$$ROOT' }
+																																		}
+																																	}])
 
 				HashWithIndifferentAccess[query.map do |col|
 					members = col[:members]

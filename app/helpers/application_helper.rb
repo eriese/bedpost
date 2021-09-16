@@ -12,17 +12,19 @@ module ApplicationHelper
 	}.freeze
 
 	private
+
 	def self.url_helpers
 		Rails.application.routes.url_helpers
 	end
 
 	public
+
 	NAV_LINKS = {
-		"nav.dashboard" => url_helpers.root_path,
-		"nav.user_profile_edit" => url_helpers.edit_user_profile_registration_path,
-		"nav.partners" => url_helpers.partnerships_path,
-		"nav.encounters" => url_helpers.encounters_path,
-		"nav.sti_tests" => url_helpers.sti_tests_path
+		'nav.dashboard' => url_helpers.root_path,
+		'nav.user_profile_edit' => url_helpers.edit_user_profile_registration_path,
+		'nav.partners' => url_helpers.partnerships_path,
+		'nav.encounters' => url_helpers.encounters_path,
+		'nav.sti_tests' => url_helpers.sti_tests_path
 	}
 
 	def pronouns
@@ -35,7 +37,7 @@ module ApplicationHelper
 
 		ac = controller.action_name
 		prefixes = controller.lookup_context.prefixes
-		new_default = prefixes.map { |pr| "#{pr}.#{ac}#{key}".to_sym} + default
+		new_default = prefixes.map { |pr| "#{pr}.#{ac}#{key}".to_sym } + default
 
 		new_key = new_default.shift
 		options[:default] = new_default

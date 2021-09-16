@@ -15,7 +15,7 @@ class BetaController < ApplicationController
 		hmac = OpenSSL::HMAC.new("#{key}&#{secret}", digest)
 		hmac << request.raw_post
 		expected_signature = Base64.encode64(hmac.digest).strip
-		if expected_signature == request.headers["sm-signature"]
+		if expected_signature == request.headers['sm-signature']
 			req_params = JSON.parse(request.raw_post).to_h.with_indifferent_access
 			if req_params[:event_type] == 'response_completed'
 				Rails.logger.warn('response webhook properly received')

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe RemoveOrphanedProfileJob, type: :job do
 	context 'with a profile that is not in the database' do
 		it 'does not raise a DocumentNotFound error' do
-			expect {described_class.perform_now("random")}.not_to raise_error
+			expect { described_class.perform_now('random') }.not_to raise_error
 		end
 	end
 

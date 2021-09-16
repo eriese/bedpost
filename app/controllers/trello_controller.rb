@@ -16,11 +16,11 @@ class TrelloController < ApplicationController
 			screenshots = params.require(:bug).permit(screenshots: [])[:screenshots]
 			attachments = screenshots.nil? ? {} : Hash[screenshots.map { |s| [s.original_filename, s.tempfile.read] }]
 			BetaMailer.delay(queue: 'mailers').bug_report(report, attachments)
-			flash[:notice] = "Successfully submitted bug report"
+			flash[:notice] = 'Successfully submitted bug report'
 		when :feature
 			report = params.require(:feature).permit(:title, :what, :why)
 			BetaMailer.delay(queue: 'mailers').feature_request(report)
-			flash[:notice] = "Successfully submitted feature request"
+			flash[:notice] = 'Successfully submitted feature request'
 		end
 		redirect_to feedback_path(feedback_type: @feedback_type)
 	end
@@ -28,10 +28,10 @@ class TrelloController < ApplicationController
 	def whitelist_types
 		redirect_to root_path unless FEEDBACK_TYPES.include? params.require(:feedback_type)
 		@feedback_type = case params.require(:feedback_type)
-		when 'bug'
-			:bug
-		when 'feature'
-			:feature
-		end
+																			when 'bug'
+																				:bug
+																			when 'feature'
+																				:feature
+																			end
 	end
 end

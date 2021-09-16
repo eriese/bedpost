@@ -6,21 +6,25 @@ class Partnership
 
 	LEVEL_FIELDS.each do |f|
 		field f, type: Integer, default: 1
-		validates f, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10}
+		validates f, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10 }
 	end
 
 	embedded_in :user_profile
-	belongs_to :partner, class_name: "Profile"
+	belongs_to :partner, class_name: 'Profile'
 
-	index({partner_id: 1}, {unique: true})
+	index({ partner_id: 1 }, { unique: true })
 
 	validates :partner, uniqueness: true, not_self: true
 	validates :uid,
-		foreign_key: {query: Proc.new { |value| UserProfile.with_uid value }},
-		not_self: {method: :uid},
-		exclusion: {in: ->(ship) {Profile.find(ship.user_profile.partnerships.map { |s| s.partner_id unless s == ship}.compact).pluck(:uid).compact}, message: :taken},
-		uniqueness: true,
-		allow_nil: true
+											foreign_key: { query: Proc.new { |value| UserProfile.with_uid value } },
+											not_self: { method: :uid },
+											exclusion: { in: ->(ship) {
+																													Profile.find(ship.user_profile.partnerships.map { |s|
+																																											s.partner_id unless s == ship
+																																										}.compact).pluck(:uid).compact
+																												}, message: :taken },
+											uniqueness: true,
+											allow_nil: true
 
 	after_save :add_to_partner
 	before_destroy :remove_from_partner
@@ -33,7 +37,8 @@ class Partnership
 	accepts_nested_attributes_for :partner
 
 	def uid
-		@uid ||= (ptnr = self.partner; ptnr.uid if ptnr.respond_to?(:uid))
+		@uid ||= (ptnr = self.partner
+												ptnr.uid if ptnr.respond_to?(:uid))
 	end
 
 	def uid=(value)
@@ -51,7 +56,6 @@ class Partnership
 		user_profile.encounters.where(partnership_id: id)
 	end
 
-
 	def last_took_place(if_none = nil)
 		encounters.any? ? encounters.last.took_place : (if_none.nil? ? Date.today : if_none)
 	end
@@ -62,6 +66,7 @@ class Partnership
 
 	def risk_mitigator
 		return @risk_mitigator unless @risk_mitigator.nil?
+
 		@risk_mitigator = 0
 		@risk_mitigator += 2 * trust
 		@risk_mitigator += 2 * exclusivity
@@ -88,6 +93,7 @@ class Partnership
 	end
 
 	private
+
 	def add_to_partner
 		@risk_mitigator = nil if any_level_changed?
 		post_persist

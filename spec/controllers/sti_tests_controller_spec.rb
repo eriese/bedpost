@@ -68,8 +68,8 @@ RSpec.describe StiTestsController, type: :controller do
 				post :create, params: { sti_test: tst }
 				expected_message = I18n.t(:incomplete, scope: 'errors.messages')
 				expect(controller).to have_received(:respond_with_submission_error).with({
-				 form_error: expected_message
-				}, new_sti_test_path)
+																																																																														form_error: expected_message
+																																																																													}, new_sti_test_path)
 			end
 		end
 
@@ -77,7 +77,7 @@ RSpec.describe StiTestsController, type: :controller do
 			it 'does not save any tests on the user' do
 				tst = test_attributes(tested_for: [:hsv, :hpv])
 				expect {
-					post :create, params: {sti_test: tst}
+					post :create, params: { sti_test: tst }
 				}.not_to(change { @user.reload.sti_tests.size })
 			end
 
@@ -90,7 +90,7 @@ RSpec.describe StiTestsController, type: :controller do
 					results: [{
 						tested_for: [I18n.t(:blank, scope: 'errors.messages')]
 					},
-					{}]
+															{}]
 				}
 
 				expect(controller).to have_received(:respond_with_submission_error).with(expected_message, new_sti_test_path)
@@ -154,7 +154,9 @@ RSpec.describe StiTestsController, type: :controller do
 
 				pms[:results_attributes][2] = StiTestResult.new(tested_for_id: :hcv).as_json(except: [:_id])
 
-				expect { patch :update, params: { tested_on: tst.to_param, sti_test: pms} }.to change {tst.reload.results.count}.by 1
+				expect { patch :update, params: { tested_on: tst.to_param, sti_test: pms } }.to change {
+																																																																																					tst.reload.results.count
+																																																																																				}.by 1
 			end
 
 			it 'removes removed test results' do
@@ -163,7 +165,9 @@ RSpec.describe StiTestsController, type: :controller do
 
 				pms[:results_attributes][1]['_destroy'] = true
 
-				expect { patch :update, params: { tested_on: tst.to_param, sti_test: pms} }.to change {tst.reload.results.count}.by -1
+				expect { patch :update, params: { tested_on: tst.to_param, sti_test: pms } }.to change {
+																																																																																					tst.reload.results.count
+																																																																																				}.by -1
 			end
 
 			it 'can change the date of the test' do
@@ -172,7 +176,7 @@ RSpec.describe StiTestsController, type: :controller do
 				new_tested_on = tst.tested_on + 1.day
 				pms['tested_on'] = new_tested_on
 
-				patch :update, params: { tested_on: tst.to_param, sti_test: pms}
+				patch :update, params: { tested_on: tst.to_param, sti_test: pms }
 
 				expect(tst.reload.tested_on).to eq new_tested_on
 			end
@@ -189,7 +193,9 @@ RSpec.describe StiTestsController, type: :controller do
 		end
 
 		it 'destroys the given sti_test' do
-			expect{ delete :destroy, params: { tested_on: @user.sti_tests.last.to_param } }.to change { @user.reload.sti_tests.count }.by -1
+			expect { delete :destroy, params: { tested_on: @user.sti_tests.last.to_param } }.to change {
+																																																																																								@user.reload.sti_tests.count
+																																																																																							}.by -1
 		end
 
 		it 'gives a flash success notice' do
@@ -220,7 +226,7 @@ RSpec.describe StiTestsController, type: :controller do
 			it 'returns an error message if a new test with the given date would not be unique' do
 				current_date = Date.current
 				@user.sti_tests << build(:sti_test, tested_on: current_date, tested_for: [:hiv])
-				get :unique, params: { tested_on: current_date}
+				get :unique, params: { tested_on: current_date }
 				expect(response.body).to include('You already gave us results for this date')
 			end
 		end
@@ -246,7 +252,7 @@ RSpec.describe StiTestsController, type: :controller do
 				original_date = @user.sti_tests.last.tested_on
 				current_date = original_date - 1.day
 				@user.sti_tests << build(:sti_test, tested_on: current_date, tested_for: [:hiv])
-				get :unique, params: { current_tested_on: original_date, tested_on: current_date}
+				get :unique, params: { current_tested_on: original_date, tested_on: current_date }
 				expect(response.body).to include('You already gave us results for this date')
 			end
 		end

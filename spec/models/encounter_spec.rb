@@ -10,7 +10,8 @@ RSpec.describe Encounter, type: :model do
 			@hand = create(:contact_instrument, name: :hand)
 			@genitals = create(:contact_instrument, name: :genitals)
 			@possible1 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @hand)
-			@possible2 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand, object_instrument: @genitals)
+			@possible2 = create(:possible_contact, contact_type: :touched, subject_instrument: @hand,
+																																										object_instrument: @genitals)
 		end
 
 		after :each do

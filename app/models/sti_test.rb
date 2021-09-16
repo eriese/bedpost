@@ -7,13 +7,13 @@ class StiTest
 	accepts_nested_attributes_for :results, allow_destroy: true
 	index({ tested_on: -1 }, unique: true)
 	validates :tested_on,
-		presence: true,
-		uniqueness: {
-			message: -> (object, _data) do
-				url = Rails.application.routes.url_helpers.edit_sti_test_path(object)
-				I18n.t 'mongoid.errors.models.sti_test.attributes.tested_on.taken_html', url: url
-			end
-		}
+											presence: true,
+											uniqueness: {
+												message: ->(object, _data) do
+													url = Rails.application.routes.url_helpers.edit_sti_test_path(object)
+													I18n.t 'mongoid.errors.models.sti_test.attributes.tested_on.taken_html', url: url
+												end
+											}
 
 	PARAM_FORMAT = '%b-%d-%Y'.freeze
 

@@ -1,5 +1,4 @@
 FactoryBot.define do
-  factory :possible_contact do
-    
-  end
+	factory :possible_contact do
+	end
 end

@@ -18,7 +18,8 @@ class Encounter
 
 	validates_presence_of :took_place
 	validates_length_of :contacts, minimum: 1
-	validates :self_risk, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: Diagnosis::TransmissionRisk::NO_RISK, less_than_or_equal_to: Diagnosis::TransmissionRisk::HIGH}
+	validates :self_risk, presence: true,
+																							numericality: { only_integer: true, greater_than_or_equal_to: Diagnosis::TransmissionRisk::NO_RISK, less_than_or_equal_to: Diagnosis::TransmissionRisk::HIGH }
 
 	def risks
 		@risks || {}

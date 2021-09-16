@@ -2,10 +2,26 @@ require 'rails_helper'
 
 RSpec.describe Encounter::RiskCalculator, type: :model do
 	before :each do
-		allow(Diagnosis).to receive(:as_map) {Hash.new {|hsh, key| hsh[key] = build_stubbed(:diagnosis, {name: key})}}
-		allow(PossibleContact).to receive(:as_map) {Hash.new { |hsh, key| hsh[key] = build_stubbed(:possible_contact, {subject_instrument_id: :external_genitals, object_instrument_id: :internal_genitals, _id: key}) }}
-		allow(Contact::Instrument).to receive(:as_map) {Hash.new { |hsh, key| hsh[key] = build_stubbed(:contact_instrument, {name: key}) }}
-		allow(Diagnosis::TransmissionRisk).to receive(:grouped_by) {Hash.new { |hsh, key| hsh[key] = [build_stubbed(:diagnosis_transmission_risk, {possible_contact_id: key})] }}
+		allow(Diagnosis).to receive(:as_map) { Hash.new { |hsh, key| hsh[key] = build_stubbed(:diagnosis, { name: key }) } }
+		allow(PossibleContact).to receive(:as_map) {
+																													Hash.new { |hsh, key|
+																														hsh[key] =
+																															build_stubbed(:possible_contact,
+																																													{ subject_instrument_id: :external_genitals,
+																																															object_instrument_id: :internal_genitals, _id: key })
+																													}
+																												}
+		allow(Contact::Instrument).to receive(:as_map) {
+																																	Hash.new { |hsh, key|
+																																		hsh[key] = build_stubbed(:contact_instrument, { name: key })
+																																	}
+																																}
+		allow(Diagnosis::TransmissionRisk).to receive(:grouped_by) {
+																																									Hash.new { |hsh, key|
+																																										hsh[key] =
+																																											[build_stubbed(:diagnosis_transmission_risk, { possible_contact_id: key })]
+																																									}
+																																								}
 	end
 
 	def stub_encounter
@@ -18,24 +34,23 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 		@user.encounters.first
 	end
 
-
 	it 'creates a map showing the highest transmission risk of the encounter for each diagnosis' do
 		encounter = stub_encounter
 
 		calc = Encounter::RiskCalculator.new(encounter)
 		risks = calc.instance_variable_get(:@risks)
 
-		contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1"})
+		contact1 = build_stubbed(:encounter_contact, { possible_contact_id: 'contact1' })
 		calc.track_contact(contact1)
 		risk1 = risks[contact1.possible_contact_id][0]
 
 		expect(calc.risk_map[risk1.diagnosis_id]).to eq risk1.risk_to_subject
 
-		contact2 = build_stubbed(:encounter_contact, {possible_contact_id: "contact2"})
+		contact2 = build_stubbed(:encounter_contact, { possible_contact_id: 'contact2' })
 		calc.track_contact(contact2)
 		risk2 = risks[contact2.possible_contact_id][0]
 
-		contact3 = build_stubbed(:encounter_contact, {possible_contact_id: "contact3"})
+		contact3 = build_stubbed(:encounter_contact, { possible_contact_id: 'contact3' })
 		calc.track_contact(contact3)
 		risk3 = risks[contact3.possible_contact_id][0]
 
@@ -46,12 +61,12 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 	describe '#track_contact' do
 		describe 'with an effective barrier' do
 			it 'returns negligible risk' do
-				contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1", barriers: ["fresh"]})
+				contact1 = build_stubbed(:encounter_contact, { possible_contact_id: 'contact1', barriers: ['fresh'] })
 				encounter = stub_encounter
 				encounter.contacts = [contact1]
 				calc = Encounter::RiskCalculator.new(encounter)
 
-				calc.instance_variable_get(:@risks)["contact1"][0].risk_to_subject = Diagnosis::TransmissionRisk::HIGH
+				calc.instance_variable_get(:@risks)['contact1'][0].risk_to_subject = Diagnosis::TransmissionRisk::HIGH
 
 				calc.track_contact(contact1)
 
@@ -62,9 +77,9 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 
 	describe '#track' do
 		before :each do
-			@contact1 = build_stubbed(:encounter_contact, {possible_contact_id: "contact1"})
-			@contact2 = build_stubbed(:encounter_contact, {possible_contact_id: "contact2"})
-			@contact3 = build_stubbed(:encounter_contact, {possible_contact_id: "contact3", barriers: ["fresh"]})
+			@contact1 = build_stubbed(:encounter_contact, { possible_contact_id: 'contact1' })
+			@contact2 = build_stubbed(:encounter_contact, { possible_contact_id: 'contact2' })
+			@contact3 = build_stubbed(:encounter_contact, { possible_contact_id: 'contact3', barriers: ['fresh'] })
 
 			@encounter = stub_encounter
 			@encounter.contacts = [@contact1, @contact2, @contact3]
@@ -73,7 +88,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 		end
 
 		it 'tracks all contacts in an encounter' do
-			allow(@encounter.partnership).to receive(:risk_mitigator) {0}
+			allow(@encounter.partnership).to receive(:risk_mitigator) { 0 }
 			@calc.track
 
 			risks = @calc.instance_variable_get(:@risks)
@@ -91,7 +106,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 			context 'when calculating risk-to-user' do
 				it 'mitigates risks by the partnership risk mitgator' do
 					mitigation = 1
-					allow(@encounter.partnership).to receive(:risk_mitigator) {mitigation}
+					allow(@encounter.partnership).to receive(:risk_mitigator) { mitigation }
 					risks = @calc.instance_variable_get(:@risks)
 					risk1 = risks[@contact1.possible_contact_id][0]
 					risk1.risk_to_subject = 3
@@ -102,7 +117,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 
 				it 'does not mitigate below negligible' do
 					mitigation = 1
-					allow(@encounter.partnership).to receive(:risk_mitigator) {mitigation}
+					allow(@encounter.partnership).to receive(:risk_mitigator) { mitigation }
 					risks = @calc.instance_variable_get(:@risks)
 					risk1 = risks[@contact1.possible_contact_id][0]
 					risk1.risk_to_subject = Diagnosis::TransmissionRisk::NEGLIGIBLE
@@ -115,7 +130,7 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 			context 'when calculating risk-to-partner' do
 				it 'mitigates risk by the user risk mitgator' do
 					mitigation = 1
-					allow(@user).to receive(:risk_mitigator) {mitigation}
+					allow(@user).to receive(:risk_mitigator) { mitigation }
 					risks = @calc.instance_variable_get(:@risks)
 					risk1 = risks[@contact1.possible_contact_id][0]
 					risk1.risk_to_object = 3
@@ -125,16 +140,16 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 				end
 			end
 
-				it 'does not mitigate below no risk' do
-					mitigation = 2
-					allow(@user).to receive(:risk_mitigator) {mitigation}
-					risks = @calc.instance_variable_get(:@risks)
-					risk1 = risks[@contact1.possible_contact_id][0]
-					risk1.risk_to_object = Diagnosis::TransmissionRisk::NO_RISK + 1
+			it 'does not mitigate below no risk' do
+				mitigation = 2
+				allow(@user).to receive(:risk_mitigator) { mitigation }
+				risks = @calc.instance_variable_get(:@risks)
+				risk1 = risks[@contact1.possible_contact_id][0]
+				risk1.risk_to_object = Diagnosis::TransmissionRisk::NO_RISK + 1
 
-					@calc.track(:partner)
-					expect(@contact1.risks[risk1.diagnosis_id][0]).to eq(Diagnosis::TransmissionRisk::NO_RISK)
-				end
+				@calc.track(:partner)
+				expect(@contact1.risks[risk1.diagnosis_id][0]).to eq(Diagnosis::TransmissionRisk::NO_RISK)
+			end
 		end
 	end
 
@@ -206,8 +221,10 @@ RSpec.describe Encounter::RiskCalculator, type: :model do
 			instruments = calc.instance_variable_get(:@instruments)
 			instruments[:fingers].alias_of_id = :hand
 
-			cur_possible = build_stubbed(:possible_contact, {subject_instrument_id: :fingers, object_instrument_id: :internal_genitals, _id: "pos1"})
-			cur_contact = build_stubbed(:encounter_contact, possible_contact_id: "pos1")
+			cur_possible = build_stubbed(:possible_contact,
+																																{ subject_instrument_id: :fingers, object_instrument_id: :internal_genitals,
+																																		_id: 'pos1' })
+			cur_contact = build_stubbed(:encounter_contact, possible_contact_id: 'pos1')
 			calc.instance_variable_set(:@cur_possible, cur_possible)
 			calc.instance_variable_set(:@cur_contact, cur_contact)
 

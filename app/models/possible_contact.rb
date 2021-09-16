@@ -3,7 +3,7 @@ class PossibleContact < Contact::BaseContact
 
 	field :self_possible, type: Boolean, default: false
 
-	index({contact_type: 1}, {unique: false})
+	index({ contact_type: 1 }, { unique: false })
 	has_many :transmission_risks, class_name: 'Diagnosis::TransmissionRisk'
 
 	def self.hashed_for_partnership

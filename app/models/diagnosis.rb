@@ -3,7 +3,7 @@ class Diagnosis
 	include StaticResource
 
 	field :name, type: Symbol
-	field :_id, type: Symbol, default: ->{ name }
+	field :_id, type: Symbol, default: -> { name }
 	field :gestation_min, type: Integer
 	field :gestation_max, type: Integer
 	field :in_fluids, type: Boolean
@@ -16,5 +16,4 @@ class Diagnosis
 	def best_test
 		@best ||= gestation_min + gestation_max * 0.25
 	end
-
 end

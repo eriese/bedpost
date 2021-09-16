@@ -26,6 +26,7 @@ class UserProfiles::SessionsController < Devise::SessionsController
 	# end
 	def set_flash_message(key, kind, options = {})
 		return if !options[:now] && flash[key] && performed?
+
 		super
 	end
 end

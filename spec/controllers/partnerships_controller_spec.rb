@@ -16,7 +16,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			dummy_user.save
 			@ship = dummy_user.partnerships.last
 
-			get :show, params: {id: @ship.id}, session: dummy_user_session
+			get :show, params: { id: @ship.id }, session: dummy_user_session
 			expect(assigns(:partnership)).to eq @ship
 		end
 
@@ -26,7 +26,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			@profile.save
 			ship = @profile.partnerships.last
 
-			get :show, params: {id: ship.id}, session: dummy_user_session
+			get :show, params: { id: ship.id }, session: dummy_user_session
 			expect(response).to redirect_to partnerships_path
 		end
 	end
@@ -50,7 +50,7 @@ RSpec.describe PartnershipsController, type: :controller do
 		it 'adds the encounter flow tag to the session if there is an encounter parameter' do
 			@profile = create(:user_profile)
 			sign_in(@profile)
-			get :new, params: {enc: 'true'}
+			get :new, params: { enc: 'true' }
 			expect(session[:new_encounter]).to be true
 		end
 	end
@@ -68,7 +68,7 @@ RSpec.describe PartnershipsController, type: :controller do
 		context 'with a valid partnership' do
 			it 'saves the partnership to the user if the partnership has a uid' do
 				@partner = create(:user_profile)
-				post :create, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
+				post :create, params: { partnership: attributes_for(:partnership, uid: @partner.uid) }
 
 				expect(controller.current_user_profile).to eq @user
 				expect(controller.current_user_profile.partnerships.length).to eq 1
@@ -76,7 +76,7 @@ RSpec.describe PartnershipsController, type: :controller do
 
 			it 'saves the partnership to the user if the partnership has no uid, but has params for a partner profile' do
 				ship_attributes = attributes_for(:partnership, partner_attributes: attributes_for(:profile))
-				post :create, params: {partnership: ship_attributes}
+				post :create, params: { partnership: ship_attributes }
 				@partner = Profile.last
 				@user.reload
 
@@ -87,7 +87,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			it 'chooses a valid uid over creating a new user' do
 				@partner = create(:user_profile)
 				ship_attributes = attributes_for(:partnership, partner_attributes: attributes_for(:profile), uid: @partner.uid)
-				expect { post :create, params: {partnership: ship_attributes} }.not_to change(Profile, :count)
+				expect { post :create, params: { partnership: ship_attributes } }.not_to change(Profile, :count)
 
 				@user.reload
 				expect(@user.partnerships.length).to eq 1
@@ -97,14 +97,15 @@ RSpec.describe PartnershipsController, type: :controller do
 			describe 'redirects' do
 				it 'redirects to the show partnership page for the new partnership if it is not part of an encounter flow' do
 					@partner = create(:user_profile)
-					post :create, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
+					post :create, params: { partnership: attributes_for(:partnership, uid: @partner.uid) }
 
 					expect(response).to redirect_to @user.reload.partnerships.last
 				end
 
 				it 'redirects to the new encounter form for the partnerhip if it is part of an encounter flow' do
 					@partner = create(:user_profile)
-					post :create, session: {new_encounter: true}, params: {partnership: attributes_for(:partnership, uid: @partner.uid)}
+					post :create, session: { new_encounter: true },
+																			params: { partnership: attributes_for(:partnership, uid: @partner.uid) }
 
 					ship = @user.reload.partnerships.last
 					expect(response).to redirect_to new_encounter_path(partnership_id: ship.id)
@@ -114,13 +115,13 @@ RSpec.describe PartnershipsController, type: :controller do
 
 		context 'with invalid partnership' do
 			it 'reloads the page' do
-				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership)}
+				post :create, session: { user_id: @user.id }, params: { partnership: attributes_for(:partnership) }
 
 				expect(response).to redirect_to new_partnership_path
 			end
 
 			it 'does not leave an unsaved partnership on the user' do
-				post :create, session: {user_id: @user.id}, params: {partnership: attributes_for(:partnership)}
+				post :create, session: { user_id: @user.id }, params: { partnership: attributes_for(:partnership) }
 
 				expect(controller.current_user_profile.partnerships.length).to eq 0
 			end
@@ -138,12 +139,12 @@ RSpec.describe PartnershipsController, type: :controller do
 			@partner = create(:profile)
 			ship = @user.partnerships.create(partner: @partner)
 
-			get :edit, session: {user_id: @user.id}, params: {id: ship.id}
+			get :edit, session: { user_id: @user.id }, params: { id: ship.id }
 			expect(assigns(:partnership)).to eq ship
 		end
 
 		it 'redirects to the partnership index page if the partnership does not exist' do
-			get :edit, session: dummy_user_session, params: {id: "nonsense"}
+			get :edit, session: dummy_user_session, params: { id: 'nonsense' }
 			expect(request).to redirect_to partnerships_path
 		end
 	end
@@ -160,8 +161,8 @@ RSpec.describe PartnershipsController, type: :controller do
 				@partner = create(:profile)
 				ship = @user.partnerships.create(partner: @partner)
 
-				new_name = "from camp"
-				post :update, session: {user_id: @user.id}, params: {id: ship.id, partnership: {nickname: new_name}}
+				new_name = 'from camp'
+				post :update, session: { user_id: @user.id }, params: { id: ship.id, partnership: { nickname: new_name } }
 
 				ship.reload
 				expect(ship.nickname).to eq new_name
@@ -174,7 +175,7 @@ RSpec.describe PartnershipsController, type: :controller do
 				sign_in @user
 				ship = @user.partnerships.create(partner: dummy_user)
 
-				post :update, session: {user_id: @user.id}, params: {id: ship.id, partnership: {familiarity: 11}}
+				post :update, session: { user_id: @user.id }, params: { id: ship.id, partnership: { familiarity: 11 } }
 				expect(response).to redirect_to edit_partnership_path(ship)
 				expect(flash[:submission_error]).to have_key(:familiarity)
 			end
@@ -191,7 +192,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			sign_in @user
 			ship = @user.partnerships.create(partner: dummy_user)
 
-			delete :destroy, params: {id: ship.to_param}, session: {user_id: @user.id}
+			delete :destroy, params: { id: ship.to_param }, session: { user_id: @user.id }
 			expect(@user.reload.partnerships.count).to eq 0
 		end
 
@@ -200,7 +201,7 @@ RSpec.describe PartnershipsController, type: :controller do
 			sign_in @user
 			ship = @user.partnerships.create(partner: dummy_user)
 
-			delete :destroy, params: {id: ship.to_param}, session: {user_id: @user.id}
+			delete :destroy, params: { id: ship.to_param }, session: { user_id: @user.id }
 			expect(response).to redirect_to partnerships_path
 		end
 	end

@@ -49,7 +49,7 @@ RSpec.describe EncountersHelper, type: :helper do
 
 		context 'with a forced schedule' do
 			before do
-				@encounter = instance_double("Encounter", risks:
+				@encounter = instance_double('Encounter', risks:
 					{
 						hpv: Diagnosis::TransmissionRisk::HIGH,
 						hsv: Diagnosis::TransmissionRisk::MODERATE,

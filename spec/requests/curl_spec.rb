@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Curl", type: :request do
+RSpec.describe 'Curl', type: :request do
 	let(:headers) do
 		{ 'ACCEPT' => '*/*' }
 	end

@@ -17,6 +17,7 @@ module I18n
 				begin
 					result = super
 					return result unless result.nil? || (result.is_a?(Hash) && cascade[:allow_hash] == false)
+
 					scope = scope.dup
 				end while (!scope.empty? || !skip_root) && scope.slice!(-step, step)
 			end
@@ -29,7 +30,7 @@ I18n::Backend::Simple.send(:include, I18n::Backend::Cascade)
 
 ActionView::Base.class_eval do
 	def translate(key, **options)
-		adl_opts = options[:cascade] == false ? {} : {cascade: { skip_root: false, allow_hash: options.has_key?(:count) }}
+		adl_opts = options[:cascade] == false ? {} : { cascade: { skip_root: false, allow_hash: options.has_key?(:count) } }
 		super(key, **options.reverse_merge(adl_opts))
 	end
 	alias t translate

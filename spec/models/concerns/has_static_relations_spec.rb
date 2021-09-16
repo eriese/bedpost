@@ -39,7 +39,7 @@ RSpec.describe HasStaticRelations, type: :module do
 		it 'looks in the cache map for the value' do
 			model = StaticRelationTestModel.new(static_resource_relation_id: @rel1._id)
 			allow(StaticResourceRelation).to receive(:as_map).and_call_original
-			allow(StaticResourceRelation).to receive(:find) {nil }
+			allow(StaticResourceRelation).to receive(:find) { nil }
 			expect(model.static_resource_relation).to eq @rel1
 			expect(StaticResourceRelation).to have_received :as_map
 		end
@@ -47,8 +47,8 @@ RSpec.describe HasStaticRelations, type: :module do
 
 	describe 'validation' do
 		it 'does not call find when validating the relation' do
-			model = StaticRelationTestModel.new(static_resource_relation_id: "invalid")
-			allow(StaticResourceRelation).to receive(:find) {StaticResourceRelation.new }
+			model = StaticRelationTestModel.new(static_resource_relation_id: 'invalid')
+			allow(StaticResourceRelation).to receive(:find) { StaticResourceRelation.new }
 			expect(model.valid?).to be false
 		end
 	end

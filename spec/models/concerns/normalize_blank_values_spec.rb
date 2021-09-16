@@ -25,20 +25,20 @@ RSpec.describe NormalizeBlankValues, type: :module do
 
 	describe '#normalize_blank_values' do
 		it 'is called on save' do
-			obj = NormalizerTestModel.new(f_1: "a string", f_2: true, f_3: [1, 2, 3])
+			obj = NormalizerTestModel.new(f_1: 'a string', f_2: true, f_3: [1, 2, 3])
 			allow(obj).to receive(:normalize_blank_values)
 			obj.save
 			expect(obj).to have_received(:normalize_blank_values)
 		end
 
 		it 'normalizes empty string fields to nil' do
-			obj = NormalizerTestModel.new(f_1: "", f_2: true, f_3: [1, 2, 3])
+			obj = NormalizerTestModel.new(f_1: '', f_2: true, f_3: [1, 2, 3])
 			obj.normalize_blank_values
 			expect(obj.f_1).to be_nil
 		end
 
 		it 'normalizes empty boolean fields to false' do
-			obj = NormalizerTestModel.new(f_1: "a string", f_2: "", f_3: [1, 2, 3])
+			obj = NormalizerTestModel.new(f_1: 'a string', f_2: '', f_3: [1, 2, 3])
 			obj.normalize_blank_values
 			expect(obj.f_2).to be false
 
@@ -48,20 +48,20 @@ RSpec.describe NormalizeBlankValues, type: :module do
 		end
 
 		it 'normalizes empty array fields to nil' do
-			obj = NormalizerTestModel.new(f_1: "a string", f_2: true, f_3: [])
+			obj = NormalizerTestModel.new(f_1: 'a string', f_2: true, f_3: [])
 			obj.normalize_blank_values
 			expect(obj.f_3).to be_nil
 		end
 
 		it 'normalizes nil array fields to nil' do
-			obj = NormalizerTestModel.new(f_1: "a string", f_2: true, f_3: nil)
+			obj = NormalizerTestModel.new(f_1: 'a string', f_2: true, f_3: nil)
 			obj.normalize_blank_values
 			expect(obj.f_3).to be_nil
 		end
 
 		it 'gracefully handles embedded objects' do
-			obj = NormalizerEmbeddingModel.create(f_1: "a string", normalizer_test_models: nil)
-			expect {obj.normalize_blank_values}.to_not raise_error
+			obj = NormalizerEmbeddingModel.create(f_1: 'a string', normalizer_test_models: nil)
+			expect { obj.normalize_blank_values }.to_not raise_error
 			expect(obj.normalizer_test_models).to eq []
 		end
 	end

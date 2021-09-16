@@ -31,6 +31,7 @@ class PartnershipWhosController < ApplicationController
 	end
 
 	private
+
 	def clear_unsaved
 		current_user_profile.clear_unsaved_partnerships
 	end

@@ -74,8 +74,8 @@ class EncountersController < ApplicationController
 		redirect_to encounters_path
 	end
 
-
 	private
+
 	def set_encounter
 		@encounter = current_user_profile.encounters.find(params[:id])
 		@partnership = @encounter.partnership
@@ -88,9 +88,10 @@ class EncountersController < ApplicationController
 	end
 
 	def e_params
-		c_attrs = [{:barriers => []}, :possible_contact_id, :position, :_destroy, :subject, :object]
-		c_attrs << :_id unless action_name == "create"
-		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, :partnership_id, contacts_attributes: c_attrs)
+		c_attrs = [{ :barriers => [] }, :possible_contact_id, :position, :_destroy, :subject, :object]
+		c_attrs << :_id unless action_name == 'create'
+		params.require(:encounter).permit(:notes, :fluids, :self_risk, :took_place, :partnership_id,
+																																				contacts_attributes: c_attrs)
 	end
 
 	def gon_encounter_data

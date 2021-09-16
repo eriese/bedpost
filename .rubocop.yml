@@ -13,8 +13,8 @@ require:
   - rubocop-rspec
   - rubocop-rails
   - rubocop-performance
-Layout/Tab:
-  Enabled: false
+Layout/IndentationStyle:
+  EnforcedStyle: tabs
 Layout/IndentationWidth:
   Width: 1
 Layout/MultilineOperationIndentation:

@@ -1,5 +1,4 @@
 module FeatureHelpers
-
 	def t_text(key, **options)
 		strip_tags(I18n.t(key, options)).strip
 	end
@@ -10,7 +9,7 @@ module FeatureHelpers
 
 	def login_new_user
 		user_params = attributes_for(:user_profile)
-		@user = create(:user_profile, user_params);
+		@user = create(:user_profile, user_params)
 
 		visit new_user_profile_session_path
 		fill_in 'Email*', with: @user.email
@@ -29,7 +28,7 @@ module FeatureHelpers
 		fill_in 'Email*', with: @user_params[:email]
 		fill_in 'Password*', with: @user_params[:password]
 		fill_in 'Confirm your password*', with: @user_params[:password]
-		click_button "signup-submit"
+		click_button 'signup-submit'
 	end
 
 	def fill_in_profile(user_params = nil, is_user: true)
@@ -44,11 +43,11 @@ module FeatureHelpers
 		click_button 'Save' if is_user
 	end
 
-	def fill_in_partnership(and_profile=true)
-		fill_in "partnership_nickname", with: "nickname"
+	def fill_in_partnership(and_profile = true)
+		fill_in 'partnership_nickname', with: 'nickname'
 		# fill in form and submit
 		fields = Partnership::LEVEL_FIELDS
-		lvls = Array.new(fields.length) {rand(1..10).to_s}
+		lvls = Array.new(fields.length) { rand(1..10).to_s }
 		indexes = (0...fields.length)
 		indexes.each do |i|
 			fill_in "partnership_#{fields[i]}", with: lvls[i]

@@ -1,9 +1,11 @@
 module UserProfileHelpers
 	private
+
 	@@_dummy_user = nil
 	@@_dummy_pronoun = nil
 
 	public
+
 	def dummy_user
 		dummy_pronoun
 		@@_dummy_user ||= FactoryBot.create(:user_profile, name: 'dummy')

@@ -16,7 +16,8 @@ class PartnershipsController < ApplicationController
 
 	def create
 		ship_params_uid = params.require(:partnership).permit(Partnership::LEVEL_FIELDS + [:nickname, :uid])
-		ship_params_partner = params.require(:partnership).permit(partner_attributes: [:anus_name, :can_penetrate, :external_name, :internal_name, :name, :pronoun_id])
+		ship_params_partner = params.require(:partnership).permit(partner_attributes: [:anus_name, :can_penetrate,
+																																																																																	:external_name, :internal_name, :name, :pronoun_id])
 
 		partnership = current_user_profile.partnerships.new(ship_params_uid)
 
@@ -49,6 +50,7 @@ class PartnershipsController < ApplicationController
 	end
 
 	private
+
 	def clear_unsaved
 		current_user_profile.clear_unsaved_partnerships
 	end
@@ -58,5 +60,4 @@ class PartnershipsController < ApplicationController
 	rescue Mongoid::Errors::DocumentNotFound
 		redirect_to partnerships_path
 	end
-
 end

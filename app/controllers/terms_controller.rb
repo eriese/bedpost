@@ -22,7 +22,8 @@ class TermsController < ApplicationController
 				return
 			end
 		end
-		respond_with_submission_error({acceptance: [I18n.t('mongoid.errors.models.user_profile.attributes.tou.acceptance')]}, term_path(term_type))
+		respond_with_submission_error({ acceptance: [I18n.t('mongoid.errors.models.user_profile.attributes.tou.acceptance')] },
+																																term_path(term_type))
 	end
 
 	def validate_type

@@ -2,6 +2,7 @@ module CleanupHelpers
 	def cleanup(*objs, debug: false)
 		objs.each do |o|
 			next unless o
+
 			if !(o.destroy || o.reload.destroy)
 				puts ("unable to delete #{o.id}: #{o} because #{o.errors.messages}")
 			elsif debug
@@ -22,7 +23,7 @@ module CleanupHelpers
 		Delayed::Backend::Mongoid::Job.where(:queue.in => ['devise_notifications', 'mailers']).destroy_all
 	end
 
-	def print_db_remnants(include_dummies=true)
+	def print_db_remnants(include_dummies = true)
 		db_has = false
 		Mongoid.default_client.collections.each do |c|
 			if c.count > 0 && (include_dummies || !collection_is_only_dummy?(c))

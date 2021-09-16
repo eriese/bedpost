@@ -18,7 +18,7 @@ RSpec.describe StaticResource, type: :module do
 		Rails.cache.redis.data
 	end
 
-	def in_cache?(cache_name = "list")
+	def in_cache?(cache_name = 'list')
 		Rails.cache.exist?(cache_name, namespace: StaticResourceTestModel.name)
 	end
 
@@ -37,7 +37,7 @@ RSpec.describe StaticResource, type: :module do
 
 			model = StaticResourceTestModel.first
 			expect(model).to receive(:clear_all_caches).and_call_original
-			model.update(f_1: "changed")
+			model.update(f_1: 'changed')
 			expect(cache_data).to be_empty
 		end
 
@@ -66,22 +66,22 @@ RSpec.describe StaticResource, type: :module do
 		it 'only clears its own caches' do
 			make_models(3)
 			StaticResourceTestModel.list
-			Rails.cache.write("other cache", "some string")
+			Rails.cache.write('other cache', 'some string')
 
 			StaticResourceTestModel.first.clear_all_caches
 			expect(in_cache?).to be false
-			expect(Rails.cache.exist?("other cache")).to be true
+			expect(Rails.cache.exist?('other cache')).to be true
 		end
 
 		it 'keeps to itself even with similar class names' do
 			make_models(3)
 			StaticResourceTestModel.list
-			other_namespace = StaticResourceTestModel.name + " "
-			Rails.cache.write("other", "some string", namespace: other_namespace)
+			other_namespace = StaticResourceTestModel.name + ' '
+			Rails.cache.write('other', 'some string', namespace: other_namespace)
 
 			StaticResourceTestModel.first.clear_all_caches
 			expect(in_cache?).to be false
-			expect(Rails.cache.exist?("other", namespace: other_namespace)).to be true
+			expect(Rails.cache.exist?('other', namespace: other_namespace)).to be true
 		end
 	end
 
@@ -117,7 +117,7 @@ RSpec.describe StaticResource, type: :module do
 				make_models(3)
 				expect(StaticResourceTestModel).to receive(:all).once.and_call_original
 				StaticResourceTestModel.as_map
-				expect(in_cache?("as_map")).to be true
+				expect(in_cache?('as_map')).to be true
 				StaticResourceTestModel.as_map
 			end
 		end
@@ -136,8 +136,8 @@ RSpec.describe StaticResource, type: :module do
 			context 'without arguments' do
 				it 'calls order and then last' do
 					make_models(2)
-					order_query = double('OrderQuery', {last: nil})
-					allow(StaticResourceTestModel).to receive(:order) {order_query}
+					order_query = double('OrderQuery', { last: nil })
+					allow(StaticResourceTestModel).to receive(:order) { order_query }
 					StaticResourceTestModel.newest
 					expect(StaticResourceTestModel).to have_received(:order).with(updated_at: :asc)
 					expect(order_query).to have_received(:last)
@@ -156,7 +156,7 @@ RSpec.describe StaticResource, type: :module do
 					order_query = double('OrderQuery', last: nil)
 					where_query = double('WhereQuery', order: order_query)
 
-					allow(StaticResourceTestModel).to receive(:where) {where_query}
+					allow(StaticResourceTestModel).to receive(:where) { where_query }
 					StaticResourceTestModel.newest(f_1: nil)
 					expect(StaticResourceTestModel).to have_received(:where).with(f_1: nil)
 					expect(where_query).to have_received(:order).with(updated_at: :asc)
@@ -165,7 +165,7 @@ RSpec.describe StaticResource, type: :module do
 
 				it 'caches' do
 					make_models(1)
-					args = {f_1: nil}
+					args = { f_1: nil }
 					StaticResourceTestModel.newest(**args)
 					expect(in_cache? "newest#{args.to_json}").to be true
 				end
@@ -174,26 +174,26 @@ RSpec.describe StaticResource, type: :module do
 
 		describe '#grouped_by' do
 			it 'caches by column and instantiation arguments' do
-				make_models(2, f_1: "first")
-				make_models(3, f_1: "second")
+				make_models(2, f_1: 'first')
+				make_models(3, f_1: 'second')
 				StaticResourceTestModel.grouped_by(:f_1)
-				expect(in_cache?("f_1_true")).to be true
+				expect(in_cache?('f_1_true')).to be true
 				StaticResourceTestModel.grouped_by(:f_1, false)
-				expect(in_cache?("f_1_false")).to be true
+				expect(in_cache?('f_1_false')).to be true
 			end
 
 			context 'with instantiate = true (default)' do
 				it 'returns a hash of arrays of all entries keyed by their values for the given column' do
 					num_first = 3
-					make_models(num_first, f_1: "first")
+					make_models(num_first, f_1: 'first')
 					num_second = 4
-					make_models(num_second, f_1: "second")
+					make_models(num_second, f_1: 'second')
 
 					result = StaticResourceTestModel.grouped_by(:f_1)
 					expect(result).to be_a(HashWithIndifferentAccess)
 					expect(result.keys.size).to be 2
 					expect(result[:first].size).to be num_first
-					expect(result["second"].size).to be num_second
+					expect(result['second'].size).to be num_second
 					expect(result[:first][0]).to be_a(StaticResourceTestModel)
 				end
 			end
@@ -201,15 +201,15 @@ RSpec.describe StaticResource, type: :module do
 			context 'with instantiate = false' do
 				it 'returns a hash of arrays of all entries keyed by their values for the given column' do
 					num_first = 3
-					make_models(num_first, f_1: "first")
+					make_models(num_first, f_1: 'first')
 					num_second = 4
-					make_models(num_second, f_1: "second")
+					make_models(num_second, f_1: 'second')
 
 					result = StaticResourceTestModel.grouped_by(:f_1, false)
 					expect(result).to be_a(HashWithIndifferentAccess)
 					expect(result.keys.size).to be 2
 					expect(result[:first].size).to be num_first
-					expect(result["second"].size).to be num_second
+					expect(result['second'].size).to be num_second
 					expect(result[:first][0]).to be_a(Hash)
 				end
 			end
@@ -219,8 +219,8 @@ RSpec.describe StaticResource, type: :module do
 			it 'caches the result' do
 				model = StaticResourceTestModel.create
 				expect(StaticResourceTestModel).to receive(:find).with(model.id).once
-				StaticResourceTestModel.cached(model.id) {StaticResourceTestModel.find(model.id)}
-				StaticResourceTestModel.cached(model.id) {StaticResourceTestModel.find(model.id)}
+				StaticResourceTestModel.cached(model.id) { StaticResourceTestModel.find(model.id) }
+				StaticResourceTestModel.cached(model.id) { StaticResourceTestModel.find(model.id) }
 				expect(in_cache?(model.id)).to be true
 			end
 

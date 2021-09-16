@@ -26,27 +26,27 @@ RSpec.describe Contact::ContactType, type: :model do
 			field :contact_type, type: Contact::ContactType
 		end
 
-  	after :each do
-  		cleanup(@model)
-  	end
+		after :each do
+			cleanup(@model)
+		end
 
-  	it 'sets properly' do
-  		@model = ContactTypeTestModel.new(contact_type: :penetrated)
-  		expect(@model.contact_type).to eq Contact::ContactType.get(:penetrated)
-  	end
+		it 'sets properly' do
+			@model = ContactTypeTestModel.new(contact_type: :penetrated)
+			expect(@model.contact_type).to eq Contact::ContactType.get(:penetrated)
+		end
 
-  	it 'saves properly with a key' do
-  		@model = ContactTypeTestModel.create(contact_type: :penetrated)
-  		@model.reload
-  		expect(@model.contact_type).to eq Contact::ContactType.get(:penetrated)
-  	end
+		it 'saves properly with a key' do
+			@model = ContactTypeTestModel.create(contact_type: :penetrated)
+			@model.reload
+			expect(@model.contact_type).to eq Contact::ContactType.get(:penetrated)
+		end
 
-  	it 'saves properly with an instance' do
-  		c_type = Contact::ContactType.get(:penetrated)
-  		@model = ContactTypeTestModel.create(contact_type: c_type)
-  		@model.reload
-  		expect(@model.contact_type).to eq c_type
-  	end
+		it 'saves properly with an instance' do
+			c_type = Contact::ContactType.get(:penetrated)
+			@model = ContactTypeTestModel.create(contact_type: c_type)
+			@model.reload
+			expect(@model.contact_type).to eq c_type
+		end
 	end
 
 	context 'constants' do

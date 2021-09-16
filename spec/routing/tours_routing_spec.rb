@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe ToursController, type: :routing do
 	describe 'routing' do

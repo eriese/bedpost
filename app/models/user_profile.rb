@@ -2,8 +2,8 @@ class UserProfile < Profile
 	# Include default devise modules. Others available are:
 	# :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
 	devise :database_authenticatable, :registerable,
-				 :recoverable, :validatable,
-				 :lockable, :timeoutable, :trackable
+								:recoverable, :validatable,
+								:lockable, :timeoutable, :trackable
 
 	## Database authenticatable
 	field :email,                  type: String, default: ''
@@ -43,7 +43,7 @@ class UserProfile < Profile
 	field :tours,                  type: Set
 
 	index({ email: 1 }, unique: true, sparse: true)
-	index({ uid: 1 }, unique: true, sparse: true, collation: { locale: I18n.default_locale.to_s, strength: 2 } )
+	index({ uid: 1 }, unique: true, sparse: true, collation: { locale: I18n.default_locale.to_s, strength: 2 })
 
 	embeds_many :partnerships, cascade_callbacks: true
 	embeds_many :encounters, cascade_callbacks: true
@@ -129,12 +129,12 @@ class UserProfile < Profile
 	# An aggregate query to get the user's partnerships (including partner names) sorted by most-recent encounter
 	def partners_with_most_recent
 		UserProfile.collection.aggregate(partners_lookup(true) + [
-			{'$project' => {
-				most_recent: {'$max' => '$encounters.took_place'},
+			{ '$project' => {
+				most_recent: { '$max' => '$encounters.took_place' },
 				nickname: 1,
 				partner_name: partner_elem('name')
-			}},
-			{'$sort' => {most_recent: -1}}
+			} },
+			{ '$sort' => { most_recent: -1 } }
 		])
 	end
 
@@ -159,24 +159,23 @@ class UserProfile < Profile
 		lookup = partners_lookup(true)
 		if partnership_id.present?
 			partnership_id = BSON::ObjectId(partnership_id) unless partnership_id.is_a? BSON::ObjectId
-			lookup.insert(lookup_index(lookup), {'$match' => {'_id' => partnership_id}})
+			lookup.insert(lookup_index(lookup), { '$match' => { '_id' => partnership_id } })
 		else
-			lookup << {'$redact' => {
+			lookup << { '$redact' => {
 				'$cond' => {
-					if: {'$and' => [{'$isArray' => '$encounters'}, {'$gt' => [{'$size' => '$encounters'}, 0]}]},
+					if: { '$and' => [{ '$isArray' => '$encounters' }, { '$gt' => [{ '$size' => '$encounters' }, 0] }] },
 					then: '$$KEEP',
 					else: '$$PRUNE'
-					}
 				}
-			}
+			} }
 		end
 
 		UserProfile.collection.aggregate(lookup + [
-			{'$project' => {
-				encounters: {took_place: 1, notes: 1, _id: 1, partnership_id: 1},
+			{ '$project' => {
+				encounters: { took_place: 1, notes: 1, _id: 1, partnership_id: 1 },
 				nickname: 1,
 				partner_name: '$partner.name'
-			}}
+			} }
 		])
 	end
 
@@ -188,12 +187,12 @@ class UserProfile < Profile
 
 	def destroy_with_password(current_password)
 		result = if valid_password?(current_password)
-			soft_destroy
-		else
-			valid?
-			errors.add(:current_password, current_password.blank? ? :blank : :invalid)
-			false
-		end
+												soft_destroy
+											else
+												valid?
+												errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+												false
+											end
 
 		result
 	end
@@ -221,7 +220,6 @@ class UserProfile < Profile
 		Rails.env.development? ? 1.year : 30.minutes
 	end
 
-
 	def encode_with(coder)
 		super
 		coder['attributes'] = @attributes.except *BLACKLIST_FOR_SERIALIZATION
@@ -236,12 +234,12 @@ class UserProfile < Profile
 	end
 
 	def unauthenticated_message
-		if 	access_locked? ||
+		if	access_locked? ||
 				(lock_strategy_enabled?(:failed_attempts) && attempts_exceeded?)
 			:locked
 		elsif	lock_strategy_enabled?(:failed_attempts) &&
-					last_attempt? &&
-					self.class.last_attempt_warning
+				last_attempt? &&
+				self.class.last_attempt_warning
 			:last_attempt
 		else
 			super
@@ -259,14 +257,14 @@ class UserProfile < Profile
 	end
 
 	def self.with_uid(uid)
-		collation(locale: I18n.default_locale.to_s, strength: 2).
-			where(uid: uid).first
+		collation(locale: I18n.default_locale.to_s, strength: 2)
+			.where(uid: uid).first
 	end
 
 	private
 
 	def generate_uid
-		SecureRandom.uuid.slice(0,8)
+		SecureRandom.uuid.slice(0, 8)
 	end
 
 	def replace_with_dummy

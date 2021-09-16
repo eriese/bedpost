@@ -3,7 +3,7 @@ class Contact::Instrument
 	include StaticResource
 
 	field :name, type: Symbol
-	field :_id, type: Symbol, default: ->{ name }
+	field :_id, type: Symbol, default: -> { name }
 	field :user_override, type: Symbol
 	field :can_clean, type: Boolean, default: false
 	field :has_fluids, type: Boolean, default: true
@@ -11,7 +11,7 @@ class Contact::Instrument
 	field :subject_barriers, type: Array
 	field :object_barriers, type: Array
 
-	index({name: 1}, {unique: true})
+	index({ name: 1 }, { unique: true })
 
 	has_many :as_subject, class_name: 'PossibleContact', inverse_of: :subject_instrument, dependent: :restrict_with_error
 	has_many :as_object, class_name: 'PossibleContact', inverse_of: :object_instrument, dependent: :restrict_with_error
@@ -34,7 +34,8 @@ class Contact::Instrument
 	end
 
 	def self.hashed_for_partnership(user, partner)
-		Rails.cache.fetch("partnership_#{user.id}-#{user.updated_at}_#{partner.id}-#{partner.updated_at}", namespace: name, expires_in: 3.hours) do
+		Rails.cache.fetch("partnership_#{user.id}-#{user.updated_at}_#{partner.id}-#{partner.updated_at}", namespace: name,
+																																																																																																					expires_in: 3.hours) do
 			Hash[as_map.values.map do |i|
 				hsh = i.serializable_hash
 				# (methods: Contact::ContactType.inst_methods)

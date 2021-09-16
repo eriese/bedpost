@@ -12,20 +12,20 @@ Rails.application.routes.draw do
 			get 'beta_signup', to: 'user_profiles/registrations#new_beta', as: :beta_registration
 		end
 	end
-	devise_for :user_profiles, skip: [:registrations], path: "", singular: :user_profile, path_names: {
-			sign_in: 'login', sign_out: 'logout',
-			password: 'recover', confirmation: 'confirm',
-			unlock: 'unlock',
+	devise_for :user_profiles, skip: [:registrations], path: '', singular: :user_profile, path_names: {
+		sign_in: 'login', sign_out: 'logout',
+		password: 'recover', confirmation: 'confirm',
+		unlock: 'unlock',
 	}, controllers: {
 		sessions: 'user_profiles/sessions'
 	}
 	# authenticated :user_profile do
-		# root to: 'user_profiles#show'
+	# root to: 'user_profiles#show'
 	# end
 
 	get 'partners/uniqueness', to: 'partnership_whos#unique'
 
-	resources :partners, controller: "partnerships", as: "partnerships" do
+	resources :partners, controller: 'partnerships', as: 'partnerships' do
 		resource :profile, except: [:index, :new, :create]
 		get 'who', to: 'partnership_whos#edit'
 		put 'who', to: 'partnership_whos#update'

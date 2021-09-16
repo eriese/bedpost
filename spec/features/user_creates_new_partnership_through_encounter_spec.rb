@@ -1,13 +1,12 @@
 require 'rails_helper'
 
-feature "User creates new partnership through encounter", :slow do
-
+feature 'User creates new partnership through encounter', :slow do
 	before :each do
 		Terms.create(terms: 'some terms', type: :tou)
 		Terms.create(terms: 'some other terms', type: :privacy)
 		login_new_user
 		accept_date = DateTime.now + 1
-		@user.update_attributes({first_time: false, terms: {tou: accept_date, privacy: accept_date}})
+		@user.update_attributes({ first_time: false, terms: { tou: accept_date, privacy: accept_date } })
 	end
 
 	after :each do
@@ -15,8 +14,8 @@ feature "User creates new partnership through encounter", :slow do
 		Terms.destroy_all
 	end
 
-	context "with uid from an existing user" do
-		scenario "The user ends up on the encounter page with the right partner" do
+	context 'with uid from an existing user' do
+		scenario 'The user ends up on the encounter page with the right partner' do
 			visit root_path
 			expect(page).to have_current_path(root_path)
 			# go to the new encounter page
@@ -32,15 +31,15 @@ feature "User creates new partnership through encounter", :slow do
 			fill_in 'partnership_uid', with: @partner.uid
 			fill_in_partnership(false)
 
-			#expect to land on a new encounter form for the partnership
+			# expect to land on a new encounter form for the partnership
 			partnership = @user.reload.partnerships.last
 			expect(partnership.uid).to eq @partner.uid
 			expect(page).to have_current_path(new_encounter_path(partnership_id: partnership.id))
 		end
 	end
 
-	context "with no uid" do
-		scenario "The user ends up on the encounter page with the right partner" do
+	context 'with no uid' do
+		scenario 'The user ends up on the encounter page with the right partner' do
 			visit root_path
 			expect(page).to have_current_path(root_path)
 			# go to the new encounter page
@@ -53,7 +52,7 @@ feature "User creates new partnership through encounter", :slow do
 			# fill in the profile details and partnership and submit
 			fill_in_partnership
 
-			#expect to land on a new encounter form for the partnership
+			# expect to land on a new encounter form for the partnership
 			partnership = @user.reload.partnerships.last
 			expect(partnership.partner_id).to eq Profile.last.id
 			expect(page).to have_current_path(new_encounter_path(partnership_id: partnership.id))

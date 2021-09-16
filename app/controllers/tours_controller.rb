@@ -12,7 +12,7 @@ class ToursController < ApplicationController
 	end
 
 	def create
-		current_user_profile.update({first_time: false})
+		current_user_profile.update({ first_time: false })
 		redirect_to root_path
 	end
 
@@ -21,17 +21,18 @@ class ToursController < ApplicationController
 		first_time = !user_profile_signed_in? || current_user_profile.first_time
 		# if there's a tour for this page
 		tour = if tour = Tour.by_page!(page, first_time)
-			# if the user's already seen it and isn't requesting it again just send true
-			if user_profile_signed_in? && current_user_profile.has_toured?(page, tour.fte_only) && params[:force] != 'true'
-				{has_tour: true}
-			# if they haven't or they are requesting it again, send the tour
-			else
-				tour
-			end
-		else
-			# if there is no tour, send false
-			{has_tour: false}
-		end
+										# if the user's already seen it and isn't requesting it again just send true
+										if user_profile_signed_in? && current_user_profile.has_toured?(page,
+																																																																									tour.fte_only) && params[:force] != 'true'
+											{ has_tour: true }
+										# if they haven't or they are requesting it again, send the tour
+										else
+											tour
+										end
+									else
+										# if there is no tour, send false
+										{ has_tour: false }
+									end
 
 		# tour = {tour_nodes: [{target: "#nav", content: "blah blah blah"}, {target: "header", content: "and blah blah"}, {target: "#page-content", content: "and scene"}]}
 
@@ -40,6 +41,7 @@ class ToursController < ApplicationController
 
 	def update
 		return true unless user_profile_signed_in?
+
 		page = params[:id]
 		if tour = Tour.by_page!(page)
 			# mark the user as having toured the page if there's a tour

@@ -17,7 +17,7 @@ RSpec.describe ToursController, type: :controller do
 		end
 
 		it 'renders index if the user has not experienced the first time flow' do
-			@user.update({first_time: true})
+			@user.update({ first_time: true })
 			get :index
 			expect(response).to render_template :index
 		end
@@ -38,75 +38,74 @@ RSpec.describe ToursController, type: :controller do
 
 	describe 'GET #show' do
 		it 'returns json {has_tour: true} if the page has a tour that the user has already seen' do
-			page_name = "page"
+			page_name = 'page'
 			@tour = create(:tour, page_name: page_name)
 			@user.tour(page_name, @tour.fte_only)
-			get :show, params: {id: page_name}
-			expect(response.body).to eq({has_tour: true}.to_json)
+			get :show, params: { id: page_name }
+			expect(response.body).to eq({ has_tour: true }.to_json)
 		end
 
 		it 'returns a json representation of the tour if the page has a tour that the user has not seen' do
-			page_name = "page"
+			page_name = 'page'
 			@tour = create(:tour, page_name: page_name)
-			get :show, params: {id: page_name}
+			get :show, params: { id: page_name }
 			expect(response.body).to eq @tour.to_json
 		end
 
 		it 'returns json {has_tour: false} if the page has no tour' do
-			get :show, params: {id: "page"}
-			expect(response.body).to eq({has_tour: false}.to_json)
+			get :show, params: { id: 'page' }
+			expect(response.body).to eq({ has_tour: false }.to_json)
 		end
 
 		it 'returns json {has_tour: false} if the page has no tour for the current first_time state of the user' do
-			@tour = create(:tour, page_name: "page", fte_only: !@user.first_time?)
-			get :show, params: {id: "page"}
-			expect(response.body).to eq({has_tour: false}.to_json)
+			@tour = create(:tour, page_name: 'page', fte_only: !@user.first_time?)
+			get :show, params: { id: 'page' }
+			expect(response.body).to eq({ has_tour: false }.to_json)
 		end
 
 		it 'returns json {has_tour: false} if the page has no tour for the current first_time state of the user, but the user has toured the first_time version' do
-			@tour = create(:tour, page_name: "page", fte_only: !@user.first_time?)
+			@tour = create(:tour, page_name: 'page', fte_only: !@user.first_time?)
 			@user.tour(@tour.page_name, @tour.fte_only)
-			get :show, params: {id: "page"}
-			expect(response.body).to eq({has_tour: false}.to_json)
+			get :show, params: { id: 'page' }
+			expect(response.body).to eq({ has_tour: false }.to_json)
 		end
 
 		context 'with force: true' do
 			it 'returns a json representation of the tour if the page has a tour, regardless of whether the user has seen it' do
-				page_name = "page"
+				page_name = 'page'
 				@tour = create(:tour, page_name: page_name)
 				@user.tour(page_name, @tour.fte_only)
-				get :show, params: {id: page_name, force: true}
+				get :show, params: { id: page_name, force: true }
 				expect(response.body).to eq @tour.to_json
 			end
 
 			it 'returns json {has_tour: false} if the page has no tour' do
-				get :show, params: {id: "page", force: true}
-				expect(response.body).to eq({has_tour: false}.to_json)
+				get :show, params: { id: 'page', force: true }
+				expect(response.body).to eq({ has_tour: false }.to_json)
 			end
 		end
 	end
 
 	describe 'PUT/PATCH #update' do
-
 		it 'adds the page to the pages the user has toured' do
-			page_name = "page"
+			page_name = 'page'
 			@tour = create(:tour, page_name: page_name)
-			put :update, params: {id: page_name}
+			put :update, params: { id: page_name }
 			@user.reload
 			expect(@user).to have_toured(page_name, @tour.fte_only)
 		end
 
 		it 'always returns a 204' do
-			page_name = "page"
+			page_name = 'page'
 			@tour = create(:tour, page_name: page_name)
 			@user.tour(page_name, @tour.fte_only)
-			patch :update, params: {id: page_name}
+			patch :update, params: { id: page_name }
 			expect(response).to have_http_status(204)
 		end
 
 		it 'does not add a non-existent tour to the user' do
-			page_name = "page"
-			patch :update, params: {id: page_name}
+			page_name = 'page'
+			patch :update, params: { id: page_name }
 			@user.reload
 			expect(@user).to_not have_toured(page_name, false)
 			expect(@user).to_not have_toured(page_name, true)

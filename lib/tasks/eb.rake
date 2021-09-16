@@ -6,7 +6,7 @@ namespace :eb do
 	CACHE_ID = 'bedpost-staging'.freeze
 	AUTO_SCALER = 'awseb-e-4tnmiiqqbj-stack-AWSEBAutoScalingGroup-1C0XG7MV16JT2'.freeze
 
-	def set_env_vars(environment_name, cache_url=nil)
+	def set_env_vars(environment_name, cache_url = nil)
 		puts 'Checking env variables...'
 		env_vars = `eb printenv #{environment_name}`
 		keys_to_set = []
@@ -33,7 +33,7 @@ namespace :eb do
 		`eb setenv #{keys_to_set.join(' ')}` unless keys_to_set.empty?
 	end
 
-	def deploy_to_environment(args, unsafe_allowed=false, cache_url=nil)
+	def deploy_to_environment(args, unsafe_allowed = false, cache_url = nil)
 		environment_name = args[:environment_name]
 		sh "eb use #{environment_name}" if environment_name.present?
 
@@ -41,7 +41,7 @@ namespace :eb do
 
 		branch_name = current_branch_name
 		environment_name ||= current_env_name
-		return unless unsafe_allowed || safe_env?({environment_name: environment_name})
+		return unless unsafe_allowed || safe_env?({ environment_name: environment_name })
 
 		commit_name = `git rev-parse --short HEAD`.chomp
 
@@ -131,7 +131,7 @@ namespace :eb do
 		if current_branch.present?
 			print "You're trying to deploy a branch that isn't master to production. Are you sure that's right? Type the current branch name to continue".blue.bold
 			unless STDIN.gets.chomp == current_branch
-				puts "No match. Exiting.".bold
+				puts 'No match. Exiting.'.bold
 				next
 			end
 		end
@@ -142,7 +142,7 @@ namespace :eb do
 		build_name = deploy_to_environment({}, true)
 		deploy(build_name)
 		if orig_env == "#{PROD_ENV}"
-			puts "Your current beanstalk environment is production. Be Careful!".light_white.bold.on_magenta
+			puts 'Your current beanstalk environment is production. Be Careful!'.light_white.bold.on_magenta
 		else
 			puts "switching back to #{orig_env} environment"
 			sh "eb use #{orig_env}"

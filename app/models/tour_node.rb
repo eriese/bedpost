@@ -5,7 +5,7 @@ class TourNode
 	field :await_in_view, type: Boolean, default: false
 	field :content, type: String, localize: true
 
-	index "content.en" => 1
+	index 'content.en' => 1
 
 	embedded_in :tour
 end

@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 shared_examples_for 'an object that dirty-tracks its embedded relations' do |clazz, class_obj, opts, skip_destroy_after, &block|
-
 	before :all do
 		if block
 			@obj = block.call

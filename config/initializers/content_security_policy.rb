@@ -17,7 +17,7 @@
 # end
 
 # If you are using UJS then enable automatic nonce generation
-Rails.application.config.content_security_policy_nonce_generator = -> request do
+Rails.application.config.content_security_policy_nonce_generator = ->request do
 	if request.env['HTTP_TURBOLINKS_REFERRER'].present?
 		request.env['HTTP_X_TURBOLINKS_NONCE']
 	else
@@ -33,7 +33,9 @@ end
 Rails.application.config.content_security_policy do |policy|
 	policy.script_src *[:self, :https, :unsafe_eval]
 
-  policy.script_src *(policy.script_src + ['http://localhost:3035', 'ws://localhost:3035', 'http://localhost:35729']) if Rails.env.development?
+	policy.script_src *(policy.script_src + ['http://localhost:3035', 'ws://localhost:3035',
+																																										'http://localhost:35729']) if Rails.env.development?
 
-  policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035", "ws://localhost:35729" if Rails.env.development?
+	policy.connect_src :self, :https, 'http://localhost:3035', 'ws://localhost:3035',
+																				'ws://localhost:35729' if Rails.env.development?
 end

@@ -13,7 +13,6 @@
 # it.
 #
 
-
 # a formatter to hide pending test output
 module FormatterOverrides
 	def example_pending(_)
@@ -36,8 +35,8 @@ if ENV['SKIP_PENDING'] == 'true' || ENV['CI'] == 'true'
 	RSpec::Core::Formatters::ProgressFormatter.prepend FormatterOverrides
 end
 
-#add custom matchers and helpers
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].sort.each {|f| require f}
+# add custom matchers and helpers
+Dir[File.expand_path(File.join(File.dirname(__FILE__), 'support', '**', '*.rb'))].sort.each { |f| require f }
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
 	# add internationalization easily
@@ -88,7 +87,7 @@ RSpec.configure do |config|
 	# Allows RSpec to persist some state between runs in order to support
 	# the `--only-failures` and `--next-failure` CLI options. We recommend
 	# you configure your source control system to ignore this file.
-	config.example_status_persistence_file_path = "spec/examples.txt"
+	config.example_status_persistence_file_path = 'spec/examples.txt'
 
 	# Many RSpec users commonly either run the entire suite or an individual
 	# file, and it's useful to allow more verbose output when running an
@@ -97,7 +96,7 @@ RSpec.configure do |config|
 		# Use the documentation formatter for detailed output,
 		# unless a formatter has already been configured
 		# (e.g. via a command-line flag).
-		config.default_formatter = "doc"
+		config.default_formatter = 'doc'
 	end
 
 # The settings below are suggested to provide a good initial experience

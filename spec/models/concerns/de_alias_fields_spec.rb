@@ -6,7 +6,7 @@ class DeAliasFieldsTestModel
 
 	field :f_1, as: :field1
 	field :f_2, as: :field2?
-	belongs_to :other_model, class_name: "DeAliasFieldsTestModel", optional: true
+	belongs_to :other_model, class_name: 'DeAliasFieldsTestModel', optional: true
 end
 
 class DeAliasFieldsTestModel2
@@ -31,27 +31,27 @@ RSpec.describe DeAliasFields, type: :module do
 				obj = DeAliasFieldsTestModel.new
 				result = obj.as_json
 
-				expect(result).to include("field1")
-				expect(result).to_not include("f_1")
+				expect(result).to include('field1')
+				expect(result).to_not include('f_1')
 			end
 
 			it 'does not de-alias _id fields' do
 				obj = DeAliasFieldsTestModel.new
 				result = obj.as_json
 
-				expect(result).to include("_id")
-				expect(result).to_not include("id")
-				expect(result).to include("other_model_id")
-				expect(result).to_not include("other_model")
+				expect(result).to include('_id')
+				expect(result).to_not include('id')
+				expect(result).to include('other_model_id')
+				expect(result).to_not include('other_model')
 			end
 
 			it 'strips question marks off by default' do
 				obj = DeAliasFieldsTestModel.new
 				result = obj.as_json
 
-				expect(result).to include("field2")
-				expect(result).to_not include("field2?")
-				expect(result).to_not include("f_2")
+				expect(result).to include('field2')
+				expect(result).to_not include('field2?')
+				expect(result).to_not include('f_2')
 			end
 		end
 	end
@@ -62,9 +62,9 @@ RSpec.describe DeAliasFields, type: :module do
 				obj = DeAliasFieldsTestModel2.new
 				result = obj.as_json
 
-				expect(result).to include("field2?")
-				expect(result).to_not include("field2")
-				expect(result).to_not include("f_2")
+				expect(result).to include('field2?')
+				expect(result).to_not include('field2')
+				expect(result).to_not include('f_2')
 			end
 		end
 	end

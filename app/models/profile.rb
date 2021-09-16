@@ -1,7 +1,7 @@
 class Profile
 	include Mongoid::Document
 	include Mongoid::Timestamps::Short
-		#to allow for serialization for jobs
+	# to allow for serialization for jobs
 	include GlobalID::Identification
 	include NormalizeBlankValues
 	include DeAliasFields
@@ -16,7 +16,7 @@ class Profile
 	has_static_relation :pronoun, optional: true
 
 	validates_presence_of :name
-	#only run this validation on the base class
+	# only run this validation on the base class
 	validates_presence_of :pronoun, :anus_name, :external_name, :if => :is_base?
 
 	def has_internal?
@@ -28,7 +28,7 @@ class Profile
 	end
 
 	def as_json_private
-		as_json({only: [:name, :pronoun_id], methods: [:anus_name, :external_name, :internal_name, :can_penetrate]})
+		as_json({ only: [:name, :pronoun_id], methods: [:anus_name, :external_name, :internal_name, :can_penetrate] })
 	end
 
 	def name_possessive
