@@ -7,7 +7,7 @@ import sassDefaults from '@stylesheets/layout/_defaults.scss';
  * @param  {number} [opacity=1] the opacity for the color
  * @return {string}         	the color represented as rgba
  */
-function hex2rgba(hex, opacity){
+export function hex2rgba(hex, opacity){
 	if (opacity === undefined) opacity = 1;
 	hex = hex.replace('#','');
 	if (hex.length == 3) { hex = `${hex}${hex}`; }

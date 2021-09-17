@@ -30,7 +30,7 @@ module PartnershipsHelper
 
 		# add the most recent if there is one
 		most_recent = ship['most_recent']
-		content << content_tag(:span, t('.latest_html', { took_place: l(most_recent, format: :most_recent) }),
+		content << content_tag(:span, t('.latest_html', took_place: l(most_recent, format: :most_recent)),
 																									class: 'partnership-link__last-encounter cta--is-square__main') if most_recent
 
 		content

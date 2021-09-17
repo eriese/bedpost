@@ -1,8 +1,7 @@
-import { Chart, registerables } from 'chart.js';
+import Chart from 'chart.js';
 import {Radar} from 'vue-chartjs';
-import sassColors from '@modules/sassColors';
+import {hex2rgba} from '@modules/sassColors';
 
-Chart.register(...registerables);
 /**
  * Original _drawLabels function from the radialLinear axis
  *
@@ -38,7 +37,8 @@ Chart.scaleService.constructors.radialLinear.prototype._drawLabels = function() 
 // });
 
 /** the color for grid and angle lines on the chart */
-const lineColor = () => sassColors.asRgba('text', 1);
+// const lineColor = () => sassColors.asRgba('text', 1);
+const lineColor = () => hex2rgba('ffffff', 1);
 
 /**
  * get the data color at the given opacity
@@ -46,7 +46,8 @@ const lineColor = () => sassColors.asRgba('text', 1);
  * @param  {number|string} opacity the opacity of the color
  * @return {string}         the full rgba color declaration
  */
-const dataColor = (opacity) => sassColors.asRgba('background-contrast', opacity,);
+// const dataColor = (opacity) => sassColors.asRgba('background-contrast', opacity,);
+const dataColor = (opacity) => hex2rgba('facade', opacity === undefined ? 1 : opacity);
 
 /**
  * A component that wraps and mounts a [radar chart]{@link https://www.chartjs.org/docs/latest/charts/radar.html} to display partnership values
@@ -84,8 +85,8 @@ export default {
 						max: 10,
 						min: 0,
 						stepSize: 2,
-						backdropColor: sassColors.asRgba('background'),
-						fontColor: sassColors.asRgba('text'),
+						backdropColor: dataColor(0),
+						fontColor: lineColor(),
 					},
 					angleLines: {
 						color: lineColor(),
@@ -97,7 +98,7 @@ export default {
 					},
 					pointLabels: {
 						fontSize: 12,
-						fontColor: sassColors.asRgba('text', 1),
+						fontColor: lineColor(),
 					},
 				},
 				tooltips: {

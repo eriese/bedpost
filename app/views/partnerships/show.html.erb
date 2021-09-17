@@ -20,7 +20,7 @@
 <div class="additional">
 	<% if @partnership.encounters.size > 0 %>
 		<p>
-			<%= link_to t(".encounters", {name: @partnership.partner.name}), encounters_path(partnership_id: @partnership.id), class: "link" %>
+			<%= link_to t(".encounters", name: @partnership.partner.name), encounters_path(partnership_id: @partnership.id), class: "link" %>
 		</p>
 	<% end %>
 	<p>

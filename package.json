@@ -7,7 +7,7 @@
 		"@rails/webpacker": "^5.4.3",
 		"@vue/compiler-sfc": "^3.2.11",
 		"axios": "^0.21.4",
-		"chart.js": "2.9.4",
+		"chart.js": "^2.0.0",
 		"flickity": "^2.2.2",
 		"gsap": "^3.7.1",
 		"i18n-js": "^3.8.0",
