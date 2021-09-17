@@ -21,6 +21,26 @@
       "note": "This lookup seems properly limited in scope that we should be safe"
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "8374ef6e4d22b7326d614b423ef3cde811b0152cd8287303f3c252c8ff374b90",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/static_controller.rb",
+      "line": 9,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(template => lookup_context.find(\"#{params.require(:static).split(\"/\")[-1].delete(\".\")}\", [\"static\"]), {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StaticController",
+        "method": "static_or_404"
+      },
+      "user_input": "params.require(:static).split(\"/\")[-1].delete(\".\")",
+      "confidence": "Weak",
+      "note": "paths are validated before being fetched"
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "8e9061b6419d0364d9669b0f28f1fa60e8ff38cd9d04c47e2de137d97ee6bb57",
@@ -35,7 +55,7 @@
           "type": "controller",
           "class": "TermsController",
           "method": "show",
-          "line": 11,
+          "line": 10,
           "file": "app/controllers/terms_controller.rb",
           "rendered": {
             "name": "terms/show",
@@ -52,6 +72,6 @@
       "note": "This model is only created internally"
     }
   ],
-  "updated": "2020-01-27 15:50:10 -0600",
-  "brakeman_version": "4.7.1"
+  "updated": "2021-09-17 12:48:43 -0400",
+  "brakeman_version": "5.1.1"
 }
